@@ -14,6 +14,11 @@ import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from './constants';
 import { CourseInfo } from '@entities/session';
 import { InviteMentorsDto } from './dto/invite-mentors.dto';
 
+export enum MentorRegistryTabsMode {
+  New = 'new',
+  All = 'all',
+}
+
 @Controller('registry')
 @ApiTags('registry')
 @UseGuards(DefaultGuard, RoleGuard)
@@ -65,6 +70,7 @@ export class RegistryController {
   @ApiOperation({ operationId: 'getMentorRegistries' })
   @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor])
   @ApiOkResponse({ type: FilterMentorRegistryResponse })
+  @ApiQuery({ name: 'status', required: false, enum: MentorRegistryTabsMode })
   @ApiQuery({ name: 'pageSize', required: false, type: 'number' })
   @ApiQuery({ name: 'currentPage', required: false, type: 'number' })
   @ApiQuery({ name: 'githubId', required: false, type: 'string' })
@@ -74,6 +80,7 @@ export class RegistryController {
   @ApiQuery({ name: 'technicalMentoring', required: false, type: 'string', isArray: true })
   public async getMentorRegistries(
     @Req() req: CurrentRequest,
+    @Query('status') status: MentorRegistryTabsMode = MentorRegistryTabsMode.All,
     @Query('pageSize') pageSize?: number,
     @Query('currentPage') currentPage?: number,
     @Query('githubId') githubId?: string,
@@ -105,6 +112,7 @@ export class RegistryController {
               )
               .map(([key]) => Number(key)),
         disciplineNames: req.user.isAdmin ? undefined : await this.getDisciplineNamesByCourseIds(req.user.courses),
+        status,
       });
       return {
         total: data.total,

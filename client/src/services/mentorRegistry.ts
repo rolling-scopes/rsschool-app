@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { MentorRegistryDto, RegistryApi, InviteMentorsDto } from 'api';
 import { PreferredStudentsLocation } from 'common/enums/mentor';
+import { MentorRegistryTabsMode } from 'modules/MentorRegistry/constants';
 
 export type MentorResponse = {
   preselectedCourses: number[];
@@ -18,6 +19,7 @@ export interface MentorRegistry {
 }
 
 export interface GetMentorRegistriesDto {
+  status: MentorRegistryTabsMode;
   currentPage: number;
   pageSize: number;
   githubId?: string;
@@ -57,6 +59,7 @@ export class MentorRegistryService {
       return response.data;
     } else {
       const response = await this.registryApi.getMentorRegistries(
+        options.status,
         options.pageSize,
         options.currentPage,
         options.githubId,

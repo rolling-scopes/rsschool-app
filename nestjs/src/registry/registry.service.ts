@@ -9,6 +9,7 @@ import { paginate } from 'src/core/paginate';
 import { InviteMentorsDto } from './dto/invite-mentors.dto';
 import { NotificationsService } from 'src/notifications/notifications.service';
 import { Student } from '@entities/student';
+import { MentorRegistryTabsMode } from './registry.controller';
 
 @Injectable()
 export class RegistryService {
@@ -95,6 +96,7 @@ export class RegistryService {
     technicalMentoring,
     coursesIds,
     disciplineNames,
+    status,
   }: {
     githubId?: string;
     cityName?: string;
@@ -105,6 +107,7 @@ export class RegistryService {
     technicalMentoring?: string[];
     coursesIds?: number[];
     disciplineNames?: string[];
+    status: MentorRegistryTabsMode;
   }) {
     const req = this.getPreparedMentorRegistriesQuery();
 
@@ -160,6 +163,9 @@ export class RegistryService {
           }
         }),
       );
+    }
+    if (status === MentorRegistryTabsMode.New) {
+      req.andWhere('mentorRegistry.preselectedCourses != mentorRegistry.preferedCourses');
     }
 
     const response = await paginate(req, {

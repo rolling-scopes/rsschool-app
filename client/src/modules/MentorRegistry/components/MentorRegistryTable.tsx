@@ -3,12 +3,12 @@ import { Form, Table, TablePaginationConfig } from 'antd';
 import FilteredTags from 'modules/Schedule/components/FilteredTags';
 import { FilterValue } from 'antd/lib/table/interface';
 import { MentorRegistryDto } from 'api';
-import { MentorsRegistryColumnKey, PAGINATION } from '../constants';
+import { MentorRegistryTabsMode, MentorsRegistryColumnKey, PAGINATION } from '../constants';
 import { ColumnType } from 'antd/lib/table';
 
 type Props = {
   setCurrentPage: Dispatch<SetStateAction<number>>;
-  total: number;
+  total: Record<MentorRegistryTabsMode, number>;
   currentPage: number;
   tagFilters: string[];
   filteredData: MentorRegistryDto[];
@@ -19,6 +19,7 @@ type Props = {
     _: TablePaginationConfig,
     filters: Record<MentorsRegistryColumnKey, FilterValue | string[] | null>,
   ) => void;
+  activeTab: MentorRegistryTabsMode;
 };
 
 export function MentorRegistryTable(props: Props) {
@@ -32,6 +33,7 @@ export function MentorRegistryTable(props: Props) {
     handleClearAllButtonClick,
     handleTableChange,
     setCurrentPage,
+    activeTab,
   } = props;
   const [form] = Form.useForm();
 
@@ -44,7 +46,7 @@ export function MentorRegistryTable(props: Props) {
         onClearAllButtonClick={handleClearAllButtonClick}
       />
       <Table<MentorRegistryDto>
-        pagination={{ pageSize: PAGINATION, current: currentPage, onChange: setCurrentPage, total }}
+        pagination={{ pageSize: PAGINATION, current: currentPage, onChange: setCurrentPage, total: total[activeTab] }}
         rowKey="id"
         dataSource={filteredData}
         scroll={{ x: tableWidth, y: 'calc(95vh - 340px)' }}
