@@ -103,7 +103,7 @@ export interface StudentTasksDetail {
   scoreWeight: number;
   name: string;
   descriptionUri: string;
-  taskGithubPrUris: string;
+  githubPrUri: string;
   score: number;
   comment: string;
   interviewDate?: string;

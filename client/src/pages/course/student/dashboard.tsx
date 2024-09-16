@@ -98,9 +98,10 @@ function Page() {
             scheduleItems
               .filter(scheduleItem => scheduleItem.type === CourseScheduleItemDtoTypeEnum.CourseTask)
               .map(task => {
-                const { comment, taskGithubPrUris } =
+                const { comment, githubPrUri } =
                   tasksDetailCurrentCourse.find(taskDetail => taskDetail.name === task.name) ?? {};
-                return { ...task, comment, githubPrUri: taskGithubPrUris };
+
+                return { ...task, comment, githubPrUri };
               }),
             'status',
           ),
