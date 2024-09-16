@@ -7,8 +7,9 @@ export class ExportCourseDto {
     this.startDate = course.startDate.toISOString();
     this.endDate = course.endDate.toISOString();
     this.alias = course.alias;
-    this.discipline = course.discipline;
+    this.discipline = course.discipline ? { id: course.discipline.id, name: course.discipline.name } : null;
     this.description = course.description;
+    this.registrationEndDate = course.registrationEndDate.toISOString();
   }
 
   id: number;
