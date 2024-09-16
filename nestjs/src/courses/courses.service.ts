@@ -66,7 +66,10 @@ export class CoursesService {
       relations: ['discipline'],
     });
 
-    const data: ExportCourseDto[] = courses.map(course => new ExportCourseDto(course));
+    const data: ExportCourseDto[] = courses
+      .filter(course => course.alias !== 'test-course')
+      .filter(course => !course.inviteOnly)
+      .map(course => new ExportCourseDto(course));
 
     if (this.configService.env === 'prod') {
       this.s3.putObject({
