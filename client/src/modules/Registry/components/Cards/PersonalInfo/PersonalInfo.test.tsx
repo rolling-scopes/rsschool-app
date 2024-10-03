@@ -1,8 +1,14 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Form } from 'antd';
-import { ERROR_MESSAGES, LABELS, PLACEHOLDERS } from 'modules/Registry/constants';
-import { PersonalInfo } from './PersonalInfo';
+import {
+  DATA_PROCESSING_TEXT,
+  ERROR_MESSAGES,
+  LABELS,
+  PLACEHOLDERS,
+  TERMS_OF_SERVICE_TEXT,
+} from 'modules/Registry/constants';
 import usePlacesAutocomplete from 'use-places-autocomplete';
+import { PersonalInfo } from './PersonalInfo';
 
 jest.mock('use-places-autocomplete');
 
@@ -138,7 +144,14 @@ describe('PersonalInfo', () => {
   test('should render data processing checkbox on student form', async () => {
     renderPersonalInfo(mockValues, true);
 
-    const checkbox = await screen.findByRole('checkbox');
+    const checkbox = await screen.findByLabelText(DATA_PROCESSING_TEXT);
+    expect(checkbox).toBeInTheDocument();
+  });
+
+  test('should render terms of service checkbox on student form', async () => {
+    renderPersonalInfo(mockValues, true);
+
+    const checkbox = await screen.findByLabelText(TERMS_OF_SERVICE_TEXT);
     expect(checkbox).toBeInTheDocument();
   });
 

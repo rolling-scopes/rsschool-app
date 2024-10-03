@@ -1,7 +1,7 @@
 import { Form, Input, Typography } from 'antd';
 import { Dispatch, SetStateAction } from 'react';
 import { Location } from 'common/models';
-import { DataProcessingCheckbox, FormButtons, FormCard } from 'modules/Registry/components';
+import { DataProcessingCheckbox, TermsOfServiceCheckbox, FormButtons, FormCard } from 'modules/Registry/components';
 import { emailPattern, englishNamePattern, epamEmailPattern } from 'services/validators';
 import { CARD_TITLES, ERROR_MESSAGES, EXTRAS, LABELS, PLACEHOLDERS, TOOLTIPS } from 'modules/Registry/constants';
 import { LocationSelect } from 'components/Forms';
@@ -67,6 +67,7 @@ export function PersonalInfo({ location, setLocation, isStudentForm }: Props) {
       {isStudentForm ? (
         <>
           <DataProcessingCheckbox isStudentForm />
+          <TermsOfServiceCheckbox isStudentForm />
           <FormButtons />
         </>
       ) : null}
