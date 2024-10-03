@@ -15,7 +15,8 @@ export function TermsOfServiceCheckbox({ isStudentForm }: Props) {
       valuePropName="checked"
       rules={[
         {
-          validator: (_, value) => (value ? Promise.resolve() : Promise.reject(new Error(ERROR_MESSAGES.shouldAgreeTerms))),
+          validator: (_, value) =>
+            value ? Promise.resolve() : Promise.reject(new Error(ERROR_MESSAGES.shouldAgreeTerms)),
         },
       ]}
     >
