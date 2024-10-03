@@ -30,7 +30,7 @@ describe('TermsOfServiceCheckbox', () => {
     renderCheckbox(Checkbox.checked);
 
     const checkbox = await screen.findByRole('checkbox');
-    const errorMessage = screen.queryByText(ERROR_MESSAGES.shouldAgree);
+    const errorMessage = screen.queryByText(ERROR_MESSAGES.shouldAgreeTerms);
     expect(checkbox).toBeChecked();
     expect(errorMessage).not.toBeInTheDocument();
   });
@@ -42,7 +42,7 @@ describe('TermsOfServiceCheckbox', () => {
 
     await user.click(checkbox);
 
-    const errorMessage = await screen.findByText(ERROR_MESSAGES.shouldAgree);
+    const errorMessage = await screen.findByText(ERROR_MESSAGES.shouldAgreeTerms);
     expect(checkbox).not.toBeChecked();
     expect(errorMessage).toBeInTheDocument();
   });

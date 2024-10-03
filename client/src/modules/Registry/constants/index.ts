@@ -13,6 +13,7 @@ const SUCCESS_TEXT = (courseName?: string) =>
 const ERROR_MESSAGES = {
   chooseAtLeastOne: 'Should choose at least one',
   shouldAgree: 'Should agree to the data processing',
+  shouldAgreeTerms: 'Should agree to the terms',
   inEnglish: (prop: string) => `${prop} should be in English`,
   email: 'Invalid email',
   epamEmail: 'Please enter a valid EPAM email',
