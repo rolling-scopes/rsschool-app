@@ -3,6 +3,8 @@ import { Rule } from 'antd/lib/form';
 const RSSCHOOL_BOT_LINK = 'https://t.me/rsschool_bot?start';
 const DATA_PROCESSING_TEXT =
   'I agree to the processing of my personal data contained in the application and sharing it with companies only for students employment purposes.';
+const TERMS_OF_SERVICE_TEXT =
+  'I agree to familiarize myself with the documentation and regularly read the announcements channel to stay informed about updates and important information.';
 const SUCCESS_TEXT = (courseName?: string) =>
   courseName
     ? `You have successfully registered for the ${courseName} course.`
@@ -138,6 +140,7 @@ const DEFAULT_FORM_ITEM_LAYOUT = {
 export {
   RSSCHOOL_BOT_LINK,
   DATA_PROCESSING_TEXT,
+  TERMS_OF_SERVICE_TEXT,
   ERROR_MESSAGES,
   TOOLTIPS,
   FORM_TITLES,

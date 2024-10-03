@@ -11,6 +11,7 @@ export * from './Cards/Preferences/Preferences';
 export * from './Cards/CourseDetails/CourseDetails';
 export * from './Footer/Footer';
 export * from './DataProcessingCheckbox/DataProcessingCheckbox';
+export * from './TermsOfServiceCheckbox/TermsOfServiceCheckbox';
 export * from './LanguagesMentoring/LanguagesMentoring';
 export * from './CourseLabel/CourseLabel';
 export * from './NoCourses/NoCourses';
