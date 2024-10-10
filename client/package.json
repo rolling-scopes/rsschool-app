@@ -30,7 +30,7 @@
     "@sentry/nextjs": "7.81.0",
     "antd": "5.11.2",
     "axios": "1.6.2",
-    "cookie": "0.6.0",
+    "cookie": "0.7.0",
     "csvtojson": "2.0.10",
     "dayjs": "1.11.10",
     "lodash": "4.17.21",
