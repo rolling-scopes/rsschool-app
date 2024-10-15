@@ -62,7 +62,7 @@ export const createResult = (_: ILogger) => async (ctx: Router.RouterContext) =>
     review: Array.isArray(inputData.review) ? inputData.review : [],
   };
 
-  if (isNaN(data.score) || data.score < 0) {
+  if (isNaN(data.score) || data.score < 0 || data.score > courseTask.maxScore) {
     setErrorResponse(ctx, BAD_REQUEST, 'no score provided');
     return;
   }
