@@ -140,7 +140,7 @@ function Page() {
 
   const submitReview = withLoading(async values => {
     try {
-      if (typeof values.maxScore !== 'undefined' && values.maxScore < score) {
+      if (values.maxScore != null && values.maxScore < score) {
         message.error(`The score (${score}) exceeds the maximum score (${values.maxScore}) for the task.`);
         return;
       }
