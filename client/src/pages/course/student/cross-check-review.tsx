@@ -140,6 +140,10 @@ function Page() {
 
   const submitReview = withLoading(async values => {
     try {
+      if (values.maxScore != null && values.maxScore < score) {
+        message.error(`The score (${score}) exceeds the maximum score (${values.maxScore}) for the task.`);
+        return;
+      }
       await courseService.postTaskSolutionResult(values.githubId, values.courseTaskId, {
         score,
         comment: markdownLabel + values.comment,
