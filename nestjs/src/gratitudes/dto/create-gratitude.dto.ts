@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsString, MinLength } from 'class-validator';
+import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsString, MinLength, ValidateBy } from 'class-validator';
 import { Badge } from './badge.dto';
 
 export class CreateGratitudeDto {
@@ -16,6 +16,13 @@ export class CreateGratitudeDto {
   @IsNotEmpty()
   @IsString()
   @MinLength(20)
+  @ValidateBy(
+    {
+      name: 'CommentContains@',
+      validator: (value: string) => !value.includes('@'),
+    },
+    { message: 'The comment can not contain "@" symbol' },
+  )
   @ApiProperty()
   comment: string;
 
