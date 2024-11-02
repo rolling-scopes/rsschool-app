@@ -118,6 +118,15 @@ function GratitudePage() {
               whitespace: true,
               message: 'The comment must contain at least 20 characters',
             },
+            {
+              validator: (_, value) => {
+                if (value.includes('@')) {
+                  return Promise.reject();
+                }
+                return Promise.resolve();
+              },
+              message: 'The comment can\'t include "@" symbol',
+            },
           ]}
         >
           <Input.TextArea rows={8} />
