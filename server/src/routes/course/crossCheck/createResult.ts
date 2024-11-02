@@ -62,6 +62,11 @@ export const createResult = (_: ILogger) => async (ctx: Router.RouterContext) =>
     review: Array.isArray(inputData.review) ? inputData.review : [],
   };
 
+  if (data.score > courseTask.maxScore) {
+    setErrorResponse(ctx, BAD_REQUEST, 'score provided is greater than max score for the task');
+    return;
+  }
+
   if (isNaN(data.score) || data.score < 0) {
     setErrorResponse(ctx, BAD_REQUEST, 'no score provided');
     return;
