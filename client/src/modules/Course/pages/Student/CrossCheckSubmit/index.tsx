@@ -13,7 +13,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService, CrossCheckComment, CrossCheckCriteria, CrossCheckReview, TaskSolution } from 'services/course';
-import { privateRsRepoPattern, urlWithIpPattern } from 'services/validators';
+import { githubPrUrl, privateRsRepoPattern, urlWithIpPattern } from 'services/validators';
 import { getQueryString } from 'utils/queryParams-utils';
 import { CoursesTasksApi, CrossCheckFeedbackDto, CrossCheckMessageDtoRoleEnum } from 'api';
 import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
@@ -32,6 +32,12 @@ const validUrlRule: Rule = {
   required: true,
   pattern: urlWithIpPattern,
   message: 'Please provide a valid link (must start with `http://` or `https://`)',
+};
+
+const githubPrInUrlRule: Rule = {
+  required: true,
+  pattern: githubPrUrl,
+  message: 'Link should be a valid GitHub Pull Request URL',
 };
 
 const notPrivateRsRepoRule: Rule = {
@@ -199,6 +205,7 @@ export function CrossCheckSubmit() {
                     validUrlRule,
                     notPrivateRsRepoRule,
                     ...(task.validations?.githubIdInUrl ? [createGithubInUrlRule(session.githubId)] : []),
+                    ...(task.validations?.githubIdInUrl ? [githubPrInUrlRule] : []),
                   ]}
                 >
                   <Input placeholder="link in the form of https://www.google.com" />
