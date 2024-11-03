@@ -8,6 +8,8 @@ import { TaskSolutionDto } from 'src/courses/task-solutions/dto';
 class Validations {
   @ApiProperty()
   [CourseTaskValidation.githubIdInUrl]: boolean;
+  @ApiProperty()
+  [CourseTaskValidation.githubPrInUrl]: boolean;
 }
 
 @ApiResponse({})

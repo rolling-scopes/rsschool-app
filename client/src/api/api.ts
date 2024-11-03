@@ -7559,6 +7559,12 @@ export interface Validations {
      * @memberof Validations
      */
     'githubIdInUrl': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Validations
+     */
+    'githubPrInUrl': boolean;
 }
 /**
  * 

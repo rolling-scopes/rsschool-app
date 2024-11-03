@@ -3070,8 +3070,8 @@
       },
       "Validations": {
         "type": "object",
-        "properties": { "githubIdInUrl": { "type": "boolean" } },
-        "required": ["githubIdInUrl"]
+        "properties": { "githubIdInUrl": { "type": "boolean" }, "githubPrInUrl": { "type": "boolean" } },
+        "required": ["githubIdInUrl", "githubPrInUrl"]
       },
       "CourseTaskDto": {
         "type": "object",
