@@ -205,7 +205,7 @@ export function CrossCheckSubmit() {
                     validUrlRule,
                     notPrivateRsRepoRule,
                     ...(task.validations?.githubIdInUrl ? [createGithubInUrlRule(session.githubId)] : []),
-                    ...(task.validations?.githubIdInUrl ? [githubPrInUrlRule] : []),
+                    ...(task.validations?.githubPrInUrl ? [githubPrInUrlRule] : []),
                   ]}
                 >
                   <Input placeholder="link in the form of https://www.google.com" />
