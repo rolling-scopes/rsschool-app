@@ -81,7 +81,7 @@ export class ConfigService {
     };
 
     this.awsClient = {
-      region: conf.get('RSSHCOOL_AWS_REGION') ?? '',
+      region: conf.get('RSSHCOOL_AWS_REGION') ?? 'eu-central-1',
       credentials: {
         accessKeyId: conf.get('RSSHCOOL_AWS_ACCESS_KEY_ID') ?? '',
         secretAccessKey: conf.get('RSSHCOOL_AWS_SECRET_ACCESS_KEY') || '',

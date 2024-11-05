@@ -46,13 +46,16 @@ describe('StatusTabs', () => {
 
     render(<StatusTabs statuses={statuses} onTabChange={onTabChangeMock} />);
 
-    const [all, available, review, future, missed, done, archived] = screen.getAllByRole('tab');
+    const [all, available, review, future, missed, done, registered, unAvailable, archived] =
+      screen.getAllByRole('tab');
     expect(all).toHaveTextContent(new RegExp(ALL_TAB_KEY, 'i'));
     expect(available).toHaveTextContent(new RegExp(StatusEnum.Available, 'i'));
     expect(review).toHaveTextContent(new RegExp(StatusEnum.Review, 'i'));
     expect(future).toHaveTextContent(new RegExp(StatusEnum.Future, 'i'));
     expect(missed).toHaveTextContent(new RegExp(StatusEnum.Missed, 'i'));
     expect(done).toHaveTextContent(new RegExp(StatusEnum.Done, 'i'));
+    expect(registered).toHaveTextContent(new RegExp(StatusEnum.Registered, 'i'));
+    expect(unAvailable).toHaveTextContent(new RegExp(StatusEnum.Unavailable, 'i'));
     expect(archived).toHaveTextContent(new RegExp(StatusEnum.Archived, 'i'));
   });
 
@@ -111,11 +114,13 @@ describe('StatusTabs', () => {
       ${StatusEnum.Archived}
       ${StatusEnum.Future}
       ${StatusEnum.Review}
+      ${StatusEnum.Registered}
+      ${StatusEnum.Unavailable}
     `('should call onTabChange with tab name "$tabName"', ({ tabName }: { tabName: string }) => {
       const statuses = generateStatuses(undefined, { [tabName]: 2 });
       render(<StatusTabs statuses={statuses} onTabChange={onTabChangeMock} />);
 
-      const selectedTab = screen.getByText(new RegExp(tabName, 'i'));
+      const selectedTab = screen.getByText(new RegExp(`^${tabName}$`, 'i')); // Проверка точного совпадения
       fireEvent.click(selectedTab);
 
       expect(onTabChangeMock).toHaveBeenCalledWith(tabName);
