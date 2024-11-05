@@ -1165,7 +1165,9 @@ export const CourseScheduleItemDtoStatusEnum = {
     Archived: 'archived',
     Future: 'future',
     Missed: 'missed',
-    Review: 'review'
+    Review: 'review',
+    Registered: 'registered',
+    Unavailable: 'unavailable'
 } as const;
 
 export type CourseScheduleItemDtoStatusEnum = typeof CourseScheduleItemDtoStatusEnum[keyof typeof CourseScheduleItemDtoStatusEnum];
@@ -1176,13 +1178,15 @@ export const CourseScheduleItemDtoTagEnum = {
     Interview: 'interview',
     CrossCheckSubmit: 'cross-check-submit',
     CrossCheckReview: 'cross-check-review',
-    Test: 'test'
+    Test: 'test',
+    TeamDistribution: 'team-distribution'
 } as const;
 
 export type CourseScheduleItemDtoTagEnum = typeof CourseScheduleItemDtoTagEnum[keyof typeof CourseScheduleItemDtoTagEnum];
 export const CourseScheduleItemDtoTypeEnum = {
     CourseTask: 'courseTask',
-    CourseEvent: 'courseEvent'
+    CourseEvent: 'courseEvent',
+    CourseTeamDistribution: 'courseTeamDistribution'
 } as const;
 
 export type CourseScheduleItemDtoTypeEnum = typeof CourseScheduleItemDtoTypeEnum[keyof typeof CourseScheduleItemDtoTypeEnum];

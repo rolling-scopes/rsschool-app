@@ -26,6 +26,10 @@ export function getTaskStatusColor(value: CourseScheduleItemDtoStatusEnum) {
       return '#13c2c2';
     case CourseScheduleItemDtoStatusEnum.Review:
       return '#722ed1';
+    case CourseScheduleItemDtoStatusEnum.Registered:
+      return '#73d13d';
+    case CourseScheduleItemDtoStatusEnum.Unavailable:
+      return '#faad14';
     default:
       return '#d9d9d9';
   }

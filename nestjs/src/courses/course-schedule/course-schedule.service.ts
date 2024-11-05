@@ -12,6 +12,8 @@ import { Repository } from 'typeorm';
 import { EventType } from '../course-events/dto/course-event.dto';
 import { Course } from '@entities/course';
 import * as dayjs from 'dayjs';
+import { TeamDistribution } from '@entities/teamDistribution';
+import { TeamDistributionStudent } from '@entities/teamDistributionStudent';
 
 export type CourseScheduleItem = Pick<CourseTask, 'id' | 'courseId'> &
   Partial<Pick<CourseTask, 'maxScore' | 'scoreWeight'>> & {
@@ -29,6 +31,7 @@ export type CourseScheduleItem = Pick<CourseTask, 'id' | 'courseId'> &
 export enum CourseScheduleDataSource {
   CourseTask = 'courseTask',
   CourseEvent = 'courseEvent',
+  CourseTeamDistribution = 'courseTeamDistribution',
 }
 
 export enum CourseScheduleItemTag {
@@ -39,6 +42,7 @@ export enum CourseScheduleItemTag {
   CrossCheckSubmit = 'cross-check-submit',
   CrossCheckReview = 'cross-check-review',
   Test = 'test',
+  TeamDistribution = 'team-distribution',
 }
 
 export enum CourseScheduleItemStatus {
@@ -48,6 +52,8 @@ export enum CourseScheduleItemStatus {
   Future = 'future',
   Missed = 'missed',
   Review = 'review',
+  Registered = 'registered',
+  Unavailable = 'unavailable',
 }
 
 @Injectable()
@@ -69,6 +75,10 @@ export class CourseScheduleService {
     readonly taskSolutionRepository: Repository<TaskSolution>,
     @InjectRepository(TaskChecker)
     readonly taskCheckerRepository: Repository<TaskChecker>,
+    @InjectRepository(TeamDistribution)
+    readonly courseTeamDistributionRepository: Repository<TeamDistribution>,
+    @InjectRepository(TeamDistributionStudent)
+    private teamDistributionStudentRepository: Repository<TeamDistributionStudent>,
   ) {}
 
   private scheduleSort(a: CourseScheduleItem, b: CourseScheduleItem) {
@@ -89,18 +99,86 @@ export class CourseScheduleService {
     return aTagPriority - bTagPriority;
   }
 
+  private async getCourseTeamDistributions(courseId: number, studentId?: number) {
+    return this.courseTeamDistributionRepository.find({
+      where: { courseId },
+      cache: studentId ? 90 * 1000 : undefined,
+    });
+  }
+
+  private async getTeamDistributionStudents(courseId: number, studentId?: number) {
+    if (!studentId) {
+      return [];
+    }
+
+    const teamDistributionStudents = await this.teamDistributionStudentRepository.find({
+      where: { courseId, studentId },
+      relations: { student: true },
+    });
+    return teamDistributionStudents;
+  }
+
+  private getTeamDistributionStatus(
+    teamDistribution: TeamDistribution,
+    teamDistributionStudents: TeamDistributionStudent[],
+  ) {
+    const currTimestampUTC = dayjs();
+    const distributionStartDate = dayjs(teamDistribution.startDate);
+    const teamDistributionStudent = teamDistributionStudents.find(el => el.teamDistributionId === teamDistribution.id);
+
+    if (currTimestampUTC < distributionStartDate) {
+      return CourseScheduleItemStatus.Future;
+    }
+
+    if (teamDistributionStudent?.distributed) {
+      return CourseScheduleItemStatus.Done;
+    }
+
+    if (teamDistributionStudent?.active) {
+      return CourseScheduleItemStatus.Registered;
+    }
+
+    if (
+      teamDistributionStudent?.student == null ||
+      teamDistributionStudent.student.isExpelled ||
+      teamDistribution.minTotalScore > teamDistributionStudent.student.totalScore
+    ) {
+      return CourseScheduleItemStatus.Unavailable;
+    }
+
+    const distributionEndDate = dayjs(teamDistribution.endDate);
+    if (currTimestampUTC <= distributionEndDate && currTimestampUTC >= distributionStartDate) {
+      return CourseScheduleItemStatus.Available;
+    }
+
+    if (currTimestampUTC > distributionEndDate) {
+      return CourseScheduleItemStatus.Missed;
+    }
+
+    return CourseScheduleItemStatus.Unavailable;
+  }
+
   public async getAll(courseId: number, studentId?: number): Promise<CourseScheduleItem[]> {
-    const [courseTasks, courseEvents] = await Promise.all([
+    const [courseTasks, courseEvents, teamDistribution] = await Promise.all([
       this.getActiveCourseTasks(courseId, studentId),
       this.getCourseEvents(courseId, studentId),
+      this.getCourseTeamDistributions(courseId, studentId),
     ]);
 
-    const [taskResults, interviewResults, technicalScreeningResults, taskSolutions, taskCheckers] = await Promise.all([
+    const [
+      taskResults,
+      interviewResults,
+      technicalScreeningResults,
+      taskSolutions,
+      taskCheckers,
+      teamDistributionStudents,
+    ] = await Promise.all([
       this.getTaskResults(studentId),
       this.getInterviewResults(studentId),
       this.getPrescreeningResults(studentId),
       this.getTaskSolutions(studentId),
       this.getTaskCheckers(studentId),
+      this.getTeamDistributionStudents(courseId, studentId),
     ]);
 
     const schedule = courseTasks
@@ -162,6 +240,22 @@ export class CourseScheduleService {
             organizer: new PersonDto(courseEvent.organizer),
             type: CourseScheduleDataSource.CourseEvent,
           } as CourseScheduleItem;
+        }),
+      )
+      .concat(
+        teamDistribution.map(teamDistribution => {
+          teamDistribution.description;
+          return {
+            id: teamDistribution.id,
+            name: teamDistribution.name,
+            courseId,
+            startDate: teamDistribution.startDate,
+            endDate: teamDistribution.endDate,
+            status: this.getTeamDistributionStatus(teamDistribution, teamDistributionStudents),
+            type: CourseScheduleDataSource.CourseTeamDistribution,
+            tag: CourseScheduleItemTag.TeamDistribution,
+            descriptionUrl: teamDistribution.descriptionUrl,
+          };
         }),
       )
       .sort(this.scheduleSort);
