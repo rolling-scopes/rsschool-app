@@ -120,7 +120,7 @@ describe('StatusTabs', () => {
       const statuses = generateStatuses(undefined, { [tabName]: 2 });
       render(<StatusTabs statuses={statuses} onTabChange={onTabChangeMock} />);
 
-      const selectedTab = screen.getByText(new RegExp(`^${tabName}$`, 'i')); // Проверка точного совпадения
+      const selectedTab = screen.getByText(new RegExp(`^${tabName}$`, 'i'));
       fireEvent.click(selectedTab);
 
       expect(onTabChangeMock).toHaveBeenCalledWith(tabName);
