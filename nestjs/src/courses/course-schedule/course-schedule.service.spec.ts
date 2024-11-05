@@ -15,6 +15,8 @@ import {
   TaskInterviewResult,
   TaskResult,
   TaskSolution,
+  TeamDistribution,
+  TeamDistributionStudent,
 } from '@entities/index';
 
 const MOCK_CURRENT_TIME = new Date('2022-03-22T00:00:00.000Z');
@@ -109,6 +111,14 @@ describe('CourseScheduleService', () => {
         },
         {
           provide: getRepositoryToken(TaskChecker),
+          useValue: {},
+        },
+        {
+          provide: getRepositoryToken(TeamDistributionStudent),
+          useValue: {},
+        },
+        {
+          provide: getRepositoryToken(TeamDistribution),
           useValue: {},
         },
       ],
