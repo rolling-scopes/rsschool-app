@@ -65,6 +65,8 @@ export class CourseScheduleService {
     readonly courseTaskRepository: Repository<CourseTask>,
     @InjectRepository(CourseEvent)
     readonly courseEventRepository: Repository<CourseEvent>,
+    @InjectRepository(TeamDistribution)
+    readonly teamDistribution: Repository<TeamDistribution>,
     @InjectRepository(TaskResult)
     readonly taskResultRepository: Repository<TaskResult>,
     @InjectRepository(TaskInterviewResult)
@@ -356,8 +358,14 @@ export class CourseScheduleService {
       this.courseRepository.findOneByOrFail({ id: toCourseId }),
     ]);
 
+    const [courseTasks, courseEvents, courseTeamDistributions] = await Promise.all([
+      this.courseTaskRepository.find({ where: { courseId: fromCourseId } }),
+      this.courseEventRepository.find({ where: { courseId: fromCourseId } }),
+      this.teamDistribution.find({ where: { courseId: fromCourseId } }),
+    ]);
+
     const timeDiff = toCourse.startDate.getTime() - fromCourse.startDate.getTime();
-    const courseTasks = await this.courseTaskRepository.find({ where: { courseId: fromCourseId } });
+
     for (const courseTask of courseTasks) {
       const { id, createdDate, updatedDate, crossCheckStatus, ...newCourseTask } = courseTask;
       newCourseTask.courseId = toCourseId;
@@ -368,7 +376,7 @@ export class CourseScheduleService {
       newCourseTask.mentorEndDate = this.adjustDate(newCourseTask.mentorEndDate, timeDiff);
       await this.courseTaskRepository.save(newCourseTask);
     }
-    const courseEvents = await this.courseEventRepository.find({ where: { courseId: fromCourseId } });
+
     for (const courseEvent of courseEvents) {
       const { id, createdDate, updatedDate, ...newCourseEvent } = courseEvent;
       newCourseEvent.courseId = toCourseId;
@@ -377,6 +385,16 @@ export class CourseScheduleService {
       newCourseEvent.date = null;
       newCourseEvent.time = null;
       await this.courseEventRepository.save(newCourseEvent);
+    }
+
+    for (const teamDistribution of courseTeamDistributions) {
+      const { id, createdDate, updatedDate, ...newTeamDistribution } = teamDistribution;
+      newTeamDistribution.courseId = toCourseId;
+      newTeamDistribution.startDate =
+        this.adjustDate(newTeamDistribution.startDate, timeDiff) ?? newTeamDistribution.startDate;
+      newTeamDistribution.endDate =
+        this.adjustDate(newTeamDistribution.endDate, timeDiff) ?? newTeamDistribution.endDate;
+      await this.teamDistribution.save(newTeamDistribution);
     }
   }
 
