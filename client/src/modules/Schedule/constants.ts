@@ -53,6 +53,7 @@ export const TAG_NAME_MAP: Record<CourseScheduleItemDto['tag'], string> = {
   'cross-check-review': 'Cross-Check: Review',
   'self-study': 'Self-study',
   lecture: 'Lecture',
+  'team-distribution': 'Team Distribution',
 };
 
 export const SCHEDULE_STATUSES = Object.keys(CourseScheduleItemDtoStatusEnum).map(key => ({
@@ -85,6 +86,7 @@ export const DEFAULT_TAG_COLOR_MAP: Record<CourseScheduleItemDto['tag'], string>
   'cross-check-review': '#36A836',
   'self-study': '#595959',
   lecture: '#eb2f96',
+  'team-distribution': '#308e00',
 };
 
 export const SPECIAL_TASK_TYPES = {

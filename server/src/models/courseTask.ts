@@ -33,6 +33,7 @@ export enum CrossCheckStatus {
 
 export enum CourseTaskValidation {
   githubIdInUrl = 'githubIdInUrl',
+  githubPrInUrl = 'githubPrInUrl',
 }
 
 @Entity()

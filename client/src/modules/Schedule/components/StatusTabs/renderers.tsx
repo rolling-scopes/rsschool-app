@@ -10,6 +10,8 @@ const tabsOrder = [
   CourseScheduleItemDtoStatusEnum.Future,
   CourseScheduleItemDtoStatusEnum.Missed,
   CourseScheduleItemDtoStatusEnum.Done,
+  CourseScheduleItemDtoStatusEnum.Registered,
+  CourseScheduleItemDtoStatusEnum.Unavailable,
   CourseScheduleItemDtoStatusEnum.Archived,
 ];
 

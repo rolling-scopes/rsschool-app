@@ -219,6 +219,9 @@ export function CourseTaskModal(props: Props) {
           <Form.Item name={['validations', 'githubIdInUrl']} valuePropName="checked">
             <Checkbox>Require Github Username in URL</Checkbox>
           </Form.Item>
+          <Form.Item name={['validations', 'githubPrInUrl']} valuePropName="checked">
+            <Checkbox>Require Github Pull Request in URL</Checkbox>
+          </Form.Item>
         </>
       ) : null}
     </ModalForm>
