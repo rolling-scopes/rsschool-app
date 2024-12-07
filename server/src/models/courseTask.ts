@@ -76,6 +76,9 @@ export class CourseTask {
   studentEndDate: null | Date | string;
 
   @Column({ type: 'timestamptz', nullable: true })
+  studentRegistrationStartDate: null | Date | string;
+
+  @Column({ type: 'timestamptz', nullable: true })
   crossCheckEndDate: null | Date | string;
 
   @Column({ type: 'timestamp', nullable: true })

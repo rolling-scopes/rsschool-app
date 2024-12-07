@@ -1,5 +1,12 @@
 import { Checkbox, Col, DatePicker, Divider, Form, Input, InputNumber, message, Row, Select, Typography } from 'antd';
-import { CourseTaskDto, CreateCourseTaskDto, CreateCourseTaskDtoCheckerEnum, TaskDto, TasksApi } from 'api';
+import {
+  CourseTaskDto,
+  CourseTaskDtoTypeEnum,
+  CreateCourseTaskDto,
+  CreateCourseTaskDtoCheckerEnum,
+  TaskDto,
+  TasksApi,
+} from 'api';
 import { ModalForm } from 'components/Forms';
 import { tagsRenderer } from 'components/Table';
 import { UserSearch } from 'components/UserSearch';
@@ -97,7 +104,7 @@ export function CourseTaskModal(props: Props) {
       getInitialValues={getInitialValues}
       data={data}
       form={form}
-      onChange={values => setChanges({ checker: values.checker })}
+      onChange={values => setChanges({ checker: values.checker, type: values.type })}
       title="Course Task"
       submit={handleModalSubmit}
       cancel={handleModalCancel}
@@ -164,6 +171,24 @@ export function CourseTaskModal(props: Props) {
           </Form.Item>
         </Col>
       </Row>
+
+      {changes.type === CourseTaskDtoTypeEnum.StageInterview || changes.type === CourseTaskDtoTypeEnum.Interview ? (
+        <Row gutter={24}>
+          <Col>
+            <Form.Item
+              name="registrationStartDate"
+              label="Registration Start Date"
+              rules={[{ required: false, message: 'Please enter start date and time' }]}
+            >
+              <DatePicker
+                format="YYYY-MM-DD HH:mm"
+                showTime={{ format: 'HH:mm' }}
+                placeholder="Select registration start date"
+              />
+            </Form.Item>
+          </Col>
+        </Row>
+      ) : null}
 
       <Row gutter={24}>
         <Col span={12}>
@@ -232,7 +257,7 @@ function createRecord(values: any): CreateCourseTaskDto {
   const [startDate, endDate] = values.range as [dayjs.Dayjs, dayjs.Dayjs];
   const crossCheckEndDate = values.crossCheckEndDate as dayjs.Dayjs | null;
 
-  const data = {
+  const data: CreateCourseTaskDto = {
     studentStartDate: startDate.utc().format(),
     studentEndDate: endDate.utc().format(),
     crossCheckEndDate: crossCheckEndDate ? crossCheckEndDate.utc().hour(23).minute(59).second(59).format() : undefined,
@@ -245,6 +270,7 @@ function createRecord(values: any): CreateCourseTaskDto {
     pairsCount: values.pairsCount,
     submitText: values.submitText,
     validations: values.validations,
+    studentRegistrationStartDate: values.registrationStartDate,
   };
   return data;
 }
@@ -262,6 +288,9 @@ function getInitialValues(modalData: Partial<CourseTaskDetails>) {
         ? [dayjs.utc(modalData.studentStartDate), dayjs.utc(modalData.studentEndDate)]
         : [dayjs().utc().hour(0).minute(0).second(0).utc(), dayjs().utc().hour(23).minute(59).second(59)],
     checker: modalData.checker || CreateCourseTaskDtoCheckerEnum.AutoTest,
+    registrationStartDate: modalData.studentRegistrationStartDate
+      ? dayjs.utc(modalData.studentRegistrationStartDate)
+      : null,
   };
   return data;
 }

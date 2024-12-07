@@ -32,6 +32,7 @@ export class CourseTaskDto {
     this.taskOwner = courseTask.taskOwner ? new PersonDto(courseTask.taskOwner) : null;
     this.validations = courseTask.validations;
     this.taskSolutions = courseTask.taskSolutions?.map(taskSolution => new TaskSolutionDto(taskSolution)) ?? null;
+    this.studentRegistrationStartDate = courseTask.studentRegistrationStartDate;
   }
 
   @IsNotEmpty()
@@ -60,6 +61,9 @@ export class CourseTaskDto {
 
   @ApiProperty()
   studentEndDate: string;
+
+  @ApiProperty({ nullable: true, type: String })
+  studentRegistrationStartDate?: string | null | Date;
 
   @ApiProperty({ nullable: true, type: String })
   crossCheckEndDate: string | null;

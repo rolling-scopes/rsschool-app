@@ -1294,6 +1294,12 @@ export interface CourseTaskDetailedDto {
      * @type {string}
      * @memberof CourseTaskDetailedDto
      */
+    'studentRegistrationStartDate': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskDetailedDto
+     */
     'crossCheckEndDate': string | null;
     /**
      * 
@@ -1450,6 +1456,12 @@ export interface CourseTaskDto {
      * @memberof CourseTaskDto
      */
     'studentEndDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseTaskDto
+     */
+    'studentRegistrationStartDate': string | null;
     /**
      * 
      * @type {string}
@@ -1887,6 +1899,12 @@ export interface CreateCourseTaskDto {
      * @memberof CreateCourseTaskDto
      */
     'studentEndDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCourseTaskDto
+     */
+    'studentRegistrationStartDate'?: string;
     /**
      * 
      * @type {string}
@@ -6512,6 +6530,12 @@ export interface UpdateCourseTaskDto {
      * @memberof UpdateCourseTaskDto
      */
     'validations': object;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateCourseTaskDto
+     */
+    'studentRegistrationStartDate'?: string;
 }
 
 export const UpdateCourseTaskDtoTypeEnum = {

@@ -66,4 +66,8 @@ export class UpdateCourseTaskDto {
   @IsObject()
   @ApiProperty()
   validations?: Record<CourseTaskValidation, boolean> | null;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  studentRegistrationStartDate?: string;
 }
