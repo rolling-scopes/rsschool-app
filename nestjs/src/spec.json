@@ -49,6 +49,24 @@
         "tags": ["activity"]
       }
     },
+    "/users/search": {
+      "get": {
+        "operationId": "searchUsers",
+        "summary": "",
+        "parameters": [{ "name": "query", "required": true, "in": "query", "schema": { "type": "string" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/UserSearchDto" } }
+              }
+            }
+          }
+        },
+        "tags": ["users"]
+      }
+    },
     "/alerts": {
       "post": {
         "operationId": "createAlert",
@@ -2682,6 +2700,42 @@
         "type": "object",
         "properties": { "sender": { "$ref": "#/components/schemas/SenderDto" } },
         "required": ["sender"]
+      },
+      "CourseRecord": {
+        "type": "object",
+        "properties": { "courseName": { "type": "string" }, "id": { "type": "number" } },
+        "required": ["courseName", "id"]
+      },
+      "UserSearchDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "githubId": { "type": "string" },
+          "name": { "type": "string" },
+          "cityName": { "type": "string", "nullable": true },
+          "countryName": { "type": "string", "nullable": true },
+          "contactsEmail": { "type": "string", "nullable": true },
+          "contactsEpamEmail": { "type": "string", "nullable": true },
+          "primaryEmail": { "type": "string", "nullable": true },
+          "contactsDiscord": { "type": "string", "nullable": true },
+          "contactsTelegram": { "type": "string", "nullable": true },
+          "mentors": { "nullable": true, "type": "array", "items": { "$ref": "#/components/schemas/CourseRecord" } },
+          "students": { "nullable": true, "type": "array", "items": { "$ref": "#/components/schemas/CourseRecord" } }
+        },
+        "required": [
+          "id",
+          "githubId",
+          "name",
+          "cityName",
+          "countryName",
+          "contactsEmail",
+          "contactsEpamEmail",
+          "primaryEmail",
+          "contactsDiscord",
+          "contactsTelegram",
+          "mentors",
+          "students"
+        ]
       },
       "CreateAlertDto": {
         "type": "object",

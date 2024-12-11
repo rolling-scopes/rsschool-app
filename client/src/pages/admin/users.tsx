@@ -1,24 +1,25 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { Button, Col, Input, List, Row, Layout, Form } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
-import { UserService, UserFull } from 'services/user';
 import { AdminPageLayout } from 'components/PageLayout';
 import { CourseRole } from 'services/models';
 import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { UsersApi, UserSearchDto } from 'api';
 
 const { Content } = Layout;
 
+const userApi = new UsersApi();
+
 function Page() {
   const { courses } = useActiveCourseContext();
-  const [users, setUsers] = useState(null as any[] | null);
-  const userService = useMemo(() => new UserService(), []);
+  const [users, setUsers] = useState(null as UserSearchDto[] | null);
 
   const handleSearch = async (values: any) => {
     if (!values.searchText) {
       return;
     }
-    const users = await userService.extendedUserSearch(values.searchText);
-    setUsers(users);
+    const users = await userApi.searchUsers(values.searchText);
+    setUsers(users.data);
   };
 
   return (
@@ -48,20 +49,22 @@ function Page() {
                   rowKey="id"
                   locale={{ emptyText: 'No results' }}
                   dataSource={users}
-                  renderItem={(user: UserFull) => (
+                  renderItem={user => (
                     <List.Item>
                       <List.Item.Meta
                         avatar={<GithubAvatar size={48} githubId={user.githubId} />}
                         title={<a href={`/profile?githubId=${user.githubId}`}>{user.githubId}</a>}
                         description={
-                          <div>
-                            <div>{user.name}</div>
-                            <div>{`Primary email: ${user.primaryEmail || ''}`}</div>
-                            <div>{`EPAM email: ${user.contactsEpamEmail || ''}`}</div>
-                            <div>{`Skype: ${user.contactsSkype || ''}`}</div>
-                            <div>{`Telegram: ${user.contactsTelegram || ''}`}</div>
-                            <div>{`Discord: ${user.discord || ''}`}</div>
-                          </div>
+                          <>
+                            <UserField value={user.name} />
+                            <UserField label="Primary Email" value={user.primaryEmail} />
+                            <UserField label="Contacts Email" value={user.contactsEmail} />
+                            <UserField label="Contacts EPAM Email" value={user.contactsEpamEmail} />
+                            <UserField label="Contacts Telegram" value={user.contactsTelegram} />
+                            <UserField label="Contacts Discord" value={user.contactsDiscord} />
+                            <UserField label="Mentor" value={user.mentors?.map(({ courseName }) => courseName)} />
+                            <UserField label="Student" value={user.students?.map(({ courseName }) => courseName)} />
+                          </>
                         }
                       />
                     </List.Item>
@@ -73,6 +76,19 @@ function Page() {
         </div>
       </Content>
     </AdminPageLayout>
+  );
+}
+
+function UserField({ label, value }: { label?: string; value: string | string[] | null | undefined }) {
+  const valueStr = Array.isArray(value) ? value.join(', ') : value;
+  if (!valueStr) {
+    return null;
+  }
+  return (
+    <div>
+      {label ? <span>{label}: </span> : null}
+      <span>{valueStr}</span>
+    </div>
   );
 }
 

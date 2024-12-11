@@ -1045,6 +1045,25 @@ export interface CourseMentorsStatsDto {
 /**
  * 
  * @export
+ * @interface CourseRecord
+ */
+export interface CourseRecord {
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseRecord
+     */
+    'courseName': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseRecord
+     */
+    'id': number;
+}
+/**
+ * 
+ * @export
  * @interface CourseRolesDto
  */
 export interface CourseRolesDto {
@@ -7373,6 +7392,85 @@ export interface UserNotificationsDto {
      * @memberof UserNotificationsDto
      */
     'connections': object;
+}
+/**
+ * 
+ * @export
+ * @interface UserSearchDto
+ */
+export interface UserSearchDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof UserSearchDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserSearchDto
+     */
+    'githubId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserSearchDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserSearchDto
+     */
+    'cityName': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserSearchDto
+     */
+    'countryName': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserSearchDto
+     */
+    'contactsEmail': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserSearchDto
+     */
+    'contactsEpamEmail': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserSearchDto
+     */
+    'primaryEmail': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserSearchDto
+     */
+    'contactsDiscord': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserSearchDto
+     */
+    'contactsTelegram': string | null;
+    /**
+     * 
+     * @type {Array<CourseRecord>}
+     * @memberof UserSearchDto
+     */
+    'mentors': Array<CourseRecord> | null;
+    /**
+     * 
+     * @type {Array<CourseRecord>}
+     * @memberof UserSearchDto
+     */
+    'students': Array<CourseRecord> | null;
 }
 /**
  * 
@@ -19601,6 +19699,110 @@ export class UserGroupApi extends BaseAPI {
      */
     public updateUserGroup(id: number, updateUserGroupDto: UpdateUserGroupDto, options?: AxiosRequestConfig) {
         return UserGroupApiFp(this.configuration).updateUserGroup(id, updateUserGroupDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * UsersApi - axios parameter creator
+ * @export
+ */
+export const UsersApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} query 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchUsers: async (query: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'query' is not null or undefined
+            assertParamExists('searchUsers', 'query', query)
+            const localVarPath = `/users/search`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (query !== undefined) {
+                localVarQueryParameter['query'] = query;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * UsersApi - functional programming interface
+ * @export
+ */
+export const UsersApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = UsersApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} query 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async searchUsers(query: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<UserSearchDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.searchUsers(query, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * UsersApi - factory interface
+ * @export
+ */
+export const UsersApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = UsersApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} query 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchUsers(query: string, options?: any): AxiosPromise<Array<UserSearchDto>> {
+            return localVarFp.searchUsers(query, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * UsersApi - object-oriented interface
+ * @export
+ * @class UsersApi
+ * @extends {BaseAPI}
+ */
+export class UsersApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} query 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public searchUsers(query: string, options?: AxiosRequestConfig) {
+        return UsersApiFp(this.configuration).searchUsers(query, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

@@ -10,7 +10,7 @@ type Props = {
   updateUrl: () => void;
 };
 
-const getGithubRepoName = (url: string | null | undefined) => (url ? url.split('/').pop() ?? '' : '');
+const getGithubRepoName = (url: string | null | undefined) => (url ? (url.split('/').pop() ?? '') : '');
 
 export function RepositoryCard(props: Props) {
   const { Text, Paragraph } = Typography;
