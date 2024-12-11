@@ -19,7 +19,6 @@ export class InterviewsService {
     readonly taskInterviewStudentRepository: Repository<TaskInterviewStudent>,
     @InjectRepository(Student)
     readonly studentRepository: Repository<Student>,
-    readonly userService: UsersService,
   ) {}
 
   public getAll(
@@ -84,7 +83,7 @@ export class InterviewsService {
 
     return records.map(record => ({
       id: record.student.id,
-      name: this.userService.getFullName(record.student.user),
+      name: UsersService.getFullName(record.student.user),
       githubId: record.student.user.githubId,
       cityName: record.student.user.cityName,
       countryName: record.student.user.countryName,
@@ -143,7 +142,7 @@ export class InterviewsService {
           id,
           totalScore,
           githubId: user.githubId,
-          name: this.userService.getFullName(student.user),
+          name: UsersService.getFullName(student.user),
           cityName: user.cityName,
           countryName: user.countryName,
           isGoodCandidate: this.isGoodCandidate(stageInterviews),
