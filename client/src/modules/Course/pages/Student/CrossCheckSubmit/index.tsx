@@ -68,6 +68,8 @@ export function CrossCheckSubmit() {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [submitDeadlinePassed, setSubmitDeadlinePassed] = useState<boolean>(false);
 
+  const isCrosscheckOngoing = submitDeadlinePassed && submittedSolution;
+
   const [authorId, setAuthorId] = useState<number | null>(null);
 
   const { value: courseTasks = [], loading } = useAsync(
@@ -255,7 +257,14 @@ export function CrossCheckSubmit() {
           </Form>
         </Col>
       </Row>
-
+      
+      {!feedback?.reviews?.length && isCrosscheckOngoing && (
+        <Row gutter={24}>
+          <Col {...colSizes}>
+            <Alert message="No one has checked your work yet." type="info" showIcon style={{ marginBottom: 8 }} />
+          </Col>
+        </Row>
+      )}
       {!!feedback?.reviews?.length && (
         <Row style={{ margin: '8px 0' }}>
           <Col>
