@@ -1,4 +1,4 @@
-import { Alert, Button, Checkbox, Col, Form, Input, message, Modal, Row } from 'antd';
+import { Alert, Button, Checkbox, Col, Form, Input, message, Modal, Result, Row } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { Rule } from 'antd/lib/form';
 import { CriteriaForm } from 'modules/CrossCheck/components/CriteriaForm';
@@ -12,7 +12,14 @@ import { NoSubmissionAvailable } from 'modules/Course/components/NoSubmissionAva
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService, CrossCheckComment, CrossCheckCriteria, CrossCheckReview, TaskSolution } from 'services/course';
+import {
+  CourseService,
+  CrossCheckStatus,
+  CrossCheckComment,
+  CrossCheckCriteria,
+  CrossCheckReview,
+  TaskSolution,
+} from 'services/course';
 import { githubPrUrl, privateRsRepoPattern, urlWithIpPattern } from 'services/validators';
 import { getQueryString } from 'utils/queryParams-utils';
 import { CoursesTasksApi, CrossCheckFeedbackDto, CrossCheckMessageDtoRoleEnum } from 'api';
@@ -67,8 +74,6 @@ export function CrossCheckSubmit() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [submitDeadlinePassed, setSubmitDeadlinePassed] = useState<boolean>(false);
-
-  const isCrosscheckOngoing = submitDeadlinePassed && submittedSolution;
 
   const [authorId, setAuthorId] = useState<number | null>(null);
 
@@ -178,6 +183,9 @@ export function CrossCheckSubmit() {
   const taskExists = !!task;
   const submitAllowed = taskExists && !submitDeadlinePassed;
   const newCrossCheck = criteria.length > 0;
+  const isCrossCheckCompleted = task?.crossCheckStatus === CrossCheckStatus.Completed;
+  const isCrosscheckOngoing = task?.crossCheckStatus === CrossCheckStatus.Distributed;
+  const hasReviews = !!feedback?.reviews?.length;
 
   return (
     <PageLayout loading={loading} title="Cross-Check Submit" showCourseName>
@@ -257,15 +265,30 @@ export function CrossCheckSubmit() {
           </Form>
         </Col>
       </Row>
-      
-      {!feedback?.reviews?.length && isCrosscheckOngoing && (
+
+      {submittedSolution && !hasReviews && isCrosscheckOngoing && (
         <Row gutter={24}>
           <Col {...colSizes}>
-            <Alert message="No one has checked your work yet." type="info" showIcon style={{ marginBottom: 8 }} />
+            <Result title="No one has checked your work yet." status="404" />
           </Col>
         </Row>
       )}
-      {!!feedback?.reviews?.length && (
+      {submittedSolution && !hasReviews && isCrossCheckCompleted && (
+        <Row gutter={24}>
+          <Col {...colSizes}>
+            <Result
+              title="No one has checked your work."
+              status="404"
+              extra={
+                <Button type="link" target="_blank" href="https://docs.rs.school/#/cross-check-flow?id=Апелляция">
+                  Check if you are eligible to appeal here.
+                </Button>
+              }
+            />
+          </Col>
+        </Row>
+      )}
+      {hasReviews && (
         <Row style={{ margin: '8px 0' }}>
           <Col>
             <SolutionReviewSettingsPanel settings={solutionReviewSettings} />
