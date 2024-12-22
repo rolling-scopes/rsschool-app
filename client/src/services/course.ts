@@ -572,11 +572,6 @@ export class CourseService {
     return result.data.data;
   }
 
-  // async createInterviewStudent(githubId: string, interviewId: string) {
-  //   const result = await this.axios.post(`/student/${githubId}/interview/${interviewId}`);
-  //   return result.data.data;
-  // }
-
   async getInterviewStudent(githubId: string, interviewId: string) {
     const result = await this.axios.get(`/student/${githubId}/interview/${interviewId}`);
     return result.data.data as { id: number } | null;
