@@ -98,9 +98,9 @@ export class InterviewsController {
     if (!interview) {
       throw new NotFoundException(`Interview ${interviewId} doesn't exist`);
     }
-    // if (interview.studentRegistrationStartDate && new Date() < interview.studentRegistrationStartDate) {
-    //   throw new BadRequestException('Student registration is not available yet');
-    // }
+    if (interview.studentRegistrationStartDate && new Date() < interview.studentRegistrationStartDate) {
+      throw new BadRequestException('Student registration is not available yet');
+    }
     const taskInterviewStudent = await this.courseTasksService.registerStudentToInterview(
       courseId,
       interviewId,
