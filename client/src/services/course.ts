@@ -604,16 +604,6 @@ export class CourseService {
   }
 }
 
-export interface Interview {
-  startDate: string;
-  endDate: string;
-  name: string;
-  id: string;
-  descriptionUrl: string;
-  type: string;
-  template: string | null;
-}
-
 export interface AssignedStudent extends StudentBasic {
   courseTaskId: number;
 }
