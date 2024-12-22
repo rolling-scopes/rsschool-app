@@ -53,7 +53,7 @@ function Page() {
       </Layout.Content>
       {modalId !== undefined ? (
         <CourseModal
-          close={() => setModalId(undefined)}
+          onClose={() => setModalId(undefined)}
           discordServers={response.data?.discordServers ?? []}
           disciplines={response.data?.disciplines ?? []}
           courses={allCourses}

@@ -28,7 +28,7 @@
     "@ant-design/cssinjs": "^1.20.0",
     "@ant-design/plots": "1.2.5",
     "@sentry/nextjs": "7.81.0",
-    "ahooks": "^3.8.4",
+    "ahooks": "3.8.4",
     "antd": "5.11.2",
     "axios": "1.6.2",
     "cookie": "0.7.0",

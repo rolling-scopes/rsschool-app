@@ -1,14 +1,14 @@
+import useRequest from 'ahooks/lib/useRequest';
 import { Button, Result } from 'antd';
 import type { ProfileCourseDto } from 'api';
 import axios from 'axios';
 import { LoadingScreen } from 'components/LoadingScreen';
 import type { Session } from 'components/withSession';
-import { CourseRole } from 'services/models';
+import { hasRoleInAnyCourse } from 'domain/user';
 import Router from 'next/router';
 import React, { useEffect } from 'react';
+import { CourseRole } from 'services/models';
 import { useActiveCourseContext } from './ActiveCourseContext';
-import { hasRoleInAnyCourse } from 'domain/user';
-import { useRequest } from 'ahooks';
 
 export const SessionContext = React.createContext<Session>({} as Session);
 

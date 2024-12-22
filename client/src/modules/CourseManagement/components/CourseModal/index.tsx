@@ -12,7 +12,7 @@ const courseApi = new CoursesApi();
 const courseIcons = Object.entries(DEFAULT_COURSE_ICONS).map(([key, config]) => ({ ...config, id: key }));
 
 type CourseModalProps = {
-  close: () => void;
+  onClose: () => void;
   discordServers: DiscordServerDto[];
   disciplines: DisciplineDto[];
   courses: Course[];
@@ -75,7 +75,7 @@ export function CourseModal(props: CourseModalProps) {
           await courseApi.createCourse(record as CreateCourseDto);
         }
       }
-      props.close();
+      props.onClose();
     },
     { manual: true },
   );
@@ -99,7 +99,7 @@ export function CourseModal(props: CourseModalProps) {
       }}
       okButtonProps={{ disabled: response.loading }}
       cancelButtonProps={{ disabled: response.loading }}
-      onCancel={props.close}
+      onCancel={props.onClose}
     >
       {response.loading ? (
         <Row justify="center">

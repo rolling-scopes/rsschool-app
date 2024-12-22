@@ -55,6 +55,7 @@ import { CourseUsersActivist1693930286280 } from './1693930286280-CourseUsersAct
 import { AddMinStudentPerMentorColumnToCourse1699808604000 } from './1699808604000-AddMinStudentPerMentorColumnToCourse';
 import { Obfuscation1700391857109 } from './1700391857109-Obfuscation';
 import { Course1712137476312 } from './1712137476312-Course';
+import { Contributor1734874453585 } from './1734874453585-Contributor';
 
 export const migrations = [
   UserMigration1630340371992,
@@ -114,4 +115,5 @@ export const migrations = [
   AddMinStudentPerMentorColumnToCourse1699808604000,
   Obfuscation1700391857109,
   Course1712137476312,
+  Contributor1734874453585,
 ];

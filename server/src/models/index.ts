@@ -1,5 +1,6 @@
 import { Alert, AlertType } from './alert';
 import { Certificate } from './certificate';
+import { Contributor } from './contributor';
 import { Course } from './course';
 import { CourseEvent } from './courseEvent';
 import { CourseManager } from './courseManager';
@@ -51,6 +52,7 @@ export {
   Alert,
   AlertType as AlertTypes,
   Certificate,
+  Contributor,
   Course,
   CourseEvent,
   CourseManager,
@@ -100,6 +102,7 @@ export {
 export const models = [
   Alert,
   Certificate,
+  Contributor,
   Course,
   CourseEvent,
   CourseManager,

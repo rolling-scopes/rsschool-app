@@ -30,6 +30,7 @@ import { EventsModule } from './events/events.module';
 import { TasksModule } from './tasks/tasks.module';
 import { PromptsModule } from './prompts/prompts.module';
 import { AutoTestModule } from './auto-test/auto-test.module';
+import { ContributorsModule } from './contributors';
 
 @Module({
   imports: [
@@ -64,6 +65,7 @@ import { AutoTestModule } from './auto-test/auto-test.module';
     TasksModule,
     PromptsModule,
     AutoTestModule,
+    ContributorsModule,
   ],
   controllers: [],
   providers: [Logger, ConfigService],
