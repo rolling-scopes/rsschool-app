@@ -35,29 +35,6 @@ export const getMentorInterviews = (_: ILogger) => async (ctx: Router.RouterCont
   setResponse(ctx, StatusCodes.OK, result);
 };
 
-export const getInterviews = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { courseId } = ctx.params;
-  const data = await courseService.getCourseTasks(courseId);
-
-  const result = data
-    .filter(interview => {
-      const type = interview.type ?? interview.task.type;
-      return type === 'stage-interview' || type === 'interview';
-    })
-    .map(interview => {
-      return {
-        id: interview.id,
-        name: interview.task.name,
-        startDate: interview.studentStartDate,
-        endDate: interview.studentEndDate,
-        descriptionUrl: interview.task.descriptionUrl,
-        type: interview.type || interview.task.type,
-        template: interview.task?.attributes?.['template'] ?? null,
-      };
-    });
-  setResponse(ctx, StatusCodes.OK, result);
-};
-
 export const getInterviewPairs = (logger: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = Number(ctx.params.courseId);
   const courseTaskId: number = Number(ctx.params.courseTaskId);

@@ -4,12 +4,12 @@ import { GithubUserLink } from 'components/GithubUserLink';
 import { PageLayout } from 'components/PageLayout';
 import { useMemo, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService, Interview } from 'services/course';
+import { CourseService } from 'services/course';
 import { formatShortDate } from 'services/formatter';
 import { getInterviewResult, InterviewDetails, InterviewStatus, stageInterviewType } from 'domain/interview';
 import { Decision } from 'data/interviews/technical-screening';
 import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
-import { CoursesInterviewsApi } from 'api';
+import { CoursesInterviewsApi, InterviewDto } from 'api';
 
 const coursesInterviewApi = new CoursesInterviewsApi();
 
@@ -18,16 +18,16 @@ function StudentInterviewPage() {
   const { course } = useActiveCourseContext();
   const courseService = useMemo(() => new CourseService(course.id), [course.id]);
   const [data, setData] = useState<InterviewDetails[]>([]);
-  const [interviews, setInterviews] = useState<Interview[]>([]);
+  const [interviews, setInterviews] = useState<InterviewDto[]>([]);
   const [registeredInterviews, setRegisteredInterviews] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
   useAsync(async () => {
     try {
       setLoading(true);
-      const [data, interviews] = await Promise.all([
+      const [data, { data: interviews }] = await Promise.all([
         courseService.getStudentInterviews(session.githubId),
-        courseService.getInterviews(),
+        coursesInterviewApi.getInterviews(course.id),
       ] as const);
       const registeredInterviews = await getRegisteredInterviews(interviews);
 
@@ -57,18 +57,19 @@ function StudentInterviewPage() {
       ),
       okText: 'Yes',
       onOk: async () => {
-        // await courseService.createInterviewStudent(session.githubId, interviewId);
-        await coursesInterviewApi.registerToInterview(course.id, Number(interviewId)).catch(() => {
+        try {
+          await coursesInterviewApi.registerToInterview(course.id, Number(interviewId));
+          setRegisteredInterviews(registeredInterviews.concat([interviewId]));
+        } catch {
           message.error('An error occurred. Please try later.');
-        });
-        setRegisteredInterviews(registeredInterviews.concat([interviewId]));
+        }
       },
     });
   };
 
-  const getRegisteredInterviews = async (interviews: Interview[]) => {
+  const getRegisteredInterviews = async (interviews: InterviewDto[]) => {
     const requests = interviews
-      .map(({ type, id }) => (type === stageInterviewType ? 'stage' : id))
+      .map(({ type, id }) => (type === stageInterviewType ? 'stage' : id.toString()))
       .map(async id => {
         const data = await courseService.getInterviewStudent(session.githubId, id).catch(() => null);
         return data ? id : null;
@@ -78,10 +79,12 @@ function StudentInterviewPage() {
     return result.filter(id => id != null) as string[];
   };
 
-  const renderExtra = (interview: Interview) => {
-    const id = interview.type === stageInterviewType ? 'stage' : interview.id;
+  const renderExtra = (interview: InterviewDto) => {
+    const id = interview.type === stageInterviewType ? 'stage' : interview.id.toString();
     const hasInterview = registeredInterviews.includes(id);
-    return (
+    return interview.studentRegistrationStartDate && new Date() < new Date(interview.studentRegistrationStartDate) ? (
+      <Tag color="orange">Registration starts at {formatShortDate(interview.studentRegistrationStartDate)}</Tag>
+    ) : (
       <Button
         onClick={() => handleRegister(id)}
         icon={hasInterview ? <CheckCircleOutlined /> : null}

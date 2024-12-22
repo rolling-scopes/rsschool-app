@@ -3534,6 +3534,12 @@ export interface InterviewDto {
      * @memberof InterviewDto
      */
     'attributes': Attributes;
+    /**
+     * Date when student can register for the interview
+     * @type {string}
+     * @memberof InterviewDto
+     */
+    'studentRegistrationStartDate': string;
 }
 /**
  * 

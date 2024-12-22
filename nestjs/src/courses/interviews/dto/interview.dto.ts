@@ -19,6 +19,9 @@ export class InterviewDto {
     this.description = courseTask.task.description;
     this.descriptionUrl = courseTask.task.descriptionUrl;
     this.attributes = courseTask.task?.attributes;
+    this.studentRegistrationStartDate = courseTask.studentRegistrationStartDate
+      ? new Date(courseTask.studentRegistrationStartDate)
+      : undefined;
   }
 
   @IsNotEmpty()
@@ -52,4 +55,7 @@ export class InterviewDto {
 
   @ApiProperty({ type: Attributes })
   attributes: Attributes;
+
+  @ApiProperty({ type: Date, description: 'Date when student can register for the interview' })
+  studentRegistrationStartDate?: Date;
 }

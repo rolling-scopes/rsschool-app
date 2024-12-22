@@ -3360,9 +3360,24 @@
           "endDate": { "type": "string" },
           "description": { "type": "string", "nullable": true },
           "descriptionUrl": { "type": "string" },
-          "attributes": { "$ref": "#/components/schemas/Attributes" }
+          "attributes": { "$ref": "#/components/schemas/Attributes" },
+          "studentRegistrationStartDate": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when student can register for the interview"
+          }
         },
-        "required": ["id", "type", "name", "startDate", "endDate", "description", "descriptionUrl", "attributes"]
+        "required": [
+          "id",
+          "type",
+          "name",
+          "startDate",
+          "endDate",
+          "description",
+          "descriptionUrl",
+          "attributes",
+          "studentRegistrationStartDate"
+        ]
       },
       "AvailableStudentDto": {
         "type": "object",

@@ -577,11 +577,6 @@ export class CourseService {
     return result.data.data as { id: number } | null;
   }
 
-  async getInterviews() {
-    const result = await this.axios.get(`/interviews`);
-    return result.data.data as Interview[];
-  }
-
   async getInterviewPairs(interviewId: string) {
     const result = await this.axios.get(`/interviews/${interviewId}`);
     return result.data.data as InterviewPair[];
