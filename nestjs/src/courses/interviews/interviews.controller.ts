@@ -33,6 +33,7 @@ import { TaskType } from '@entities/task';
 import { InterviewFeedbackService } from './interviewFeedback.service';
 import { InterviewFeedbackDto } from './dto/get-interview-feedback.dto';
 import { PutInterviewFeedbackDto } from './dto/put-interview-feedback.dto';
+import { RegistrationInterviewDto } from './dto/registration-interview.dto';
 
 @Controller('courses/:courseId/interviews')
 @ApiTags('courses interviews')
@@ -78,6 +79,35 @@ export class InterviewsController {
       throw new NotFoundException(`Interview ${interviewId} doesn't exist`);
     }
     return new InterviewDto(data);
+  }
+
+  @Post('/:interviewId/register')
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  @ApiBadRequestResponse()
+  @ApiOperation({ operationId: 'registerToInterview' })
+  @RequiredRoles([CourseRole.Student], true)
+  public async registerToInterview(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('interviewId', ParseIntPipe) interviewId: number,
+    @Req() req: CurrentRequest,
+  ) {
+    const { user } = req;
+    const interview = await this.courseTasksService.getById(interviewId);
+
+    if (!interview) {
+      throw new NotFoundException(`Interview ${interviewId} doesn't exist`);
+    }
+    // if (interview.studentRegistrationStartDate && new Date() < interview.studentRegistrationStartDate) {
+    //   throw new BadRequestException('Student registration is not available yet');
+    // }
+    const taskInterviewStudent = await this.courseTasksService.registerStudentToInterview(
+      courseId,
+      interviewId,
+      user.githubId,
+    );
+
+    return new RegistrationInterviewDto(taskInterviewStudent);
   }
 
   @Get('/:interviewId/students/available')

@@ -66,22 +66,6 @@ export const getInterviewPairs = (logger: ILogger) => async (ctx: Router.RouterC
   setResponse(ctx, StatusCodes.OK, data);
 };
 
-export const createInterviewStudent = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { courseId, githubId, courseTaskId } = ctx.params;
-  try {
-    const student = await courseService.queryStudentByGithubId(courseId, githubId);
-    if (student == null) {
-      setResponse(ctx, StatusCodes.BAD_REQUEST, null);
-      return;
-    }
-    const repository = getCustomRepository(InterviewRepository);
-    const result = await repository.addStudent(courseId, Number(courseTaskId), student.id);
-    setResponse(ctx, StatusCodes.OK, result);
-  } catch (e) {
-    setResponse(ctx, StatusCodes.BAD_REQUEST, { message: (e as Error).message });
-  }
-};
-
 export const getInterviewStudent = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, githubId, courseTaskId } = ctx.params;
   try {

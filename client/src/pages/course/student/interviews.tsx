@@ -9,6 +9,9 @@ import { formatShortDate } from 'services/formatter';
 import { getInterviewResult, InterviewDetails, InterviewStatus, stageInterviewType } from 'domain/interview';
 import { Decision } from 'data/interviews/technical-screening';
 import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { CoursesInterviewsApi } from 'api';
+
+const coursesInterviewApi = new CoursesInterviewsApi();
 
 function StudentInterviewPage() {
   const session = useContext(SessionContext);
@@ -54,7 +57,10 @@ function StudentInterviewPage() {
       ),
       okText: 'Yes',
       onOk: async () => {
-        await courseService.createInterviewStudent(session.githubId, interviewId);
+        // await courseService.createInterviewStudent(session.githubId, interviewId);
+        await coursesInterviewApi.registerToInterview(course.id, Number(interviewId)).catch(() => {
+          message.error('An error occurred. Please try later.');
+        });
         setRegisteredInterviews(registeredInterviews.concat([interviewId]));
       },
     });

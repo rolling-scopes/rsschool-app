@@ -1,5 +1,5 @@
 import { In, Repository } from 'typeorm';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { StageInterviewFeedbackJson } from '@common/models';
 import { CourseTask } from '@entities/courseTask';
@@ -182,5 +182,26 @@ export class InterviewsService {
 
   private isGoodCandidate(stageInterviews: StageInterview[]) {
     return stageInterviews.some(i => i.isCompleted && i.isGoodCandidate);
+  }
+
+  public async registerStudentToInterview(courseId: number, courseTaskId: number, githubId: string) {
+    const student = await this.studentRepository.findOneOrFail({ where: { courseId, user: { githubId } } });
+    if (student.isExpelled) {
+      throw new BadRequestException('Student is expelled');
+    }
+
+    const record = await this.taskInterviewStudentRepository.findOne({
+      where: { courseId, studentId: student.id, courseTaskId },
+    });
+    if (record) {
+      throw new BadRequestException('Student is already registered');
+    }
+
+    const taskInterviewStudent = await this.taskInterviewStudentRepository.save({
+      courseId,
+      studentId: student.id,
+      courseTaskId,
+    });
+    return taskInterviewStudent;
   }
 }
