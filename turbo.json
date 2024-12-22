@@ -1,9 +1,15 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env"],
-  "pipeline": {
+  "globalDependencies": [
+    "**/.env"
+  ],
+  "tasks": {
     "build": {
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**",
+        "dist/**"
+      ],
       "env": [
         "ACTIVITY_WEBHOOK_SECRET",
         "AWS_LAMBDA",

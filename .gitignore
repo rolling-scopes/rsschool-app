@@ -12,3 +12,4 @@ setup/backup.sql
 setup/cdk/cdk.out
 .turbo
 out
+app/
