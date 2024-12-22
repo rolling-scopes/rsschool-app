@@ -53,7 +53,7 @@ const AboutCard = ({ isEditingModeEnabled, data, updateProfile }: Props) => {
           <p style={{ fontSize: 18, marginBottom: 5 }}>
             <Text strong>About myself:</Text>
           </p>
-          <TextArea rows={4} value={value} onChange={handleChange} showCount={false} allowClear={false} count={false} />
+          <TextArea rows={4} value={value} onChange={handleChange} />
         </div>
       }
       saveProfile={handleSave}
