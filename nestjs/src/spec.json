@@ -2846,7 +2846,7 @@
           "year": { "type": "number" },
           "startDate": { "type": "string" },
           "endDate": { "type": "string" },
-          "registrationEndDate": { "type": "string" },
+          "registrationEndDate": { "type": "string", "nullable": true },
           "primarySkillId": { "type": "string" },
           "primarySkillName": { "type": "string" },
           "locationName": { "type": "string" },
@@ -2922,10 +2922,11 @@
           "fullName": { "type": "string" },
           "alias": { "type": "string" },
           "description": { "type": "string" },
+          "descriptionUrl": { "type": "string" },
           "year": { "type": "number" },
           "startDate": { "type": "string" },
           "endDate": { "type": "string" },
-          "registrationEndDate": { "type": "string" },
+          "registrationEndDate": { "type": "string", "nullable": true },
           "locationName": { "type": "string" },
           "discordServerId": { "type": "number" },
           "completed": { "type": "boolean" },
@@ -2939,7 +2940,7 @@
           "minStudentsPerMentor": { "type": "number" },
           "certificateThreshold": { "type": "number" }
         },
-        "required": ["name", "fullName", "alias", "certificateThreshold"]
+        "required": ["certificateThreshold"]
       },
       "LeaveCourseRequestDto": { "type": "object", "properties": { "comment": { "type": "string" } } },
       "Discord": {
@@ -4320,7 +4321,7 @@
           "year": { "type": "number" },
           "startDate": { "type": "string" },
           "endDate": { "type": "string" },
-          "registrationEndDate": { "type": "string" },
+          "registrationEndDate": { "type": "string", "nullable": true },
           "primarySkillId": { "type": "string" },
           "primarySkillName": { "type": "string" },
           "locationName": { "type": "string" },

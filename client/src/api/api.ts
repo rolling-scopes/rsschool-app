@@ -859,7 +859,7 @@ export interface CourseDto {
      * @type {string}
      * @memberof CourseDto
      */
-    'registrationEndDate': string;
+    'registrationEndDate': string | null;
     /**
      * 
      * @type {string}
@@ -4605,7 +4605,7 @@ export interface ProfileCourseDto {
      * @type {string}
      * @memberof ProfileCourseDto
      */
-    'registrationEndDate': string;
+    'registrationEndDate': string | null;
     /**
      * 
      * @type {string}
@@ -6258,25 +6258,31 @@ export interface UpdateCourseDto {
      * @type {string}
      * @memberof UpdateCourseDto
      */
-    'name': string;
+    'name'?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateCourseDto
      */
-    'fullName': string;
+    'fullName'?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateCourseDto
      */
-    'alias': string;
+    'alias'?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateCourseDto
      */
     'description'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateCourseDto
+     */
+    'descriptionUrl'?: string;
     /**
      * 
      * @type {number}
@@ -6300,7 +6306,7 @@ export interface UpdateCourseDto {
      * @type {string}
      * @memberof UpdateCourseDto
      */
-    'registrationEndDate'?: string;
+    'registrationEndDate'?: string | null;
     /**
      * 
      * @type {string}

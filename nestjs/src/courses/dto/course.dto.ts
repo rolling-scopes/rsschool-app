@@ -62,8 +62,8 @@ export class CourseDto {
   @ApiProperty()
   endDate: string;
 
-  @ApiProperty()
-  registrationEndDate: string;
+  @ApiProperty({ type: 'string', nullable: true })
+  registrationEndDate: string | null;
 
   @ApiProperty()
   primarySkillId: string;
