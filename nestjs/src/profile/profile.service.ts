@@ -185,7 +185,7 @@ export class ProfileService {
         omitBy<QueryDeepPartialEntity<User>>(
           {
             firstName,
-            lastName: firstName ? lastName ?? '' : undefined,
+            lastName: firstName ? (lastName ?? '') : undefined,
             countryName,
             cityName,
             educationHistory,

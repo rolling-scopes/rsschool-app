@@ -40,17 +40,21 @@ export function Consents({
 
   return !hasContacts ? (
     <Space direction="vertical" style={{ width: '100%' }}>
-      {!hasTelegram && (
-        <Alert
-          message={
-            <div>
-              Note: To enable telegram notifications please open the <a href={rsschoolBotLink}>@rsschool_bot</a> and
+      <Alert
+        message={
+          hasTelegram ? (
+            <>
+              Telegram notifications are sent from <a href={rsschoolBotLink}>@rsschool_bot</a>
+            </>
+          ) : (
+            <>
+              Note: To enable Telegram notifications please open the <a href={rsschoolBotLink}>@rsschool_bot</a> and
               click the <b>Start</b> button to set it up
-            </div>
-          }
-          type="info"
-        />
-      )}
+            </>
+          )
+        }
+        type="info"
+      />
 
       {!hasDiscord && (
         <Alert

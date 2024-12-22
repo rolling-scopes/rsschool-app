@@ -47,7 +47,7 @@ export class UsersService {
     });
   }
 
-  public getFullName({ firstName, lastName }: { firstName: string; lastName: string }) {
+  public static getFullName({ firstName, lastName }: { firstName: string; lastName: string }) {
     const result = [];
     if (firstName) {
       result.push(firstName.trim());
@@ -56,6 +56,34 @@ export class UsersService {
       result.push(lastName.trim());
     }
     return result.join(' ');
+  }
+
+  public async searchUsers(query?: string) {
+    if (!query) {
+      return [];
+    }
+
+    const search = `${query.trim()}%`;
+
+    // Search by full name, githubId, discord username
+    const userIds = await this.userRepository
+      .createQueryBuilder()
+      .where(`CONCAT("firstName", ' ', "lastName") ILIKE :search`, { search })
+      .orWhere('"githubId" ILIKE :search', { search })
+      .orWhere(`CAST(discord AS jsonb)->>'username' ILIKE :search`, { search })
+      .select(['id'])
+      .limit(20)
+      .getRawMany();
+
+    if (userIds.length === 0) {
+      return [];
+    }
+
+    // Get full user data by ids
+    return this.userRepository.find({
+      where: { id: In(userIds.map(({ id }) => id)) },
+      relations: ['mentors', 'students', 'mentors.course', 'students.course', 'students.certificate'],
+    });
   }
 
   public static getPrimaryUserFields(modelName = 'user') {
