@@ -23,7 +23,7 @@ export enum CourseRole {
 }
 
 function hasRole(user?: IUserSession, courseId?: number, role?: CourseRole) {
-  return courseId && role ? user?.courses?.[courseId]?.roles.includes(role) ?? false : false;
+  return courseId && role ? (user?.courses?.[courseId]?.roles.includes(role) ?? false) : false;
 }
 
 function hasRoleInAny(user?: IUserSession, role?: CourseRole) {

@@ -45,7 +45,7 @@ export class GratitudesService {
       return gratitudeBadge;
     }
 
-    const userCourseRoles = courses ? courses[courseId]?.roles ?? [] : [];
+    const userCourseRoles = courses ? (courses[courseId]?.roles ?? []) : [];
     return gratitudeBadge.filter((badge: GratitudeBadge) => {
       const allowed = badge.roles?.some(role => userCourseRoles.includes(role)) ?? true;
       return allowed;

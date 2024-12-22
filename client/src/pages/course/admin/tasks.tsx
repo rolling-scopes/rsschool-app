@@ -5,7 +5,13 @@ import { ColumnsType } from 'antd/lib/table';
 import { CoursesTasksApi, CourseTaskDto } from 'api';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { AdminPageLayout } from 'components/PageLayout';
-import { crossCheckDateRenderer, crossCheckStatusRenderer, dateRenderer, stringSorter } from 'components/Table';
+import {
+  crossCheckDateRenderer,
+  crossCheckStatusRenderer,
+  dateRenderer,
+  getColumnSearchProps,
+  stringSorter,
+} from 'components/Table';
 import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { CourseTaskModal } from 'modules/CourseManagement/components/CourseTaskModal';
 import { useCallback, useMemo, useState } from 'react';
@@ -203,6 +209,7 @@ function getColumns(getDropdownMenu: (record: CourseTaskDto) => any): ColumnsTyp
       title: 'Name',
       dataIndex: 'name',
       fixed: 'left',
+      ...getColumnSearchProps('name'),
     },
     { title: 'Scores Count', dataIndex: 'resultsCount' },
     {

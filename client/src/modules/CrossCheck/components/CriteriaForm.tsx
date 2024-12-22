@@ -52,7 +52,9 @@ export function CriteriaForm({ authorId, comments, reviewComments, criteria, onC
         .map(d => ({
           criteriaId: d.criteriaId,
           percentage:
-            criteriaId === d.criteriaId ? percentage : value?.find(v => v.criteriaId === d.criteriaId)?.percentage ?? 0,
+            criteriaId === d.criteriaId
+              ? percentage
+              : (value?.find(v => v.criteriaId === d.criteriaId)?.percentage ?? 0),
         }));
       onChange?.(newReview, reviewComments);
     },
@@ -69,7 +71,7 @@ export function CriteriaForm({ authorId, comments, reviewComments, criteria, onC
             authorId: authorId,
             timestamp: comment?.timestamp ?? Date.now(),
             criteriaId: d.criteriaId,
-            text: criteriaId === d.criteriaId ? text : comment?.text ?? '',
+            text: criteriaId === d.criteriaId ? text : (comment?.text ?? ''),
           };
         })
         .filter(c => c.text);

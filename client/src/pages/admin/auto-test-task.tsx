@@ -18,7 +18,7 @@ function Page() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTask, setSelectedTask] = useState<AutoTestTask>();
-  const taskId = router?.query ? router.query?.taskId ?? null : null;
+  const taskId = router?.query ? (router.query?.taskId ?? null) : null;
   const { courses } = useActiveCourseContext();
 
   useAsync(async () => {

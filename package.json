@@ -18,8 +18,8 @@
     "db:restore": "podman exec -i db psql -U rs_master -d rs_school < ./setup/backup-local.sql",
     "db:dump": "PGPASSWORD=12345678 pg_dump -h localhost --username rs_master rs_school --file ./setup/backup-local.sql",
     "db:dump:win": "pg_dump -h localhost --username rs_master rs_school > ./setup/backup-local.sql",
-    "db:up": "podman-compose -f ./setup/docker-compose.yml up  -d",
-    "db:down": "podman-compose -f ./setup/docker-compose.yml down"
+    "db:up": "podman compose -f ./setup/docker-compose.yml up  -d",
+    "db:down": "podman compose -f ./setup/docker-compose.yml down"
   },
   "devDependencies": {
     "@total-typescript/ts-reset": "0.5.1",
@@ -28,7 +28,7 @@
     "@typescript-eslint/parser": "6.12.0",
     "eslint": "8.54.0",
     "jest": "29.7.0",
-    "prettier": "3.2.5",
+    "prettier": "3.4.2",
     "turbo": "1.10.16"
   },
   "packageManager": "npm@10.7.0"
