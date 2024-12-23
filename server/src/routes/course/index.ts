@@ -92,7 +92,6 @@ function addScoreApi(router: Router<any, any>, logger: ILogger) {
 }
 
 function addInterviewsApi(router: Router<any, any>, logger: ILogger) {
-  router.get('/interviews', courseGuard, interviews.getInterviews(logger));
   router.get('/interviews/:courseTaskId', courseManagerGuard, interviews.getInterviewPairs(logger));
   router.post(
     '/interview/:courseTaskId/interviewer/:githubId/student/:studentGithubId/',
@@ -195,13 +194,6 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
     courseGuard,
     ...validators,
     interviews.getInterviewStudent(logger),
-  );
-
-  router.post(
-    '/student/:githubId/interview/:courseTaskId',
-    courseGuard,
-    ...validators,
-    interviews.createInterviewStudent(logger),
   );
 
   router.post('/student/:githubId/availability', courseManagerGuard, updateMentoringAvailability(logger));

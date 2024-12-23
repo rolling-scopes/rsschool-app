@@ -33,6 +33,10 @@ export class CreateCourseTaskDto {
 
   @ApiProperty({ required: false })
   @IsOptional()
+  studentRegistrationStartDate?: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
   crossCheckEndDate?: string;
 
   @ApiProperty({ required: false })

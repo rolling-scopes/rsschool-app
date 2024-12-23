@@ -572,19 +572,9 @@ export class CourseService {
     return result.data.data;
   }
 
-  async createInterviewStudent(githubId: string, interviewId: string) {
-    const result = await this.axios.post(`/student/${githubId}/interview/${interviewId}`);
-    return result.data.data;
-  }
-
   async getInterviewStudent(githubId: string, interviewId: string) {
     const result = await this.axios.get(`/student/${githubId}/interview/${interviewId}`);
     return result.data.data as { id: number } | null;
-  }
-
-  async getInterviews() {
-    const result = await this.axios.get(`/interviews`);
-    return result.data.data as Interview[];
   }
 
   async getInterviewPairs(interviewId: string) {
@@ -612,16 +602,6 @@ export class CourseService {
   exportStudentsCsv(activeOnly?: boolean) {
     window.open(`${this.axios.defaults.baseURL}/students/csv?status=${activeOnly ? 'active' : ''}`, '_blank');
   }
-}
-
-export interface Interview {
-  startDate: string;
-  endDate: string;
-  name: string;
-  id: string;
-  descriptionUrl: string;
-  type: string;
-  template: string | null;
 }
 
 export interface AssignedStudent extends StudentBasic {

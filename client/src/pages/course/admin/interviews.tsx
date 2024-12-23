@@ -4,12 +4,15 @@ import { AdminPageLayout } from 'components/PageLayout';
 import { getColumnSearchProps, stringSorter, boolIconRenderer, PersonCell, numberSorter } from 'components/Table';
 import { useLoading } from 'components/useLoading';
 import { useMemo, useState, useContext } from 'react';
-import { CourseService, Interview } from 'services/course';
+import { CourseService } from 'services/course';
 import { CourseRole } from 'services/models';
 import { useAsync } from 'react-use';
 import { isCourseManager } from 'domain/user';
 import { InterviewPair } from 'common/models/interview';
 import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { CoursesInterviewsApi, InterviewDto } from 'api';
+
+const coursesInterviewsApi = new CoursesInterviewsApi();
 
 function Page() {
   const session = useContext(SessionContext);
@@ -17,17 +20,17 @@ function Page() {
   const courseId = course.id;
 
   const [loading, withLoading] = useLoading(false);
-  const [interviews, setInterviews] = useState([] as Interview[]);
+  const [interviews, setInterviews] = useState<InterviewDto[]>([]);
   const [data, setData] = useState([] as InterviewPair[]);
   const [selected, setSelected] = useState<string | null>(null);
   const [modal, setModal] = useState(false);
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
 
   const loadInterviews = async () => {
-    const records = await courseService.getInterviews();
-    const filtered = records.filter(({ type }) => type === 'interview');
+    const { data: interviews } = await coursesInterviewsApi.getInterviews(courseId);
+    const filtered = interviews.filter(({ type }) => type === 'interview');
     setInterviews(filtered);
-    setSelected(filtered[0]?.id ?? null);
+    setSelected(filtered[0]?.id.toString() ?? null);
   };
 
   const deleteInterview = withLoading(async (record: any) => {
@@ -52,7 +55,7 @@ function Page() {
       <Row style={{ marginBottom: 16 }} justify="space-between">
         <Select value={selected!} onChange={(value: string) => setSelected(value)} style={{ minWidth: 300 }}>
           {interviews.map(interview => (
-            <Select.Option value={interview.id} key={interview.id}>
+            <Select.Option value={interview.id.toString()} key={interview.id.toString()}>
               {interview.name}
             </Select.Option>
           ))}

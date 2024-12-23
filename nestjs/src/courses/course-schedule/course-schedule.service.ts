@@ -374,6 +374,10 @@ export class CourseScheduleService {
       newCourseTask.studentEndDate = this.adjustDate(newCourseTask.studentEndDate, timeDiff);
       newCourseTask.mentorStartDate = this.adjustDate(newCourseTask.mentorStartDate, timeDiff);
       newCourseTask.mentorEndDate = this.adjustDate(newCourseTask.mentorEndDate, timeDiff);
+      newCourseTask.studentRegistrationStartDate = this.adjustDate(
+        newCourseTask.studentRegistrationStartDate,
+        timeDiff,
+      );
       await this.courseTaskRepository.save(newCourseTask);
     }
 
