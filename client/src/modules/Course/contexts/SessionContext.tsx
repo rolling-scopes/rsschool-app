@@ -1,18 +1,16 @@
+import useRequest from 'ahooks/lib/useRequest';
 import { Button, Result } from 'antd';
 import type { ProfileCourseDto } from 'api';
 import axios from 'axios';
 import { LoadingScreen } from 'components/LoadingScreen';
 import type { Session } from 'components/withSession';
-import { CourseRole } from 'services/models';
+import { hasRoleInAnyCourse } from 'domain/user';
 import Router from 'next/router';
 import React, { useEffect } from 'react';
-import { useAsync } from 'react-use';
+import { CourseRole } from 'services/models';
 import { useActiveCourseContext } from './ActiveCourseContext';
-import { hasRoleInAnyCourse } from 'domain/user';
 
 export const SessionContext = React.createContext<Session>({} as Session);
-
-let sessionCache: Session | undefined;
 
 type Props = React.PropsWithChildren<{
   allowedRoles?: CourseRole[];
@@ -40,17 +38,13 @@ export function SessionProvider(props: Props) {
   const course = props.course ?? activeCourse;
 
   const {
-    value: session,
+    data: session,
     loading,
     error,
-  } = useAsync(async () => {
-    if (sessionCache) {
-      return sessionCache;
-    }
+  } = useRequest(async () => {
     const response = await axios.get<{ data: Session }>('/api/session');
-    sessionCache = response.data.data;
-    return sessionCache;
-  }, []);
+    return response.data.data;
+  });
 
   useEffect(() => {
     if (!error) {

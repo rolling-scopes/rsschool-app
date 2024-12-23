@@ -2669,6 +2669,77 @@
         },
         "tags": ["auto-tests"]
       }
+    },
+    "/contributors": {
+      "post": {
+        "operationId": "createContributor",
+        "summary": "",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateContributorDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ContributorDto" } } }
+          }
+        },
+        "tags": ["contributors"]
+      },
+      "get": {
+        "operationId": "getContributors",
+        "summary": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/ContributorDto" } }
+              }
+            }
+          }
+        },
+        "tags": ["contributors"]
+      }
+    },
+    "/contributors/{id}": {
+      "get": {
+        "operationId": "getContributor",
+        "summary": "",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ContributorDto" } } }
+          }
+        },
+        "tags": ["contributors"]
+      },
+      "delete": {
+        "operationId": "deleteContributor",
+        "summary": "",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": { "200": { "description": "" } },
+        "tags": ["contributors"]
+      },
+      "patch": {
+        "operationId": "updateContributor",
+        "summary": "",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateContributorDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ContributorDto" } } }
+          }
+        },
+        "tags": ["contributors"]
+      }
     }
   },
   "info": { "title": "", "description": "", "version": "1.0.0", "contact": {} },
@@ -2846,7 +2917,7 @@
           "year": { "type": "number" },
           "startDate": { "type": "string" },
           "endDate": { "type": "string" },
-          "registrationEndDate": { "type": "string" },
+          "registrationEndDate": { "type": "string", "nullable": true },
           "primarySkillId": { "type": "string" },
           "primarySkillName": { "type": "string" },
           "locationName": { "type": "string" },
@@ -2922,10 +2993,11 @@
           "fullName": { "type": "string" },
           "alias": { "type": "string" },
           "description": { "type": "string" },
+          "descriptionUrl": { "type": "string" },
           "year": { "type": "number" },
           "startDate": { "type": "string" },
           "endDate": { "type": "string" },
-          "registrationEndDate": { "type": "string" },
+          "registrationEndDate": { "type": "string", "nullable": true },
           "locationName": { "type": "string" },
           "discordServerId": { "type": "number" },
           "completed": { "type": "boolean" },
@@ -2939,7 +3011,7 @@
           "minStudentsPerMentor": { "type": "number" },
           "certificateThreshold": { "type": "number" }
         },
-        "required": ["name", "fullName", "alias", "certificateThreshold"]
+        "required": ["certificateThreshold"]
       },
       "LeaveCourseRequestDto": { "type": "object", "properties": { "comment": { "type": "string" } } },
       "Discord": {
@@ -4320,7 +4392,7 @@
           "year": { "type": "number" },
           "startDate": { "type": "string" },
           "endDate": { "type": "string" },
-          "registrationEndDate": { "type": "string" },
+          "registrationEndDate": { "type": "string", "nullable": true },
           "primarySkillId": { "type": "string" },
           "primarySkillName": { "type": "string" },
           "locationName": { "type": "string" },
@@ -5305,6 +5377,36 @@
           "attributes",
           "courses"
         ]
+      },
+      "CreateContributorDto": {
+        "type": "object",
+        "properties": { "description": { "type": "string" }, "userId": { "type": "number" } },
+        "required": ["description", "userId"]
+      },
+      "ContributorUserDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "githubId": { "type": "string" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" }
+        },
+        "required": ["id", "githubId", "firstName", "lastName"]
+      },
+      "ContributorDto": {
+        "type": "object",
+        "properties": {
+          "description": { "type": "string" },
+          "user": { "$ref": "#/components/schemas/ContributorUserDto" },
+          "id": { "type": "number" },
+          "createdDate": { "type": "string" },
+          "updatedDate": { "type": "string" }
+        },
+        "required": ["description", "user", "id", "createdDate", "updatedDate"]
+      },
+      "UpdateContributorDto": {
+        "type": "object",
+        "properties": { "description": { "type": "string" }, "userId": { "type": "number" } }
       }
     }
   }

@@ -20,6 +20,7 @@ import { Registry } from './registry';
 import { Discord } from '../../../common/models/profile';
 import { CourseUser } from './courseUser';
 import { NotificationUserConnection, Resume } from '.';
+import { Contributor } from './contributor';
 
 export interface EducationRecord {
   graduationYear: number;
@@ -206,6 +207,13 @@ export class User {
 
   @OneToMany(_ => CourseUser, (courseUser: CourseUser) => courseUser.user, { nullable: true })
   courseUsers: CourseUser[] | null;
+
+  @OneToOne(() => Contributor, contributor => contributor.user)
+  @JoinColumn({ name: 'contributor_id' })
+  contributor: Contributor | null;
+
+  @Column({ nullable: true, name: 'contributor_id' })
+  contributorId: number | null;
 
   @BeforeInsert()
   beforeInsert?() {
