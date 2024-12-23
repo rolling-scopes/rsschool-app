@@ -1,4 +1,4 @@
-import { stageInterviewType } from 'domain/interview';
+import { TaskDtoTypeEnum } from 'api';
 import { SessionProvider, ActiveCourseProvider } from 'modules/Course/contexts';
 import { Feedback } from 'modules/Interviews/pages/feedback';
 import { InterviewFeedback } from 'modules/Interviews/pages/InterviewFeedback';
@@ -11,7 +11,7 @@ export default function (props: PageProps) {
   return (
     <ActiveCourseProvider>
       <SessionProvider allowedRoles={[CourseRole.Mentor]} course={props.course}>
-        {props.type === stageInterviewType ? <Feedback {...props} /> : <InterviewFeedback {...props} />}
+        {props.type === TaskDtoTypeEnum.StageInterview ? <Feedback {...props} /> : <InterviewFeedback {...props} />}
       </SessionProvider>
     </ActiveCourseProvider>
   );

@@ -5,10 +5,10 @@ import {
   StudentsApi,
   CoursesInterviewsApi,
   InterviewFeedbackDto,
+  TaskDtoTypeEnum,
 } from 'api';
 import { templates } from 'data/interviews';
 import { getTasksTotalScore } from 'domain/course';
-import { stageInterviewType } from 'domain/interview';
 import { notAuthorizedResponse } from 'modules/Course/data';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { ParsedUrlQuery } from 'querystring';
@@ -25,7 +25,7 @@ export type StageFeedbackProps = CourseOnlyPageProps & {
     studentsCount: number;
   };
   interviewFeedback: InterviewFeedbackDto;
-  type: typeof stageInterviewType;
+  type: typeof TaskDtoTypeEnum.StageInterview;
 };
 
 export type FeedbackProps = CourseOnlyPageProps & {
@@ -49,7 +49,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ctx => {
       return notAuthorizedResponse;
     }
 
-    const pageProps = await (type === stageInterviewType
+    const pageProps = await (type === TaskDtoTypeEnum.StageInterview
       ? getStageInterviewData({ ctx, courseId: course.id, token })
       : getInterviewData({ ctx, courseId: course.id, token }));
 
@@ -96,7 +96,7 @@ async function getStageInterviewData({
     new StudentsApi(axiosConfig).getStudent(Number(studentId)),
     new CoursesTasksApi(axiosConfig).getCourseTasks(courseId),
     new CourseStatsApi(axiosConfig).getCourseStats(courseId),
-    new CoursesInterviewsApi(axiosConfig).getInterviewFeedback(courseId, interviewId, stageInterviewType),
+    new CoursesInterviewsApi(axiosConfig).getInterviewFeedback(courseId, interviewId, TaskDtoTypeEnum.StageInterview),
   ]);
   if (!student) {
     throw new Error('Student not found');
@@ -110,7 +110,7 @@ async function getStageInterviewData({
       studentsCount: activeStudentsCount,
     },
     interviewFeedback,
-    type: stageInterviewType,
+    type: TaskDtoTypeEnum.StageInterview,
   };
 }
 

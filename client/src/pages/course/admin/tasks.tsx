@@ -193,7 +193,7 @@ function Page() {
         size="small"
         dataSource={data}
         columns={getColumns(getDropdownMenu)}
-        scroll={{ x: 1020, y: 'calc(100vh - 260px)' }}
+        scroll={{ x: 1020, y: 'calc(100vh - 265px)' }}
       />
       {modalData ? (
         <CourseTaskModal onCancel={() => setModalData(null)} onSubmit={handleModalSubmit} data={modalData} />
