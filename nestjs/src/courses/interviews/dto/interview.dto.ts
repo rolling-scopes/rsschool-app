@@ -20,8 +20,8 @@ export class InterviewDto {
     this.descriptionUrl = courseTask.task.descriptionUrl;
     this.attributes = courseTask.task?.attributes;
     this.studentRegistrationStartDate = courseTask.studentRegistrationStartDate
-      ? new Date(courseTask.studentRegistrationStartDate)
-      : undefined;
+      ? courseTask.studentRegistrationStartDate.toString()
+      : null;
   }
 
   @IsNotEmpty()
@@ -57,5 +57,5 @@ export class InterviewDto {
   attributes: Attributes;
 
   @ApiProperty({ type: Date, description: 'Date when student can register for the interview' })
-  studentRegistrationStartDate?: Date;
+  studentRegistrationStartDate: string | null;
 }
