@@ -1,4 +1,5 @@
 import { Tag } from 'antd';
+import { TaskDtoTypeEnum } from 'api';
 import { StageInterviewFeedbackVerdict, InterviewDetails as CommonInterviewDetails } from 'common/models';
 import { Decision } from 'data/interviews/technical-screening';
 import dayjs from 'dayjs';
@@ -48,8 +49,6 @@ export enum InterviewStatus {
   Canceled,
 }
 
-export const stageInterviewType = 'stage-interview';
-
 export function isInterviewRegistrationInProgress(interviewStartDate: string) {
   const startDate = dayjs(interviewStartDate).subtract(2, 'weeks');
 
@@ -79,7 +78,7 @@ export function getInterviewFeedbackUrl({
   if (!featureToggles.feedback && isScreening) {
     return `/course/mentor/interview-technical-screening?course=${courseAlias}&githubId=${studentGithubId}`;
   }
-  const type = isScreening ? stageInterviewType : template;
+  const type = isScreening ? TaskDtoTypeEnum.StageInterview : template;
   return `/course/interview/${type}/feedback?course=${courseAlias}&githubId=${studentGithubId}&studentId=${studentId}&interviewId=${interviewId}`;
 }
 

@@ -6,10 +6,10 @@ import { useMemo, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { formatShortDate } from 'services/formatter';
-import { getInterviewResult, InterviewDetails, InterviewStatus, stageInterviewType } from 'domain/interview';
+import { getInterviewResult, InterviewDetails, InterviewStatus } from 'domain/interview';
 import { Decision } from 'data/interviews/technical-screening';
 import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
-import { CoursesInterviewsApi, InterviewDto } from 'api';
+import { CoursesInterviewsApi, InterviewDto, TaskDtoTypeEnum } from 'api';
 
 const coursesInterviewApi = new CoursesInterviewsApi();
 
@@ -27,7 +27,10 @@ function StudentInterviewPage() {
       setLoading(true);
       const [data, { data: interviews }] = await Promise.all([
         courseService.getStudentInterviews(session.githubId),
-        coursesInterviewApi.getInterviews(course.id),
+        coursesInterviewApi.getInterviews(course.id, false, [
+          TaskDtoTypeEnum.Interview,
+          TaskDtoTypeEnum.StageInterview,
+        ]),
       ] as const);
       const registeredInterviews = await getRegisteredInterviews(interviews);
 
@@ -69,7 +72,7 @@ function StudentInterviewPage() {
 
   const getRegisteredInterviews = async (interviews: InterviewDto[]) => {
     const requests = interviews
-      .map(({ type, id }) => (type === stageInterviewType ? 'stage' : id.toString()))
+      .map(({ type, id }) => (type === TaskDtoTypeEnum.StageInterview ? 'stage' : id.toString()))
       .map(async id => {
         const data = await courseService.getInterviewStudent(session.githubId, id).catch(() => null);
         return data ? id : null;
@@ -80,7 +83,7 @@ function StudentInterviewPage() {
   };
 
   const renderExtra = (interview: InterviewDto) => {
-    const id = interview.type === stageInterviewType ? 'stage' : interview.id.toString();
+    const id = interview.type === TaskDtoTypeEnum.StageInterview ? 'stage' : interview.id.toString();
     const hasInterview = registeredInterviews.includes(id);
     return interview.studentRegistrationStartDate && new Date() < new Date(interview.studentRegistrationStartDate) ? (
       <Tag color="orange">Registration starts at {formatShortDate(interview.studentRegistrationStartDate)}</Tag>

@@ -1,11 +1,10 @@
-import { CoursesApi, CoursesInterviewsApi } from 'api';
+import { CoursesApi, CoursesInterviewsApi, TaskDtoTypeEnum } from 'api';
 import { notAuthorizedResponse, noAccessResponse } from 'modules/Course/data';
 import { GetServerSideProps } from 'next';
 import type { PageProps } from './index';
 import { getApiConfiguration } from 'utils/axios';
 import { getTokenFromContext } from 'utils/server';
 import dayjs from 'dayjs';
-import { stageInterviewType } from 'domain/interview';
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async ctx => {
   try {
@@ -35,7 +34,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ctx => {
       return notAuthorizedResponse;
     }
 
-    const isStage = interview.type === stageInterviewType;
+    const isStage = interview.type === TaskDtoTypeEnum.StageInterview;
     if (!isStage && dayjs(interview.startDate).isAfter(dayjs())) {
       return notAuthorizedResponse;
     }

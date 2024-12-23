@@ -16,9 +16,9 @@ import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { isCourseManager, isMentor } from 'domain/user';
-import { AvailableStudentDto, CoursesInterviewsApi, InterviewDto } from 'api';
+import { AvailableStudentDto, CoursesInterviewsApi, InterviewDto, TaskDtoTypeEnum } from 'api';
 import { getApiConfiguration } from 'utils/axios';
-import { getRating, stageInterviewType } from 'domain/interview';
+import { getRating } from 'domain/interview';
 import { SessionContext } from 'modules/Course/contexts';
 
 const api = new CoursesInterviewsApi(getApiConfiguration());
@@ -32,7 +32,7 @@ export function InterviewWaitingList({ course, interview }: PageProps) {
   const [loading, withLoading] = useLoading(false);
   const [availableStudents, setAvailableStudents] = useState<AvailableStudentDto[]>([]);
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
-  const isStageInterview = interview.type === stageInterviewType;
+  const isStageInterview = interview.type === TaskDtoTypeEnum.StageInterview;
 
   useAsync(
     withLoading(async () => {

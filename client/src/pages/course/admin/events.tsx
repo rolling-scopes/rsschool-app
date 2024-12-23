@@ -92,6 +92,7 @@ function Page() {
         size="small"
         dataSource={data}
         columns={getColumns(handleEditEvent, handleDeleteItem, { timeZone, events })}
+        scroll={{ x: 1020, y: 'calc(100vh - 265px)' }}
       />
       {modalData && (
         <CourseEventModal

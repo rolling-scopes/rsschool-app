@@ -2,8 +2,7 @@ import { Alert, Typography } from 'antd';
 import InfoCircleTwoTone from '@ant-design/icons/InfoCircleTwoTone';
 import dayjs from 'dayjs';
 import { useContext } from 'react';
-import { stageInterviewType } from 'domain/interview';
-import { InterviewDto } from 'api';
+import { InterviewDto, TaskDtoTypeEnum } from 'api';
 import { MentorOptionsContext } from './MentorPreferencesModal';
 import { useAlert } from '../hooks/useAlert';
 
@@ -15,7 +14,7 @@ export function RegistrationNoticeAlert(props: { interview: InterviewDto; startD
 
   if (isDismissed) return null;
 
-  if (interview.type !== stageInterviewType) {
+  if (interview.type !== TaskDtoTypeEnum.StageInterview) {
     return null;
   }
 

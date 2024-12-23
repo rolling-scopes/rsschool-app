@@ -1,4 +1,4 @@
-import { CoursesInterviewsApi, InterviewDto } from 'api';
+import { CoursesInterviewsApi, InterviewDto, TaskDtoTypeEnum } from 'api';
 import { PageLayout } from 'components/PageLayout';
 import { useLoading } from 'components/useLoading';
 import { useCallback, useState, useContext } from 'react';
@@ -24,7 +24,10 @@ export function Interviews() {
 
   const loadData = async () => {
     const [{ data }] = await Promise.all([
-      new CoursesInterviewsApi().getInterviews(course.id, false, ['interview', 'stage-interview']),
+      new CoursesInterviewsApi().getInterviews(course.id, false, [
+        TaskDtoTypeEnum.Interview,
+        TaskDtoTypeEnum.StageInterview,
+      ]),
       fetchStudentInterviews(),
     ]);
 
