@@ -1,345 +1,68 @@
-import {
-  Button,
-  Checkbox,
-  Col,
-  DatePicker,
-  Form,
-  Image,
-  Input,
-  InputNumber,
-  Layout,
-  message,
-  Radio,
-  Row,
-  Select,
-  Table,
-} from 'antd';
-import { Session } from 'components/withSession';
-import { ModalForm } from 'components/Forms';
-import { dateUtcRenderer, stringSorter, stringTrimRenderer, boolIconRenderer } from 'components/Table';
-import dayjs from 'dayjs';
-import { useCallback, useState, useContext } from 'react';
-import { useAsync } from 'react-use';
-import { CoursesService } from 'services/courses';
-import {
-  DiscordServersApi,
-  DiscordServerDto,
-  DisciplinesApi,
-  DisciplineDto,
-  CoursesApi,
-  UpdateCourseDto,
-  CreateCourseDto,
-} from 'api';
-import { Course, CourseRole } from 'services/models';
-import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
+import { useRequest } from 'ahooks';
+import { Button, Image, Layout, Table } from 'antd';
+import { CoursesApi, DisciplinesApi, DiscordServersApi } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
-import { isCourseManager } from 'domain/user';
+import { boolIconRenderer, dateUtcRenderer, stringSorter, stringTrimRenderer } from 'components/Table';
+import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
+import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import { isCourseManager } from 'domain/user';
 import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { CourseModal } from 'modules/CourseManagement/components/CourseModal';
+import { useContext, useState } from 'react';
+import { Course, CourseRole } from 'services/models';
 dayjs.extend(utc);
 
-const { Content } = Layout;
-
 const disciplinesApi = new DisciplinesApi();
-const courseService = new CoursesService();
 const discordServersService = new DiscordServersApi();
 const courseApi = new CoursesApi();
 
-function filterCourses(session: Session, courses: Course[]) {
-  return courses.filter(course => isCourseManager(session, course.id));
-}
-
 function Page() {
   const session = useContext(SessionContext);
-  const { courses: allCourses } = useActiveCourseContext();
-  const [courses, setCourses] = useState<Course[]>(filterCourses(session, allCourses));
-  const [discordServers, setDiscordServers] = useState<DiscordServerDto[]>([]);
-  const [disciplines, setDisciplines] = useState<DisciplineDto[]>([]);
-  const [modalData, setModalData] = useState(null as Partial<Course> | null);
-  const [modalAction, setModalAction] = useState('update');
-  const [modalLoading, setModalLoading] = useState(false);
-  const [isCopy, setIsCopy] = useState(false);
 
-  const loadData = async () => {
+  const { courses: allCourses } = useActiveCourseContext();
+  const [modalId, setModalId] = useState<number | null | undefined>();
+
+  const response = useRequest(async () => {
     const [{ data: courses }, { data: discordServers }, { data: disciplines }] = await Promise.all([
       courseApi.getCourses(),
       discordServersService.getDiscordServers(),
       disciplinesApi.getDisciplines(),
     ]);
-    setCourses(filterCourses(session, courses));
-    setDiscordServers(discordServers);
-    setDisciplines(disciplines);
-  };
-
-  const { loading } = useAsync(loadData, []);
-
-  const handleAddItem = () => {
-    setModalData({});
-    setModalAction('create');
-  };
-
-  const handleEditItem = (record: Course) => {
-    setModalData(record);
-    setModalAction('update');
-  };
-
-  const handleModalSubmit = useCallback(
-    async (values: any) => {
-      try {
-        if (modalLoading) {
-          return;
-        }
-        setModalLoading(true);
-        const record = createRecord(values);
-        if (modalAction === 'update') {
-          await courseApi.updateCourse(modalData!.id!, record);
-        } else {
-          if (values.courseId) {
-            await courseService.createCourseCopy(record as CreateCourseDto, values.courseId);
-            setIsCopy(false);
-          } else {
-            await courseService.createCourse(record as CreateCourseDto);
-          }
-        }
-        await loadData();
-        setModalData(null);
-      } catch (e) {
-        message.error('An error occurred. Can not save the task.');
-      } finally {
-        setModalLoading(false);
-      }
-    },
-    [modalAction, modalData, modalLoading],
-  );
-
-  const renderModal = () => {
-    if (modalData == null) {
-      return;
-    }
-    const isUpdate = modalAction === 'update';
-    return (
-      <ModalForm
-        data={modalData}
-        title="Course"
-        submit={handleModalSubmit}
-        cancel={() => setModalData(null)}
-        getInitialValues={getInitialValues}
-        loading={modalLoading}
-      >
-        <Row gutter={24}>
-          <Col span={24}>
-            {!isUpdate ? (
-              <Checkbox checked={isCopy} value={isCopy} onChange={e => setIsCopy(e.target.checked)}>
-                I want to copy tasks and events from other course
-              </Checkbox>
-            ) : (
-              ''
-            )}
-            {isCopy && !isUpdate ? (
-              <Form.Item name="courseId" label="Choose course">
-                <Select placeholder="Please select course template">
-                  {courses.map(course => (
-                    <Select.Option key={course.id} value={course.id}>
-                      {course.name}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            ) : (
-              ''
-            )}
-          </Col>
-          <Col span={12}>
-            <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter name' }]}>
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              name="fullName"
-              label="Full Name"
-              rules={[{ required: true, message: 'Please enter full name' }]}
-            >
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item name="alias" label="Alias" rules={[{ required: true, message: 'Please enter alias' }]}>
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item name="certificateIssuer" label="Certificate Issuer">
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              name="description"
-              label="Description"
-              rules={[{ required: true, message: 'Please course description' }]}
-            >
-              <Input.TextArea />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              name="discordServerId"
-              label="Choose discord server"
-              rules={[{ required: true, message: 'Please select discord server' }]}
-            >
-              <Select placeholder="Please select discord server">
-                {discordServers.map(discordServer => (
-                  <Select.Option key={discordServer.id} value={discordServer.id}>
-                    {discordServer.name}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </Col>
-        </Row>
-        <Form.Item
-          name={['discipline', 'id']}
-          label="Disciplines"
-          rules={[{ required: true, message: 'Please select a discipline' }]}
-        >
-          <Select placeholder="Please select a discipline">
-            {disciplines.map(discipline => (
-              <Select.Option key={discipline.id} value={discipline.id}>
-                {discipline.name}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-
-        <Row justify="space-between">
-          <Col>
-            <Form.Item
-              name="range"
-              label="Start Date - End Date"
-              rules={[{ required: true, type: 'array', message: 'Please enter course date range' }]}
-            >
-              <DatePicker.RangePicker />
-            </Form.Item>
-          </Col>
-          <Col>
-            <Form.Item name="registrationEndDate" label="Registration End Date">
-              <DatePicker />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Form.Item name="logo" label="Course Logo">
-          <Select placeholder="Please select logo">
-            {courseIcons.map(course => (
-              <Select.Option key={course.id} value={course.id}>
-                {course.label}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-
-        <Row>
-          <Col span={12}>
-            <Form.Item
-              name="minStudentsPerMentor"
-              label="Minimum Students per Mentor"
-              rules={[
-                { min: 1, type: 'integer', message: 'Ensure that the input, if provided, is a positive integer.' },
-              ]}
-            >
-              <InputNumber step={1} />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              name="certificateThreshold"
-              label="Certificate Threshold"
-              tooltip="Minimum score percentage required for students to qualify for a certificate."
-              rules={[
-                {
-                  required: true,
-                  message: 'Please input the certificate threshold.',
-                  type: 'integer',
-                  min: 1,
-                  max: 100,
-                },
-              ]}
-            >
-              <InputNumber step={5} min={1} max={100} addonAfter="%" />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Form.Item name="state" label="State">
-          <Radio.Group>
-            <Radio value="active">Active</Radio>
-            <Radio value="planned">Planned</Radio>
-            <Radio value="completed">Completed</Radio>
-          </Radio.Group>
-        </Form.Item>
-
-        <Form.Item name="usePrivateRepositories" label="Repositories" valuePropName="checked">
-          <Checkbox>Use Private Repositories</Checkbox>
-        </Form.Item>
-
-        <Form.Item name="personalMentoring" label="Personal Mentoring" valuePropName="checked">
-          <Checkbox>Personal mentoring</Checkbox>
-        </Form.Item>
-
-        <Form.Item name="inviteOnly" label="Invite Only" valuePropName="checked">
-          <Checkbox>Invite Only Course</Checkbox>
-        </Form.Item>
-      </ModalForm>
-    );
-  };
+    return {
+      courses: courses.filter(course => isCourseManager(session, course.id)),
+      discordServers,
+      disciplines,
+    };
+  });
 
   return (
-    <AdminPageLayout title="Manage Courses" loading={loading} courses={allCourses}>
-      <Content style={{ margin: 8 }}>
-        <Button type="primary" onClick={handleAddItem}>
+    <AdminPageLayout title="Manage Courses" loading={response.loading} courses={allCourses}>
+      <Layout.Content style={{ margin: 8 }}>
+        <Button type="primary" onClick={() => setModalId(null)}>
           Add Course
         </Button>
         <Table
           size="small"
           style={{ marginTop: 8 }}
-          dataSource={courses}
+          dataSource={response.data?.courses ?? []}
           pagination={{ pageSize: 100 }}
           rowKey="id"
-          columns={getColumns(handleEditItem)}
+          columns={getColumns((record: Course) => setModalId(record.id))}
         />
-      </Content>
-      {renderModal()}
+      </Layout.Content>
+      {modalId !== undefined ? (
+        <CourseModal
+          onClose={() => setModalId(undefined)}
+          discordServers={response.data?.discordServers ?? []}
+          disciplines={response.data?.disciplines ?? []}
+          courses={allCourses}
+          courseId={modalId}
+        />
+      ) : null}
     </AdminPageLayout>
   );
 }
-
-function createRecord(values: any) {
-  const [startDate, endDate] = values.range as [dayjs.Dayjs, dayjs.Dayjs];
-  const record: UpdateCourseDto = {
-    name: values.name,
-    fullName: values.fullName,
-    alias: values.alias,
-    startDate: startDate ? dayjs.utc(startDate).startOf('day').format() : undefined,
-    endDate: endDate ? dayjs.utc(endDate).startOf('day').format() : undefined,
-    registrationEndDate: values.registrationEndDate ? values.registrationEndDate.toISOString() : null,
-    completed: values.state === 'completed',
-    planned: values.state === 'planned',
-    inviteOnly: values.inviteOnly,
-    description: values.description,
-    disciplineId: values.discipline?.id,
-    certificateIssuer: values.certificateIssuer,
-    discordServerId: values.discordServerId,
-    usePrivateRepositories: values.usePrivateRepositories,
-    personalMentoring: values.personalMentoring,
-    logo: values.logo,
-    minStudentsPerMentor: values.minStudentsPerMentor,
-    certificateThreshold: values.certificateThreshold,
-  };
-  return record;
-}
-
-const courseIcons = Object.entries(DEFAULT_COURSE_ICONS).map(([key, config]) => ({ ...config, id: key }));
 
 function getColumns(handleEditItem: any) {
   return [
@@ -409,24 +132,6 @@ function getColumns(handleEditItem: any) {
       render: (_: any, record: any) => <a onClick={() => handleEditItem(record)}>Edit</a>,
     },
   ];
-}
-
-function getInitialValues(modalData: Partial<Course>) {
-  return {
-    ...modalData,
-    minStudentsPerMentor: modalData.minStudentsPerMentor || 2,
-    certificateThreshold: modalData.certificateThreshold ?? 70,
-    inviteOnly: !!modalData.inviteOnly,
-    state: modalData.completed ? 'completed' : modalData.planned ? 'planned' : 'active',
-    registrationEndDate: modalData.registrationEndDate ? dayjs.utc(modalData.registrationEndDate) : null,
-    range:
-      modalData.startDate && modalData.endDate
-        ? [
-            modalData.startDate ? dayjs.utc(modalData.startDate) : null,
-            modalData.endDate ? dayjs.utc(modalData.endDate) : null,
-          ]
-        : null,
-  };
 }
 
 export default function () {

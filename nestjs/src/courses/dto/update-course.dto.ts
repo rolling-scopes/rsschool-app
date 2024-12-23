@@ -3,21 +3,26 @@ import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class UpdateCourseDto {
   @IsString()
-  @ApiProperty()
-  name: string;
+  @ApiPropertyOptional()
+  name?: string;
 
   @IsString()
-  @ApiProperty()
-  fullName: string;
+  @ApiPropertyOptional()
+  fullName?: string;
 
   @IsString()
-  @ApiProperty()
-  alias: string;
+  @ApiPropertyOptional()
+  alias?: string;
 
   @IsString()
   @IsOptional()
   @ApiPropertyOptional()
   description?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiPropertyOptional()
+  descriptionUrl?: string;
 
   @ApiPropertyOptional()
   year?: number;
@@ -34,8 +39,8 @@ export class UpdateCourseDto {
 
   @IsString()
   @IsOptional()
-  @ApiPropertyOptional()
-  registrationEndDate?: string;
+  @ApiPropertyOptional({ type: 'string', nullable: true })
+  registrationEndDate?: string | null;
 
   @IsString()
   @IsOptional()

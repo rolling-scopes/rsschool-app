@@ -51,7 +51,7 @@ export class Course {
   endDate: Date;
 
   @Column({ type: 'timestamptz', nullable: true })
-  registrationEndDate: Date;
+  registrationEndDate: Date | null;
 
   @Column({ nullable: true })
   primarySkillId: string;

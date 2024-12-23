@@ -11,7 +11,7 @@ export class ExportCourseDto {
     this.discipline = course.discipline ? { id: course.discipline.id, name: course.discipline.name } : null;
     this.description = course.description;
     this.descriptionUrl = course.descriptionUrl;
-    this.registrationEndDate = course.registrationEndDate.toISOString();
+    this.registrationEndDate = course.registrationEndDate?.toISOString() ?? null;
   }
 
   id: number;
@@ -21,7 +21,7 @@ export class ExportCourseDto {
   description: string;
   descriptionUrl: string;
   discipline: { id: number; name: string } | null;
-  registrationEndDate: string;
+  registrationEndDate: string | null;
   startDate: string;
   endDate: string;
 }

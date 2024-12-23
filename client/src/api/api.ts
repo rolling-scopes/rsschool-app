@@ -727,6 +727,74 @@ export interface ContactsDto {
 /**
  * 
  * @export
+ * @interface ContributorDto
+ */
+export interface ContributorDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof ContributorDto
+     */
+    'description': string;
+    /**
+     * 
+     * @type {ContributorUserDto}
+     * @memberof ContributorDto
+     */
+    'user': ContributorUserDto;
+    /**
+     * 
+     * @type {number}
+     * @memberof ContributorDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContributorDto
+     */
+    'createdDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContributorDto
+     */
+    'updatedDate': string;
+}
+/**
+ * 
+ * @export
+ * @interface ContributorUserDto
+ */
+export interface ContributorUserDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof ContributorUserDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContributorUserDto
+     */
+    'githubId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContributorUserDto
+     */
+    'firstName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContributorUserDto
+     */
+    'lastName': string;
+}
+/**
+ * 
+ * @export
  * @interface CountriesStatsDto
  */
 export interface CountriesStatsDto {
@@ -859,7 +927,7 @@ export interface CourseDto {
      * @type {string}
      * @memberof CourseDto
      */
-    'registrationEndDate': string;
+    'registrationEndDate': string | null;
     /**
      * 
      * @type {string}
@@ -1687,6 +1755,25 @@ export interface CreateAlertDto {
      * @memberof CreateAlertDto
      */
     'courseId'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface CreateContributorDto
+ */
+export interface CreateContributorDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateContributorDto
+     */
+    'description': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateContributorDto
+     */
+    'userId': number;
 }
 /**
  * 
@@ -4629,7 +4716,7 @@ export interface ProfileCourseDto {
      * @type {string}
      * @memberof ProfileCourseDto
      */
-    'registrationEndDate': string;
+    'registrationEndDate': string | null;
     /**
      * 
      * @type {string}
@@ -6274,6 +6361,25 @@ export interface TeamsDto {
 /**
  * 
  * @export
+ * @interface UpdateContributorDto
+ */
+export interface UpdateContributorDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateContributorDto
+     */
+    'description'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateContributorDto
+     */
+    'userId'?: number;
+}
+/**
+ * 
+ * @export
  * @interface UpdateCourseDto
  */
 export interface UpdateCourseDto {
@@ -6282,25 +6388,31 @@ export interface UpdateCourseDto {
      * @type {string}
      * @memberof UpdateCourseDto
      */
-    'name': string;
+    'name'?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateCourseDto
      */
-    'fullName': string;
+    'fullName'?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateCourseDto
      */
-    'alias': string;
+    'alias'?: string;
     /**
      * 
      * @type {string}
      * @memberof UpdateCourseDto
      */
     'description'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateCourseDto
+     */
+    'descriptionUrl'?: string;
     /**
      * 
      * @type {number}
@@ -6324,7 +6436,7 @@ export interface UpdateCourseDto {
      * @type {string}
      * @memberof UpdateCourseDto
      */
-    'registrationEndDate'?: string;
+    'registrationEndDate'?: string | null;
     /**
      * 
      * @type {string}
@@ -8830,6 +8942,363 @@ export class CertificateApi extends BaseAPI {
      */
     public saveCertificate(saveCertificateDto: SaveCertificateDto, options?: AxiosRequestConfig) {
         return CertificateApiFp(this.configuration).saveCertificate(saveCertificateDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * ContributorsApi - axios parameter creator
+ * @export
+ */
+export const ContributorsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CreateContributorDto} createContributorDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createContributor: async (createContributorDto: CreateContributorDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createContributorDto' is not null or undefined
+            assertParamExists('createContributor', 'createContributorDto', createContributorDto)
+            const localVarPath = `/contributors`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createContributorDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteContributor: async (id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deleteContributor', 'id', id)
+            const localVarPath = `/contributors/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getContributor: async (id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getContributor', 'id', id)
+            const localVarPath = `/contributors/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getContributors: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/contributors`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {UpdateContributorDto} updateContributorDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateContributor: async (id: number, updateContributorDto: UpdateContributorDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('updateContributor', 'id', id)
+            // verify required parameter 'updateContributorDto' is not null or undefined
+            assertParamExists('updateContributor', 'updateContributorDto', updateContributorDto)
+            const localVarPath = `/contributors/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateContributorDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * ContributorsApi - functional programming interface
+ * @export
+ */
+export const ContributorsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = ContributorsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {CreateContributorDto} createContributorDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createContributor(createContributorDto: CreateContributorDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ContributorDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createContributor(createContributorDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteContributor(id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteContributor(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getContributor(id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ContributorDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getContributor(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getContributors(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ContributorDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getContributors(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {UpdateContributorDto} updateContributorDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateContributor(id: number, updateContributorDto: UpdateContributorDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ContributorDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateContributor(id, updateContributorDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * ContributorsApi - factory interface
+ * @export
+ */
+export const ContributorsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = ContributorsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {CreateContributorDto} createContributorDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createContributor(createContributorDto: CreateContributorDto, options?: any): AxiosPromise<ContributorDto> {
+            return localVarFp.createContributor(createContributorDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteContributor(id: number, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteContributor(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getContributor(id: number, options?: any): AxiosPromise<ContributorDto> {
+            return localVarFp.getContributor(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getContributors(options?: any): AxiosPromise<Array<ContributorDto>> {
+            return localVarFp.getContributors(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {UpdateContributorDto} updateContributorDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateContributor(id: number, updateContributorDto: UpdateContributorDto, options?: any): AxiosPromise<ContributorDto> {
+            return localVarFp.updateContributor(id, updateContributorDto, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * ContributorsApi - object-oriented interface
+ * @export
+ * @class ContributorsApi
+ * @extends {BaseAPI}
+ */
+export class ContributorsApi extends BaseAPI {
+    /**
+     * 
+     * @param {CreateContributorDto} createContributorDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ContributorsApi
+     */
+    public createContributor(createContributorDto: CreateContributorDto, options?: AxiosRequestConfig) {
+        return ContributorsApiFp(this.configuration).createContributor(createContributorDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ContributorsApi
+     */
+    public deleteContributor(id: number, options?: AxiosRequestConfig) {
+        return ContributorsApiFp(this.configuration).deleteContributor(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ContributorsApi
+     */
+    public getContributor(id: number, options?: AxiosRequestConfig) {
+        return ContributorsApiFp(this.configuration).getContributor(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ContributorsApi
+     */
+    public getContributors(options?: AxiosRequestConfig) {
+        return ContributorsApiFp(this.configuration).getContributors(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {UpdateContributorDto} updateContributorDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ContributorsApi
+     */
+    public updateContributor(id: number, updateContributorDto: UpdateContributorDto, options?: AxiosRequestConfig) {
+        return ContributorsApiFp(this.configuration).updateContributor(id, updateContributorDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
