@@ -184,7 +184,7 @@ export function CrossCheckSubmit() {
   const submitAllowed = taskExists && !submitDeadlinePassed;
   const newCrossCheck = criteria.length > 0;
   const isCrossCheckCompleted = task?.crossCheckStatus === CrossCheckStatus.Completed;
-  const isCrosscheckOngoing = task?.crossCheckStatus === CrossCheckStatus.Distributed;
+  const isCrossCheckOngoing = task?.crossCheckStatus === CrossCheckStatus.Distributed;
   const hasReviews = !!feedback?.reviews?.length;
 
   return (
@@ -266,23 +266,18 @@ export function CrossCheckSubmit() {
         </Col>
       </Row>
 
-      {submittedSolution && !hasReviews && isCrosscheckOngoing && (
-        <Row gutter={24}>
-          <Col {...colSizes}>
-            <Result title="No one has checked your work yet." status="404" />
-          </Col>
-        </Row>
-      )}
-      {submittedSolution && !hasReviews && isCrossCheckCompleted && (
+      {submittedSolution && !hasReviews && (isCrossCheckCompleted || isCrossCheckOngoing) && (
         <Row gutter={24}>
           <Col {...colSizes}>
             <Result
-              title="No one has checked your work."
+              title={isCrossCheckCompleted ? 'No one has checked your work.' : 'No one has checked your work yet.'}
               status="404"
               extra={
-                <Button type="link" target="_blank" href="https://docs.rs.school/#/cross-check-flow?id=Апелляция">
-                  Check if you are eligible to appeal here.
-                </Button>
+                isCrossCheckCompleted && (
+                  <Button type="link" target="_blank" href="https://docs.rs.school/#/en/cross-check-flow?id=appeal">
+                    Check if you are eligible to appeal here.
+                  </Button>
+                )
               }
             />
           </Col>
