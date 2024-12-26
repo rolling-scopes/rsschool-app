@@ -43,7 +43,7 @@ function AutoTestTaskCard({ courseTask }: AutoTestTaskCardProps) {
           </Paragraph>
         </Col>
         <Col span={24}>
-          <Link href={'/admin/auto-test-task?taskId=' + courseTask.id}>
+          <Link href={`/admin/auto-test-task/${courseTask.id}`}>
             <Button type="primary">Preview Task</Button>
           </Link>
         </Col>

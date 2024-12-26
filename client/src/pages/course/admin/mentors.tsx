@@ -69,9 +69,9 @@ function Page() {
     ]);
 
     const studentsGroupCount = records.reduce(
-      (acc, { studentsCount, maxStudentsLimit }) => {
+      (acc, { studentsCount, maxStudentsLimit, isActive }) => {
         acc[0] += studentsCount ? studentsCount : 0;
-        acc[1] += maxStudentsLimit ? maxStudentsLimit : 0;
+        acc[1] += maxStudentsLimit && isActive ? maxStudentsLimit : 0;
         return acc;
       },
       [0, 0],
