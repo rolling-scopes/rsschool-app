@@ -92,12 +92,25 @@ function Page({ selectedTask }: PageProps) {
       {selectedTask?.attributes?.public?.questions && (
         <>
           <Divider />
-          <Descriptions title="Test Settings" bordered column={4}>
+          <Descriptions
+            title="Test Settings"
+            bordered
+            size="small"
+            column={{
+              xs: 1,
+              md: 2,
+              lg: 3,
+              xxl: 5,
+            }}
+          >
             <Descriptions.Item label="Max Attempts Number">
               {selectedTask?.attributes?.public?.maxAttemptsNumber}
             </Descriptions.Item>
             <Descriptions.Item label="Number of Questions">
               {selectedTask?.attributes?.public?.numberOfQuestions}
+            </Descriptions.Item>
+            <Descriptions.Item label="Total Questions">
+              {selectedTask?.attributes?.public?.questions?.length}
             </Descriptions.Item>
             <Descriptions.Item label="Strict Attempts Mode">
               <Switch checked={selectedTask?.attributes?.public?.strictAttemptsMode} disabled />
@@ -112,7 +125,7 @@ function Page({ selectedTask }: PageProps) {
             renderItem={(item: Record<string, any>, index) => (
               <List.Item>
                 <List.Item.Meta
-                  title={item.question}
+                  title={`${index + 1}. ${item.question}`}
                   description={item.answers.map((answer: string, indexAnswer: number) => (
                     <Checkbox key={indexAnswer} checked={selectedTask?.attributes.answers[index].includes(indexAnswer)}>
                       {answer}
