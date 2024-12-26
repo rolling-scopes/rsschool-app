@@ -4,7 +4,6 @@ import { AdminPageLayout } from 'components/PageLayout';
 import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { CourseRole } from 'services/models';
 import { GetServerSideProps } from 'next';
-import { ParsedUrlQuery } from 'querystring';
 import { getTokenFromContext } from 'utils/server';
 import { getApiConfiguration } from 'utils/axios';
 
@@ -18,7 +17,8 @@ type PageProps = {
 
 export const getServerSideProps: GetServerSideProps = async context => {
   try {
-    const { taskId } = context.params as ParsedUrlQuery;
+    context.params;
+    const taskId = context.params?.taskId;
 
     if (!taskId) {
       throw new Error('task id is required');
