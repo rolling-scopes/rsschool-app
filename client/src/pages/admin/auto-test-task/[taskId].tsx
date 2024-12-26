@@ -17,7 +17,6 @@ type PageProps = {
 
 export const getServerSideProps: GetServerSideProps = async context => {
   try {
-    context.params;
     const taskId = context.params?.taskId;
 
     if (!taskId) {
