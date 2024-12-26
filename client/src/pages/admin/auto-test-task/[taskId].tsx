@@ -1,4 +1,4 @@
-import { Checkbox, Descriptions, Divider, List, Switch, Tag, Typography } from 'antd';
+import { Checkbox, Descriptions, Divider, List, Space, Switch, Tag, Typography } from 'antd';
 import { AutoTestTaskDto, AutoTestsApi } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
 import { TASK_TYPES_MAP } from 'data/taskTypes';
@@ -67,11 +67,13 @@ function Page({ selectedTask }: PageProps) {
         )}
         {selectedTask?.courses?.length && selectedTask?.courses?.length > 0 && (
           <Descriptions.Item label="Courses">
-            {selectedTask?.courses.map(course => (
-              <Tag color={course?.isActive ? 'green' : 'red'} key={course.name}>
-                <Typography.Text>{course.name}</Typography.Text>
-              </Tag>
-            ))}
+            <Space wrap size="small">
+              {selectedTask.courses.map(course => (
+                <Tag color={course?.isActive ? 'green' : 'red'} key={course.name}>
+                  <Typography.Text>{course.name}</Typography.Text>
+                </Tag>
+              ))}
+            </Space>
           </Descriptions.Item>
         )}
 
