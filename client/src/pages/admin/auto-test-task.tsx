@@ -47,7 +47,7 @@ function Page() {
       ) : (
         <>
           <Descriptions column={1}>
-            <Descriptions.Item label="ID">{selectedTask?.id}</Descriptions.Item>
+            <Descriptions.Item label="Name">{selectedTask?.name}</Descriptions.Item>
             {selectedTask?.type && (
               <Descriptions.Item label="Type">{TASK_TYPES_MAP[selectedTask?.type]}</Descriptions.Item>
             )}
