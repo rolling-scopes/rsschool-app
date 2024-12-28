@@ -1,12 +1,6 @@
 import { AxiosError } from 'axios';
 import { useReducer } from 'react';
-import {
-  CourseTaskDto,
-  CoursesTasksApi,
-  CheckerEnum,
-  CoursesTaskSolutionsApi,
-  CourseTaskDtoTypeEnum,
-} from 'api';
+import { CourseTaskDto, CoursesTasksApi, CheckerEnum, CoursesTaskSolutionsApi, CourseTaskDtoTypeEnum } from 'api';
 
 type Action = {
   type: 'loading' | 'open' | 'close' | 'error' | 'submit' | 'set-solution-url';
