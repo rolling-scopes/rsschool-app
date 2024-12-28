@@ -13,7 +13,7 @@ export class CdnService {
     try {
       const result = await coursesService.getCourses();
       return result.data;
-    } catch (e) {
+    } catch {
       return [];
     }
   }

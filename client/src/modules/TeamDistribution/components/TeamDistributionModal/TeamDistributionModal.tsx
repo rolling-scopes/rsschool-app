@@ -73,7 +73,7 @@ const submitTeamDistribution = async (courseId: number, values: FormState, id?: 
     } else {
       await teamDistributionApi.createTeamDistribution(courseId, record);
     }
-  } catch (error) {
+  } catch {
     message.error('Failed to create team distribution. Please try later.');
   }
 };

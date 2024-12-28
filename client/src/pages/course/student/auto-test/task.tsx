@@ -48,7 +48,7 @@ export const getServerSideProps: GetServerSideProps<AutoTestTaskProps> = async c
     }
 
     return noAccessResponse;
-  } catch (error) {
+  } catch {
     return noAccessResponse;
   }
 };

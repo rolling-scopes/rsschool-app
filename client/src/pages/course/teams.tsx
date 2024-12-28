@@ -32,7 +32,7 @@ export const getServerSideProps: GetServerSideProps<{
     return {
       props: { ...courseProps.props, teamDistributionDetailed: data },
     };
-  } catch (error) {
+  } catch {
     return noAccessResponse;
   }
 };

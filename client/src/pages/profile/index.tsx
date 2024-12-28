@@ -72,7 +72,7 @@ const ProfilePage = () => {
       setProfile(updateProfile);
       setIsProfileOwner(isProfileOwner);
       setConnections(connections as Connections);
-    } catch (e) {
+    } catch {
       setProfile(null);
     }
   };
@@ -80,7 +80,7 @@ const ProfilePage = () => {
   const sendEmailConfirmationLink = async () => {
     try {
       await userService.sendEmailConfirmationLink();
-    } catch (e) {
+    } catch {
       message.error('Error has occurred. Please try again later');
     }
   };
@@ -93,7 +93,7 @@ const ProfilePage = () => {
       setIsSaving(false);
       message.success('Profile was successfully saved');
       isUpdated = true;
-    } catch (error) {
+    } catch {
       setIsSaving(false);
       message.error('Error has occurred. Please check your connection and try again');
       isUpdated = false;

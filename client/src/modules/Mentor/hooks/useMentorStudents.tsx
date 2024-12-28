@@ -14,7 +14,7 @@ export function useMentorStudents(mentorId: number | null) {
       try {
         const { data = [] } = await service.getMentorStudents(mentorId);
         setStudents(data);
-      } catch (error) {
+      } catch {
         message.error('Failed to fetch students');
       } finally {
         setLoading(false);

@@ -12,13 +12,17 @@
       ],
       "env": [
         "ACTIVITY_WEBHOOK_SECRET",
+        "APP_VERSION",
         "AWS_LAMBDA",
+        "BUILD_VERSION",
         "CDN_HOST",
         "CONSENT_SECRET",
+        "NESTJS_HOST",
         "NODE_ENV",
         "NODE_PORT",
         "NODE_TLS_REJECT_UNAUTHORIZED",
         "RS_ENV",
+        "RS_HOST",
         "RSSCHOOL_ADMIN_TEAMS",
         "RSSHCOOL_API_ADMIN_PASSWORD",
         "RSSHCOOL_API_ADMIN_USERNAME",
@@ -52,7 +56,8 @@
         "RSSHCOOL_UI_GCP_MAPS_API_KEY",
         "RSSHCOOL_USERS_ADMINS",
         "RSSHCOOL_USERS_HIRERS",
-        "SENTRY_DSN"
+        "SENTRY_DSN",
+        "SERVER_HOST"
       ]
     },
     "lint": {},

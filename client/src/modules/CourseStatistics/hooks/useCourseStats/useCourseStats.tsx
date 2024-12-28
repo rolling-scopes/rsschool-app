@@ -32,7 +32,7 @@ export function useCourseStats(courseId: number) {
         courseTasks: courseTasks.data,
         studentsCertificatesCountries: studentsCertificatesCountries.data,
       };
-    } catch (error) {
+    } catch {
       message.error('Something went wrong, please try to reload the page later');
     }
   }, [courseId]);

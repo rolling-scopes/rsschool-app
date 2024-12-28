@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-/* eslint-disable @next/next/no-page-custom-font */
 import { Layout, Typography, Modal } from 'antd';
 import { AxiosError } from 'axios';
 import dayjs from 'dayjs';

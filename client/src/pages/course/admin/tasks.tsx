@@ -162,7 +162,7 @@ function Page() {
       } else {
         message.warning('Cross-check pairs were not created because there are no submitted solutions');
       }
-    } catch (e) {
+    } catch {
       message.error('An error occurred.');
     } finally {
       await loadData();

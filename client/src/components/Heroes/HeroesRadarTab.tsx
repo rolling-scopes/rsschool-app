@@ -84,7 +84,9 @@ function HeroesRadarTab({ setLoading }: { setLoading: (arg: boolean) => void }) 
 
   useEffect(() => {
     getHeroes(initialQueryParams);
-    isAdmin && getCountries();
+    if (isAdmin) {
+      getCountries();
+    }
   }, []);
 
   const handleSubmit = useCallback(async (formData: HeroesRadarFormProps) => {

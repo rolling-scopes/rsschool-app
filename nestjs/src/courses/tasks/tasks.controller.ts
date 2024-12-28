@@ -25,6 +25,7 @@ export class TasksController {
 
     Promise.resolve().then(
       () =>
+        // eslint-disable-next-line no-async-promise-executor
         new Promise(async () => {
           this.logger.log({ message: 'processing students notifications...' });
 

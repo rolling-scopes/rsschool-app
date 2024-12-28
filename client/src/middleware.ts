@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {

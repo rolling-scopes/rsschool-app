@@ -93,7 +93,7 @@ export function TasksPage() {
         }
 
         toggleModal();
-      } catch (e) {
+      } catch {
         message.error('An error occurred. Please try again later.');
       } finally {
         setModalLoading(false);

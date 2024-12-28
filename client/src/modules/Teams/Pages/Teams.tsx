@@ -49,7 +49,7 @@ function Teams({ course, teamDistributionDetailed }: TeamsPageProps) {
   const distributeStudentsToTeam = withLoading(async () => {
     try {
       await teamDistributionApi.distributeStudentsToTeam(course.id, distribution.id);
-    } catch (error) {
+    } catch {
       message.error('Failed to distribute students to team. Please try later.');
     }
   });
@@ -69,7 +69,7 @@ function Teams({ course, teamDistributionDetailed }: TeamsPageProps) {
       await loadDistribution();
       setShowJoinTeamModal(false);
       showJoinTeamResultModal(team);
-    } catch (error) {
+    } catch {
       message.error('Failed to join to team. Please try later.');
     }
   });
@@ -80,7 +80,7 @@ function Teams({ course, teamDistributionDetailed }: TeamsPageProps) {
       const { data } = await teamApi.getTeamPassword(course.id, distribution.id, teamId);
       copyToClipboard(data.password);
       notification.success({ message: 'Password copied to clipboard', duration: 2 });
-    } catch (error) {
+    } catch {
       message.error('Something went wrong. Please try again later.');
     }
   };
@@ -91,7 +91,7 @@ function Teams({ course, teamDistributionDetailed }: TeamsPageProps) {
       const { data } = await teamApi.changeTeamPassword(course.id, distribution.id, teamId);
       copyToClipboard(data.password);
       notification.success({ message: 'New Password copied to clipboard', duration: 2 });
-    } catch (error) {
+    } catch {
       message.error('Something went wrong. Please try again later.');
     }
   };
@@ -106,7 +106,7 @@ function Teams({ course, teamDistributionDetailed }: TeamsPageProps) {
       }
       await loadDistribution();
       toggleTeamModal();
-    } catch (error) {
+    } catch {
       message.error('Failed to create team. Please try later.');
     }
   });

@@ -114,7 +114,7 @@ export function useMentorData(courseAlias?: string | string[]) {
         try {
           await Promise.all(requests);
           setCurrentSteps(previousStep => previousStep + 1);
-        } catch (e) {
+        } catch {
           message.error(ERROR_MESSAGES.tryLater);
         } finally {
           setLoading(false);

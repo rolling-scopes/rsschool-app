@@ -84,7 +84,7 @@ function Page() {
         students: values.students?.map((s: any) => Number(s.value)) ?? [],
       });
       setSuccess(true);
-    } catch (e) {
+    } catch {
       message.error('An error occurred. Please try later.');
     } finally {
       setLoading(false);

@@ -13,7 +13,7 @@ export function useDistribution(teamDistributionDetailed: TeamDistributionDetail
     try {
       const { data } = await teamDistributionApi.getCourseTeamDistributionDetailed(courseId, distribution.id);
       setDistribution(data);
-    } catch (error) {
+    } catch {
       message.error('Something went wrong, please try reloading the page later');
     }
   });

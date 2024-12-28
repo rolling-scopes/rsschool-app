@@ -85,7 +85,7 @@ function Page() {
       setStudents(activeStudents);
       form.resetFields();
       message.success(actionMessages[action].success);
-    } catch (e) {
+    } catch {
       message.error('An error occured. Please try later.');
     } finally {
       setLoading(false);

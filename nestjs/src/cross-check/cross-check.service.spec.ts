@@ -99,11 +99,11 @@ const tasks = [
   },
 ];
 
-const mockPost = jest.fn((url, data, config) => ({
-  pipe: jest.fn((...callbacks) => []),
+const mockPost = jest.fn(() => ({
+  pipe: jest.fn(() => []),
 }));
 
-const mockCourseTaskRepositoryFind = jest.fn(queryParamsObj => tasks);
+const mockCourseTaskRepositoryFind = jest.fn(() => tasks);
 
 const mockCourseTaskRepositoryFactory = jest.fn(() => ({
   find: mockCourseTaskRepositoryFind,

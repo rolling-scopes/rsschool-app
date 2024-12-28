@@ -4,6 +4,7 @@ import { setResponse } from './utils';
 import { BAD_REQUEST, FORBIDDEN } from 'http-status-codes';
 import { getCourseTask } from '../services/tasks.service';
 import { DateTime } from 'luxon';
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const auth = require('basic-auth'); //tslint:disable-line
 
 export const validateGithubIdAndAccess = async (ctx: Router.RouterContext, next: Next) => {
