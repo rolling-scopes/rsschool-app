@@ -11,8 +11,9 @@
     "test:ci": "jest --ci --reporters=default --reporters=jest-junit",
     "test-watch": "jest --watch",
     "coverage": "jest --coverage",
-    "typeorm": "npx ts-node -r dotenv/config ./node_modules/typeorm/cli.js",
-    "typeorm:migration:generate": "npx ts-node -r dotenv/config ./node_modules/typeorm/cli.js migration:generate -d src/dataSource.ts"
+    "typeorm": "typeorm-ts-node-commonjs",
+    "typeorm:migration:generate": "npm run migration",
+    "migration": "typeorm-ts-node-commonjs migration:generate -d src/dataSource.ts"
   },
   "dependencies": {
     "@apalchys/pino-cloudwatch": "0.9.0",
