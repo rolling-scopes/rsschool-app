@@ -1,4 +1,4 @@
-import { Alert, Button, Checkbox, Col, Form, Input, message, Modal, Row } from 'antd';
+import { Alert, Button, Checkbox, Col, Form, Input, message, Modal, Result, Row } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { Rule } from 'antd/lib/form';
 import { CriteriaForm } from 'modules/CrossCheck/components/CriteriaForm';
@@ -12,7 +12,14 @@ import { NoSubmissionAvailable } from 'modules/Course/components/NoSubmissionAva
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService, CrossCheckComment, CrossCheckCriteria, CrossCheckReview, TaskSolution } from 'services/course';
+import {
+  CourseService,
+  CrossCheckStatus,
+  CrossCheckComment,
+  CrossCheckCriteria,
+  CrossCheckReview,
+  TaskSolution,
+} from 'services/course';
 import { githubPrUrl, privateRsRepoPattern, urlWithIpPattern } from 'services/validators';
 import { getQueryString } from 'utils/queryParams-utils';
 import { CoursesTasksApi, CrossCheckFeedbackDto, CrossCheckMessageDtoRoleEnum } from 'api';
@@ -176,6 +183,9 @@ export function CrossCheckSubmit() {
   const taskExists = !!task;
   const submitAllowed = taskExists && !submitDeadlinePassed;
   const newCrossCheck = criteria.length > 0;
+  const isCrossCheckCompleted = task?.crossCheckStatus === CrossCheckStatus.Completed;
+  const isCrossCheckOngoing = task?.crossCheckStatus === CrossCheckStatus.Distributed;
+  const hasReviews = !!feedback?.reviews?.length;
 
   return (
     <PageLayout loading={loading} title="Cross-Check Submit" showCourseName>
@@ -256,7 +266,24 @@ export function CrossCheckSubmit() {
         </Col>
       </Row>
 
-      {!!feedback?.reviews?.length && (
+      {submittedSolution && !hasReviews && (isCrossCheckCompleted || isCrossCheckOngoing) && (
+        <Row gutter={24}>
+          <Col {...colSizes}>
+            <Result
+              title={isCrossCheckCompleted ? 'No one has checked your work.' : 'No one has checked your work yet.'}
+              status="404"
+              extra={
+                isCrossCheckCompleted && (
+                  <Button type="link" target="_blank" href="https://docs.rs.school/#/en/cross-check-flow?id=appeal">
+                    Check if you are eligible to appeal here.
+                  </Button>
+                )
+              }
+            />
+          </Col>
+        </Row>
+      )}
+      {hasReviews && (
         <Row style={{ margin: '8px 0' }}>
           <Col>
             <SolutionReviewSettingsPanel settings={solutionReviewSettings} />
