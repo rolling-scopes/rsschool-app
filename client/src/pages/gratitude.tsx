@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAsync } from 'react-use';
 import { Alert, Button, Form, Input, message, Select } from 'antd';
-import { BadgeDto, BadgeDtoIdEnum, GratitudesApi } from 'api';
+import { BadgeDto, BadgeEnum, GratitudesApi } from 'api';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
 import { UserService } from 'services/user';
@@ -11,7 +11,7 @@ import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'm
 interface IGratitude {
   userIds: number[];
   courseId: number;
-  badgeId: BadgeDtoIdEnum;
+  badgeId: BadgeEnum;
   comment: string;
 }
 
@@ -40,7 +40,7 @@ function GratitudePage() {
       form.resetFields();
       message.success('Your feedback has been submitted.');
     } catch (e) {
-      const error = e as AxiosError<any>;
+      const error = e as AxiosError<{ message: string }>;
       const response = error.response;
       const errorMessage = response?.data?.message ?? 'An error occurred. Please try later.';
       message.error(errorMessage);
@@ -91,7 +91,7 @@ function GratitudePage() {
           </Select>
         </Form.Item>
         <Form.Item
-          initialValue={BadgeDtoIdEnum.ThankYou}
+          initialValue={BadgeEnum.ThankYou}
           name="badgeId"
           label="Badge"
           rules={[
