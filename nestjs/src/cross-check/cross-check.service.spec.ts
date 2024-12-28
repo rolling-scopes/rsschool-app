@@ -151,7 +151,7 @@ describe('CrossCheckService', () => {
     });
 
     it('httpService.post should be called right amout of times', () => {
-      expect(mockPost).toBeCalledTimes(4);
+      expect(mockPost).toHaveBeenCalledTimes(4);
     });
 
     it('tasks with submission deadline passed should be distributed', () => {

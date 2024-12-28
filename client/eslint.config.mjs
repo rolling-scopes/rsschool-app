@@ -5,6 +5,6 @@ export default [
   ...defaultConfig,
   {
     ...testingLibrary.configs['flat/react'],
-    files: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
+    files: ['**/__tests__/**/*.ts?(x)', '**/?(*.)+(spec|test).ts?(x)'],
   },
 ];

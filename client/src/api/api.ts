@@ -522,13 +522,18 @@ export interface BadgeDto {
     'name': string;
     /**
      * 
-     * @type {string}
+     * @type {BadgeEnum}
      * @memberof BadgeDto
      */
-    'id': BadgeDtoIdEnum;
+    'id': BadgeEnum;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
 
-export const BadgeDtoIdEnum = {
+export const BadgeEnum = {
     Congratulations: 'Congratulations',
     ExpertHelp: 'Expert_help',
     GreatSpeaker: 'Great_speaker',
@@ -547,7 +552,8 @@ export const BadgeDtoIdEnum = {
     Thanks: 'Thanks'
 } as const;
 
-export type BadgeDtoIdEnum = typeof BadgeDtoIdEnum[keyof typeof BadgeDtoIdEnum];
+export type BadgeEnum = typeof BadgeEnum[keyof typeof BadgeEnum];
+
 
 /**
  * 
@@ -637,6 +643,23 @@ export interface CheckTasksDeadlineDto {
      */
     'deadlineInHours': number;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const CheckerEnum = {
+    AutoTest: 'auto-test',
+    Assigned: 'assigned',
+    Mentor: 'mentor',
+    TaskOwner: 'taskOwner',
+    CrossCheck: 'crossCheck'
+} as const;
+
+export type CheckerEnum = typeof CheckerEnum[keyof typeof CheckerEnum];
+
+
 /**
  * 
  * @export
@@ -1989,10 +2012,10 @@ export interface CreateCourseTaskDto {
     'scoreWeight'?: number;
     /**
      * 
-     * @type {string}
+     * @type {CheckerEnum}
      * @memberof CreateCourseTaskDto
      */
-    'checker': CreateCourseTaskDtoCheckerEnum;
+    'checker': CheckerEnum;
     /**
      * 
      * @type {string}
@@ -2049,15 +2072,6 @@ export interface CreateCourseTaskDto {
     'validations': object;
 }
 
-export const CreateCourseTaskDtoCheckerEnum = {
-    AutoTest: 'auto-test',
-    Assigned: 'assigned',
-    Mentor: 'mentor',
-    TaskOwner: 'taskOwner',
-    CrossCheck: 'crossCheck'
-} as const;
-
-export type CreateCourseTaskDtoCheckerEnum = typeof CreateCourseTaskDtoCheckerEnum[keyof typeof CreateCourseTaskDtoCheckerEnum];
 export const CreateCourseTaskDtoTypeEnum = {
     Jstask: 'jstask',
     Kotlintask: 'kotlintask',
@@ -3410,10 +3424,10 @@ export interface GratitudeDto {
     'id': number;
     /**
      * 
-     * @type {string}
+     * @type {BadgeEnum}
      * @memberof GratitudeDto
      */
-    'badgeId': GratitudeDtoBadgeIdEnum;
+    'badgeId': BadgeEnum;
     /**
      * 
      * @type {string}
@@ -3433,28 +3447,6 @@ export interface GratitudeDto {
      */
     'date': string;
 }
-
-export const GratitudeDtoBadgeIdEnum = {
-    Congratulations: 'Congratulations',
-    ExpertHelp: 'Expert_help',
-    GreatSpeaker: 'Great_speaker',
-    GoodJob: 'Good_job',
-    HelpingHand: 'Helping_hand',
-    Hero: 'Hero',
-    ThankYou: 'Thank_you',
-    OutstandingWork: 'Outstanding_work',
-    TopPerformer: 'Top_performer',
-    JobOffer: 'Job_Offer',
-    RsActivist: 'RS_activist',
-    JuryTeam: 'Jury_Team',
-    Mentor: 'Mentor',
-    Contributor: 'Contributor',
-    Coordinator: 'Coordinator',
-    Thanks: 'Thanks'
-} as const;
-
-export type GratitudeDtoBadgeIdEnum = typeof GratitudeDtoBadgeIdEnum[keyof typeof GratitudeDtoBadgeIdEnum];
-
 /**
  * 
  * @export
@@ -3785,10 +3777,10 @@ export interface MentorDashboardDto {
     'solutionUrl': string;
     /**
      * 
-     * @type {string}
+     * @type {SolutionItemStatusEnum}
      * @memberof MentorDashboardDto
      */
-    'status': string;
+    'status': SolutionItemStatusEnum;
     /**
      * 
      * @type {string}
@@ -5494,6 +5486,21 @@ export const SoftSkillEntryValueEnum = {
 } as const;
 
 export type SoftSkillEntryValueEnum = typeof SoftSkillEntryValueEnum[keyof typeof SoftSkillEntryValueEnum];
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const SolutionItemStatusEnum = {
+    InReview: 'in-review',
+    Done: 'done',
+    RandomTask: 'random-task'
+} as const;
+
+export type SolutionItemStatusEnum = typeof SolutionItemStatusEnum[keyof typeof SolutionItemStatusEnum];
+
 
 /**
  * 

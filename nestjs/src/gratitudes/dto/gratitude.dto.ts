@@ -18,7 +18,7 @@ export class GratitudeDto {
   @ApiProperty()
   public id: number;
 
-  @ApiProperty({ type: Badge, enum: Badge })
+  @ApiProperty({ type: Badge, enum: Badge, enumName: 'BadgeEnum' })
   public badgeId: Badge;
 
   @ApiProperty()

@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { CourseTaskDetailedDtoTypeEnum, CreateCourseTaskDtoCheckerEnum } from 'api';
+import { CourseTaskDetailedDtoTypeEnum, CheckerEnum } from 'api';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
 import Coding, { CodingProps } from './Coding';
 
@@ -8,7 +8,7 @@ function renderCoding(type: CourseTaskDetailedDtoTypeEnum) {
     name: 'Course Task',
     studentStartDate: '2022-09-10 12:00',
     studentEndDate: '2022-10-10 12:00',
-    checker: CreateCourseTaskDtoCheckerEnum.AutoTest,
+    checker: CheckerEnum.AutoTest,
     id: 10,
     descriptionUrl: 'description-url',
     githubRepoName: 'github-repo-name',
