@@ -1,18 +1,15 @@
-import { Checkbox, Descriptions, Divider, List, Space, Switch, Tag, Typography } from 'antd';
-import { AutoTestTaskDto, AutoTestsApi } from 'api';
+import { Descriptions, Divider, Form, Space, Switch, Tag, Typography } from 'antd';
+import { AutoTestTaskDto, AutoTestsApi, SelfEducationQuestionSelectedAnswersDto } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
 import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { CourseRole } from 'services/models';
 import { GetServerSideProps } from 'next';
 import { getTokenFromContext } from 'utils/server';
 import { getApiConfiguration } from 'utils/axios';
-
-export interface AutoTestTask extends AutoTestTaskDto {
-  attributes: Record<string, any>;
-}
+import { Question } from 'modules/AutoTest/components';
 
 type PageProps = {
-  selectedTask: AutoTestTask;
+  selectedTask: AutoTestTaskDto;
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
@@ -115,22 +112,23 @@ function Page({ selectedTask }: PageProps) {
               {selectedTask?.attributes?.public?.tresholdPercentage}
             </Descriptions.Item>
           </Descriptions>
-          <List
-            itemLayout="horizontal"
-            dataSource={selectedTask?.attributes.public.questions}
-            renderItem={(item: Record<string, any>, index) => (
-              <List.Item>
-                <List.Item.Meta
-                  title={`${index + 1}. ${item.question}`}
-                  description={item.answers.map((answer: string, indexAnswer: number) => (
-                    <Checkbox key={indexAnswer} checked={selectedTask?.attributes.answers[index].includes(indexAnswer)}>
-                      {answer}
-                    </Checkbox>
-                  ))}
-                />
-              </List.Item>
-            )}
-          />
+          <Form layout="vertical" requiredMark={false} disabled={true}>
+            {selectedTask?.attributes.public.questions.map((question, index) => (
+              <Question
+                question={
+                  {
+                    ...question,
+                    // TODO: Investigate and fix potential type mismatch for selectedAnswers.
+                    // Related issue: https://github.com/rolling-scopes/rsschool-app/issues/2572
+                    selectedAnswers: question.multiple
+                      ? selectedTask?.attributes.answers[index]
+                      : selectedTask?.attributes.answers[index][0],
+                  } as SelfEducationQuestionSelectedAnswersDto
+                }
+                questionIndex={index}
+              />
+            ))}
+          </Form>
         </>
       )}
     </AdminPageLayout>

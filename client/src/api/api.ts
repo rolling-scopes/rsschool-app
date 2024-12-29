@@ -291,6 +291,25 @@ export interface AuthConnectionDto {
 /**
  * 
  * @export
+ * @interface AutoTestAttributesDto
+ */
+export interface AutoTestAttributesDto {
+    /**
+     * 
+     * @type {PublicAttributesDto}
+     * @memberof AutoTestAttributesDto
+     */
+    'public': PublicAttributesDto;
+    /**
+     * 
+     * @type {Array<Array<number>>}
+     * @memberof AutoTestAttributesDto
+     */
+    'answers': Array<Array<number>>;
+}
+/**
+ * 
+ * @export
  * @interface AutoTestTaskDto
  */
 export interface AutoTestTaskDto {
@@ -374,10 +393,10 @@ export interface AutoTestTaskDto {
     'skills': Array<string>;
     /**
      * 
-     * @type {object}
+     * @type {AutoTestAttributesDto}
      * @memberof AutoTestTaskDto
      */
-    'attributes': object;
+    'attributes': AutoTestAttributesDto;
     /**
      * 
      * @type {Array<UsedCourseDto>}
@@ -4849,6 +4868,43 @@ export interface PromptDto {
 /**
  * 
  * @export
+ * @interface PublicAttributesDto
+ */
+export interface PublicAttributesDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof PublicAttributesDto
+     */
+    'maxAttemptsNumber': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PublicAttributesDto
+     */
+    'numberOfQuestions': number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof PublicAttributesDto
+     */
+    'strictAttemptsMode': boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof PublicAttributesDto
+     */
+    'tresholdPercentage': number;
+    /**
+     * 
+     * @type {Array<QuestionDto>}
+     * @memberof PublicAttributesDto
+     */
+    'questions': Array<QuestionDto>;
+}
+/**
+ * 
+ * @export
  * @interface PutInterviewFeedbackDto
  */
 export interface PutInterviewFeedbackDto {
@@ -4888,6 +4944,43 @@ export interface PutInterviewFeedbackDto {
      * @memberof PutInterviewFeedbackDto
      */
     'score'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface QuestionDto
+ */
+export interface QuestionDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof QuestionDto
+     */
+    'question': string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof QuestionDto
+     */
+    'multiple': boolean;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof QuestionDto
+     */
+    'answers': Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof QuestionDto
+     */
+    'questionImage'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof QuestionDto
+     */
+    'answersType'?: string;
 }
 /**
  * 
@@ -5386,13 +5479,13 @@ export interface SelfEducationQuestionSelectedAnswersDto {
      * @type {string}
      * @memberof SelfEducationQuestionSelectedAnswersDto
      */
-    'questionImage': string;
+    'questionImage'?: string;
     /**
      * 
      * @type {string}
      * @memberof SelfEducationQuestionSelectedAnswersDto
      */
-    'answersType': string;
+    'answersType'?: string;
     /**
      * 
      * @type {Array<number>}

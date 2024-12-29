@@ -4,6 +4,48 @@ import { uniqBy } from 'lodash';
 import { IdNameDto } from 'src/core/dto';
 import { UsedCourseDto } from 'src/courses/dto/used-course.dto';
 
+class QuestionDto {
+  @ApiProperty()
+  question: string;
+
+  @ApiProperty()
+  multiple: boolean;
+
+  @ApiProperty({ type: [String] })
+  answers: string[];
+
+  @ApiProperty({ required: false })
+  questionImage?: string;
+
+  @ApiProperty({ required: false })
+  answersType?: string;
+}
+
+class PublicAttributesDto {
+  @ApiProperty()
+  maxAttemptsNumber: number;
+
+  @ApiProperty()
+  numberOfQuestions: number;
+
+  @ApiProperty()
+  strictAttemptsMode: boolean;
+
+  @ApiProperty()
+  tresholdPercentage: number;
+
+  @ApiProperty({ type: [QuestionDto] })
+  questions: QuestionDto[];
+}
+
+class AutoTestAttributesDto {
+  @ApiProperty({ type: PublicAttributesDto })
+  public: PublicAttributesDto;
+
+  @ApiProperty({ type: 'array', items: { type: 'array', items: { type: 'number' } } })
+  answers: number[][];
+}
+
 export class AutoTestTaskDto {
   constructor(task: Task) {
     this.id = task.id;
@@ -30,7 +72,7 @@ export class AutoTestTaskDto {
     this.githubPrRequired = task.githubPrRequired;
     this.tags = task.tags;
     this.skills = task.skills;
-    this.attributes = task.attributes;
+    this.attributes = task.attributes as AutoTestAttributesDto;
     this.createdDate = task.createdDate;
     this.updatedDate = task.updatedDate;
   }
@@ -74,8 +116,8 @@ export class AutoTestTaskDto {
   @ApiProperty()
   public skills: string[];
 
-  @ApiProperty()
-  public attributes: Record<string, any>;
+  @ApiProperty({ type: AutoTestAttributesDto })
+  public attributes: AutoTestAttributesDto;
 
   @ApiProperty({ type: [UsedCourseDto] })
   public courses: UsedCourseDto[];
