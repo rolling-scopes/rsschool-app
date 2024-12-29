@@ -115,6 +115,7 @@ function Page({ selectedTask }: PageProps) {
           <Form layout="vertical" requiredMark={false} disabled={true}>
             {selectedTask?.attributes.public.questions.map((question, index) => (
               <Question
+                key={index}
                 question={
                   {
                     ...question,
