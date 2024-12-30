@@ -1,5 +1,5 @@
-import { message, Card, Row, List, Col, Button, Modal, Tag, Descriptions } from 'antd';
-import { CheckCircleOutlined } from '@ant-design/icons';
+import { message, Card, Row, Spin, List, Col, Button, Modal, Tag, Descriptions, Typography, Alert } from 'antd';
+import { CheckCircleOutlined, InfoCircleTwoTone } from '@ant-design/icons';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { PageLayout } from 'components/PageLayout';
 import { useMemo, useState, useContext } from 'react';
@@ -10,6 +10,9 @@ import { getInterviewResult, InterviewDetails, InterviewStatus } from 'domain/in
 import { Decision } from 'data/interviews/technical-screening';
 import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { CoursesInterviewsApi, InterviewDto, TaskDtoTypeEnum } from 'api';
+import CalendarOutlined from '@ant-design/icons/CalendarOutlined';
+
+const { Meta } = Card;
 
 const coursesInterviewApi = new CoursesInterviewsApi();
 
@@ -70,6 +73,10 @@ function StudentInterviewPage() {
     });
   };
 
+  const getInterviewId = (type: string, id: number): string => {
+    return type === TaskDtoTypeEnum.StageInterview ? 'stage' : id.toString();
+  };
+
   const getRegisteredInterviews = async (interviews: InterviewDto[]) => {
     const requests = interviews
       .map(({ type, id }) => (type === TaskDtoTypeEnum.StageInterview ? 'stage' : id.toString()))
@@ -82,69 +89,187 @@ function StudentInterviewPage() {
     return result.filter(id => id != null) as string[];
   };
 
+  const hasInterview = (type: string, id: number): boolean => {
+    const interviewId = getInterviewId(type, id);
+    return registeredInterviews.includes(interviewId);
+  };
+
+  const isRegistrationNotStarted = (interview: InterviewDto): boolean => {
+    return !!interview.studentRegistrationStartDate && new Date() < new Date(interview.studentRegistrationStartDate);
+  };
+
   const renderExtra = (interview: InterviewDto) => {
-    const id = interview.type === TaskDtoTypeEnum.StageInterview ? 'stage' : interview.id.toString();
-    const hasInterview = registeredInterviews.includes(id);
-    return interview.studentRegistrationStartDate && new Date() < new Date(interview.studentRegistrationStartDate) ? (
-      <Tag color="orange">Registration starts at {formatShortDate(interview.studentRegistrationStartDate)}</Tag>
-    ) : (
+    const { type, id, studentRegistrationStartDate } = interview;
+    const isRegistered = hasInterview(type, id);
+    const interviewId = getInterviewId(type, id);
+
+    if (isRegistrationNotStarted(interview)) {
+      return <Tag color="orange">Registration starts on {formatShortDate(studentRegistrationStartDate)}</Tag>;
+    }
+
+    return (
       <Button
-        onClick={() => handleRegister(id)}
-        icon={hasInterview ? <CheckCircleOutlined /> : null}
-        disabled={hasInterview}
-        type={hasInterview ? 'default' : 'primary'}
+        onClick={() => handleRegister(interviewId)}
+        icon={isRegistered ? <CheckCircleOutlined /> : null}
+        disabled={isRegistered}
+        type={isRegistered ? 'default' : 'primary'}
       >
-        {hasInterview ? 'Registered' : 'Register'}
+        {isRegistered ? 'Registered' : 'Register'}
       </Button>
     );
   };
 
+  const renderInterviewCard = (interview: InterviewDto) => {
+    const isRegistered = hasInterview(interview.type, interview.id);
+    const registrationNotStarted = isRegistrationNotStarted(interview);
+    const items = data.filter(d => d.name === interview.name);
+    const hasInterviewer = items.some(i => i.interviewer.githubId != null);
+    const interviewPassed = items.length > 0 && items.every(i => i.result != null);
+    const { name, startDate, endDate, id, descriptionUrl, studentRegistrationStartDate } = interview;
+
+    return (
+      <Col key={id} xs={24} lg={12}>
+        <Card
+          bodyStyle={{ paddingTop: 0 }}
+          hoverable
+          title={
+            <Button type="link" href={descriptionUrl} target="_blank" style={{ padding: 0, fontWeight: 500 }}>
+              {name}
+            </Button>
+          }
+          extra={<InterviewPeriod startDate={startDate} endDate={endDate} />}
+        >
+          <Meta
+            style={{ minHeight: 82, alignItems: 'center', textAlign: 'center' }}
+            description={hasInterviewer ? renderInterviewResult(items) : renderExtra(interview)}
+          />
+
+          <Alert
+            message={
+              <div style={{ minHeight: 50 }}>
+                {renderCardMessage(interviewPassed, isRegistered, registrationNotStarted, studentRegistrationStartDate)}
+              </div>
+            }
+            icon={<InfoCircleTwoTone />}
+            showIcon
+            type="info"
+            description={renderCardDescription(items, registrationNotStarted, isRegistered)}
+            style={{ minHeight: 275 }}
+          />
+        </Card>
+      </Col>
+    );
+  };
+
+  const renderCardMessage = (
+    interviewPassed: boolean,
+    isRegistered: boolean,
+    registrationNotStarted: boolean,
+    registrationStartDate: string,
+  ) => {
+    switch (true) {
+      case interviewPassed:
+        return 'You have your interview result. Congratulations!';
+      case isRegistered:
+        return 'You’re all set! Prepare for your upcoming interview.';
+      case registrationNotStarted:
+        return (
+          <div>
+            Remember to come back and register after{' '}
+            <span style={{ whiteSpace: 'nowrap' }}>{formatShortDate(registrationStartDate)}</span>!
+          </div>
+        );
+      default:
+        return 'Register and get ready for your exciting interview!';
+    }
+  };
+
+  const getIconClass = (interviewPassed: boolean, registrationNotStarted: boolean, isRegistered: boolean) => {
+    switch (true) {
+      case interviewPassed:
+        return 'passed';
+      case isRegistered:
+        return 'registered';
+      case registrationNotStarted:
+        return 'registration-not-started';
+      case !isRegistered:
+        return 'not-registered';
+      default:
+        return 'not-registered';
+    }
+  };
+
+  const renderCardDescription = (items: InterviewDetails[], registrationNotStarted: boolean, isRegistered: boolean) => {
+    const interviewPassed = items.length > 0 && items.every(i => i.result != null);
+    const iconClass = getIconClass(interviewPassed, registrationNotStarted, isRegistered);
+
+    return <div className={`icon-group ${iconClass}`} />;
+  };
+
+  const renderInterviewResult = (items: InterviewDetails[]) => {
+    return (
+      <List
+        itemLayout="vertical"
+        dataSource={items}
+        size="small"
+        renderItem={item => {
+          const { interviewer, status, result } = item;
+          return (
+            <List.Item style={{ padding: '8px 0' }}>
+              <Descriptions layout="vertical" size="small">
+                <Descriptions.Item label="Interviewer">
+                  <GithubUserLink value={interviewer.githubId} />
+                </Descriptions.Item>
+                <Descriptions.Item label="Status">
+                  <StatusLabel status={status} />
+                </Descriptions.Item>
+                <Descriptions.Item label="Result">
+                  <b>{getInterviewResult(result as Decision) ?? '-'}</b>
+                </Descriptions.Item>
+              </Descriptions>
+            </List.Item>
+          );
+        }}
+      />
+    );
+  };
+
+  const renderInterviewsList = () => {
+    return interviews.map(interview => renderInterviewCard(interview));
+  };
+
   return (
     <PageLayout loading={loading} title="Interviews" background="#F0F2F5" showCourseName>
-      <Row gutter={24} style={{ minHeight: '85vh' }}>
-        {interviews.map(interview => {
-          const items = data.filter(d => d.name === interview.name);
-          return (
-            <Col key={interview.id} xs={20} sm={16} md={14} lg={12} xl={10} xxl={10}>
-              <Card
-                size="small"
-                title={
-                  <>
-                    <Button target="_blank" href={interview.descriptionUrl} type="link">
-                      {interview.name}
-                    </Button>
-                    {formatShortDate(interview.startDate)} - {formatShortDate(interview.endDate)}
-                  </>
-                }
-                extra={renderExtra(interview)}
-              >
-                <List
-                  itemLayout="vertical"
-                  dataSource={items}
-                  size="small"
-                  renderItem={item => {
-                    return (
-                      <List.Item style={{ padding: '8px 0' }}>
-                        <Descriptions layout="vertical" size="small">
-                          <Descriptions.Item label="Interviewer">
-                            <GithubUserLink value={item.interviewer.githubId} />
-                          </Descriptions.Item>
-                          <Descriptions.Item label="Status">
-                            <StatusLabel status={item.status} />
-                          </Descriptions.Item>
-                          <Descriptions.Item label="Result">
-                            <b>{getInterviewResult(item.result as Decision) ?? '-'}</b>
-                          </Descriptions.Item>
-                        </Descriptions>
-                      </List.Item>
-                    );
-                  }}
-                ></List>
-              </Card>
-            </Col>
-          );
-        })}
-      </Row>
+      <Spin spinning={loading}>
+        {
+          <Row gutter={[12, 12]} justify="start">
+            {renderInterviewsList()}
+          </Row>
+        }
+      </Spin>
+      <style jsx global>{`
+        .icon-group {
+          background-image: url(/static/svg/sloths/lazy.svg);
+          background-position: center;
+          background-size: contain;
+          background-repeat: no-repeat;
+          max-width: 270px;
+          height: 160px;
+          margin: 10px auto;
+        }
+        .registration-not-started {
+          background-image: url(/static/svg/sloths/listening.svg);
+        }
+        .not-registered {
+          background-image: url(/static/svg/sloths/take-notes.svg);
+        }
+        .registered {
+          background-image: url(/static/svg/sloths/its-a-good-job.svg);
+        }
+        .passed {
+          background-image: url(/static/svg/sloths/congratulations.svg);
+        }
+      `}</style>
     </PageLayout>
   );
 }
@@ -159,6 +284,16 @@ function StatusLabel({ status }: { status: InterviewStatus }) {
     default:
       return <Tag color="orange">Not Completed</Tag>;
   }
+}
+
+function InterviewPeriod(props: { startDate: string; endDate: string }) {
+  const { startDate, endDate } = props;
+  return (
+    <Typography.Text type="secondary">
+      <CalendarOutlined style={{ marginRight: 8 }} />
+      {`${formatShortDate(startDate)} - ${formatShortDate(endDate)}`}
+    </Typography.Text>
+  );
 }
 
 export default function () {
