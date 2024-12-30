@@ -4106,7 +4106,7 @@
           "answersType": { "type": "string" },
           "selectedAnswers": { "type": "array", "items": { "type": "number" } }
         },
-        "required": ["answers", "question", "multiple", "questionImage", "answersType", "selectedAnswers"]
+        "required": ["answers", "question", "multiple", "selectedAnswers"]
       },
       "TaskVerificationAttemptDto": {
         "type": "object",
@@ -5357,6 +5357,36 @@
           "thresholdPercentage"
         ]
       },
+      "QuestionDto": {
+        "type": "object",
+        "properties": {
+          "question": { "type": "string" },
+          "multiple": { "type": "boolean" },
+          "answers": { "type": "array", "items": { "type": "string" } },
+          "questionImage": { "type": "string" },
+          "answersType": { "type": "string" }
+        },
+        "required": ["question", "multiple", "answers"]
+      },
+      "PublicAttributesDto": {
+        "type": "object",
+        "properties": {
+          "maxAttemptsNumber": { "type": "number" },
+          "numberOfQuestions": { "type": "number" },
+          "strictAttemptsMode": { "type": "boolean" },
+          "tresholdPercentage": { "type": "number" },
+          "questions": { "type": "array", "items": { "$ref": "#/components/schemas/QuestionDto" } }
+        },
+        "required": ["maxAttemptsNumber", "numberOfQuestions", "strictAttemptsMode", "tresholdPercentage", "questions"]
+      },
+      "AutoTestAttributesDto": {
+        "type": "object",
+        "properties": {
+          "public": { "$ref": "#/components/schemas/PublicAttributesDto" },
+          "answers": { "type": "array", "items": { "type": "array", "items": { "type": "number" } } }
+        },
+        "required": ["public", "answers"]
+      },
       "AutoTestTaskDto": {
         "type": "object",
         "properties": {
@@ -5390,7 +5420,7 @@
           "updatedDate": { "type": "string" },
           "tags": { "type": "array", "items": { "type": "string" } },
           "skills": { "type": "array", "items": { "type": "string" } },
-          "attributes": { "type": "object" },
+          "attributes": { "$ref": "#/components/schemas/AutoTestAttributesDto" },
           "courses": { "type": "array", "items": { "$ref": "#/components/schemas/UsedCourseDto" } }
         },
         "required": [

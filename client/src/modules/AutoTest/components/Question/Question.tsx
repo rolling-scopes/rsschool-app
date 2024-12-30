@@ -38,7 +38,7 @@ function Question({ question: selfEducationQuestion, questionIndex }: Props): JS
         name={`answer-${questionIndex}`}
         valuePropName="checked"
       >
-        <Element.Group value={selectedAnswers as any}>
+        <Element.Group value={selectedAnswers}>
           <Space direction="vertical" size="small">
             {answers?.map((answer, answerIndex) => {
               const checked = Array.isArray(selectedAnswers)
