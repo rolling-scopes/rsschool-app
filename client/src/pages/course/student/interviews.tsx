@@ -119,6 +119,20 @@ function StudentInterviewPage() {
     );
   };
 
+  const renderNoInterviews = () => (
+    <Row justify="center">
+      <Col xs={24} lg={12}>
+        <Alert
+          description={<div className="icon-group" />}
+          icon={<InfoCircleTwoTone />}
+          showIcon
+          message="There are no planned interviews."
+          type="info"
+        />
+      </Col>
+    </Row>
+  );
+
   const renderInterviewCard = (interview: InterviewDto) => {
     const isRegistered = hasInterview(interview.type, interview.id);
     const registrationNotStarted = isRegistrationNotStarted(interview);
@@ -241,11 +255,13 @@ function StudentInterviewPage() {
   return (
     <PageLayout loading={loading} title="Interviews" background="#F0F2F5" showCourseName>
       <Spin spinning={loading}>
-        {
+        {interviews.length === 0 ? (
+          renderNoInterviews()
+        ) : (
           <Row gutter={[12, 12]} justify="start">
             {renderInterviewsList()}
           </Row>
-        }
+        )}
       </Spin>
       <style jsx global>{`
         .icon-group {
