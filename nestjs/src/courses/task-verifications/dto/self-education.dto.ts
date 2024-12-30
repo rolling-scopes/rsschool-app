@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class SelfEducationQuestionDto {
   constructor(question: SelfEducationQuestionDto) {
@@ -18,10 +18,10 @@ export class SelfEducationQuestionDto {
   @ApiProperty()
   multiple: boolean;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   questionImage?: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   answersType?: 'image';
 }
 
