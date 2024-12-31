@@ -74,25 +74,18 @@ function StudentInterviewPage() {
     });
   };
 
-  const getInterviewId = (type: string, id: number): string => {
-    return type === TaskDtoTypeEnum.StageInterview ? 'stage' : id.toString();
-  };
-
   const getRegisteredInterviews = async (interviews: InterviewDto[]) => {
-    const requests = interviews
-      .map(({ type, id }) => (type === TaskDtoTypeEnum.StageInterview ? 'stage' : id.toString()))
-      .map(async id => {
-        const data = await courseService.getInterviewStudent(session.githubId, id).catch(() => null);
-        return data ? id : null;
-      });
+    const requests = interviews.map(async ({ id }) => {
+      const data = await courseService.getInterviewStudent(session.githubId, id.toString()).catch(() => null);
+      return data ? id.toString() : null;
+    });
 
     const result = await Promise.all(requests);
-    return result.filter(id => id != null) as string[];
+    return result.filter(id => id != null);
   };
 
-  const hasInterview = (type: string, id: number): boolean => {
-    const interviewId = getInterviewId(type, id);
-    return registeredInterviews.includes(interviewId);
+  const hasInterview = (id: number): boolean => {
+    return registeredInterviews.includes(id.toString());
   };
 
   const isRegistrationNotStarted = (interview: InterviewDto): boolean => {
@@ -100,9 +93,8 @@ function StudentInterviewPage() {
   };
 
   const renderExtra = (interview: InterviewDto) => {
-    const { type, id, studentRegistrationStartDate } = interview;
-    const isRegistered = hasInterview(type, id);
-    const interviewId = getInterviewId(type, id);
+    const { id, studentRegistrationStartDate } = interview;
+    const isRegistered = hasInterview(id);
 
     if (isRegistrationNotStarted(interview)) {
       return <Tag color="orange">Registration starts on {formatShortDate(studentRegistrationStartDate)}</Tag>;
@@ -110,7 +102,7 @@ function StudentInterviewPage() {
 
     return (
       <Button
-        onClick={() => handleRegister(interviewId)}
+        onClick={() => handleRegister(id.toString())}
         icon={isRegistered ? <CheckCircleOutlined /> : null}
         disabled={isRegistered}
         type={isRegistered ? 'default' : 'primary'}
@@ -142,7 +134,7 @@ function StudentInterviewPage() {
   const renderInterviewCard = (interview: InterviewDto) => {
     const { name, startDate, endDate, id, descriptionUrl, studentRegistrationStartDate } = interview;
 
-    const isRegistered = hasInterview(interview.type, interview.id);
+    const isRegistered = hasInterview(interview.id);
     const registrationNotStarted = isRegistrationNotStarted(interview);
 
     const items = data.filter(d => d.name === interview.name);
@@ -155,10 +147,8 @@ function StudentInterviewPage() {
       registrationNotStarted,
       studentRegistrationStartDate,
     );
-
-    const metaDescription = hasInterviewer ? renderInterviewResult(items) : renderExtra(interview);
-
     const alertDescription = renderCardDescription(items, registrationNotStarted, isRegistered);
+    const metaDescription = hasInterviewer ? renderInterviewResult(items) : renderExtra(interview);
 
     return (
       <Col key={id} xs={24} lg={12}>
