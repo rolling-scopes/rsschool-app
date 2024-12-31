@@ -11,6 +11,7 @@ import { Decision } from 'data/interviews/technical-screening';
 import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { CoursesInterviewsApi, InterviewDto, TaskDtoTypeEnum } from 'api';
 import CalendarOutlined from '@ant-design/icons/CalendarOutlined';
+import css from 'styled-jsx/css';
 
 const { Meta } = Card;
 
@@ -123,23 +124,41 @@ function StudentInterviewPage() {
     <Row justify="center">
       <Col xs={24} lg={12}>
         <Alert
-          description={<div className="icon-group" />}
-          icon={<InfoCircleTwoTone />}
-          showIcon
-          message="There are no planned interviews."
           type="info"
+          showIcon
+          icon={<InfoCircleTwoTone />}
+          message="There are no planned interviews."
+          description={
+            <>
+              <div className={iconGroup.className} />
+              {iconGroup.styles}
+            </>
+          }
         />
       </Col>
     </Row>
   );
 
   const renderInterviewCard = (interview: InterviewDto) => {
+    const { name, startDate, endDate, id, descriptionUrl, studentRegistrationStartDate } = interview;
+
     const isRegistered = hasInterview(interview.type, interview.id);
     const registrationNotStarted = isRegistrationNotStarted(interview);
+
     const items = data.filter(d => d.name === interview.name);
     const hasInterviewer = items.some(i => i.interviewer.githubId != null);
     const interviewPassed = items.length > 0 && items.every(i => i.result != null);
-    const { name, startDate, endDate, id, descriptionUrl, studentRegistrationStartDate } = interview;
+
+    const cardMessage = renderCardMessage(
+      interviewPassed,
+      isRegistered,
+      registrationNotStarted,
+      studentRegistrationStartDate,
+    );
+
+    const metaDescription = hasInterviewer ? renderInterviewResult(items) : renderExtra(interview);
+
+    const alertDescription = renderCardDescription(items, registrationNotStarted, isRegistered);
 
     return (
       <Col key={id} xs={24} lg={12}>
@@ -153,21 +172,14 @@ function StudentInterviewPage() {
           }
           extra={<InterviewPeriod startDate={startDate} endDate={endDate} />}
         >
-          <Meta
-            style={{ minHeight: 82, alignItems: 'center', textAlign: 'center' }}
-            description={hasInterviewer ? renderInterviewResult(items) : renderExtra(interview)}
-          />
+          <Meta style={{ minHeight: 80, alignItems: 'center', textAlign: 'center' }} description={metaDescription} />
 
           <Alert
-            message={
-              <div style={{ minHeight: 50 }}>
-                {renderCardMessage(interviewPassed, isRegistered, registrationNotStarted, studentRegistrationStartDate)}
-              </div>
-            }
+            message={<div style={{ minHeight: 50 }}>{cardMessage}</div>}
             icon={<InfoCircleTwoTone />}
             showIcon
             type="info"
-            description={renderCardDescription(items, registrationNotStarted, isRegistered)}
+            description={alertDescription}
             style={{ minHeight: 275 }}
           />
         </Card>
@@ -198,55 +210,53 @@ function StudentInterviewPage() {
     }
   };
 
-  const getIconClass = (interviewPassed: boolean, registrationNotStarted: boolean, isRegistered: boolean) => {
+  const getIconGroupBgImage = (interviewPassed: boolean, registrationNotStarted: boolean, isRegistered: boolean) => {
     switch (true) {
       case interviewPassed:
-        return 'passed';
+        return 'url(/static/svg/sloths/congratulations.svg)';
       case isRegistered:
-        return 'registered';
+        return 'url(/static/svg/sloths/its-a-good-job.svg)';
       case registrationNotStarted:
-        return 'registration-not-started';
-      case !isRegistered:
-        return 'not-registered';
+        return 'url(/static/svg/sloths/listening.svg)';
       default:
-        return 'not-registered';
+        return 'url(/static/svg/sloths/take-notes.svg)';
     }
   };
 
   const renderCardDescription = (items: InterviewDetails[], registrationNotStarted: boolean, isRegistered: boolean) => {
     const interviewPassed = items.length > 0 && items.every(i => i.result != null);
-    const iconClass = getIconClass(interviewPassed, registrationNotStarted, isRegistered);
+    const backgroundImage = getIconGroupBgImage(interviewPassed, registrationNotStarted, isRegistered);
 
-    return <div className={`icon-group ${iconClass}`} />;
-  };
-
-  const renderInterviewResult = (items: InterviewDetails[]) => {
     return (
-      <List
-        itemLayout="vertical"
-        dataSource={items}
-        size="small"
-        renderItem={item => {
-          const { interviewer, status, result } = item;
-          return (
-            <List.Item style={{ padding: '8px 0' }}>
-              <Descriptions layout="vertical" size="small">
-                <Descriptions.Item label="Interviewer">
-                  <GithubUserLink value={interviewer.githubId} />
-                </Descriptions.Item>
-                <Descriptions.Item label="Status">
-                  <StatusLabel status={status} />
-                </Descriptions.Item>
-                <Descriptions.Item label="Result">
-                  <b>{getInterviewResult(result as Decision) ?? '-'}</b>
-                </Descriptions.Item>
-              </Descriptions>
-            </List.Item>
-          );
-        }}
-      />
+      <>
+        <div className={iconGroup.className} style={{ backgroundImage }} />
+        {iconGroup.styles}
+      </>
     );
   };
+
+  const renderInterviewResult = (items: InterviewDetails[]) => (
+    <List
+      itemLayout="vertical"
+      dataSource={items}
+      size="small"
+      renderItem={({ interviewer, status, result }) => (
+        <List.Item style={{ padding: '8px 0' }}>
+          <Descriptions layout="vertical" size="small">
+            <Descriptions.Item label="Interviewer">
+              <GithubUserLink value={interviewer.githubId} />
+            </Descriptions.Item>
+            <Descriptions.Item label="Status">
+              <StatusLabel status={status} />
+            </Descriptions.Item>
+            <Descriptions.Item label="Result">
+              <b>{getInterviewResult(result as Decision) ?? '-'}</b>
+            </Descriptions.Item>
+          </Descriptions>
+        </List.Item>
+      )}
+    />
+  );
 
   const renderInterviewsList = () => {
     return interviews.map(interview => renderInterviewCard(interview));
@@ -263,32 +273,21 @@ function StudentInterviewPage() {
           </Row>
         )}
       </Spin>
-      <style jsx global>{`
-        .icon-group {
-          background-image: url(/static/svg/sloths/lazy.svg);
-          background-position: center;
-          background-size: contain;
-          background-repeat: no-repeat;
-          max-width: 270px;
-          height: 160px;
-          margin: 10px auto;
-        }
-        .registration-not-started {
-          background-image: url(/static/svg/sloths/listening.svg);
-        }
-        .not-registered {
-          background-image: url(/static/svg/sloths/take-notes.svg);
-        }
-        .registered {
-          background-image: url(/static/svg/sloths/its-a-good-job.svg);
-        }
-        .passed {
-          background-image: url(/static/svg/sloths/congratulations.svg);
-        }
-      `}</style>
     </PageLayout>
   );
 }
+
+const iconGroup = css.resolve`
+  div {
+    background-image: url(/static/svg/sloths/lazy.svg);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    max-width: 270px;
+    height: 160px;
+    margin: 10px auto;
+  }
+`;
 
 function StatusLabel({ status }: { status: InterviewStatus }) {
   switch (status) {
