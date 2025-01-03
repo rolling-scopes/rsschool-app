@@ -29,7 +29,7 @@ export function PromptModal({ open, onCancel, loadData, data }: Props) {
 
       await loadData();
       onCancel();
-    } catch (e) {
+    } catch {
       message.error('Something went wrong. Please try again later.');
     }
   };

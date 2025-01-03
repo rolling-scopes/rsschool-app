@@ -5,6 +5,7 @@ import { ScoreInput } from 'components/Forms';
 import { MentorDashboardDto } from 'api';
 import { CourseService } from 'services/course';
 import isEmpty from 'lodash/isEmpty';
+import { AxiosError } from 'axios';
 
 export interface SubmitReviewModalProps {
   data: MentorDashboardDto | null;
@@ -28,7 +29,7 @@ function SubmitReviewModal({ data, courseId, onClose, onSubmit }: SubmitReviewMo
 
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: { score: number }) => {
     setLoading(true);
 
     try {
@@ -40,8 +41,8 @@ function SubmitReviewModal({ data, courseId, onClose, onSubmit }: SubmitReviewMo
         setSubmitted(true);
         onSubmit();
       }
-    } catch (e: any) {
-      const error = e.response?.data?.message ?? e.message;
+    } catch (e) {
+      const error = (e as AxiosError<{ message: string }>).response?.data?.message ?? (e as Error).message;
       setErrorText(error);
     } finally {
       setLoading(false);

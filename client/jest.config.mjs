@@ -1,6 +1,6 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const nextJest = require('next/jest');
+import next from 'next/jest.js';
 
+// eslint-disable-next-line turbo/no-undeclared-env-vars, no-undef
 process.env.TZ = 'UTC';
 
 const esModules = [
@@ -27,9 +27,9 @@ const esModules = [
   'trim-lines',
 ].join('|');
 
-const createJestConfig = nextJest({ dir: './' });
+const createJestConfig = next({ dir: './' });
 
-module.exports = async () => {
+export default async () => {
   const config = await createJestConfig({
     testEnvironment: 'jsdom',
     rootDir: 'src',

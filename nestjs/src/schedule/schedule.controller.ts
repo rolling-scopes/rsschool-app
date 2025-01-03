@@ -24,6 +24,7 @@ export class ScheduleController {
     const recipients = await this.scheduleService.getChangedCoursesRecipients(dto.lastHours);
     Promise.resolve().then(
       () =>
+        // eslint-disable-next-line no-async-promise-executor
         new Promise(async () => {
           this.logger.log({ message: 'processing recipients notifications...' });
 

@@ -41,7 +41,7 @@ export const Students = ({ courses }: PageProps) => {
           previousCourses?.toString(),
         );
         setStudents({ ...students, ...data });
-      } catch (error) {
+      } catch {
         message.error('Failed to load students list. Please try again.');
       }
     },

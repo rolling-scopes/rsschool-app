@@ -54,7 +54,7 @@ export const EditCV = (props: Props) => {
     setContacts(contacts);
     setVisibleCourses(visibleCourses);
 
-    props.onUpdateResume && props.onUpdateResume();
+    props.onUpdateResume?.();
   };
 
   const saveData = async (data: AllDataToSubmit) => {

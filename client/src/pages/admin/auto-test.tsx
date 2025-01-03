@@ -28,7 +28,7 @@ function Page() {
       const resp = await api.getBasicAutoTests();
       setTests(resp.data);
       setIsLoading(false);
-    } catch (e) {
+    } catch {
       message.error('Something went wrong. Please try again later.');
     }
   });

@@ -31,7 +31,7 @@ export function DisciplineModal({ isModalVisible, onCancel, loadDisciplines, dis
 
       await loadDisciplines();
       onCancel();
-    } catch (e) {
+    } catch {
       message.error('Something went wrong. Please try again later.');
     }
   };

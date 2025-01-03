@@ -28,6 +28,6 @@ export class BadgeDto {
   @ApiProperty()
   public name: string;
 
-  @ApiProperty({ type: Badge, enum: Badge })
+  @ApiProperty({ type: Badge, enum: Badge, enumName: 'BadgeEnum' })
   public id: Badge;
 }

@@ -183,8 +183,6 @@ export class CrossCheckService {
           authorId: c.authorId,
         })) ?? [];
 
-    reviewResult.anonymous;
-
     const data = await getCustomRepository(UserRepository).findByStudentIds(
       comments.map(c => c.authorId).filter(c => c),
     );

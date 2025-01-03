@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   globals: {
     NODE_ENV: 'test',
   },

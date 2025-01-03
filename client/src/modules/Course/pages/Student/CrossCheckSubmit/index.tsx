@@ -100,7 +100,7 @@ export function CrossCheckSubmit() {
       form.resetFields();
       setComments([]);
       setCourseTaskId(null);
-    } catch (e) {
+    } catch {
       message.error('An error occured. Please try later.');
     }
   };
@@ -117,7 +117,7 @@ export function CrossCheckSubmit() {
       form.resetFields();
       setSubmittedSolution(null);
       setCourseTaskId(null);
-    } catch (e) {
+    } catch {
       message.error('An error occurred. Please try later.');
     }
 

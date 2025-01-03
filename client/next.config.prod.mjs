@@ -12,4 +12,5 @@ const nextConfig = {
     CDN_HOST: process.env.CDN_HOST || '',
   },
 };
-module.exports = nextConfig;
+
+export default nextConfig;

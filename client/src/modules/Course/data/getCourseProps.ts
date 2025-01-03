@@ -35,7 +35,7 @@ export const getCourseProps: GetServerSideProps<{ course: ProfileCourseDto }> = 
     return {
       props: { course },
     };
-  } catch (e) {
+  } catch {
     return noAccessResponse;
   }
 };
@@ -53,7 +53,7 @@ export const getCoursesProps: GetServerSideProps<{ courses: CourseDto[] }> = asy
     return {
       props: { courses },
     };
-  } catch (e) {
+  } catch {
     return noAccessResponse;
   }
 };

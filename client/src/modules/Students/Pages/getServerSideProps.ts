@@ -20,7 +20,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ctx => {
     return {
       props,
     };
-  } catch (e) {
+  } catch {
     return notAuthorizedResponse;
   }
 };

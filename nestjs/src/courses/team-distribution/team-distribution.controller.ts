@@ -114,8 +114,8 @@ export class TeamDistributionController {
   @ApiOperation({ operationId: 'submitScore' })
   @RequiredRoles([CourseRole.Manager, Role.Admin], true)
   public async submitScore(
-    @Req() req: CurrentRequest,
-    @Param('courseId', ParseIntPipe) courseId: number,
+    @Req() _: CurrentRequest,
+    @Param('courseId', ParseIntPipe) _courseId: number,
     @Param('id', ParseIntPipe) id: number,
     @Param('taskId', ParseIntPipe) taskId: number,
   ) {

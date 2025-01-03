@@ -31,7 +31,7 @@ export class CheckService {
         default:
           throw new Error('Unsupported type');
       }
-    } catch (error) {
+    } catch {
       message.error('Something went wrong');
     }
     return dataFromService;

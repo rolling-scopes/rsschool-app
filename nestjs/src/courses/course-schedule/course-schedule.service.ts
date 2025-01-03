@@ -246,7 +246,6 @@ export class CourseScheduleService {
       )
       .concat(
         teamDistribution.map(teamDistribution => {
-          teamDistribution.description;
           return {
             id: teamDistribution.id,
             name: teamDistribution.name,

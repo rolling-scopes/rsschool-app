@@ -49,7 +49,7 @@ export const getServerSideProps: GetServerSideProps<{ course: ProfileCourseDto }
     return {
       props: { course, mentorId, studentsCount },
     };
-  } catch (e) {
+  } catch {
     return noAccessResponse;
   }
 };

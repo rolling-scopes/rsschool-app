@@ -1,5 +1,5 @@
 import { Octokit } from 'octokit';
-import { RequestError } from '@octokit/types';
+import { OctokitResponse, RequestError } from '@octokit/types';
 import { getCustomRepository, getRepository } from 'typeorm';
 import { config } from '../config';
 import { ILogger } from '../logger';
@@ -184,11 +184,13 @@ export class RepositoryService {
           .catch(() => github.rest.git.getRef({ owner, repo, ref: 'heads/master' }));
         await github.rest.git.createRef({ owner, repo, ref: 'refs/heads/gh-pages', sha: mainRef.data.object.sha });
       }
-      await github.rest.repos.createPagesSite({ owner, repo, source: { branch: 'gh-pages' } }).catch(response => {
-        if (response.status !== 409 && response.status !== 500) {
-          throw response;
-        }
-      });
+      await github.rest.repos
+        .createPagesSite({ owner, repo, source: { branch: 'gh-pages' } })
+        .catch((response: OctokitResponse<unknown>) => {
+          if (response.status !== 409 && response.status !== 500) {
+            throw response;
+          }
+        });
       this.logger?.info(`[${ownerRepo}] enabled Github Pages`);
     } catch (err) {
       this.logger?.info(`[${ownerRepo}] failed to enable Github Pages`, err);
@@ -334,7 +336,7 @@ export class RepositoryService {
     try {
       const { data: team } = await github.rest.teams.getByName({ org, team_slug: teamName });
       return !!team.slug;
-    } catch (err) {
+    } catch {
       return false;
     }
   }

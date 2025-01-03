@@ -117,7 +117,7 @@ function Page() {
     try {
       await mentorRegistryService.sendCommentMentorRegistry(modalData?.record?.githubId, comment);
       await loadData();
-    } catch (error) {
+    } catch {
       message.error('An error occurred. Please try again later.');
     } finally {
       setIsModalOpen(false);
@@ -137,11 +137,13 @@ function Page() {
     async (values: any) => {
       try {
         setModalLoading(true);
-        modalData?.record?.githubId && (await mentorRegistryService.updateMentor(modalData.record.githubId, values));
+        if (modalData?.record?.githubId) {
+          await mentorRegistryService.updateMentor(modalData.record.githubId, values);
+        }
         setModalData(null);
         await loadData();
         openNotificationWithIcon('success');
-      } catch (e) {
+      } catch {
         message.error('An error occurred. Please try again later.');
       } finally {
         setModalLoading(false);
@@ -189,7 +191,7 @@ function Page() {
       setModalData(null);
       await mentorRegistryService.updateMentor(record!.githubId, getInitialValues(record));
       loadData();
-    } catch (e) {
+    } catch {
       message.error('An error occurred. Please try again later.');
     } finally {
       setModalLoading(false);

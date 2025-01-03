@@ -6,7 +6,7 @@ import YoutubeOutlined from '@ant-design/icons/YoutubeOutlined';
 import InfoCircleOutlined from '@ant-design/icons/InfoCircleOutlined';
 import { Tag, Tooltip, Typography } from 'antd';
 import { BaseType } from 'antd/lib/typography/Base';
-import { CourseScheduleItemDto, CourseScheduleItemDtoTagEnum, CreateCourseTaskDtoCheckerEnum, TaskDto } from 'api';
+import { CourseScheduleItemDto, CourseScheduleItemDtoTagEnum, CheckerEnum, TaskDto } from 'api';
 import { CrossCheckStatus } from 'services/course';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -25,16 +25,13 @@ export function dateUtcRenderer(value: string | null) {
   return value ? dayjs.utc(value).format('YYYY-MM-DD') : '';
 }
 
-export function crossCheckDateRenderer(value: string | null, { checker }: { checker: CreateCourseTaskDtoCheckerEnum }) {
-  if (checker !== CreateCourseTaskDtoCheckerEnum.CrossCheck) return 'N/A';
+export function crossCheckDateRenderer(value: string | null, { checker }: { checker: CheckerEnum }) {
+  if (checker !== CheckerEnum.CrossCheck) return 'N/A';
   return value ? dayjs(value).tz('UTC').format('YYYY-MM-DD') : 'Not Set';
 }
 
-export function crossCheckStatusRenderer(
-  value: CrossCheckStatus,
-  { checker }: { checker: CreateCourseTaskDtoCheckerEnum },
-) {
-  return checker !== CreateCourseTaskDtoCheckerEnum.CrossCheck ? (
+export function crossCheckStatusRenderer(value: CrossCheckStatus, { checker }: { checker: CheckerEnum }) {
+  return checker !== CheckerEnum.CrossCheck ? (
     'N/A'
   ) : value === CrossCheckStatus.Initial ? (
     'Not distributed'

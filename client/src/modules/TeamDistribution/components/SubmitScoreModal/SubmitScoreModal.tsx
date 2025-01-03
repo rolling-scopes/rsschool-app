@@ -23,7 +23,7 @@ export default function SubmitScoreModal({ distribution, onClose }: Props) {
     try {
       const { data } = await courseTasksApi.getCourseTasks(course.id);
       return data;
-    } catch (error) {
+    } catch {
       message.error(`Failed to load tasks for course: ${course.name}`);
     }
   };

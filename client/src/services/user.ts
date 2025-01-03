@@ -78,7 +78,7 @@ export class UserService {
       }
       const response = await this.axios.get<SearchResponse>(`/api/users/search/${query}`);
       return response.data.data;
-    } catch (e) {
+    } catch {
       return [];
     }
   }
@@ -90,7 +90,7 @@ export class UserService {
       }
       const response = await this.axios.get<SearchResponse>(`/api/users/search/extended/${query}`);
       return response.data.data;
-    } catch (e) {
+    } catch {
       return [];
     }
   }

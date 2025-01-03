@@ -12,7 +12,7 @@ import { Task } from '@entities/task';
 import { MentorBasic, MentorDetails } from '@common/models';
 
 import { PersonDto } from 'src/core/dto';
-import { MentorDashboardDto } from './dto/mentor-dashboard.dto';
+import { MentorDashboardDto, SolutionItemStatus } from './dto/mentor-dashboard.dto';
 import * as dayjs from 'dayjs';
 import { TaskChecker, User } from '../../../../server/src/models';
 import { PreferredStudentsLocation } from '@common/enums/mentor';
@@ -27,12 +27,6 @@ export interface SolutionItem {
   status: SolutionItemStatus;
   endDate: string;
   person: PersonDto;
-}
-
-export enum SolutionItemStatus {
-  InReview = 'in-review',
-  Done = 'done',
-  RandomTask = 'random-task',
 }
 
 @Injectable()

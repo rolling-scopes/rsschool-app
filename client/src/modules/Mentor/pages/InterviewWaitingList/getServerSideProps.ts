@@ -42,7 +42,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ctx => {
     return {
       props: { course, interview },
     };
-  } catch (e) {
+  } catch {
     return noAccessResponse;
   }
 };

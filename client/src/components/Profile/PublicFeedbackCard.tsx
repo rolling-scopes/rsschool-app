@@ -48,7 +48,7 @@ class PublicFeedbackCard extends React.Component<Props, State> {
 
     receivedBadges.forEach(({ badgeId }) => {
       if (badgeId) {
-        badgesCount[badgeId] ? (badgesCount[badgeId] += 1) : (badgesCount[badgeId] = 1);
+        badgesCount[badgeId] = badgesCount[badgeId] ? badgesCount[badgeId] + 1 : 1;
       }
     });
 

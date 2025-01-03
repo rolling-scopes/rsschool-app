@@ -35,7 +35,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     return {
       props: { selectedTask: selectedTask.data },
     };
-  } catch (e) {
+  } catch {
     return {
       notFound: true,
     };

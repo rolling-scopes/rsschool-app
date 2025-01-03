@@ -39,7 +39,7 @@ export function ContributorModal(props: Props) {
         await api.createContributor(record);
       }
       props.onClose();
-    } catch (e) {
+    } catch {
       message.error('Something went wrong. Please try again later.');
     }
   };

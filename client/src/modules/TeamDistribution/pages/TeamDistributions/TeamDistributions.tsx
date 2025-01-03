@@ -31,7 +31,7 @@ function TeamDistributions() {
     try {
       const { data } = await teamDistributionApi.getCourseTeamDistributions(course.id);
       setDistributions(data);
-    } catch (error) {
+    } catch {
       message.error('Something went wrong, please try reloading the page later');
     }
   };
@@ -56,7 +56,7 @@ function TeamDistributions() {
       await teamDistributionApi.teamDistributionRegistry(course.id, distributionId);
       await loadData();
       message.success('Registration completed.');
-    } catch (error) {
+    } catch {
       message.error('Registration failed. Please try again later');
     }
   };
@@ -66,7 +66,7 @@ function TeamDistributions() {
       await teamDistributionApi.teamDistributionDeleteRegistry(course.id, distributionId);
       await loadData();
       message.success('Registration canceled.');
-    } catch (error) {
+    } catch {
       message.error('Cancellation of registration failed. Please try again later');
     }
   };
@@ -75,7 +75,7 @@ function TeamDistributions() {
     try {
       await teamDistributionApi.deleteTeamDistribution(course.id, distributionId);
       await loadData();
-    } catch (error) {
+    } catch {
       message.error('Failed to delete team distribution. Please try later.');
     }
   };

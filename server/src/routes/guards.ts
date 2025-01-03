@@ -14,10 +14,11 @@ import {
   isSupervisor,
   isDementor,
 } from '../models';
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const auth = require('koa-basic-auth'); //tslint:disable-line
 
 export type RouterContext = Router.RouterContext<
-  {},
+  unknown,
   { state: { user?: IUserSession }; isAuthenticated?: () => boolean }
 >;
 
@@ -93,7 +94,7 @@ export const courseGuard = async (ctx: RouterContext, next: () => Promise<void>)
   await basicAuthAdmin(ctx, next);
 };
 
-export const courseMentorGuard: Router.Middleware<{}, RouterContext> = async (
+export const courseMentorGuard: Router.Middleware<unknown, RouterContext> = async (
   ctx: RouterContext,
   next: () => Promise<void>,
 ) => {
@@ -113,7 +114,7 @@ export const courseMentorGuard: Router.Middleware<{}, RouterContext> = async (
   await basicAuthAdmin(ctx, next);
 };
 
-export const courseMentorOrDementorGuard: Router.Middleware<{}, RouterContext> = async (
+export const courseMentorOrDementorGuard: Router.Middleware<unknown, RouterContext> = async (
   ctx: RouterContext,
   next: () => Promise<void>,
 ) => {
@@ -134,7 +135,7 @@ export const courseMentorOrDementorGuard: Router.Middleware<{}, RouterContext> =
   await basicAuthAdmin(ctx, next);
 };
 
-export const anyCourseMentorGuard: Router.Middleware<{}, RouterContext> = async (
+export const anyCourseMentorGuard: Router.Middleware<unknown, RouterContext> = async (
   ctx: RouterContext,
   next: () => Promise<void>,
 ) => {
@@ -150,7 +151,7 @@ export const anyCourseMentorGuard: Router.Middleware<{}, RouterContext> = async 
   await basicAuthAdmin(ctx, next);
 };
 
-export const adminGuard: Router.Middleware<{}, RouterContext> = async (
+export const adminGuard: Router.Middleware<unknown, RouterContext> = async (
   ctx: RouterContext,
   next: () => Promise<void>,
 ) => {

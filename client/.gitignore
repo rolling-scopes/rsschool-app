@@ -1,6 +1,0 @@
-node_modules/
-test-results/
-playwright-report/
-
-# Sentry Auth Token
-.sentryclirc

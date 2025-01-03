@@ -5,7 +5,7 @@ import { SelectProps } from 'antd/lib';
 
 const options = Object.entries(TaskType).map(([label, value]) => ({ label, value }));
 
-interface CriteriaTypeSelectProps extends SelectProps {}
+type CriteriaTypeSelectProps = SelectProps;
 
 export const CriteriaTypeSelect: FC<CriteriaTypeSelectProps> = props => (
   <Select placeholder="Select type" {...props}>

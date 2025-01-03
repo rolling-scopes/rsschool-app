@@ -8,7 +8,7 @@ COPY package.json package.json
 COPY package-lock.json package-lock.json
 COPY client/public client/public
 COPY client/package.json client/package.json
-COPY client/next.config.prod.js client/next.config.js
+COPY client/next.config.prod.mjs client/next.config.mjs
 
 RUN npm ci --production --no-optional
 

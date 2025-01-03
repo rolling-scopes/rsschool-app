@@ -1,12 +1,6 @@
 import { AxiosError } from 'axios';
 import { useReducer } from 'react';
-import {
-  CourseTaskDto,
-  CoursesTasksApi,
-  CreateCourseTaskDtoCheckerEnum,
-  CoursesTaskSolutionsApi,
-  CourseTaskDtoTypeEnum,
-} from 'api';
+import { CourseTaskDto, CoursesTasksApi, CheckerEnum, CoursesTaskSolutionsApi, CourseTaskDtoTypeEnum } from 'api';
 
 type Action = {
   type: 'loading' | 'open' | 'close' | 'error' | 'submit' | 'set-solution-url';
@@ -50,7 +44,7 @@ export function useSubmitTaskSolution(courseId: number) {
       const { data } = await coursesTasksApi.getCourseTasksWithStudentSolution(courseId);
       const courseTasks = data.filter(
         item =>
-          item.checker === CreateCourseTaskDtoCheckerEnum.Mentor &&
+          item.checker === CheckerEnum.Mentor &&
           item.type != CourseTaskDtoTypeEnum.Selfeducation &&
           item.type != CourseTaskDtoTypeEnum.StageInterview &&
           item.type != CourseTaskDtoTypeEnum.Interview,

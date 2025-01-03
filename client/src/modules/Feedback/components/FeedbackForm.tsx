@@ -109,7 +109,7 @@ export const FeedbackForm = ({ studentId, onSubmit, students }: FeedbackFormProp
       const existingFeedback = selectedStudent?.feedbacks[0];
 
       await onSubmit(studentId, payload, existingFeedback ? existingFeedback.id : undefined);
-    } catch (e) {
+    } catch {
       message.error('Error occurred while creating feedback. Please try later.');
     }
   };

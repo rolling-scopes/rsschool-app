@@ -48,7 +48,6 @@ export class SelfEducationService {
   ) {}
 
   public async createSelfeducationVerification({
-    courseId,
     courseTask,
     studentId,
     studentAnswers,

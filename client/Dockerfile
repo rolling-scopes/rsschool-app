@@ -7,15 +7,15 @@ ENV NODE_PORT 8080
 
 WORKDIR /app
 
-COPY client/next.config.js /app/client/next.config.js
-COPY client/next.config.prod.js /app/client/next.config.prod.js
+COPY client/next.config.mjs /app/client/next.config.mjs
+COPY client/next.config.prod.mjs /app/client/next.config.prod.mjs
 COPY client/package.json /app/client/package.json
 COPY client/public /app/client/public
 
 COPY package.json /app
 COPY package-lock.json /app
 
-RUN npm ci --omit=dev --omit=optional
+RUN npm ci --production --no-optional
 
 COPY client/.next /app/client/.next
 

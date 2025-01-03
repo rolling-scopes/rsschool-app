@@ -4,6 +4,7 @@ import pinoLogger from 'pino-multi-stream';
 import { ParsedUrlQuery } from 'querystring';
 import { config } from './config';
 import axios from 'axios';
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const cloudwatch = require('@apalchys/pino-cloudwatch'); //tslint:disable-line
 
 export interface ILog {
@@ -23,9 +24,7 @@ type ErrorObj = {
 };
 
 export interface ILogger {
-  // eslint-disable-next-line @typescript-eslint/ban-types
   info(obj: object | string, ...params: any[]): void;
-  // eslint-disable-next-line @typescript-eslint/ban-types
   warn(obj: object | string, ...params: any[]): void;
   error(obj: Error | ErrorObj | string, ...params: any[]): void;
   child(options: { module: string; userId?: string }): ILogger;

@@ -127,7 +127,7 @@ export function useStudentData(githubId: string, courseAlias: string | undefined
         try {
           await Promise.all(requests);
           setCurrentStep(previousStep => previousStep + 1);
-        } catch (e) {
+        } catch {
           message.error(ERROR_MESSAGES.tryLater);
         } finally {
           setLoading(false);

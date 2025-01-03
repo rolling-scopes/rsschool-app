@@ -127,13 +127,15 @@ export class TeamDistributionStudentService {
       throw new BadRequestException('Number of points is less than the input threshold for distribution');
     }
 
-    record
-      ? await this.repository.update(record.id, { active: true })
-      : await this.repository.save({
-          studentId: studentId,
-          courseId: teamDistribution.courseId,
-          teamDistributionId: teamDistribution.id,
-        });
+    if (record) {
+      await this.repository.update(record.id, { active: true });
+    } else {
+      await this.repository.save({
+        studentId,
+        courseId: teamDistribution.courseId,
+        teamDistributionId: teamDistribution.id,
+      });
+    }
   }
 
   public async deleteStudentFromTeamDistribution(studentId: number, teamDistributionId: number) {

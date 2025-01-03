@@ -7,7 +7,6 @@ import { IPaginationInfo } from 'common/types/pagination';
 import { ScoreOrder, ScoreTableFilters } from './types';
 
 export function useScorePaging(router: NextRouter, courseService: CourseService, activeOnly: boolean) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { githubId, name, ['mentor.githubId']: mentor, cityName, ...currentQuery } = router.query;
 
   const setQueryParams = useCallback(

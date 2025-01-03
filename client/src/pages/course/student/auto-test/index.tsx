@@ -1,6 +1,6 @@
 import { ActiveCourseProvider, SessionProvider } from 'modules/Course/contexts';
 import { GetServerSideProps } from 'next';
-import { CoursesTasksApi, CourseTaskDtoTypeEnum, CreateCourseTaskDtoCheckerEnum, ProfileCourseDto } from 'api';
+import { CoursesTasksApi, CourseTaskDtoTypeEnum, CheckerEnum, ProfileCourseDto } from 'api';
 import { getTokenFromContext } from 'utils/server';
 import { noAccessResponse, notAuthorizedResponse } from 'modules/Course/data';
 import { UserService } from 'services/user';
@@ -33,7 +33,7 @@ export const getServerSideProps: GetServerSideProps<{ course: ProfileCourseDto }
     const courseTasks = tasks
       .filter(
         task =>
-          task.checker === CreateCourseTaskDtoCheckerEnum.AutoTest &&
+          task.checker === CheckerEnum.AutoTest &&
           task.type !== CourseTaskDtoTypeEnum.Test &&
           dayjs().isSameOrAfter(task.studentStartDate),
       )
@@ -42,7 +42,7 @@ export const getServerSideProps: GetServerSideProps<{ course: ProfileCourseDto }
     return {
       props: { course, courseTasks },
     };
-  } catch (e) {
+  } catch {
     return noAccessResponse;
   }
 };

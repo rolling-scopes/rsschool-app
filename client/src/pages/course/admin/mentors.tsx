@@ -93,7 +93,7 @@ function Page() {
       setLoading(true);
       await service.expelMentor(githubId);
       setMentors(prevRecords => prevRecords.map(r => (r.githubId === githubId ? { ...r, isActive: false } : r)));
-    } catch (e) {
+    } catch {
       message.error('An error occured. Please try later.');
     } finally {
       setLoading(false);
@@ -105,7 +105,7 @@ function Page() {
       setLoading(true);
       await service.restoreMentor(githubId);
       setMentors(prevRecords => prevRecords.map(r => (r.githubId === githubId ? { ...r, isActive: true } : r)));
-    } catch (e) {
+    } catch {
       message.error('An error occured. Please try later.');
     } finally {
       setLoading(false);
@@ -116,7 +116,7 @@ function Page() {
     try {
       setLoading(true);
       await service.postSyncRepositoriesMentors();
-    } catch (e) {
+    } catch {
       message.error('An error occured. Please try later.');
     } finally {
       setLoading(false);

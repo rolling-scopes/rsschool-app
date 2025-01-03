@@ -99,11 +99,11 @@ const tasks = [
   },
 ];
 
-const mockPost = jest.fn((url, data, config) => ({
-  pipe: jest.fn((...callbacks) => []),
+const mockPost = jest.fn(() => ({
+  pipe: jest.fn(() => []),
 }));
 
-const mockCourseTaskRepositoryFind = jest.fn(queryParamsObj => tasks);
+const mockCourseTaskRepositoryFind = jest.fn(() => tasks);
 
 const mockCourseTaskRepositoryFactory = jest.fn(() => ({
   find: mockCourseTaskRepositoryFind,
@@ -151,7 +151,7 @@ describe('CrossCheckService', () => {
     });
 
     it('httpService.post should be called right amout of times', () => {
-      expect(mockPost).toBeCalledTimes(4);
+      expect(mockPost).toHaveBeenCalledTimes(4);
     });
 
     it('tasks with submission deadline passed should be distributed', () => {

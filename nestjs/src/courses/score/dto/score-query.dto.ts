@@ -26,7 +26,7 @@ export class ScoreQueryDto {
   @IsString()
   public orderBy: OrderField;
 
-  @ApiProperty({ enum: ['asc', , 'desc'] })
+  @ApiProperty({ enum: ['asc', 'desc'] })
   @IsString()
   public orderDirection: OrderDirection;
 

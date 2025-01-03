@@ -128,7 +128,7 @@ export class ScheduleService {
       `select "name", "id", 'event' as "type"  from "event" where "id" = ANY($1)
         union
        select "name", "id", 'task' as "type"  from "task" where "id" = ANY($2)`,
-      [fetchEvents.size > 0 ? [...fetchEvents] : null, [...fetchTasks] || null],
+      [fetchEvents.size > 0 ? [...fetchEvents] : null, [...fetchTasks]],
     );
     const entryMap = new Map(courseEntries.map(entry => [`${entry.type}-${entry.id}`, entry]));
 
@@ -158,7 +158,11 @@ export class ScheduleService {
       const parentId = this.getParentId(entryUpdate, entryPrevious);
       const entryKey = `${type}-${entityId}-${parentId}`;
       const prevEntry = recordsMap.get(entryKey);
-      type === 'event' ? fetchEvents.add(parentId) : fetchTasks.add(parentId);
+      if (type === 'event') {
+        fetchEvents.add(parentId);
+      } else {
+        fetchTasks.add(parentId);
+      }
 
       if (operation === 'insert') {
         recordsMap.set(entryKey, {

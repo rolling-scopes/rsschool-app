@@ -33,7 +33,7 @@ export function Consents({
   const sendEmailConfirmationLink = useCallback(async () => {
     try {
       await new UserService().sendEmailConfirmationLink();
-    } catch (e) {
+    } catch {
       message.error('Error has occured. Please try again later');
     }
   }, []);

@@ -318,7 +318,7 @@ function Page() {
     const ratings = [htmlCss, common, dataStructures, programmingTask.codeWritingLevel].filter(Boolean) as number[];
 
     const rating = ratings.reduce((sum, num) => sum + num, 0) / ratingsCount;
-    return Math.floor(rating * 10 ?? 0);
+    return Math.floor(rating * 10);
   };
 
   const handleSubmit = withLoading(async (values: any) => {
