@@ -147,7 +147,7 @@ function StudentInterviewPage() {
 
     const metaDescription = hasInterviewer || interviewPassed ? renderInterviewDetails(item) : renderExtra(interview);
     const alertDescription = renderCardDescription({ interviewPassed, isRegistered, registrationNotStarted });
-    const cardMessage = renderCardMessage({
+    const { cardMessage } = getInterviewCardDetails({
       interviewPassed,
       isRegistered,
       registrationNotStarted,
@@ -181,50 +181,40 @@ function StudentInterviewPage() {
     );
   };
 
-  const getInterviewStateDetails = (params: StudentInterviewDetails) => {
+  const getInterviewCardDetails = (params: StudentInterviewDetails) => {
     const { interviewPassed, isRegistered, registrationNotStarted, registrationStart } = params;
 
     switch (true) {
       case interviewPassed:
         return {
-          message: 'You have your interview result. Congratulations!',
-          image: 'url(https://cdn.rs.school/sloths/cleaned/congratulations.svg)',
+          cardMessage: 'You have your interview result. Congratulations!',
+          backgroundImage: 'url(https://cdn.rs.school/sloths/cleaned/congratulations.svg)',
         };
       case isRegistered:
         return {
-          message: 'You’re all set! Prepare for your upcoming interview.',
-          image: 'url(https://cdn.rs.school/sloths/cleaned/its-a-good-job.svg)',
+          cardMessage: 'You’re all set! Prepare for your upcoming interview.',
+          backgroundImage: 'url(https://cdn.rs.school/sloths/cleaned/its-a-good-job.svg)',
         };
       case registrationNotStarted:
         return {
-          message: (
+          cardMessage: (
             <div>
               Remember to come back and register after{' '}
               <span style={{ whiteSpace: 'nowrap' }}>{formatShortDate(registrationStart ?? '')}</span>!
             </div>
           ),
-          image: 'url(https://cdn.rs.school/sloths/cleaned/listening.svg)',
+          backgroundImage: 'url(https://cdn.rs.school/sloths/cleaned/listening.svg)',
         };
       default:
         return {
-          message: 'Register and get ready for your exciting interview!',
-          image: 'url(https://cdn.rs.school/sloths/cleaned/take-notes.svg)',
+          cardMessage: 'Register and get ready for your exciting interview!',
+          backgroundImage: 'url(https://cdn.rs.school/sloths/cleaned/take-notes.svg)',
         };
     }
   };
 
-  const renderCardMessage = (params: StudentInterviewDetails) => {
-    const { message } = getInterviewStateDetails(params);
-    return message;
-  };
-
-  const getIconGroupBgImage = (params: StudentInterviewDetails) => {
-    const { image } = getInterviewStateDetails(params);
-    return image;
-  };
-
   const renderCardDescription = (params: StudentInterviewDetails) => {
-    const backgroundImage = getIconGroupBgImage(params);
+    const { backgroundImage } = getInterviewCardDetails(params);
     return (
       <>
         <div className={iconGroup.className} style={{ backgroundImage }} />
