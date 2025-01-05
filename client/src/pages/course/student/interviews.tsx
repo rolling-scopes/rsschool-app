@@ -102,11 +102,9 @@ function StudentInterviewPage() {
     const { id, studentRegistrationStartDate } = interview;
     const isRegistered = hasInterview(id);
 
-    if (isRegistrationNotStarted(interview)) {
-      return <Tag color="orange">Registration starts on {formatShortDate(studentRegistrationStartDate)}</Tag>;
-    }
-
-    return (
+    return isRegistrationNotStarted(interview) ? (
+      <Tag color="orange">Registration starts on {formatShortDate(studentRegistrationStartDate)}</Tag>
+    ) : (
       <Button
         onClick={() => handleRegister(id.toString())}
         icon={isRegistered ? <CheckCircleOutlined /> : null}
