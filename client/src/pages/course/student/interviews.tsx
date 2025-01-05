@@ -1,4 +1,4 @@
-import { message, Card, Row, Spin, List, Col, Button, Modal, Tag, Descriptions, Typography, Alert } from 'antd';
+import { message, Card, Row, Spin, Col, Button, Modal, Tag, Descriptions, Typography, Alert } from 'antd';
 import { CheckCircleOutlined, InfoCircleTwoTone } from '@ant-design/icons';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { PageLayout } from 'components/PageLayout';
@@ -13,9 +13,15 @@ import { CoursesInterviewsApi, InterviewDto, TaskDtoTypeEnum } from 'api';
 import CalendarOutlined from '@ant-design/icons/CalendarOutlined';
 import css from 'styled-jsx/css';
 
+const coursesInterviewApi = new CoursesInterviewsApi();
 const { Meta } = Card;
 
-const coursesInterviewApi = new CoursesInterviewsApi();
+interface StudentInterviewDetails {
+  registrationNotStarted: boolean;
+  registrationStart?: string;
+  isRegistered: boolean;
+  interviewPassed: boolean;
+}
 
 function StudentInterviewPage() {
   const session = useContext(SessionContext);
@@ -132,23 +138,23 @@ function StudentInterviewPage() {
   );
 
   const renderInterviewCard = (interview: InterviewDto) => {
-    const { name, startDate, endDate, id, descriptionUrl, studentRegistrationStartDate } = interview;
+    const { name, startDate, endDate, id, descriptionUrl, studentRegistrationStartDate: registrationStart } = interview;
+    const item = data.find(d => d.name === name);
 
     const isRegistered = hasInterview(interview.id);
     const registrationNotStarted = isRegistrationNotStarted(interview);
 
-    const items = data.filter(d => d.name === interview.name);
-    const hasInterviewer = items.some(i => i.interviewer.githubId != null);
-    const interviewPassed = items.length > 0 && items.every(i => i.result != null);
+    const hasInterviewer = item?.status === InterviewStatus.NotCompleted;
+    const interviewPassed = item?.status === InterviewStatus.Completed;
 
-    const cardMessage = renderCardMessage(
+    const metaDescription = hasInterviewer || interviewPassed ? renderInterviewDetails(item) : renderExtra(interview);
+    const alertDescription = renderCardDescription({ interviewPassed, isRegistered, registrationNotStarted });
+    const cardMessage = renderCardMessage({
       interviewPassed,
       isRegistered,
       registrationNotStarted,
-      studentRegistrationStartDate,
-    );
-    const alertDescription = renderCardDescription(items, registrationNotStarted, isRegistered);
-    const metaDescription = hasInterviewer ? renderInterviewResult(items) : renderExtra(interview);
+      registrationStart,
+    });
 
     return (
       <Col key={id} xs={24} lg={12}>
@@ -177,46 +183,50 @@ function StudentInterviewPage() {
     );
   };
 
-  const renderCardMessage = (
-    interviewPassed: boolean,
-    isRegistered: boolean,
-    registrationNotStarted: boolean,
-    registrationStartDate: string,
-  ) => {
+  const getInterviewStateDetails = (params: StudentInterviewDetails) => {
+    const { interviewPassed, isRegistered, registrationNotStarted, registrationStart } = params;
+
     switch (true) {
       case interviewPassed:
-        return 'You have your interview result. Congratulations!';
+        return {
+          message: 'You have your interview result. Congratulations!',
+          image: 'url(/static/svg/sloths/congratulations.svg)',
+        };
       case isRegistered:
-        return 'You’re all set! Prepare for your upcoming interview.';
+        return {
+          message: 'You’re all set! Prepare for your upcoming interview.',
+          image: 'url(/static/svg/sloths/its-a-good-job.svg)',
+        };
       case registrationNotStarted:
-        return (
-          <div>
-            Remember to come back and register after{' '}
-            <span style={{ whiteSpace: 'nowrap' }}>{formatShortDate(registrationStartDate)}</span>!
-          </div>
-        );
+        return {
+          message: (
+            <div>
+              Remember to come back and register after{' '}
+              <span style={{ whiteSpace: 'nowrap' }}>{formatShortDate(registrationStart ?? '')}</span>!
+            </div>
+          ),
+          image: 'url(/static/svg/sloths/listening.svg)',
+        };
       default:
-        return 'Register and get ready for your exciting interview!';
+        return {
+          message: 'Register and get ready for your exciting interview!',
+          image: 'url(/static/svg/sloths/take-notes.svg)',
+        };
     }
   };
 
-  const getIconGroupBgImage = (interviewPassed: boolean, registrationNotStarted: boolean, isRegistered: boolean) => {
-    switch (true) {
-      case interviewPassed:
-        return 'url(/static/svg/sloths/congratulations.svg)';
-      case isRegistered:
-        return 'url(/static/svg/sloths/its-a-good-job.svg)';
-      case registrationNotStarted:
-        return 'url(/static/svg/sloths/listening.svg)';
-      default:
-        return 'url(/static/svg/sloths/take-notes.svg)';
-    }
+  const renderCardMessage = (params: StudentInterviewDetails) => {
+    const { message } = getInterviewStateDetails(params);
+    return message;
   };
 
-  const renderCardDescription = (items: InterviewDetails[], registrationNotStarted: boolean, isRegistered: boolean) => {
-    const interviewPassed = items.length > 0 && items.every(i => i.result != null);
-    const backgroundImage = getIconGroupBgImage(interviewPassed, registrationNotStarted, isRegistered);
+  const getIconGroupBgImage = (params: StudentInterviewDetails) => {
+    const { image } = getInterviewStateDetails(params);
+    return image;
+  };
 
+  const renderCardDescription = (params: StudentInterviewDetails) => {
+    const backgroundImage = getIconGroupBgImage(params);
     return (
       <>
         <div className={iconGroup.className} style={{ backgroundImage }} />
@@ -225,28 +235,25 @@ function StudentInterviewPage() {
     );
   };
 
-  const renderInterviewResult = (items: InterviewDetails[]) => (
-    <List
-      itemLayout="vertical"
-      dataSource={items}
-      size="small"
-      renderItem={({ interviewer, status, result }) => (
-        <List.Item style={{ padding: '8px 0' }}>
-          <Descriptions layout="vertical" size="small">
-            <Descriptions.Item label="Interviewer">
-              <GithubUserLink value={interviewer.githubId} />
-            </Descriptions.Item>
-            <Descriptions.Item label="Status">
-              <StatusLabel status={status} />
-            </Descriptions.Item>
-            <Descriptions.Item label="Result">
-              <b>{getInterviewResult(result as Decision) ?? '-'}</b>
-            </Descriptions.Item>
-          </Descriptions>
-        </List.Item>
-      )}
-    />
-  );
+  const renderInterviewDetails = (item: InterviewDetails) => {
+    const { interviewer, status, result } = item;
+
+    return (
+      <div style={{ padding: '8px 0' }}>
+        <Descriptions layout="vertical" size="small">
+          <Descriptions.Item label="Interviewer">
+            <GithubUserLink value={interviewer.githubId} />
+          </Descriptions.Item>
+          <Descriptions.Item label="Status">
+            <StatusLabel status={status} />
+          </Descriptions.Item>
+          <Descriptions.Item label="Result">
+            <b>{getInterviewResult(result as Decision) ?? '-'}</b>
+          </Descriptions.Item>
+        </Descriptions>
+      </div>
+    );
+  };
 
   const renderInterviewsList = () => {
     return interviews.map(interview => renderInterviewCard(interview));
