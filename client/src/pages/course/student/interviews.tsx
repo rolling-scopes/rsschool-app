@@ -188,12 +188,12 @@ function StudentInterviewPage() {
       case interviewPassed:
         return {
           message: 'You have your interview result. Congratulations!',
-          image: 'url(/static/svg/sloths/congratulations.svg)',
+          image: 'url(https://cdn.rs.school/sloths/cleaned/congratulations.svg)',
         };
       case isRegistered:
         return {
           message: 'You’re all set! Prepare for your upcoming interview.',
-          image: 'url(/static/svg/sloths/its-a-good-job.svg)',
+          image: 'url(https://cdn.rs.school/sloths/cleaned/its-a-good-job.svg)',
         };
       case registrationNotStarted:
         return {
@@ -203,12 +203,12 @@ function StudentInterviewPage() {
               <span style={{ whiteSpace: 'nowrap' }}>{formatShortDate(registrationStart ?? '')}</span>!
             </div>
           ),
-          image: 'url(/static/svg/sloths/listening.svg)',
+          image: 'url(https://cdn.rs.school/sloths/cleaned/listening.svg)',
         };
       default:
         return {
           message: 'Register and get ready for your exciting interview!',
-          image: 'url(/static/svg/sloths/take-notes.svg)',
+          image: 'url(https://cdn.rs.school/sloths/cleaned/take-notes.svg)',
         };
     }
   };
@@ -274,7 +274,7 @@ function StudentInterviewPage() {
 
 const iconGroup = css.resolve`
   div {
-    background-image: url(/static/svg/sloths/lazy.svg);
+    background-image: url(https://cdn.rs.school/sloths/cleaned/lazy.svg);
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
