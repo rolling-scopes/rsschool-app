@@ -82,8 +82,12 @@ function StudentInterviewPage() {
 
   const getRegisteredInterviews = async (interviews: InterviewDto[]) => {
     const requests = interviews.map(async ({ id }) => {
-      const data = await courseService.getInterviewStudent(session.githubId, id.toString()).catch(() => null);
-      return data ? id.toString() : null;
+      try {
+        const data = await courseService.getInterviewStudent(session.githubId, id.toString());
+        return data ? id.toString() : null;
+      } catch (error) {
+        message.error('Something went wrong, please try reloading the page later');
+      }
     });
 
     const result = await Promise.all(requests);
