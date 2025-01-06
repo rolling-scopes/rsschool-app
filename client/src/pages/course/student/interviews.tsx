@@ -1,4 +1,4 @@
-import { message, Card, Row, Spin, Col, Button, Modal, Tag, Descriptions, Typography, Alert } from 'antd';
+import { message, Card, Row, Spin, Col, Button, Modal, Tag, Descriptions, Alert } from 'antd';
 import { CheckCircleOutlined, InfoCircleTwoTone } from '@ant-design/icons';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { PageLayout } from 'components/PageLayout';
@@ -6,11 +6,10 @@ import { useMemo, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { formatShortDate } from 'services/formatter';
-import { getInterviewResult, InterviewDetails, InterviewStatus } from 'domain/interview';
+import { getInterviewResult, InterviewDetails, InterviewPeriod, InterviewStatus } from 'domain/interview';
 import { Decision } from 'data/interviews/technical-screening';
 import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { CoursesInterviewsApi, InterviewDto, TaskDtoTypeEnum } from 'api';
-import CalendarOutlined from '@ant-design/icons/CalendarOutlined';
 import css from 'styled-jsx/css';
 
 const coursesInterviewApi = new CoursesInterviewsApi();
@@ -81,17 +80,18 @@ function StudentInterviewPage() {
   };
 
   const getRegisteredInterviews = async (interviews: InterviewDto[]) => {
-    const requests = interviews.map(async ({ id }) => {
-      try {
-        const data = await courseService.getInterviewStudent(session.githubId, id.toString());
+    try {
+      const requests = interviews.map(async ({ id }) => {
+        const data = await courseService.getInterviewStudent(session.githubId, id.toString()).catch(() => null);
         return data ? id.toString() : null;
-      } catch (error) {
-        message.error('Something went wrong, please try reloading the page later');
-      }
-    });
+      });
 
-    const result = await Promise.all(requests);
-    return result.filter(id => id != null);
+      const result = await Promise.all(requests);
+      return result.filter(id => id != null);
+    } catch (error) {
+      message.error('Something went wrong, please try reloading the page later');
+      return [];
+    }
   };
 
   const hasInterview = (id: number): boolean => {
@@ -168,7 +168,7 @@ function StudentInterviewPage() {
               {name}
             </Button>
           }
-          extra={<InterviewPeriod startDate={startDate} endDate={endDate} />}
+          extra={<InterviewPeriod startDate={startDate} endDate={endDate} shortDate />}
         >
           <Meta style={{ minHeight: 80, alignItems: 'center', textAlign: 'center' }} description={metaDescription} />
 
@@ -188,33 +188,36 @@ function StudentInterviewPage() {
   const getInterviewCardDetails = (params: StudentInterviewDetails) => {
     const { interviewPassed, isRegistered, registrationNotStarted, registrationStart } = params;
 
-    switch (true) {
-      case interviewPassed:
-        return {
-          cardMessage: 'You have your interview result. Congratulations!',
-          backgroundImage: 'url(https://cdn.rs.school/sloths/cleaned/congratulations.svg)',
-        };
-      case isRegistered:
-        return {
-          cardMessage: 'You’re all set! Prepare for your upcoming interview.',
-          backgroundImage: 'url(https://cdn.rs.school/sloths/cleaned/its-a-good-job.svg)',
-        };
-      case registrationNotStarted:
-        return {
-          cardMessage: (
-            <div>
-              Remember to come back and register after{' '}
-              <span style={{ whiteSpace: 'nowrap' }}>{formatShortDate(registrationStart ?? '')}</span>!
-            </div>
-          ),
-          backgroundImage: 'url(https://cdn.rs.school/sloths/cleaned/listening.svg)',
-        };
-      default:
-        return {
-          cardMessage: 'Register and get ready for your exciting interview!',
-          backgroundImage: 'url(https://cdn.rs.school/sloths/cleaned/take-notes.svg)',
-        };
+    if (interviewPassed) {
+      return {
+        cardMessage: 'You have your interview result. Congratulations!',
+        backgroundImage: 'url(https://cdn.rs.school/sloths/cleaned/congratulations.svg)',
+      };
     }
+
+    if (isRegistered) {
+      return {
+        cardMessage: 'You’re all set! Prepare for your upcoming interview.',
+        backgroundImage: 'url(https://cdn.rs.school/sloths/cleaned/its-a-good-job.svg)',
+      };
+    }
+
+    if (registrationNotStarted) {
+      return {
+        cardMessage: (
+          <div>
+            Remember to come back and register after{' '}
+            <span style={{ whiteSpace: 'nowrap' }}>{formatShortDate(registrationStart ?? '')}</span>!
+          </div>
+        ),
+        backgroundImage: 'url(https://cdn.rs.school/sloths/cleaned/listening.svg)',
+      };
+    }
+
+    return {
+      cardMessage: 'Register and get ready for your exciting interview!',
+      backgroundImage: 'url(https://cdn.rs.school/sloths/cleaned/take-notes.svg)',
+    };
   };
 
   const renderCardDescription = (params: StudentInterviewDetails) => {
@@ -288,16 +291,6 @@ function StatusLabel({ status }: { status: InterviewStatus }) {
     default:
       return <Tag color="orange">Not Completed</Tag>;
   }
-}
-
-function InterviewPeriod(props: { startDate: string; endDate: string }) {
-  const { startDate, endDate } = props;
-  return (
-    <Typography.Text type="secondary">
-      <CalendarOutlined style={{ marginRight: 8 }} />
-      {`${formatShortDate(startDate)} - ${formatShortDate(endDate)}`}
-    </Typography.Text>
-  );
 }
 
 export default function () {
