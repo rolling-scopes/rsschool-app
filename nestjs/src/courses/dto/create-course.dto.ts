@@ -90,4 +90,9 @@ export class CreateCourseDto {
   @IsNumber()
   @ApiProperty({ required: true })
   certificateThreshold: number;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty()
+  wearecommunityUrl?: string;
 }

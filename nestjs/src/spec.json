@@ -662,12 +662,12 @@
     "/courses/{courseId}/interviews/{interviewId}/register": {
       "post": {
         "operationId": "registerToInterview",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "interviewId", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
         "responses": { "200": { "description": "" }, "400": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
         "tags": ["courses interviews"]
       }
     },
@@ -2685,7 +2685,6 @@
     "/contributors": {
       "post": {
         "operationId": "createContributor",
-        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -2697,11 +2696,11 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ContributorDto" } } }
           }
         },
+        "summary": "",
         "tags": ["contributors"]
       },
       "get": {
         "operationId": "getContributors",
-        "summary": "",
         "parameters": [],
         "responses": {
           "200": {
@@ -2713,13 +2712,13 @@
             }
           }
         },
+        "summary": "",
         "tags": ["contributors"]
       }
     },
     "/contributors/{id}": {
       "get": {
         "operationId": "getContributor",
-        "summary": "",
         "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": {
           "200": {
@@ -2727,18 +2726,18 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ContributorDto" } } }
           }
         },
+        "summary": "",
         "tags": ["contributors"]
       },
       "delete": {
         "operationId": "deleteContributor",
-        "summary": "",
         "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": { "200": { "description": "" } },
+        "summary": "",
         "tags": ["contributors"]
       },
       "patch": {
         "operationId": "updateContributor",
-        "summary": "",
         "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
         "requestBody": {
           "required": true,
@@ -2750,6 +2749,7 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ContributorDto" } } }
           }
         },
+        "summary": "",
         "tags": ["contributors"]
       }
     }
@@ -2943,7 +2943,8 @@
           "logo": { "type": "string" },
           "discipline": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/IdNameDto" }] },
           "minStudentsPerMentor": { "type": "number" },
-          "certificateThreshold": { "type": "number" }
+          "certificateThreshold": { "type": "number" },
+          "wearecommunityUrl": { "type": "string", "nullable": true }
         },
         "required": [
           "id",
@@ -2971,7 +2972,8 @@
           "logo",
           "discipline",
           "minStudentsPerMentor",
-          "certificateThreshold"
+          "certificateThreshold",
+          "wearecommunityUrl"
         ]
       },
       "CreateCourseDto": {
@@ -2987,6 +2989,7 @@
           "planned": { "type": "boolean" },
           "inviteOnly": { "type": "boolean" },
           "description": { "type": "string" },
+          "descriptionUrl": { "type": "string" },
           "disciplineId": { "type": "number" },
           "discordServerId": { "type": "number" },
           "usePrivateRepositories": { "type": "boolean" },
@@ -2994,9 +2997,10 @@
           "personalMentoring": { "type": "boolean" },
           "logo": { "type": "string" },
           "minStudentsPerMentor": { "type": "number" },
-          "certificateThreshold": { "type": "number" }
+          "certificateThreshold": { "type": "number" },
+          "wearecommunityUrl": { "type": "string" }
         },
-        "required": ["name", "startDate", "endDate", "fullName", "alias", "description", "certificateThreshold"]
+        "required": ["name", "startDate", "endDate", "fullName", "alias", "certificateThreshold", "wearecommunityUrl"]
       },
       "UpdateCourseDto": {
         "type": "object",
@@ -3021,7 +3025,8 @@
           "logo": { "type": "string" },
           "disciplineId": { "type": "number" },
           "minStudentsPerMentor": { "type": "number" },
-          "certificateThreshold": { "type": "number" }
+          "certificateThreshold": { "type": "number" },
+          "wearecommunityUrl": { "type": "string", "nullable": true }
         },
         "required": ["certificateThreshold"]
       },
@@ -4441,7 +4446,8 @@
           "logo": { "type": "string" },
           "discipline": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/IdNameDto" }] },
           "minStudentsPerMentor": { "type": "number" },
-          "certificateThreshold": { "type": "number" }
+          "certificateThreshold": { "type": "number" },
+          "wearecommunityUrl": { "type": "string", "nullable": true }
         },
         "required": [
           "id",
@@ -4469,7 +4475,8 @@
           "logo",
           "discipline",
           "minStudentsPerMentor",
-          "certificateThreshold"
+          "certificateThreshold",
+          "wearecommunityUrl"
         ]
       },
       "UpdateUserDto": {

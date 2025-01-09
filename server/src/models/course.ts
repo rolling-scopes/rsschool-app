@@ -111,4 +111,7 @@ export class Course {
 
   @Column({ default: 70 })
   certificateThreshold: number;
+
+  @Column({ nullable: true, type: 'varchar' })
+  wearecommunityUrl: string | null;
 }

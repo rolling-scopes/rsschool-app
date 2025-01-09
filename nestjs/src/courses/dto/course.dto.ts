@@ -27,6 +27,7 @@ export class CourseDto {
     this.discipline = course.discipline ? { id: course.discipline.id, name: course.discipline.name } : null;
     this.minStudentsPerMentor = course.minStudentsPerMentor;
     this.certificateThreshold = course.certificateThreshold;
+    this.wearecommunityUrl = course.wearecommunityUrl;
   }
 
   @ApiProperty()
@@ -106,4 +107,7 @@ export class CourseDto {
 
   @ApiProperty()
   certificateThreshold: number;
+
+  @ApiProperty({ nullable: true, type: String })
+  wearecommunityUrl: string | null;
 }

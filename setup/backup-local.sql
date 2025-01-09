@@ -249,7 +249,8 @@ CREATE TABLE public.course (
     logo character varying,
     "disciplineId" integer,
     "minStudentsPerMentor" integer DEFAULT 2,
-    "certificateThreshold" integer DEFAULT 70 NOT NULL
+    "certificateThreshold" integer DEFAULT 70 NOT NULL,
+    "wearecommunityUrl" character varying
 );
 
 
@@ -2602,10 +2603,10 @@ COPY public.contributor (id, created_date, updated_date, deleted_date, user_id, 
 -- Data for Name: course; Type: TABLE DATA; Schema: public; Owner: rs_master
 --
 
-COPY public.course (id, "createdDate", "updatedDate", name, year, "primarySkillId", "primarySkillName", "locationName", alias, completed, description, "descriptionUrl", planned, "startDate", "endDate", "fullName", "registrationEndDate", "inviteOnly", "discordServerId", "certificateIssuer", "usePrivateRepositories", "personalMentoring", logo, "disciplineId", "minStudentsPerMentor", "certificateThreshold") FROM stdin;
-11	2019-08-27 07:36:13.565873	2020-03-13 15:39:41.477995	RS 2019 Q3	\N	javascript	JavaScript	\N	rs-2019-q3	t	RS 2019 Q3	\N	f	2019-09-09 07:35:20.981+00	2020-01-31 07:35:20.981+00	Rolling Scopes School 2019 Q3	\N	f	\N	\N	t	t	\N	\N	2	70
-13	2019-10-21 08:05:31.068833	2020-04-06 15:14:44.116961	RS 2020 Q1	\N	javascript	JavaScript	\N	rs-2020-q1	f	Javascript / Frontend Курс.\nВводное занятие - 2 февраля\nОрганизационный вебинар начнется 2 февраля в 12:00 по минскому времени (GMT+3). Мы расскажем о процессе обучения в RS School и выдадим задания для первого этапа обучения.\n\nВебинар будет транслироваться на канале https://www.youtube.com/c/rollingscopesschool.\nРекомендуем подписаться на канал и нажать колокольчик, чтобы не пропустить начало трансляции. \n\nЕсли у вас не будет возможности присоединиться к онлайн-трансляции, не переживайте! \nЗапись вебинара будет размещена на канале в открытом доступе.\n\nОписание тренинга\nОсновной сайт: https://rs.school/js/\n\nПодробная информация о школе:  https://docs.rs.school	\N	f	2020-02-02 09:01:56.398+00	2020-07-31 08:01:56.398+00	Rolling Scopes School 2020 Q1: JavaScript/Front-end	2020-04-15 08:40:46.24+00	f	\N	\N	t	t	\N	\N	2	70
-23	2020-02-25 09:28:08.842897	2021-07-28 20:44:30.259905	TEST COURSE	\N	javascript	JavaScript	\N	test-course	f	TEST COURSE	\N	f	2021-05-31 21:00:00+00	2023-06-30 21:00:00+00	TEST COURSE	\N	t	2	\N	t	t	\N	\N	2	70
+COPY public.course (id, "createdDate", "updatedDate", name, year, "primarySkillId", "primarySkillName", "locationName", alias, completed, description, "descriptionUrl", planned, "startDate", "endDate", "fullName", "registrationEndDate", "inviteOnly", "discordServerId", "certificateIssuer", "usePrivateRepositories", "personalMentoring", logo, "disciplineId", "minStudentsPerMentor", "certificateThreshold", "wearecommunityUrl") FROM stdin;
+11	2019-08-27 07:36:13.565873	2020-03-13 15:39:41.477995	RS 2019 Q3	\N	javascript	JavaScript	\N	rs-2019-q3	t	RS 2019 Q3	\N	f	2019-09-09 07:35:20.981+00	2020-01-31 07:35:20.981+00	Rolling Scopes School 2019 Q3	\N	f	\N	\N	t	t	\N	\N	2	70	\N
+13	2019-10-21 08:05:31.068833	2020-04-06 15:14:44.116961	RS 2020 Q1	\N	javascript	JavaScript	\N	rs-2020-q1	f	Javascript / Frontend Курс.\nВводное занятие - 2 февраля\nОрганизационный вебинар начнется 2 февраля в 12:00 по минскому времени (GMT+3). Мы расскажем о процессе обучения в RS School и выдадим задания для первого этапа обучения.\n\nВебинар будет транслироваться на канале https://www.youtube.com/c/rollingscopesschool.\nРекомендуем подписаться на канал и нажать колокольчик, чтобы не пропустить начало трансляции. \n\nЕсли у вас не будет возможности присоединиться к онлайн-трансляции, не переживайте! \nЗапись вебинара будет размещена на канале в открытом доступе.\n\nОписание тренинга\nОсновной сайт: https://rs.school/js/\n\nПодробная информация о школе:  https://docs.rs.school	\N	f	2020-02-02 09:01:56.398+00	2020-07-31 08:01:56.398+00	Rolling Scopes School 2020 Q1: JavaScript/Front-end	2020-04-15 08:40:46.24+00	f	\N	\N	t	t	\N	\N	2	70	\N
+23	2020-02-25 09:28:08.842897	2021-07-28 20:44:30.259905	TEST COURSE	\N	javascript	JavaScript	\N	test-course	f	TEST COURSE	\N	f	2021-05-31 21:00:00+00	2023-06-30 21:00:00+00	TEST COURSE	\N	t	2	\N	t	t	\N	\N	2	70	\N
 \.
 
 
@@ -3315,6 +3316,7 @@ COPY public.migrations (id, "timestamp", name) FROM stdin;
 57	1712137476312	Course1712137476312
 58	1730926720293	CourseTask1730926720293
 59	1734874453585	Contributor1734874453585
+60	1736458672717	Course1736458672717
 \.
 
 
@@ -4248,7 +4250,7 @@ SELECT pg_catalog.setval('public.mentor_registry_id_seq', 290, true);
 -- Name: migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rs_master
 --
 
-SELECT pg_catalog.setval('public.migrations_id_seq', 59, true);
+SELECT pg_catalog.setval('public.migrations_id_seq', 60, true);
 
 
 --

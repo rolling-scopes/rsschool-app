@@ -100,4 +100,9 @@ export class UpdateCourseDto {
   @IsNumber()
   @ApiProperty({ required: true })
   certificateThreshold: number;
+
+  @IsString()
+  @IsOptional()
+  @ApiPropertyOptional({ nullable: true, type: 'string' })
+  wearecommunityUrl?: string | null;
 }
