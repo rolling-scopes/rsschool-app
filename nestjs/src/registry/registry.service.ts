@@ -208,6 +208,7 @@ export class RegistryService {
 
     Promise.resolve().then(
       () =>
+        // eslint-disable-next-line no-async-promise-executor
         new Promise(async () => {
           this.logger.log({ message: 'processing invitations...' });
 

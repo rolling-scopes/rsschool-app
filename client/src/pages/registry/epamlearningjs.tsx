@@ -66,7 +66,7 @@ function EpamLearningJSPage() {
       } else {
         message.error('Invalid github id');
       }
-    } catch (e) {
+    } catch {
       message.error('An error occured. Please try later.');
     }
   };

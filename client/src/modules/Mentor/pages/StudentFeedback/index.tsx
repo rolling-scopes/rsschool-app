@@ -30,14 +30,14 @@ export function StudentFeedback({ course }: CourseOnlyPageProps) {
       try {
         await api.updateStudentFeedback(studentId, existingFeedbackId, payload);
         message.success('Feedback has been successfully updated');
-      } catch (error) {
+      } catch {
         message.error('Failed to update feedback');
       }
     } else {
       try {
         await api.createStudentFeedback(studentId, payload);
         message.success('Feedback has been successfully submitted');
-      } catch (error) {
+      } catch {
         message.error('Failed to submit feedback');
       }
     }

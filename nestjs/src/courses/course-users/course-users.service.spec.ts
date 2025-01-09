@@ -116,7 +116,7 @@ describe('CourseUsersService', () => {
 
   describe('getCourseUsersByCourseId', () => {
     it('should find users by course id and return it', async () => {
-      const expectedResponse = mockFindResponse.map(({ user, course, ...rest }) => ({
+      const expectedResponse = mockFindResponse.map(({ user, course: _, ...rest }) => ({
         ...rest,
         name: mockFullName,
         githubId: user.githubId,

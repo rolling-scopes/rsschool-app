@@ -12,7 +12,7 @@ function SolutionReviewSettingsPanel(props: SolutionReviewSettingsPanelProps) {
   const { areContactsVisible, setAreContactsVisible } = settings;
 
   const handleContactsVisibilityChange = () => {
-    setAreContactsVisible && setAreContactsVisible(!areContactsVisible);
+    setAreContactsVisible?.(!areContactsVisible);
   };
 
   return (

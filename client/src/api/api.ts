@@ -541,13 +541,18 @@ export interface BadgeDto {
     'name': string;
     /**
      * 
-     * @type {string}
+     * @type {BadgeEnum}
      * @memberof BadgeDto
      */
-    'id': BadgeDtoIdEnum;
+    'id': BadgeEnum;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
 
-export const BadgeDtoIdEnum = {
+export const BadgeEnum = {
     Congratulations: 'Congratulations',
     ExpertHelp: 'Expert_help',
     GreatSpeaker: 'Great_speaker',
@@ -566,7 +571,8 @@ export const BadgeDtoIdEnum = {
     Thanks: 'Thanks'
 } as const;
 
-export type BadgeDtoIdEnum = typeof BadgeDtoIdEnum[keyof typeof BadgeDtoIdEnum];
+export type BadgeEnum = typeof BadgeEnum[keyof typeof BadgeEnum];
+
 
 /**
  * 
@@ -588,28 +594,28 @@ export interface BasicAutoTestTaskDto {
     'name': string;
     /**
      * 
-     * @type {object}
+     * @type {number}
      * @memberof BasicAutoTestTaskDto
      */
-    'maxAttemptsNumber': object | null;
+    'maxAttemptsNumber': number | null;
     /**
      * 
-     * @type {object}
+     * @type {number}
      * @memberof BasicAutoTestTaskDto
      */
-    'numberOfQuestions': object | null;
+    'numberOfQuestions': number | null;
     /**
      * 
-     * @type {object}
+     * @type {number}
      * @memberof BasicAutoTestTaskDto
      */
-    'strictAttemptsMode': object | null;
+    'strictAttemptsMode': number | null;
     /**
      * 
-     * @type {object}
+     * @type {number}
      * @memberof BasicAutoTestTaskDto
      */
-    'thresholdPercentage': object | null;
+    'thresholdPercentage': number | null;
 }
 /**
  * 
@@ -656,6 +662,23 @@ export interface CheckTasksDeadlineDto {
      */
     'deadlineInHours': number;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const CheckerEnum = {
+    AutoTest: 'auto-test',
+    Assigned: 'assigned',
+    Mentor: 'mentor',
+    TaskOwner: 'taskOwner',
+    CrossCheck: 'crossCheck'
+} as const;
+
+export type CheckerEnum = typeof CheckerEnum[keyof typeof CheckerEnum];
+
+
 /**
  * 
  * @export
@@ -2008,10 +2031,10 @@ export interface CreateCourseTaskDto {
     'scoreWeight'?: number;
     /**
      * 
-     * @type {string}
+     * @type {CheckerEnum}
      * @memberof CreateCourseTaskDto
      */
-    'checker': CreateCourseTaskDtoCheckerEnum;
+    'checker': CheckerEnum;
     /**
      * 
      * @type {string}
@@ -2068,15 +2091,6 @@ export interface CreateCourseTaskDto {
     'validations': object;
 }
 
-export const CreateCourseTaskDtoCheckerEnum = {
-    AutoTest: 'auto-test',
-    Assigned: 'assigned',
-    Mentor: 'mentor',
-    TaskOwner: 'taskOwner',
-    CrossCheck: 'crossCheck'
-} as const;
-
-export type CreateCourseTaskDtoCheckerEnum = typeof CreateCourseTaskDtoCheckerEnum[keyof typeof CreateCourseTaskDtoCheckerEnum];
 export const CreateCourseTaskDtoTypeEnum = {
     Jstask: 'jstask',
     Kotlintask: 'kotlintask',
@@ -3429,10 +3443,10 @@ export interface GratitudeDto {
     'id': number;
     /**
      * 
-     * @type {string}
+     * @type {BadgeEnum}
      * @memberof GratitudeDto
      */
-    'badgeId': GratitudeDtoBadgeIdEnum;
+    'badgeId': BadgeEnum;
     /**
      * 
      * @type {string}
@@ -3452,28 +3466,6 @@ export interface GratitudeDto {
      */
     'date': string;
 }
-
-export const GratitudeDtoBadgeIdEnum = {
-    Congratulations: 'Congratulations',
-    ExpertHelp: 'Expert_help',
-    GreatSpeaker: 'Great_speaker',
-    GoodJob: 'Good_job',
-    HelpingHand: 'Helping_hand',
-    Hero: 'Hero',
-    ThankYou: 'Thank_you',
-    OutstandingWork: 'Outstanding_work',
-    TopPerformer: 'Top_performer',
-    JobOffer: 'Job_Offer',
-    RsActivist: 'RS_activist',
-    JuryTeam: 'Jury_Team',
-    Mentor: 'Mentor',
-    Contributor: 'Contributor',
-    Coordinator: 'Coordinator',
-    Thanks: 'Thanks'
-} as const;
-
-export type GratitudeDtoBadgeIdEnum = typeof GratitudeDtoBadgeIdEnum[keyof typeof GratitudeDtoBadgeIdEnum];
-
 /**
  * 
  * @export
@@ -3804,10 +3796,10 @@ export interface MentorDashboardDto {
     'solutionUrl': string;
     /**
      * 
-     * @type {string}
+     * @type {SolutionItemStatusEnum}
      * @memberof MentorDashboardDto
      */
-    'status': string;
+    'status': SolutionItemStatusEnum;
     /**
      * 
      * @type {string}
@@ -5587,6 +5579,21 @@ export const SoftSkillEntryValueEnum = {
 } as const;
 
 export type SoftSkillEntryValueEnum = typeof SoftSkillEntryValueEnum[keyof typeof SoftSkillEntryValueEnum];
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const SolutionItemStatusEnum = {
+    InReview: 'in-review',
+    Done: 'done',
+    RandomTask: 'random-task'
+} as const;
+
+export type SolutionItemStatusEnum = typeof SolutionItemStatusEnum[keyof typeof SolutionItemStatusEnum];
+
 
 /**
  * 
@@ -17890,7 +17897,7 @@ export const StudentsScoreApiAxiosParamCreator = function (configuration?: Confi
          * 
          * @param {string} activeOnly 
          * @param {'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate' | 'repositoryLastActivityDate'} orderBy 
-         * @param {'asc' | 'null' | 'desc'} orderDirection 
+         * @param {'asc' | 'desc'} orderDirection 
          * @param {string} current 
          * @param {string} pageSize 
          * @param {number} courseId 
@@ -17901,7 +17908,7 @@ export const StudentsScoreApiAxiosParamCreator = function (configuration?: Confi
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getScore: async (activeOnly: string, orderBy: 'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate' | 'repositoryLastActivityDate', orderDirection: 'asc' | 'null' | 'desc', current: string, pageSize: string, courseId: number, githubId?: string, name?: string, mentorGithubId?: string, cityName?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getScore: async (activeOnly: string, orderBy: 'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate' | 'repositoryLastActivityDate', orderDirection: 'asc' | 'desc', current: string, pageSize: string, courseId: number, githubId?: string, name?: string, mentorGithubId?: string, cityName?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'activeOnly' is not null or undefined
             assertParamExists('getScore', 'activeOnly', activeOnly)
             // verify required parameter 'orderBy' is not null or undefined
@@ -18025,7 +18032,7 @@ export const StudentsScoreApiFp = function(configuration?: Configuration) {
          * 
          * @param {string} activeOnly 
          * @param {'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate' | 'repositoryLastActivityDate'} orderBy 
-         * @param {'asc' | 'null' | 'desc'} orderDirection 
+         * @param {'asc' | 'desc'} orderDirection 
          * @param {string} current 
          * @param {string} pageSize 
          * @param {number} courseId 
@@ -18036,7 +18043,7 @@ export const StudentsScoreApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getScore(activeOnly: string, orderBy: 'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate' | 'repositoryLastActivityDate', orderDirection: 'asc' | 'null' | 'desc', current: string, pageSize: string, courseId: number, githubId?: string, name?: string, mentorGithubId?: string, cityName?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ScoreDto>> {
+        async getScore(activeOnly: string, orderBy: 'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate' | 'repositoryLastActivityDate', orderDirection: 'asc' | 'desc', current: string, pageSize: string, courseId: number, githubId?: string, name?: string, mentorGithubId?: string, cityName?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ScoreDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getScore(activeOnly, orderBy, orderDirection, current, pageSize, courseId, githubId, name, mentorGithubId, cityName, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -18065,7 +18072,7 @@ export const StudentsScoreApiFactory = function (configuration?: Configuration, 
          * 
          * @param {string} activeOnly 
          * @param {'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate' | 'repositoryLastActivityDate'} orderBy 
-         * @param {'asc' | 'null' | 'desc'} orderDirection 
+         * @param {'asc' | 'desc'} orderDirection 
          * @param {string} current 
          * @param {string} pageSize 
          * @param {number} courseId 
@@ -18076,7 +18083,7 @@ export const StudentsScoreApiFactory = function (configuration?: Configuration, 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getScore(activeOnly: string, orderBy: 'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate' | 'repositoryLastActivityDate', orderDirection: 'asc' | 'null' | 'desc', current: string, pageSize: string, courseId: number, githubId?: string, name?: string, mentorGithubId?: string, cityName?: string, options?: any): AxiosPromise<ScoreDto> {
+        getScore(activeOnly: string, orderBy: 'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate' | 'repositoryLastActivityDate', orderDirection: 'asc' | 'desc', current: string, pageSize: string, courseId: number, githubId?: string, name?: string, mentorGithubId?: string, cityName?: string, options?: any): AxiosPromise<ScoreDto> {
             return localVarFp.getScore(activeOnly, orderBy, orderDirection, current, pageSize, courseId, githubId, name, mentorGithubId, cityName, options).then((request) => request(axios, basePath));
         },
         /**
@@ -18103,7 +18110,7 @@ export class StudentsScoreApi extends BaseAPI {
      * 
      * @param {string} activeOnly 
      * @param {'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate' | 'repositoryLastActivityDate'} orderBy 
-     * @param {'asc' | 'null' | 'desc'} orderDirection 
+     * @param {'asc' | 'desc'} orderDirection 
      * @param {string} current 
      * @param {string} pageSize 
      * @param {number} courseId 
@@ -18115,7 +18122,7 @@ export class StudentsScoreApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof StudentsScoreApi
      */
-    public getScore(activeOnly: string, orderBy: 'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate' | 'repositoryLastActivityDate', orderDirection: 'asc' | 'null' | 'desc', current: string, pageSize: string, courseId: number, githubId?: string, name?: string, mentorGithubId?: string, cityName?: string, options?: AxiosRequestConfig) {
+    public getScore(activeOnly: string, orderBy: 'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate' | 'repositoryLastActivityDate', orderDirection: 'asc' | 'desc', current: string, pageSize: string, courseId: number, githubId?: string, name?: string, mentorGithubId?: string, cityName?: string, options?: AxiosRequestConfig) {
         return StudentsScoreApiFp(this.configuration).getScore(activeOnly, orderBy, orderDirection, current, pageSize, courseId, githubId, name, mentorGithubId, cityName, options).then((request) => request(this.axios, this.basePath));
     }
 

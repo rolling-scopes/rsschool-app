@@ -75,7 +75,7 @@ function SolutionReview(props: SolutionReviewProps) {
         await courseService.updateTaskSolutionResultMessages(id, courseTaskId, {
           role: currentRole,
         });
-      } catch (error) {
+      } catch {
         message.error('An error occurred. Please try later.');
       }
     })();
@@ -95,7 +95,7 @@ function SolutionReview(props: SolutionReviewProps) {
 
         message.success('The message has been sent.');
         form.resetFields(['content']);
-      } catch (error) {
+      } catch {
         message.error('An error occurred. Please try later.');
       } finally {
         setLoading(false);

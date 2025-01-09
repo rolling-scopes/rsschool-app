@@ -157,7 +157,7 @@ function Page() {
       setScore(0);
       setCriteriaData([]);
       setState({ loading: false, data: [] });
-    } catch (e) {
+    } catch {
       message.error('An error occurred. Please try later.');
     }
   });

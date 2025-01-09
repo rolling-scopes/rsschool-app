@@ -4,7 +4,6 @@
     "/activity": {
       "get": {
         "operationId": "getActivity",
-        "summary": "",
         "parameters": [],
         "responses": {
           "200": {
@@ -12,11 +11,11 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ActivityDto" } } }
           }
         },
+        "summary": "",
         "tags": ["activity"]
       },
       "post": {
         "operationId": "createActivity",
-        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -28,13 +27,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ActivityDto" } } }
           }
         },
+        "summary": "",
         "tags": ["activity"]
       }
     },
     "/activity/webhook": {
       "post": {
         "operationId": "createActivityWebhook",
-        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -46,13 +45,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ActivityDto" } } }
           }
         },
+        "summary": "",
         "tags": ["activity"]
       }
     },
     "/users/search": {
       "get": {
         "operationId": "searchUsers",
-        "summary": "",
         "parameters": [{ "name": "query", "required": true, "in": "query", "schema": { "type": "string" } }],
         "responses": {
           "200": {
@@ -64,13 +63,13 @@
             }
           }
         },
+        "summary": "",
         "tags": ["users"]
       }
     },
     "/alerts": {
       "post": {
         "operationId": "createAlert",
-        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -82,11 +81,11 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AlertDto" } } }
           }
         },
+        "summary": "",
         "tags": ["alerts"]
       },
       "get": {
         "operationId": "getAlerts",
-        "summary": "",
         "parameters": [{ "name": "enabled", "required": true, "in": "query", "schema": { "type": "boolean" } }],
         "responses": {
           "200": {
@@ -98,20 +97,20 @@
             }
           }
         },
+        "summary": "",
         "tags": ["alerts"]
       }
     },
     "/alerts/{id}": {
       "delete": {
         "operationId": "deleteAlert",
-        "summary": "",
         "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": { "200": { "description": "" } },
+        "summary": "",
         "tags": ["alerts"]
       },
       "patch": {
         "operationId": "updateAlert",
-        "summary": "",
         "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
         "requestBody": {
           "required": true,
@@ -123,13 +122,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AlertDto" } } }
           }
         },
+        "summary": "",
         "tags": ["alerts"]
       }
     },
     "/students/{studentId}/feedbacks": {
       "post": {
         "operationId": "createStudentFeedback",
-        "summary": "",
         "parameters": [{ "name": "studentId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "requestBody": {
           "required": true,
@@ -141,13 +140,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/StudentFeedbackDto" } } }
           }
         },
+        "summary": "",
         "tags": ["students feedbacks"]
       }
     },
     "/students/{studentId}/feedbacks/{id}": {
       "patch": {
         "operationId": "updateStudentFeedback",
-        "summary": "",
         "parameters": [
           { "name": "studentId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
@@ -162,11 +161,11 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/StudentFeedbackDto" } } }
           }
         },
+        "summary": "",
         "tags": ["students feedbacks"]
       },
       "get": {
         "operationId": "getStudentFeedback",
-        "summary": "",
         "parameters": [
           { "name": "studentId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
@@ -177,13 +176,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/StudentFeedbackDto" } } }
           }
         },
+        "summary": "",
         "tags": ["students feedbacks"]
       }
     },
     "/courses": {
       "get": {
         "operationId": "getCourses",
-        "summary": "",
         "parameters": [],
         "responses": {
           "200": {
@@ -195,11 +194,11 @@
             }
           }
         },
+        "summary": "",
         "tags": ["courses"]
       },
       "post": {
         "operationId": "createCourse",
-        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -211,13 +210,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CourseDto" } } }
           }
         },
+        "summary": "",
         "tags": ["courses"]
       }
     },
     "/courses/{courseId}": {
       "get": {
         "operationId": "getCourse",
-        "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": {
           "200": {
@@ -226,11 +225,11 @@
           },
           "403": { "description": "" }
         },
+        "summary": "",
         "tags": ["courses"]
       },
       "put": {
         "operationId": "updateCourse",
-        "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "requestBody": {
           "required": true,
@@ -243,35 +242,35 @@
           },
           "403": { "description": "" }
         },
+        "summary": "",
         "tags": ["courses"]
       }
     },
     "/courses/{courseId}/leave": {
       "post": {
         "operationId": "leaveCourse",
-        "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "requestBody": {
           "required": false,
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/LeaveCourseRequestDto" } } }
         },
         "responses": { "201": { "description": "" } },
+        "summary": "",
         "tags": ["courses"]
       }
     },
     "/courses/{courseId}/rejoin": {
       "post": {
         "operationId": "rejoinCourse",
-        "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": { "201": { "description": "" } },
+        "summary": "",
         "tags": ["courses"]
       }
     },
     "/courses/{courseId}/copy": {
       "post": {
         "operationId": "copyCourse",
-        "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "requestBody": {
           "required": true,
@@ -283,13 +282,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CourseDto" } } }
           }
         },
+        "summary": "",
         "tags": ["courses"]
       }
     },
     "/students": {
       "get": {
         "operationId": "getUserStudents",
-        "summary": "",
         "parameters": [
           { "name": "current", "required": true, "in": "query", "schema": { "type": "string" } },
           { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "string" } },
@@ -305,13 +304,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UserStudentsDto" } } }
           }
         },
+        "summary": "",
         "tags": ["students"]
       }
     },
     "/students/{studentId}": {
       "get": {
         "operationId": "getStudent",
-        "summary": "",
         "parameters": [{ "name": "studentId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": {
           "200": {
@@ -321,13 +320,13 @@
           "400": { "description": "" },
           "403": { "description": "" }
         },
+        "summary": "",
         "tags": ["students"]
       }
     },
     "/mentors/{mentorId}/course/{courseId}/options": {
       "get": {
         "operationId": "getMentorOptions",
-        "summary": "",
         "parameters": [
           { "name": "mentorId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
@@ -340,13 +339,13 @@
           "403": { "description": "" },
           "404": { "description": "" }
         },
+        "summary": "",
         "tags": ["mentors"]
       }
     },
     "/mentors/{mentorId}/students": {
       "get": {
         "operationId": "getMentorStudents",
-        "summary": "",
         "parameters": [{ "name": "mentorId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": {
           "200": {
@@ -359,13 +358,13 @@
           },
           "400": { "description": "" }
         },
+        "summary": "",
         "tags": ["mentors"]
       }
     },
     "/mentors/{mentorId}/course/{courseId}/students": {
       "get": {
         "operationId": "getCourseStudentsCount",
-        "summary": "",
         "parameters": [
           { "name": "mentorId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
@@ -374,13 +373,13 @@
           "200": { "description": "", "content": { "application/json": { "schema": { "type": "number" } } } },
           "400": { "description": "" }
         },
+        "summary": "",
         "tags": ["mentors"]
       }
     },
     "/mentors/{mentorId}/course/{courseId}/dashboard": {
       "get": {
         "operationId": "getMentorDashboardData",
-        "summary": "",
         "parameters": [
           { "name": "mentorId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
@@ -396,25 +395,25 @@
           },
           "400": { "description": "" }
         },
+        "summary": "",
         "tags": ["mentors"]
       }
     },
     "/mentors/{mentorId}/course/{courseId}/random-task": {
       "get": {
         "operationId": "getRandomTask",
-        "summary": "",
         "parameters": [
           { "name": "mentorId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
         "responses": { "200": { "description": "" }, "400": { "description": "" } },
+        "summary": "",
         "tags": ["mentors"]
       }
     },
     "/courses/{courseId}/tasks": {
       "get": {
         "operationId": "getCourseTasks",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           {
@@ -442,11 +441,11 @@
           "400": { "description": "" },
           "403": { "description": "" }
         },
+        "summary": "",
         "tags": ["courses tasks"]
       },
       "post": {
         "operationId": "createCourseTask",
-        "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "requestBody": {
           "required": true,
@@ -460,13 +459,13 @@
           "400": { "description": "" },
           "403": { "description": "" }
         },
+        "summary": "",
         "tags": ["courses tasks"]
       }
     },
     "/courses/{courseId}/tasks/solutions": {
       "get": {
         "operationId": "getCourseTasksWithStudentSolution",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           {
@@ -488,13 +487,13 @@
           "400": { "description": "" },
           "403": { "description": "" }
         },
+        "summary": "",
         "tags": ["courses tasks"]
       }
     },
     "/courses/{courseId}/tasks/detailed": {
       "get": {
         "operationId": "getCourseTasksDetailed",
-        "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": {
           "200": {
@@ -508,13 +507,13 @@
           "400": { "description": "" },
           "403": { "description": "" }
         },
+        "summary": "",
         "tags": ["courses tasks"]
       }
     },
     "/courses/{courseId}/tasks/{courseTaskId}": {
       "get": {
         "operationId": "getCourseTask",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
@@ -527,11 +526,11 @@
           "400": { "description": "" },
           "403": { "description": "" }
         },
+        "summary": "",
         "tags": ["courses tasks"]
       },
       "put": {
         "operationId": "updateCourseTask",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
@@ -548,23 +547,23 @@
           "400": { "description": "" },
           "403": { "description": "" }
         },
+        "summary": "",
         "tags": ["courses tasks"]
       },
       "delete": {
         "operationId": "deleteCourseTask",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
         "responses": { "200": { "description": "" }, "400": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
         "tags": ["courses tasks"]
       }
     },
     "/courses/{courseId}/events": {
       "post": {
         "operationId": "createCourseEvent",
-        "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "requestBody": {
           "required": true,
@@ -582,13 +581,13 @@
           "400": { "description": "" },
           "403": { "description": "" }
         },
+        "summary": "",
         "tags": ["courses events"]
       }
     },
     "/courses/{courseId}/events/{courseEventId}": {
       "put": {
         "operationId": "updateCourseEvent",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "courseEventId", "required": true, "in": "path", "schema": { "type": "number" } }
@@ -598,23 +597,23 @@
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateCourseEventDto" } } }
         },
         "responses": { "200": { "description": "" }, "400": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
         "tags": ["courses events"]
       },
       "delete": {
         "operationId": "deleteCourseEvent",
-        "summary": "",
         "parameters": [
           { "name": "courseEventId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "courseId", "required": true, "in": "path", "schema": {} }
         ],
         "responses": { "200": { "description": "" }, "400": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
         "tags": ["courses events"]
       }
     },
     "/courses/{courseId}/interviews": {
       "get": {
         "operationId": "getInterviews",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "disabled", "required": false, "in": "query", "schema": { "type": "boolean" } },
@@ -637,13 +636,13 @@
           "400": { "description": "" },
           "403": { "description": "" }
         },
+        "summary": "",
         "tags": ["courses interviews"]
       }
     },
     "/courses/{courseId}/interviews/{interviewId}": {
       "get": {
         "operationId": "getInterview",
-        "summary": "",
         "parameters": [
           { "name": "interviewId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
@@ -656,6 +655,7 @@
           "400": { "description": "" },
           "403": { "description": "" }
         },
+        "summary": "",
         "tags": ["courses interviews"]
       }
     },
@@ -674,7 +674,6 @@
     "/courses/{courseId}/interviews/{interviewId}/students/available": {
       "get": {
         "operationId": "getAvailableStudents",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "interviewId", "required": true, "in": "path", "schema": { "type": "number" } }
@@ -691,13 +690,13 @@
           "400": { "description": "" },
           "403": { "description": "" }
         },
+        "summary": "",
         "tags": ["courses interviews"]
       }
     },
     "/courses/{courseId}/interviews/{interviewId}/{type}/feedback": {
       "get": {
         "operationId": "getInterviewFeedback",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "interviewId", "required": true, "in": "path", "schema": { "type": "number" } },
@@ -711,11 +710,11 @@
           "400": { "description": "" },
           "403": { "description": "" }
         },
+        "summary": "",
         "tags": ["courses interviews"]
       },
       "post": {
         "operationId": "createInterviewFeedback",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "interviewId", "required": true, "in": "path", "schema": { "type": "number" } },
@@ -726,26 +725,26 @@
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PutInterviewFeedbackDto" } } }
         },
         "responses": { "200": { "description": "" }, "400": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
         "tags": ["courses interviews"]
       }
     },
     "/tasks/notify/changes": {
       "post": {
         "operationId": "notifyTasksDeadlines",
-        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CheckTasksDeadlineDto" } } }
         },
         "responses": { "403": { "description": "" } },
+        "summary": "",
         "tags": ["courses tasks"]
       }
     },
     "/courses/{courseId}/stats": {
       "get": {
         "operationId": "getCourseStats",
-        "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": {
           "200": {
@@ -753,13 +752,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CourseStatsDto" } } }
           }
         },
+        "summary": "",
         "tags": ["course stats"]
       }
     },
     "/courses/{courseId}/stats/mentors": {
       "get": {
         "operationId": "getCourseMentors",
-        "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": {
           "200": {
@@ -768,13 +767,13 @@
           },
           "400": { "description": "" }
         },
+        "summary": "",
         "tags": ["course stats"]
       }
     },
     "/courses/{courseId}/stats/mentors/countries": {
       "get": {
         "operationId": "getCourseMentorCountries",
-        "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": {
           "200": {
@@ -783,13 +782,13 @@
           },
           "400": { "description": "" }
         },
+        "summary": "",
         "tags": ["course stats"]
       }
     },
     "/courses/{courseId}/stats/students/countries": {
       "get": {
         "operationId": "getCourseStudentCountries",
-        "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": {
           "200": {
@@ -798,13 +797,13 @@
           },
           "400": { "description": "" }
         },
+        "summary": "",
         "tags": ["course stats"]
       }
     },
     "/courses/{courseId}/stats/students/certificates/countries": {
       "get": {
         "operationId": "getCourseStudentCertificatesCountries",
-        "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": {
           "200": {
@@ -813,13 +812,13 @@
           },
           "400": { "description": "" }
         },
+        "summary": "",
         "tags": ["course stats"]
       }
     },
     "/courses/{courseId}/stats/task/{taskId}/performance": {
       "get": {
         "operationId": "getTaskPerformance",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "taskId", "required": true, "in": "path", "schema": { "type": "number" } }
@@ -831,13 +830,13 @@
           },
           "400": { "description": "" }
         },
+        "summary": "",
         "tags": ["course stats"]
       }
     },
     "/courses/{courseId}/cross-checks/pairs": {
       "get": {
         "operationId": "getCrossCheckPairs",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "number" } },
@@ -858,13 +857,13 @@
             }
           }
         },
+        "summary": "",
         "tags": ["courses tasks"]
       }
     },
     "/courses/{courseId}/cross-checks/available-review-stats": {
       "get": {
         "operationId": "getAvailableCrossCheckReviewStats",
-        "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": {
           "403": { "description": "" },
@@ -877,25 +876,25 @@
             }
           }
         },
+        "summary": "",
         "tags": ["courses tasks"]
       }
     },
     "/courses/{courseId}/cross-checks/{courseTaskId}/csv": {
       "get": {
         "operationId": "getCrossCheckCsv",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
         "responses": { "403": { "description": "" } },
+        "summary": "",
         "tags": ["courses tasks"]
       }
     },
     "/courses/{courseId}/cross-checks/{courseTaskId}/feedbacks/my": {
       "get": {
         "operationId": "getMyCrossCheckFeedbacks",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
@@ -907,13 +906,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CrossCheckFeedbackDto" } } }
           }
         },
+        "summary": "",
         "tags": ["courses tasks"]
       }
     },
     "/course/{courseId}/students/score": {
       "get": {
         "operationId": "getScore",
-        "summary": "",
         "parameters": [
           { "name": "activeOnly", "required": true, "in": "query", "schema": { "type": "string" } },
           {
@@ -939,7 +938,7 @@
             "name": "orderDirection",
             "required": true,
             "in": "query",
-            "schema": { "enum": ["asc", null, "desc"], "type": "string" }
+            "schema": { "enum": ["asc", "desc"], "type": "string" }
           },
           { "name": "current", "required": true, "in": "query", "schema": { "type": "string" } },
           { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "string" } },
@@ -955,13 +954,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ScoreDto" } } }
           }
         },
+        "summary": "",
         "tags": ["students score"]
       }
     },
     "/course/{courseId}/students/score/{githubId}": {
       "get": {
         "operationId": "getStudentScore",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }
@@ -972,13 +971,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ScoreStudentDto" } } }
           }
         },
+        "summary": "",
         "tags": ["students score"]
       }
     },
     "/courses/{courseId}/tasks/{courseTaskId}/solutions": {
       "post": {
         "operationId": "createTaskSolution",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
@@ -995,13 +994,13 @@
           "400": { "description": "" },
           "403": { "description": "" }
         },
+        "summary": "",
         "tags": ["courses task solutions"]
       }
     },
     "/courses/{courseId}/schedule": {
       "get": {
         "operationId": "getSchedule",
-        "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": {
           "200": {
@@ -1013,26 +1012,26 @@
             }
           }
         },
+        "summary": "",
         "tags": ["courses schedule"]
       }
     },
     "/courses/{courseId}/schedule/copy": {
       "post": {
         "operationId": "copySchedule",
-        "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CourseCopyFromDto" } } }
         },
         "responses": { "200": { "description": "" } },
+        "summary": "",
         "tags": ["courses schedule"]
       }
     },
     "/courses/{courseId}/icalendar/token": {
       "get": {
         "operationId": "getScheduleICalendarToken",
-        "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": {
           "200": {
@@ -1040,13 +1039,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CourseScheduleTokenDto" } } }
           }
         },
+        "summary": "",
         "tags": ["courses schedule ical"]
       }
     },
     "/courses/{courseId}/icalendar/{token}": {
       "get": {
         "operationId": "getScheduleICalendar",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "token", "required": true, "in": "path", "schema": { "type": "string" } },
@@ -1055,13 +1054,13 @@
         "responses": {
           "200": { "description": "", "content": { "application/json": { "schema": { "type": "string" } } } }
         },
+        "summary": "",
         "tags": ["courses schedule ical"]
       }
     },
     "/courses/{courseId}/team-distribution": {
       "post": {
         "operationId": "createTeamDistribution",
-        "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "requestBody": {
           "required": true,
@@ -1073,11 +1072,11 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamDistributionDto" } } }
           }
         },
+        "summary": "",
         "tags": ["team distribution"]
       },
       "get": {
         "operationId": "getCourseTeamDistributions",
-        "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": {
           "200": {
@@ -1089,23 +1088,23 @@
             }
           }
         },
+        "summary": "",
         "tags": ["team distribution"]
       }
     },
     "/courses/{courseId}/team-distribution/{id}": {
       "delete": {
         "operationId": "deleteTeamDistribution",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
         "responses": { "200": { "description": "" } },
+        "summary": "",
         "tags": ["team distribution"]
       },
       "put": {
         "operationId": "updateTeamDistribution",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
@@ -1115,13 +1114,13 @@
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateTeamDistributionDto" } } }
         },
         "responses": { "200": { "description": "" } },
+        "summary": "",
         "tags": ["team distribution"]
       }
     },
     "/courses/{courseId}/team-distribution/{id}/registry": {
       "post": {
         "operationId": "teamDistributionRegistry",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
@@ -1132,23 +1131,23 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamDistributionDto" } } }
           }
         },
+        "summary": "",
         "tags": ["team distribution"]
       },
       "delete": {
         "operationId": "teamDistributionDeleteRegistry",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
         "responses": { "200": { "description": "" } },
+        "summary": "",
         "tags": ["team distribution"]
       }
     },
     "/courses/{courseId}/team-distribution/{id}/submit-score/{taskId}": {
       "get": {
         "operationId": "submitScore",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } },
@@ -1160,13 +1159,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamDistributionDto" } } }
           }
         },
+        "summary": "",
         "tags": ["team distribution"]
       }
     },
     "/courses/{courseId}/team-distribution/{id}/detailed": {
       "get": {
         "operationId": "getCourseTeamDistributionDetailed",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
@@ -1179,13 +1178,13 @@
             }
           }
         },
+        "summary": "",
         "tags": ["team distribution"]
       }
     },
     "/courses/{courseId}/team-distribution/{id}/students": {
       "get": {
         "operationId": "getStudentsWithoutTeam",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } },
@@ -1203,25 +1202,25 @@
             }
           }
         },
+        "summary": "",
         "tags": ["team distribution"]
       }
     },
     "/courses/{courseId}/team-distribution/{id}/distribution": {
       "post": {
         "operationId": "distributeStudentsToTeam",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
         "responses": { "200": { "description": "" } },
+        "summary": "",
         "tags": ["team distribution"]
       }
     },
     "/courses/{courseId}/team-distribution/{distributionId}/team": {
       "get": {
         "operationId": "getTeams",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } },
@@ -1235,11 +1234,11 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamsDto" } } }
           }
         },
+        "summary": "",
         "tags": ["team"]
       },
       "post": {
         "operationId": "createTeam",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } }
@@ -1254,13 +1253,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamDto" } } }
           }
         },
+        "summary": "",
         "tags": ["team"]
       }
     },
     "/courses/{courseId}/team-distribution/{distributionId}/team/{id}": {
       "patch": {
         "operationId": "updateTeam",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } },
@@ -1271,13 +1270,13 @@
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateTeamDto" } } }
         },
         "responses": { "200": { "description": "" } },
+        "summary": "",
         "tags": ["team"]
       }
     },
     "/courses/{courseId}/team-distribution/{distributionId}/team/{id}/password": {
       "get": {
         "operationId": "getTeamPassword",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } },
@@ -1289,11 +1288,11 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamPasswordDto" } } }
           }
         },
+        "summary": "",
         "tags": ["team"]
       },
       "post": {
         "operationId": "changeTeamPassword",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } },
@@ -1305,13 +1304,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamPasswordDto" } } }
           }
         },
+        "summary": "",
         "tags": ["team"]
       }
     },
     "/courses/{courseId}/team-distribution/{distributionId}/team/{id}/join": {
       "post": {
         "operationId": "joinTeam",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } },
@@ -1327,26 +1326,26 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamInfoDto" } } }
           }
         },
+        "summary": "",
         "tags": ["team"]
       }
     },
     "/courses/{courseId}/team-distribution/{distributionId}/team/{id}/leave": {
       "post": {
         "operationId": "leaveTeam",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "distributionId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
         "responses": { "200": { "description": "" } },
+        "summary": "",
         "tags": ["team"]
       }
     },
     "/courses/{courseId}/tasks/{courseTaskId}/verifications/answers": {
       "get": {
         "operationId": "getAnswers",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
@@ -1363,13 +1362,13 @@
           "400": { "description": "" },
           "403": { "description": "" }
         },
+        "summary": "",
         "tags": ["course task verifications"]
       }
     },
     "/courses/{courseId}/tasks/{courseTaskId}/verifications": {
       "post": {
         "operationId": "createTaskVerification",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
@@ -1388,13 +1387,13 @@
           "400": { "description": "" },
           "429": { "description": "" }
         },
+        "summary": "",
         "tags": ["course task verifications"]
       }
     },
     "/courses/{courseId}/users": {
       "get": {
         "operationId": "getCourseUsers",
-        "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": {
           "200": {
@@ -1407,11 +1406,11 @@
           },
           "404": { "description": "" }
         },
+        "summary": "",
         "tags": ["course users"]
       },
       "put": {
         "operationId": "putCourseUsers",
-        "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "requestBody": {
           "required": true,
@@ -1422,13 +1421,13 @@
           }
         },
         "responses": { "200": { "description": "" } },
+        "summary": "",
         "tags": ["course users"]
       }
     },
     "/courses/{courseId}/users/{githubId}": {
       "put": {
         "operationId": "putCourseUser",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }
@@ -1438,13 +1437,13 @@
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CourseRolesDto" } } }
         },
         "responses": { "200": { "description": "" }, "400": { "description": "" } },
+        "summary": "",
         "tags": ["course users"]
       }
     },
     "/course/{courseId}/mentors/details": {
       "get": {
         "operationId": "getMentorsDetails",
-        "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": {
           "200": {
@@ -1457,22 +1456,22 @@
           },
           "403": { "description": "" }
         },
+        "summary": "",
         "tags": ["course mentors"]
       }
     },
     "/course/{courseId}/mentors/details/csv": {
       "get": {
         "operationId": "getMentorsDetailsCsv",
-        "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": { "403": { "description": "" } },
+        "summary": "",
         "tags": ["course mentors"]
       }
     },
     "/course/{courseId}/mentors/search/{searchText}": {
       "get": {
         "operationId": "searchMentors",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "searchText", "required": true, "in": "path", "schema": { "type": "string" } }
@@ -1488,13 +1487,13 @@
           },
           "403": { "description": "" }
         },
+        "summary": "",
         "tags": ["course mentors"]
       }
     },
     "/courses/{courseId}/students/{githubId}/summary": {
       "get": {
         "operationId": "getStudentSummary",
-        "summary": "",
         "parameters": [
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
           { "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }
@@ -1507,13 +1506,13 @@
           "400": { "description": "" },
           "403": { "description": "" }
         },
+        "summary": "",
         "tags": ["students"]
       }
     },
     "/course/{courseId}/mentor-reviews": {
       "get": {
         "operationId": "getMentorReviews",
-        "summary": "",
         "parameters": [
           { "name": "current", "required": true, "in": "query", "schema": { "type": "string" } },
           { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "string" } },
@@ -1529,24 +1528,24 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/MentorReviewsDto" } } }
           }
         },
+        "summary": "",
         "tags": ["mentor-reviews"]
       },
       "post": {
         "operationId": "assignReviewer",
-        "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/MentorReviewAssignDto" } } }
         },
         "responses": { "200": { "description": "" } },
+        "summary": "",
         "tags": ["mentor-reviews"]
       }
     },
     "/users/notifications": {
       "get": {
         "operationId": "getUserNotifications",
-        "summary": "",
         "parameters": [],
         "responses": {
           "200": {
@@ -1554,11 +1553,11 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UserNotificationsDto" } } }
           }
         },
+        "summary": "",
         "tags": ["users notifications"]
       },
       "put": {
         "operationId": "updateUserNotifications",
-        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -1584,13 +1583,13 @@
             }
           }
         },
+        "summary": "",
         "tags": ["users notifications"]
       }
     },
     "/users/notifications/connections": {
       "get": {
         "operationId": "getUserNotificationConnections",
-        "summary": "",
         "parameters": [],
         "responses": {
           "200": {
@@ -1600,15 +1599,16 @@
             }
           }
         },
+        "summary": "",
         "tags": ["users notifications"]
       }
     },
     "/users/notifications/confirmation/email": {
       "post": {
         "operationId": "sendEmailConfirmationLink",
-        "summary": "",
         "parameters": [],
         "responses": { "201": { "description": "" } },
+        "summary": "",
         "tags": ["users notifications"]
       }
     },
@@ -1657,20 +1657,19 @@
     "/users/notifications/send": {
       "post": {
         "operationId": "sendNotification",
-        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SendUserNotificationDto" } } }
         },
         "responses": { "200": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
         "tags": ["users notifications"]
       }
     },
     "/notifications": {
       "get": {
         "operationId": "getNotifications",
-        "summary": "",
         "parameters": [],
         "responses": {
           "200": {
@@ -1683,11 +1682,11 @@
           },
           "403": { "description": "" }
         },
+        "summary": "",
         "tags": ["notifications"]
       },
       "put": {
         "operationId": "updateNotification",
-        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -1700,11 +1699,11 @@
           },
           "403": { "description": "" }
         },
+        "summary": "",
         "tags": ["notifications"]
       },
       "post": {
         "operationId": "createNotification",
-        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -1717,42 +1716,43 @@
           },
           "403": { "description": "" }
         },
+        "summary": "",
         "tags": ["notifications"]
       }
     },
     "/notifications/{id}": {
       "delete": {
         "operationId": "deleteNotification",
-        "summary": "",
         "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }],
         "responses": { "200": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
         "tags": ["notifications"]
       }
     },
     "/auth/github/login": {
       "get": {
         "operationId": "githubLogin",
-        "summary": "",
         "parameters": [],
         "responses": { "200": { "description": "" } },
+        "summary": "",
         "tags": ["auth"]
       }
     },
     "/auth/github/callback": {
       "get": {
         "operationId": "githubCallback",
-        "summary": "",
         "parameters": [],
         "responses": { "200": { "description": "" } },
+        "summary": "",
         "tags": ["auth"]
       }
     },
     "/auth/github/logout": {
       "get": {
         "operationId": "githubLogout",
-        "summary": "",
         "parameters": [],
         "responses": { "200": { "description": "" } },
+        "summary": "",
         "tags": ["auth"]
       }
     },
@@ -1771,7 +1771,6 @@
     "/profile/{username}/courses": {
       "get": {
         "operationId": "getUserCourses",
-        "summary": "",
         "parameters": [{ "name": "username", "required": true, "in": "path", "schema": { "type": "string" } }],
         "responses": {
           "200": {
@@ -1783,39 +1782,39 @@
             }
           }
         },
+        "summary": "",
         "tags": ["profile"]
       }
     },
     "/profile/user": {
       "post": {
         "operationId": "updateUser",
-        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateUserDto" } } }
         },
         "responses": { "201": { "description": "" } },
+        "summary": "",
         "tags": ["profile"]
       }
     },
     "/profile/info": {
       "patch": {
         "operationId": "updateProfileInfoFlat",
-        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateProfileInfoDto" } } }
         },
         "responses": { "200": { "description": "" } },
+        "summary": "",
         "tags": ["profile"]
       }
     },
     "/profile/{username}": {
       "get": {
         "operationId": "getProfile",
-        "summary": "",
         "parameters": [{ "name": "username", "required": true, "in": "path", "schema": { "type": "string" } }],
         "responses": {
           "default": {
@@ -1823,20 +1822,20 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ProfileDto" } } }
           }
         },
+        "summary": "",
         "tags": ["profile"]
       },
       "delete": {
         "operationId": "obfuscateProfile",
-        "summary": "",
         "parameters": [{ "name": "username", "required": true, "in": "path", "schema": { "type": "string" } }],
         "responses": { "200": { "description": "" } },
+        "summary": "",
         "tags": ["profile"]
       }
     },
     "/profile/{username}/personal": {
       "get": {
         "operationId": "getPersonalProfile",
-        "summary": "",
         "parameters": [{ "name": "username", "required": true, "in": "path", "schema": { "type": "string" } }],
         "responses": {
           "default": {
@@ -1844,13 +1843,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PersonalProfileDto" } } }
           }
         },
+        "summary": "",
         "tags": ["profile"]
       }
     },
     "/profile/{username}/endorsement": {
       "get": {
         "operationId": "getEndorsement",
-        "summary": "",
         "parameters": [{ "name": "username", "required": true, "in": "path", "schema": { "type": "string" } }],
         "responses": {
           "default": {
@@ -1858,13 +1857,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/EndorsementDto" } } }
           }
         },
+        "summary": "",
         "tags": ["profile"]
       }
     },
     "/profile/{username}/endorsement-data": {
       "get": {
         "operationId": "getEndorsementData",
-        "summary": "",
         "parameters": [{ "name": "username", "required": true, "in": "path", "schema": { "type": "string" } }],
         "responses": {
           "default": {
@@ -1872,13 +1871,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/EndorsementDataDto" } } }
           }
         },
+        "summary": "",
         "tags": ["profile"]
       }
     },
     "/disciplines": {
       "post": {
         "operationId": "createDiscipline",
-        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -1890,11 +1889,11 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/DisciplineDto" } } }
           }
         },
+        "summary": "",
         "tags": ["disciplines"]
       },
       "get": {
         "operationId": "getDisciplines",
-        "summary": "",
         "parameters": [],
         "responses": {
           "200": {
@@ -1906,20 +1905,20 @@
             }
           }
         },
+        "summary": "",
         "tags": ["disciplines"]
       }
     },
     "/disciplines/{id}": {
       "delete": {
         "operationId": "deleteDiscipline",
-        "summary": "",
         "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": { "200": { "description": "" } },
+        "summary": "",
         "tags": ["disciplines"]
       },
       "patch": {
         "operationId": "updateDiscipline",
-        "summary": "",
         "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
         "requestBody": {
           "required": true,
@@ -1931,46 +1930,46 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/DisciplineDto" } } }
           }
         },
+        "summary": "",
         "tags": ["disciplines"]
       }
     },
     "/registry/mentor/{githubId}": {
       "put": {
         "operationId": "approveMentor",
-        "summary": "",
         "parameters": [{ "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }],
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ApproveMentorDto" } } }
         },
         "responses": { "200": { "description": "" } },
+        "summary": "",
         "tags": ["registry"]
       },
       "delete": {
         "operationId": "cancelMentorRegistry",
-        "summary": "",
         "parameters": [{ "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }],
         "responses": { "200": { "description": "" } },
+        "summary": "",
         "tags": ["registry"]
       }
     },
     "/registry/mentor/{githubId}/comment": {
       "put": {
         "operationId": "commentMentorRegistry",
-        "summary": "",
         "parameters": [{ "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }],
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CommentMentorRegistryDto" } } }
         },
         "responses": { "200": { "description": "" } },
+        "summary": "",
         "tags": ["registry"]
       }
     },
     "/registry/mentors": {
       "get": {
         "operationId": "getMentorRegistries",
-        "summary": "",
         "parameters": [
           {
             "name": "status",
@@ -2009,48 +2008,48 @@
             }
           }
         },
+        "summary": "",
         "tags": ["registry"]
       }
     },
     "/registry/mentors/invite": {
       "post": {
         "operationId": "inviteMentors",
-        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InviteMentorsDto" } } }
         },
         "responses": { "201": { "description": "" } },
+        "summary": "",
         "tags": ["registry"]
       }
     },
     "/certificate/{publicId}": {
       "get": {
         "operationId": "getCertificate",
-        "summary": "",
         "parameters": [{ "name": "publicId", "required": true, "in": "path", "schema": { "type": "string" } }],
         "responses": { "200": { "description": "" } },
+        "summary": "",
         "tags": ["certificate"]
       }
     },
     "/certificate": {
       "post": {
         "operationId": "saveCertificate",
-        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SaveCertificateDto" } } }
         },
         "responses": { "201": { "description": "" } },
+        "summary": "",
         "tags": ["certificate"]
       }
     },
     "/discord-servers": {
       "post": {
         "operationId": "createDiscordServer",
-        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -2062,11 +2061,11 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/DiscordServerDto" } } }
           }
         },
+        "summary": "",
         "tags": ["discord-servers"]
       },
       "get": {
         "operationId": "getDiscordServers",
-        "summary": "",
         "parameters": [],
         "responses": {
           "200": {
@@ -2078,13 +2077,13 @@
             }
           }
         },
+        "summary": "",
         "tags": ["discord-servers"]
       }
     },
     "/discord-servers/{id}": {
       "put": {
         "operationId": "updateDiscordServer",
-        "summary": "",
         "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
         "requestBody": {
           "required": true,
@@ -2096,11 +2095,11 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/DiscordServerDto" } } }
           }
         },
+        "summary": "",
         "tags": ["discord-servers"]
       },
       "delete": {
         "operationId": "deleteDiscordServer",
-        "summary": "",
         "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": {
           "200": {
@@ -2108,13 +2107,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/DiscordServerDto" } } }
           }
         },
+        "summary": "",
         "tags": ["discord-servers"]
       }
     },
     "/opportunities/{githubId}/resume": {
       "get": {
         "operationId": "getResume",
-        "summary": "",
         "parameters": [{ "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }],
         "responses": {
           "200": {
@@ -2125,11 +2124,11 @@
           "403": { "description": "" },
           "404": { "description": "" }
         },
+        "summary": "",
         "tags": ["opportunities"]
       },
       "patch": {
         "operationId": "saveResume",
-        "summary": "",
         "parameters": [{ "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }],
         "requestBody": {
           "required": true,
@@ -2144,13 +2143,13 @@
           "403": { "description": "" },
           "404": { "description": "" }
         },
+        "summary": "",
         "tags": ["opportunities"]
       }
     },
     "/opportunities/consent": {
       "get": {
         "operationId": "getConsent",
-        "summary": "",
         "parameters": [],
         "responses": {
           "200": {
@@ -2158,11 +2157,11 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ConsentDto" } } }
           }
         },
+        "summary": "",
         "tags": ["opportunities"]
       },
       "post": {
         "operationId": "createConsent",
-        "summary": "",
         "parameters": [],
         "responses": {
           "200": {
@@ -2170,11 +2169,11 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/GiveConsentDto" } } }
           }
         },
+        "summary": "",
         "tags": ["opportunities"]
       },
       "delete": {
         "operationId": "deleteConsent",
-        "summary": "",
         "parameters": [],
         "responses": {
           "200": {
@@ -2182,13 +2181,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ConsentDto" } } }
           }
         },
+        "summary": "",
         "tags": ["opportunities"]
       }
     },
     "/opportunities/prolong": {
       "post": {
         "operationId": "prolong",
-        "summary": "",
         "parameters": [],
         "responses": {
           "200": {
@@ -2196,13 +2195,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/StatusDto" } } }
           }
         },
+        "summary": "",
         "tags": ["opportunities"]
       }
     },
     "/opportunities/visibility": {
       "post": {
         "operationId": "setVisibility",
-        "summary": "",
         "parameters": [],
         "responses": {
           "200": {
@@ -2210,13 +2209,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/VisibilityDto" } } }
           }
         },
+        "summary": "",
         "tags": ["opportunities"]
       }
     },
     "/opportunities/public/{uuid}": {
       "get": {
         "operationId": "getPublicResume",
-        "summary": "",
         "parameters": [{ "name": "uuid", "required": true, "in": "path", "schema": { "type": "string" } }],
         "responses": {
           "200": {
@@ -2227,13 +2226,13 @@
           "403": { "description": "" },
           "404": { "description": "" }
         },
+        "summary": "",
         "tags": ["opportunities"]
       }
     },
     "/opportunities/applicants": {
       "get": {
         "operationId": "getApplicants",
-        "summary": "",
         "parameters": [],
         "responses": {
           "200": {
@@ -2245,13 +2244,13 @@
             }
           }
         },
+        "summary": "",
         "tags": ["opportunities"]
       }
     },
     "/user-group": {
       "post": {
         "operationId": "createUserGroup",
-        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -2263,11 +2262,11 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UserGroupDto" } } }
           }
         },
+        "summary": "",
         "tags": ["user-group"]
       },
       "get": {
         "operationId": "getUserGroups",
-        "summary": "",
         "parameters": [],
         "responses": {
           "200": {
@@ -2279,13 +2278,13 @@
             }
           }
         },
+        "summary": "",
         "tags": ["user-group"]
       }
     },
     "/user-group/{id}": {
       "put": {
         "operationId": "updateUserGroup",
-        "summary": "",
         "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
         "requestBody": {
           "required": true,
@@ -2297,11 +2296,11 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UserGroupDto" } } }
           }
         },
+        "summary": "",
         "tags": ["user-group"]
       },
       "delete": {
         "operationId": "deleteUserGroup",
-        "summary": "",
         "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": {
           "200": {
@@ -2309,26 +2308,26 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UserGroupDto" } } }
           }
         },
+        "summary": "",
         "tags": ["user-group"]
       }
     },
     "/schedule/notify/changes": {
       "post": {
         "operationId": "notifyScheduleChanges",
-        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CheckScheduleChangesDto" } } }
         },
         "responses": { "403": { "description": "" } },
+        "summary": "",
         "tags": ["schedule"]
       }
     },
     "/gratitudes": {
       "post": {
         "operationId": "createGratitude",
-        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -2340,13 +2339,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/GratitudeDto" } } }
           }
         },
+        "summary": "",
         "tags": ["gratitudes"]
       }
     },
     "/gratitudes/badges/{courseId}": {
       "get": {
         "operationId": "getBadges",
-        "summary": "",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": {
           "200": {
@@ -2358,13 +2357,13 @@
             }
           }
         },
+        "summary": "",
         "tags": ["gratitudes"]
       }
     },
     "/gratitudes/heroes/radar": {
       "get": {
         "operationId": "getHeroesRadar",
-        "summary": "",
         "parameters": [
           { "name": "current", "required": true, "in": "query", "schema": { "type": "number" } },
           { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "number" } },
@@ -2386,13 +2385,13 @@
           },
           "403": { "description": "" }
         },
+        "summary": "",
         "tags": ["gratitudes"]
       }
     },
     "/gratitudes/heroes/radar/csv": {
       "get": {
         "operationId": "getHeroesRadarCsv",
-        "summary": "",
         "parameters": [
           { "name": "current", "required": true, "in": "query", "schema": { "type": "number" } },
           { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "number" } },
@@ -2408,13 +2407,13 @@
           { "name": "endDate", "required": false, "in": "query", "schema": { "format": "date-time", "type": "string" } }
         ],
         "responses": { "403": { "description": "" } },
+        "summary": "",
         "tags": ["gratitudes"]
       }
     },
     "/gratitudes/heroes/countries": {
       "get": {
         "operationId": "getHeroesCountries",
-        "summary": "",
         "parameters": [],
         "responses": {
           "200": {
@@ -2426,13 +2425,13 @@
             }
           }
         },
+        "summary": "",
         "tags": ["gratitudes"]
       }
     },
     "/events": {
       "get": {
         "operationId": "getEvents",
-        "summary": "",
         "parameters": [],
         "responses": {
           "200": {
@@ -2444,11 +2443,11 @@
             }
           }
         },
+        "summary": "",
         "tags": ["events"]
       },
       "post": {
         "operationId": "createEvent",
-        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -2460,13 +2459,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/EventDto" } } }
           }
         },
+        "summary": "",
         "tags": ["events"]
       }
     },
     "/events/{id}": {
       "patch": {
         "operationId": "updateEvent",
-        "summary": "",
         "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
         "requestBody": {
           "required": true,
@@ -2478,20 +2477,20 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/EventDto" } } }
           }
         },
+        "summary": "",
         "tags": ["events"]
       },
       "delete": {
         "operationId": "deleteEvent",
-        "summary": "",
         "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": { "200": { "description": "" } },
+        "summary": "",
         "tags": ["events"]
       }
     },
     "/tasks": {
       "post": {
         "operationId": "createTask",
-        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -2503,11 +2502,11 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TaskDto" } } }
           }
         },
+        "summary": "",
         "tags": ["tasks"]
       },
       "get": {
         "operationId": "getTasks",
-        "summary": "",
         "parameters": [],
         "responses": {
           "200": {
@@ -2517,20 +2516,20 @@
             }
           }
         },
+        "summary": "",
         "tags": ["tasks"]
       }
     },
     "/tasks/{id}": {
       "delete": {
         "operationId": "deleteTask",
-        "summary": "",
         "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": { "200": { "description": "" } },
+        "summary": "",
         "tags": ["tasks"]
       },
       "patch": {
         "operationId": "updateTask",
-        "summary": "",
         "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
         "requestBody": {
           "required": true,
@@ -2542,13 +2541,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TaskDto" } } }
           }
         },
+        "summary": "",
         "tags": ["tasks"]
       }
     },
     "/tasks/{taskId}/criteria": {
       "get": {
         "operationId": "getTaskCriteria",
-        "summary": "",
         "parameters": [{ "name": "taskId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": {
           "200": {
@@ -2556,11 +2555,11 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TaskCriteriaDto" } } }
           }
         },
+        "summary": "",
         "tags": ["tasks-criteria"]
       },
       "post": {
         "operationId": "createTaskCriteria",
-        "summary": "",
         "parameters": [{ "name": "taskId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "requestBody": {
           "required": true,
@@ -2572,11 +2571,11 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TaskCriteriaDto" } } }
           }
         },
+        "summary": "",
         "tags": ["tasks-criteria"]
       },
       "patch": {
         "operationId": "updateTaskCriteria",
-        "summary": "",
         "parameters": [{ "name": "taskId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "requestBody": {
           "required": true,
@@ -2588,13 +2587,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TaskCriteriaDto" } } }
           }
         },
+        "summary": "",
         "tags": ["tasks-criteria"]
       }
     },
     "/prompts": {
       "post": {
         "operationId": "createPrompt",
-        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -2606,11 +2605,11 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PromptDto" } } }
           }
         },
+        "summary": "",
         "tags": ["prompts"]
       },
       "get": {
         "operationId": "getPrompts",
-        "summary": "",
         "parameters": [],
         "responses": {
           "200": {
@@ -2622,20 +2621,20 @@
             }
           }
         },
+        "summary": "",
         "tags": ["prompts"]
       }
     },
     "/prompts/{id}": {
       "delete": {
         "operationId": "deletePrompt",
-        "summary": "",
         "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": { "200": { "description": "" } },
+        "summary": "",
         "tags": ["prompts"]
       },
       "patch": {
         "operationId": "updatePrompt",
-        "summary": "",
         "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
         "requestBody": {
           "required": true,
@@ -2647,13 +2646,13 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PromptDto" } } }
           }
         },
+        "summary": "",
         "tags": ["prompts"]
       }
     },
     "/auto-test": {
       "get": {
         "operationId": "getBasicAutoTests",
-        "summary": "",
         "parameters": [],
         "responses": {
           "200": {
@@ -2665,13 +2664,13 @@
             }
           }
         },
+        "summary": "",
         "tags": ["auto-tests"]
       }
     },
     "/auto-test/{id}": {
       "get": {
         "operationId": "getAutoTest",
-        "summary": "",
         "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": {
           "200": {
@@ -2679,6 +2678,7 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AutoTestTaskDto" } } }
           }
         },
+        "summary": "",
         "tags": ["auto-tests"]
       }
     },
@@ -3179,6 +3179,7 @@
           "repoUrl"
         ]
       },
+      "SolutionItemStatusEnum": { "type": "string", "enum": ["in-review", "done", "random-task"] },
       "MentorDashboardDto": {
         "type": "object",
         "properties": {
@@ -3190,7 +3191,7 @@
           "maxScore": { "type": "number" },
           "resultScore": { "type": "number", "nullable": true },
           "solutionUrl": { "type": "string" },
-          "status": { "type": "string" },
+          "status": { "allOf": [{ "$ref": "#/components/schemas/SolutionItemStatusEnum" }] },
           "endDate": { "type": "string" }
         },
         "required": [
@@ -3339,13 +3340,14 @@
           "resultsCount"
         ]
       },
+      "CheckerEnum": { "type": "string", "enum": ["auto-test", "assigned", "mentor", "taskOwner", "crossCheck"] },
       "CreateCourseTaskDto": {
         "type": "object",
         "properties": {
           "taskId": { "type": "number" },
           "maxScore": { "type": "number" },
           "scoreWeight": { "type": "number" },
-          "checker": { "type": "string", "enum": ["auto-test", "assigned", "mentor", "taskOwner", "crossCheck"] },
+          "checker": { "allOf": [{ "$ref": "#/components/schemas/CheckerEnum" }] },
           "studentStartDate": { "type": "string" },
           "studentEndDate": { "type": "string" },
           "studentRegistrationStartDate": { "type": "string" },
@@ -4388,7 +4390,7 @@
           "id": { "type": "string" },
           "name": { "type": "string" },
           "enabled": { "type": "boolean" },
-          "type": { "$ref": "#/components/schemas/NotificationType" },
+          "type": { "allOf": [{ "$ref": "#/components/schemas/NotificationType" }] },
           "channels": { "type": "array", "items": { "$ref": "#/components/schemas/ChannelSettings" } },
           "parentId": { "type": "string" }
         },
@@ -4401,7 +4403,7 @@
           "name": { "type": "string" },
           "enabled": { "type": "boolean" },
           "channels": { "type": "array", "items": { "$ref": "#/components/schemas/ChannelSettings" } },
-          "type": { "$ref": "#/components/schemas/NotificationType" },
+          "type": { "allOf": [{ "$ref": "#/components/schemas/NotificationType" }] },
           "parentId": { "type": "string" }
         },
         "required": ["id", "name", "enabled", "channels", "type", "parentId"]
@@ -4762,27 +4764,7 @@
         "properties": {
           "user": { "$ref": "#/components/schemas/PersonDto" },
           "id": { "type": "number" },
-          "badgeId": {
-            "type": "string",
-            "enum": [
-              "Congratulations",
-              "Expert_help",
-              "Great_speaker",
-              "Good_job",
-              "Helping_hand",
-              "Hero",
-              "Thank_you",
-              "Outstanding_work",
-              "Top_performer",
-              "Job_Offer",
-              "RS_activist",
-              "Jury_Team",
-              "Mentor",
-              "Contributor",
-              "Coordinator",
-              "Thanks"
-            ]
-          },
+          "badgeId": { "allOf": [{ "$ref": "#/components/schemas/BadgeEnum" }] },
           "comment": { "type": "string" },
           "courseId": { "type": "number" },
           "date": { "type": "string" }
@@ -5066,31 +5048,32 @@
         },
         "required": ["userIds", "courseId", "comment", "badgeId"]
       },
+      "BadgeEnum": {
+        "type": "string",
+        "enum": [
+          "Congratulations",
+          "Expert_help",
+          "Great_speaker",
+          "Good_job",
+          "Helping_hand",
+          "Hero",
+          "Thank_you",
+          "Outstanding_work",
+          "Top_performer",
+          "Job_Offer",
+          "RS_activist",
+          "Jury_Team",
+          "Mentor",
+          "Contributor",
+          "Coordinator",
+          "Thanks"
+        ]
+      },
       "BadgeDto": {
         "type": "object",
         "properties": {
           "name": { "type": "string" },
-          "id": {
-            "type": "string",
-            "enum": [
-              "Congratulations",
-              "Expert_help",
-              "Great_speaker",
-              "Good_job",
-              "Helping_hand",
-              "Hero",
-              "Thank_you",
-              "Outstanding_work",
-              "Top_performer",
-              "Job_Offer",
-              "RS_activist",
-              "Jury_Team",
-              "Mentor",
-              "Contributor",
-              "Coordinator",
-              "Thanks"
-            ]
-          }
+          "id": { "allOf": [{ "$ref": "#/components/schemas/BadgeEnum" }] }
         },
         "required": ["name", "id"]
       },
@@ -5343,10 +5326,10 @@
         "properties": {
           "id": { "type": "number" },
           "name": { "type": "string" },
-          "maxAttemptsNumber": { "type": "object", "nullable": true },
-          "numberOfQuestions": { "type": "object", "nullable": true },
-          "strictAttemptsMode": { "type": "object", "nullable": true },
-          "thresholdPercentage": { "type": "object", "nullable": true }
+          "maxAttemptsNumber": { "type": "number", "nullable": true },
+          "numberOfQuestions": { "type": "number", "nullable": true },
+          "strictAttemptsMode": { "type": "number", "nullable": true },
+          "thresholdPercentage": { "type": "number", "nullable": true }
         },
         "required": [
           "id",

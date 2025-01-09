@@ -23,7 +23,7 @@ export const PromptsPage = () => {
       setLoading(true);
       const { data } = await api.getPrompts();
       setPrompts(data);
-    } catch (e) {
+    } catch {
       message.error('Something went wrong. Please try again later.');
     } finally {
       setLoading(false);

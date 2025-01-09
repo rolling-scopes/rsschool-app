@@ -1,24 +1,17 @@
 import { Checkbox, Col, DatePicker, Divider, Form, Input, InputNumber, message, Row, Select, Typography } from 'antd';
-import {
-  CourseTaskDto,
-  CourseTaskDtoTypeEnum,
-  CreateCourseTaskDto,
-  CreateCourseTaskDtoCheckerEnum,
-  TaskDto,
-  TasksApi,
-} from 'api';
+import { CheckerEnum, CourseTaskDto, CourseTaskDtoTypeEnum, CreateCourseTaskDto, TaskDto, TasksApi } from 'api';
 import { ModalForm } from 'components/Forms';
 import { tagsRenderer } from 'components/Table';
 import { UserSearch } from 'components/UserSearch';
 import { TASK_TYPES } from 'data/taskTypes';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+import utc from 'dayjs/plugin/utc';
 import times from 'lodash/times';
 import { useCallback, useEffect, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseTaskDetails } from 'services/course';
 import { UserService } from 'services/user';
-import dayjs from 'dayjs';
-import duration from 'dayjs/plugin/duration';
-import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(duration);
 dayjs.extend(utc);
@@ -133,11 +126,11 @@ export function CourseTaskModal(props: Props) {
         <Col span={12}>
           <Form.Item name="checker" required label="Checker">
             <Select placeholder="Please select who checks">
-              <Option value={CreateCourseTaskDtoCheckerEnum.AutoTest}>Auto-Test</Option>
-              <Option value={CreateCourseTaskDtoCheckerEnum.Mentor}>Mentor</Option>
-              <Option value={CreateCourseTaskDtoCheckerEnum.Assigned}>Cross-Mentor</Option>
-              <Option value={CreateCourseTaskDtoCheckerEnum.TaskOwner}>Task Owner</Option>
-              <Option value={CreateCourseTaskDtoCheckerEnum.CrossCheck}>Cross-Check</Option>
+              <Option value={CheckerEnum.AutoTest}>Auto-Test</Option>
+              <Option value={CheckerEnum.Mentor}>Mentor</Option>
+              <Option value={CheckerEnum.Assigned}>Cross-Mentor</Option>
+              <Option value={CheckerEnum.TaskOwner}>Task Owner</Option>
+              <Option value={CheckerEnum.CrossCheck}>Cross-Check</Option>
             </Select>
           </Form.Item>
         </Col>
@@ -287,7 +280,7 @@ function getInitialValues(modalData: Partial<CourseTaskDetails>) {
       modalData.studentStartDate && modalData.studentEndDate
         ? [dayjs.utc(modalData.studentStartDate), dayjs.utc(modalData.studentEndDate)]
         : [dayjs().utc().hour(0).minute(0).second(0).utc(), dayjs().utc().hour(23).minute(59).second(59)],
-    checker: modalData.checker || CreateCourseTaskDtoCheckerEnum.AutoTest,
+    checker: modalData.checker || CheckerEnum.AutoTest,
     registrationStartDate: modalData.studentRegistrationStartDate
       ? dayjs.utc(modalData.studentRegistrationStartDate)
       : null,

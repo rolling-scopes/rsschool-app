@@ -1,4 +1,5 @@
 client/.next/cache
+client/.next/static
 client/.turbo
 node_modules
 npm-debug.log

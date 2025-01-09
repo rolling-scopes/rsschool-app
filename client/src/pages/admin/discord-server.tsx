@@ -63,7 +63,7 @@ function Page() {
         }
         await loadData();
         setModalData(null);
-      } catch (e) {
+      } catch {
         message.error('An error occurred. Cannot save discord server.');
       } finally {
         setModalLoading(false);

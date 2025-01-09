@@ -23,7 +23,7 @@ const postTasks = (logger: ILogger) => async (ctx: RouterContext) => {
       if (item.descriptionUrl) {
         try {
           new url.URL(item.descriptionUrl);
-        } catch (e) {
+        } catch {
           const message = `[${item.descriptionUrl}] is not url`;
           response.push({ status: 'failed', value: message });
           continue;

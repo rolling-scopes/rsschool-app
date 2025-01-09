@@ -185,11 +185,11 @@ async function parseFiles(incomingFiles: any) {
         github: filterLogin(item.Github).toLowerCase(),
       };
     });
-  const uniqueStudents = new Map();
+  const uniqueStudents = new Map<string, number>();
   scores.forEach(({ github, score }) => {
-    if (uniqueStudents.has(github)) {
-      const savedScore = uniqueStudents.get(github);
-      if (savedScore < score) {
+    const current = uniqueStudents.get(github);
+    if (current) {
+      if (current < score) {
         uniqueStudents.set(github, score);
       }
     } else {
@@ -209,16 +209,17 @@ async function uploadResults(
   data: { score: any; studentGithubId: any }[],
 ) {
   const results = await courseService.postMultipleScores(courseTaskId, data);
-  const groupedByStatus = new Map();
+  const groupedByStatus = new Map<string, SubmitResult>();
+
   results.forEach(({ status, value }: { status: string; value: string | number }) => {
-    if (groupedByStatus.has(status)) {
-      const savedStatus = groupedByStatus.get(status);
+    const current = groupedByStatus.get(status);
+    if (current) {
       const newStatus = {
         status,
-        count: savedStatus.count + 1,
+        count: current.count + 1,
       } as SubmitResult;
       if (status === 'skipped' && typeof value === 'string') {
-        newStatus.messages = savedStatus.messages.concat([value]);
+        newStatus.messages = (current.messages ?? []).concat([value]);
       }
       groupedByStatus.set(status, newStatus);
     } else {

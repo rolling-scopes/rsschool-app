@@ -14,6 +14,7 @@
     "strictPropertyInitialization": false,
     "target": "es2020",
     "outDir": "./dist",
+    "skipLibCheck": true,
     "lib": ["es2020", "dom", "esnext.asynciterable", "ES2019.Array", "ES2020"]
   },
   "include": ["./src/**/*.ts"],
