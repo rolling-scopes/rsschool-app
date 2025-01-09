@@ -1054,6 +1054,12 @@ export interface CourseDto {
      * @memberof CourseDto
      */
     'certificateThreshold': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseDto
+     */
+    'wearecommunityUrl': string | null;
 }
 /**
  * 
@@ -1882,7 +1888,13 @@ export interface CreateCourseDto {
      * @type {string}
      * @memberof CreateCourseDto
      */
-    'description': string;
+    'description'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCourseDto
+     */
+    'descriptionUrl'?: string;
     /**
      * 
      * @type {number}
@@ -1931,6 +1943,12 @@ export interface CreateCourseDto {
      * @memberof CreateCourseDto
      */
     'certificateThreshold': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCourseDto
+     */
+    'wearecommunityUrl': string;
 }
 /**
  * 
@@ -4812,6 +4830,12 @@ export interface ProfileCourseDto {
      * @memberof ProfileCourseDto
      */
     'certificateThreshold': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProfileCourseDto
+     */
+    'wearecommunityUrl': string | null;
 }
 /**
  * 
@@ -6609,6 +6633,12 @@ export interface UpdateCourseDto {
      * @memberof UpdateCourseDto
      */
     'certificateThreshold': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateCourseDto
+     */
+    'wearecommunityUrl'?: string | null;
 }
 /**
  * 
