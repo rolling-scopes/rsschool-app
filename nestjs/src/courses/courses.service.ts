@@ -56,7 +56,7 @@ export class CoursesService {
   }
 
   // every 1h check if there are any courses that are already completed
-  @Cron(CronExpression.EVERY_HOUR)
+  @Cron(CronExpression.EVERY_30_MINUTES)
   public async exportPublicOpenCounrses() {
     const courses = await this.repository.find({
       where: {
@@ -76,7 +76,7 @@ export class CoursesService {
         Bucket: this.configService.buckets.cdn,
         Key: `app/courses.json`,
         Body: JSON.stringify(data),
-        CacheControl: 'max-age=3600',
+        CacheControl: 'max-age=1800',
         ContentType: 'application/json',
       });
     }
