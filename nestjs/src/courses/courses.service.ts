@@ -76,7 +76,7 @@ export class CoursesService {
         Bucket: this.configService.buckets.cdn,
         Key: `app/courses.json`,
         Body: JSON.stringify(data),
-        CacheControl: 'max-age=1800',
+        CacheControl: 'max-age=900',
         ContentType: 'application/json',
       });
     }
