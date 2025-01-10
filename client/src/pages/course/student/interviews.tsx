@@ -250,10 +250,6 @@ function StudentInterviewPage() {
     );
   };
 
-  const renderInterviewsList = () => {
-    return interviews.map(interview => renderInterviewCard(interview));
-  };
-
   return (
     <PageLayout loading={loading} title="Interviews" background="#F0F2F5" showCourseName>
       <Spin spinning={loading}>
@@ -261,7 +257,7 @@ function StudentInterviewPage() {
           renderNoInterviews()
         ) : (
           <Row gutter={[12, 12]} justify="start">
-            {renderInterviewsList()}
+            {interviews.map(interview => renderInterviewCard(interview))}
           </Row>
         )}
       </Spin>
