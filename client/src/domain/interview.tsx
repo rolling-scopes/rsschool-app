@@ -1,10 +1,13 @@
-import { Tag } from 'antd';
+import { Tag, Typography } from 'antd';
 import { TaskDtoTypeEnum } from 'api';
 import { StageInterviewFeedbackVerdict, InterviewDetails as CommonInterviewDetails } from 'common/models';
 import { Decision } from 'data/interviews/technical-screening';
 import dayjs from 'dayjs';
 import between from 'dayjs/plugin/isBetween';
 import { featureToggles } from 'services/features';
+import CalendarOutlined from '@ant-design/icons/CalendarOutlined';
+import { formatDate, formatShortDate } from 'services/formatter';
+
 dayjs.extend(between);
 
 export function friendlyStageInterviewVerdict(value: StageInterviewFeedbackVerdict) {
@@ -134,3 +137,27 @@ export function DecisionTag({ decision, status }: { decision?: Decision; status?
     }
   }
 }
+
+export function InterviewPeriod({
+  startDate,
+  endDate,
+  shortDate,
+}: {
+  startDate: string;
+  endDate: string;
+  shortDate?: boolean;
+}) {
+  const format = shortDate ? formatShortDate : formatDate;
+  return (
+    <div className="interview-period">
+      <Typography.Text type="secondary">
+        <CalendarOutlined style={{ marginRight: 8 }} />
+        {`${format(startDate)} - ${format(endDate)}`}
+      </Typography.Text>
+    </div>
+  );
+}
+
+export const isRegistrationNotStarted = (studentRegistrationStartDate: string): boolean => {
+  return !!studentRegistrationStartDate && new Date() < new Date(studentRegistrationStartDate);
+};
