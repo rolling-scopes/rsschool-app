@@ -7,8 +7,12 @@ interface StudentInterviewDetails {
   registrationStart: string;
 }
 
-export const getInterviewCardDetails = (params: Partial<StudentInterviewDetails>) => {
-  const { interviewPassed, isRegistered, registrationNotStarted, registrationStart } = params;
+export const getInterviewCardDetails = ({
+  interviewPassed,
+  isRegistered,
+  registrationNotStarted,
+  registrationStart,
+}: StudentInterviewDetails) => {
   if (interviewPassed) {
     return {
       cardMessage: 'You have your interview result. Congratulations!',
