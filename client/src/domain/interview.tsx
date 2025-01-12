@@ -157,3 +157,7 @@ export function InterviewPeriod({
     </div>
   );
 }
+
+export const isRegistrationNotStarted = (studentRegistrationStartDate: string): boolean => {
+  return !!studentRegistrationStartDate && new Date() < new Date(studentRegistrationStartDate);
+};
