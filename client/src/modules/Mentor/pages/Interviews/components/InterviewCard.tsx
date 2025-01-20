@@ -1,6 +1,6 @@
 import { Button, Card } from 'antd';
 import css from 'styled-jsx/css';
-import { InterviewPeriod } from './InterviewPeriod';
+import { InterviewPeriod } from 'domain/interview';
 import { InterviewDetails } from './InterviewDetails';
 import { InterviewDto } from 'api';
 import { Course } from 'services/models';

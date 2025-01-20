@@ -1,15 +1,12 @@
-import { message, Card, Row, List, Col, Button, Modal, Tag, Descriptions } from 'antd';
-import { CheckCircleOutlined } from '@ant-design/icons';
-import { GithubUserLink } from 'components/GithubUserLink';
+import { message, Row, Spin, Modal } from 'antd';
 import { PageLayout } from 'components/PageLayout';
 import { useMemo, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
-import { formatShortDate } from 'services/formatter';
-import { getInterviewResult, InterviewDetails, InterviewStatus } from 'domain/interview';
-import { Decision } from 'data/interviews/technical-screening';
+import { InterviewDetails } from 'domain/interview';
 import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { CoursesInterviewsApi, InterviewDto, TaskDtoTypeEnum } from 'api';
+import { InterviewCard, NoInterviewsAlert } from 'modules/Interview/Student';
 
 const coursesInterviewApi = new CoursesInterviewsApi();
 
@@ -71,94 +68,50 @@ function StudentInterviewPage() {
   };
 
   const getRegisteredInterviews = async (interviews: InterviewDto[]) => {
-    const requests = interviews
-      .map(({ type, id }) => (type === TaskDtoTypeEnum.StageInterview ? 'stage' : id.toString()))
-      .map(async id => {
-        const data = await courseService.getInterviewStudent(session.githubId, id).catch(() => null);
-        return data ? id : null;
+    try {
+      const requests = interviews.map(async ({ id }) => {
+        const data = await courseService.getInterviewStudent(session.githubId, id.toString()).catch(() => null);
+        return data ? id.toString() : null;
       });
 
-    const result = await Promise.all(requests);
-    return result.filter(id => id != null) as string[];
+      const result = await Promise.all(requests);
+      return result.filter(id => id != null);
+    } catch {
+      message.error('Something went wrong, please try reloading the page later');
+      return [];
+    }
   };
 
-  const renderExtra = (interview: InterviewDto) => {
-    const id = interview.type === TaskDtoTypeEnum.StageInterview ? 'stage' : interview.id.toString();
-    const hasInterview = registeredInterviews.includes(id);
-    return interview.studentRegistrationStartDate && new Date() < new Date(interview.studentRegistrationStartDate) ? (
-      <Tag color="orange">Registration starts at {formatShortDate(interview.studentRegistrationStartDate)}</Tag>
-    ) : (
-      <Button
-        onClick={() => handleRegister(id)}
-        icon={hasInterview ? <CheckCircleOutlined /> : null}
-        disabled={hasInterview}
-        type={hasInterview ? 'default' : 'primary'}
-      >
-        {hasInterview ? 'Registered' : 'Register'}
-      </Button>
-    );
-  };
+  const hasInterview = (id: number) => registeredInterviews.includes(id.toString());
+
+  const getInterviewItem = (interviewName: string) => data.find(d => d.name === interviewName) ?? null;
 
   return (
     <PageLayout loading={loading} title="Interviews" background="#F0F2F5" showCourseName>
-      <Row gutter={24} style={{ minHeight: '85vh' }}>
-        {interviews.map(interview => {
-          const items = data.filter(d => d.name === interview.name);
-          return (
-            <Col key={interview.id} xs={20} sm={16} md={14} lg={12} xl={10} xxl={10}>
-              <Card
-                size="small"
-                title={
-                  <>
-                    <Button target="_blank" href={interview.descriptionUrl} type="link">
-                      {interview.name}
-                    </Button>
-                    {formatShortDate(interview.startDate)} - {formatShortDate(interview.endDate)}
-                  </>
-                }
-                extra={renderExtra(interview)}
-              >
-                <List
-                  itemLayout="vertical"
-                  dataSource={items}
-                  size="small"
-                  renderItem={item => {
-                    return (
-                      <List.Item style={{ padding: '8px 0' }}>
-                        <Descriptions layout="vertical" size="small">
-                          <Descriptions.Item label="Interviewer">
-                            <GithubUserLink value={item.interviewer.githubId} />
-                          </Descriptions.Item>
-                          <Descriptions.Item label="Status">
-                            <StatusLabel status={item.status} />
-                          </Descriptions.Item>
-                          <Descriptions.Item label="Result">
-                            <b>{getInterviewResult(item.result as Decision) ?? '-'}</b>
-                          </Descriptions.Item>
-                        </Descriptions>
-                      </List.Item>
-                    );
-                  }}
-                ></List>
-              </Card>
-            </Col>
-          );
-        })}
-      </Row>
+      <Spin spinning={loading}>
+        {interviews.length === 0 ? (
+          <NoInterviewsAlert />
+        ) : (
+          <Row gutter={[12, 12]} justify="start">
+            {interviews.map(interview => {
+              const { name, id } = interview;
+              const item = getInterviewItem(name);
+              const registered = hasInterview(id);
+              return (
+                <InterviewCard
+                  key={id}
+                  interview={interview}
+                  item={item}
+                  isRegistered={registered}
+                  onRegister={handleRegister}
+                />
+              );
+            })}
+          </Row>
+        )}
+      </Spin>
     </PageLayout>
   );
-}
-
-function StatusLabel({ status }: { status: InterviewStatus }) {
-  switch (status) {
-    case InterviewStatus.Completed:
-      return <Tag color="green">Completed</Tag>;
-    case InterviewStatus.Canceled:
-      return <Tag color="red">Canceled</Tag>;
-    case InterviewStatus.NotCompleted:
-    default:
-      return <Tag color="orange">Not Completed</Tag>;
-  }
 }
 
 export default function () {
