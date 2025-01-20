@@ -76,7 +76,7 @@ function StudentInterviewPage() {
 
       const result = await Promise.all(requests);
       return result.filter(id => id != null);
-    } catch (error) {
+    } catch {
       message.error('Something went wrong, please try reloading the page later');
       return [];
     }
