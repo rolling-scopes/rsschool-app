@@ -21,7 +21,7 @@ export const DisciplinePage = () => {
       setLoading(true);
       const { data: disciplines } = await disciplinesApi.getDisciplines();
       setDisciplines(disciplines);
-    } catch (e) {
+    } catch {
       message.error('Something went wrong. Please try again later.');
     } finally {
       setLoading(false);

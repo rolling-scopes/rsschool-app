@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { TaskCard } from '..';
-import { CreateCourseTaskDtoCheckerEnum } from 'api';
+import { CheckerEnum } from 'api';
 import { Course } from 'services/models';
 import { CourseTaskState, CourseTaskVerifications } from 'modules/AutoTest/types';
 
@@ -37,7 +37,7 @@ function generateCourseTask(maxAttemptsNumber?: number): CourseTaskVerifications
     name: 'Course Task',
     studentStartDate: '2022-09-10T12:00:00.000Z',
     studentEndDate: '2022-10-10T12:00:00.000Z',
-    checker: CreateCourseTaskDtoCheckerEnum.AutoTest,
+    checker: CheckerEnum.AutoTest,
     id: 10,
     descriptionUrl: 'description-url',
     state: CourseTaskState.Missed,

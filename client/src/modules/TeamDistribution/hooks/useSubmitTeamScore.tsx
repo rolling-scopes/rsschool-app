@@ -20,7 +20,7 @@ export function useSubmitTeamScore(courseId: number, teamDistributionId: number)
 
       setTaskId(null);
       message.success('Score submitted successfully.');
-    } catch (e) {
+    } catch {
       message.error('Error occurred while submitting score.');
     } finally {
       setLoading(false);

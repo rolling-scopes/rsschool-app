@@ -7,8 +7,9 @@ import utc from 'dayjs/plugin/utc';
 import { Course } from 'services/models';
 dayjs.extend(utc);
 
-const courseApi = new CoursesApi();
+const wearecommunityRegex = new RegExp('^(https?://)?(www\\.)?wearecommunity\\.io.*$');
 
+const courseApi = new CoursesApi();
 const courseIcons = Object.entries(DEFAULT_COURSE_ICONS).map(([key, config]) => ({ ...config, id: key }));
 
 type CourseModalProps = {
@@ -47,6 +48,7 @@ type FormData = {
   certificateIssuer?: string;
   discipline?: { id: number } | null;
   courseId?: number;
+  wearecommunityUrl?: string;
 };
 
 export function CourseModal(props: CourseModalProps) {
@@ -290,6 +292,18 @@ export function CourseModal(props: CourseModalProps) {
             </Col>
           </Row>
 
+          <Row gutter={24}>
+            <Col sm={12} span={24}>
+              <Form.Item
+                rules={[{ message: 'Please enter wearecommunity.io URL', pattern: wearecommunityRegex }]}
+                name="wearecommunityUrl"
+                label="wearecommunity.io URL"
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+          </Row>
+
           <Form.Item name="usePrivateRepositories" valuePropName="checked">
             <Checkbox>Use Private Repositories</Checkbox>
           </Form.Item>
@@ -328,6 +342,7 @@ function createRecord(values: FormData) {
     logo: values.logo,
     minStudentsPerMentor: values.minStudentsPerMentor,
     certificateThreshold: values.certificateThreshold,
+    wearecommunityUrl: values.wearecommunityUrl,
   };
   return record;
 }
@@ -335,6 +350,7 @@ function createRecord(values: FormData) {
 function getInitialValues(modalData: Partial<Course>): FormData {
   return {
     ...modalData,
+    wearecommunityUrl: modalData.wearecommunityUrl ?? undefined,
     minStudentsPerMentor: modalData.minStudentsPerMentor || 2,
     certificateThreshold: modalData.certificateThreshold ?? 70,
     inviteOnly: !!modalData.inviteOnly,

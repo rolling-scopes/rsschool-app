@@ -64,7 +64,6 @@ export class AuthService {
     const provider = profile.provider.toString();
     const result =
       (provider ? await this.userService.getUserByProvider(provider, providerUserId) : undefined) ??
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       (await this.userService.getByGithubId(username!));
 
     if (result != null && (result.githubId !== username || !result.provider)) {
@@ -91,7 +90,6 @@ export class AuthService {
       await this.userService.saveUser(user);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const authUser = await this.getAuthUser(username!, admin);
     return authUser;
   }

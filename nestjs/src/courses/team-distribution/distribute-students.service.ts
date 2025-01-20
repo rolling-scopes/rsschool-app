@@ -42,7 +42,7 @@ export class DistributeStudentsService {
         await queryRunner.manager.remove(Team, teams);
       }
       await queryRunner.commitTransaction();
-    } catch (error) {
+    } catch {
       await queryRunner.rollbackTransaction();
       throw new InternalServerErrorException();
     } finally {

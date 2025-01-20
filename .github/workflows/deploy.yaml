@@ -43,11 +43,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
 
-      - name: Install turbo
-        run: npm install turbo@1 --global
-
       - name: Generate a isolated subworkspace for Client
-        run: turbo prune --scope=client --docker
+        run: npx turbo prune --scope=client --docker
 
       - name: Add lockfile and package.json's and source of isolated subworkspace
         run: |
@@ -72,6 +69,7 @@ jobs:
           RSSHCOOL_UI_GCP_MAPS_API_KEY: ${{ secrets.RSSHCOOL_UI_GCP_MAPS_API_KEY }}
           CDN_HOST: 'https://cdn.rs.school'
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          DO_NOT_TRACK: 1
         working-directory: ./app
         run: npm run build
 
@@ -121,11 +119,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
 
-      - name: Install turbo
-        run: npm install turbo@1 --global
-
       - name: Generate a isolated subworkspace for Client
-        run: turbo prune --scope=server --docker
+        run: npx turbo prune --scope=server --docker
 
       - name: Add lockfile and package.json's and source of isolated subworkspace
         run: |
@@ -146,6 +141,7 @@ jobs:
       - name: Build (npm run build)
         env:
           NODE_ENV: production
+          DO_NOT_TRACK: 1
         run: npm run build
         working-directory: ./app
 
@@ -184,11 +180,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
 
-      - name: Install turbo
-        run: npm install turbo@1 --global
-
       - name: Generate a isolated subworkspace for Client
-        run: turbo prune --scope=server --scope=nestjs --docker
+        run: npx turbo prune --scope=server --scope=nestjs --docker
 
       - name: Add lockfile and package.json's and source of isolated subworkspace
         run: |
@@ -208,6 +201,7 @@ jobs:
       - name: Build (npm run build)
         env:
           NODE_ENV: production
+          DO_NOT_TRACK: 1
         run: npx turbo run build --filter=nestjs
         working-directory: ./app
 

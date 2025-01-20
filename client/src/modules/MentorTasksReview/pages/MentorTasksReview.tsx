@@ -56,7 +56,7 @@ export const MentorTasksReview = ({ tasks }: PageProps) => {
           ...sortValues,
         );
         setReviews({ ...reviews, ...data });
-      } catch (error) {
+      } catch {
         message.error('Failed to load mentor reviews. Please try later.');
       }
     },

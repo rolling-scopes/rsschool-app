@@ -7,14 +7,13 @@ import { useState, useEffect, useCallback, useContext } from 'react';
 import { onlyDefined } from 'utils/onlyDefined';
 import dayjs from 'dayjs';
 import type { TimeRangePickerProps } from 'antd';
-import type { Dayjs } from 'dayjs';
 import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
 
 export type HeroesRadarFormProps = {
   courseId?: number;
   notActivist?: boolean;
   countryName?: string;
-  dates?: (Dayjs | null)[];
+  dates?: (dayjs.Dayjs | null)[];
 };
 
 type GetHeroesProps = HeroesRadarFormProps & Partial<IPaginationInfo>;
@@ -84,7 +83,9 @@ function HeroesRadarTab({ setLoading }: { setLoading: (arg: boolean) => void }) 
 
   useEffect(() => {
     getHeroes(initialQueryParams);
-    isAdmin && getCountries();
+    if (isAdmin) {
+      getCountries();
+    }
   }, []);
 
   const handleSubmit = useCallback(async (formData: HeroesRadarFormProps) => {

@@ -1,5 +1,11 @@
 import { ApiProperty, ApiResponse } from '@nestjs/swagger';
-import { SolutionItem, SolutionItemStatus } from '../mentors.service';
+import { SolutionItem } from '../mentors.service';
+
+export enum SolutionItemStatus {
+  InReview = 'in-review',
+  Done = 'done',
+  RandomTask = 'random-task',
+}
 
 @ApiResponse({})
 export class MentorDashboardDto {
@@ -40,8 +46,8 @@ export class MentorDashboardDto {
   @ApiProperty({ type: String })
   solutionUrl: string;
 
-  @ApiProperty({ enum: SolutionItemStatus, enumName: 'SolutionItemStatus' })
-  status: SolutionItemStatus;
+  @ApiProperty({ enum: SolutionItemStatus, type: SolutionItemStatus, enumName: 'SolutionItemStatusEnum' })
+  public status: SolutionItemStatus;
 
   @ApiProperty({ type: String })
   endDate: string;

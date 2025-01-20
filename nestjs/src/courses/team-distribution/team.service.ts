@@ -236,7 +236,7 @@ export class TeamService {
       await queryRunner.manager.update(TeamDistributionStudent, record.id, { distributed: false });
 
       await queryRunner.commitTransaction();
-    } catch (error) {
+    } catch {
       await queryRunner.rollbackTransaction();
       throw new InternalServerErrorException();
     } finally {
@@ -258,7 +258,7 @@ export class TeamService {
       );
       await queryRunner.manager.update(TeamDistributionStudent, record.id, { distributed: true });
       await queryRunner.commitTransaction();
-    } catch (error) {
+    } catch {
       await queryRunner.rollbackTransaction();
       throw new InternalServerErrorException();
     } finally {

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { max } from 'lodash';
 import { ILogger } from '../../logger';
 import { shuffleRec } from './shuffle';

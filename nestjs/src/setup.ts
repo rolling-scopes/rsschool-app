@@ -31,7 +31,7 @@ export function setupApp(app: INestApplication) {
   }
 
   const httpAdapterHost = app.get(HttpAdapterHost);
-  app.useGlobalFilters(new EntityNotFoundFilter(), new SentryFilter(httpAdapterHost.httpAdapter));
+  app.useGlobalFilters(new SentryFilter(httpAdapterHost.httpAdapter), new EntityNotFoundFilter());
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

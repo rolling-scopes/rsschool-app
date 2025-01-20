@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateCourseDto {
@@ -43,8 +43,14 @@ export class CreateCourseDto {
   inviteOnly?: boolean;
 
   @IsString()
-  @ApiProperty()
-  description: string;
+  @IsOptional()
+  @ApiPropertyOptional()
+  description?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiPropertyOptional()
+  descriptionUrl?: string;
 
   @IsNumber()
   @IsOptional()
@@ -84,4 +90,9 @@ export class CreateCourseDto {
   @IsNumber()
   @ApiProperty({ required: true })
   certificateThreshold: number;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty()
+  wearecommunityUrl?: string;
 }

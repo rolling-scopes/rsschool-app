@@ -43,7 +43,7 @@ function Page() {
       ]);
       setCourseUsers(users.data as any);
       setUserGroups(groups);
-    } catch (error) {
+    } catch {
       message.error('Something went wrong, please try reloading the page later');
     } finally {
       setLoading(false);

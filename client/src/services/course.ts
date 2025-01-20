@@ -218,7 +218,7 @@ export class CourseService {
         params: { onlyStudentsWithoutMentorShown },
       });
       return response.data.data;
-    } catch (e) {
+    } catch {
       return [];
     }
   }

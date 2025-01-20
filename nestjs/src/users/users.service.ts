@@ -1,7 +1,7 @@
 import { User } from '@entities/user';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { Brackets, In, Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
@@ -58,22 +58,32 @@ export class UsersService {
     return result.join(' ');
   }
 
-  public async searchUsers(query?: string) {
-    if (!query) {
+  public async searchUsers(reqQuery?: string) {
+    if (!reqQuery) {
       return [];
     }
 
-    const search = `${query.trim()}%`;
+    const search = `${reqQuery.trim()}%`;
 
     // Search by full name, githubId, discord username
-    const userIds = await this.userRepository
-      .createQueryBuilder()
-      .where(`CONCAT("firstName", ' ', "lastName") ILIKE :search`, { search })
-      .orWhere('"githubId" ILIKE :search', { search })
-      .orWhere(`CAST(discord AS jsonb)->>'username' ILIKE :search`, { search })
-      .select(['id'])
-      .limit(20)
-      .getRawMany();
+    const searchTerms = search.split(' ');
+
+    const query = this.userRepository.createQueryBuilder().select(['id']).limit(20);
+
+    searchTerms.forEach((term, index) => {
+      query.andWhere(
+        new Brackets(qb => {
+          qb.where(`"firstName" ILIKE :searchText${index}`, { [`searchText${index}`]: `%${term}%` })
+            .orWhere(`"lastName" ILIKE :searchText${index}`, { [`searchText${index}`]: `%${term}%` })
+            .orWhere(`"githubId" ILIKE :searchText${index}`, { [`searchText${index}`]: `%${term}%` })
+            .orWhere(`CAST("discord" AS jsonb)->>'username' ILIKE :searchText${index}`, {
+              [`searchText${index}`]: `%${term}%`,
+            });
+        }),
+      );
+    });
+
+    const userIds = await query.getRawMany();
 
     if (userIds.length === 0) {
       return [];

@@ -37,14 +37,14 @@ const submitTemplateEvent = async (values: any, eventTemplate?: EventDto) => {
     try {
       const res = await eventsApi.createEvent(templateEventData);
       return res.data.id;
-    } catch (error) {
+    } catch {
       message.error('Failed to create event template. Please try later.');
     }
   } else {
     try {
       const res = await eventsApi.updateEvent(eventTemplate.id, templateEventData);
       return res.data.id;
-    } catch (error) {
+    } catch {
       message.error('Failed to update event template. Please try later.');
     }
   }
@@ -64,13 +64,13 @@ export async function submitEvent(
   if (editableRecord?.id) {
     try {
       await serviceCourse.updateCourseEvent(editableRecord.id, omit(record, 'eventId'));
-    } catch (error) {
+    } catch {
       message.error('Failed to update event. Please try later.');
     }
   } else {
     try {
       await serviceCourse.createCourseEvent(record);
-    } catch (error) {
+    } catch {
       message.error('Failed to create event. Please try later.');
     }
   }
