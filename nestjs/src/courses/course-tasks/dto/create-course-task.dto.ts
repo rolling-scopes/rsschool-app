@@ -20,6 +20,7 @@ export class CreateCourseTaskDto {
   scoreWeight?: number;
 
   @ApiProperty({ type: Checker, enum: Checker, enumName: 'CheckerEnum' })
+  @IsNotEmpty()
   checker: Checker;
 
   @ApiProperty()
