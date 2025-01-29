@@ -1,6 +1,6 @@
 import { InputType, InterviewTemplate } from './types';
 
-export const stScreeningTemplate: InterviewTemplate = {
+export const shortTrackScreeningTemplate: InterviewTemplate = {
   name: 'EPAM ShortTrack Technical Screening',
   examplesUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/interview-basic-coreJS.md',
   descriptionHtml: `
