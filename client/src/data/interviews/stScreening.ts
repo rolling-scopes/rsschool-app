@@ -31,7 +31,7 @@ export const stScreeningTemplate: InterviewTemplate = {
         {
           id: 1013,
           name: 'Ternary, Nullish Coalescing, Optional Chaining, and Logical Operators (few practical tasks)',
-          type: InputType.Input
+          type: InputType.Input,
         },
         { id: 1014, name: 'Loops - for, while, do while, for of, for in' },
         { id: 1015, name: 'Type conversions, == / === (few practical tasks)', type: InputType.Input },
