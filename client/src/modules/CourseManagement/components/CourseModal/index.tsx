@@ -382,9 +382,9 @@ function createRecord(values: FormData) {
 function getDateRange(startDate?: string | null, endDate?: string | null): [dayjs.Dayjs | null, dayjs.Dayjs | null] | null {
   return startDate && endDate
     ? [
-        startDate ? dayjs.utc(startDate) : null,
-        endDate ? dayjs.utc(endDate) : null,
-      ]
+      startDate ? dayjs.utc(startDate) : null,
+      endDate ? dayjs.utc(endDate) : null,
+    ]
     : null;
 }
 
