@@ -379,18 +379,17 @@ function createRecord(values: FormData) {
   return record;
 }
 
-function getDateRange(startDate?: string | null, endDate?: string | null): [dayjs.Dayjs | null, dayjs.Dayjs | null] | null {
-  return startDate && endDate
-    ? [
-      startDate ? dayjs.utc(startDate) : null,
-      endDate ? dayjs.utc(endDate) : null,
-    ]
-    : null;
+function getDateRange(
+  startDate?: string | null,
+  endDate?: string | null,
+): [dayjs.Dayjs | null, dayjs.Dayjs | null] | null {
+  return startDate && endDate ? [startDate ? dayjs.utc(startDate) : null, endDate ? dayjs.utc(endDate) : null] : null;
 }
 
 function getInitialValues(modalData: Partial<Course>): FormData {
   const range = getDateRange(modalData.startDate, modalData.endDate);
-  const personalMentoringDateRange = getDateRange(modalData.personalMentoringStartDate, modalData.personalMentoringEndDate) || range;
+  const personalMentoringDateRange =
+    getDateRange(modalData.personalMentoringStartDate, modalData.personalMentoringEndDate) || range;
   return {
     ...modalData,
     wearecommunityUrl: modalData.wearecommunityUrl ?? undefined,
