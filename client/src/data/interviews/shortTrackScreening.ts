@@ -2,7 +2,7 @@ import { InputType, InterviewTemplate } from './types';
 
 export const shortTrackScreeningTemplate: InterviewTemplate = {
   name: 'EPAM ShortTrack Technical Screening',
-  examplesUrl: 'https://github.com/rolling-scopes-school/tasks/blob/master/tasks/interview-basic-coreJS.md',
+  examplesUrl: 'https://github.com/rolling-scopes-school/epam-short-track/tree/main/screening',
   descriptionHtml: `
     During the interview, students can score up to 100 points. Each topic has its value in points.<br/>
     Please see the details below.
@@ -151,12 +151,12 @@ export const shortTrackScreeningTemplate: InterviewTemplate = {
       name: 'English Level',
       description: 'Checking by Mentor',
       questions: [
-        { id: 1101, name: 'less then B1' },
-        { id: 1102, name: 'B1' },
-        { id: 1103, name: 'B1+' },
-        { id: 1104, name: 'B2' },
-        { id: 1105, name: 'B2+' },
-        { id: 1106, name: 'C1' },
+        { id: 1111, name: 'less then B1' },
+        { id: 1112, name: 'B1' },
+        { id: 1113, name: 'B1+' },
+        { id: 1114, name: 'B2' },
+        { id: 1115, name: 'B2+' },
+        { id: 1116, name: 'C1' },
       ],
     },
     {
