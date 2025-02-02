@@ -40,7 +40,7 @@ import { RegistrationInterviewDto } from './dto/registration-interview.dto';
 @UseGuards(DefaultGuard, CourseGuard, RoleGuard)
 export class InterviewsController {
   constructor(
-    private courseTasksService: InterviewsService,
+    private interviewsService: InterviewsService,
     private interviewFeedbackService: InterviewFeedbackService,
   ) {}
 
@@ -58,7 +58,7 @@ export class InterviewsController {
     @Query('disabled') disabled?: boolean,
     @Query('types', new ParseArrayPipe({ optional: true })) types?: string[],
   ) {
-    const data = await this.courseTasksService.getAll(courseId, {
+    const data = await this.interviewsService.getAll(courseId, {
       disabled,
       types: types as TaskType[],
     });
@@ -74,7 +74,7 @@ export class InterviewsController {
   @ApiParam({ name: 'courseId', type: Number })
   @ApiOperation({ operationId: 'getInterview' })
   public async getInterview(@Param('interviewId', ParseIntPipe) interviewId: number) {
-    const data = await this.courseTasksService.getById(interviewId);
+    const data = await this.interviewsService.getById(interviewId);
     if (!data) {
       throw new NotFoundException(`Interview ${interviewId} doesn't exist`);
     }
@@ -93,7 +93,7 @@ export class InterviewsController {
     @Req() req: CurrentRequest,
   ) {
     const { user } = req;
-    const interview = await this.courseTasksService.getById(interviewId);
+    const interview = await this.interviewsService.getById(interviewId);
 
     if (!interview) {
       throw new NotFoundException(`Interview ${interviewId} doesn't exist`);
@@ -101,11 +101,10 @@ export class InterviewsController {
     if (interview.studentRegistrationStartDate && new Date() < interview.studentRegistrationStartDate) {
       throw new BadRequestException('Student registration is not available yet');
     }
-    const taskInterviewStudent = await this.courseTasksService.registerStudentToInterview(
-      courseId,
-      interviewId,
-      user.githubId,
-    );
+    const taskInterviewStudent =
+      interview.type === TaskType.StageInterview
+        ? await this.interviewsService.registerStudentToStageInterview(courseId, user.githubId)
+        : await this.interviewsService.registerStudentToInterview(courseId, interviewId, user.githubId);
 
     return new RegistrationInterviewDto(taskInterviewStudent);
   }
@@ -120,17 +119,17 @@ export class InterviewsController {
     @Param('courseId', ParseIntPipe) courseId: number,
     @Param('interviewId', ParseIntPipe) interviewId: number,
   ) {
-    const interview = await this.courseTasksService.getById(interviewId);
+    const interview = await this.interviewsService.getById(interviewId);
 
     if (!interview) {
       throw new NotFoundException(`Interview ${interviewId} doesn't exist`);
     }
     if (interview.type === 'stage-interview') {
-      return this.courseTasksService.getStageInterviewAvailableStudents(courseId);
+      return this.interviewsService.getStageInterviewAvailableStudents(courseId);
     }
 
     if (interview.type === 'interview') {
-      return this.courseTasksService.getInterviewRegisteredStudents(courseId, +interviewId);
+      return this.interviewsService.getInterviewRegisteredStudents(courseId, +interviewId);
     }
 
     throw new BadRequestException('Invalid interview id');

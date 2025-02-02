@@ -12,7 +12,7 @@ export class TaskInterviewStudent {
   createdDate: string;
 
   @UpdateDateColumn()
-  updatedDate: number;
+  updatedDate: string;
 
   @ManyToOne(_ => Student)
   student: Student;

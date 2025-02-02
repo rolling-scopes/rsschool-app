@@ -8,10 +8,10 @@ export class StageInterviewStudent {
   @PrimaryGeneratedColumn() id: number;
 
   @CreateDateColumn()
-  createdDate: number;
+  createdDate: string;
 
   @UpdateDateColumn()
-  updatedDate: number;
+  updatedDate: string;
 
   @ManyToOne(_ => Student)
   student: Student;
