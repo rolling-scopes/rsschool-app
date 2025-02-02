@@ -1,12 +1,12 @@
-import { Construct } from 'constructs';
 import * as cdk from 'aws-cdk-lib';
-import * as logs from 'aws-cdk-lib/aws-logs';
-import * as lambda from 'aws-cdk-lib/aws-lambda';
-import * as custom from 'aws-cdk-lib/custom-resources';
-import * as iam from 'aws-cdk-lib/aws-iam';
+import * as apiv2 from 'aws-cdk-lib/aws-apigatewayv2';
+import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
 import { IRepository } from 'aws-cdk-lib/aws-ecr';
-import * as apiv2 from '@aws-cdk/aws-apigatewayv2-alpha';
-import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as logs from 'aws-cdk-lib/aws-logs';
+import * as custom from 'aws-cdk-lib/custom-resources';
+import { Construct } from 'constructs';
 
 export type DockerFunctionProps = cdk.StackProps & {
   feature: string;

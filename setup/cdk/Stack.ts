@@ -1,13 +1,13 @@
 import * as cdk from 'aws-cdk-lib';
+import * as apiv2 from 'aws-cdk-lib/aws-apigatewayv2';
+import { Repository } from 'aws-cdk-lib/aws-ecr';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as alias from 'aws-cdk-lib/aws-route53-targets';
-import * as apiv2 from '@aws-cdk/aws-apigatewayv2-alpha';
-import { Repository } from 'aws-cdk-lib/aws-ecr';
 
+import { CfnOutput } from 'aws-cdk-lib';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import { Construct } from 'constructs';
 import { DockerFunction } from './DockerFunctionConstruct';
-import { CfnOutput } from 'aws-cdk-lib';
 
 type Props = cdk.StackProps & {
   feature: string;
