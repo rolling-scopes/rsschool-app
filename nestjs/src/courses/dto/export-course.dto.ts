@@ -12,6 +12,8 @@ export class ExportCourseDto {
     this.description = course.description;
     this.descriptionUrl = course.descriptionUrl;
     this.registrationEndDate = course.registrationEndDate?.toISOString() ?? null;
+    this.personalMentoringStateDate = course.personalMentoringStartDate?.toISOString() ?? null;
+    this.personalMentoringEndDate = course.personalMentoringEndDate?.toISOString() ?? null;
     this.wearecommunityUrl = course.wearecommunityUrl || null;
   }
 
@@ -25,5 +27,7 @@ export class ExportCourseDto {
   registrationEndDate: string | null;
   startDate: string;
   endDate: string;
+  personalMentoringStateDate: string | null;
+  personalMentoringEndDate: string | null;
   wearecommunityUrl: string | null;
 }
