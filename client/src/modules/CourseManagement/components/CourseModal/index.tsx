@@ -345,10 +345,10 @@ export function CourseModal(props: CourseModalProps) {
 
 function createRecord(values: FormData) {
   const [startDate, endDate] = values.range as [dayjs.Dayjs, dayjs.Dayjs];
-  const [personalMentoringStartDate, personalMentoringEndDate] = values.personalMentoringDateRange as [
-    dayjs.Dayjs,
-    dayjs.Dayjs,
-  ];
+  const [personalMentoringStartDate, personalMentoringEndDate] = values.personalMentoringDateRange
+    ? (values.personalMentoringDateRange as [dayjs.Dayjs, dayjs.Dayjs])
+    : [null, null];
+
   const record: UpdateCourseDto = {
     name: values.name,
     fullName: values.fullName,
@@ -367,10 +367,10 @@ function createRecord(values: FormData) {
     personalMentoring: values.personalMentoring,
     personalMentoringStartDate: personalMentoringStartDate
       ? dayjs.utc(personalMentoringStartDate).startOf('day').format()
-      : undefined,
+      : null,
     personalMentoringEndDate: personalMentoringEndDate
       ? dayjs.utc(personalMentoringEndDate).startOf('day').format()
-      : undefined,
+      : null,
     logo: values.logo,
     minStudentsPerMentor: values.minStudentsPerMentor,
     certificateThreshold: values.certificateThreshold,
