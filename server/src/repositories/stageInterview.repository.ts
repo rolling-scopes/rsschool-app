@@ -111,15 +111,6 @@ export class StageInterviewRepository extends AbstractRepository<StageInterview>
     }
   }
 
-  public async addStudent(courseId: number, studentId: number) {
-    const repository = getRepository(StageInterviewStudent);
-    let record = await repository.findOne({ where: { courseId, studentId } });
-    if (record == null) {
-      record = await repository.save({ courseId, studentId });
-    }
-    return { id: record.id };
-  }
-
   public async findStudent(courseId: number, studentId: number) {
     const repository = getRepository(StageInterviewStudent);
     const record = await repository.findOne({ where: { courseId, studentId } });

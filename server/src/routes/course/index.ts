@@ -182,12 +182,6 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
     ...validators,
     stageInterview.getInterviewStudent(logger),
   );
-  router.post(
-    '/student/:githubId/interview/stage',
-    courseGuard,
-    ...validators,
-    stageInterview.createInterviewStudent(logger),
-  );
 
   router.get(
     '/student/:githubId/interview/:courseTaskId',

@@ -19,6 +19,8 @@ export class InterviewsService {
     readonly taskInterviewStudentRepository: Repository<TaskInterviewStudent>,
     @InjectRepository(Student)
     readonly studentRepository: Repository<Student>,
+    @InjectRepository(StageInterviewStudent)
+    readonly stageInterviewStudentRepository: Repository<StageInterviewStudent>,
   ) {}
 
   public getAll(
@@ -92,6 +94,9 @@ export class InterviewsService {
     }));
   }
 
+  /**
+   * TODO: rewrite it. Hard to maintain and understand
+   */
   public async getStageInterviewAvailableStudents(courseId: number): Promise<AvailableStudentDto[]> {
     const { entities, raw } = await this.studentRepository
       .createQueryBuilder('student')
@@ -181,6 +186,21 @@ export class InterviewsService {
 
   private isGoodCandidate(stageInterviews: StageInterview[]) {
     return stageInterviews.some(i => i.isCompleted && i.isGoodCandidate);
+  }
+
+  public async registerStudentToStageInterview(courseId: number, githubId: string) {
+    const student = await this.studentRepository.findOneOrFail({ where: { courseId, user: { githubId } } });
+    if (student.isExpelled) {
+      throw new BadRequestException('Student is expelled');
+    }
+
+    const studentId = student.id;
+    const record = await this.stageInterviewStudentRepository.findOne({ where: { courseId, studentId } });
+    if (record) {
+      throw new BadRequestException('Student is already registered');
+    }
+    await this.stageInterviewStudentRepository.insert({ courseId, studentId });
+    return this.stageInterviewStudentRepository.findOneByOrFail({ courseId, studentId });
   }
 
   public async registerStudentToInterview(courseId: number, courseTaskId: number, githubId: string) {
