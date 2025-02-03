@@ -80,6 +80,16 @@ export class CreateCourseDto {
   @IsString()
   @IsOptional()
   @ApiProperty({ required: false })
+  personalMentoringStartDate?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  personalMentoringEndDate?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
   logo?: string;
 
   @IsNumber()

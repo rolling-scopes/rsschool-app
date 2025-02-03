@@ -23,6 +23,8 @@ export class CourseDto {
     this.usePrivateRepositories = course.usePrivateRepositories;
     this.registrationEndDate = course.registrationEndDate?.toISOString() ?? null;
     this.personalMentoring = course.personalMentoring;
+    this.personalMentoringStartDate = course.personalMentoringStartDate?.toISOString() ?? null;
+    this.personalMentoringEndDate = course.personalMentoringEndDate?.toISOString() ?? null;
     this.logo = course.logo;
     this.discipline = course.discipline ? { id: course.discipline.id, name: course.discipline.name } : null;
     this.minStudentsPerMentor = course.minStudentsPerMentor;
@@ -95,6 +97,12 @@ export class CourseDto {
 
   @ApiProperty()
   personalMentoring: boolean;
+
+  @ApiProperty({ type: 'string', nullable: true })
+  personalMentoringStartDate: string | null;
+
+  @ApiProperty({ type: 'string', nullable: true })
+  personalMentoringEndDate: string | null;
 
   @ApiProperty()
   logo: string;

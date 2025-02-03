@@ -1035,6 +1035,18 @@ export interface CourseDto {
      * @type {string}
      * @memberof CourseDto
      */
+    'personalMentoringStartDate': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseDto
+     */
+    'personalMentoringEndDate': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseDto
+     */
     'logo': string;
     /**
      * 
@@ -1925,6 +1937,18 @@ export interface CreateCourseDto {
      * @memberof CreateCourseDto
      */
     'personalMentoring'?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCourseDto
+     */
+    'personalMentoringStartDate'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCourseDto
+     */
+    'personalMentoringEndDate'?: string;
     /**
      * 
      * @type {string}
@@ -4811,6 +4835,18 @@ export interface ProfileCourseDto {
      * @type {string}
      * @memberof ProfileCourseDto
      */
+    'personalMentoringStartDate': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProfileCourseDto
+     */
+    'personalMentoringEndDate': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ProfileCourseDto
+     */
     'logo': string;
     /**
      * 
@@ -6609,6 +6645,18 @@ export interface UpdateCourseDto {
      * @memberof UpdateCourseDto
      */
     'personalMentoring'?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateCourseDto
+     */
+    'personalMentoringStartDate'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateCourseDto
+     */
+    'personalMentoringEndDate'?: string | null;
     /**
      * 
      * @type {string}

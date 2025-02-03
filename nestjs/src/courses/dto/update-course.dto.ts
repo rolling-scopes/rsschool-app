@@ -84,6 +84,16 @@ export class UpdateCourseDto {
 
   @IsString()
   @IsOptional()
+  @ApiPropertyOptional({ type: 'string', nullable: true })
+  personalMentoringStartDate?: string | null;
+
+  @IsString()
+  @IsOptional()
+  @ApiPropertyOptional({ type: 'string', nullable: true })
+  personalMentoringEndDate?: string | null;
+
+  @IsString()
+  @IsOptional()
   @ApiPropertyOptional()
   logo?: string;
 

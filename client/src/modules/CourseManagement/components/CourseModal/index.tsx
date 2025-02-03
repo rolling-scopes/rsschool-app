@@ -45,6 +45,9 @@ type FormData = {
   logo?: string;
   usePrivateRepositories?: boolean;
   personalMentoring?: boolean;
+  personalMentoringStartDate?: string | null;
+  personalMentoringEndDate?: string | null;
+  personalMentoringDateRange: [dayjs.Dayjs | null, dayjs.Dayjs | null] | null;
   certificateIssuer?: string;
   discipline?: { id: number } | null;
   courseId?: number;
@@ -308,9 +311,28 @@ export function CourseModal(props: CourseModalProps) {
             <Checkbox>Use Private Repositories</Checkbox>
           </Form.Item>
 
-          <Form.Item name="personalMentoring" valuePropName="checked">
-            <Checkbox>Personal mentoring</Checkbox>
-          </Form.Item>
+          <Row gutter={24}>
+            <Col md={8} sm={12} span={24}>
+              <Form.Item name="personalMentoring" valuePropName="checked">
+                <Checkbox>Personal mentoring</Checkbox>
+              </Form.Item>
+            </Col>
+            <Col md={8} sm={12} span={24}>
+              <Form.Item dependencies={['personalMentoring']}>
+                {({ getFieldValue }) =>
+                  getFieldValue('personalMentoring') ? (
+                    <Form.Item
+                      name="personalMentoringDateRange"
+                      label="Personal Mentoring Dates"
+                      rules={[{ required: true, type: 'array', message: 'Please enter mentoring dates' }]}
+                    >
+                      <DatePicker.RangePicker style={{ width: '100%' }} />
+                    </Form.Item>
+                  ) : null
+                }
+              </Form.Item>
+            </Col>
+          </Row>
 
           <Form.Item name="inviteOnly" valuePropName="checked">
             <Checkbox>Invite Only Course</Checkbox>
@@ -323,6 +345,10 @@ export function CourseModal(props: CourseModalProps) {
 
 function createRecord(values: FormData) {
   const [startDate, endDate] = values.range as [dayjs.Dayjs, dayjs.Dayjs];
+  const [personalMentoringStartDate, personalMentoringEndDate] = values.personalMentoringDateRange
+    ? (values.personalMentoringDateRange as [dayjs.Dayjs, dayjs.Dayjs])
+    : [null, null];
+
   const record: UpdateCourseDto = {
     name: values.name,
     fullName: values.fullName,
@@ -339,6 +365,12 @@ function createRecord(values: FormData) {
     discordServerId: values.discordServerId,
     usePrivateRepositories: values.usePrivateRepositories,
     personalMentoring: values.personalMentoring,
+    personalMentoringStartDate: personalMentoringStartDate
+      ? dayjs.utc(personalMentoringStartDate).startOf('day').format()
+      : null,
+    personalMentoringEndDate: personalMentoringEndDate
+      ? dayjs.utc(personalMentoringEndDate).startOf('day').format()
+      : null,
     logo: values.logo,
     minStudentsPerMentor: values.minStudentsPerMentor,
     certificateThreshold: values.certificateThreshold,
@@ -347,7 +379,17 @@ function createRecord(values: FormData) {
   return record;
 }
 
+function getDateRange(
+  startDate?: string | null,
+  endDate?: string | null,
+): [dayjs.Dayjs | null, dayjs.Dayjs | null] | null {
+  return startDate && endDate ? [startDate ? dayjs.utc(startDate) : null, endDate ? dayjs.utc(endDate) : null] : null;
+}
+
 function getInitialValues(modalData: Partial<Course>): FormData {
+  const range = getDateRange(modalData.startDate, modalData.endDate);
+  const personalMentoringDateRange =
+    getDateRange(modalData.personalMentoringStartDate, modalData.personalMentoringEndDate) || range;
   return {
     ...modalData,
     wearecommunityUrl: modalData.wearecommunityUrl ?? undefined,
@@ -356,12 +398,7 @@ function getInitialValues(modalData: Partial<Course>): FormData {
     inviteOnly: !!modalData.inviteOnly,
     state: modalData.completed ? 'completed' : modalData.planned ? 'planned' : 'active',
     registrationEndDate: modalData.registrationEndDate ? dayjs.utc(modalData.registrationEndDate) : null,
-    range:
-      modalData.startDate && modalData.endDate
-        ? [
-            modalData.startDate ? dayjs.utc(modalData.startDate) : null,
-            modalData.endDate ? dayjs.utc(modalData.endDate) : null,
-          ]
-        : null,
+    range: range,
+    personalMentoringDateRange: personalMentoringDateRange,
   };
 }

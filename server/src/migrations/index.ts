@@ -58,6 +58,7 @@ import { Course1712137476312 } from './1712137476312-Course';
 import { CourseTask1730926720293 } from './1730926720293-CourseTask';
 import { Contributor1734874453585 } from './1734874453585-Contributor';
 import { Course1736458672717 } from './1736458672717-Course';
+import { CoursePersonalMentoringDates1738250779923 } from './1738250779923-CoursePersonalMentoringDates';
 
 export const migrations = [
   UserMigration1630340371992,
@@ -120,4 +121,5 @@ export const migrations = [
   CourseTask1730926720293,
   Contributor1734874453585,
   Course1736458672717,
+  CoursePersonalMentoringDates1738250779923,
 ];
