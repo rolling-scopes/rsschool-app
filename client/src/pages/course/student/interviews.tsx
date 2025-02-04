@@ -5,7 +5,7 @@ import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { InterviewDetails } from 'domain/interview';
 import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
-import { CoursesInterviewsApi, InterviewDto, TaskDtoTypeEnum } from 'api';
+import { CoursesInterviewsApi, CourseTaskDtoTypeEnum, InterviewDto, TaskDtoTypeEnum } from 'api';
 import { InterviewCard, NoInterviewsAlert } from 'modules/Interview/Student';
 
 const coursesInterviewApi = new CoursesInterviewsApi();
@@ -69,8 +69,11 @@ function StudentInterviewPage() {
 
   const getRegisteredInterviews = async (interviews: InterviewDto[]) => {
     try {
-      const requests = interviews.map(async ({ id }) => {
-        const data = await courseService.getInterviewStudent(session.githubId, id.toString()).catch(() => null);
+      const requests = interviews.map(async ({ type, id }) => {
+        const data =
+          type === CourseTaskDtoTypeEnum.StageInterview
+            ? await courseService.getInterviewStudent(session.githubId, 'stage').catch(() => null)
+            : await courseService.getInterviewStudent(session.githubId, id.toString()).catch(() => null);
         return data ? id.toString() : null;
       });
 
