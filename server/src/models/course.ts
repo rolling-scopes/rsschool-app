@@ -96,6 +96,12 @@ export class Course {
   @Column({ default: true })
   personalMentoring: boolean;
 
+  @Column({ type: 'timestamptz', nullable: true })
+  personalMentoringStartDate: Date | null;
+
+  @Column({ type: 'timestamptz', nullable: true })
+  personalMentoringEndDate: Date | null;
+
   @Column({ nullable: true })
   logo: string;
 
