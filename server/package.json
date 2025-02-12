@@ -23,7 +23,7 @@
     "http-status-codes": "2.1.4",
     "json2csv": "5.0.7",
     "jsonwebtoken": "8.5.1",
-    "koa": "2.13.1",
+    "koa": "2.15.4",
     "koa-basic-auth": "4.0.0",
     "koa-bodyparser": "4.2.1",
     "koa-jwt": "3.6.0",
