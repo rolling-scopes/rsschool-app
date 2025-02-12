@@ -22,7 +22,7 @@ export function CourseDetails({ courses }: Props) {
         <Select
           placeholder={PLACEHOLDERS.courses}
           options={courses.map(course => ({
-            label: <CourseLabel course={course} />,
+            label: <CourseLabel course={course} isStudentForm />,
             value: course.id,
           }))}
         />
