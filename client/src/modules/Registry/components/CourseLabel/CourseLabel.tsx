@@ -13,7 +13,7 @@ export function CourseLabel({ course, isStudentForm }: Props) {
   const disciplineName = discipline?.name ? `${discipline.name}, ` : '';
   const courseInfo = isStudentForm
     ? ` ${name} (${disciplineName}${formatMonthFriendly(startDate)}) `
-    : ` ${name} (${LABELS.Mentoring} ${
+    : ` ${name} (${LABELS.mentoring} ${
         personalMentoringStartDate ? formatMonthFriendly(personalMentoringStartDate) : ''
       }-${personalMentoringEndDate ? formatMonthFriendly(personalMentoringEndDate) : ''}) `;
   return (

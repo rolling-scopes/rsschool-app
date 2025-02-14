@@ -71,7 +71,7 @@ const LABELS = {
   studentsCount: 'Count of students',
   studentsLocation: 'Students location',
   course: 'Course',
-  Mentoring: 'Mentoring:',
+  mentoring: 'Mentoring:',
 };
 
 const CARD_TITLES = {
