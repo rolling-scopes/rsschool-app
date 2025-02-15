@@ -135,7 +135,7 @@ export class TaskVerificationsService {
     }
 
     if (courseTask.type === TaskType.SelfEducation) {
-      await this.seflEducationService.createSelfeducationVerification({
+      await this.seflEducationService.createSelfEducationVerification({
         courseId: courseTask.courseId,
         courseTask,
         studentId: student.id,
