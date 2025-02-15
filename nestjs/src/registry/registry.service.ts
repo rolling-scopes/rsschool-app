@@ -67,6 +67,7 @@ export class RegistryService {
     const mentorRegistries = await this.getPreparedMentorRegistriesQuery()
       .andWhere('mentorRegistry.canceled = false')
       .getMany();
+
     return mentorRegistries;
   }
 
@@ -109,7 +110,7 @@ export class RegistryService {
     disciplineNames?: string[];
     status: MentorRegistryTabsMode;
   }) {
-    const req = this.getPreparedMentorRegistriesQuery();
+    const req = this.getPreparedMentorRegistriesQuery().andWhere('mentorRegistry.canceled = false');
 
     if (githubId) {
       req.andWhere(`"user"."githubId" ILIKE :githubId`, { githubId: `%${githubId}%` });
@@ -152,14 +153,12 @@ export class RegistryService {
       req.andWhere(
         new Brackets(qb => {
           if (coursesIds?.length) {
-            qb.where(`string_to_array(mentorRegistry.preferedCourses, ',') && :coursesIds`, { coursesIds }).andWhere(
-              'mentorRegistry.canceled = false',
-            );
+            qb.where(`string_to_array(mentorRegistry.preferedCourses, ',') && :coursesIds`, { coursesIds });
           }
           if (disciplineNames?.length) {
             qb.orWhere(`string_to_array(mentorRegistry.technicalMentoring, ',') && :disciplineNames`, {
               disciplineNames,
-            }).andWhere('mentorRegistry.canceled = false');
+            });
           }
         }),
       );

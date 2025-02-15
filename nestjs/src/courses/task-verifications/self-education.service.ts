@@ -47,7 +47,7 @@ export class SelfEducationService {
     private readonly writeScoreService: WriteScoreService,
   ) {}
 
-  public async createSelfeducationVerification({
+  public async createSelfEducationVerification({
     courseTask,
     studentId,
     studentAnswers,
