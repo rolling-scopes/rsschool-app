@@ -411,6 +411,26 @@
         "tags": ["mentors"]
       }
     },
+    "/mentors/{mentorId}/course/{courseId}/in-review-count": {
+      "get": {
+        "operationId": "getInReviewTasksCount",
+        "parameters": [
+          { "name": "mentorId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/MentorInReviewTasksCountDto" } }
+            }
+          },
+          "400": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["mentors"]
+      }
+    },
     "/courses/{courseId}/tasks": {
       "get": {
         "operationId": "getCourseTasks",
@@ -3219,6 +3239,11 @@
           "status",
           "endDate"
         ]
+      },
+      "MentorInReviewTasksCountDto": {
+        "type": "object",
+        "properties": { "count": { "type": "number" } },
+        "required": ["count"]
       },
       "Validations": {
         "type": "object",

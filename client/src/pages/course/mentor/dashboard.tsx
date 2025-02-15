@@ -13,6 +13,7 @@ import { getApiConfiguration } from 'utils/axios';
 export interface MentorDashboardProps extends CoursePageProps {
   mentorId: number;
   studentsCount: number;
+  inReviewTasksCount: number;
 }
 
 function parseToken(token: string): Session {
@@ -44,10 +45,14 @@ export const getServerSideProps: GetServerSideProps<{ course: ProfileCourseDto }
     }
 
     const service = new MentorsApi(getApiConfiguration(token));
-    const { data: studentsCount } = await service.getCourseStudentsCount(mentorId, courseId);
+
+    const [{ data: studentsCount }, { data: inReviewTasksCount }] = await Promise.all([
+      service.getCourseStudentsCount(mentorId, courseId),
+      service.getInReviewTasksCount(mentorId, courseId),
+    ]);
 
     return {
-      props: { course, mentorId, studentsCount },
+      props: { course, mentorId, studentsCount, inReviewTasksCount: inReviewTasksCount.count },
     };
   } catch {
     return noAccessResponse;

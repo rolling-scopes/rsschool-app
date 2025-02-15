@@ -21,6 +21,7 @@ import { CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, RoleGuard } fr
 import { MentorDashboardDto } from './dto/mentor-dashboard.dto';
 import { MentorOptionsDto } from './dto/mentor-options.dto';
 import { MentorStudentDto } from './dto/mentor-student.dto';
+import { MentorInReviewTasksCountDto } from './dto/mentor-in-review-tasks-count.dto';
 
 @Controller('mentors')
 @ApiTags('mentors')
@@ -97,5 +98,18 @@ export class MentorsController {
     @Param('courseId', ParseIntPipe) courseId: number,
   ) {
     return await this.mentorsService.getRandomTask(mentorId, courseId);
+  }
+
+  @Get('/:mentorId/course/:courseId/in-review-count')
+  @ApiOperation({ operationId: 'getInReviewTasksCount' })
+  @ApiOkResponse({ type: MentorInReviewTasksCountDto })
+  @ApiBadRequestResponse()
+  @RequiredRoles([CourseRole.Mentor, CourseRole.Supervisor, CourseRole.Manager], true)
+  public async getInReviewTasksCount(
+    @Param('mentorId', ParseIntPipe) mentorId: number,
+    @Param('courseId', ParseIntPipe) courseId: number,
+  ) {
+    const count = await this.mentorsService.getInReviewTasksCount(mentorId, courseId);
+    return new MentorInReviewTasksCountDto(count);
   }
 }

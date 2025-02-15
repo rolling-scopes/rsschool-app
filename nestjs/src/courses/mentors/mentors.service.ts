@@ -163,6 +163,11 @@ export class MentorsService {
     return solutions.map(solution => new MentorDashboardDto(solution));
   }
 
+  public async getInReviewTasksCount(mentorId: number, courseId: number) {
+    const solutions = await this.getSolutions(mentorId, courseId);
+    return solutions.filter(s => s.status !== SolutionItemStatus.Done).length;
+  }
+
   private async getRandomSolution(courseId: number): Promise<{ courseTaskId: number; studentId: number }> {
     const task = await this.taskSolutionRepository
       .createQueryBuilder('ts')
