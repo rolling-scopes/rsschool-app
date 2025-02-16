@@ -233,4 +233,4 @@ function Page() {
   );
 }
 
-export const ProfilePage = withGoogleMaps(Page);
+export default withGoogleMaps(Page);

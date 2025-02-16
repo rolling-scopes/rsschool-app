@@ -1,29 +1,22 @@
+import { useRequest } from 'ahooks';
 import { Alert, Button, Checkbox, Col, Form, Input, message, Modal, Result, Row } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { Rule } from 'antd/lib/form';
-import { CriteriaForm } from 'modules/CrossCheck/components/CriteriaForm';
-import { SubmittedStatus } from 'modules/CrossCheck/components/SubmittedStatus';
-import { SolutionReview } from 'modules/CrossCheck/components/SolutionReview';
-import { useSolutionReviewSettings } from 'modules/CrossCheck/hooks';
-import { SolutionReviewSettingsPanel } from 'modules/CrossCheck/components/SolutionReviewSettingsPanel';
+import { CoursesTasksApi, CrossCheckFeedbackDto, CrossCheckMessageDtoRoleEnum, CrossCheckStatusEnum } from 'api';
 import { CourseTaskSelect, ScoreInput } from 'components/Forms';
 import { PageLayout } from 'components/PageLayout';
 import { NoSubmissionAvailable } from 'modules/Course/components/NoSubmissionAvailable';
+import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
+import { CriteriaForm } from 'modules/CrossCheck/components/CriteriaForm';
+import { SolutionReview } from 'modules/CrossCheck/components/SolutionReview';
+import { SolutionReviewSettingsPanel } from 'modules/CrossCheck/components/SolutionReviewSettingsPanel';
+import { SubmittedStatus } from 'modules/CrossCheck/components/SubmittedStatus';
+import { useSolutionReviewSettings } from 'modules/CrossCheck/hooks';
 import { useRouter } from 'next/router';
-import { useEffect, useMemo, useState, useContext } from 'react';
-import { useAsync } from 'react-use';
-import {
-  CourseService,
-  CrossCheckStatus,
-  CrossCheckComment,
-  CrossCheckCriteria,
-  CrossCheckReview,
-  TaskSolution,
-} from 'services/course';
+import { useContext, useEffect, useMemo, useState } from 'react';
+import { CourseService, CrossCheckComment, CrossCheckCriteria, CrossCheckReview, TaskSolution } from 'services/course';
 import { githubPrUrl, privateRsRepoPattern, urlWithIpPattern } from 'services/validators';
 import { getQueryString } from 'utils/queryParams-utils';
-import { CoursesTasksApi, CrossCheckFeedbackDto, CrossCheckMessageDtoRoleEnum } from 'api';
-import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
 
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
 
@@ -77,10 +70,9 @@ export function CrossCheckSubmit() {
 
   const [authorId, setAuthorId] = useState<number | null>(null);
 
-  const { value: courseTasks = [], loading } = useAsync(
-    () => courseService.getCourseCrossCheckTasks('started'),
-    [course.id],
-  );
+  const { data: courseTasks = [], loading } = useRequest(() => courseService.getCourseCrossCheckTasks('started'), {
+    refreshDeps: [course.id],
+  });
 
   useEffect(() => {
     if (loading) return;
@@ -183,8 +175,8 @@ export function CrossCheckSubmit() {
   const taskExists = !!task;
   const submitAllowed = taskExists && !submitDeadlinePassed;
   const newCrossCheck = criteria.length > 0;
-  const isCrossCheckCompleted = task?.crossCheckStatus === CrossCheckStatus.Completed;
-  const isCrossCheckOngoing = task?.crossCheckStatus === CrossCheckStatus.Distributed;
+  const isCrossCheckCompleted = task?.crossCheckStatus === CrossCheckStatusEnum.Completed;
+  const isCrossCheckOngoing = task?.crossCheckStatus === CrossCheckStatusEnum.Distributed;
   const hasReviews = !!feedback?.reviews?.length;
 
   return (

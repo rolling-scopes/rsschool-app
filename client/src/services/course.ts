@@ -24,12 +24,6 @@ import { optionalQueryString } from 'utils/optionalQueryString';
 import { Decision } from 'data/interviews/technical-screening';
 import { InterviewStatus } from 'domain/interview';
 
-export enum CrossCheckStatus {
-  Initial = 'initial',
-  Distributed = 'distributed',
-  Completed = 'completed',
-}
-
 export type CrossCheckCriteriaType = 'title' | 'subtask' | 'penalty';
 
 export interface CrossCheckMessageAuthor {
@@ -104,22 +98,6 @@ export interface CourseEvent {
   done?: number;
 }
 
-export interface CourseUser {
-  id: number;
-  name: string;
-  githubId: string;
-  courseId: number;
-  isManager: boolean;
-  isSupervisor: boolean;
-  isDementor: boolean;
-}
-
-export interface MentorWithContacts {
-  githubId: string;
-  email: string;
-  phone: string;
-}
-
 export type CrossCheckCriteria = {
   type: CrossCheckCriteriaType;
   title?: string;
@@ -135,8 +113,6 @@ export type CrossCheckComment = {
   authorId?: number;
   authorGithubId?: string;
 };
-
-export type AllStudents = { students: StudentBasic[]; assignedStudents: AssignedStudent[] };
 
 export type SearchStudent = UserBasic & { mentor: UserBasic | null };
 
@@ -469,11 +445,6 @@ export class CourseService {
     return result.data.data;
   }
 
-  async createRepositories() {
-    const result = await this.axios.post(`/repositories`);
-    return result.data.data as { repository: string }[];
-  }
-
   async postSyncRepositoriesMentors() {
     await this.axios.post(`/repositories/mentors`);
   }
@@ -513,21 +484,6 @@ export class CourseService {
 
   async createCrossCheckCompletion(courseTaskId: number) {
     const result = await this.axios.post(`/task/${courseTaskId}/cross-check/completion`);
-    return result.data;
-  }
-
-  async getUsers() {
-    const result = await this.axios.get('/users');
-    return result.data.data;
-  }
-
-  async upsertUsers(data: unknown) {
-    const result = await this.axios.put(`/users`, data);
-    return result.data;
-  }
-
-  async upsertUser(githubId: string, data: unknown) {
-    const result = await this.axios.put(`/user/${githubId}`, data);
     return result.data;
   }
 
@@ -610,31 +566,12 @@ export class CourseService {
   }
 }
 
-export interface AssignedStudent extends StudentBasic {
-  courseTaskId: number;
-}
-
 export interface StudentDetails extends StudentBasic {
   countryName: string;
   cityName: string;
   totalScore: number;
   repository: string;
   interviews: { id: number; isCompleted: boolean }[];
-}
-
-export interface MentorDetails extends MentorBasic {
-  countryName: string;
-  cityName: string;
-  maxStudentsLimit: number;
-  studentsPreference: string;
-  interviews: {
-    total: number;
-    completed: number;
-  };
-  screenings: {
-    total: number;
-    completed: number;
-  };
 }
 
 export interface PostScore {
