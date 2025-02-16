@@ -8,7 +8,7 @@ import {
   MentorOptionsDtoPreferedStudentsLocationEnum,
   ProfileApi,
 } from 'api';
-import { Location } from 'common/models';
+import { Location } from '@common/models';
 import { CdnService } from 'services/cdn';
 import { Course } from 'services/models';
 import { UserFull, UserService } from 'services/user';

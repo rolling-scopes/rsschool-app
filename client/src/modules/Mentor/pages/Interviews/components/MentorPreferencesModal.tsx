@@ -6,7 +6,7 @@ import { CourseService } from 'services/course';
 import { MentorsApi } from 'api';
 import { getMentorId } from 'domain/user';
 import { Session } from 'components/withSession';
-import { PreferredStudentsLocation } from 'common/enums/mentor';
+import { PreferredStudentsLocation } from '@common/enums/mentor';
 
 type Props = {
   course: { id: number; name: string };

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Modal, Tag } from 'antd';
 import { formatDate } from 'services/formatter';
 import { Rating } from 'components/Rating';
-import { LegacyFeedback, StageInterviewDetailedFeedback } from 'common/models/profile';
+import { LegacyFeedback, StageInterviewDetailedFeedback } from '@common/models/profile';
 import { LegacyScreeningFeedback } from './LegacyScreeningFeedback';
 import { PrescreeningFeedback } from './PrescreeningFeedback';
 import { DecisionTag, getRating } from 'domain/interview';

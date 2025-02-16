@@ -1,5 +1,5 @@
 import { Session } from 'components/withSession';
-import { StudentBasic as CommonStudentBasic } from 'common/models';
+import { StudentBasic as CommonStudentBasic } from '@common/models';
 import { ProfileCourseDto, UserGroupDtoRolesEnum as CourseRole } from 'api';
 
 export type Course = ProfileCourseDto;

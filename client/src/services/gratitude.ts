@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IGratitudeGetResponse, IGratitudeGetRequest } from 'common/interfaces/gratitude';
+import { IGratitudeGetResponse, IGratitudeGetRequest } from '@common/interfaces/gratitude';
 
 export class GratitudeService {
   async getGratitude(data?: IGratitudeGetRequest): Promise<{ content: IGratitudeGetResponse[]; count: number }> {

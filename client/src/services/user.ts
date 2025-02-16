@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { getApiConfiguration, getServerAxiosProps } from 'utils/axios';
-import { EnglishLevel } from 'common/models';
+import { EnglishLevel } from '@common/models';
 import { ProfileApi, ProfileDto, UsersNotificationsApi, UpdateUserDtoLanguagesEnum } from 'api';
 import discordIntegration from '../configs/discord-integration';
 import type {
@@ -13,7 +13,7 @@ import type {
   StageInterviewDetailedFeedback,
   StudentStats,
   Location,
-} from 'common/models/profile';
+} from '@common/models/profile';
 import { Rule } from 'antd/lib/form';
 
 export interface UserBasic {

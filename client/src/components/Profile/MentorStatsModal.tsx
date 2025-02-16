@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { MentorStats } from 'common/models/profile';
+import { MentorStats } from '@common/models/profile';
 import { Modal, Typography, Tag, Row, Col } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
 
