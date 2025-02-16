@@ -1,6 +1,6 @@
 import { Tag, Typography } from 'antd';
 import { TaskDtoTypeEnum } from 'api';
-import { StageInterviewFeedbackVerdict, InterviewDetails as CommonInterviewDetails } from 'common/models';
+import { StageInterviewFeedbackVerdict, InterviewDetails as CommonInterviewDetails } from '@common/models';
 import { Decision } from 'data/interviews/technical-screening';
 import dayjs from 'dayjs';
 import between from 'dayjs/plugin/isBetween';

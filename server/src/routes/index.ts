@@ -1,25 +1,24 @@
 import Router from '@koa/router';
 
+import { activityRoute } from './activity';
+import { courseRoute } from './course';
+import { feedbackRoute } from './feedback';
+import { filesRoute } from './file';
 import { errorHandlerMiddleware } from './logging';
 import { publicMeRouter } from './me';
-import { courseRoute } from './course';
-import { usersRoute } from './users';
-import { taskRoute } from './task';
-import { filesRoute } from './file';
-import { taskResultRoute } from './taskResult';
-import { studentRoute } from './student';
-import { tasksRoute } from './tasks';
-import { taskVerification } from './taskVerification';
 import { profileRoute } from './profile';
 import { registryRouter } from './registry';
-import { sessionRoute } from './session';
-import { activityRoute } from './activity';
-import { feedbackRoute } from './feedback';
 import { repositoryRoute } from './repository';
+import { studentRoute } from './student';
+import { taskRoute } from './task';
+import { taskResultRoute } from './taskResult';
+import { tasksRoute } from './tasks';
+import { taskVerification } from './taskVerification';
+import { usersRoute } from './users';
 
 import { ILogger } from '../logger';
-import { courseMiddleware, userRolesMiddleware } from './middlewares';
 import { checksRoute } from './checks';
+import { courseMiddleware, userRolesMiddleware } from './middlewares';
 
 export * from './logging';
 
@@ -38,7 +37,6 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
 
   // public routes
 
-  applyRouter(router, sessionRoute(logger));
   applyRouter(router, publicMeRouter(logger));
   applyRouter(router, registryRouter(logger));
   applyRouter(router, courseRoute(logger));

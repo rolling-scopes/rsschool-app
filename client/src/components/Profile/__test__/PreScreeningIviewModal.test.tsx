@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import PreScreeningIviewModal from '../PreScreeningIviewModal';
-import { StageInterviewDetailedFeedback } from 'common/models/profile';
+import { StageInterviewDetailedFeedback } from '@common/models/profile';
 
 describe('PreScreeningIviewModal', () => {
   it('Should render correctly', () => {

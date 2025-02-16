@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import StudentStatsModal from '../StudentStatsModal';
-import { StudentStats } from 'common/models/profile';
+import { StudentStats } from '@common/models/profile';
 
 describe('StudentStatsModal', () => {
   it('Should render correctly', () => {

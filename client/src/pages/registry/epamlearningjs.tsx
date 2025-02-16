@@ -10,7 +10,7 @@ import { Course } from 'services/models';
 import { UserFull, UserService } from 'services/user';
 import { emailPattern, englishNamePattern } from 'services/validators';
 import { TYPES } from './../../configs/registry';
-import { Location } from 'common/models/profile';
+import { Location } from '@common/models/profile';
 import { SessionProvider } from 'modules/Course/contexts';
 
 const defaultColumnSizes = { xs: 18, sm: 10, md: 8, lg: 6 };
