@@ -80,7 +80,7 @@ import { SessionModule } from './session/session.module';
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggingMiddleware).forRoutes({ path: '*', method: RequestMethod.ALL });
-    consumer.apply(NoCacheMiddleware).forRoutes({ path: '*', method: RequestMethod.GET });
+    consumer.apply(LoggingMiddleware).forRoutes({ path: '/*', method: RequestMethod.ALL });
+    consumer.apply(NoCacheMiddleware).forRoutes({ path: '/*', method: RequestMethod.GET });
   }
 }

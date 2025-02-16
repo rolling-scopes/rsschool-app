@@ -11,7 +11,7 @@
     "build": "next build",
     "build:lambda": "tsc --esModuleInterop --skipLibCheck --module commonjs --target es2018 --outDir dist lambda/app.ts",
     "build:analyze": "ANALYZE=1 next build",
-    "compile": "tsc --noEmit",
+    "compile": "tsc -p tsconfig.json --noEmit",
     "prod": "next start -p 8080",
     "lint": "eslint src",
     "test": "jest --silent",
