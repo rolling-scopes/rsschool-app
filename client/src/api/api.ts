@@ -1568,10 +1568,10 @@ export interface CourseTaskDetailedDto {
     'pairsCount': number | null;
     /**
      * 
-     * @type {string}
+     * @type {CrossCheckStatusEnum}
      * @memberof CourseTaskDetailedDto
      */
-    'crossCheckStatus': string;
+    'crossCheckStatus': CrossCheckStatusEnum;
     /**
      * 
      * @type {string}
@@ -1735,10 +1735,10 @@ export interface CourseTaskDto {
     'pairsCount': number | null;
     /**
      * 
-     * @type {string}
+     * @type {CrossCheckStatusEnum}
      * @memberof CourseTaskDto
      */
-    'crossCheckStatus': string;
+    'crossCheckStatus': CrossCheckStatusEnum;
     /**
      * 
      * @type {string}
@@ -2996,6 +2996,21 @@ export interface CrossCheckSolutionReviewDto {
      */
     'messages': Array<CrossCheckMessageDto>;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const CrossCheckStatusEnum = {
+    Initial: 'initial',
+    Distributed: 'distributed',
+    Completed: 'completed'
+} as const;
+
+export type CrossCheckStatusEnum = typeof CrossCheckStatusEnum[keyof typeof CrossCheckStatusEnum];
+
+
 /**
  * 
  * @export

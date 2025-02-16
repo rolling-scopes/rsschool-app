@@ -83,18 +83,6 @@ export class UserService {
     }
   }
 
-  async extendedUserSearch(query: string | null) {
-    try {
-      if (!query) {
-        return [];
-      }
-      const response = await this.axios.get<SearchResponse>(`/api/users/search/extended/${query}`);
-      return response.data.data;
-    } catch {
-      return [];
-    }
-  }
-
   async getMyProfile() {
     const response = await this.axios.get<{ data: UserFull }>(`/api/profile/me`);
     return response.data.data;

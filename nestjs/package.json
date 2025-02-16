@@ -83,7 +83,6 @@
     "supertest": "6.3.3",
     "ts-jest": "29.2.5",
     "ts-loader": "9.5.2",
-    "ts-node": "10.9.2",
     "tsconfig-paths": "4.2.0"
   },
   "jest": {

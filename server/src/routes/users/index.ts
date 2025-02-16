@@ -4,7 +4,7 @@ import { ILogger } from '../../logger';
 import { User } from '../../models';
 import { getRepository } from 'typeorm';
 import { setResponse } from '../utils';
-import { adminGuard, anyCourseManagerGuard, guard, RouterContext } from '../guards';
+import { adminGuard, guard, RouterContext } from '../guards';
 import { OperationResult, userService } from '../../services';
 
 const postUsers = (_: ILogger) => async (ctx: RouterContext) => {
@@ -158,18 +158,6 @@ export function usersRoute(logger: ILogger) {
    *          description: operation status
    */
   router.get('/search/:searchText', guard, getSearchByGithubId(logger));
-
-  const searchConfig = [
-    { field: 'githubId', isCaseSensitive: true },
-    { field: 'contactsTelegram', isCaseSensitive: true },
-    { field: 'contactsSkype', isCaseSensitive: true },
-    { field: 'contactsEpamEmail', isCaseSensitive: true },
-    { field: 'primaryEmail', isCaseSensitive: true },
-    { field: 'firstName', isCaseSensitive: false },
-    { field: 'lastName', isCaseSensitive: false },
-  ];
-
-  router.get('/search/extended/:searchText', anyCourseManagerGuard, getSearch(logger)(searchConfig));
 
   return router;
 }
