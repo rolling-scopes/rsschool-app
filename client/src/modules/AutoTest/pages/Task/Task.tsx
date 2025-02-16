@@ -2,26 +2,25 @@ import { useContext } from 'react';
 import { CoursePageProps } from 'services/models';
 import { CourseTaskDetailedDto } from 'api';
 import { PageLayout } from 'components/PageLayout';
-import { SessionContext } from 'modules/Course/contexts';
+import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
 import { AttemptsAnswers, Exercise, TaskDescription, VerificationInformation } from 'modules/AutoTest/components';
 import { useCourseTaskVerifications, useVerificationsAnswers } from 'modules/AutoTest/hooks';
+import { useRouter } from 'next/router';
 
 export interface AutoTestTaskProps extends CoursePageProps {
   task: CourseTaskDetailedDto;
 }
 
-function Task({ course, task }: AutoTestTaskProps) {
+function Task() {
+  const { course } = useActiveCourseContext();
   const { githubId } = useContext(SessionContext);
-  const {
-    loading,
-    task: courseTask,
-    isExerciseVisible,
-    startTask,
-    finishTask,
-    reload,
-  } = useCourseTaskVerifications(course.id, task);
+  const { query } = useRouter();
 
-  const { answers, showAnswers, hideAnswers } = useVerificationsAnswers(course.id, task.id);
+  const courseTaskId = Number(query.courseTaskId);
+
+  const { loading, tasks, isExerciseVisible, startTask, finishTask, reload } = useCourseTaskVerifications(course.id);
+  const { answers, showAnswers, hideAnswers } = useVerificationsAnswers(course.id, courseTaskId);
+  const courseTask = tasks?.find(t => t.id === courseTaskId);
 
   if (!courseTask) {
     return null;

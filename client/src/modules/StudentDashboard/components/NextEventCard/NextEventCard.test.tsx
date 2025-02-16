@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
+import { CourseScheduleItemDto, CourseScheduleItemDtoTagEnum, CourseScheduleItemDtoTypeEnum } from 'api';
 import { NextEventCard } from '.';
-import { CourseScheduleItemDto, CourseScheduleItemDtoTagEnum } from 'api';
 
 const NEXT_EVENTS = generateAvailableTasks();
 
@@ -28,6 +28,7 @@ describe('NextEventCard', () => {
 function generateAvailableTasks(count = 3): CourseScheduleItemDto[] {
   return new Array(count).fill({}).map((_, idx) => ({
     id: idx,
+    type: CourseScheduleItemDtoTypeEnum.CourseTask,
     name: `Available Task ${idx}`,
     startDate: '1970-01-01T00:00:00.000Z',
     endDate: `1970-02-0${idx + 1}T00:00:00.000Z`,

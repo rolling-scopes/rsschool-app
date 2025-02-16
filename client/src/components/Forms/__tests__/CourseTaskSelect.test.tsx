@@ -33,6 +33,8 @@ const ActiveCodewarsData: CourseTaskDto[] = [
     submitText: null,
     taskOwner: null,
     validations: null,
+    studentRegistrationStartDate: '2022-09-12T23:59:00.000Z',
+    taskSolutions: [],
   },
   {
     id: 764,
@@ -51,6 +53,8 @@ const ActiveCodewarsData: CourseTaskDto[] = [
     submitText: null,
     taskOwner: null,
     validations: null,
+    studentRegistrationStartDate: '2022-09-12T23:59:00.000Z',
+    taskSolutions: [],
   },
 ];
 
@@ -72,6 +76,8 @@ const ActiveTestData: CourseTaskDto[] = [
     submitText: null,
     taskOwner: null,
     validations: null,
+    studentRegistrationStartDate: '2022-09-12T23:59:00.000Z',
+    taskSolutions: [],
   },
   {
     id: 442,
@@ -90,6 +96,8 @@ const ActiveTestData: CourseTaskDto[] = [
     submitText: null,
     taskOwner: null,
     validations: null,
+    studentRegistrationStartDate: '2022-09-12T23:59:00.000Z',
+    taskSolutions: [],
   },
 ];
 
@@ -111,6 +119,8 @@ const UnknownTaskData: CourseTaskDto[] = [
     submitText: null,
     taskOwner: null,
     validations: null,
+    studentRegistrationStartDate: '2022-09-12T23:59:00.000Z',
+    taskSolutions: [],
   },
   {
     id: 853,
@@ -129,6 +139,8 @@ const UnknownTaskData: CourseTaskDto[] = [
     submitText: null,
     taskOwner: null,
     validations: null,
+    studentRegistrationStartDate: '2022-09-12T23:59:00.000Z',
+    taskSolutions: [],
   },
 ];
 
@@ -190,7 +202,10 @@ const ReviewTaskData: CourseTaskDto[] = [
     taskOwner: null,
     validations: {
       githubIdInUrl: false,
+      githubPrInUrl: false,
     },
+    studentRegistrationStartDate: '2022-09-12T23:59:00.000Z',
+    taskSolutions: [],
   },
   {
     id: 450,
@@ -210,7 +225,10 @@ const ReviewTaskData: CourseTaskDto[] = [
     taskOwner: null,
     validations: {
       githubIdInUrl: false,
+      githubPrInUrl: false,
     },
+    studentRegistrationStartDate: '2022-09-12T23:59:00.000Z',
+    taskSolutions: [],
   },
 ];
 
@@ -233,7 +251,10 @@ const expiredTaskData: CourseTaskDto[] = [
     taskOwner: null,
     validations: {
       githubIdInUrl: false,
+      githubPrInUrl: false,
     },
+    studentRegistrationStartDate: '2022-09-12T23:59:00.000Z',
+    taskSolutions: [],
   },
   {
     id: 841,
@@ -253,7 +274,10 @@ const expiredTaskData: CourseTaskDto[] = [
     taskOwner: null,
     validations: {
       githubIdInUrl: false,
+      githubPrInUrl: false,
     },
+    studentRegistrationStartDate: '2022-09-12T23:59:00.000Z',
+    taskSolutions: [],
   },
 ];
 

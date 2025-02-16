@@ -8,8 +8,8 @@ import { useState } from 'react';
 import { useAsync } from 'react-use';
 import StudentsTable from '../components/StudentsTable';
 import { ColumnKey } from '../components/StudentsTable/renderers';
-import { PageProps } from './getServerSideProps';
 import { StudentInfo } from '../components/StudentInfo';
+import { useActiveCourseContext } from 'modules/Course/contexts';
 
 const studentsApi = new StudentsApi();
 
@@ -18,7 +18,8 @@ type StudentsState = {
   pagination: IPaginationInfo;
 };
 
-export const Students = ({ courses }: PageProps) => {
+export const Students = () => {
+  const { courses } = useActiveCourseContext();
   const [students, setStudents] = useState<StudentsState>({
     content: [],
     pagination: { current: 1, pageSize: 20 },

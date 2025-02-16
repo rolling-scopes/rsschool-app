@@ -1,7 +1,6 @@
 import { Divider, Layout } from 'antd';
 import dynamic from 'next/dynamic';
 import { Header } from 'components/Header';
-import { StageFeedbackProps } from '../InterviewFeedback/getServerSideProps';
 
 import { Steps } from './Steps';
 import { StudentInfo } from './StudentInfo';
@@ -9,12 +8,13 @@ import { SubHeader } from './SubHeader';
 import { StepContextProvider } from './StepContext';
 import { StepsContent } from './StepsContent';
 import { featureToggles } from 'services/features';
+import { StageFeedbackProps } from '../../data';
 
 const LegacyTechScreening = dynamic(() => import('pages/course/mentor/interview-technical-screening'), {
   loading: () => <p>Loading...</p>,
 });
 
-export function Feedback(props: StageFeedbackProps) {
+export function StageInterviewFeedback(props: StageFeedbackProps) {
   const { student, courseSummary, interviewFeedback, course, interviewId, type } = props;
 
   const shouldFallbackToLegacy = !featureToggles.feedback || interviewFeedback.version === 0;

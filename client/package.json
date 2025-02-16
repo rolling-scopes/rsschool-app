@@ -11,7 +11,7 @@
     "build": "next build",
     "build:lambda": "tsc --esModuleInterop --skipLibCheck --module commonjs --target es2018 --outDir dist lambda/app.ts",
     "build:analyze": "ANALYZE=1 next build",
-    "ci:build": "tsc",
+    "compile": "tsc --noEmit",
     "prod": "next start -p 8080",
     "lint": "eslint src",
     "test": "jest --silent",
@@ -23,6 +23,7 @@
   "dependencies": {
     "@ant-design/compatible": "5.1.2",
     "@ant-design/cssinjs": "^1.20.0",
+    "@ant-design/icons": "5.5.2",
     "@ant-design/plots": "1.2.5",
     "ahooks": "3.8.4",
     "antd": "5.11.2",

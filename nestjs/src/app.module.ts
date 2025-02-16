@@ -32,6 +32,7 @@ import { PromptsModule } from './prompts/prompts.module';
 import { AutoTestModule } from './auto-test/auto-test.module';
 import { ContributorsModule } from './contributors';
 import { ListenersModule } from './listeners';
+import { SessionModule } from './session/session.module';
 
 @Module({
   imports: [
@@ -72,6 +73,7 @@ import { ListenersModule } from './listeners';
     AutoTestModule,
     ContributorsModule,
     ListenersModule,
+    SessionModule,
   ],
   controllers: [],
   providers: [Logger, ConfigService],

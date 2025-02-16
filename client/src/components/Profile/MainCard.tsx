@@ -13,7 +13,7 @@ import ObfuscationModal from './ObfuscateConfirmationModal';
 const { Title, Paragraph, Text } = Typography;
 
 type Props = {
-  isAdmin: boolean;
+  isAdmin?: boolean;
   data: ProfileMainCardData;
   isEditingModeEnabled: boolean;
   updateProfile: (data: UpdateProfileInfoDto) => Promise<boolean>;

@@ -193,10 +193,10 @@ const { className: masonryColumnClassName, styles: masonryColumnStyles } = css.r
 
 export default function () {
   return (
-    <SessionProvider>
-      <ActiveCourseProvider>
+    <ActiveCourseProvider>
+      <SessionProvider>
         <Page />
-      </ActiveCourseProvider>
-    </SessionProvider>
+      </SessionProvider>
+    </ActiveCourseProvider>
   );
 }

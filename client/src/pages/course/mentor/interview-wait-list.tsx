@@ -1,15 +1,12 @@
 import { ActiveCourseProvider, SessionProvider } from 'modules/Course/contexts';
-import { InterviewWaitingList, PageProps } from 'modules/Mentor/pages/InterviewWaitingList';
-import { getServerSideProps } from 'modules/Mentor/pages/InterviewWaitingList/getServerSideProps';
+import { InterviewWaitingList } from 'modules/Mentor/pages/InterviewWaitingList';
 import { CourseRole } from 'services/models';
 
-export { getServerSideProps };
-
-function Page(props: PageProps) {
+function Page() {
   return (
     <ActiveCourseProvider>
       <SessionProvider allowedRoles={[CourseRole.Mentor, CourseRole.Manager]}>
-        <InterviewWaitingList {...props} />
+        <InterviewWaitingList />
       </SessionProvider>
     </ActiveCourseProvider>
   );

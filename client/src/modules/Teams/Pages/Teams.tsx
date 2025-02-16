@@ -1,7 +1,6 @@
 import { message, notification, Row } from 'antd';
 import { useMemo, useState, useContext } from 'react';
 import { PageLayout } from 'components/PageLayout';
-import type { TeamsPageProps } from 'pages/course/teams';
 import {
   JoinTeamModal,
   MyTeamSection,
@@ -17,18 +16,25 @@ import { showCreateTeamResultModal, showJoinTeamResultModal } from '../utils/sho
 import { useLoading } from 'components/useLoading';
 import { useDistribution } from '../hooks';
 import { useModalForm } from 'hooks';
-import { SessionContext } from 'modules/Course/contexts';
+import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
+import { useRouter } from 'next/router';
 
 const teamApi = new TeamApi();
 const teamDistributionApi = new TeamDistributionApi();
 
-function Teams({ course, teamDistributionDetailed }: TeamsPageProps) {
+function Teams() {
   const session = useContext(SessionContext);
+  const { course } = useActiveCourseContext();
+  const router = useRouter();
+
+  const teamDistributionId = Number(router.query.teamDistributionId);
+
   const {
     distribution,
     loadDistribution,
     loading: loadingDistribution,
-  } = useDistribution(teamDistributionDetailed, course.id);
+  } = useDistribution(course.id, teamDistributionId);
+
   const { open: openTeamModal, toggle: toggleTeamModal, mode, formData: teamData } = useModalForm<Partial<TeamDto>>();
   const [loading, withLoading] = useLoading(false);
 
@@ -48,7 +54,7 @@ function Teams({ course, teamDistributionDetailed }: TeamsPageProps) {
 
   const distributeStudentsToTeam = withLoading(async () => {
     try {
-      await teamDistributionApi.distributeStudentsToTeam(course.id, distribution.id);
+      await teamDistributionApi.distributeStudentsToTeam(course.id, teamDistributionId);
     } catch {
       message.error('Failed to distribute students to team. Please try later.');
     }
@@ -65,7 +71,7 @@ function Teams({ course, teamDistributionDetailed }: TeamsPageProps) {
 
   const joinTeam = withLoading(async (teamId: number, record: JoinTeamDto) => {
     try {
-      const { data: team } = await teamApi.joinTeam(course.id, distribution.id, teamId, record);
+      const { data: team } = await teamApi.joinTeam(course.id, teamDistributionId, teamId, record);
       await loadDistribution();
       setShowJoinTeamModal(false);
       showJoinTeamResultModal(team);
@@ -77,7 +83,7 @@ function Teams({ course, teamDistributionDetailed }: TeamsPageProps) {
   const copyPassword = async (teamId: number): Promise<void> => {
     const teamApi = new TeamApi();
     try {
-      const { data } = await teamApi.getTeamPassword(course.id, distribution.id, teamId);
+      const { data } = await teamApi.getTeamPassword(course.id, teamDistributionId, teamId);
       copyToClipboard(data.password);
       notification.success({ message: 'Password copied to clipboard', duration: 2 });
     } catch {
@@ -88,7 +94,7 @@ function Teams({ course, teamDistributionDetailed }: TeamsPageProps) {
   const changePassword = async (teamId: number): Promise<void> => {
     const teamApi = new TeamApi();
     try {
-      const { data } = await teamApi.changeTeamPassword(course.id, distribution.id, teamId);
+      const { data } = await teamApi.changeTeamPassword(course.id, teamDistributionId, teamId);
       copyToClipboard(data.password);
       notification.success({ message: 'New Password copied to clipboard', duration: 2 });
     } catch {
@@ -99,9 +105,9 @@ function Teams({ course, teamDistributionDetailed }: TeamsPageProps) {
   const submitTeam = withLoading(async (record: CreateTeamDto, id?: number) => {
     try {
       if (id) {
-        await teamApi.updateTeam(course.id, distribution.id, id, record);
+        await teamApi.updateTeam(course.id, teamDistributionId, id, record);
       } else {
-        const { data: team } = await teamApi.createTeam(course.id, distribution.id, record);
+        const { data: team } = await teamApi.createTeam(course.id, teamDistributionId, record);
         showCreateTeamResultModal(team, copyPassword);
       }
       await loadDistribution();
@@ -112,6 +118,9 @@ function Teams({ course, teamDistributionDetailed }: TeamsPageProps) {
   });
 
   const contentRenderers = () => {
+    if (!distribution) {
+      return null;
+    }
     switch (activeTab) {
       case 'teams':
         return <TeamsSection distribution={distribution} toggleTeamModal={toggleTeamModal} isManager={isManager} />;
@@ -127,7 +136,7 @@ function Teams({ course, teamDistributionDetailed }: TeamsPageProps) {
             studentId={studentId}
             copyPassword={copyPassword}
             changePassword={changePassword}
-            reloadDistribution={loadDistribution}
+            reloadDistribution={loadDistribution as () => Promise<void>}
             setActiveTab={setActiveTab}
           />
         );
@@ -145,7 +154,7 @@ function Teams({ course, teamDistributionDetailed }: TeamsPageProps) {
       showCourseName
       withMargin={false}
     >
-      {openTeamModal && (
+      {openTeamModal && distribution && (
         <TeamModal
           mode={mode}
           isManager={isManager}
@@ -157,17 +166,19 @@ function Teams({ course, teamDistributionDetailed }: TeamsPageProps) {
         />
       )}
       {showJoinTeamModal && <JoinTeamModal onSubmit={joinTeam} onCancel={() => setShowJoinTeamModal(false)} />}
-      <TeamsHeader
-        courseAlias={course.alias}
-        isManager={isManager}
-        isStudent={isStudent}
-        activeTab={activeTab}
-        distribution={distribution}
-        setActiveTab={setActiveTab}
-        handleCreateTeam={handleCreateTeam}
-        handleDistributeStudents={handleDistributeStudents}
-        handleJoinTeam={handleJoinTeam}
-      />
+      {distribution ? (
+        <TeamsHeader
+          courseAlias={course.alias}
+          isManager={isManager}
+          isStudent={isStudent}
+          activeTab={activeTab}
+          distribution={distribution}
+          setActiveTab={setActiveTab}
+          handleCreateTeam={handleCreateTeam}
+          handleDistributeStudents={handleDistributeStudents}
+          handleJoinTeam={handleJoinTeam}
+        />
+      ) : null}
       <Row style={{ background: 'white', padding: '24px', margin: 24 }}>{contentRenderers()}</Row>
     </PageLayout>
   );

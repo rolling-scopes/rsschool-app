@@ -2779,6 +2779,20 @@
         "summary": "",
         "tags": ["contributors"]
       }
+    },
+    "/session": {
+      "get": {
+        "operationId": "getSession",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AuthUserDto" } } }
+          }
+        },
+        "summary": "",
+        "tags": ["session"]
+      }
     }
   },
   "info": { "title": "", "description": "", "version": "1.0.0", "contact": {} },
@@ -5499,6 +5513,34 @@
       "UpdateContributorDto": {
         "type": "object",
         "properties": { "description": { "type": "string" }, "userId": { "type": "number" } }
+      },
+      "AuthUserDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "githubId": { "type": "string" },
+          "roles": { "type": "object", "additionalProperties": { "type": "string", "enum": ["mentor", "student"] } },
+          "isAdmin": { "type": "boolean" },
+          "isHirer": { "type": "boolean" },
+          "appRoles": { "type": "array", "items": { "type": "string" } },
+          "courses": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "roles": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["manager", "supervisor", "student", "mentor", "dementor", "activist"]
+                  }
+                }
+              },
+              "required": ["roles"]
+            }
+          }
+        },
+        "required": ["id", "githubId", "roles", "isAdmin", "isHirer", "appRoles", "courses"]
       }
     }
   }
