@@ -1,11 +1,11 @@
 import { useAsync } from 'react-use';
 import { Course } from 'services/models';
 import { UserFull, UserService } from 'services/user';
-import { StudentStats } from 'common/models';
+import { StudentStats } from '@common/models';
 import { useCallback, useEffect, useState } from 'react';
 import { CdnService } from 'services/cdn';
 import { GeneralSection, DoneSection } from 'modules/Registry/components';
-import { Location } from 'common/models';
+import { Location } from '@common/models';
 import { Form, message, Modal, Typography } from 'antd';
 import { useRouter } from 'next/router';
 import { ExclamationCircleOutlined } from '@ant-design/icons';

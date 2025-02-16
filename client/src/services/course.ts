@@ -1,8 +1,8 @@
 import globalAxios, { AxiosInstance } from 'axios';
-import { UserBasic, MentorBasic, StudentBasic, InterviewDetails, InterviewPair } from 'common/models';
+import { UserBasic, MentorBasic, StudentBasic, InterviewDetails, InterviewPair } from '@common/models';
 import { ScoreOrder, ScoreTableFilters } from 'modules/Score/hooks/types';
-import { IPaginationInfo } from 'common/types/pagination';
-import { PreferredStudentsLocation } from 'common/enums/mentor';
+import { IPaginationInfo } from '@common/types/pagination';
+import { PreferredStudentsLocation } from '@common/enums/mentor';
 
 import {
   CoursesTasksApi,

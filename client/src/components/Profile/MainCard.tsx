@@ -4,7 +4,7 @@ import { GithubFilled, EnvironmentFilled, EditOutlined } from '@ant-design/icons
 import isEqual from 'lodash/isEqual';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { LocationSelect } from 'components/Forms';
-import { Location } from 'common/models/profile';
+import { Location } from '@common/models/profile';
 import ProfileSettingsModal from './ProfileSettingsModal';
 import { UpdateProfileInfoDto } from 'api';
 import { ProfileMainCardData } from 'services/user';

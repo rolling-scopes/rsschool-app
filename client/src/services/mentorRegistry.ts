@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { MentorRegistryDto, RegistryApi, InviteMentorsDto } from 'api';
-import { PreferredStudentsLocation } from 'common/enums/mentor';
+import { PreferredStudentsLocation } from '@common/enums/mentor';
 import { MentorRegistryTabsMode } from 'modules/MentorRegistry/constants';
 
 export type MentorResponse = {

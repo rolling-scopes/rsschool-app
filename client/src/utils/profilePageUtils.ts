@@ -1,4 +1,4 @@
-import { StudentStats } from 'common/models';
+import { StudentStats } from '@common/models';
 import { CoreJsInterviewsData } from 'components/Profile/CoreJsIviewsCard';
 
 export const hadStudentCoreJSInterview = (stats: StudentStats[]) =>

@@ -1,13 +1,13 @@
-import { Button, Checkbox, DatePicker, Form, Select, Space, TableProps, Row } from 'antd';
 import { FileExcelOutlined } from '@ant-design/icons';
-import HeroesRadarTable from './HeroesRadarTable';
-import { HeroesRadarDto, GratitudesApi, HeroRadarDto, CountryDto } from 'api';
-import { IPaginationInfo } from 'common/types/pagination';
-import { useState, useEffect, useCallback, useContext } from 'react';
-import { onlyDefined } from 'utils/onlyDefined';
-import dayjs from 'dayjs';
+import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
+import { onlyDefined } from '@client/utils/onlyDefined';
+import { IPaginationInfo } from '@common/types/pagination';
 import type { TimeRangePickerProps } from 'antd';
-import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
+import { Button, Checkbox, DatePicker, Form, Row, Select, Space, TableProps } from 'antd';
+import { CountryDto, GratitudesApi, HeroesRadarDto, HeroRadarDto } from 'api';
+import dayjs from 'dayjs';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import HeroesRadarTable from './HeroesRadarTable';
 
 export type HeroesRadarFormProps = {
   courseId?: number;

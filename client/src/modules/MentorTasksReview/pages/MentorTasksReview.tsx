@@ -3,7 +3,7 @@ import { message, Space, TablePaginationConfig, Typography } from 'antd';
 import { FilterValue } from 'antd/es/table/interface';
 import { SorterResult } from 'antd/lib/table/interface';
 import { CoursesTasksApi, CourseTaskDtoCheckerEnum, MentorReviewDto, MentorReviewsApi } from 'api';
-import { IPaginationInfo } from 'common/types/pagination';
+import { IPaginationInfo } from '@common/types/pagination';
 import { AdminPageLayout } from 'components/PageLayout';
 import { useLoading } from 'components/useLoading';
 import { isCourseManager } from 'domain/user';
