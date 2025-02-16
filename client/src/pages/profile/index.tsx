@@ -40,7 +40,7 @@ const profileApi = new ProfileApi();
 const userService = new UserService();
 const notificationsService = new NotificationsService();
 
-const ProfilePage = () => {
+const Profile = () => {
   const router = useRouter();
   const session = useContext(SessionContext);
   const [profile, setProfile] = useState<ProfileInfo | null>(null);
@@ -225,12 +225,12 @@ const ProfilePage = () => {
 
 function Page() {
   return (
-    <SessionProvider>
-      <ActiveCourseProvider>
-        <ProfilePage />
-      </ActiveCourseProvider>
-    </SessionProvider>
+    <ActiveCourseProvider>
+      <SessionProvider>
+        <Profile />
+      </SessionProvider>
+    </ActiveCourseProvider>
   );
 }
 
-export default withGoogleMaps(Page);
+export const ProfilePage = withGoogleMaps(Page);

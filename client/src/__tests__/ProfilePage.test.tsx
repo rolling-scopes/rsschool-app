@@ -1,11 +1,17 @@
-import React from 'react';
 import { render } from '@testing-library/react';
-import { NextRouter } from 'next/router';
 import { Session } from 'components/withSession';
-import ProfilePage from '../pages/profile';
+import { NextRouter, useRouter } from 'next/router';
+import { ProfilePage } from '../pages/profile';
+import { SessionApi } from 'api';
 
 jest.mock('next/config', () => () => ({}));
+jest.mock('next/router', () => ({
+  ...jest.requireActual('next/router'),
+  useRouter: jest.fn(),
+}));
+
 jest.mock('api', () => ({
+  ...jest.requireActual('api'),
   ProfileApi: jest.fn(),
   UsersNotificationsApi: jest.fn(),
   NotificationsApi: jest.fn(),
@@ -33,6 +39,9 @@ const session = {
     },
   },
 } as Session;
+
+SessionApi.prototype.getSession = jest.fn().mockResolvedValue({ data: session });
+
 const router = {
   query: {
     githubId: 'petrov',
@@ -42,7 +51,8 @@ const router = {
 describe('ProfilePage', () => {
   describe('Should render correctly', () => {
     it('if full profile info is in the state', () => {
-      const { container } = render(<ProfilePage session={session} router={router} />);
+      jest.mocked(useRouter).mockReturnValue(router);
+      const { container } = render(<ProfilePage />);
       expect(container).toMatchSnapshot();
     });
   });

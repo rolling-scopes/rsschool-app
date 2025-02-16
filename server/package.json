@@ -5,6 +5,7 @@
   "license": "Mozilla Public License 2.0",
   "scripts": {
     "build": "tsc",
+    "compile": "tsc --noEmit",
     "start": "tsnd --ignore-watch node_modules --inspect --notify false -r dotenv/config -- ./src/index.ts | pino-pretty -i time,hostname,pid,host,method,remoteAddress",
     "lint": "eslint src",
     "test": "jest",

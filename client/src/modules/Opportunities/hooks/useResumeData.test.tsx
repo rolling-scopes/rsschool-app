@@ -1,6 +1,7 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { OpportunitiesApi, ResumeDto } from 'api';
 import { useResumeData } from './useResumeData';
+import { AxiosResponse } from 'axios';
 
 const mockGithubId = 'test';
 const mockActualTime = 1664564110455;
@@ -17,7 +18,7 @@ describe('useResumeData', () => {
         headers: {},
         config: {},
         data: mockResumeData as unknown as ResumeDto,
-      }),
+      } as AxiosResponse<ResumeDto>),
     );
     const { result } = renderHook(() => useResumeData({ githubId: mockGithubId, actualTime: mockActualTime }));
     await waitFor(() => {
