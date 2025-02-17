@@ -1,5 +1,6 @@
-import { Descriptions, Divider, Form, Space, Switch, Tag, Typography } from 'antd';
-import { AutoTestTaskDto, AutoTestsApi, SelfEducationQuestionSelectedAnswersDto } from 'api';
+import { useState } from 'react';
+import { Button, Descriptions, Divider, Form, message, Space, Switch, Tag, Typography } from 'antd';
+import { AutoTestTaskDto, AutoTestsApi, SelfEducationQuestionSelectedAnswersDto, TasksApi } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
 import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { CourseRole } from 'services/models';
@@ -7,6 +8,7 @@ import { GetServerSideProps } from 'next';
 import { getTokenFromContext } from 'utils/server';
 import { getApiConfiguration } from 'utils/axios';
 import { Question } from 'modules/AutoTest/components';
+import AutoTestForm from 'modules/AutoTest/components/AutoTestForm/AutoTestForm';
 
 type PageProps = {
   selectedTask: AutoTestTaskDto;
@@ -25,111 +27,134 @@ export const getServerSideProps: GetServerSideProps = async context => {
     const selectedTask = await api.getAutoTest(Number(taskId));
 
     if (!selectedTask.data) {
-      return {
-        props: {
-          notFound: true,
-        },
-      };
+      return { props: { notFound: true } };
     }
 
-    return {
-      props: { selectedTask: selectedTask.data },
-    };
+    return { props: { selectedTask: selectedTask.data } };
   } catch {
-    return {
-      notFound: true,
-    };
+    return { notFound: true };
   }
 };
 
+const taskApi = new TasksApi();
+
 function Page({ selectedTask }: PageProps) {
   const { courses } = useActiveCourseContext();
+  const [task, setTask] = useState<AutoTestTaskDto>(selectedTask);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleSaveTask = async (updatedTask: AutoTestTaskDto) => {
+    try {
+      await taskApi.updateTask(updatedTask.id, {
+        name: selectedTask.name,
+        descriptionUrl: selectedTask.descriptionUrl,
+        disciplineId: selectedTask.discipline?.id,
+        tags: selectedTask.tags,
+        attributes: updatedTask.attributes,
+        description: selectedTask.description,
+        githubRepoName: selectedTask.githubRepoName,
+        sourceGithubRepoUrl: selectedTask.sourceGithubRepoUrl,
+        githubPrRequired: selectedTask.githubPrRequired,
+        type: selectedTask.type,
+        skills: selectedTask.skills,
+      });
+      setTask(updatedTask);
+      setIsEditing(false);
+    } catch (error) {
+      message.error('Failed to update auto test');
+    }
+  };
 
   return (
-    <AdminPageLayout title="Auto test task" courses={courses} loading={false}>
-      <Descriptions column={1}>
-        <Descriptions.Item label="Name">{selectedTask?.name}</Descriptions.Item>
-        {selectedTask?.descriptionUrl && (
-          <Descriptions.Item label="Description URL">
-            <a href={selectedTask?.descriptionUrl} target="_blank">
-              {selectedTask?.descriptionUrl}
-            </a>
-          </Descriptions.Item>
-        )}
-        {selectedTask?.discipline?.name && (
-          <Descriptions.Item label="Discipline">{selectedTask?.discipline?.name}</Descriptions.Item>
-        )}
-        {selectedTask?.courses?.length && selectedTask?.courses?.length > 0 && (
-          <Descriptions.Item label="Courses">
-            <Space wrap size="small">
-              {selectedTask.courses.map(course => (
-                <Tag color={course?.isActive ? 'green' : 'red'} key={course.name}>
-                  <Typography.Text>{course.name}</Typography.Text>
-                </Tag>
-              ))}
-            </Space>
-          </Descriptions.Item>
-        )}
-
-        {selectedTask?.tags && (
-          <Descriptions.Item label="Tags">
-            {selectedTask?.tags.map(tag => (
-              <Tag color="blue" key={tag}>
-                {tag}
-              </Tag>
-            ))}
-          </Descriptions.Item>
-        )}
-      </Descriptions>
-
-      {selectedTask?.attributes?.public?.questions && (
+    <AdminPageLayout title="Auto test" courses={courses} loading={false}>
+      {isEditing ? (
+        <AutoTestForm selectedTask={task} onCancel={() => setIsEditing(false)} onSave={handleSaveTask} />
+      ) : (
         <>
-          <Divider />
-          <Descriptions
-            title="Test Settings"
-            bordered
-            size="small"
-            column={{
-              xs: 1,
-              md: 2,
-              lg: 3,
-              xxl: 5,
-            }}
-          >
-            <Descriptions.Item label="Max Attempts Number">
-              {selectedTask?.attributes?.public?.maxAttemptsNumber}
-            </Descriptions.Item>
-            <Descriptions.Item label="Number of Questions">
-              {selectedTask?.attributes?.public?.numberOfQuestions}
-            </Descriptions.Item>
-            <Descriptions.Item label="Total Questions">
-              {selectedTask?.attributes?.public?.questions?.length}
-            </Descriptions.Item>
-            <Descriptions.Item label="Strict Attempts Mode">
-              <Switch checked={selectedTask?.attributes?.public?.strictAttemptsMode} disabled />
-            </Descriptions.Item>
-            <Descriptions.Item label="Threshold Percentage">
-              {selectedTask?.attributes?.public?.tresholdPercentage}
-            </Descriptions.Item>
+          <Space style={{ marginBottom: 16 }}>
+            <Button type="primary" onClick={() => setIsEditing(true)}>
+              Edit
+            </Button>
+          </Space>
+          <Descriptions column={1}>
+            <Descriptions.Item label="Name">{task.name}</Descriptions.Item>
+            {task?.descriptionUrl && (
+              <Descriptions.Item label="Description URL">
+                <a href={task?.descriptionUrl} target="_blank" rel="noreferrer">
+                  {task?.descriptionUrl}
+                </a>
+              </Descriptions.Item>
+            )}
+            {task?.discipline?.name && (
+              <Descriptions.Item label="Discipline">{task?.discipline?.name}</Descriptions.Item>
+            )}
+            {task?.courses?.length && task?.courses?.length > 0 && (
+              <Descriptions.Item label="Courses">
+                <Space wrap size="small">
+                  {task.courses.map(course => (
+                    <Tag color={course?.isActive ? 'green' : 'red'} key={course.name}>
+                      <Typography.Text>{course.name}</Typography.Text>
+                    </Tag>
+                  ))}
+                </Space>
+              </Descriptions.Item>
+            )}
+            {task?.tags && (
+              <Descriptions.Item label="Tags">
+                {task?.tags.map(tag => (
+                  <Tag color="blue" key={tag}>
+                    {tag}
+                  </Tag>
+                ))}
+              </Descriptions.Item>
+            )}
           </Descriptions>
-          <Form layout="vertical" requiredMark={false} disabled={true}>
-            {selectedTask?.attributes.public.questions.map((question, index) => (
-              <Question
-                key={index}
-                question={
-                  {
-                    ...question,
-                    // TODO: Investigate and fix potential type mismatch for selectedAnswers.
-                    // Related issue: https://github.com/rolling-scopes/rsschool-app/issues/2572
-                    selectedAnswers: question.multiple
-                      ? selectedTask?.attributes.answers[index]
-                      : selectedTask?.attributes.answers[index][0],
-                  } as SelfEducationQuestionSelectedAnswersDto
-                }
-                questionIndex={index}
-              />
-            ))}
-          </Form>
+          {task?.attributes?.public?.questions && (
+            <>
+              <Divider />
+              <Descriptions
+                title="Test Settings"
+                bordered
+                size="small"
+                column={{
+                  xs: 1,
+                  md: 2,
+                  lg: 3,
+                  xxl: 5,
+                }}
+              >
+                <Descriptions.Item label="Max Attempts Number">
+                  {task.attributes.public.maxAttemptsNumber}
+                </Descriptions.Item>
+                <Descriptions.Item label="Number of Questions">
+                  {task.attributes.public.numberOfQuestions}
+                </Descriptions.Item>
+                <Descriptions.Item label="Total Questions">{task.attributes.public.questions.length}</Descriptions.Item>
+                <Descriptions.Item label="Strict Attempts Mode">
+                  <Switch checked={task.attributes.public.strictAttemptsMode} disabled />
+                </Descriptions.Item>
+                <Descriptions.Item label="Threshold Percentage">
+                  {task.attributes.public.tresholdPercentage}
+                </Descriptions.Item>
+              </Descriptions>
+              <Form layout="vertical" requiredMark={false} disabled>
+                {task.attributes.public.questions.map((question, index) => (
+                  <Question
+                    key={index}
+                    question={
+                      {
+                        ...question,
+                        selectedAnswers: question.multiple
+                          ? task.attributes.answers[index]
+                          : task.attributes.answers[index][0],
+                      } as SelfEducationQuestionSelectedAnswersDto
+                    }
+                    questionIndex={index}
+                  />
+                ))}
+              </Form>
+            </>
+          )}
         </>
       )}
     </AdminPageLayout>
