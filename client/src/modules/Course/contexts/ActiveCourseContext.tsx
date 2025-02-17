@@ -32,21 +32,23 @@ export const ActiveCourseProvider = ({ children }: Props) => {
   const alias = router.query.course;
   const [storageCourseId] = useLocalStorage('activeCourseId');
   const [activeCourse, setActiveCourse] = useState<ProfileCourseDto>();
+  const [loading, setLoading] = useState(true);
 
-  const { error, loading } = useAsync(async () => {
-    if (!coursesCache) {
-      coursesCache = await new UserService().getCourses();
+  const { error } = useAsync(async () => {
+    if (router.isReady) {
+      if (!coursesCache) {
+        coursesCache = await new UserService().getCourses();
+      }
+
+      const course =
+        coursesCache.find(course => course.alias === alias) ??
+        coursesCache.find(course => course.id === storageCourseId) ??
+        coursesCache[0];
+
+      setCourse(course);
+      setLoading(false);
     }
-
-    const course =
-      coursesCache.find(course => course.alias === alias) ??
-      coursesCache.find(course => course.id === storageCourseId) ??
-      coursesCache[0];
-
-    setActiveCourse(course);
-
-    return course;
-  }, []);
+  }, [router.isReady]);
 
   const setCourse = (course: ProfileCourseDto) => {
     setActiveCourse(course);
