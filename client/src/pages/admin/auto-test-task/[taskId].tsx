@@ -60,7 +60,7 @@ function Page({ selectedTask }: PageProps) {
       });
       setTask(updatedTask);
       setIsEditing(false);
-    } catch (error) {
+    } catch {
       message.error('Failed to update auto test');
     }
   };
