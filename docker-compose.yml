@@ -79,6 +79,13 @@ services:
       - shared-network
     depends_on:
       - server
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: eu-central-1
+        awslogs-group: rsschool-app
+        awslogs-stream: nestjs
+        awslogs-create-group: 'true'
 
   nginx:
     container_name: nginx
