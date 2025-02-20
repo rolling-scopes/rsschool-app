@@ -60,7 +60,11 @@ function Page() {
       </Row>
 
       <Table
-        pagination={{ pageSize: 50 }}
+        pagination={{
+          defaultPageSize: 50,
+          showSizeChanger: true,
+          showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} interviews`,
+        }}
         size="small"
         rowKey="id"
         dataSource={interviews}
