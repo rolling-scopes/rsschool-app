@@ -1,15 +1,21 @@
 import { CourseDto } from 'api';
 import { CourseIcon } from 'components/Icons';
 import { formatMonthFriendly } from 'services/formatter';
+import { LABELS } from 'modules/Registry/constants';
 
 type Props = {
   course: CourseDto;
+  isStudentForm?: boolean;
 };
 
-export function CourseLabel({ course }: Props) {
-  const { discipline, name, startDate } = course;
+export function CourseLabel({ course, isStudentForm }: Props) {
+  const { discipline, name, startDate, personalMentoringStartDate, personalMentoringEndDate } = course;
   const disciplineName = discipline?.name ? `${discipline.name}, ` : '';
-  const courseInfo = ` ${name} (${disciplineName}${formatMonthFriendly(startDate)}) `;
+  const courseInfo = isStudentForm
+    ? ` ${name} (${disciplineName}${formatMonthFriendly(startDate)}) `
+    : ` ${name} (${LABELS.mentoring} ${
+        personalMentoringStartDate ? formatMonthFriendly(personalMentoringStartDate) : ''
+      }-${personalMentoringEndDate ? formatMonthFriendly(personalMentoringEndDate) : ''}) `;
   return (
     <>
       <CourseIcon course={course} />
