@@ -63,9 +63,7 @@ function Page() {
         pagination={{
           defaultPageSize: 50,
           showSizeChanger: true,
-          showTotal: (total, range) => {
-            return `${range[0]}-${range[1]} of ${total} interviews`;
-          },
+          showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} interviews`,
         }}
         size="small"
         rowKey="id"
