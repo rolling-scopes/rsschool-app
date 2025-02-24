@@ -5,20 +5,22 @@ import { useSubmitTaskSolution } from './useSubmitTaskSolution';
 
 const COURSE_ID = 10;
 
-const resolvedMock: AxiosResponse = {
+const resolvedMock = {
   status: 200,
   statusText: 'OK',
   headers: {},
   config: {},
   data: {},
-};
+} as unknown as AxiosResponse;
 
 const rejectedMock: AxiosError = {
-  status: '500',
+  message: 'Bad Response',
+  code: '500',
   config: {},
-  name: 'Error',
-  message: 'Bad response',
-  isAxiosError: true,
+  response: {
+    status: 500,
+    statusText: 'Bad Response',
+  },
 } as AxiosError;
 
 describe('useSubmitTaskSolution', () => {

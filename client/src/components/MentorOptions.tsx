@@ -1,5 +1,5 @@
 import { Button, Form, FormInstance, Select } from 'antd';
-import { PreferredStudentsLocation } from 'common/enums/mentor';
+import { PreferredStudentsLocation } from '@common/enums/mentor';
 import { StudentSearch } from './StudentSearch';
 
 export type Options = {

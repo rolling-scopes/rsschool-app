@@ -137,6 +137,20 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                   class="ant-typography css-dev-only-do-not-override-1v2lwm6"
                 >
                   <strong>
+                    WhatsApp
+                    :
+                  </strong>
+                </span>
+                 
+                1234567890
+              </li>
+              <li
+                class="ant-list-item ant-list-item-no-flex"
+              >
+                <span
+                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
+                >
+                  <strong>
                     Notes
                     :
                   </strong>
@@ -330,6 +344,20 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                 </span>
                  
                 skype_vasya
+              </li>
+              <li
+                class="ant-list-item ant-list-item-no-flex"
+              >
+                <span
+                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
+                >
+                  <strong>
+                    WhatsApp
+                    :
+                  </strong>
+                </span>
+                 
+                1234567890
               </li>
             </ul>
           </div>

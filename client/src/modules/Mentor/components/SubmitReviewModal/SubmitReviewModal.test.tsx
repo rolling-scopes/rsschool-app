@@ -1,7 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import { MentorDashboardDto } from 'api';
+import mockAxios from 'jest-mock-axios';
 import { MODAL_TITLE, SubmitReviewModal, SubmitReviewModalProps } from '.';
 import { SUCCESS_MESSAGE } from './SubmitReviewModal';
-import mockAxios from 'jest-mock-axios';
 
 const MODAL_DATA_MOCK = {
   courseTaskId: 1,
@@ -12,7 +13,7 @@ const MODAL_DATA_MOCK = {
   studentName: `Student Name`,
   taskDescriptionUrl: `task-url`,
   taskName: `Task Name`,
-};
+} as MentorDashboardDto;
 
 const PROPS_MOCK: SubmitReviewModalProps = {
   data: MODAL_DATA_MOCK,

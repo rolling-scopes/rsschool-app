@@ -31,6 +31,7 @@ import { TasksModule } from './tasks/tasks.module';
 import { PromptsModule } from './prompts/prompts.module';
 import { AutoTestModule } from './auto-test/auto-test.module';
 import { ContributorsModule } from './contributors';
+import { SessionModule } from './session/session.module';
 
 @Module({
   imports: [
@@ -66,13 +67,14 @@ import { ContributorsModule } from './contributors';
     PromptsModule,
     AutoTestModule,
     ContributorsModule,
+    SessionModule,
   ],
   controllers: [],
   providers: [Logger, ConfigService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggingMiddleware).forRoutes({ path: '*', method: RequestMethod.ALL });
-    consumer.apply(NoCacheMiddleware).forRoutes({ path: '*/*', method: RequestMethod.GET });
+    consumer.apply(LoggingMiddleware).forRoutes({ path: '/*', method: RequestMethod.ALL });
+    consumer.apply(NoCacheMiddleware).forRoutes({ path: '/*', method: RequestMethod.GET });
   }
 }
