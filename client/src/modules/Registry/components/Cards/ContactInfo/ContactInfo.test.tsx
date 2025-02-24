@@ -12,9 +12,11 @@ const mockValues = {
   contactsNotes: 'notes',
 };
 
-const renderContactInfo = () =>
+type Values = typeof mockValues | Record<string, unknown>;
+
+const renderContactInfo = (values: Values = mockValues) =>
   render(
-    <Form initialValues={mockValues}>
+    <Form role="form" initialValues={values}>
       <ContactInfo />
     </Form>,
   );
@@ -107,5 +109,16 @@ describe('ContactInfo', () => {
 
     const errorMessage = await screen.findByText(message);
     expect(errorMessage).toBeInTheDocument();
+  });
+
+  test('should render error messages only on required fields', async () => {
+    renderContactInfo({});
+
+    const form = screen.getByRole('form');
+    fireEvent.submit(form);
+
+    const errorEmail = await screen.findByText(ERROR_MESSAGES.email);
+
+    expect(errorEmail).toBeInTheDocument();
   });
 });

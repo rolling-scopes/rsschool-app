@@ -47,7 +47,7 @@ export function ContactInfo() {
       <Form.Item
         label={LABELS.email}
         name="contactsEmail"
-        rules={[{ pattern: emailPattern, message: ERROR_MESSAGES.email }]}
+        rules={[{ required: true, pattern: emailPattern, message: ERROR_MESSAGES.email }]}
       >
         <Input placeholder={PLACEHOLDERS.email} />
       </Form.Item>
