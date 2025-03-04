@@ -14,9 +14,11 @@ import { DevStrategy } from './strategies/dev.strategy';
 import { GithubStrategy } from './strategies/github.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { CoreModule } from '../core/core.module';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
+    CacheModule.register(),
     CoreModule,
     PassportModule.register({}),
     UsersModule,

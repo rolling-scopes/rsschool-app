@@ -1,6 +1,6 @@
 import { BranchesOutlined, CloseCircleTwoTone, SolutionOutlined, UndoOutlined } from '@ant-design/icons';
 import { Button, Descriptions, Drawer } from 'antd';
-import { MentorBasic } from 'common/models';
+import { MentorBasic } from '@common/models';
 import { CommentModal } from 'components/CommentModal';
 import { MentorSearch } from 'components/MentorSearch';
 import { useState } from 'react';

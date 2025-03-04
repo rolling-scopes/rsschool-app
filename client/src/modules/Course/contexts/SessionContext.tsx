@@ -1,7 +1,6 @@
 import useRequest from 'ahooks/lib/useRequest';
 import { Button, Result } from 'antd';
-import type { ProfileCourseDto } from 'api';
-import axios from 'axios';
+import { type ProfileCourseDto, SessionApi } from 'api';
 import { LoadingScreen } from 'components/LoadingScreen';
 import type { Session } from 'components/withSession';
 import { hasRoleInAnyCourse } from 'domain/user';
@@ -20,7 +19,7 @@ type Props = React.PropsWithChildren<{
   hirerOnly?: boolean;
 }>;
 
-const AccessDeniedWarning = () => (
+export const AccessDeniedWarning = () => (
   <Result
     status="warning"
     title="You don't have required role to access this page"
@@ -32,6 +31,8 @@ const AccessDeniedWarning = () => (
   />
 );
 
+const sessionApi = new SessionApi();
+
 export function SessionProvider(props: Props) {
   const { allowedRoles, anyCoursePowerUser } = props;
   const activeCourse = useActiveCourseContext().course;
@@ -42,8 +43,8 @@ export function SessionProvider(props: Props) {
     loading,
     error,
   } = useRequest(async () => {
-    const response = await axios.get<{ data: Session }>('/api/session');
-    return response.data.data;
+    const response = await sessionApi.getSession();
+    return response.data;
   });
 
   useEffect(() => {

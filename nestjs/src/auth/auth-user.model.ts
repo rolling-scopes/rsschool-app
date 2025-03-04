@@ -20,6 +20,13 @@ export interface CourseInfo {
   roles: CourseRole[];
 }
 
+export interface JwtToken {
+  id: number;
+  githubId: string;
+  isAdmin: boolean;
+  isHirer: boolean;
+}
+
 export class AuthUser {
   public readonly roles: Record<string, 'mentor' | 'student'>;
   public readonly isAdmin: boolean;

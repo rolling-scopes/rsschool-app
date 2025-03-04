@@ -14,6 +14,7 @@ const MENTOR_MOCK = {
   contactsPhone: 'contact-phone',
   contactsSkype: 'contact-skype',
   contactsTelegram: 'contact-telegram',
+  contactsWhatsApp: 'contact-whatsapp',
 };
 const PROPS_MOCK: MentorCardProps = {
   mentor: MENTOR_MOCK,

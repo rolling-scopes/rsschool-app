@@ -20,6 +20,8 @@ function renderActions(distribution: TeamDistributionDto, isManager = false) {
       deleteRegister={mockOnDeleteRegister}
       isManager={isManager}
       courseAlias="test"
+      isCourseDementor={false}
+      onOpenSubmitScoreModal={jest.fn()}
     />,
   );
 }
