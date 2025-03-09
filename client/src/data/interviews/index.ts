@@ -4,6 +4,7 @@ import { corejs2Template } from './corejs2';
 import { reactTemplate } from './react';
 import { shortTrackScreeningTemplate } from './shortTrackScreening';
 import { shortTrackJavaScriptTemplate } from './shortTrackJavaScript';
+import { shortTrackTypeScriptTemplate } from './shortTrackTypeScript';
 export * from './types';
 
 export const templates = {
@@ -13,4 +14,5 @@ export const templates = {
   angular: angularTemplate,
   shortTrackScreening: shortTrackScreeningTemplate,
   shortTrackJavaScript: shortTrackJavaScriptTemplate,
+  shortTrackTypeScript: shortTrackTypeScriptTemplate,
 };
