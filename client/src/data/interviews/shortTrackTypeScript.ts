@@ -93,7 +93,7 @@ export const shortTrackTypeScriptTemplate: InterviewTemplate = {
         },
         {
           id: 1303,
-          name: 'How do async and await enhance the readability and maintainability of asynchronous JavaScript code compared to traditional promise chains?',
+          name: 'How does async/await syntax enhances the readability and maintainability of asynchronous JavaScript code compared to traditional promise chains?',
           type: InputType.Input,
         },
       ],
