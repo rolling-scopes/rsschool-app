@@ -5,6 +5,7 @@ import { reactTemplate } from './react';
 import { shortTrackScreeningTemplate } from './shortTrackScreening';
 import { shortTrackJavaScriptTemplate } from './shortTrackJavaScript';
 import { shortTrackTypeScriptTemplate } from './shortTrackTypeScript';
+import { shortTrackPerformanceTemplate } from 'data/interviews/shortTrackPerformance';
 export * from './types';
 
 export const templates = {
@@ -15,4 +16,5 @@ export const templates = {
   shortTrackScreening: shortTrackScreeningTemplate,
   shortTrackJavaScript: shortTrackJavaScriptTemplate,
   shortTrackTypeScript: shortTrackTypeScriptTemplate,
+  shortTrackPerformance: shortTrackPerformanceTemplate,
 };
