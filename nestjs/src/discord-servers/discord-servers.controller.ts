@@ -25,9 +25,8 @@ export class DiscordServersController {
   @ApiOperation({ operationId: 'getDiscordServers' })
   @ApiOkResponse({ type: [DiscordServerDto] })
   public async getAll(@Req() req: CurrentRequest) {
-    const fullInfo = req.user.isAdmin;
     const items = await this.service.getAll();
-    return items.map(item => (fullInfo ? new DiscordServerDto(item) : new IdNameDto(item)));
+    return items.map(item => (req.user.isAdmin ? new DiscordServerDto(item) : new IdNameDto(item)));
   }
 
   @Put(':id')
