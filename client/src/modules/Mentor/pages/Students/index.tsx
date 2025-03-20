@@ -60,7 +60,7 @@ export function Students() {
                 student.active ? (
                   <Link key="expel" href={routes.getExpelRoute(alias)} legacyBehavior>
                     <Button type="link" icon={<MinusCircleTwoTone twoToneColor="red" />}>
-                      Expel
+                      Modify Assignment
                     </Button>
                   </Link>
                 ) : null,
