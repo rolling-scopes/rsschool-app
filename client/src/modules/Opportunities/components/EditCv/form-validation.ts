@@ -1,4 +1,5 @@
 import { Rule } from 'rc-field-form/lib/interface';
+import { githubUsernamePattern } from 'services/validators';
 
 const validationMessages = {
   required: "Field can't be empty",
@@ -78,6 +79,14 @@ export const contactsValidationRules: {
       max: 30,
       message: validationMessages.max(30),
     },
+    () => ({
+      async validator(_, value) {
+        if (!value || githubUsernamePattern.test(value)) {
+          return Promise.resolve();
+        }
+        throw new Error(validationMessages.invalid('github username'));
+      },
+    }),
     {
       whitespace: true,
       message: validationMessages.whitespace,
