@@ -1,4 +1,5 @@
 import { Rule } from 'rc-field-form/lib/interface';
+import { githubUsernamePattern } from 'services/validators';
 
 const validationMessages = {
   required: "Field can't be empty",
@@ -80,9 +81,6 @@ export const contactsValidationRules: {
     },
     () => ({
       async validator(_, value) {
-        /* https://github.com/GrantBirki/github-username-regex-js */
-        const githubUsernamePattern =
-          /^(?:[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*(_[a-zA-Z0-9]+))$/i;
         if (!value || githubUsernamePattern.test(value)) {
           return Promise.resolve();
         }

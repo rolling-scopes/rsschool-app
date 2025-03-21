@@ -7,6 +7,7 @@ import {
   notGithubPattern,
   githubPrUrl,
   githubRepoUrl,
+  githubUsernamePattern,
   notUrlPattern,
   passwordPattern,
 } from './validators';
@@ -103,6 +104,20 @@ describe('github repo url', () => {
     ${'not a url'}                           | ${false}
   `('returns $match for $url', ({ url, match }) => {
     expect(githubRepoUrl.test(url)).toBe(match);
+  });
+});
+
+describe('github username', () => {
+  it.each`
+    username                         | match
+    ${'myrepository'}                | ${true}
+    ${'https://github.com/username'} | ${false}
+    ${'not my repo'}                 | ${false}
+    ${'my-repository'}               | ${true}
+    ${'-myrepository'}               | ${false}
+    ${'myrepository-'}               | ${false}
+  `('returns $match for $username', ({ username, match }) => {
+    expect(githubUsernamePattern.test(username)).toBe(match);
   });
 });
 
