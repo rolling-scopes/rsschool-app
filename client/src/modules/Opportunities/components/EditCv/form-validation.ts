@@ -78,6 +78,17 @@ export const contactsValidationRules: {
       max: 30,
       message: validationMessages.max(30),
     },
+    () => ({
+      async validator(_, value) {
+        /* https://github.com/GrantBirki/github-username-regex-js */
+        const githubUsernamePattern =
+          /^(?:[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}|[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*(_[a-zA-Z0-9]+))$/i;
+        if (!value || githubUsernamePattern.test(value)) {
+          return Promise.resolve();
+        }
+        throw new Error(validationMessages.invalid('github username'));
+      },
+    }),
     {
       whitespace: true,
       message: validationMessages.whitespace,
