@@ -1,9 +1,9 @@
 import Router from '@koa/router';
 import { StatusCodes } from 'http-status-codes';
-import { createQueryBuilder, getRepository } from 'typeorm';
+import { createQueryBuilder } from 'typeorm';
 import { Next } from 'koa';
 import { setResponse } from './utils';
-import { IUserSession, CourseUser, CourseRole, CourseTask, User } from '../models';
+import { IUserSession, CourseUser, CourseRole, User, JwtToken } from '../models';
 
 export const courseMiddleware = async (ctx: Router.RouterContext, next: Next) => {
   if (!ctx.params.courseId) {
@@ -24,42 +24,38 @@ export const courseMiddleware = async (ctx: Router.RouterContext, next: Next) =>
 };
 
 export const userRolesMiddleware = async (ctx: Router.RouterContext, next: Next) => {
-  const user = ctx.state?.user as IUserSession;
+  const user = ctx.state?.user as JwtToken;
+
   if (user == null) {
     await next();
     return;
   }
 
-  const [authDetails] = await Promise.all([
-    getAuthDetails(user.id),
-    getRepository(CourseTask)
-      .createQueryBuilder()
-      .select('"courseId"')
-      .where('"taskOwnerId" = :taskOwnerId', { taskOwnerId: user.id })
-      .groupBy('"courseId"')
-      .getRawMany(),
-  ]);
+  const authDetails = await getAuthDetails(user.id);
+
+  const enrichedUser: IUserSession = {
+    ...authDetails,
+    ...user,
+    courses: {},
+  };
 
   authDetails.students.forEach(student => {
-    if (user.courses) {
-      const current = user.courses[student.courseId] ?? { mentorId: null, studentId: null, roles: [] };
-      user.courses[student.courseId] = {
-        ...current,
-        studentId: student.id,
-        roles: current.roles.includes(CourseRole.Student) ? current.roles : current.roles.concat([CourseRole.Student]),
-      };
-    }
+    const current = enrichedUser.courses[student.courseId] ?? { mentorId: null, studentId: null, roles: [] };
+    enrichedUser.courses[student.courseId] = {
+      ...current,
+      studentId: student.id,
+      roles: current.roles.includes(CourseRole.Student) ? current.roles : current.roles.concat([CourseRole.Student]),
+    };
   });
   authDetails.mentors.forEach(mentor => {
-    if (user.courses) {
-      const current = user.courses[mentor.courseId] ?? { mentorId: null, studentId: null, roles: [] };
-      user.courses[mentor.courseId] = {
-        ...current,
-        mentorId: mentor.id,
-        roles: current.roles.includes(CourseRole.Mentor) ? current.roles : current.roles.concat([CourseRole.Mentor]),
-      };
-    }
+    const current = enrichedUser.courses[mentor.courseId] ?? { mentorId: null, studentId: null, roles: [] };
+    enrichedUser.courses[mentor.courseId] = {
+      ...current,
+      mentorId: mentor.id,
+      roles: current.roles.includes(CourseRole.Mentor) ? current.roles : current.roles.concat([CourseRole.Mentor]),
+    };
   });
+  ctx.state.user = enrichedUser;
   await next();
 };
 

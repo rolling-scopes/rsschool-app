@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { List, Typography, Button, Tag } from 'antd';
 import CommonCard from './CommonCard';
 import MentorStatsModal from './MentorStatsModal';
-import { MentorStats, Student } from 'common/models/profile';
+import { MentorStats, Student } from '@common/models/profile';
 import { TeamOutlined, FullscreenOutlined, FileTextOutlined } from '@ant-design/icons';
 import { MentorEndorsement } from 'modules/Profile/components/MentorEndorsement';
 

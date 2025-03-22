@@ -5,6 +5,7 @@
   "license": "Mozilla Public License 2.0",
   "scripts": {
     "build": "tsc",
+    "compile": "tsc --noEmit",
     "start": "tsnd --ignore-watch node_modules --inspect --notify false -r dotenv/config -- ./src/index.ts | pino-pretty -i time,hostname,pid,host,method,remoteAddress",
     "lint": "eslint src",
     "test": "jest",
@@ -23,7 +24,7 @@
     "http-status-codes": "2.1.4",
     "json2csv": "5.0.7",
     "jsonwebtoken": "8.5.1",
-    "koa": "2.13.1",
+    "koa": "2.15.4",
     "koa-basic-auth": "4.0.0",
     "koa-bodyparser": "4.2.1",
     "koa-jwt": "3.6.0",
@@ -54,7 +55,6 @@
     "jest-junit": "16.0.0",
     "pino-pretty": "7.5.1",
     "ts-jest": "29.1.1",
-    "ts-node": "10.9.1",
     "ts-node-dev": "2.0.0",
     "tsconfig-paths": "4.1.0"
   },
