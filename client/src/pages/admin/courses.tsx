@@ -26,7 +26,7 @@ function Page() {
   const response = useRequest(async () => {
     const [{ data: courses }, { data: discordServers }, { data: disciplines }] = await Promise.all([
       courseApi.getCourses(),
-      discordServersService.getDiscordServers(),
+      discordServersService.getReducedDiscordServers(),
       disciplinesApi.getDisciplines(),
     ]);
     return {
