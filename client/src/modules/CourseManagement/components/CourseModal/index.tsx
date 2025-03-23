@@ -1,6 +1,6 @@
 import useRequest from 'ahooks/lib/useRequest';
 import { Checkbox, Col, DatePicker, Flex, Form, Input, InputNumber, Modal, Radio, Row, Select, Spin } from 'antd';
-import { CoursesApi, CreateCourseDto, DisciplineDto, DiscordServerDto, UpdateCourseDto } from 'api';
+import { CoursesApi, CreateCourseDto, DisciplineDto, IdNameDto, UpdateCourseDto } from 'api';
 import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -14,7 +14,7 @@ const courseIcons = Object.entries(DEFAULT_COURSE_ICONS).map(([key, config]) => 
 
 type CourseModalProps = {
   onClose: () => void;
-  discordServers: DiscordServerDto[];
+  discordServers: IdNameDto[];
   disciplines: DisciplineDto[];
   courses: Course[];
   courseId: number | null;
