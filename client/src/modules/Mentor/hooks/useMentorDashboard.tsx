@@ -1,14 +1,15 @@
+import { useRequest } from 'ahooks';
 import { MentorsApi } from 'api';
-import { useMemo } from 'react';
-import { useAsync } from 'react-use';
 
-export function useMentorDashboard(mentorId: number, courseId: number, hasChanged: boolean) {
-  const service = useMemo(() => new MentorsApi(), []);
+const service = new MentorsApi();
 
-  const { value: data, loading } = useAsync(async () => {
+export function useMentorDashboard(mentorId: number | undefined, courseId: number) {
+  const { data, loading, run } = useRequest(async () => {
+    if (!mentorId) {
+      return [];
+    }
     const { data = [] } = await service.getMentorDashboardData(mentorId, courseId);
     return data;
-  }, [hasChanged]);
-
-  return [data, loading] as const;
+  });
+  return [data, loading, run] as const;
 }

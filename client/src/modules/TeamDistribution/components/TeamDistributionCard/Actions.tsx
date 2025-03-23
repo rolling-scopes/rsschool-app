@@ -13,7 +13,7 @@ type Props = {
   register: (distributionId: number) => Promise<void>;
   deleteRegister: (distributionId: number) => Promise<void>;
   isManager: boolean;
-  isCourseDementor: boolean;
+  isCourseDementor?: boolean;
   courseAlias: string;
   onOpenSubmitScoreModal: () => void;
 };

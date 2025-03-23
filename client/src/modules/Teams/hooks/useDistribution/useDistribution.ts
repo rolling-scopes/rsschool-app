@@ -1,18 +1,14 @@
+import { useRequest } from 'ahooks';
 import { message } from 'antd';
-import { TeamDistributionApi, TeamDistributionDetailedDto } from 'api';
-import { useLoading } from 'components/useLoading';
-import { useState, useMemo } from 'react';
+import { TeamDistributionApi } from 'api';
 
-export function useDistribution(teamDistributionDetailed: TeamDistributionDetailedDto, courseId: number) {
-  const [distribution, setDistribution] = useState(teamDistributionDetailed);
-  const [loading, withLoading] = useLoading(false);
+const teamDistributionApi = new TeamDistributionApi();
 
-  const teamDistributionApi = useMemo(() => new TeamDistributionApi(), []);
-
-  const loadDistribution = withLoading(async () => {
+export function useDistribution(courseId: number, teamDistributionId: number) {
+  const { data, loading, runAsync } = useRequest(async () => {
     try {
-      const { data } = await teamDistributionApi.getCourseTeamDistributionDetailed(courseId, distribution.id);
-      setDistribution(data);
+      const { data } = await teamDistributionApi.getCourseTeamDistributionDetailed(courseId, teamDistributionId);
+      return data;
     } catch {
       message.error('Something went wrong, please try reloading the page later');
     }
@@ -20,7 +16,7 @@ export function useDistribution(teamDistributionDetailed: TeamDistributionDetail
 
   return {
     loading,
-    distribution,
-    loadDistribution,
+    distribution: data,
+    loadDistribution: runAsync,
   };
 }

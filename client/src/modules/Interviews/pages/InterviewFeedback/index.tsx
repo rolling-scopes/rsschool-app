@@ -8,7 +8,7 @@ import range from 'lodash/range';
 import toString from 'lodash/toString';
 import { Fragment, useMemo, useState } from 'react';
 import { CourseService } from 'services/course';
-import type { FeedbackProps } from './getServerSideProps';
+import { FeedbackProps } from '../../data/getInterviewData';
 
 type FormAnswer = {
   questionId: string;

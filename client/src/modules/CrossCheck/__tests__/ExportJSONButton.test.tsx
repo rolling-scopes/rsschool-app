@@ -1,28 +1,29 @@
 import { render, screen } from '@testing-library/react';
+import { CriteriaDto, CriteriaDtoTypeEnum } from 'api';
 import { ExportJSONButton } from '../ExportJSONButton';
 
 const dataCriteria = [
   {
     key: '0',
     index: 0,
-    type: 'Title',
+    type: CriteriaDtoTypeEnum.Title,
     text: 'Its title',
   },
   {
     key: '1',
     index: 1,
-    type: 'Subtask',
+    type: CriteriaDtoTypeEnum.Subtask,
     text: 'Its subtask',
     max: 10,
   },
   {
     key: '2',
     index: 2,
-    type: 'Penalty',
+    type: CriteriaDtoTypeEnum.Penalty,
     text: 'Its penalty',
     max: -5,
   },
-];
+] as CriteriaDto[];
 
 describe('ExportJSONButton', () => {
   test('contains following text', () => {

@@ -5,7 +5,17 @@ const onSubmit = jest.fn();
 const onCancel = jest.fn();
 
 function renderModal() {
-  return render(<TeamModal data={{}} onCancel={onCancel} onSubmit={onSubmit} />);
+  return render(
+    <TeamModal
+      isManager={false}
+      maxStudentsCount={10}
+      courseId={1}
+      mode="create"
+      data={{}}
+      onCancel={onCancel}
+      onSubmit={onSubmit}
+    />,
+  );
 }
 
 describe('TeamModal', () => {

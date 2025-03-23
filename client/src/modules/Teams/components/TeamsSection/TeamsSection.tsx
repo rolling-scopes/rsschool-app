@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 
 import { TeamApi, TeamDistributionDetailedDto, TeamDto } from 'api';
 import { useAsync } from 'react-use';
-import { IPaginationInfo } from 'common/types/pagination';
+import { IPaginationInfo } from '@common/types/pagination';
 import { getColumns, expandedRowRender } from './renderers';
 import { useLoading } from 'components/useLoading';
 import { TeamsTableColumnKey } from 'modules/Teams/constants';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import StudentStatsCard from '../StudentStatsCard';
-import { StudentStats } from 'common/models/profile';
+import { StudentStats } from '@common/models/profile';
 
 describe('StudentStatsCard', () => {
   const githubId = 'test';

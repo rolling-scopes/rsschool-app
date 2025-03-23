@@ -1,9 +1,8 @@
 import { PageLayoutSimple } from 'components/PageLayout';
 import { getMentorId } from 'domain/user';
-import { SessionContext } from 'modules/Course/contexts';
+import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
 import { useMentorStudents } from 'modules/Mentor/hooks/useMentorStudents';
 import { useContext } from 'react';
-import { CourseOnlyPageProps } from 'services/models';
 import { CreateStudentFeedbackDto, StudentsFeedbacksApi } from 'api';
 import { FeedbackForm } from 'modules/Feedback/components/FeedbackForm';
 import { useRouter } from 'next/router';
@@ -11,7 +10,8 @@ import { message } from 'antd';
 
 const api = new StudentsFeedbacksApi();
 
-export function StudentFeedback({ course }: CourseOnlyPageProps) {
+export function StudentFeedback() {
+  const { course } = useActiveCourseContext();
   const session = useContext(SessionContext);
   const { id: courseId } = course;
   const mentorId = getMentorId(session, courseId);
