@@ -21,6 +21,7 @@ function Page() {
 
   const [loading, withLoading] = useLoading(false);
   const [interviews, setInterviews] = useState<InterviewDto[]>([]);
+
   const [data, setData] = useState([] as InterviewPair[]);
   const [selected, setSelected] = useState<string | null>(null);
   const [modal, setModal] = useState(false);
@@ -50,10 +51,11 @@ function Page() {
 
   const createInterviews = async () => {
     if (selected) {
-      const courseId = Number(selected);
+      const courseTaskId = Number(selected);
+      const isInterviewsIncludesSelected = interviews.map(({ id }) => id).includes(courseTaskId);
 
-      if (interviews.map(({ id }) => id).includes(courseId)) {
-        await courseService.createInterviewDistribution(courseId);
+      if (isInterviewsIncludesSelected) {
+        await courseService.createInterviewDistribution(courseTaskId);
         await loadData();
       }
     }
