@@ -2,7 +2,7 @@ import { InputType, InterviewTemplate } from './types';
 
 export const shortTrackJavaScriptTemplate: InterviewTemplate = {
   name: 'EPAM ShortTrack Core JS mentors interview #1',
-  examplesUrl: 'https://github.com/rolling-scopes-school/epam-short-track/tree/main/screening',
+  examplesUrl: 'https://rolling-scopes-school.github.io/epam-short-track/core-js-ts/interviews/mentors-checkpoint-2',
   descriptionHtml: `
     During the interview, students can score up to 10 points. Each question is rated 0.5 points.<br/>
     `,

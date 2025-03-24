@@ -48,7 +48,7 @@ Please install the following software before starting development:
 - Run `npm run db:restore` (restore a test DB snapshot)
 - Make a copy of `server/.env.example` and `nestjs/.env.example` and rename it to `server/.env` and `nestjs/.env` respectively.
 - Run `npm start` (starts application by running Next.js and REST API server)
-- Open `https://localhost:3000` in a browser
+- Open `http://localhost:3000` in a browser
 - See more in [CONTRIBUTING](https://github.com/rolling-scopes/rsschool-app/blob/master/CONTRIBUTING.md) guide
 
 ### Running docs locally
