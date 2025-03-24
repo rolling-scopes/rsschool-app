@@ -1,4 +1,4 @@
-import { Button, message, Popconfirm, Select, Table } from 'antd';
+import { Button, message, Select, Table } from 'antd';
 import dayjs from 'dayjs';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
@@ -15,6 +15,7 @@ import tz from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { CourseRole } from 'services/models';
+import { CustomPopconfirm } from 'components/common/CustomPopconfirm';
 
 dayjs.extend(utc);
 dayjs.extend(tz);
@@ -143,12 +144,14 @@ function getColumns(
             <a onClick={() => handleEditItem(record)}>Edit</a>{' '}
           </span>
           <span style={{ marginLeft: 8 }}>
-            <Popconfirm
+            <CustomPopconfirm
               onConfirm={() => handleDeleteItem(record.id)}
               title="Are you sure you want to delete this item?"
             >
-              <a href="#">Delete</a>
-            </Popconfirm>
+              <a href="#" onClick={e => e.preventDefault()}>
+                Delete
+              </a>
+            </CustomPopconfirm>
           </span>
         </>
       ),

@@ -1,4 +1,4 @@
-import { Button, Popconfirm, Table } from 'antd';
+import { Button, Table } from 'antd';
 import { Rating } from 'components/Rating';
 import { PageLayout } from 'components/PageLayout';
 import {
@@ -20,6 +20,7 @@ import { AvailableStudentDto, CoursesInterviewsApi, InterviewDto, TaskDtoTypeEnu
 import { getApiConfiguration } from 'utils/axios';
 import { getRating } from 'domain/interview';
 import { SessionContext } from 'modules/Course/contexts';
+import { CustomPopconfirm } from 'components/common/CustomPopconfirm';
 
 const api = new CoursesInterviewsApi(getApiConfiguration());
 
@@ -129,7 +130,7 @@ export function InterviewWaitingList({ course, interview }: PageProps) {
             align: 'right',
             render: (_, record) => (
               <>
-                <Popconfirm
+                <CustomPopconfirm
                   title={
                     <>
                       Are you sure to interview <b>{record.githubId}</b>?
@@ -139,9 +140,9 @@ export function InterviewWaitingList({ course, interview }: PageProps) {
                   onConfirm={() => inviteStudent(record.githubId)}
                 >
                   <Button type="link">Want to interview</Button>
-                </Popconfirm>
+                </CustomPopconfirm>
                 {isStageInterview && isMentor(session, courseId) && record.rating ? (
-                  <Popconfirm
+                  <CustomPopconfirm
                     title={
                       <>
                         Are you sure you want to assign <b>{record.githubId}</b> to yourself without an interview?
@@ -151,16 +152,16 @@ export function InterviewWaitingList({ course, interview }: PageProps) {
                     onConfirm={() => assignStudentToMentor(record.githubId)}
                   >
                     <Button type="link">Assign student to me</Button>
-                  </Popconfirm>
+                  </CustomPopconfirm>
                 ) : null}
                 {isStageInterview && isPowerUser ? (
-                  <Popconfirm
+                  <CustomPopconfirm
                     title={<>Are you sure to remove {record.githubId} from the wait list?</>}
                     okText="Yes"
                     onConfirm={() => removeFromList(record.githubId)}
                   >
                     <Button type="link">Remove from list</Button>
-                  </Popconfirm>
+                  </CustomPopconfirm>
                 ) : null}
               </>
             ),

@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Form, Button, Select, message, Popconfirm, Input, Table, Layout } from 'antd';
+import { Form, Button, Select, message, Input, Table, Layout } from 'antd';
 import { ModalForm } from 'components/Forms';
 import { stringSorter, stringTrimRenderer, getColumnSearchProps } from 'components/Table';
 import { urlPattern } from 'services/validators';
@@ -10,6 +10,7 @@ import { EVENT_TYPES } from 'data/eventTypes';
 import { CreateEventDto, DisciplineDto, DisciplinesApi, EventDto, EventsApi } from 'api';
 import { ColumnsType } from 'antd/lib/table';
 import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { CustomPopconfirm } from 'components/common/CustomPopconfirm';
 
 const { Content } = Layout;
 
@@ -195,12 +196,14 @@ function getColumns(handleEditItem: any, handleDeleteItem: any) {
             <a onClick={() => handleEditItem(record)}>Edit</a>{' '}
           </span>
           <span style={{ marginLeft: 8 }}>
-            <Popconfirm
+            <CustomPopconfirm
               onConfirm={() => handleDeleteItem(record.id)}
               title="Are you sure you want to delete this item?"
             >
-              <a href="#">Delete</a>
-            </Popconfirm>
+              <a href="#" onClick={e => e.preventDefault()}>
+                Delete
+              </a>
+            </CustomPopconfirm>
           </span>
         </>
       ),
