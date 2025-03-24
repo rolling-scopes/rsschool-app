@@ -49,7 +49,7 @@ function Page() {
     }
   };
 
-  const createInterviews = async () => {
+  const createInterviews = withLoading(async () => {
     if (selected) {
       const courseTaskId = Number(selected);
       const isInterviewsIncludesSelected = interviews.map(({ id }) => id).includes(courseTaskId);
@@ -59,7 +59,7 @@ function Page() {
         await loadData();
       }
     }
-  };
+  });
 
   useAsync(withLoading(loadData), [selected]);
 
