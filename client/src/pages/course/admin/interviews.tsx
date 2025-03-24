@@ -50,8 +50,12 @@ function Page() {
 
   const createInterviews = async () => {
     if (selected) {
-      await courseService.createInterviewDistribution(+selected);
-      await loadData();
+      const courseId = Number(selected);
+
+      if (interviews.map(({ id }) => id).includes(courseId)) {
+        await courseService.createInterviewDistribution(courseId);
+        await loadData();
+      }
     }
   };
 
