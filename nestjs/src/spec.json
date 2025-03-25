@@ -2081,6 +2081,24 @@
         "tags": ["discord-servers"]
       }
     },
+    "/discord-servers/reduced": {
+      "get": {
+        "operationId": "getReducedDiscordServers",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/IdNameDto" } }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": ["discord-servers"]
+      }
+    },
     "/discord-servers/{id}": {
       "put": {
         "operationId": "updateDiscordServer",
