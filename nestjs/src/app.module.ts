@@ -1,7 +1,7 @@
 import { Logger, Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ScheduleModule as NestScheduleModule } from '@nestjs/schedule';
-
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { LoggerModule } from 'nestjs-pino';
 
 import { AlertsModule } from './alerts/alerts.module';
@@ -31,6 +31,7 @@ import { TasksModule } from './tasks/tasks.module';
 import { PromptsModule } from './prompts/prompts.module';
 import { AutoTestModule } from './auto-test/auto-test.module';
 import { ContributorsModule } from './contributors';
+import { ListenersModule } from './listeners';
 
 @Module({
   imports: [
@@ -40,6 +41,10 @@ import { ContributorsModule } from './contributors';
     TypeOrmModule.forRoot({
       ...config,
       autoLoadEntities: true,
+    }),
+    EventEmitterModule.forRoot({
+      delimiter: '.',
+      wildcard: true,
     }),
     NestScheduleModule.forRoot(),
     ActivityModule,
@@ -66,6 +71,7 @@ import { ContributorsModule } from './contributors';
     PromptsModule,
     AutoTestModule,
     ContributorsModule,
+    ListenersModule,
   ],
   controllers: [],
   providers: [Logger, ConfigService],
@@ -73,6 +79,6 @@ import { ContributorsModule } from './contributors';
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggingMiddleware).forRoutes({ path: '*', method: RequestMethod.ALL });
-    consumer.apply(NoCacheMiddleware).forRoutes({ path: '*/*', method: RequestMethod.GET });
+    consumer.apply(NoCacheMiddleware).forRoutes({ path: '*', method: RequestMethod.GET });
   }
 }
