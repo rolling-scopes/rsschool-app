@@ -13636,6 +13636,35 @@ export const DiscordServersApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getReducedDiscordServers: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/discord-servers/reduced`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {number} id 
          * @param {UpdateDiscordServerDto} updateDiscordServerDto 
          * @param {*} [options] Override http request option.
@@ -13714,6 +13743,15 @@ export const DiscordServersApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getReducedDiscordServers(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<IdNameDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getReducedDiscordServers(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {number} id 
          * @param {UpdateDiscordServerDto} updateDiscordServerDto 
          * @param {*} [options] Override http request option.
@@ -13758,6 +13796,14 @@ export const DiscordServersApiFactory = function (configuration?: Configuration,
          */
         getDiscordServers(options?: any): AxiosPromise<Array<DiscordServerDto>> {
             return localVarFp.getDiscordServers(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getReducedDiscordServers(options?: any): AxiosPromise<Array<IdNameDto>> {
+            return localVarFp.getReducedDiscordServers(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -13809,6 +13855,16 @@ export class DiscordServersApi extends BaseAPI {
      */
     public getDiscordServers(options?: AxiosRequestConfig) {
         return DiscordServersApiFp(this.configuration).getDiscordServers(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DiscordServersApi
+     */
+    public getReducedDiscordServers(options?: AxiosRequestConfig) {
+        return DiscordServersApiFp(this.configuration).getReducedDiscordServers(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
