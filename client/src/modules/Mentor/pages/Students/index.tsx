@@ -1,7 +1,7 @@
 import {
   MessageOutlined,
   MessageTwoTone,
-  MinusCircleTwoTone,
+  InteractionTwoTone,
   StarOutlined,
   LockFilled,
   TrophyOutlined,
@@ -59,8 +59,8 @@ export function Students() {
                 </Link>,
                 student.active ? (
                   <Link key="expel" href={routes.getExpelRoute(alias)} legacyBehavior>
-                    <Button type="link" icon={<MinusCircleTwoTone twoToneColor="red" />}>
-                      Expel
+                    <Button type="link" icon={<InteractionTwoTone twoToneColor="orange" />}>
+                      Change Status
                     </Button>
                   </Link>
                 ) : null,
