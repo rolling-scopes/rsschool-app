@@ -12,6 +12,7 @@ export const privateRsRepoPattern = /https:\/\/github\.com\/rolling-scopes-schoo
 
 export const githubPrUrl = /https:\/\/github.com\/(\w|\d|-)+\/(\w|\d|-)+\/pull\/(\d)+/gi;
 export const githubRepoUrl = /https:\/\/github.com\/(\w|\d|-)+\/(\w|\d|-)+/gi;
+export const githubUsernamePattern = /^[a-zA-Z0-9](?:[a-zA-Z0-9]|-(?=[a-zA-Z0-9])){0,37}[a-zA-Z0-9]$/;
 
 export const notUrlPattern = /^((?!\/).)*$/g;
 
