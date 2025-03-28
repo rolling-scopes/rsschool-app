@@ -15,8 +15,8 @@ export class CourseDto {
     this.completed = course.completed;
     this.planned = course.planned;
     this.certificateIssuer = course.certificateIssuer;
-    this.createdDate = course.createdDate;
-    this.updatedDate = course.updatedDate;
+    this.createdDate = course.createdDate.toISOString();
+    this.updatedDate = course.updatedDate.toISOString();
     this.locationName = course.locationName;
     this.discordServerId = course.discordServerId;
     this.inviteOnly = course.inviteOnly;
