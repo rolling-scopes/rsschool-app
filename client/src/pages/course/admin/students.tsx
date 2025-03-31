@@ -126,7 +126,13 @@ function Page() {
           </div>
           <div>{renderToolbar()}</div>
         </Row>
-        <Table rowKey="id" pagination={{ pageSize: 100 }} size="small" dataSource={students} columns={getColumns()} />
+        <Table
+          rowKey="id"
+          pagination={{ pageSize: 100, showSizeChanger: false }}
+          size="small"
+          dataSource={students}
+          columns={getColumns()}
+        />
 
         <DashboardDetails
           onUpdateMentor={updateMentor}
