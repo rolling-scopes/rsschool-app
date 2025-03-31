@@ -9,6 +9,7 @@ type AuthConfig = {
     callbackUrl: string;
     scope: string[];
     activityWebhookSecret: string;
+    integrationSiteToken: string;
   };
   dev: {
     username: string;
@@ -65,7 +66,9 @@ export class ConfigService {
         clientSecret: conf.get('RSSHCOOL_AUTH_GITHUB_CLIENT_SECRET') ?? '',
         callbackUrl: conf.get('RSSHCOOL_AUTH_GITHUB_CALLBACK') ?? '',
         scope: ['user:email'],
-        activityWebhookSecret: conf.get('process.env.RSSHCOOL_AUTH_GITHUB_WEBHOOK_ACTIVITY_SECRET', 'activity-webhook'),
+        activityWebhookSecret: conf.get('RSSHCOOL_AUTH_GITHUB_WEBHOOK_ACTIVITY_SECRET', 'activity-webhook'),
+        // token for rolling-scopes/site integration
+        integrationSiteToken: conf.get('RSSHCOOL_AUTH_GITHUB_INTEGRATION_SITE_TOKEN', ''),
       },
       dev: {
         username: conf.get('RSSCHOOL_AUTH_DEV_USERNAME') ?? '',
