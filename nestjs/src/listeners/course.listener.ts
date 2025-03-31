@@ -98,10 +98,19 @@ export class CourseListener {
 
     const current = await this.s3.getObject({ Bucket: this.bucket, Key: this.objectKey }).catch(() => null);
     const serialized = JSON.stringify(data);
-    if (current?.Body?.toString() === serialized) {
+    const stored = await current?.Body?.transformToString();
+
+    if (stored === serialized) {
       return false;
     }
-    await this.s3.putObject({ Bucket: this.bucket, Key: this.objectKey, Body: serialized, CacheControl: 'max-age=30' });
+
+    await this.s3.putObject({
+      Bucket: this.bucket,
+      Key: this.objectKey,
+      Body: serialized,
+      ContentType: 'application/json',
+      CacheControl: 'max-age=30',
+    });
     return true;
   }
 }
