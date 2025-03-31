@@ -109,26 +109,24 @@ describe('github repo url', () => {
 
 describe('githubUsernamePattern', () => {
   it.each`
-    username                      | match    | reason
-    ${'validuser'}               | ${true}  | ${'basic valid username'}
-    ${'user-name'}               | ${true}  | ${'single dash in the middle'}
-    ${'user123'}                 | ${true}  | ${'alphanumeric'}
-    ${'1user'}                   | ${true}  | ${'starts with number'}
-    ${'a'.repeat(39)}            | ${true}  | ${'max allowed length'}
-
-    ${'user--name'}              | ${false} | ${'double dash not allowed'}
-    ${'-username'}              | ${false} | ${'cannot start with dash'}
-    ${'username-'}              | ${false} | ${'cannot end with dash'}
-    ${'_username'}              | ${false} | ${'underscore not allowed'}
-    ${'user_name'}              | ${false} | ${'underscore not allowed anywhere'}
-    ${'user name'}              | ${false} | ${'spaces not allowed'}
-    ${'user.name'}              | ${false} | ${'dot not allowed'}
-    ${'a'.repeat(40)}           | ${false} | ${'exceeds max length'}
+    username          | match    | reason
+    ${'validuser'}    | ${true}  | ${'basic valid username'}
+    ${'user-name'}    | ${true}  | ${'single dash in the middle'}
+    ${'user123'}      | ${true}  | ${'alphanumeric'}
+    ${'1user'}        | ${true}  | ${'starts with number'}
+    ${'a'.repeat(39)} | ${true}  | ${'max allowed length'}
+    ${'user--name'}   | ${false} | ${'double dash not allowed'}
+    ${'-username'}    | ${false} | ${'cannot start with dash'}
+    ${'username-'}    | ${false} | ${'cannot end with dash'}
+    ${'_username'}    | ${false} | ${'underscore not allowed'}
+    ${'user_name'}    | ${false} | ${'underscore not allowed anywhere'}
+    ${'user name'}    | ${false} | ${'spaces not allowed'}
+    ${'user.name'}    | ${false} | ${'dot not allowed'}
+    ${'a'.repeat(40)} | ${false} | ${'exceeds max length'}
   `('returns $match for "$username" ($reason)', ({ username, match }) => {
     expect(githubUsernamePattern.test(username)).toBe(match);
   });
 });
-
 
 describe('not url pattern', () => {
   it.each`
