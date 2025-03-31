@@ -20,10 +20,10 @@ export class Course {
   @PrimaryGeneratedColumn() id: number;
 
   @CreateDateColumn()
-  createdDate: string;
+  createdDate: Date;
 
   @UpdateDateColumn()
-  updatedDate: string;
+  updatedDate: Date;
 
   @Column({ unique: true })
   name: string;
