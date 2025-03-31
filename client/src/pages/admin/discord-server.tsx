@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Layout, message, Row, Table } from 'antd';
+import { Button, Col, Form, Input, Layout, message, Row, Table, Typography } from 'antd';
 import { ModalForm } from 'components/Forms';
 import { stringSorter } from 'components/Table';
 import { useCallback, useState } from 'react';
@@ -168,9 +168,7 @@ function getColumns(handleEditItem: any, handleDeleteItem: any) {
               onConfirm={() => handleDeleteItem(record.id)}
               title="Are you sure you want to delete this item?"
             >
-              <a href="#" onClick={e => e.preventDefault()}>
-                Delete
-              </a>
+              <Typography.Link>Delete</Typography.Link>
             </CustomPopconfirm>
           </span>
         </>

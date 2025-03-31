@@ -1,4 +1,4 @@
-import { Table } from 'antd';
+import { Table, Typography } from 'antd';
 import { ColumnType } from 'antd/lib/table';
 import { NotificationDto } from 'api';
 import { CustomPopconfirm } from 'components/common/CustomPopconfirm';
@@ -57,9 +57,7 @@ function buildColumns(onEdit: (record: NotificationDto) => void, onDelete: (reco
               okText="Yes"
               cancelText="No"
             >
-              <a href="#" onClick={e => e.preventDefault()}>
-                Delete
-              </a>
+              <Typography.Link>Delete</Typography.Link>
             </CustomPopconfirm>
           </div>
         </>

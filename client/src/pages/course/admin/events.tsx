@@ -1,4 +1,4 @@
-import { Button, message, Select, Table } from 'antd';
+import { Button, message, Select, Table, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
@@ -148,9 +148,7 @@ function getColumns(
               onConfirm={() => handleDeleteItem(record.id)}
               title="Are you sure you want to delete this item?"
             >
-              <a href="#" onClick={e => e.preventDefault()}>
-                Delete
-              </a>
+              <Typography.Link>Delete</Typography.Link>
             </CustomPopconfirm>
           </span>
         </>

@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Form, Button, Select, message, Input, Table, Layout } from 'antd';
+import { Form, Button, Select, message, Input, Table, Layout, Typography } from 'antd';
 import { ModalForm } from 'components/Forms';
 import { stringSorter, stringTrimRenderer, getColumnSearchProps } from 'components/Table';
 import { urlPattern } from 'services/validators';
@@ -200,9 +200,7 @@ function getColumns(handleEditItem: any, handleDeleteItem: any) {
               onConfirm={() => handleDeleteItem(record.id)}
               title="Are you sure you want to delete this item?"
             >
-              <a href="#" onClick={e => e.preventDefault()}>
-                Delete
-              </a>
+              <Typography.Link>Delete</Typography.Link>
             </CustomPopconfirm>
           </span>
         </>
