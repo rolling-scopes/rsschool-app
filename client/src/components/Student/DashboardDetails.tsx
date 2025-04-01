@@ -1,4 +1,10 @@
-import { BranchesOutlined, CloseCircleTwoTone, SolutionOutlined, UndoOutlined } from '@ant-design/icons';
+import {
+  BranchesOutlined,
+  CloseCircleTwoTone,
+  FileExcelOutlined,
+  SolutionOutlined,
+  UndoOutlined,
+} from '@ant-design/icons';
 import { Button, Descriptions, Drawer } from 'antd';
 import { MentorBasic } from 'common/models';
 import { CommentModal } from 'components/CommentModal';
@@ -10,11 +16,13 @@ import css from 'styled-jsx/css';
 type Props = {
   details: StudentDetails | null;
   courseId: number;
+  isLoading: boolean;
   onClose: () => void;
   onCreateRepository: () => void;
   onRestoreStudent: () => void;
   onExpelStudent: (comment: string) => void;
   onIssueCertificate: () => void;
+  onRemoveCertificate: () => void;
   onUpdateMentor: (githubId: string) => void;
   courseManagerOrSupervisor: boolean;
 };
@@ -28,7 +36,7 @@ export function DashboardDetails(props: Props) {
   return (
     <>
       <Drawer
-        width={600}
+        width={660}
         title={`${details.name} , ${details.githubId}`}
         placement="right"
         closable={false}
@@ -45,8 +53,21 @@ export function DashboardDetails(props: Props) {
               >
                 Create Repository
               </Button>
-              <Button disabled={!details.isActive} icon={<SolutionOutlined />} onClick={props.onIssueCertificate}>
+              <Button
+                disabled={!details.isActive}
+                icon={<SolutionOutlined />}
+                onClick={props.onIssueCertificate}
+                loading={props.isLoading}
+              >
                 Issue Certificate
+              </Button>
+              <Button
+                disabled={!details.isActive}
+                icon={<FileExcelOutlined style={{ color: 'red' }} />}
+                onClick={props.onRemoveCertificate}
+                loading={props.isLoading}
+              >
+                Remove Certificate
               </Button>
             </>
           )}
