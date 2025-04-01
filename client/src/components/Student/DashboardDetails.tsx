@@ -5,7 +5,7 @@ import {
   SolutionOutlined,
   UndoOutlined,
 } from '@ant-design/icons';
-import { Button, Descriptions, Drawer } from 'antd';
+import { Button, Descriptions, Drawer, Popconfirm, Modal, Input } from 'antd';
 import { MentorBasic } from 'common/models';
 import { CommentModal } from 'components/CommentModal';
 import { MentorSearch } from 'components/MentorSearch';
@@ -29,10 +29,20 @@ type Props = {
 
 export function DashboardDetails(props: Props) {
   const [expelMode, setExpelMode] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [inputValue, setInputValue] = useState('');
   const { details } = props;
   if (details == null) {
     return null;
   }
+
+  const handleModalConfirm = () => {
+    if (inputValue === details.githubId) {
+      props.onRemoveCertificate();
+      setModalOpen(false);
+    }
+  };
+
   return (
     <>
       <Drawer
@@ -53,22 +63,46 @@ export function DashboardDetails(props: Props) {
               >
                 Create Repository
               </Button>
+              <Popconfirm title="Are you sure you want to issue the certificate?" onConfirm={props.onIssueCertificate}>
+                <Button disabled={!details.isActive} icon={<SolutionOutlined />} loading={props.isLoading}>
+                  Issue Certificate
+                </Button>
+              </Popconfirm>
               <Button
-                disabled={!details.isActive}
-                icon={<SolutionOutlined />}
-                onClick={props.onIssueCertificate}
-                loading={props.isLoading}
-              >
-                Issue Certificate
-              </Button>
-              <Button
+                danger
                 disabled={!details.isActive}
                 icon={<FileExcelOutlined style={{ color: 'red' }} />}
-                onClick={props.onRemoveCertificate}
+                onClick={() => setModalOpen(true)}
                 loading={props.isLoading}
               >
                 Remove Certificate
               </Button>
+              <Modal
+                title="Confirm and remove the certificate"
+                open={modalOpen}
+                onOk={handleModalConfirm}
+                onCancel={() => setModalOpen(false)}
+                width={350}
+                okButtonProps={{
+                  disabled: inputValue !== details.githubId,
+                  danger: true,
+                }}
+                okText="Confirm"
+                cancelText="Cancel"
+                destroyOnClose
+              >
+                <div style={{ padding: '8px 0' }}>
+                  <p>
+                    Type <strong>{details.githubId}</strong> to confirm:
+                  </p>
+                  <Input
+                    placeholder="GitHub username"
+                    value={inputValue}
+                    onChange={e => setInputValue(e.target.value)}
+                    onPressEnter={handleModalConfirm}
+                  />
+                </div>
+              </Modal>
             </>
           )}
           <Button
