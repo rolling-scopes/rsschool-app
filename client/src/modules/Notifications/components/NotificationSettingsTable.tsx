@@ -1,6 +1,7 @@
-import { Popconfirm, Table } from 'antd';
+import { Table, Typography } from 'antd';
 import { ColumnType } from 'antd/lib/table';
 import { NotificationDto } from 'api';
+import { CustomPopconfirm } from 'components/common/CustomPopconfirm';
 import { boolIconRenderer } from 'components/Table';
 import { useMemo } from 'react';
 
@@ -50,14 +51,14 @@ function buildColumns(onEdit: (record: NotificationDto) => void, onDelete: (reco
             <a onClick={() => onEdit(record)}>Edit</a>
           </div>
           <div>
-            <Popconfirm
+            <CustomPopconfirm
               title="Are you sure to delete this notification?"
               onConfirm={() => onDelete(record)}
               okText="Yes"
               cancelText="No"
             >
-              <a>Delete</a>
-            </Popconfirm>
+              <Typography.Link>Delete</Typography.Link>
+            </CustomPopconfirm>
           </div>
         </>
       ),

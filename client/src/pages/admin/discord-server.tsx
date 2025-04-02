@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Layout, message, Row, Table, Popconfirm } from 'antd';
+import { Button, Col, Form, Input, Layout, message, Row, Table, Typography } from 'antd';
 import { ModalForm } from 'components/Forms';
 import { stringSorter } from 'components/Table';
 import { useCallback, useState } from 'react';
@@ -6,6 +6,7 @@ import { useAsync } from 'react-use';
 import { DiscordServersApi, UpdateDiscordServerDto, DiscordServerDto } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
 import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { CustomPopconfirm } from 'components/common/CustomPopconfirm';
 
 const { Content } = Layout;
 
@@ -163,12 +164,12 @@ function getColumns(handleEditItem: any, handleDeleteItem: any) {
             <a onClick={() => handleEditItem(record)}>Edit</a>{' '}
           </span>
           <span style={{ marginLeft: 8 }}>
-            <Popconfirm
+            <CustomPopconfirm
               onConfirm={() => handleDeleteItem(record.id)}
               title="Are you sure you want to delete this item?"
             >
-              <a href="#">Delete</a>
-            </Popconfirm>
+              <Typography.Link>Delete</Typography.Link>
+            </CustomPopconfirm>
           </span>
         </>
       ),
