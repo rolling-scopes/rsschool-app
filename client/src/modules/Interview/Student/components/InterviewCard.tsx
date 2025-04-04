@@ -2,7 +2,7 @@ import { Col, Card, Button, Alert } from 'antd';
 import { InfoCircleTwoTone } from '@ant-design/icons';
 import { InterviewDto } from 'api';
 import {
-  getSimpleInterviewResult,
+  getInterviewCardResult,
   InterviewDetails,
   InterviewPeriod,
   InterviewStatus,
@@ -29,7 +29,7 @@ export const InterviewCard = ({
 }) => {
   const { id, descriptionUrl, name, startDate, endDate, studentRegistrationStartDate: registrationStart } = interview;
   const interviewPassed = item?.status === InterviewStatus.Completed;
-  const interviewResult = getSimpleInterviewResult(item?.result as Decision);
+  const interviewResult = getInterviewCardResult(item?.result as Decision);
   const registrationNotStarted = isRegistrationNotStarted(registrationStart);
   const { cardMessage, backgroundImage } = getInterviewCardDetails({
     interviewResult,
