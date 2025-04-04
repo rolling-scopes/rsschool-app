@@ -5,11 +5,11 @@ import {
   SolutionOutlined,
   UndoOutlined,
 } from '@ant-design/icons';
-import { Button, Descriptions, Drawer, Popconfirm, Modal, Input } from 'antd';
+import { Button, Descriptions, Drawer, Popconfirm, Modal, Input, InputRef } from 'antd';
 import { MentorBasic } from 'common/models';
 import { CommentModal } from 'components/CommentModal';
 import { MentorSearch } from 'components/MentorSearch';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { StudentDetails } from 'services/course';
 import css from 'styled-jsx/css';
 
@@ -31,6 +31,7 @@ export function DashboardDetails(props: Props) {
   const [expelMode, setExpelMode] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
+  const modalInputRef = useRef<InputRef>(null);
   const { details } = props;
   if (details == null) {
     return null;
@@ -40,6 +41,20 @@ export function DashboardDetails(props: Props) {
     if (inputValue === details.githubId) {
       props.onRemoveCertificate();
       setModalOpen(false);
+      setInputValue('');
+    }
+  };
+
+  const handleModalCancel = () => {
+    setModalOpen(false);
+    setInputValue('');
+  };
+
+  const setModalInputFocus = (isOpen: boolean) => {
+    if (isOpen) {
+      setTimeout(() => {
+        modalInputRef.current?.focus();
+      }, 0);
     }
   };
 
@@ -81,7 +96,8 @@ export function DashboardDetails(props: Props) {
                 title="Confirm and remove the certificate"
                 open={modalOpen}
                 onOk={handleModalConfirm}
-                onCancel={() => setModalOpen(false)}
+                onCancel={handleModalCancel}
+                afterOpenChange={setModalInputFocus}
                 width={350}
                 okButtonProps={{
                   disabled: inputValue !== details.githubId,
@@ -96,6 +112,7 @@ export function DashboardDetails(props: Props) {
                     Type <strong>{details.githubId}</strong> to confirm:
                   </p>
                   <Input
+                    ref={modalInputRef}
                     placeholder="GitHub username"
                     value={inputValue}
                     onChange={e => setInputValue(e.target.value)}
