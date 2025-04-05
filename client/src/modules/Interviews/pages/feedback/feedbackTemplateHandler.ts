@@ -1,6 +1,5 @@
 import { InterviewFeedbackDto } from 'api';
 import {
-  Decision,
   Feedback,
   FeedbackStep,
   FeedbackStepId,
@@ -206,11 +205,9 @@ function getInterviewSummary(feedback: Feedback) {
 function isInterviewCompleted(feedback: Feedback) {
   const { steps } = feedback;
   const introduction = feedback.steps.find(step => step.id === FeedbackStepId.Introduction);
-  const decision = feedback.steps.find(step => step.id === FeedbackStepId.Decision);
 
   return (
-    (introduction && isInterviewCanceled(introduction.id, introduction.values)) ||
-    (steps.every(step => step.isCompleted) && decision?.values?.decision !== Decision.Draft)
+    (introduction && isInterviewCanceled(introduction.id, introduction.values)) || steps.every(step => step.isCompleted)
   );
 }
 

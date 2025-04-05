@@ -1,3 +1,4 @@
+import { InterviewResult } from 'domain/interview';
 import { formatShortDate } from 'services/formatter';
 
 interface StudentInterviewDetails {
@@ -5,19 +6,34 @@ interface StudentInterviewDetails {
   isRegistered: boolean;
   interviewPassed: boolean;
   registrationStart: string;
+  interviewResult: InterviewResult;
 }
 
 export const getInterviewCardDetails = ({
+  interviewResult,
   interviewPassed,
   isRegistered,
   registrationNotStarted,
   registrationStart,
 }: StudentInterviewDetails) => {
   if (interviewPassed) {
-    return {
-      cardMessage: 'You have your interview result. Congratulations!',
-      backgroundImage: 'url(https://cdn.rs.school/sloths/cleaned/congratulations.svg)',
-    };
+    switch (interviewResult) {
+      case InterviewResult.Yes:
+        return {
+          cardMessage: 'You have your interview result. Congratulations!',
+          backgroundImage: 'url(https://cdn.rs.school/sloths/cleaned/congratulations.svg)',
+        };
+      case InterviewResult.No:
+        return {
+          cardMessage: 'Your interview result is ready. Mistakes are proof that you are trying. Stay positive!',
+          backgroundImage: 'url(https://cdn.rs.school/sloths/cleaned/train.svg)',
+        };
+      case InterviewResult.Draft:
+        return {
+          cardMessage: `Your interview is complete. The mentor hasn’t provided feedback yet. Please check back later.`,
+          backgroundImage: 'url(https://cdn.rs.school/sloths/cleaned/mentor-new.svg)',
+        };
+    }
   }
 
   if (isRegistered) {
