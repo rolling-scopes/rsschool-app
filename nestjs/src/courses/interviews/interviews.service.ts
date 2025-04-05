@@ -6,7 +6,7 @@ import { CourseTask } from '@entities/courseTask';
 import { StageInterview } from '@entities/stageInterview';
 import { TaskInterviewStudent } from '@entities/taskInterviewStudent';
 import { TaskInterviewResult } from '@entities/taskInterviewResult';
-import { TaskChecker } from '@entities/TaskChecker';
+import { TaskChecker } from '@entities/taskChecker';
 import { UsersService } from 'src/users/users.service';
 import { StageInterviewStudent, Student } from '@entities/index';
 import { AvailableStudentDto } from './dto/available-student.dto';
