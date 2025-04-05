@@ -35,14 +35,6 @@ export const getMentorInterviews = (_: ILogger) => async (ctx: Router.RouterCont
   setResponse(ctx, StatusCodes.OK, result);
 };
 
-export const getInterviewPairs = (logger: ILogger) => async (ctx: Router.RouterContext) => {
-  const courseId: number = Number(ctx.params.courseId);
-  const courseTaskId: number = Number(ctx.params.courseTaskId);
-  const service = new InterviewService(courseId, logger);
-  const data = await service.getInterviewPairs(courseTaskId);
-  setResponse(ctx, StatusCodes.OK, data);
-};
-
 export const getInterviewStudent = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, githubId, courseTaskId } = ctx.params;
   try {

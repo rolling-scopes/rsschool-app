@@ -8,9 +8,8 @@ import { CourseService } from 'services/course';
 import { CourseRole } from 'services/models';
 import { useAsync } from 'react-use';
 import { isCourseManager } from 'domain/user';
-import { InterviewPair } from 'common/models/interview';
 import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
-import { CoursesInterviewsApi, InterviewDto } from 'api';
+import { CoursesInterviewsApi, InterviewDto, InterviewPairDto } from 'api';
 
 const coursesInterviewsApi = new CoursesInterviewsApi();
 
@@ -22,7 +21,7 @@ function Page() {
   const [loading, withLoading] = useLoading(false);
   const [interviews, setInterviews] = useState<InterviewDto[]>([]);
 
-  const [data, setData] = useState([] as InterviewPair[]);
+  const [data, setData] = useState([] as InterviewPairDto[]);
   const [selected, setSelected] = useState<string | null>(null);
   const [modal, setModal] = useState(false);
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
@@ -44,7 +43,7 @@ function Page() {
 
   const loadData = async () => {
     if (selected) {
-      const data = await courseService.getInterviewPairs(selected);
+      const { data } = await coursesInterviewsApi.getInterviewPairs(Number(selected), courseId);
       setData(data);
     }
   };
