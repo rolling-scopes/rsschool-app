@@ -1,4 +1,4 @@
-import { Button, Row, Select, Table } from 'antd';
+import { Button, Row, Select, Table, Popconfirm } from 'antd';
 import { StudentMentorModal } from 'components/StudentMentorModal';
 import { AdminPageLayout } from 'components/PageLayout';
 import { getColumnSearchProps, stringSorter, boolIconRenderer, PersonCell, numberSorter } from 'components/Table';
@@ -21,10 +21,13 @@ function Page() {
 
   const [loading, withLoading] = useLoading(false);
   const [interviews, setInterviews] = useState<InterviewDto[]>([]);
+
   const [data, setData] = useState([] as InterviewPair[]);
   const [selected, setSelected] = useState<string | null>(null);
   const [modal, setModal] = useState(false);
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
+
+  const courseManagerRole = useMemo(() => isCourseManager(session, courseId), [course, session]);
 
   const loadInterviews = async () => {
     const { data: interviews } = await coursesInterviewsApi.getInterviews(courseId);
@@ -46,20 +49,44 @@ function Page() {
     }
   };
 
+  const createInterviews = withLoading(async () => {
+    if (selected) {
+      const courseTaskId = Number(selected);
+      const isInterviewsIncludesSelected = interviews.map(({ id }) => id).includes(courseTaskId);
+
+      if (isInterviewsIncludesSelected) {
+        await courseService.createInterviewDistribution(courseTaskId);
+        await loadData();
+      }
+    }
+  });
+
   useAsync(withLoading(loadData), [selected]);
 
   useAsync(withLoading(loadInterviews), []);
 
   return (
     <AdminPageLayout loading={loading} title="Interviews" showCourseName courses={courses}>
-      <Row style={{ marginBottom: 16 }} justify="space-between">
-        <Select value={selected!} onChange={(value: string) => setSelected(value)} style={{ minWidth: 300 }}>
-          {interviews.map(interview => (
-            <Select.Option value={interview.id.toString()} key={interview.id.toString()}>
-              {interview.name}
-            </Select.Option>
-          ))}
-        </Select>
+      <Row style={{ marginBottom: 16, gap: 16 }} justify="space-between">
+        <Row style={{ gap: 16 }}>
+          <Select value={selected!} onChange={(value: string) => setSelected(value)} style={{ minWidth: 300 }}>
+            {interviews.map(interview => (
+              <Select.Option value={interview.id.toString()} key={interview.id.toString()}>
+                {interview.name}
+              </Select.Option>
+            ))}
+          </Select>
+          {courseManagerRole ? (
+            <div>
+              <Popconfirm
+                onConfirm={() => createInterviews()}
+                title="Do you want to create interview pairs for not distributed students?"
+              >
+                <Button>Create Interview Pairs</Button>
+              </Popconfirm>
+            </div>
+          ) : null}
+        </Row>
         <Button type="primary" onClick={() => setModal(true)}>
           Create
         </Button>
