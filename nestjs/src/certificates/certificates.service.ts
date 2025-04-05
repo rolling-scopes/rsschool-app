@@ -82,4 +82,16 @@ export class CertificationsService {
       },
     };
   }
+
+  public async removeCertificate(studentId: number) {
+    const certificate = await this.certificateRepository.findOne({
+      where: { studentId },
+    });
+
+    if (!certificate) {
+      throw new NotFoundException('Certificate not found');
+    }
+
+    await this.certificateRepository.remove(certificate);
+  }
 }

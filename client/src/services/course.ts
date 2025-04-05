@@ -18,6 +18,7 @@ import {
   CrossCheckCriteriaDataDto,
   StudentsApi,
   StudentSummaryDto,
+  CertificateApi,
 } from 'api';
 import { optionalQueryString } from 'utils/optionalQueryString';
 import { Decision } from 'data/interviews/technical-screening';
@@ -143,6 +144,7 @@ const courseTasksApi = new CoursesTasksApi();
 const courseEventsApi = new CoursesEventsApi();
 const studentsScoreApi = new StudentsScoreApi();
 const studentsApi = new StudentsApi();
+const certificateApi = new CertificateApi();
 
 export class CourseService {
   private axios: AxiosInstance;
@@ -547,6 +549,10 @@ export class CourseService {
   async createCertificate(githubId: string) {
     const result = await this.axios.post(`/student/${githubId}/certificate`);
     return result.data.data;
+  }
+
+  async removeCertificate(studentId: number) {
+    await certificateApi.removeCertificate(studentId);
   }
 
   async getMentorInterviews(githubId: string) {

@@ -63,6 +63,14 @@ function Page() {
     }
   });
 
+  const removeCertificate = withLoading(async () => {
+    const studentId = details?.id;
+    if (studentId != null) {
+      await courseService.removeCertificate(studentId);
+      message.info('The certificate has been removed.');
+    }
+  });
+
   const createRepository = withLoading(async () => {
     const githubId = details?.githubId;
     if (githubId != null) {
@@ -135,9 +143,11 @@ function Page() {
         />
 
         <DashboardDetails
+          isLoading={loading}
           onUpdateMentor={updateMentor}
           onRestoreStudent={restoreStudent}
           onIssueCertificate={issueCertificate}
+          onRemoveCertificate={removeCertificate}
           onExpelStudent={expelStudent}
           onCreateRepository={createRepository}
           onClose={() => {

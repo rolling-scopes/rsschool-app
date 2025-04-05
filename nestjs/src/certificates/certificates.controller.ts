@@ -1,4 +1,15 @@
-import { Body, Controller, Get, NotFoundException, Param, Post, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  ParseIntPipe,
+  Post,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
@@ -67,5 +78,13 @@ export class CertificatesController {
       notificationId: 'courseCertificate',
       userId: userId,
     });
+  }
+
+  @Delete('/:studentId')
+  @UseGuards(DefaultGuard, RoleGuard)
+  @RequiredRoles([Role.Admin])
+  @ApiOperation({ operationId: 'removeCertificate' })
+  public async removeCertificate(@Param('studentId', ParseIntPipe) studentId: number) {
+    await this.certificatesService.removeCertificate(studentId);
   }
 }

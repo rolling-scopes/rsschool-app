@@ -1,34 +1,67 @@
-import { BranchesOutlined, CloseCircleTwoTone, SolutionOutlined, UndoOutlined } from '@ant-design/icons';
-import { Button, Descriptions, Drawer } from 'antd';
+import {
+  BranchesOutlined,
+  CloseCircleTwoTone,
+  FileExcelOutlined,
+  SolutionOutlined,
+  UndoOutlined,
+} from '@ant-design/icons';
+import { Button, Descriptions, Drawer, Popconfirm, Modal, Input, InputRef } from 'antd';
 import { MentorBasic } from 'common/models';
 import { CommentModal } from 'components/CommentModal';
 import { MentorSearch } from 'components/MentorSearch';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { StudentDetails } from 'services/course';
 import css from 'styled-jsx/css';
 
 type Props = {
   details: StudentDetails | null;
   courseId: number;
+  isLoading: boolean;
   onClose: () => void;
   onCreateRepository: () => void;
   onRestoreStudent: () => void;
   onExpelStudent: (comment: string) => void;
   onIssueCertificate: () => void;
+  onRemoveCertificate: () => void;
   onUpdateMentor: (githubId: string) => void;
   courseManagerOrSupervisor: boolean;
 };
 
 export function DashboardDetails(props: Props) {
   const [expelMode, setExpelMode] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+  const modalInputRef = useRef<InputRef>(null);
   const { details } = props;
   if (details == null) {
     return null;
   }
+
+  const handleModalConfirm = () => {
+    if (inputValue === details.githubId) {
+      props.onRemoveCertificate();
+      setModalOpen(false);
+      setInputValue('');
+    }
+  };
+
+  const handleModalCancel = () => {
+    setModalOpen(false);
+    setInputValue('');
+  };
+
+  const setModalInputFocus = (isOpen: boolean) => {
+    if (isOpen) {
+      setTimeout(() => {
+        modalInputRef.current?.focus();
+      }, 0);
+    }
+  };
+
   return (
     <>
       <Drawer
-        width={600}
+        width={660}
         title={`${details.name} , ${details.githubId}`}
         placement="right"
         closable={false}
@@ -45,9 +78,48 @@ export function DashboardDetails(props: Props) {
               >
                 Create Repository
               </Button>
-              <Button disabled={!details.isActive} icon={<SolutionOutlined />} onClick={props.onIssueCertificate}>
-                Issue Certificate
+              <Popconfirm title="Are you sure you want to issue the certificate?" onConfirm={props.onIssueCertificate}>
+                <Button disabled={!details.isActive} icon={<SolutionOutlined />} loading={props.isLoading}>
+                  Issue Certificate
+                </Button>
+              </Popconfirm>
+              <Button
+                danger
+                disabled={!details.isActive}
+                icon={<FileExcelOutlined style={{ color: 'red' }} />}
+                onClick={() => setModalOpen(true)}
+                loading={props.isLoading}
+              >
+                Remove Certificate
               </Button>
+              <Modal
+                title="Confirm and remove the certificate"
+                open={modalOpen}
+                onOk={handleModalConfirm}
+                onCancel={handleModalCancel}
+                afterOpenChange={setModalInputFocus}
+                width={350}
+                okButtonProps={{
+                  disabled: inputValue !== details.githubId,
+                  danger: true,
+                }}
+                okText="Confirm"
+                cancelText="Cancel"
+                destroyOnClose
+              >
+                <div style={{ padding: '8px 0' }}>
+                  <p>
+                    Type <strong>{details.githubId}</strong> to confirm:
+                  </p>
+                  <Input
+                    ref={modalInputRef}
+                    placeholder="GitHub username"
+                    value={inputValue}
+                    onChange={e => setInputValue(e.target.value)}
+                    onPressEnter={handleModalConfirm}
+                  />
+                </div>
+              </Modal>
             </>
           )}
           <Button

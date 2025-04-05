@@ -8999,6 +8999,39 @@ export const CertificateApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
+         * @param {number} studentId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        removeCertificate: async (studentId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'studentId' is not null or undefined
+            assertParamExists('removeCertificate', 'studentId', studentId)
+            const localVarPath = `/certificate/{studentId}`
+                .replace(`{${"studentId"}}`, encodeURIComponent(String(studentId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {SaveCertificateDto} saveCertificateDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9054,6 +9087,16 @@ export const CertificateApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {number} studentId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async removeCertificate(studentId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.removeCertificate(studentId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {SaveCertificateDto} saveCertificateDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9083,6 +9126,15 @@ export const CertificateApiFactory = function (configuration?: Configuration, ba
         },
         /**
          * 
+         * @param {number} studentId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        removeCertificate(studentId: number, options?: any): AxiosPromise<void> {
+            return localVarFp.removeCertificate(studentId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {SaveCertificateDto} saveCertificateDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9109,6 +9161,17 @@ export class CertificateApi extends BaseAPI {
      */
     public getCertificate(publicId: string, options?: AxiosRequestConfig) {
         return CertificateApiFp(this.configuration).getCertificate(publicId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} studentId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CertificateApi
+     */
+    public removeCertificate(studentId: number, options?: AxiosRequestConfig) {
+        return CertificateApiFp(this.configuration).removeCertificate(studentId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
