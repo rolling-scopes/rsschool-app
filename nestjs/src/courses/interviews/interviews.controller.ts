@@ -90,6 +90,7 @@ export class InterviewsController {
   @ApiBadRequestResponse()
   @ApiParam({ name: 'courseId', type: Number })
   @ApiOperation({ operationId: 'getInterviewPairs' })
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
   public async getInterviewPairs(@Param('interviewId', ParseIntPipe) interviewId: number) {
     const data = await this.interviewsService.getInterviewPairs(interviewId);
     return data;
