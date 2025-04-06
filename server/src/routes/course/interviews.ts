@@ -2,7 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 import Router from '@koa/router';
 import { getCustomRepository } from 'typeorm';
 import { ILogger } from '../../logger';
-import { courseService, InterviewService, notificationService } from '../../services';
+import { courseService, InterviewService, notificationService, taskService } from '../../services';
 import { setResponse } from '../utils';
 import { InterviewRepository } from '../../repositories/interview.repository';
 import { StageInterviewRepository } from '../../repositories/stageInterview.repository';
@@ -125,11 +125,27 @@ export const createInterviews = (logger: ILogger) => async (ctx: Router.RouterCo
       clean: boolean;
       registrationEnabled: boolean;
     };
+
+    const courseTask = await taskService.getCourseTask(courseTaskId);
+
+    if (courseTask == null) {
+      setResponse(ctx, StatusCodes.BAD_REQUEST, { message: 'not valid course task' });
+      return;
+    }
+
+    if (courseTask.isProcessing) {
+      setResponse(ctx, StatusCodes.PROCESSING, { message: 'course task is already being processed' });
+      return;
+    }
+
+    await taskService.changeCourseTaskProcessing(courseTaskId, true);
+
     const interviewService = new InterviewService(courseId, logger);
     const result = await interviewService.createInterviewsAutomatically(courseTaskId, {
       clean,
       registrationEnabled,
     });
+
     if (result == null) {
       setResponse(ctx, StatusCodes.BAD_REQUEST);
       return;
@@ -147,6 +163,8 @@ export const createInterviews = (logger: ILogger) => async (ctx: Router.RouterCo
     setResponse(ctx, StatusCodes.OK, result);
   } catch (e) {
     setResponse(ctx, StatusCodes.BAD_REQUEST, { message: (e as Error).message });
+  } finally {
+    await taskService.changeCourseTaskProcessing(courseTaskId, false);
   }
 };
 

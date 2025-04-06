@@ -23,6 +23,10 @@ export async function changeCourseTaskStatus(courseTask: CourseTask, crossCheckS
   await getRepository(CourseTask).save({ ...courseTask, crossCheckStatus });
 }
 
+export async function changeCourseTaskProcessing(courseTaskId: number, isProcessing: boolean) {
+  await getRepository(CourseTask).update(courseTaskId, { isProcessing });
+}
+
 export function isSubmissionDeadlinePassed({ studentEndDate }: CourseTask) {
   const currentTimestamp = Date.now();
   if (!studentEndDate) return false;
