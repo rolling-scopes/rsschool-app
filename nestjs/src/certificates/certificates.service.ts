@@ -11,6 +11,8 @@ import { Student } from '@entities/student';
 import { Course } from '@entities/course';
 import { User } from '@entities/user';
 import { CertificateMetadataDto } from './dto/certificate-metadata.dto';
+import { HttpService } from '@nestjs/axios';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class CertificationsService {
@@ -24,6 +26,7 @@ export class CertificationsService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
     private readonly configService: ConfigService,
+    private readonly httpService: HttpService,
   ) {
     this.s3 = new S3(this.configService.awsClient);
   }
@@ -92,6 +95,11 @@ export class CertificationsService {
       throw new NotFoundException('Certificate not found');
     }
 
-    await this.certificateRepository.remove(certificate);
+    await Promise.all([
+      lastValueFrom(
+        this.httpService.delete(`${this.configService.awsServices.restApiUrl}/certificate/${certificate.s3Key}`),
+      ),
+      this.certificateRepository.remove(certificate),
+    ]);
   }
 }
