@@ -1,11 +1,18 @@
 import { Col, Card, Button, Alert } from 'antd';
 import { InfoCircleTwoTone } from '@ant-design/icons';
 import { InterviewDto } from 'api';
-import { InterviewDetails, InterviewPeriod, InterviewStatus, isRegistrationNotStarted } from 'domain/interview';
+import {
+  getInterviewCardResult,
+  InterviewDetails,
+  InterviewPeriod,
+  InterviewStatus,
+  isRegistrationNotStarted,
+} from 'domain/interview';
 import { InterviewDescription } from './InterviewDescription';
 import { getInterviewCardDetails } from '../data/getInterviewCardDetails';
 import { AlertDescription } from './AlertDescription';
 import { ExtraInfo } from './ExtraInfo';
+import { Decision } from 'data/interviews/technical-screening';
 
 const { Meta } = Card;
 
@@ -22,8 +29,10 @@ export const InterviewCard = ({
 }) => {
   const { id, descriptionUrl, name, startDate, endDate, studentRegistrationStartDate: registrationStart } = interview;
   const interviewPassed = item?.status === InterviewStatus.Completed;
+  const interviewResult = getInterviewCardResult(item?.result as Decision);
   const registrationNotStarted = isRegistrationNotStarted(registrationStart);
   const { cardMessage, backgroundImage } = getInterviewCardDetails({
+    interviewResult,
     interviewPassed,
     isRegistered,
     registrationNotStarted,
