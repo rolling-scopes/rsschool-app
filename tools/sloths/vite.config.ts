@@ -3,13 +3,13 @@ import path from 'node:path';
 
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
+import vueI18n from '@intlify/vite-plugin-vue-i18n';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
-    VueI18nPlugin({
+    vueI18n({
       include: path.resolve(__dirname, './src/locales/**'),
     }),
   ],
