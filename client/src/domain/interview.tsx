@@ -52,6 +52,35 @@ export enum InterviewStatus {
   Canceled,
 }
 
+export enum InterviewResult {
+  Yes = 'yes',
+  No = 'no',
+  Draft = 'draft',
+}
+
+export function getInterviewCardResult(decision: Decision | StageInterviewFeedbackVerdict) {
+  switch (decision) {
+    case Decision.Yes:
+      return InterviewResult.Yes;
+    case Decision.Draft:
+      return InterviewResult.Draft;
+    case 'didNotDecideYet':
+      return InterviewResult.Draft;
+    case Decision.No:
+      return InterviewResult.No;
+    case Decision.SeparateStudy:
+      return InterviewResult.No;
+    case Decision.MissedIgnoresMentor:
+      return InterviewResult.No;
+    case Decision.MissedWithReason:
+      return InterviewResult.No;
+    case 'noButGoodCandidate':
+      return InterviewResult.No;
+    default:
+      return InterviewResult.Yes;
+  }
+}
+
 export function isInterviewRegistrationInProgress(interviewStartDate: string) {
   const startDate = dayjs(interviewStartDate).subtract(2, 'weeks');
 
