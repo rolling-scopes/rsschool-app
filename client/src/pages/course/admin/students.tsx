@@ -135,6 +135,7 @@ function Page() {
         />
 
         <DashboardDetails
+          isLoading={loading}
           onUpdateMentor={updateMentor}
           onRestoreStudent={restoreStudent}
           onIssueCertificate={issueCertificate}
