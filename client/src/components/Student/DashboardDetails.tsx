@@ -1,5 +1,5 @@
 import { BranchesOutlined, CloseCircleTwoTone, SolutionOutlined, UndoOutlined } from '@ant-design/icons';
-import { Button, Descriptions, Drawer } from 'antd';
+import { Button, Descriptions, Drawer, Popconfirm } from 'antd';
 import { MentorBasic } from 'common/models';
 import { CommentModal } from 'components/CommentModal';
 import { MentorSearch } from 'components/MentorSearch';
@@ -10,6 +10,7 @@ import css from 'styled-jsx/css';
 type Props = {
   details: StudentDetails | null;
   courseId: number;
+  isLoading: boolean;
   onClose: () => void;
   onCreateRepository: () => void;
   onRestoreStudent: () => void;
@@ -45,9 +46,11 @@ export function DashboardDetails(props: Props) {
               >
                 Create Repository
               </Button>
-              <Button disabled={!details.isActive} icon={<SolutionOutlined />} onClick={props.onIssueCertificate}>
-                Issue Certificate
-              </Button>
+              <Popconfirm title="Are you sure you want to issue the certificate?" onConfirm={props.onIssueCertificate}>
+                <Button disabled={!details.isActive} icon={<SolutionOutlined />} loading={props.isLoading}>
+                  Issue Certificate
+                </Button>
+              </Popconfirm>
             </>
           )}
           <Button
