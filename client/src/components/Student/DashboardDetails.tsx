@@ -17,6 +17,7 @@ type Props = {
   details: StudentDetails | null;
   courseId: number;
   isLoading: boolean;
+  isAdmin: boolean;
   onClose: () => void;
   onCreateRepository: () => void;
   onRestoreStudent: () => void;
@@ -61,7 +62,7 @@ export function DashboardDetails(props: Props) {
   return (
     <>
       <Drawer
-        width={660}
+        width={props.isAdmin ? 660 : 600}
         title={`${details.name} , ${details.githubId}`}
         placement="right"
         closable={false}
@@ -83,43 +84,46 @@ export function DashboardDetails(props: Props) {
                   Issue Certificate
                 </Button>
               </Popconfirm>
-              <Button
-                danger
-                disabled={!details.isActive}
-                icon={<FileExcelOutlined style={{ color: 'red' }} />}
-                onClick={() => setModalOpen(true)}
-                loading={props.isLoading}
-              >
-                Remove Certificate
-              </Button>
-              <Modal
-                title="Confirm and remove the certificate"
-                open={modalOpen}
-                onOk={handleModalConfirm}
-                onCancel={handleModalCancel}
-                afterOpenChange={setModalInputFocus}
-                width={350}
-                okButtonProps={{
-                  disabled: inputValue !== details.githubId,
-                  danger: true,
-                }}
-                okText="Confirm"
-                cancelText="Cancel"
-                destroyOnClose
-              >
-                <div style={{ padding: '8px 0' }}>
-                  <p>
-                    Type <strong>{details.githubId}</strong> to confirm:
-                  </p>
-                  <Input
-                    ref={modalInputRef}
-                    placeholder="GitHub username"
-                    value={inputValue}
-                    onChange={e => setInputValue(e.target.value)}
-                    onPressEnter={handleModalConfirm}
-                  />
-                </div>
-              </Modal>
+              {props.isAdmin && (
+                <>
+                  <Button
+                    danger
+                    icon={<FileExcelOutlined style={{ color: 'red' }} />}
+                    onClick={() => setModalOpen(true)}
+                    loading={props.isLoading}
+                  >
+                    Remove Certificate
+                  </Button>
+                  <Modal
+                    title="Confirm and remove the certificate"
+                    open={modalOpen}
+                    onOk={handleModalConfirm}
+                    onCancel={handleModalCancel}
+                    afterOpenChange={setModalInputFocus}
+                    width={350}
+                    okButtonProps={{
+                      disabled: inputValue !== details.githubId,
+                      danger: true,
+                    }}
+                    okText="Confirm"
+                    cancelText="Cancel"
+                    destroyOnClose
+                  >
+                    <div style={{ padding: '8px 0' }}>
+                      <p>
+                        Type <strong>{details.githubId}</strong> to confirm:
+                      </p>
+                      <Input
+                        ref={modalInputRef}
+                        placeholder="GitHub username"
+                        value={inputValue}
+                        onChange={e => setInputValue(e.target.value)}
+                        onPressEnter={handleModalConfirm}
+                      />
+                    </div>
+                  </Modal>
+                </>
+              )}
             </>
           )}
           <Button

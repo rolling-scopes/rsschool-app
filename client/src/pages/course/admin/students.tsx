@@ -13,7 +13,7 @@ import {
   stringSorter,
 } from 'components/Table';
 import { useLoading } from 'components/useLoading';
-import { isCourseManager, isCourseSupervisor } from 'domain/user';
+import { isAdmin, isCourseManager, isCourseSupervisor } from 'domain/user';
 import keys from 'lodash/keys';
 import { useMemo, useState, useContext } from 'react';
 import { useAsync, useToggle } from 'react-use';
@@ -44,6 +44,7 @@ function Page() {
 
   const [loading, withLoading] = useLoading(false);
   const [hasCourseManagerRole] = useState(isCourseManager(session, courseId));
+  const [hasAdminRole] = useState(isAdmin(session));
   const hasCourseSupervisorRole = useMemo(() => isCourseSupervisor(session, course.id), [session, course.id]);
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [students, setStudents] = useState([] as StudentDetails[]);
@@ -144,6 +145,7 @@ function Page() {
 
         <DashboardDetails
           isLoading={loading}
+          isAdmin={hasAdminRole}
           onUpdateMentor={updateMentor}
           onRestoreStudent={restoreStudent}
           onIssueCertificate={issueCertificate}
