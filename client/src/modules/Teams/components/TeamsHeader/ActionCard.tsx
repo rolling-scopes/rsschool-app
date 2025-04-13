@@ -1,4 +1,4 @@
-import { Button, Card, Col, Space, Typography } from 'antd';
+import { Button, Card, Col, Popconfirm, Space, Typography } from 'antd';
 
 const { Title, Text } = Typography;
 
@@ -15,7 +15,9 @@ export function ActionCard({ title, text, buttonCaption, onClick }: Props) {
       <Card title={<Title level={5}>{title}</Title>} style={{ backgroundColor: '#E6F7FF' }}>
         <Space size={12} direction="vertical">
           <Text type="secondary">{text}</Text>
-          <Button onClick={onClick}>{buttonCaption}</Button>
+          <Popconfirm title={<>Are you sure you want to {buttonCaption.toLowerCase()}?</>} onConfirm={onClick}>
+            <Button>{buttonCaption}</Button>
+          </Popconfirm>
         </Space>
       </Card>
     </Col>
