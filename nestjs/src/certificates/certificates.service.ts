@@ -12,8 +12,6 @@ import { Course } from '@entities/course';
 import { User } from '@entities/user';
 import { CertificateMetadataDto } from './dto/certificate-metadata.dto';
 import { HttpService } from '@nestjs/axios';
-import { lastValueFrom } from 'rxjs';
-
 @Injectable()
 export class CertificationsService {
   private s3: S3;
@@ -96,9 +94,14 @@ export class CertificationsService {
     }
 
     await Promise.all([
-      lastValueFrom(
-        this.httpService.delete(`${this.configService.awsServices.restApiUrl}/certificate/${certificate.s3Key}`),
-      ),
+      new Promise((resolve, reject) => {
+        this.httpService
+          .delete(`${this.configService.awsServices.restApiUrl}/certificate/${certificate.s3Key}`)
+          .subscribe({
+            next: response => resolve(response),
+            error: error => reject(error),
+          });
+      }),
       this.certificateRepository.remove(certificate),
     ]);
   }
