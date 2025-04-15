@@ -41,10 +41,10 @@ function Page() {
   const session = useContext(SessionContext);
 
   const courseId = course.id;
+  const hasAdminRole = isAdmin(session);
 
   const [loading, withLoading] = useLoading(false);
   const [hasCourseManagerRole] = useState(isCourseManager(session, courseId));
-  const [hasAdminRole] = useState(isAdmin(session));
   const hasCourseSupervisorRole = useMemo(() => isCourseSupervisor(session, course.id), [session, course.id]);
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [students, setStudents] = useState([] as StudentDetails[]);
