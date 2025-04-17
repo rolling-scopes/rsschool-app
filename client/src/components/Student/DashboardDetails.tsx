@@ -1,4 +1,10 @@
-import { BranchesOutlined, CloseCircleTwoTone, SolutionOutlined, UndoOutlined } from '@ant-design/icons';
+import {
+  BranchesOutlined,
+  CloseCircleTwoTone,
+  FileExcelOutlined,
+  SolutionOutlined,
+  UndoOutlined,
+} from '@ant-design/icons';
 import { Button, Descriptions, Drawer, Popconfirm } from 'antd';
 import { MentorBasic } from 'common/models';
 import { CommentModal } from 'components/CommentModal';
@@ -11,11 +17,13 @@ type Props = {
   details: StudentDetails | null;
   courseId: number;
   isLoading: boolean;
+  isAdmin: boolean;
   onClose: () => void;
   onCreateRepository: () => void;
   onRestoreStudent: () => void;
   onExpelStudent: (comment: string) => void;
   onIssueCertificate: () => void;
+  onRemoveCertificate: () => void;
   onUpdateMentor: (githubId: string) => void;
   courseManagerOrSupervisor: boolean;
 };
@@ -26,10 +34,11 @@ export function DashboardDetails(props: Props) {
   if (details == null) {
     return null;
   }
+
   return (
     <>
       <Drawer
-        width={600}
+        width={props.isAdmin ? 660 : 600}
         title={`${details.name} , ${details.githubId}`}
         placement="right"
         closable={false}
@@ -51,6 +60,16 @@ export function DashboardDetails(props: Props) {
                   Issue Certificate
                 </Button>
               </Popconfirm>
+              {props.isAdmin && (
+                <Popconfirm
+                  title="Are you sure you want to remove the certificate?"
+                  onConfirm={props.onRemoveCertificate}
+                >
+                  <Button danger icon={<FileExcelOutlined style={{ color: 'red' }} />} loading={props.isLoading}>
+                    Remove Certificate
+                  </Button>
+                </Popconfirm>
+              )}
             </>
           )}
           <Button

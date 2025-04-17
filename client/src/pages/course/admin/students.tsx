@@ -13,7 +13,7 @@ import {
   stringSorter,
 } from 'components/Table';
 import { useLoading } from 'components/useLoading';
-import { isCourseManager, isCourseSupervisor } from 'domain/user';
+import { isAdmin, isCourseManager, isCourseSupervisor } from 'domain/user';
 import keys from 'lodash/keys';
 import { useMemo, useState, useContext } from 'react';
 import { useAsync, useToggle } from 'react-use';
@@ -41,6 +41,7 @@ function Page() {
   const session = useContext(SessionContext);
 
   const courseId = course.id;
+  const hasAdminRole = isAdmin(session);
 
   const [loading, withLoading] = useLoading(false);
   const [hasCourseManagerRole] = useState(isCourseManager(session, courseId));
@@ -60,6 +61,14 @@ function Page() {
     if (githubId != null) {
       await courseService.createCertificate(githubId);
       message.info('The certificate has been requested.');
+    }
+  });
+
+  const removeCertificate = withLoading(async () => {
+    const studentId = details?.id;
+    if (studentId != null) {
+      await courseService.removeCertificate(studentId);
+      message.info('The certificate has been removed.');
     }
   });
 
@@ -136,9 +145,11 @@ function Page() {
 
         <DashboardDetails
           isLoading={loading}
+          isAdmin={hasAdminRole}
           onUpdateMentor={updateMentor}
           onRestoreStudent={restoreStudent}
           onIssueCertificate={issueCertificate}
+          onRemoveCertificate={removeCertificate}
           onExpelStudent={expelStudent}
           onCreateRepository={createRepository}
           onClose={() => {
