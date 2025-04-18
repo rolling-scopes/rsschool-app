@@ -170,20 +170,10 @@ export class RegistryService {
     if (status === MentorRegistryTabsMode.New) {
       req.andWhere(
         new Brackets(qb => {
-          qb.where(
-            `NOT (
-                string_to_array(mentorRegistry.preselectedCourses, ',')::int[] @>
-                string_to_array(mentorRegistry.preferedCourses, ',')::int[]
-                AND
-                string_to_array(mentorRegistry.preselectedCourses, ',')::int[] <@
-                string_to_array(mentorRegistry.preferedCourses, ',')::int[]
-            ) AND mentorRegistry.preferedCourses != ''`,
-          )
-            .orWhere(`mentorRegistry.preselectedCourses = ''`)
-            .orWhere(
-              `(SELECT COUNT(*) FROM mentor WHERE mentor.userId = mentorRegistry.userId)
+          qb.where(`mentorRegistry.preselectedCourses = ''`).orWhere(
+            `(SELECT COUNT(*) FROM mentor WHERE mentor.userId = mentorRegistry.userId)
                 < cardinality(string_to_array(mentorRegistry.preselectedCourses, ','))`,
-            );
+          );
         }),
       );
     }
