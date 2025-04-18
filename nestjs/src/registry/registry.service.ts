@@ -177,12 +177,12 @@ export class RegistryService {
                 AND
                 string_to_array(mentorRegistry.preselectedCourses, ',')::int[] <@
                 string_to_array(mentorRegistry.preferedCourses, ',')::int[]
-              )`,
+            ) AND mentorRegistry.preferedCourses != ''`,
           )
-            .orWhere(`mentorRegistry.preferedCourses = ''`)
+            .orWhere(`mentorRegistry.preselectedCourses = ''`)
             .orWhere(
               `(SELECT COUNT(*) FROM mentor WHERE mentor.userId = mentorRegistry.userId)
-              < cardinality(string_to_array(mentorRegistry.preselectedCourses, ','))`,
+                < cardinality(string_to_array(mentorRegistry.preselectedCourses, ','))`,
             );
         }),
       );
