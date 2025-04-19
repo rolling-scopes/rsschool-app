@@ -23,6 +23,7 @@ import {
   isCourseSupervisor,
   isHirer,
   isAnyCourseDementor,
+  isTaskOwner,
 } from 'domain/user';
 import { Course } from 'services/models';
 
@@ -173,6 +174,12 @@ const courseManagementMenuItems: CourseManagementMenuItemsData[] = [
     courseAccess: isCourseManager,
   },
   {
+    name: 'Submit Scores',
+    key: 'submitScores',
+    getUrl: (course: Course) => `/course/submit-scores?course=${course.alias}`,
+    courseAccess: some(isTaskOwner, isAdmin, isCourseManager),
+  },
+  {
     name: 'Course Students',
     key: 'courseStudents',
     getUrl: (course: Course) => `/course/admin/students?course=${course.alias}`,
@@ -191,8 +198,8 @@ const courseManagementMenuItems: CourseManagementMenuItemsData[] = [
     courseAccess: isCourseManager,
   },
   {
-    name: 'Cross-Сheck Table',
-    key: 'Cross-Сheck Table',
+    name: 'Cross-Check Table',
+    key: 'Cross-Check Table',
     getUrl: (course: Course) => `/course/admin/cross-check-table?course=${course.alias}`,
     courseAccess: some(isCourseManager, isDementor),
   },

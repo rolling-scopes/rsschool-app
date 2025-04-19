@@ -81,7 +81,7 @@ export function AdminSider(props: Props) {
   };
 
   return (
-    <Sider trigger={null} collapsible collapsed={isSiderCollapsed} theme="light" width={220}>
+    <Sider data-testid="admin-sider" trigger={null} collapsible collapsed={isSiderCollapsed} theme="light" width={220}>
       {isSiderCollapsed ? <MenuUnfoldOutlined {...menuIconProps} /> : <MenuFoldOutlined {...menuIconProps} />}
       <Menu
         mode="inline"

@@ -3,7 +3,6 @@ import {
   CalendarTwoTone,
   CheckCircleTwoTone,
   GoldTwoTone,
-  CheckSquareTwoTone,
   CodeTwoTone,
   DashboardTwoTone,
   FireTwoTone,
@@ -15,7 +14,7 @@ import {
 import { Session } from 'components/withSession';
 import React from 'react';
 import { Course } from 'services/models';
-import { isStudent, isAdmin, isTaskOwner, isMentor, isCourseManager, isActiveStudent, isDementor } from 'domain/user';
+import { isStudent, isAdmin, isMentor, isCourseManager, isActiveStudent, isDementor } from 'domain/user';
 import { getAutoTestRoute } from 'services/routes';
 import { MenuProps } from 'antd';
 import Router from 'next/router';
@@ -81,13 +80,6 @@ const links: LinkData[] = [
     icon: <GoldTwoTone twoToneColor="#7f00ff" />,
     getUrl: (course: Course) => `/course/mentor/students?course=${course.alias}`,
     access: every(isMentor),
-  },
-  {
-    name: 'Submit Scores',
-    icon: <CheckSquareTwoTone twoToneColor="#52c41a" />,
-    getUrl: (course: Course) => `/course/submit-scores?course=${course.alias}`,
-    access: every(some(isTaskOwner, isAdmin, isCourseManager)),
-    courseAccess: everyCourse(isCourseNotCompleted),
   },
   {
     name: 'Cross-Check: Submit',
