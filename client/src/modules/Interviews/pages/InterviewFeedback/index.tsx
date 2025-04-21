@@ -125,7 +125,10 @@ export function InterviewFeedback({ course, type, interviewTaskId, githubId }: F
             })}
           </Fragment>
         ))}
-        <Typography.Title level={4}>Total score</Typography.Title>
+        <Typography.Title level={4}>
+          Total Score
+          <Typography.Title level={5}>First star is 0 (No Interview, Rejected etc.)</Typography.Title>
+        </Typography.Title>
         <Form.Item name="score" label="Score" rules={[{ validator: validateTotalScore }]}>
           <Rate
             count={11}
