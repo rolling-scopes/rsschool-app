@@ -54,6 +54,13 @@ export function InterviewFeedback({ course, type, interviewTaskId, githubId }: F
     }
   };
 
+  const validateTotalScore = (_: any, value: number | undefined) => {
+    if (value && value > 0) {
+      return Promise.resolve();
+    }
+    return Promise.reject(new Error('Please select a Score'));
+  };
+
   return (
     <PageLayoutSimple loading={loading} title={`${template.name}: Interview Feedback`} showCourseName>
       <Typography style={{ marginBottom: 24 }}>
@@ -119,7 +126,7 @@ export function InterviewFeedback({ course, type, interviewTaskId, githubId }: F
           </Fragment>
         ))}
         <Typography.Title level={4}>Total score</Typography.Title>
-        <Form.Item name="score" label="Score" rules={[{ required: true, message: 'Please set Score' }]}>
+        <Form.Item name="score" label="Score" rules={[{ validator: validateTotalScore }]}>
           <Rate
             count={11}
             tooltips={['0 (No Interview, Rejected etc.)'].concat(range(1, 11).map(toString))}
