@@ -156,15 +156,26 @@ export class RegistryService {
             qb.where(`string_to_array(mentorRegistry.preferedCourses, ',') && :coursesIds`, { coursesIds });
           }
           if (disciplineNames?.length) {
-            qb.orWhere(`string_to_array(mentorRegistry.technicalMentoring, ',') && :disciplineNames`, {
-              disciplineNames,
-            });
+            qb.orWhere(
+              `mentorRegistry.preferedCourses = ''
+              OR string_to_array(mentorRegistry.technicalMentoring, ',') && :disciplineNames`,
+              {
+                disciplineNames,
+              },
+            );
           }
         }),
       );
     }
     if (status === MentorRegistryTabsMode.New) {
-      req.andWhere('mentorRegistry.preselectedCourses != mentorRegistry.preferedCourses');
+      req.andWhere(
+        new Brackets(qb => {
+          qb.where(`mentorRegistry.preselectedCourses = ''`).orWhere(
+            `(SELECT COUNT(*) FROM mentor WHERE mentor.userId = mentorRegistry.userId)
+                < cardinality(string_to_array(mentorRegistry.preselectedCourses, ','))`,
+          );
+        }),
+      );
     }
 
     const response = await paginate(req, {

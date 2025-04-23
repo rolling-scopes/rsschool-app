@@ -45,6 +45,7 @@ import {
   validateExpelledStudent,
   validateGithubId,
   validateGithubIdAndAccess,
+  validateGithubIdAndAccessForUserOrPowerUser,
 } from '../validators';
 import * as crossCheck from './crossCheck';
 import {
@@ -196,7 +197,12 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   router.post('/student/:githubId/task/:courseTaskId/result', courseGuard, score.createSingleScore(logger));
   router.post('/student/:githubId/interview/:courseTaskId/result', ...mentorValidators, createInterviewResult(logger));
 
-  router.post('/student/:githubId/repository', guard, ...validators, createRepository(logger));
+  router.post(
+    '/student/:githubId/repository',
+    guard,
+    validateGithubIdAndAccessForUserOrPowerUser,
+    createRepository(logger),
+  );
   router.post('/student/:githubId/status', ...mentorOrDementorValidators, updateStudentStatus(logger));
   router.post('/student/:githubId/status-self', courseGuard, selfUpdateStudentStatus(logger));
   router.get('/student/:githubId/score', courseGuard, score.getScoreByStudent(logger));

@@ -2070,6 +2070,15 @@
         "tags": ["certificate"]
       }
     },
+    "/certificate/{studentId}": {
+      "delete": {
+        "operationId": "removeCertificate",
+        "parameters": [{ "name": "studentId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": { "200": { "description": "" } },
+        "summary": "",
+        "tags": ["certificate"]
+      }
+    },
     "/discord-servers": {
       "post": {
         "operationId": "createDiscordServer",

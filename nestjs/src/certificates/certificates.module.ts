@@ -9,6 +9,7 @@ import { CoursesModule } from '../courses/courses.module';
 import { CertificatesController } from './certificates.controller';
 import { CertificationsService } from './certificates.service';
 import { User } from '@entities/user';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { User } from '@entities/user';
     ConfigModule,
     UsersNotificationsModule,
     CoursesModule,
+    HttpModule,
   ],
   controllers: [CertificatesController],
   providers: [CertificationsService],
