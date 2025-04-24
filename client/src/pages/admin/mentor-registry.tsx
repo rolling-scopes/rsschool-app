@@ -168,11 +168,13 @@ function Page() {
       >
         <Form.Item name="preselectedCourses" label="Pre-Selected Courses">
           <Select mode="multiple" optionFilterProp="children">
-            {courses.map(course => (
-              <Select.Option disabled={course.completed} key={course.id} value={course.id}>
-                {course.name}
-              </Select.Option>
-            ))}
+            {courses
+              .filter(course => !course.completed && course.personalMentoring)
+              .map(course => (
+                <Select.Option key={course.id} value={course.id}>
+                  {course.name}
+                </Select.Option>
+              ))}
           </Select>
         </Form.Item>
       </ModalForm>
