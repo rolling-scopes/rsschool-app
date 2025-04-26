@@ -1,14 +1,14 @@
-import { Button, Checkbox, Form, Input, message, Rate, Space, Typography } from 'antd';
+import { Button, Checkbox, Form, Input, message, Space, Typography } from 'antd';
 import { AxiosError } from 'axios';
 import { CommentInput } from 'components/Forms';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { InputType, templates } from 'data/interviews';
-import range from 'lodash/range';
-import toString from 'lodash/toString';
 import { Fragment, useMemo, useState } from 'react';
 import { CourseService } from 'services/course';
 import type { FeedbackProps } from './getServerSideProps';
+import { ScoreSelector } from 'components/ScoreSelector';
+import { useRouter } from 'next/router';
 
 type FormAnswer = {
   questionId: string;
@@ -22,6 +22,7 @@ export function InterviewFeedback({ course, type, interviewTaskId, githubId }: F
   const template = templates[type];
 
   const [form] = Form.useForm();
+  const router = useRouter();
 
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [loading, setLoading] = useState(false);
@@ -39,7 +40,7 @@ export function InterviewFeedback({ course, type, interviewTaskId, githubId }: F
         questionId: id.toString(),
         questionText: name,
       }));
-      const score = Number(values.score) - 1;
+      const score = Number(values.score);
       const body = { formAnswers, score, comment: values.comment || '' };
       await courseService.postStudentInterviewResult(githubId, interviewTaskId, body);
       message.success('You interview feedback has been submitted. Thank you.');
@@ -52,13 +53,6 @@ export function InterviewFeedback({ course, type, interviewTaskId, githubId }: F
     } finally {
       setLoading(false);
     }
-  };
-
-  const validateTotalScore = (_: any, value: number | undefined) => {
-    if (value && value > 0) {
-      return Promise.resolve();
-    }
-    return Promise.reject(new Error('Please select a Score'));
   };
 
   return (
@@ -125,21 +119,22 @@ export function InterviewFeedback({ course, type, interviewTaskId, githubId }: F
             })}
           </Fragment>
         ))}
-        <Typography.Title level={4}>
-          Total Score
-          <Typography.Title level={5}>First star is 0 (No Interview, Rejected etc.)</Typography.Title>
-        </Typography.Title>
-        <Form.Item name="score" label="Score" rules={[{ validator: validateTotalScore }]}>
-          <Rate
-            count={11}
-            tooltips={['0 (No Interview, Rejected etc.)'].concat(range(1, 11).map(toString))}
-            style={{ marginBottom: '5px' }}
-          />
+        <Typography.Title level={4}>Total Score</Typography.Title>
+        <Form.Item name="score" label="Score" rules={[{ required: true, message: 'Please select a Score' }]}>
+          <ScoreSelector />
         </Form.Item>
         <Typography.Title level={4}>Comment</Typography.Title>
         <CommentInput />
         <Button size="large" type="primary" htmlType="submit">
           Submit
+        </Button>
+        <Button
+          type="default"
+          size="large"
+          onClick={() => router.back()}
+          style={{ float: 'right', marginBottom: '20px' }}
+        >
+          Back
         </Button>
       </Form>
     </PageLayoutSimple>
