@@ -8,6 +8,8 @@ import { CfnOutput } from 'aws-cdk-lib';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import { Construct } from 'constructs';
 import { DockerFunction } from './DockerFunctionConstruct';
+import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
+import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 
 type Props = cdk.StackProps & {
   feature: string;
@@ -42,6 +44,21 @@ export class RsSchoolAppStack extends cdk.Stack {
       },
     });
 
+    const commonOriginRequestPolicy = new cloudfront.OriginRequestPolicy(this, 'CommonOriginRequestPolicy', {
+      queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.all(),
+      headerBehavior: cloudfront.OriginRequestHeaderBehavior.allowList('Origin', 'Authorization'),
+      cookieBehavior: cloudfront.OriginRequestCookieBehavior.all(),
+    });
+
+    const createBehavior = (originDomain: string) => ({
+      origin: new origins.HttpOrigin(originDomain, {
+        protocolPolicy: cloudfront.OriginProtocolPolicy.HTTPS_ONLY,
+      }),
+      allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
+      cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+      originRequestPolicy: commonOriginRequestPolicy,
+    });
+
     const serverApi = new DockerFunction(this, 'ServerApi', {
       ...defaultProps,
       basePath: '/api/{proxy+}',
@@ -60,53 +77,14 @@ export class RsSchoolAppStack extends cdk.Stack {
       repository: Repository.fromRepositoryName(this, 'NestjsRepository', 'rsschool-nestjs'),
     });
 
-    const noCacheBehavior: cloudfront.Behavior = {
-      allowedMethods: cloudfront.CloudFrontAllowedMethods.ALL,
-      defaultTtl: cdk.Duration.seconds(0),
-      minTtl: cdk.Duration.seconds(0),
-      maxTtl: cdk.Duration.seconds(0),
-      forwardedValues: {
-        queryString: true,
-        headers: ['Origin', 'Authorization'],
-        cookies: {
-          forward: 'all',
-        },
-      },
-    };
-
-    const distribution = new cloudfront.CloudFrontWebDistribution(this, 'Distribution', {
-      originConfigs: [
-        {
-          customOriginSource: {
-            domainName: nestjsApi.domainName,
-            originProtocolPolicy: cloudfront.OriginProtocolPolicy.HTTPS_ONLY,
-          },
-          behaviors: [{ pathPattern: '/api/v2/*', ...noCacheBehavior }],
-        },
-        {
-          customOriginSource: {
-            domainName: serverApi.domainName,
-            originProtocolPolicy: cloudfront.OriginProtocolPolicy.HTTPS_ONLY,
-          },
-          behaviors: [{ pathPattern: '/api/*', ...noCacheBehavior }],
-        },
-        {
-          customOriginSource: {
-            domainName: nextApp.domainName,
-            originProtocolPolicy: cloudfront.OriginProtocolPolicy.HTTPS_ONLY,
-          },
-          behaviors: [{ isDefaultBehavior: true, ...noCacheBehavior }],
-        },
-      ],
+    const distribution = new cloudfront.Distribution(this, 'Distribution', {
       defaultRootObject: '/',
-      viewerCertificate: {
-        aliases: [this.fqdn],
-        props: {
-          // cloudfront needs certificate in us-east-1 so we pass it as string
-          acmCertificateArn: certificateArn,
-          sslSupportMethod: 'sni-only',
-          minimumProtocolVersion: 'TLSv1.2_2019',
-        },
+      domainNames: [this.fqdn],
+      certificate: acm.Certificate.fromCertificateArn(this, 'Certificate', certificateArn),
+      defaultBehavior: createBehavior(nextApp.domainName),
+      additionalBehaviors: {
+        '/api/*': createBehavior(serverApi.domainName),
+        '/api/v2/*': createBehavior(nestjsApi.domainName),
       },
     });
 
