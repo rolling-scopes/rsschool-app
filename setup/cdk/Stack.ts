@@ -5,7 +5,19 @@ import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as alias from 'aws-cdk-lib/aws-route53-targets';
 
 import { CfnOutput } from 'aws-cdk-lib';
-import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
+import {
+  Distribution,
+  OriginRequestPolicy,
+  OriginRequestQueryStringBehavior,
+  OriginRequestHeaderBehavior,
+  OriginRequestCookieBehavior,
+  OriginProtocolPolicy,
+  AllowedMethods,
+  CachePolicy,
+  CacheHeaderBehavior,
+  CacheQueryStringBehavior,
+  CacheCookieBehavior,
+} from 'aws-cdk-lib/aws-cloudfront';
 import { Construct } from 'constructs';
 import { DockerFunction } from './DockerFunctionConstruct';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
@@ -44,21 +56,6 @@ export class RsSchoolAppStack extends cdk.Stack {
       },
     });
 
-    const commonOriginRequestPolicy = new cloudfront.OriginRequestPolicy(this, 'CommonOriginRequestPolicy', {
-      queryStringBehavior: cloudfront.OriginRequestQueryStringBehavior.all(),
-      headerBehavior: cloudfront.OriginRequestHeaderBehavior.allowList('Origin', 'Authorization'),
-      cookieBehavior: cloudfront.OriginRequestCookieBehavior.all(),
-    });
-
-    const createBehavior = (originDomain: string) => ({
-      origin: new origins.HttpOrigin(originDomain, {
-        protocolPolicy: cloudfront.OriginProtocolPolicy.HTTPS_ONLY,
-      }),
-      allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
-      cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
-      originRequestPolicy: commonOriginRequestPolicy,
-    });
-
     const serverApi = new DockerFunction(this, 'ServerApi', {
       ...defaultProps,
       basePath: '/api/{proxy+}',
@@ -77,7 +74,29 @@ export class RsSchoolAppStack extends cdk.Stack {
       repository: Repository.fromRepositoryName(this, 'NestjsRepository', 'rsschool-nestjs'),
     });
 
-    const distribution = new cloudfront.Distribution(this, 'Distribution', {
+    const noCachePolicy = new CachePolicy(this, 'NoCachePolicy', {
+      defaultTtl: cdk.Duration.minutes(5),
+      headerBehavior: CacheHeaderBehavior.allowList('Authorization'),
+      queryStringBehavior: CacheQueryStringBehavior.all(),
+      cookieBehavior: CacheCookieBehavior.all(),
+    });
+
+    const commonOriginRequestPolicy = new OriginRequestPolicy(this, 'CommonOriginRequestPolicy', {
+      queryStringBehavior: OriginRequestQueryStringBehavior.all(),
+      headerBehavior: OriginRequestHeaderBehavior.allowList('Origin'),
+      cookieBehavior: OriginRequestCookieBehavior.all(),
+    });
+
+    const createBehavior = (originDomain: string) => ({
+      origin: new origins.HttpOrigin(originDomain, {
+        protocolPolicy: OriginProtocolPolicy.HTTPS_ONLY,
+      }),
+      allowedMethods: AllowedMethods.ALLOW_ALL,
+      cachePolicy: noCachePolicy,
+      originRequestPolicy: commonOriginRequestPolicy,
+    });
+
+    const distribution = new Distribution(this, 'Distribution', {
       defaultRootObject: '/',
       domainNames: [this.fqdn],
       certificate: acm.Certificate.fromCertificateArn(this, 'Certificate', certificateArn),
