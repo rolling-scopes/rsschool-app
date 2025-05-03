@@ -74,8 +74,10 @@ export class RsSchoolAppStack extends cdk.Stack {
       repository: Repository.fromRepositoryName(this, 'NestjsRepository', 'rsschool-nestjs'),
     });
 
-    const noCachePolicy = new CachePolicy(this, 'NoCachePolicy', {
-      defaultTtl: cdk.Duration.minutes(5),
+    const authorizationCachePolicy = new CachePolicy(this, 'AuthorizationCachePolicy', {
+      defaultTtl: cdk.Duration.seconds(5),
+      minTtl: cdk.Duration.seconds(0),
+      maxTtl: cdk.Duration.seconds(60),
       headerBehavior: CacheHeaderBehavior.allowList('Authorization'),
       queryStringBehavior: CacheQueryStringBehavior.all(),
       cookieBehavior: CacheCookieBehavior.all(),
@@ -92,7 +94,7 @@ export class RsSchoolAppStack extends cdk.Stack {
         protocolPolicy: OriginProtocolPolicy.HTTPS_ONLY,
       }),
       allowedMethods: AllowedMethods.ALLOW_ALL,
-      cachePolicy: noCachePolicy,
+      cachePolicy: authorizationCachePolicy,
       originRequestPolicy: commonOriginRequestPolicy,
     });
 
