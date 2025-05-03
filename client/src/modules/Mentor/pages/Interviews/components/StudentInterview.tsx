@@ -1,34 +1,87 @@
-import { Col, Row, Button, Typography, Space } from 'antd';
+import { Col, Row, Button, Typography, Space, message, Popconfirm } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
 import GithubFilled from '@ant-design/icons/GithubFilled';
 import { DecisionTag, getInterviewFeedbackUrl } from 'domain/interview';
-import { MentorInterview } from 'services/course';
+import { CourseService, MentorInterview } from 'services/course';
 import css from 'styled-jsx/css';
+import { useState } from 'react';
+import { CloseCircleOutlined } from '@ant-design/icons';
 
-export function StudentInterview(props: { interview: MentorInterview; template?: string | null; courseAlias: string }) {
-  const { interview, template, courseAlias } = props;
+export function StudentInterview(props: {
+  interview: MentorInterview;
+  template?: string | null;
+  courseAlias: string;
+  courseId: number;
+}) {
+  const { interview, template, courseAlias, courseId } = props;
   const { student, completed } = interview;
+
+  const [interviewFeedbackUrl, setInterviewFeedbackUrl] = useState('');
+  const [isInterviewCompleted, setInterviewCompleted] = useState(completed);
+  const [popconfirmOpen, setPopconfirmOpen] = useState(false);
+  const courseService = new CourseService(courseId);
+
+  const handleButtonClick = (event: React.MouseEvent<HTMLElement>) => {
+    setInterviewFeedbackUrl(
+      getInterviewFeedbackUrl({
+        courseAlias,
+        interviewName: interview.name,
+        interviewId: interview.id,
+        studentGithubId: student.githubId,
+        studentId: student.id,
+        template: template,
+      }),
+    );
+    if (!isInterviewCompleted) {
+      event.preventDefault();
+      setPopconfirmOpen(true);
+    }
+  };
+
+  const popconfirmTitle = (
+    <div style={{ maxWidth: '270px', whiteSpace: 'pre-line' }}>
+      You can reject the interview with a result <strong>0</strong>, if student didn't connect with you, or for other
+      reasons.
+    </div>
+  );
+
+  const handlePopconfirmConfirm = async () => {
+    setPopconfirmOpen(false);
+    const score = 0;
+    const data = { score, comment: 'No Interview, Rejected' };
+    await courseService.postStudentInterviewResult(student.githubId, interview.id, data);
+
+    setInterviewCompleted(true);
+    message.success('You feedback with zero result has been submitted.');
+  };
+
+  const handleCancel = () => {
+    window.location.href = interviewFeedbackUrl;
+    setPopconfirmOpen(false);
+  };
+
   return (
     <Col className={containerClassName}>
       <Space size={21} direction="vertical" style={{ width: '100%' }}>
         <Row justify="space-between" align="middle">
           <DecisionTag decision={interview.decision} status={interview.status} />
-
-          <Button
-            type="primary"
-            ghost
-            size="small"
-            href={getInterviewFeedbackUrl({
-              courseAlias,
-              interviewName: interview.name,
-              interviewId: interview.id,
-              studentGithubId: student.githubId,
-              studentId: student.id,
-              template: template,
-            })}
+          <Popconfirm
+            title={popconfirmTitle}
+            open={popconfirmOpen && !isInterviewCompleted}
+            onOpenChange={visible => setPopconfirmOpen(visible)}
+            onConfirm={handlePopconfirmConfirm}
+            onCancel={handleCancel}
+            okText="Reject"
+            cancelText="Provide feedback"
+            okButtonProps={{
+              danger: true,
+              icon: <CloseCircleOutlined />,
+            }}
           >
-            {completed ? 'Edit feedback' : 'Provide feedback'}
-          </Button>
+            <Button type="primary" ghost size="small" onClick={handleButtonClick} href={interviewFeedbackUrl}>
+              {isInterviewCompleted ? 'Edit feedback' : 'Provide feedback'}
+            </Button>
+          </Popconfirm>
         </Row>
         <Row>
           <Space size={14} align="baseline">
