@@ -23,7 +23,7 @@ export function StudentInterview(props: {
 
   const courseService = new CourseService(courseId);
   const isCoreJsInterview = interviewTaskType === TaskDtoTypeEnum.Interview;
-  const interviewStatus = !isInterviewCompleted ? interview.status : InterviewStatus.Completed;
+  const interviewStatus = isInterviewCompleted ? InterviewStatus.Completed : interview.status;
 
   const interviewFeedbackUrl = getInterviewFeedbackUrl({
     courseAlias,
