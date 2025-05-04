@@ -1,5 +1,10 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
+export type SelfEducationAnswers = {
+  index: number;
+  value: number | number[];
+}[];
+
 export class SelfEducationQuestionDto {
   constructor(question: SelfEducationQuestionDto) {
     this.answers = question.answers;
@@ -32,5 +37,5 @@ export class SelfEducationQuestionSelectedAnswersDto extends SelfEducationQuesti
   }
 
   @ApiProperty({ type: [Number] })
-  selectedAnswers: (number | number[])[];
+  selectedAnswers: number[];
 }

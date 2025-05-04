@@ -6,7 +6,7 @@ import { SelfEducationQuestionSelectedAnswersDto } from './self-education.dto';
 @ApiResponse({})
 export class TaskVerificationAttemptDto {
   constructor(taskVerification: TaskVerification, questions: SelfEducationQuestionSelectedAnswersDto[]) {
-    this.createdDate = taskVerification.createdDate;
+    this.createdDate = taskVerification.createdDate.getTime();
     this.courseTaskId = taskVerification.courseTaskId;
     this.score = taskVerification.score;
     this.maxScore = taskVerification.courseTask.maxScore;

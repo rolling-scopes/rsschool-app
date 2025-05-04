@@ -1,28 +1,22 @@
 import { CourseTask } from '@entities/courseTask';
 import { TaskVerification } from '@entities/taskVerification';
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 import { Repository } from 'typeorm';
 import { WriteScoreService } from '../score';
+import { SelfEducationAnswers } from './dto';
 
-type CorrectAnswer = {
-  index: number;
-  value: (number | number[])[];
-  isCorrect: boolean;
-};
+type CorrectAnswer = SelfEducationAnswers[number] & { isCorrect: boolean };
 
 type SelfEducationVerificationParams = {
   courseId: number;
   courseTask: CourseTask;
   studentId: number;
-  studentAnswers: {
-    index: number;
-    value: (number | number[])[];
-  }[];
+  studentAnswers: SelfEducationAnswers;
 };
 
-type SelfEducationAttributes = {
+export type SelfEducationAttributes = {
   public: {
     maxAttemptsNumber: number;
     numberOfQuestions: number;
@@ -52,6 +46,41 @@ export class SelfEducationService {
     studentId,
     studentAnswers,
   }: SelfEducationVerificationParams) {
+    const { id: courseTaskId, type: courseTaskType } = courseTask;
+
+    const verifications = await this.taskVerificationsRepository.find({
+      where: { studentId, courseTaskId },
+      order: { createdDate: 'DESC' },
+    });
+
+    const { score, details, studentCorrectAnswers } = this.verifySelfEducationAnswers(
+      courseTask,
+      studentAnswers,
+      verifications.length,
+      verifications[0]?.createdDate?.toString(),
+    );
+
+    const { id } = await this.taskVerificationsRepository.save({
+      studentId,
+      courseTaskId,
+      score,
+      details,
+      status: 'completed',
+      answers: studentCorrectAnswers,
+    });
+
+    const result = await this.taskVerificationsRepository.findOneByOrFail({ id });
+    await this.writeScoreService.saveScore(studentId, courseTaskId, { score, comment: details });
+
+    return { ...result, courseTask: { type: courseTaskType } };
+  }
+
+  public verifySelfEducationAnswers(
+    courseTask: CourseTask,
+    studentAnswers: SelfEducationAnswers,
+    attempt: number,
+    lastAttemptTime?: string,
+  ) {
     const {
       answers,
       public: {
@@ -63,19 +92,33 @@ export class SelfEducationService {
       },
     } = courseTask.task.attributes as SelfEducationAttributes;
 
-    const { id: courseTaskId, type: courseTaskType, maxScore } = courseTask;
+    if (studentAnswers.length !== numberOfQuestions) {
+      throw new BadRequestException(
+        `Number of submitted answers (${studentAnswers.length}) does not match the number of questions (${numberOfQuestions})`,
+      );
+    }
 
-    const verifications = await this.taskVerificationsRepository.find({
-      where: { studentId, courseTaskId },
-      order: { createdDate: 'DESC' },
-    });
+    // Check if all answer values are integers
+    if (studentAnswers.flatMap(a => (Array.isArray(a.value) ? a.value : [a.value])).some(a => !Number.isInteger(a))) {
+      throw new BadRequestException('Invalid answer value');
+    }
 
-    const verificationsNumber = verifications.length;
-    const lastVerificationDate = verifications[0]?.createdDate?.toString();
+    const submittedIndices = new Set(studentAnswers.map(a => a.index));
+    if (submittedIndices.size !== numberOfQuestions) {
+      throw new BadRequestException('Submitted answer indices must be unique');
+    }
+
+    for (let i = 0; i < numberOfQuestions; i++) {
+      if (!submittedIndices.has(i)) {
+        throw new BadRequestException(`Missing answer for question index ${i}`);
+      }
+    }
+
+    const { maxScore } = courseTask;
 
     if (
-      !this.isNextSubmitAllowed(oneAttemptPerNumberOfHours, lastVerificationDate) ||
-      (strictAttemptsMode && verificationsNumber >= maxAttemptsNumber)
+      !this.isNextSubmitAllowed(oneAttemptPerNumberOfHours, lastAttemptTime) ||
+      (strictAttemptsMode && attempt >= maxAttemptsNumber)
     ) {
       throw new ForbiddenException();
     }
@@ -96,7 +139,7 @@ export class SelfEducationService {
         ? `Your accuracy: ${rightAnswersPercent}%. The minimum accuracy for obtaining a score on this test is ${tresholdPercentage}%.`
         : `Accuracy: ${rightAnswersPercent}%`;
 
-    if (verificationsNumber >= maxAttemptsNumber) {
+    if (attempt >= maxAttemptsNumber) {
       score = Math.floor(score / 2);
       details += '. Attempts number was over, so score was divided by 2';
     }
@@ -107,19 +150,11 @@ export class SelfEducationService {
       return { index, value, isCorrect: sortedAnswers === sortedValues };
     });
 
-    const { id } = await this.taskVerificationsRepository.save({
-      studentId,
-      courseTaskId,
+    return {
+      studentCorrectAnswers,
       score,
       details,
-      status: 'completed',
-      answers: studentCorrectAnswers,
-    });
-
-    const result = await this.taskVerificationsRepository.findOneByOrFail({ id });
-    await this.writeScoreService.saveScore(studentId, courseTaskId, { score, comment: details });
-
-    return { ...result, courseTask: { type: courseTaskType } };
+    };
   }
 
   private isNextSubmitAllowed(hours: number, lastAttemptTime?: string) {
