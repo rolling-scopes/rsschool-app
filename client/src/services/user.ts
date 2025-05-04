@@ -176,11 +176,11 @@ export type ResponseCourse = {
 export interface UserFull extends UserBasic {
   firstName: string;
   lastName: string;
-  externalAccounts: any[];
+  externalAccounts: unknown[];
   englishLevel: string;
   readyFullTime: string;
-  educationHistory: any[];
-  employmentHistory: any[];
+  educationHistory: unknown[];
+  employmentHistory: unknown[];
   contactsTelegram: string;
   contactsSkype: string;
   contactsWhatsApp: string;

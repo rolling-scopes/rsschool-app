@@ -1,29 +1,30 @@
-import { useCallback, useState, useMemo, useContext } from 'react';
-import { useAsync } from 'react-use';
 import FileExcelOutlined from '@ant-design/icons/FileExcelOutlined';
 import { Alert, Button, Col, Form, message, notification, Row, Select, Space, Tabs, Typography } from 'antd';
+import { useCallback, useContext, useMemo, useState } from 'react';
+import { useAsync } from 'react-use';
 
 import { DisciplineDto, DisciplinesApi, MentorRegistryDto } from 'api';
 
-import { MentorRegistryService } from 'services/mentorRegistry';
-import { Course, CourseRole } from 'services/models';
+import { CommentModal } from 'components/CommentModal';
 import { ModalForm } from 'components/Forms';
-import { MentorRegistryResendModal } from 'modules/MentorRegistry/components/MentorRegistryResendModal';
-import { MentorRegistryDeleteModal } from 'modules/MentorRegistry/components/MentorRegistryDeleteModal';
-import { MentorRegistryTable } from 'modules/MentorRegistry/components/MentorRegistryTable';
-import {
-  CombinedFilter,
-  MentorRegistryTableContainer,
-} from 'modules/MentorRegistry/components/MentorRegistryTableContainer';
-import { MentorRegistryTabsMode, PAGINATION } from 'modules/MentorRegistry/constants';
-import { useLoading } from 'components/useLoading';
 import { AdminPageLayout } from 'components/PageLayout';
 import { tabRenderer } from 'components/TabsWithCounter/renderers';
-import css from 'styled-jsx/css';
-import { CommentModal } from 'components/CommentModal';
+import { useLoading } from 'components/useLoading';
 import { ActiveCourseProvider, SessionContext, SessionProvider } from 'modules/Course/contexts';
-import { CoursesService } from 'services/courses';
+import {
+  CombinedFilter,
+  MentorRegistryDeleteModal,
+  MentorRegistryResendModal,
+  MentorRegistryTable,
+  MentorRegistryTableContainer,
+  MentorRegistryTabsMode,
+  PAGINATION,
+} from 'modules/MentorRegistry';
 import dynamic from 'next/dynamic';
+import { CoursesService } from 'services/courses';
+import { MentorRegistryService } from 'services/mentorRegistry';
+import { Course, CourseRole } from 'services/models';
+import css from 'styled-jsx/css';
 
 const InviteMentorsModal = dynamic(() => import('modules/MentorRegistry/components/InviteMentorsModal'), {
   ssr: false,
@@ -43,6 +44,10 @@ type ModalData = Partial<{
   record: MentorRegistryDto;
   mode: ModalDataMode;
 }>;
+
+type FormData = {
+  preselectedCourses: number[];
+};
 
 const mentorRegistryService = new MentorRegistryService();
 const coursesService = new CoursesService();
@@ -134,11 +139,13 @@ function Page() {
   };
 
   const handleModalSubmit = useCallback(
-    async (values: any) => {
+    async (values: FormData) => {
       try {
         setModalLoading(true);
         if (modalData?.record?.githubId) {
-          await mentorRegistryService.updateMentor(modalData.record.githubId, values);
+          await mentorRegistryService.updateMentor(modalData.record.githubId, {
+            preselectedCourses: values.preselectedCourses.map(v => String(v)),
+          });
         }
         setModalData(null);
         await loadData();
@@ -163,7 +170,6 @@ function Page() {
         title="Record"
         submit={handleModalSubmit}
         cancel={() => setModalData(null)}
-        getInitialValues={getInitialValues}
         loading={modalLoading}
       >
         <Form.Item name="preselectedCourses" label="Pre-Selected Courses">
@@ -181,17 +187,13 @@ function Page() {
     );
   }, [modalData]);
 
-  const getInitialValues = useCallback((record?: Partial<any>) => {
-    return {
-      preselectedCourses: record?.preselectedCourses?.map((v: string) => Number(v)),
-    };
-  }, []);
-
   async function resendConfirmation(record: MentorRegistryDto) {
     try {
       setModalLoading(true);
       setModalData(null);
-      await mentorRegistryService.updateMentor(record!.githubId, getInitialValues(record));
+      await mentorRegistryService.updateMentor(record!.githubId, {
+        preselectedCourses: record.preselectedCourses.map(v => String(v)),
+      });
       loadData();
     } catch {
       message.error('An error occurred. Please try again later.');

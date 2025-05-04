@@ -72,11 +72,10 @@ export class MentorRegistryService {
     }
   }
 
-  public async updateMentor(githubId: string, data: any) {
-    const response = await this.axios.put(`/mentor/${githubId}`, data, {
-      baseURL: `/api/v2/registry`,
+  public async updateMentor(githubId: string, data: { preselectedCourses: string[] }) {
+    await this.registryApi.approveMentor(githubId, {
+      preselectedCourses: data.preselectedCourses,
     });
-    return response.data.data;
   }
 
   public async cancelMentorRegistry(githubId: string) {

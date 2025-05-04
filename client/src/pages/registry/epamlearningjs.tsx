@@ -18,8 +18,16 @@ const defaultRowGutter = 24;
 
 const courseAlias = 'epamlearningjs';
 
+type FormData = {
+  firstName: string;
+  lastName: string;
+  primaryEmail: string;
+  location: Location;
+  gdpr: boolean;
+};
+
 function EpamLearningJSPage() {
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<FormData>();
 
   const update = useUpdate();
   const [submitted, setSubmitted] = useState(false);
@@ -43,7 +51,7 @@ function EpamLearningJSPage() {
     } as Location);
   }, [initialData]);
 
-  const handleSubmit = async (model: any) => {
+  const handleSubmit = async (model: FormData) => {
     const { location } = model;
     const registryModel = {
       type: TYPES.STUDENT,
@@ -95,7 +103,7 @@ function EpamLearningJSPage() {
         initialValues={getInitialValues(initialData)}
         onChange={update}
         className="m-2"
-        onFinish={(values: any) => handleSubmit({ ...values, location })}
+        onFinish={(values: FormData) => handleSubmit({ ...values, location: location! })}
       >
         <Col style={{ margin: '0 20px' }}>
           <Row>
