@@ -1,40 +1,44 @@
 import { Col, Row, Button, Typography, Space, message, Popconfirm } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
 import GithubFilled from '@ant-design/icons/GithubFilled';
-import { DecisionTag, getInterviewFeedbackUrl } from 'domain/interview';
+import { DecisionTag, getInterviewFeedbackUrl, InterviewStatus } from 'domain/interview';
 import { CourseService, MentorInterview } from 'services/course';
 import css from 'styled-jsx/css';
 import { useState } from 'react';
 import { CloseCircleOutlined } from '@ant-design/icons';
+import { TaskDtoTypeEnum } from 'api';
 
 export function StudentInterview(props: {
   interview: MentorInterview;
+  interviewTaskType: TaskDtoTypeEnum;
   template?: string | null;
   courseAlias: string;
   courseId: number;
 }) {
-  const { interview, template, courseAlias, courseId } = props;
+  const { interview, interviewTaskType, template, courseAlias, courseId } = props;
   const { student, completed } = interview;
 
-  const [interviewFeedbackUrl, setInterviewFeedbackUrl] = useState('');
   const [isInterviewCompleted, setInterviewCompleted] = useState(completed);
   const [popconfirmOpen, setPopconfirmOpen] = useState(false);
-  const courseService = new CourseService(courseId);
 
-  const handleButtonClick = (event: React.MouseEvent<HTMLElement>) => {
-    setInterviewFeedbackUrl(
-      getInterviewFeedbackUrl({
-        courseAlias,
-        interviewName: interview.name,
-        interviewId: interview.id,
-        studentGithubId: student.githubId,
-        studentId: student.id,
-        template: template,
-      }),
-    );
-    if (!isInterviewCompleted) {
-      event.preventDefault();
+  const courseService = new CourseService(courseId);
+  const isCoreJsInterview = interviewTaskType === TaskDtoTypeEnum.Interview;
+  const interviewStatus = !isInterviewCompleted ? interview.status : InterviewStatus.Completed;
+
+  const interviewFeedbackUrl = getInterviewFeedbackUrl({
+    courseAlias,
+    interviewName: interview.name,
+    interviewId: interview.id,
+    studentGithubId: student.githubId,
+    studentId: student.id,
+    template: template,
+  });
+
+  const handleButtonClick = () => {
+    if (!isInterviewCompleted && isCoreJsInterview) {
       setPopconfirmOpen(true);
+    } else {
+      window.location.href = interviewFeedbackUrl;
     }
   };
 
@@ -64,10 +68,10 @@ export function StudentInterview(props: {
     <Col className={containerClassName}>
       <Space size={21} direction="vertical" style={{ width: '100%' }}>
         <Row justify="space-between" align="middle">
-          <DecisionTag decision={interview.decision} status={interview.status} />
+          <DecisionTag decision={interview.decision} status={interviewStatus} />
           <Popconfirm
             title={popconfirmTitle}
-            open={popconfirmOpen && !isInterviewCompleted}
+            open={isCoreJsInterview && !isInterviewCompleted && popconfirmOpen}
             onOpenChange={visible => setPopconfirmOpen(visible)}
             onConfirm={handlePopconfirmConfirm}
             onCancel={handleCancel}
@@ -78,7 +82,7 @@ export function StudentInterview(props: {
               icon: <CloseCircleOutlined />,
             }}
           >
-            <Button type="primary" ghost size="small" onClick={handleButtonClick} href={interviewFeedbackUrl}>
+            <Button type="primary" ghost size="small" onClick={handleButtonClick}>
               {isInterviewCompleted ? 'Edit feedback' : 'Provide feedback'}
             </Button>
           </Popconfirm>
