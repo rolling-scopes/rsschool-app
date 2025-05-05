@@ -25,7 +25,7 @@ describe('AdminSider', () => {
       description: 'Test Description',
       startDate: '2024-01-01',
       endDate: '2024-12-31',
-      registrationEndDate: '2023-12-31',
+      registrationEndDate: '2023-12-30',
       completed: false,
       planned: false,
       inviteOnly: false,
