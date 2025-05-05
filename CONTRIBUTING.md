@@ -126,7 +126,7 @@ See more about TypeORM migrations at official docs [Migrations](https://github.c
 - Do not include issue IDs in the PR title.
 - Use GitHub's [Draft PR](https://github.blog/2019-02-14-introducing-draft-pull-requests/) feature instead of using "WIP" (Work In Progress) in the title.
 - Consider adding relevant `area:*` label(s) to your PR.
-- Add the `deploy` label if you want the PR deployed to the staging environment.
+- Add the `deploy` label if you want the PR deployed to the staging environment. **NOTE**: This feature does not work for PRs opened from forks due to security limitations.
 - Write a clear and meaningful description for your PR.
 - Include screenshots and animated GIFs in your PR description whenever possible to demonstrate changes.
 
