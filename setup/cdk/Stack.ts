@@ -5,9 +5,23 @@ import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as alias from 'aws-cdk-lib/aws-route53-targets';
 
 import { CfnOutput } from 'aws-cdk-lib';
-import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
+import {
+  Distribution,
+  OriginRequestPolicy,
+  OriginRequestQueryStringBehavior,
+  OriginRequestHeaderBehavior,
+  OriginRequestCookieBehavior,
+  OriginProtocolPolicy,
+  AllowedMethods,
+  CachePolicy,
+  CacheHeaderBehavior,
+  CacheQueryStringBehavior,
+  CacheCookieBehavior,
+} from 'aws-cdk-lib/aws-cloudfront';
 import { Construct } from 'constructs';
 import { DockerFunction } from './DockerFunctionConstruct';
+import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
+import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 
 type Props = cdk.StackProps & {
   feature: string;
@@ -60,53 +74,38 @@ export class RsSchoolAppStack extends cdk.Stack {
       repository: Repository.fromRepositoryName(this, 'NestjsRepository', 'rsschool-nestjs'),
     });
 
-    const noCacheBehavior: cloudfront.Behavior = {
-      allowedMethods: cloudfront.CloudFrontAllowedMethods.ALL,
-      defaultTtl: cdk.Duration.seconds(0),
+    const authorizationCachePolicy = new CachePolicy(this, 'AuthorizationCachePolicy', {
+      defaultTtl: cdk.Duration.seconds(5),
       minTtl: cdk.Duration.seconds(0),
-      maxTtl: cdk.Duration.seconds(0),
-      forwardedValues: {
-        queryString: true,
-        headers: ['Origin', 'Authorization'],
-        cookies: {
-          forward: 'all',
-        },
-      },
-    };
+      maxTtl: cdk.Duration.seconds(60),
+      headerBehavior: CacheHeaderBehavior.allowList('Authorization'),
+      queryStringBehavior: CacheQueryStringBehavior.all(),
+      cookieBehavior: CacheCookieBehavior.all(),
+    });
 
-    const distribution = new cloudfront.CloudFrontWebDistribution(this, 'Distribution', {
-      originConfigs: [
-        {
-          customOriginSource: {
-            domainName: nestjsApi.domainName,
-            originProtocolPolicy: cloudfront.OriginProtocolPolicy.HTTPS_ONLY,
-          },
-          behaviors: [{ pathPattern: '/api/v2/*', ...noCacheBehavior }],
-        },
-        {
-          customOriginSource: {
-            domainName: serverApi.domainName,
-            originProtocolPolicy: cloudfront.OriginProtocolPolicy.HTTPS_ONLY,
-          },
-          behaviors: [{ pathPattern: '/api/*', ...noCacheBehavior }],
-        },
-        {
-          customOriginSource: {
-            domainName: nextApp.domainName,
-            originProtocolPolicy: cloudfront.OriginProtocolPolicy.HTTPS_ONLY,
-          },
-          behaviors: [{ isDefaultBehavior: true, ...noCacheBehavior }],
-        },
-      ],
+    const commonOriginRequestPolicy = new OriginRequestPolicy(this, 'CommonOriginRequestPolicy', {
+      queryStringBehavior: OriginRequestQueryStringBehavior.all(),
+      headerBehavior: OriginRequestHeaderBehavior.allowList('Origin'),
+      cookieBehavior: OriginRequestCookieBehavior.all(),
+    });
+
+    const createBehavior = (originDomain: string) => ({
+      origin: new origins.HttpOrigin(originDomain, {
+        protocolPolicy: OriginProtocolPolicy.HTTPS_ONLY,
+      }),
+      allowedMethods: AllowedMethods.ALLOW_ALL,
+      cachePolicy: authorizationCachePolicy,
+      originRequestPolicy: commonOriginRequestPolicy,
+    });
+
+    const distribution = new Distribution(this, 'Distribution', {
       defaultRootObject: '/',
-      viewerCertificate: {
-        aliases: [this.fqdn],
-        props: {
-          // cloudfront needs certificate in us-east-1 so we pass it as string
-          acmCertificateArn: certificateArn,
-          sslSupportMethod: 'sni-only',
-          minimumProtocolVersion: 'TLSv1.2_2019',
-        },
+      domainNames: [this.fqdn],
+      certificate: acm.Certificate.fromCertificateArn(this, 'Certificate', certificateArn),
+      defaultBehavior: createBehavior(nextApp.domainName),
+      additionalBehaviors: {
+        '/api/*': createBehavior(serverApi.domainName),
+        '/api/v2/*': createBehavior(nestjsApi.domainName),
       },
     });
 

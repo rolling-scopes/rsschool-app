@@ -53,6 +53,7 @@ export function InterviewsList(props: StudentsListProps) {
                 key={studentInterview.student.githubId}
                 interview={studentInterview}
                 courseAlias={course.alias}
+                courseId={course.id}
                 template={template}
               />
             ))}

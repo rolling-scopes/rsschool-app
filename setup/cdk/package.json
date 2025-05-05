@@ -2,8 +2,8 @@
   "type": "module",
   "name": "cdk",
   "dependencies": {
-    "aws-cdk": "2.178.2",
-    "aws-cdk-lib": "2.189.1",
+    "aws-cdk": "2.1012.0",
+    "aws-cdk-lib": "2.192.0",
     "constructs": "^10",
     "tsx": "^4.19.2"
   }
