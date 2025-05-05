@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { MentorInterview } from 'services/course';
 import { StudentInterview } from './StudentInterview';
 import { InterviewsSummary } from './InterviewsSummary';
-import { InterviewDto } from 'api';
+import { InterviewDto, TaskDtoTypeEnum } from 'api';
 import { Course } from 'services/models';
 import { useLoading } from 'components/useLoading';
 import { useAsyncFn } from 'react-use';
@@ -52,7 +52,9 @@ export function InterviewsList(props: StudentsListProps) {
               <StudentInterview
                 key={studentInterview.student.githubId}
                 interview={studentInterview}
+                interviewTaskType={interviewTask.type as TaskDtoTypeEnum}
                 courseAlias={course.alias}
+                courseId={course.id}
                 template={template}
               />
             ))}
