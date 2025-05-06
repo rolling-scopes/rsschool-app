@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class UpdateCourseDto {
   @IsString()
@@ -115,4 +115,9 @@ export class UpdateCourseDto {
   @IsOptional()
   @ApiPropertyOptional({ nullable: true, type: 'string' })
   wearecommunityUrl?: string | null;
+
+  @IsArray()
+  @IsOptional()
+  @ApiPropertyOptional()
+  certificateDisciplines?: string[];
 }

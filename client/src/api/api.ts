@@ -1072,6 +1072,12 @@ export interface CourseDto {
      * @memberof CourseDto
      */
     'wearecommunityUrl': string | null;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof CourseDto
+     */
+    'certificateDisciplines': Array<number>;
 }
 /**
  * 
@@ -1973,6 +1979,12 @@ export interface CreateCourseDto {
      * @memberof CreateCourseDto
      */
     'wearecommunityUrl': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof CreateCourseDto
+     */
+    'certificateDisciplines': Array<string>;
 }
 /**
  * 
@@ -4872,6 +4884,12 @@ export interface ProfileCourseDto {
      * @memberof ProfileCourseDto
      */
     'wearecommunityUrl': string | null;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof ProfileCourseDto
+     */
+    'certificateDisciplines': Array<number>;
 }
 /**
  * 
@@ -6687,6 +6705,12 @@ export interface UpdateCourseDto {
      * @memberof UpdateCourseDto
      */
     'wearecommunityUrl'?: string | null;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof UpdateCourseDto
+     */
+    'certificateDisciplines'?: Array<string>;
 }
 /**
  * 

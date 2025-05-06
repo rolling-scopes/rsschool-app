@@ -2973,7 +2973,8 @@
           "discipline": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/IdNameDto" }] },
           "minStudentsPerMentor": { "type": "number" },
           "certificateThreshold": { "type": "number" },
-          "wearecommunityUrl": { "type": "string", "nullable": true }
+          "wearecommunityUrl": { "type": "string", "nullable": true },
+          "certificateDisciplines": { "type": "array", "items": { "type": "number" } }
         },
         "required": [
           "id",
@@ -3004,7 +3005,8 @@
           "discipline",
           "minStudentsPerMentor",
           "certificateThreshold",
-          "wearecommunityUrl"
+          "wearecommunityUrl",
+          "certificateDisciplines"
         ]
       },
       "CreateCourseDto": {
@@ -3031,9 +3033,19 @@
           "logo": { "type": "string" },
           "minStudentsPerMentor": { "type": "number" },
           "certificateThreshold": { "type": "number" },
-          "wearecommunityUrl": { "type": "string" }
+          "wearecommunityUrl": { "type": "string" },
+          "certificateDisciplines": { "type": "array", "items": { "type": "string" } }
         },
-        "required": ["name", "startDate", "endDate", "fullName", "alias", "certificateThreshold", "wearecommunityUrl"]
+        "required": [
+          "name",
+          "startDate",
+          "endDate",
+          "fullName",
+          "alias",
+          "certificateThreshold",
+          "wearecommunityUrl",
+          "certificateDisciplines"
+        ]
       },
       "UpdateCourseDto": {
         "type": "object",
@@ -3061,7 +3073,8 @@
           "disciplineId": { "type": "number" },
           "minStudentsPerMentor": { "type": "number" },
           "certificateThreshold": { "type": "number" },
-          "wearecommunityUrl": { "type": "string", "nullable": true }
+          "wearecommunityUrl": { "type": "string", "nullable": true },
+          "certificateDisciplines": { "type": "array", "items": { "type": "string" } }
         },
         "required": ["certificateThreshold"]
       },
@@ -4484,7 +4497,8 @@
           "discipline": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/IdNameDto" }] },
           "minStudentsPerMentor": { "type": "number" },
           "certificateThreshold": { "type": "number" },
-          "wearecommunityUrl": { "type": "string", "nullable": true }
+          "wearecommunityUrl": { "type": "string", "nullable": true },
+          "certificateDisciplines": { "type": "array", "items": { "type": "number" } }
         },
         "required": [
           "id",
@@ -4515,7 +4529,8 @@
           "discipline",
           "minStudentsPerMentor",
           "certificateThreshold",
-          "wearecommunityUrl"
+          "wearecommunityUrl",
+          "certificateDisciplines"
         ]
       },
       "UpdateUserDto": {
