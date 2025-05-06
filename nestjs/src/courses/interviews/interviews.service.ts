@@ -1,10 +1,12 @@
 import { In, Repository } from 'typeorm';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { StageInterviewFeedbackJson } from '@common/models';
+import { InterviewPair, InterviewStatus, StageInterviewFeedbackJson } from '@common/models';
 import { CourseTask } from '@entities/courseTask';
 import { StageInterview } from '@entities/stageInterview';
 import { TaskInterviewStudent } from '@entities/taskInterviewStudent';
+import { TaskInterviewResult } from '@entities/taskInterviewResult';
+import { TaskChecker } from '@entities/taskChecker';
 import { UsersService } from 'src/users/users.service';
 import { StageInterviewStudent, Student } from '@entities/index';
 import { AvailableStudentDto } from './dto/available-student.dto';
@@ -17,6 +19,10 @@ export class InterviewsService {
     readonly courseTaskRepository: Repository<CourseTask>,
     @InjectRepository(TaskInterviewStudent)
     readonly taskInterviewStudentRepository: Repository<TaskInterviewStudent>,
+    @InjectRepository(TaskChecker)
+    readonly taskCheckerRepository: Repository<TaskChecker>,
+    @InjectRepository(TaskInterviewResult)
+    readonly taskInterviewResultRepository: Repository<TaskInterviewResult>,
     @InjectRepository(Student)
     readonly studentRepository: Repository<Student>,
     @InjectRepository(StageInterviewStudent)
@@ -91,6 +97,52 @@ export class InterviewsService {
       countryName: record.student.user.countryName,
       totalScore: record.student.totalScore,
       registeredDate: record.createdDate,
+    }));
+  }
+
+  public async getInterviewPairs(courseTaskId: number): Promise<InterviewPair[]> {
+    const records = await this.taskCheckerRepository
+      .createQueryBuilder('tc')
+      .leftJoin('tc.mentor', 'mentor')
+      .leftJoin('tc.student', 'student')
+      .leftJoin('mentor.user', 'mentorUser')
+      .leftJoin('student.user', 'studentUser')
+      .leftJoin(TaskInterviewResult, 'tir', 'tc.studentId = tir.studentId AND tc.courseTaskId = tir.courseTaskId')
+      .addSelect([
+        'tc.id',
+        'tir.score',
+        'mentorUser.id',
+        'mentorUser.firstName',
+        'mentorUser.lastName',
+        'mentorUser.githubId',
+        'studentUser.id',
+        'studentUser.firstName',
+        'studentUser.lastName',
+        'studentUser.githubId',
+      ])
+      .where('tc.courseTaskId = :courseTaskId', { courseTaskId })
+      .getRawMany();
+
+    return records.map(record => ({
+      id: record.tc_id,
+      result: record.tir_score || null,
+      status: record.tir_score ? InterviewStatus.Completed : InterviewStatus.NotCompleted,
+      interviewer: {
+        id: record.mentorUser_id,
+        githubId: record.mentorUser_githubId,
+        name: UsersService.getFullName({
+          firstName: record.mentorUser_firstName,
+          lastName: record.mentorUser_lastName,
+        }),
+      },
+      student: {
+        id: record.studentUser_id,
+        githubId: record.studentUser_githubId,
+        name: UsersService.getFullName({
+          firstName: record.studentUser_firstName,
+          lastName: record.studentUser_lastName,
+        }),
+      },
     }));
   }
 
