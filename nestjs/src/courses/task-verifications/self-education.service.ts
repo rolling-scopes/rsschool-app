@@ -7,7 +7,7 @@ import { Repository } from 'typeorm';
 import { WriteScoreService } from '../score';
 import { SelfEducationAnswers } from './dto';
 
-type CorrectAnswer = SelfEducationAnswers[number] & { isCorrect: boolean };
+type CheckedAnswer = SelfEducationAnswers[number] & { isCorrect: boolean };
 
 type SelfEducationVerificationParams = {
   courseId: number;
@@ -53,7 +53,7 @@ export class SelfEducationService {
       order: { createdDate: 'DESC' },
     });
 
-    const { score, details, studentCorrectAnswers } = this.verifySelfEducationAnswers(
+    const { score, details, checkedAnswers } = this.verifySelfEducationAnswers(
       courseTask,
       studentAnswers,
       verifications.length,
@@ -66,9 +66,8 @@ export class SelfEducationService {
       score,
       details,
       status: 'completed',
-      answers: studentCorrectAnswers,
+      answers: checkedAnswers,
     });
-
     const result = await this.taskVerificationsRepository.findOneByOrFail({ id });
     await this.writeScoreService.saveScore(studentId, courseTaskId, { score, comment: details });
 
@@ -92,26 +91,25 @@ export class SelfEducationService {
       },
     } = courseTask.task.attributes as SelfEducationAttributes;
 
-    if (studentAnswers.length !== numberOfQuestions) {
-      throw new BadRequestException(
-        `Number of submitted answers (${studentAnswers.length}) does not match the number of questions (${numberOfQuestions})`,
-      );
+    if (studentAnswers.length > answers.length || studentAnswers.length === 0) {
+      throw new BadRequestException(`Incorrect student answers count`);
     }
 
+    const isPositiveInteger = (value: number) => Number.isInteger(value) && value >= 0;
+    const isWithinAnswersRange = (index: number) => index >= 0 && index < answers.length;
+
     // Check if all answer values are integers
-    if (studentAnswers.flatMap(a => (Array.isArray(a.value) ? a.value : [a.value])).some(a => !Number.isInteger(a))) {
+    if (studentAnswers.flatMap(a => (Array.isArray(a.value) ? a.value : [a.value])).some(a => !isPositiveInteger(a))) {
       throw new BadRequestException('Invalid answer value');
     }
 
-    const submittedIndices = new Set(studentAnswers.map(a => a.index));
-    if (submittedIndices.size !== numberOfQuestions) {
-      throw new BadRequestException('Submitted answer indices must be unique');
+    if (studentAnswers.some(a => !isPositiveInteger(a.index) || !isWithinAnswersRange(a.index))) {
+      throw new BadRequestException('Invalid answer index');
     }
 
-    for (let i = 0; i < numberOfQuestions; i++) {
-      if (!submittedIndices.has(i)) {
-        throw new BadRequestException(`Missing answer for question index ${i}`);
-      }
+    const submittedIndices = new Set(studentAnswers.map(a => a.index));
+    if (submittedIndices.size !== studentAnswers.length) {
+      throw new BadRequestException('Submitted answer indices must be unique');
     }
 
     const { maxScore } = courseTask;
@@ -123,35 +121,34 @@ export class SelfEducationService {
       throw new ForbiddenException();
     }
 
-    const rightAnswersCount = studentAnswers
-      .map(({ index, value }) => {
-        const rightAnswer = this.sortAnswers(answers[index]);
-        const userAnswer = this.sortAnswers(value);
+    const checkedAnswers: CheckedAnswer[] = studentAnswers.map(({ index, value: studentAnswer }) => {
+      const answer = answers[index];
+      if (answer === undefined) {
+        throw new BadRequestException('Invalid answer index');
+      }
 
-        return Number(rightAnswer === userAnswer);
-      })
-      .reduce((sum, value) => sum + value, 0);
+      const serializedAnswer = this.serializeAnswers(answer);
+      const serializedStudentAnswer = this.serializeAnswers(studentAnswer);
 
-    const rightAnswersPercent = Math.round((100 / numberOfQuestions) * rightAnswersCount);
-    let score = rightAnswersPercent < tresholdPercentage ? 0 : Math.floor(maxScore * rightAnswersPercent * 0.01);
+      return { index, value: studentAnswer, isCorrect: serializedAnswer === serializedStudentAnswer };
+    });
+
+    const correctAnswersCount = checkedAnswers.filter(answer => answer.isCorrect === true).length;
+    const correctAnswersPercent = Math.round((100 / numberOfQuestions) * correctAnswersCount);
+
+    let score = correctAnswersPercent < tresholdPercentage ? 0 : Math.floor(maxScore * correctAnswersPercent * 0.01);
     let details =
-      rightAnswersPercent < tresholdPercentage
-        ? `Your accuracy: ${rightAnswersPercent}%. The minimum accuracy for obtaining a score on this test is ${tresholdPercentage}%.`
-        : `Accuracy: ${rightAnswersPercent}%`;
+      correctAnswersPercent < tresholdPercentage
+        ? `Your accuracy: ${correctAnswersPercent}%. The minimum accuracy for obtaining a score on this test is ${tresholdPercentage}%.`
+        : `Accuracy: ${correctAnswersPercent}%`;
 
     if (attempt >= maxAttemptsNumber) {
       score = Math.floor(score / 2);
       details += '. Attempts number was over, so score was divided by 2';
     }
 
-    const studentCorrectAnswers: CorrectAnswer[] = studentAnswers.map(({ index, value }) => {
-      const sortedAnswers = this.sortAnswers(answers[index]);
-      const sortedValues = this.sortAnswers(value);
-      return { index, value, isCorrect: sortedAnswers === sortedValues };
-    });
-
     return {
-      studentCorrectAnswers,
+      checkedAnswers,
       score,
       details,
     };
@@ -163,10 +160,14 @@ export class SelfEducationService {
     return dayjs().diff(lastAttemptTime, 'hours') >= hours;
   }
 
-  private sortAnswers<T>(values: T): string {
-    return String(values)
-      .split(',')
-      .sort((a, b) => Number(a) - Number(b))
-      .join('');
+  /**
+   * Sorts the values and joins them with a pipe character.
+   * The final string is used for comparison of answers.
+   */
+  private serializeAnswers(values: number | number[]): string {
+    if (Array.isArray(values)) {
+      return [...values].sort((a, b) => Number(a) - Number(b)).join('|');
+    }
+    return String(values);
   }
 }

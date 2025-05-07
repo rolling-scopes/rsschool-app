@@ -25,7 +25,7 @@ const createMockCourseTask = (
           numberOfQuestions: 2,
           ...attributes.public,
         },
-        answers: attributes.answers,
+        answers: attributes.answers ?? [0, 1],
       },
     } as unknown as Task,
   } as unknown as CourseTask;
@@ -71,28 +71,33 @@ describe('SelfEducationService', () => {
     });
 
     describe('Input Validation', () => {
-      it('should throw if answer count !== numberOfQuestions (less)', () => {
-        studentAnswers = [{ index: 0, value: 0 }];
-
-        mockTask = createMockCourseTask({
-          public: { numberOfQuestions: 2 },
-          answers: [0, 1],
-        });
-
-        expect(() => service.verifySelfEducationAnswers(mockTask, studentAnswers, 0)).toThrow(
-          new BadRequestException('Number of submitted answers (1) does not match the number of questions (2)'),
-        );
-      });
-
-      it('should throw if answer count !== numberOfQuestions (more)', () => {
+      it('should throw if student answers count greater than total answers', () => {
         studentAnswers = [
           { index: 0, value: 0 },
           { index: 1, value: 1 },
           { index: 2, value: 2 },
         ];
-        mockTask = createMockCourseTask({ public: { numberOfQuestions: 2 } });
+
+        mockTask = createMockCourseTask({
+          public: {},
+          answers: [0, 1],
+        });
+
         expect(() => service.verifySelfEducationAnswers(mockTask, studentAnswers, 0)).toThrow(
-          new BadRequestException('Number of submitted answers (3) does not match the number of questions (2)'),
+          new BadRequestException('Incorrect student answers count'),
+        );
+      });
+
+      it('should throw if student answers count is 0', () => {
+        studentAnswers = [];
+
+        mockTask = createMockCourseTask({
+          public: {},
+          answers: [0, 1],
+        });
+
+        expect(() => service.verifySelfEducationAnswers(mockTask, studentAnswers, 0)).toThrow(
+          new BadRequestException('Incorrect student answers count'),
         );
       });
 
@@ -107,7 +112,7 @@ describe('SelfEducationService', () => {
         );
       });
 
-      it('should throw  if input value is undefined', () => {
+      it('should throw if input value is undefined', () => {
         studentAnswers = [
           // @ts-expect-error - test
           { index: 0, value: undefined },
@@ -125,6 +130,39 @@ describe('SelfEducationService', () => {
           { index: 1, value: 1 },
         ];
         mockTask = createMockCourseTask({ public: { numberOfQuestions: 2 } });
+        expect(() => service.verifySelfEducationAnswers(mockTask, studentAnswers, 0)).toThrow(
+          new BadRequestException('Invalid answer value'),
+        );
+      });
+
+      it('should throw if index is out of range', () => {
+        studentAnswers = [
+          { index: 0, value: 0 },
+          { index: 2, value: 1 },
+        ];
+        mockTask = createMockCourseTask({ public: {} });
+        expect(() => service.verifySelfEducationAnswers(mockTask, studentAnswers, 0)).toThrow(
+          new BadRequestException('Invalid answer index'),
+        );
+      });
+
+      it('should throw if index is negative', () => {
+        studentAnswers = [
+          { index: -1, value: 0 },
+          { index: 1, value: 1 },
+        ];
+        mockTask = createMockCourseTask({ public: {} });
+        expect(() => service.verifySelfEducationAnswers(mockTask, studentAnswers, 0)).toThrow(
+          new BadRequestException('Invalid answer index'),
+        );
+      });
+
+      it('should throw if value is negative', () => {
+        studentAnswers = [
+          { index: 0, value: -1 },
+          { index: 1, value: 1 },
+        ];
+        mockTask = createMockCourseTask({ public: {} });
         expect(() => service.verifySelfEducationAnswers(mockTask, studentAnswers, 0)).toThrow(
           new BadRequestException('Invalid answer value'),
         );
@@ -386,7 +424,7 @@ describe('SelfEducationService', () => {
           { index: 1, value: [1, 3] },
         ];
         const result = service.verifySelfEducationAnswers(mockTask, studentAnswers, 0);
-        expect(result.studentCorrectAnswers).toEqual([
+        expect(result.checkedAnswers).toEqual([
           { index: 0, value: 5, isCorrect: true },
           { index: 1, value: [1, 3], isCorrect: true },
         ]);
@@ -399,7 +437,7 @@ describe('SelfEducationService', () => {
           { index: 1, value: [3, 1] },
         ];
         const result = service.verifySelfEducationAnswers(mockTask, studentAnswers, 0);
-        expect(result.studentCorrectAnswers).toEqual([
+        expect(result.checkedAnswers).toEqual([
           { index: 0, value: 5, isCorrect: true },
           { index: 1, value: [3, 1], isCorrect: true },
         ]);
@@ -412,7 +450,7 @@ describe('SelfEducationService', () => {
           { index: 1, value: [1, 3] },
         ];
         const result = service.verifySelfEducationAnswers(mockTask, studentAnswers, 0);
-        expect(result.studentCorrectAnswers).toEqual([
+        expect(result.checkedAnswers).toEqual([
           { index: 0, value: 4, isCorrect: false },
           { index: 1, value: [1, 3], isCorrect: true },
         ]);
@@ -425,7 +463,7 @@ describe('SelfEducationService', () => {
           { index: 1, value: [1] },
         ];
         const result = service.verifySelfEducationAnswers(mockTask, studentAnswers, 0);
-        expect(result.studentCorrectAnswers).toEqual([
+        expect(result.checkedAnswers).toEqual([
           { index: 0, value: 5, isCorrect: true },
           { index: 1, value: [1], isCorrect: false },
         ]);
@@ -438,7 +476,7 @@ describe('SelfEducationService', () => {
           { index: 1, value: [1, 3, 4] },
         ];
         const result = service.verifySelfEducationAnswers(mockTask, studentAnswers, 0);
-        expect(result.studentCorrectAnswers).toEqual([
+        expect(result.checkedAnswers).toEqual([
           { index: 0, value: 5, isCorrect: true },
           { index: 1, value: [1, 3, 4], isCorrect: false },
         ]);
@@ -451,7 +489,7 @@ describe('SelfEducationService', () => {
           { index: 1, value: [1, 3] },
         ];
         const result = service.verifySelfEducationAnswers(mockTask, studentAnswers, 0);
-        expect(result.studentCorrectAnswers).toEqual([
+        expect(result.checkedAnswers).toEqual([
           { index: 0, value: [5], isCorrect: true },
           { index: 1, value: [1, 3], isCorrect: true },
         ]);
@@ -471,14 +509,14 @@ describe('SelfEducationService', () => {
         ];
         const result = service.verifySelfEducationAnswers(mockTask, studentAnswers, 0);
 
-        expect(result).toHaveProperty('studentCorrectAnswers');
+        expect(result).toHaveProperty('checkedAnswers');
         expect(result).toHaveProperty('score');
         expect(result).toHaveProperty('details');
 
-        expect(Array.isArray(result.studentCorrectAnswers)).toBe(true);
-        expect(result.studentCorrectAnswers.length).toBe(2);
-        expect(result.studentCorrectAnswers[0]).toEqual({ index: 0, value: 0, isCorrect: true });
-        expect(result.studentCorrectAnswers[1]).toEqual({ index: 1, value: 99, isCorrect: false });
+        expect(Array.isArray(result.checkedAnswers)).toBe(true);
+        expect(result.checkedAnswers.length).toBe(2);
+        expect(result.checkedAnswers[0]).toEqual({ index: 0, value: 0, isCorrect: true });
+        expect(result.checkedAnswers[1]).toEqual({ index: 1, value: 99, isCorrect: false });
 
         expect(typeof result.score).toBe('number');
         expect(result.score).toBe(50);
@@ -489,17 +527,6 @@ describe('SelfEducationService', () => {
     });
 
     describe('Edge Cases', () => {
-      it('should throw if indices are not sequential from 0', () => {
-        studentAnswers = [
-          { index: 1, value: 0 },
-          { index: 2, value: 1 },
-        ];
-        mockTask = createMockCourseTask({ public: { numberOfQuestions: 2 } });
-        expect(() => service.verifySelfEducationAnswers(mockTask, studentAnswers, 0)).toThrow(
-          new BadRequestException('Missing answer for question index 0'),
-        );
-      });
-
       it('should handle empty array as answer value', () => {
         mockTask = createMockCourseTask({
           public: { numberOfQuestions: 2 },
@@ -510,7 +537,7 @@ describe('SelfEducationService', () => {
           { index: 1, value: [] },
         ];
         const result = service.verifySelfEducationAnswers(mockTask, studentAnswers, 0);
-        expect(result.studentCorrectAnswers[1]?.isCorrect).toBe(true);
+        expect(result.checkedAnswers[1]?.isCorrect).toBe(true);
       });
 
       it('should handle 0% threshold correctly', () => {
@@ -565,7 +592,7 @@ describe('SelfEducationService', () => {
         ];
         const result = service.verifySelfEducationAnswers(mockTask, studentAnswers, 0);
         expect(result.score).toBe(100);
-        expect(result.studentCorrectAnswers.every(a => a.isCorrect)).toBe(true);
+        expect(result.checkedAnswers.every(a => a.isCorrect)).toBe(true);
       });
 
       it('should round scores correctly', () => {
