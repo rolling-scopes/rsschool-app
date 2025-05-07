@@ -1909,6 +1909,28 @@
         "tags": ["disciplines"]
       }
     },
+    "/disciplines/ids": {
+      "post": {
+        "operationId": "getDisciplinesByIds",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/DisciplineIdsDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/DisciplineDto" } }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": ["disciplines"]
+      }
+    },
     "/disciplines/{id}": {
       "delete": {
         "operationId": "deleteDiscipline",
@@ -4677,6 +4699,11 @@
           "updatedDate": { "type": "string" }
         },
         "required": ["name", "id", "createdDate", "updatedDate"]
+      },
+      "DisciplineIdsDto": {
+        "type": "object",
+        "properties": { "ids": { "type": "array", "items": { "type": "number" } } },
+        "required": ["ids"]
       },
       "UpdateDisciplineDto": { "type": "object", "properties": { "name": { "type": "string" } }, "required": ["name"] },
       "ApproveMentorDto": {

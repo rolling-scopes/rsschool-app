@@ -2960,6 +2960,19 @@ export interface DisciplineDto {
 /**
  * 
  * @export
+ * @interface DisciplineIdsDto
+ */
+export interface DisciplineIdsDto {
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof DisciplineIdsDto
+     */
+    'ids': Array<number>;
+}
+/**
+ * 
+ * @export
  * @interface Discord
  */
 export interface Discord {
@@ -13429,6 +13442,41 @@ export const DisciplinesApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
+         * @param {DisciplineIdsDto} disciplineIdsDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDisciplinesByIds: async (disciplineIdsDto: DisciplineIdsDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'disciplineIdsDto' is not null or undefined
+            assertParamExists('getDisciplinesByIds', 'disciplineIdsDto', disciplineIdsDto)
+            const localVarPath = `/disciplines/ids`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(disciplineIdsDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {number} id 
          * @param {UpdateDisciplineDto} updateDisciplineDto 
          * @param {*} [options] Override http request option.
@@ -13507,6 +13555,16 @@ export const DisciplinesApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {DisciplineIdsDto} disciplineIdsDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getDisciplinesByIds(disciplineIdsDto: DisciplineIdsDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<DisciplineDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getDisciplinesByIds(disciplineIdsDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {number} id 
          * @param {UpdateDisciplineDto} updateDisciplineDto 
          * @param {*} [options] Override http request option.
@@ -13551,6 +13609,15 @@ export const DisciplinesApiFactory = function (configuration?: Configuration, ba
          */
         getDisciplines(options?: any): AxiosPromise<Array<DisciplineDto>> {
             return localVarFp.getDisciplines(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {DisciplineIdsDto} disciplineIdsDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDisciplinesByIds(disciplineIdsDto: DisciplineIdsDto, options?: any): AxiosPromise<Array<DisciplineDto>> {
+            return localVarFp.getDisciplinesByIds(disciplineIdsDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -13602,6 +13669,17 @@ export class DisciplinesApi extends BaseAPI {
      */
     public getDisciplines(options?: AxiosRequestConfig) {
         return DisciplinesApiFp(this.configuration).getDisciplines(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {DisciplineIdsDto} disciplineIdsDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DisciplinesApi
+     */
+    public getDisciplinesByIds(disciplineIdsDto: DisciplineIdsDto, options?: AxiosRequestConfig) {
+        return DisciplinesApiFp(this.configuration).getDisciplinesByIds(disciplineIdsDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
