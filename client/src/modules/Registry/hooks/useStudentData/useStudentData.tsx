@@ -53,10 +53,6 @@ export function useStudentData(githubId: string, courseAlias: string | undefined
         const disciplineIds = currentCourse.certificateDisciplines;
         const { data } = (await disciplinesApi.getDisciplinesByIds({ ids: disciplineIds })) as { data: IdName[] };
 
-        if (disciplineIds.includes(0)) {
-          data.push({ id: 0, name: 'any' });
-        }
-
         const certifiedStudentCourseIds =
           profileInfo.studentStats
             ?.map(course => ({
@@ -66,26 +62,32 @@ export function useStudentData(githubId: string, courseAlias: string | undefined
             .filter(item => item.certificate)
             .map(item => item.courseId) || [];
 
-        const studentCertifiedDisciplineNames = [
-          ...new Set(
-            courses
-              .filter(course => certifiedStudentCourseIds.includes(course.id))
-              .map(course => course.discipline?.name)
-              .filter(Boolean),
-          ),
-        ];
+        if (disciplineIds.includes(0)) {
+          if (!certifiedStudentCourseIds.length) {
+            setMissingDisciplines('any');
+          }
+        } else {
+          const studentCertifiedDisciplineNames = [
+            ...new Set(
+              courses
+                .filter(course => certifiedStudentCourseIds.includes(course.id))
+                .map(course => course.discipline?.name)
+                .filter(Boolean),
+            ),
+          ];
 
-        const requiredDisciplineNames = data.map(discipline => discipline.name);
-        const hasAllRequiredDisciplines = requiredDisciplineNames.every(name =>
-          studentCertifiedDisciplineNames.includes(name),
-        );
+          const requiredDisciplineNames = data.map(discipline => discipline.name);
+          const hasAllRequiredDisciplines = requiredDisciplineNames.every(name =>
+            studentCertifiedDisciplineNames.includes(name),
+          );
 
-        if (!hasAllRequiredDisciplines) {
-          const missingDisciplines = requiredDisciplineNames
-            .filter(name => !studentCertifiedDisciplineNames.includes(name))
-            .join(', ');
+          if (!hasAllRequiredDisciplines) {
+            const missingDisciplines = requiredDisciplineNames
+              .filter(name => !studentCertifiedDisciplineNames.includes(name))
+              .join(', ');
 
-          setMissingDisciplines(missingDisciplines);
+            setMissingDisciplines(missingDisciplines);
+          }
         }
       }
 
