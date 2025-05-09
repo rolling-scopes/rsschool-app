@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGua
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { DefaultGuard, RequiredRoles, Role, RoleGuard } from '../auth';
 import { DisciplinesService } from './disciplines.service';
-import { CreateDisciplineDto, DisciplineDto, UpdateDisciplineDto } from './dto';
+import { CreateDisciplineDto, DisciplineDto, DisciplineIdsDto, UpdateDisciplineDto } from './dto';
 
 @Controller('disciplines')
 @ApiTags('disciplines')
@@ -24,6 +24,14 @@ export class DisciplinesController {
   @ApiOkResponse({ type: [DisciplineDto] })
   public async getAll() {
     const items = await this.service.getAll();
+    return items.map(item => new DisciplineDto(item));
+  }
+
+  @Post('/ids')
+  @ApiOperation({ operationId: 'getDisciplinesByIds' })
+  @ApiOkResponse({ type: [DisciplineDto] })
+  public async getByIds(@Body() dto: DisciplineIdsDto) {
+    const items = await this.service.getByIds(dto.ids);
     return items.map(item => new DisciplineDto(item));
   }
 
