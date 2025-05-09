@@ -87,31 +87,6 @@
     "ts-node": "10.9.1",
     "tsconfig-paths": "4.2.0"
   },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "src",
-    "testRegex": [
-      ".*\\.spec\\.ts$",
-      "test\\.ts"
-    ],
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "collectCoverageFrom": [
-      "**/*.(t|j)s"
-    ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node",
-    "moduleNameMapper": {
-      "^@entities(.*)$": "<rootDir>/../../server/src/models/$1",
-      "^src/(.*)$": "<rootDir>/$1"
-    },
-    "clearMocks": true
-  },
   "jest-junit": {
     "outputDirectory": "../reports",
     "outputName": "jest-junit-nestjs.xml"

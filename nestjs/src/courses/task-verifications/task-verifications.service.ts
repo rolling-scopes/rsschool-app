@@ -1,14 +1,13 @@
-import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { MoreThan, Repository } from 'typeorm';
-import { TaskVerification } from '@entities/taskVerification';
 import { CourseTask } from '@entities/courseTask';
-import { TaskVerificationAttemptDto } from './dto/task-verifications-attempts.dto';
-import { SelfEducationQuestionSelectedAnswersDto } from './dto/self-education.dto';
-import * as dayjs from 'dayjs';
 import { Student } from '@entities/index';
 import { TaskType } from '@entities/task';
+import { TaskVerification } from '@entities/taskVerification';
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import * as dayjs from 'dayjs';
 import { CloudApiService } from 'src/cloud-api/cloud-api.service';
+import { MoreThan, Repository } from 'typeorm';
+import { SelfEducationAnswers, SelfEducationQuestionSelectedAnswersDto, TaskVerificationAttemptDto } from './dto';
 import { SelfEducationService } from './self-education.service';
 
 export type VerificationEvent = {
@@ -73,7 +72,7 @@ export class TaskVerificationsService {
 
             return new SelfEducationQuestionSelectedAnswersDto({
               answers: taskQuestion.answers,
-              selectedAnswers: answer.value,
+              selectedAnswers: Array.isArray(answer.value) ? answer.value : [answer.value],
               multiple: taskQuestion.multiple,
               question: taskQuestion.question,
               answersType: taskQuestion.answersType,
@@ -91,7 +90,7 @@ export class TaskVerificationsService {
   public async createTaskVerification(
     courseTaskId: number,
     studentId: number,
-    data: { githubId: string; body: any },
+    data: { githubId: string; body: Record<string, unknown> | unknown[] },
   ): Promise<{ id?: number }> {
     const [courseTask, student] = await Promise.all([
       this.courseTasksRepository.findOne({
@@ -139,7 +138,7 @@ export class TaskVerificationsService {
         courseId: courseTask.courseId,
         courseTask,
         studentId: student.id,
-        studentAnswers: data.body,
+        studentAnswers: data.body as SelfEducationAnswers,
       });
       return { id: undefined };
     }
