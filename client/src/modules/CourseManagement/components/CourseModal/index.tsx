@@ -242,7 +242,11 @@ export function CourseModal(props: CourseModalProps) {
 
           <Row gutter={24}>
             <Col md={8} sm={12} span={24}>
-              <Form.Item name="registrationEndDate" label="Registration End Date">
+              <Form.Item
+                name="registrationEndDate"
+                label="Registration End Date"
+                getValueFromEvent={date => date?.utc().endOf('day')}
+              >
                 <DatePicker style={{ width: '100%' }} />
               </Form.Item>
             </Col>
