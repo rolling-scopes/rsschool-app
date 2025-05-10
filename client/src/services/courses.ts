@@ -1,12 +1,12 @@
 import { CourseDto as Course, CoursesApi, CreateCourseDto } from 'api';
-import { getApiConfiguration } from 'utils/axios';
+
 export type CoursesResponse = { data: Course[] };
 
 export class CoursesService {
   private coursesApi: CoursesApi;
 
-  constructor(private token?: string) {
-    this.coursesApi = new CoursesApi(getApiConfiguration(this.token));
+  constructor() {
+    this.coursesApi = new CoursesApi();
   }
 
   async createCourse(data: CreateCourseDto) {

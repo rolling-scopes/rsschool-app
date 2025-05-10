@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { getApiConfiguration, getServerAxiosProps } from 'utils/axios';
-import { EnglishLevel } from 'common/models';
+import { EnglishLevel } from '@common/models';
 import { ProfileApi, ProfileDto, UsersNotificationsApi, UpdateUserDtoLanguagesEnum } from 'api';
 import discordIntegration from '../configs/discord-integration';
 import type {
@@ -13,7 +13,7 @@ import type {
   StageInterviewDetailedFeedback,
   StudentStats,
   Location,
-} from 'common/models/profile';
+} from '@common/models/profile';
 import { Rule } from 'antd/lib/form';
 
 export interface UserBasic {
@@ -77,18 +77,6 @@ export class UserService {
         return [];
       }
       const response = await this.axios.get<SearchResponse>(`/api/users/search/${query}`);
-      return response.data.data;
-    } catch {
-      return [];
-    }
-  }
-
-  async extendedUserSearch(query: string | null) {
-    try {
-      if (!query) {
-        return [];
-      }
-      const response = await this.axios.get<SearchResponse>(`/api/users/search/extended/${query}`);
       return response.data.data;
     } catch {
       return [];
@@ -188,11 +176,11 @@ export type ResponseCourse = {
 export interface UserFull extends UserBasic {
   firstName: string;
   lastName: string;
-  externalAccounts: any[];
+  externalAccounts: unknown[];
   englishLevel: string;
   readyFullTime: string;
-  educationHistory: any[];
-  employmentHistory: any[];
+  educationHistory: unknown[];
+  employmentHistory: unknown[];
   contactsTelegram: string;
   contactsSkype: string;
   contactsWhatsApp: string;

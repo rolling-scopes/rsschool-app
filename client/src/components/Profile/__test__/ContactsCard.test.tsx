@@ -15,6 +15,7 @@ describe('ContactsCard', () => {
             telegram: 'televasya',
             notes: 'vasya',
             linkedIn: 'http://linkedin_test.com/vasya',
+            whatsApp: '1234567890',
           }}
           isEditingModeEnabled={false}
           sendConfirmationEmail={jest.fn()}
@@ -35,6 +36,7 @@ describe('ContactsCard', () => {
             telegram: null,
             notes: null,
             linkedIn: null,
+            whatsApp: '1234567890',
           }}
           isEditingModeEnabled={true}
           sendConfirmationEmail={jest.fn()}

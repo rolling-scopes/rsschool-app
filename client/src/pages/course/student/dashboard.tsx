@@ -1,40 +1,22 @@
-import { Result } from 'antd';
+import { PageLayout } from 'components/PageLayout';
+import { useContext, useMemo, useState } from 'react';
 import Masonry from 'react-masonry-css';
 import css from 'styled-jsx/css';
-import { useAsync } from 'react-use';
-import { useMemo, useState, useContext } from 'react';
-import groupBy from 'lodash/groupBy';
-import omitBy from 'lodash/omitBy';
-import { LoadingScreen } from 'components/LoadingScreen';
-import { PageLayout } from 'components/PageLayout';
 
-import { CourseService } from 'services/course';
-import { UserService } from 'services/user';
+import { StudentsApi } from '@client/api';
+import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import {
+  AvailableReviewCard,
   MainStatsCard,
   MentorCard,
-  TasksStatsCard,
   NextEventCard,
   RepositoryCard,
-  TaskStat,
-  AvailableReviewCard,
-} from 'modules/StudentDashboard/components';
-import { useLoading } from 'components/useLoading';
-import {
-  CoursesTasksApi,
-  CourseTaskDto,
-  CourseStatsApi,
-  CoursesScheduleApi,
-  CourseScheduleItemDto,
-  CourseScheduleItemDtoStatusEnum,
-  AvailableReviewStatsDto,
-  CourseScheduleItemDtoTypeEnum,
-  StudentSummaryDto,
-} from 'api';
-import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+  TasksStatsCard,
+  useDashboardData,
+} from 'modules/StudentDashboard';
+import { CourseService } from 'services/course';
 
-const coursesTasksApi = new CoursesTasksApi();
-const coursesStatsApi = new CourseStatsApi();
+const studentsApi = new StudentsApi();
 
 function Page() {
   const { githubId } = useContext(SessionContext);
@@ -43,97 +25,38 @@ function Page() {
   const { fullName, usePrivateRepositories, alias } = course;
 
   const courseService = useMemo(() => new CourseService(course.id), [course.id]);
-  const userService = useMemo(() => new UserService(), []);
-
-  const [studentSummary, setStudentSummary] = useState<StudentSummaryDto>();
   const [repositoryUrl, setRepositoryUrl] = useState('');
-  const [courseTasks, setCourseTasks] = useState<CourseTaskDto[]>([]);
-  const [nextEvents, setNextEvent] = useState([] as CourseScheduleItemDto[]);
-  const [availableReviews, setAvailableReviews] = useState<AvailableReviewStatsDto[]>([]);
-  const [tasksByStatus, setTasksByStatus] = useState(
-    {} as Record<CourseScheduleItemDtoStatusEnum, CourseScheduleItemDto[]>,
-  );
-  const [totalStudentsCount, setTotalStudentsCount] = useState(0);
-  const [loading, withLoading] = useLoading(false);
 
   const updateUrl = async () => {
-    const { repository } = await courseService.getStudentSummary(githubId);
-    setRepositoryUrl(repository ? repository : '');
+    const { data } = await studentsApi.getStudentSummary(course.id, githubId);
+    setRepositoryUrl(data.repository ? data.repository : '');
   };
 
-  useAsync(
-    withLoading(async () => {
-      const courseId = course.id;
-      const [
-        studentSummary,
-        { data: courseTasks },
-        statisticsCourses,
-        courseStats,
-        { data: scheduleItems },
-        { data: availableReviews },
-      ] = await Promise.all([
-        courseService.getStudentSummary(githubId),
-        coursesTasksApi.getCourseTasks(courseId),
-        userService.getProfileInfo(githubId),
-        coursesStatsApi.getCourseStats(courseId),
-        new CoursesScheduleApi().getSchedule(courseId),
-        coursesTasksApi.getAvailableCrossCheckReviewStats(courseId),
-      ]);
+  const { data, loading } = useDashboardData(course.id, githubId);
 
-      const nextEvents = scheduleItems.filter(({ status }) => status === CourseScheduleItemDtoStatusEnum.Available);
+  const studentPosition = data?.studentSummary?.rank ?? 0;
+  const maxCourseScore = data?.maxCourseScore ?? 0;
 
-      const tasksDetailCurrentCourse =
-        statisticsCourses.studentStats?.find(currentCourse => currentCourse.courseId === course.id)?.tasks ?? [];
-
-      setNextEvent(nextEvents);
-      setStudentSummary(studentSummary);
-      setCourseTasks(courseTasks);
-      setRepositoryUrl(studentSummary?.repository ? studentSummary.repository : '');
-      setTotalStudentsCount(courseStats?.data.activeStudentsCount || 0);
-      setAvailableReviews(availableReviews ?? []);
-
-      setTasksByStatus(
-        omitBy(
-          groupBy(
-            scheduleItems
-              .filter(scheduleItem => scheduleItem.type === CourseScheduleItemDtoTypeEnum.CourseTask)
-              .map(task => {
-                const { comment, githubPrUri } =
-                  tasksDetailCurrentCourse.find(taskDetail => taskDetail.name === task.name) ?? {};
-
-                return { ...task, comment, githubPrUri };
-              }),
-            'status',
-          ),
-          (_, status) => status === CourseScheduleItemDtoStatusEnum.Archived,
-        ) as Record<CourseScheduleItemDtoStatusEnum, TaskStat[]>,
-      );
-    }),
-    [course.id],
-  );
-
-  const studentPosition = studentSummary?.rank ?? 0;
-
-  const maxCourseScore = Math.round(
-    courseTasks.reduce((score, task) => score + (task.maxScore ?? 0) * task.scoreWeight, 0),
-  );
-
-  const { isActive = false, totalScore = 0 } = studentSummary ?? {};
+  const { isActive = false, totalScore = 0 } = data?.studentSummary ?? {};
 
   const cards = [
-    studentSummary && (
+    data?.studentSummary && (
       <MainStatsCard
         isActive={isActive}
         totalScore={totalScore}
         position={studentPosition}
         maxCourseScore={maxCourseScore}
-        totalStudentsCount={totalStudentsCount}
+        totalStudentsCount={data?.courseStats?.activeStudentsCount ?? 0}
       />
     ),
-    courseTasks.length && <TasksStatsCard tasksByStatus={tasksByStatus} courseName={fullName} />,
-    <NextEventCard key="next-event-card" nextEvents={nextEvents} courseAlias={alias} />,
-    <AvailableReviewCard key="available-review-card" availableReviews={availableReviews} courseAlias={alias} />,
-    <MentorCard key="mentor-card" courseId={course.id} mentor={studentSummary?.mentor} />,
+    data?.tasksByStatus && <TasksStatsCard tasksByStatus={data?.tasksByStatus} courseName={fullName} />,
+    <NextEventCard key="next-event-card" nextEvents={data?.nextEvents ?? []} courseAlias={alias} />,
+    <AvailableReviewCard
+      key="available-review-card"
+      availableReviews={data?.availableReviews ?? []}
+      courseAlias={alias}
+    />,
+    <MentorCard key="mentor-card" courseId={course.id} mentor={data?.studentSummary?.mentor} />,
     usePrivateRepositories && (
       <RepositoryCard
         githubId={githubId}
@@ -146,31 +69,25 @@ function Page() {
 
   return (
     <PageLayout loading={loading} title="Student dashboard" background="#F0F2F5" showCourseName>
-      <LoadingScreen show={loading}>
-        {studentSummary ? (
-          <>
-            <Masonry
-              breakpointCols={{
-                default: 3,
-                1180: 2,
-                800: 1,
-              }}
-              className={masonryClassName}
-              columnClassName={masonryColumnClassName}
-            >
-              {cards.map((card, idx) => (
-                <div style={{ marginBottom: gapSize }} key={`card-${idx}`}>
-                  {card}
-                </div>
-              ))}
-            </Masonry>
-            {masonryStyles}
-            {masonryColumnStyles}
-          </>
-        ) : (
-          <Result status={'403'} title="You have no access to this page" />
-        )}
-      </LoadingScreen>
+      <>
+        <Masonry
+          breakpointCols={{
+            default: 3,
+            1180: 2,
+            800: 1,
+          }}
+          className={masonryClassName}
+          columnClassName={masonryColumnClassName}
+        >
+          {cards.map((card, idx) => (
+            <div style={{ marginBottom: gapSize }} key={`card-${idx}`}>
+              {card}
+            </div>
+          ))}
+        </Masonry>
+        {masonryStyles}
+        {masonryColumnStyles}
+      </>
     </PageLayout>
   );
 }
@@ -193,10 +110,10 @@ const { className: masonryColumnClassName, styles: masonryColumnStyles } = css.r
 
 export default function () {
   return (
-    <SessionProvider>
-      <ActiveCourseProvider>
+    <ActiveCourseProvider>
+      <SessionProvider allowedRoles={['student']}>
         <Page />
-      </ActiveCourseProvider>
-    </SessionProvider>
+      </SessionProvider>
+    </ActiveCourseProvider>
   );
 }

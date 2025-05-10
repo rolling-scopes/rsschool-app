@@ -10,7 +10,7 @@ import { Course } from 'services/models';
 import { UserFull, UserService } from 'services/user';
 import { emailPattern, englishNamePattern } from 'services/validators';
 import { TYPES } from './../../configs/registry';
-import { Location } from 'common/models/profile';
+import { Location } from '@common/models/profile';
 import { SessionProvider } from 'modules/Course/contexts';
 
 const defaultColumnSizes = { xs: 18, sm: 10, md: 8, lg: 6 };
@@ -18,8 +18,16 @@ const defaultRowGutter = 24;
 
 const courseAlias = 'epamlearningjs';
 
+type FormData = {
+  firstName: string;
+  lastName: string;
+  primaryEmail: string;
+  location: Location;
+  gdpr: boolean;
+};
+
 function EpamLearningJSPage() {
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<FormData>();
 
   const update = useUpdate();
   const [submitted, setSubmitted] = useState(false);
@@ -43,7 +51,7 @@ function EpamLearningJSPage() {
     } as Location);
   }, [initialData]);
 
-  const handleSubmit = async (model: any) => {
+  const handleSubmit = async (model: FormData) => {
     const { location } = model;
     const registryModel = {
       type: TYPES.STUDENT,
@@ -95,7 +103,7 @@ function EpamLearningJSPage() {
         initialValues={getInitialValues(initialData)}
         onChange={update}
         className="m-2"
-        onFinish={(values: any) => handleSubmit({ ...values, location })}
+        onFinish={(values: FormData) => handleSubmit({ ...values, location: location! })}
       >
         <Col style={{ margin: '0 20px' }}>
           <Row>

@@ -8,7 +8,7 @@ import { CourseService } from 'services/course';
 import { CourseRole } from 'services/models';
 import { useAsync } from 'react-use';
 import { isCourseManager } from 'domain/user';
-import { InterviewPair } from 'common/models/interview';
+import { InterviewPair } from '@common/models/interview';
 import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { CoursesInterviewsApi, InterviewDto } from 'api';
 

@@ -65,7 +65,7 @@ const links: LinkData[] = [
   },
   {
     name: 'Score',
-    icon: <FireTwoTone twoToneColor="orange" />,
+    icon: <FireTwoTone twoToneColor="#ffa500" />,
     getUrl: (course: Course) => `/course/score?course=${course.alias}`,
     access: anyAccess,
   },
@@ -104,7 +104,7 @@ const links: LinkData[] = [
   },
   {
     name: 'Interviews',
-    icon: <AudioTwoTone twoToneColor="orange" />,
+    icon: <AudioTwoTone twoToneColor="#ffa500" />,
     getUrl: (course: Course) => `/course/mentor/interviews?course=${course.alias}`,
     access: every(isMentor),
     courseAccess: everyCourse(isCourseNotCompleted),
@@ -118,7 +118,7 @@ const links: LinkData[] = [
   },
   {
     name: 'Expel/Unassign Student',
-    icon: <StopTwoTone twoToneColor="red" />,
+    icon: <StopTwoTone twoToneColor="#ff0000" />,
     getUrl: (course: Course) => `/course/mentor/expel-student?course=${course.alias}`,
     access: every(isMentor),
     courseAccess: everyCourse(isCourseNotCompleted),

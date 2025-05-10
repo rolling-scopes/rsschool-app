@@ -3,7 +3,7 @@ import isEqual from 'lodash/isEqual';
 import { Typography, List, Button, Progress, Modal, Divider } from 'antd';
 import CommonCard from './CommonCard';
 import StudentStatsModal from './StudentStatsModal';
-import { StudentStats } from 'common/models/profile';
+import { StudentStats } from '@common/models/profile';
 import { BookOutlined, FullscreenOutlined, SafetyCertificateTwoTone } from '@ant-design/icons';
 import { CoursesApi } from 'api';
 import { WarningTwoTone, ReloadOutlined, LogoutOutlined } from '@ant-design/icons';

@@ -5,9 +5,8 @@ import { boolIconRenderer, PersonCell, getColumnSearchProps } from 'components/T
 import { UserSearch } from 'components/UserSearch';
 import { useCallback, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
-import { CourseUser } from 'services/course';
-import { CourseUsersApi } from 'api';
-import { UserGroup, CourseRole } from 'services/models';
+import { CourseUserDto, CourseUsersApi } from 'api';
+import { CourseRole } from 'services/models';
 import { UserService } from 'services/user';
 import { UserGroupApi, UserGroupDto } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
@@ -28,9 +27,9 @@ function Page() {
   const courseId = course.id;
 
   const [loading, setLoading] = useState(false);
-  const [courseUsers, setCourseUsers] = useState([] as CourseUser[]);
+  const [courseUsers, setCourseUsers] = useState([] as CourseUserDto[]);
   const [userGroups, setUserGroups] = useState<UserGroupDto[] | null>(null);
-  const [userModalData, setUserModalData] = useState(null as Partial<CourseUser> | null);
+  const [userModalData, setUserModalData] = useState(null as Partial<CourseUserDto> | null);
   const [groupModalData, setGroupModalData] = useState(null as UserGroupDto[] | null);
 
   const loadData = useCallback(async () => {
@@ -60,7 +59,7 @@ function Page() {
     setGroupModalData(userGroups);
   };
 
-  const handleEditItem = (record: CourseUser) => {
+  const handleEditItem = (record: CourseUserDto) => {
     setUserModalData(record);
   };
 
@@ -82,7 +81,7 @@ function Page() {
     loadData();
   };
 
-  const renderUserModal = (modalData: Partial<CourseUser> | null) => {
+  const renderUserModal = (modalData: Partial<CourseUserDto> | null) => {
     if (!modalData) {
       return null;
     }
@@ -125,7 +124,7 @@ function Page() {
   };
 
   const GroupModal = ({ modalData }: { modalData: UserGroupDto[] }) => {
-    const [selectedGroups, setSelectedGroups] = useState<UserGroup[] | null>(null);
+    const [selectedGroups, setSelectedGroups] = useState<UserGroupDto[] | null>(null);
     return (
       groupModalData && (
         <Modal
@@ -241,7 +240,7 @@ function getColumns(handleEditItem: any) {
     {
       title: 'Actions',
       dataIndex: 'actions',
-      render: (_: any, record: CourseUser) => (
+      render: (_: any, record: CourseUserDto) => (
         <>
           <a onClick={() => handleEditItem(record)}>Edit</a>{' '}
         </>
@@ -277,7 +276,7 @@ function createRecords(groups: UserGroupDto[]) {
   return Object.entries(data).map(([id, roles]) => ({ ...roles, userId: Number(id) }));
 }
 
-function getInitialValues(modalData: Partial<CourseUser> | UserGroup[]) {
+function getInitialValues(modalData: Partial<CourseUserDto> | UserGroupDto[]) {
   return modalData;
 }
 

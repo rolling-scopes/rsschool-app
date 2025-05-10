@@ -1,26 +1,25 @@
 import { Col, Row, Table } from 'antd';
-import React, { useMemo, useState } from 'react';
-import { getColumns } from '.';
 import { MentorDashboardDto } from 'api';
-import { useMentorDashboard } from 'modules/Mentor/hooks/useMentorDashboard';
-import { SubmitReviewModal } from 'modules/Mentor/components/SubmitReviewModal';
-import { TaskStatusTabs } from '../TaskStatusTabs';
+import { useMemo, useState } from 'react';
+import { getColumns } from './renderers';
 import { SolutionItemStatus } from '../../constants';
 import { ReviewRandomTask } from '../ReviewRandomTask';
+import { SubmitReviewModal } from '../SubmitReviewModal';
+import { TaskStatusTabs } from '../TaskStatusTabs';
 
 export interface TaskSolutionsTableProps {
   mentorId: number;
   courseId: number;
+  onChange: () => void;
+  data: MentorDashboardDto[];
+  loading: boolean;
 }
 
 const getUniqueKey = (record: MentorDashboardDto) => Object.values(record).filter(Boolean).join('|');
 
-function TaskSolutionsTable({ mentorId, courseId }: TaskSolutionsTableProps) {
+function TaskSolutionsTable({ mentorId, onChange, data, loading, courseId }: TaskSolutionsTableProps) {
   const [modalData, setModalData] = useState<MentorDashboardDto | null>(null);
-  const [reloadData, setReloadData] = useState(false);
   const [activeTab, setActiveTab] = useState(SolutionItemStatus.InReview);
-
-  const [data, loading] = useMentorDashboard(mentorId, courseId, reloadData);
 
   const statuses = useMemo(() => data?.map(({ status }) => status as SolutionItemStatus), [data]);
   const isReviewRandomTaskVisible = useMemo(() => {
@@ -29,10 +28,6 @@ function TaskSolutionsTable({ mentorId, courseId }: TaskSolutionsTableProps) {
   }, [data, activeTab]);
 
   const filteredData = data?.filter(item => item.status === activeTab);
-
-  const handleReloadData = () => {
-    setReloadData(!reloadData);
-  };
 
   const handleSubmitButtonClick = (data: MentorDashboardDto) => {
     setModalData(data);
@@ -66,11 +61,11 @@ function TaskSolutionsTable({ mentorId, courseId }: TaskSolutionsTableProps) {
       {isReviewRandomTaskVisible && (
         <Row style={{ background: 'white', padding: '24px 0' }} justify="center">
           <Col>
-            <ReviewRandomTask mentorId={mentorId} courseId={courseId} onClick={handleReloadData} />
+            <ReviewRandomTask mentorId={mentorId} courseId={courseId} onClick={onChange} />
           </Col>
         </Row>
       )}
-      <SubmitReviewModal courseId={courseId} data={modalData} onClose={setModalData} onSubmit={handleReloadData} />
+      <SubmitReviewModal courseId={courseId} data={modalData} onClose={setModalData} onSubmit={onChange} />
     </>
   );
 }

@@ -1,6 +1,6 @@
 import { Form, Input, Typography } from 'antd';
 import { Dispatch, SetStateAction } from 'react';
-import { Location } from 'common/models';
+import { Location } from '@common/models';
 import { DataProcessingCheckbox, FormButtons, FormCard } from 'modules/Registry/components';
 import { emailPattern, englishNamePattern, epamEmailPattern } from 'services/validators';
 import { CARD_TITLES, ERROR_MESSAGES, EXTRAS, LABELS, PLACEHOLDERS, TOOLTIPS } from 'modules/Registry/constants';

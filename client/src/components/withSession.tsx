@@ -12,6 +12,5 @@ export interface Session {
   githubId: string;
   isAdmin: boolean;
   isHirer: boolean;
-  isActivist: boolean;
-  courses: { [courseId: number | string]: CourseInfo | undefined };
+  courses: { [courseId: string]: CourseInfo | undefined };
 }

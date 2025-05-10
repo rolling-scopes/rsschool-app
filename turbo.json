@@ -1,15 +1,9 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": [
-    "**/.env"
-  ],
+  "globalDependencies": ["**/.env"],
   "tasks": {
     "build": {
-      "outputs": [
-        ".next/**",
-        "!.next/cache/**",
-        "dist/**"
-      ],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"],
       "env": [
         "ACTIVITY_WEBHOOK_SECRET",
         "APP_VERSION",
@@ -66,6 +60,7 @@
     "start": {
       "cache": false,
       "persistent": true
-    }
+    },
+    "compile": {}
   }
 }

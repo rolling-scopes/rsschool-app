@@ -1,6 +1,6 @@
 export const INSTRUCTIONS_TEXT = {
   title: "What's next?",
-  description: 'No panic! information about students tasks for review will appear here.',
+  description: "Don't panic! Information about students' tasks for review will appear here.",
   steps: [
     {
       title: 'Wait for the distribution of students',

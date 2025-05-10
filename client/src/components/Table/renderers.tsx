@@ -6,8 +6,7 @@ import YoutubeOutlined from '@ant-design/icons/YoutubeOutlined';
 import InfoCircleOutlined from '@ant-design/icons/InfoCircleOutlined';
 import { Tag, Tooltip, Typography } from 'antd';
 import { BaseType } from 'antd/lib/typography/Base';
-import { CourseScheduleItemDto, CourseScheduleItemDtoTagEnum, CheckerEnum, TaskDto } from 'api';
-import { CrossCheckStatus } from 'services/course';
+import { CourseScheduleItemDto, CourseScheduleItemDtoTagEnum, CheckerEnum, TaskDto, CrossCheckStatusEnum } from 'api';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -30,10 +29,10 @@ export function crossCheckDateRenderer(value: string | null, { checker }: { chec
   return value ? dayjs(value).tz('UTC').format('YYYY-MM-DD') : 'Not Set';
 }
 
-export function crossCheckStatusRenderer(value: CrossCheckStatus, { checker }: { checker: CheckerEnum }) {
+export function crossCheckStatusRenderer(value: CrossCheckStatusEnum, { checker }: { checker: CheckerEnum }) {
   return checker !== CheckerEnum.CrossCheck ? (
     'N/A'
-  ) : value === CrossCheckStatus.Initial ? (
+  ) : value === CrossCheckStatusEnum.Initial ? (
     'Not distributed'
   ) : (
     <span style={{ textTransform: 'capitalize' }}>{value}</span>
@@ -76,7 +75,7 @@ export function buildCheckBoxRenderer<T>(
   };
 }
 
-export function boolIconRenderer(value: any) {
+export function boolIconRenderer(value: unknown) {
   return value ? (
     <CheckCircleFilled title={(!!value).toString()} />
   ) : (

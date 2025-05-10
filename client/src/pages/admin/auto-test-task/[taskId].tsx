@@ -1,49 +1,33 @@
+import { useRequest } from 'ahooks';
 import { Descriptions, Divider, Form, Space, Switch, Tag, Typography } from 'antd';
-import { AutoTestTaskDto, AutoTestsApi, SelfEducationQuestionSelectedAnswersDto } from 'api';
+import { AutoTestsApi, SelfEducationQuestionSelectedAnswersDto } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
-import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
-import { CourseRole } from 'services/models';
-import { GetServerSideProps } from 'next';
-import { getTokenFromContext } from 'utils/server';
-import { getApiConfiguration } from 'utils/axios';
 import { Question } from 'modules/AutoTest/components';
+import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { CourseRole } from 'services/models';
 
-type PageProps = {
-  selectedTask: AutoTestTaskDto;
-};
+const api = new AutoTestsApi();
 
-export const getServerSideProps: GetServerSideProps = async context => {
-  try {
-    const taskId = context.params?.taskId;
-
-    if (!taskId) {
-      throw new Error('task id is required');
-    }
-
-    const token = getTokenFromContext(context);
-    const api = new AutoTestsApi(getApiConfiguration(token));
-    const selectedTask = await api.getAutoTest(Number(taskId));
-
-    if (!selectedTask.data) {
-      return {
-        props: {
-          notFound: true,
-        },
-      };
-    }
-
-    return {
-      props: { selectedTask: selectedTask.data },
-    };
-  } catch {
-    return {
-      notFound: true,
-    };
-  }
-};
-
-function Page({ selectedTask }: PageProps) {
+function Page() {
   const { courses } = useActiveCourseContext();
+  const router = useRouter();
+
+  const { data: selectedTask } = useRequest(async () => {
+    const taskId = Number(router.query.taskId as string);
+    if (Number.isNaN(taskId)) {
+      return null;
+    }
+    const { data } = await api.getAutoTest(Number(router.query.taskId as string));
+    return data;
+  });
+
+  useEffect(() => {
+    if (selectedTask === null) {
+      router.push('/404');
+    }
+  }, [selectedTask]);
 
   return (
     <AdminPageLayout title="Auto test task" courses={courses} loading={false}>
@@ -136,11 +120,11 @@ function Page({ selectedTask }: PageProps) {
   );
 }
 
-export default function (props: PageProps) {
+export default function () {
   return (
     <ActiveCourseProvider>
       <SessionProvider allowedRoles={[CourseRole.Manager]}>
-        <Page {...props} />
+        <Page />
       </SessionProvider>
     </ActiveCourseProvider>
   );

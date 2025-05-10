@@ -1,31 +1,37 @@
-import { Space, TablePaginationConfig, Typography, message } from 'antd';
-import { MentorReviewDto, MentorReviewsApi } from 'api';
-import { IPaginationInfo } from 'common/types/pagination';
+import { useRequest } from 'ahooks';
+import { message, Space, TablePaginationConfig, Typography } from 'antd';
+import { FilterValue } from 'antd/es/table/interface';
+import { SorterResult } from 'antd/lib/table/interface';
+import { CoursesTasksApi, CourseTaskDtoCheckerEnum, MentorReviewDto, MentorReviewsApi } from 'api';
+import { IPaginationInfo } from '@common/types/pagination';
 import { AdminPageLayout } from 'components/PageLayout';
 import { useLoading } from 'components/useLoading';
+import { isCourseManager } from 'domain/user';
 import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
 import { useContext, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import type { PageProps } from './getServerSideProps';
 import MentorReviewsTable from '../components/ReviewsTable';
-import { FilterValue } from 'antd/es/table/interface';
 import { ColumnKey } from '../components/ReviewsTable/renderers';
-import { SorterResult } from 'antd/lib/table/interface';
 import { sortDirectionMap } from './MentorTasksReview.constants';
-import { isCourseManager } from 'domain/user';
 
 const { Text } = Typography;
 
 const mentorReviewsApi = new MentorReviewsApi();
+const coursesTasksApi = new CoursesTasksApi();
 
 type ReviewsState = {
   content: MentorReviewDto[];
   pagination: IPaginationInfo;
 };
 
-export const MentorTasksReview = ({ tasks }: PageProps) => {
+export const MentorTasksReview = () => {
   const { courses, course } = useActiveCourseContext();
   const session = useContext(SessionContext);
+
+  const { data: tasks } = useRequest(async () => {
+    const { data } = await coursesTasksApi.getCourseTasks(course.id, undefined, CourseTaskDtoCheckerEnum.Mentor);
+    return data;
+  });
 
   const isManager = useMemo(() => isCourseManager(session, course.id), [session, course.id]);
 
@@ -82,7 +88,7 @@ export const MentorTasksReview = ({ tasks }: PageProps) => {
         pagination={reviews.pagination}
         handleChange={getMentorReviews}
         handleReviewerAssigned={handleReviewerAssigned}
-        tasks={tasks}
+        tasks={tasks ?? []}
         isManager={isManager}
       />
     </AdminPageLayout>

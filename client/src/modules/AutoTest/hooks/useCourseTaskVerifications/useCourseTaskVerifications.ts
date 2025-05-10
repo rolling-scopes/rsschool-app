@@ -1,41 +1,39 @@
+import { useRequest } from 'ahooks';
 import { message } from 'antd';
-import { useEffect, useMemo, useState } from 'react';
-import { useAsync } from 'react-use';
-import { CourseService } from 'services/course';
-import { CourseTaskDetailedDto } from 'api';
+import { CheckerEnum, CoursesTasksApi, CourseTaskDtoTypeEnum } from 'api';
+import dayjs from 'dayjs';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import { mapTo } from 'modules/AutoTest/utils/map';
+import { useEffect, useMemo, useState } from 'react';
+import { CourseService } from 'services/course';
 
-function isCourseTasksArray(item: unknown): item is CourseTaskDetailedDto[] {
-  return !!item && Array.isArray(item);
-}
+dayjs.extend(isSameOrAfter);
 
-function isCourseTask(item: unknown): item is CourseTaskDetailedDto {
-  return !!item && typeof item === 'object' && 'id' in item;
-}
-
-export function useCourseTaskVerifications(courseId: number, item: CourseTaskDetailedDto | CourseTaskDetailedDto[]) {
-  const [needsReload, setNeedsReload] = useState(false);
+export function useCourseTaskVerifications(courseId: number) {
   const [isExerciseVisible, setIsExerciseVisible] = useState(false);
 
+  const { data } = useRequest(async () => {
+    const { data } = await new CoursesTasksApi().getCourseTasksDetailed(courseId);
+    const now = dayjs();
+    return data.filter(
+      item =>
+        item.checker === CheckerEnum.AutoTest &&
+        item.type !== CourseTaskDtoTypeEnum.Test &&
+        now.isSameOrAfter(item.studentStartDate),
+    );
+  });
+
+  const courseTasks = data;
   const courseService = useMemo(() => new CourseService(courseId), []);
 
   const {
     loading,
-    value: allVerifications = [],
+    data: allVerifications = [],
     error,
-  } = useAsync(async () => await courseService.getTaskVerifications(), [needsReload]);
+    run: reload,
+  } = useRequest(async () => await courseService.getTaskVerifications());
 
-  const tasks = useMemo(() => {
-    if (isCourseTasksArray(item)) {
-      return item?.map(ct => mapTo(ct, allVerifications));
-    }
-  }, [item, allVerifications]);
-
-  const task = useMemo(() => {
-    if (isCourseTask(item)) {
-      return mapTo(item, allVerifications);
-    }
-  }, [item, allVerifications]);
+  const tasks = useMemo(() => courseTasks?.map(ct => mapTo(ct, allVerifications)), [courseTasks, allVerifications]);
 
   function startTask() {
     setIsExerciseVisible(true);
@@ -46,10 +44,6 @@ export function useCourseTaskVerifications(courseId: number, item: CourseTaskDet
     setIsExerciseVisible(false);
   }
 
-  function reload() {
-    setNeedsReload(!needsReload);
-  }
-
   useEffect(() => {
     if (error?.message) {
       message.error(error.message);
@@ -57,7 +51,6 @@ export function useCourseTaskVerifications(courseId: number, item: CourseTaskDet
   }, [error?.message]);
 
   return {
-    task,
     tasks,
     loading,
     isExerciseVisible,

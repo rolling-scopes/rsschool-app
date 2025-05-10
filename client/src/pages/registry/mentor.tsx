@@ -12,6 +12,7 @@ function Page(props: { courseAlias?: string }) {
 }
 
 const MentorRegistryPage: any = withGoogleMaps(Page);
+
 MentorRegistryPage.getInitialProps = async (context: NextPageContext) => {
   try {
     const courseAlias = context.query.course;
