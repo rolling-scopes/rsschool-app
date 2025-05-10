@@ -1,6 +1,5 @@
 import { IApiResponse } from '../models';
 import Router from '@koa/router';
-import * as crypto from 'crypto';
 import moment from 'moment-timezone';
 
 export function setResponse<T>(
@@ -39,25 +38,6 @@ export function setCsvResponse(
     ctx.res.setHeader('Content-disposition', `filename="${filename}.csv"`);
   }
   return ctx;
-}
-
-export function setIcalResponse(ctx: Router.RouterContext | Router.RouterContext<any, any>, data: string) {
-  ctx.status = 200;
-  ctx.body = data;
-  ctx.res.setHeader('Content-Type', 'text/calendar');
-  return ctx;
-}
-
-export function createComparisonSignature(body: any, secret: string) {
-  const hmac = crypto.createHmac('sha1', secret);
-  const selfSignature = hmac.update(JSON.stringify(body)).digest('hex');
-  return `sha1=${selfSignature}`;
-}
-
-export function compareSignatures(signature: string, comparisonSignature: string) {
-  const source = Buffer.from(signature);
-  const comparison = Buffer.from(comparisonSignature);
-  return crypto.timingSafeEqual(source, comparison);
 }
 
 export const dateFormatter = (date: string, timeZone: string, format: string) =>
