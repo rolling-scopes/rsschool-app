@@ -1,6 +1,5 @@
 import Router from '@koa/router';
 
-import { activityRoute } from './activity';
 import { courseRoute } from './course';
 import { feedbackRoute } from './feedback';
 import { filesRoute } from './file';
@@ -9,9 +8,7 @@ import { publicMeRouter } from './me';
 import { profileRoute } from './profile';
 import { registryRouter } from './registry';
 import { repositoryRoute } from './repository';
-import { studentRoute } from './student';
 import { taskRoute } from './task';
-import { taskResultRoute } from './taskResult';
 import { tasksRoute } from './tasks';
 import { taskVerification } from './taskVerification';
 import { usersRoute } from './users';
@@ -42,12 +39,9 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, courseRoute(logger));
   applyRouter(router, usersRoute(logger));
   applyRouter(router, taskRoute(logger));
-  applyRouter(router, taskResultRoute(logger));
-  applyRouter(router, studentRoute(logger));
   applyRouter(router, tasksRoute(logger));
   applyRouter(router, taskVerification(logger));
   applyRouter(router, profileRoute(logger));
-  applyRouter(router, activityRoute(logger));
   applyRouter(router, feedbackRoute(logger));
   applyRouter(router, checksRoute(logger));
   applyRouter(router, filesRoute(logger));

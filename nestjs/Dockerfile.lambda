@@ -1,4 +1,4 @@
-FROM node:20-bullseye-slim as builder
+FROM node:22-bullseye-slim as builder
 
 WORKDIR /container_out
 
@@ -13,7 +13,7 @@ COPY nestjs/lambda nestjs/
 COPY nestjs/dist nestjs/
 
 # Lambda Container
-FROM public.ecr.aws/lambda/nodejs:20
+FROM public.ecr.aws/lambda/nodejs:22
 
 ENV NODE_ENV production
 ENV TZ utc
