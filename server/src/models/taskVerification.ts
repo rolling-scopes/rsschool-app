@@ -7,7 +7,7 @@ export class TaskVerification {
   @PrimaryGeneratedColumn() id: number;
 
   @CreateDateColumn()
-  createdDate: number;
+  createdDate: Date;
 
   @UpdateDateColumn()
   @Index()
@@ -42,7 +42,7 @@ export class TaskVerification {
   @Column({ type: 'json', default: [], select: false })
   answers: {
     index: number;
-    value: (number | number[])[];
+    value: number | number[];
     isCorrect: boolean;
   }[];
 }

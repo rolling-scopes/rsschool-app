@@ -2,7 +2,7 @@ import { MoreOutlined } from '@ant-design/icons';
 import { Button, Dropdown, message, Table } from 'antd';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
 import { ColumnsType } from 'antd/lib/table';
-import { CoursesTasksApi, CourseTaskDto } from 'api';
+import { CoursesTasksApi, CourseTaskDto, CrossCheckStatusEnum } from 'api';
 import { GithubUserLink } from 'components/GithubUserLink';
 import { AdminPageLayout } from 'components/PageLayout';
 import {
@@ -16,7 +16,7 @@ import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'm
 import { CourseTaskModal } from 'modules/CourseManagement/components/CourseTaskModal';
 import { useCallback, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService, CrossCheckStatus } from 'services/course';
+import { CourseService } from 'services/course';
 import { CourseRole } from 'services/models';
 
 const courseTasksApi = new CoursesTasksApi();
@@ -137,7 +137,7 @@ function Page() {
         ? {
             key: 'crossCheckComplete',
             label: 'Cross-Check: Complete',
-            disabled: !isSubmitDeadlinePassed || record.crossCheckStatus === CrossCheckStatus.Initial,
+            disabled: !isSubmitDeadlinePassed || record.crossCheckStatus === CrossCheckStatusEnum.Initial,
             onClick: () => handleCrossCheckCompletion(record),
           }
         : null,

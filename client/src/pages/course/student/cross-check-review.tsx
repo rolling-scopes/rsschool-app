@@ -4,6 +4,7 @@ import {
   CrossCheckCriteriaDataDto,
   CrossCheckMessageDtoRoleEnum,
   CrossCheckSolutionReviewDto,
+  CrossCheckStatusEnum,
   TasksCriteriaApi,
 } from 'api';
 import { CourseTaskSelect } from 'components/Forms';
@@ -12,17 +13,17 @@ import { markdownLabel } from 'components/Forms/PreparedComment';
 import { PageLayout } from 'components/PageLayout';
 import { useLoading } from 'components/useLoading';
 import { UserSearch } from 'components/UserSearch';
-import { CourseRole } from 'services/models';
+import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { AssignmentLink, CrossCheckAssignmentLink } from 'modules/CrossCheck/components/CrossCheckAssignmentLink';
 import { CrossCheckCriteriaForm } from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
 import { CrossCheckHistory } from 'modules/CrossCheck/components/CrossCheckHistory';
-import { useRouter } from 'next/router';
-import { useEffect, useMemo, useState, useContext } from 'react';
-import { useAsync, useLocalStorage } from 'react-use';
-import { CourseService, CrossCheckStatus } from 'services/course';
-import { getQueryString } from 'utils/queryParams-utils';
-import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { TaskType } from 'modules/CrossCheck/constants';
+import { useRouter } from 'next/router';
+import { useContext, useEffect, useMemo, useState } from 'react';
+import { useAsync, useLocalStorage } from 'react-use';
+import { CourseService } from 'services/course';
+import { CourseRole } from 'services/models';
+import { getQueryString } from 'utils/queryParams-utils';
 
 enum LocalStorage {
   IsUsernameVisible = 'crossCheckIsUsernameVisible',
@@ -212,7 +213,7 @@ function Page() {
       return;
     }
     const assignments = await courseService.getCrossCheckAssignments(session.githubId, courseTask.id);
-    const submissionDisabled = courseTask.crossCheckStatus !== CrossCheckStatus.Distributed;
+    const submissionDisabled = courseTask.crossCheckStatus !== CrossCheckStatusEnum.Distributed;
     setAssignments(assignments);
     setCourseTaskId(courseTask.id);
     setCriteriaId(courseTask.taskId);

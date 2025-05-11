@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import PreScreeningIviewCard from '../PreScreeningIviewCard';
-import { StageInterviewDetailedFeedback } from 'common/models/profile';
+import { StageInterviewDetailedFeedback } from '@common/models/profile';
 
 describe('PreScreeningIviewCard', () => {
   const data = [

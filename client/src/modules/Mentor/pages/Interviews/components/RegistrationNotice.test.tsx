@@ -16,6 +16,7 @@ describe('RegistrationNoticeAlert', () => {
     type: 'stage-interview',
     descriptionUrl: '',
     attributes: {},
+    studentRegistrationStartDate: new Date('2023-01-01').toISOString(),
   };
 
   it('should not render component if registration not yet started', () => {

@@ -1,6 +1,6 @@
 import { Typography, Table, Row, Space } from 'antd';
 import { Rating } from 'components/Rating';
-import { StageInterviewDetailedFeedback } from 'common/models/profile';
+import { StageInterviewDetailedFeedback } from '@common/models/profile';
 import {
   CODING_LEVELS,
   FeedbackStepId,

@@ -291,6 +291,88 @@ export interface AuthConnectionDto {
 /**
  * 
  * @export
+ * @interface AuthUserDto
+ */
+export interface AuthUserDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof AuthUserDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof AuthUserDto
+     */
+    'githubId': string;
+    /**
+     * 
+     * @type {{ [key: string]: string; }}
+     * @memberof AuthUserDto
+     */
+    'roles': { [key: string]: string; };
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AuthUserDto
+     */
+    'isAdmin': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AuthUserDto
+     */
+    'isHirer': boolean;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof AuthUserDto
+     */
+    'appRoles': Array<string>;
+    /**
+     * 
+     * @type {{ [key: string]: AuthUserDtoCourses; }}
+     * @memberof AuthUserDto
+     */
+    'courses': { [key: string]: AuthUserDtoCourses; };
+}
+
+export const AuthUserDtoRolesEnum = {
+    Mentor: 'mentor',
+    Student: 'student'
+} as const;
+
+export type AuthUserDtoRolesEnum = typeof AuthUserDtoRolesEnum[keyof typeof AuthUserDtoRolesEnum];
+
+/**
+ * 
+ * @export
+ * @interface AuthUserDtoCourses
+ */
+export interface AuthUserDtoCourses {
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof AuthUserDtoCourses
+     */
+    'roles': Array<AuthUserDtoCoursesRolesEnum>;
+}
+
+export const AuthUserDtoCoursesRolesEnum = {
+    Manager: 'manager',
+    Supervisor: 'supervisor',
+    Student: 'student',
+    Mentor: 'mentor',
+    Dementor: 'dementor',
+    Activist: 'activist'
+} as const;
+
+export type AuthUserDtoCoursesRolesEnum = typeof AuthUserDtoCoursesRolesEnum[keyof typeof AuthUserDtoCoursesRolesEnum];
+
+/**
+ * 
+ * @export
  * @interface AutoTestAttributesDto
  */
 export interface AutoTestAttributesDto {
@@ -1492,10 +1574,10 @@ export interface CourseTaskDetailedDto {
     'pairsCount': number | null;
     /**
      * 
-     * @type {string}
+     * @type {CrossCheckStatusEnum}
      * @memberof CourseTaskDetailedDto
      */
-    'crossCheckStatus': string;
+    'crossCheckStatus': CrossCheckStatusEnum;
     /**
      * 
      * @type {string}
@@ -1659,10 +1741,10 @@ export interface CourseTaskDto {
     'pairsCount': number | null;
     /**
      * 
-     * @type {string}
+     * @type {CrossCheckStatusEnum}
      * @memberof CourseTaskDto
      */
-    'crossCheckStatus': string;
+    'crossCheckStatus': CrossCheckStatusEnum;
     /**
      * 
      * @type {string}
@@ -2926,6 +3008,21 @@ export interface CrossCheckSolutionReviewDto {
      */
     'messages': Array<CrossCheckMessageDto>;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const CrossCheckStatusEnum = {
+    Initial: 'initial',
+    Distributed: 'distributed',
+    Completed: 'completed'
+} as const;
+
+export type CrossCheckStatusEnum = typeof CrossCheckStatusEnum[keyof typeof CrossCheckStatusEnum];
+
+
 /**
  * 
  * @export
@@ -17636,6 +17733,100 @@ export class ScheduleApi extends BaseAPI {
      */
     public notifyScheduleChanges(checkScheduleChangesDto: CheckScheduleChangesDto, options?: AxiosRequestConfig) {
         return ScheduleApiFp(this.configuration).notifyScheduleChanges(checkScheduleChangesDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * SessionApi - axios parameter creator
+ * @export
+ */
+export const SessionApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSession: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/session`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * SessionApi - functional programming interface
+ * @export
+ */
+export const SessionApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SessionApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSession(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AuthUserDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSession(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * SessionApi - factory interface
+ * @export
+ */
+export const SessionApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SessionApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSession(options?: any): AxiosPromise<AuthUserDto> {
+            return localVarFp.getSession(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * SessionApi - object-oriented interface
+ * @export
+ * @class SessionApi
+ * @extends {BaseAPI}
+ */
+export class SessionApi extends BaseAPI {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SessionApi
+     */
+    public getSession(options?: AxiosRequestConfig) {
+        return SessionApiFp(this.configuration).getSession(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

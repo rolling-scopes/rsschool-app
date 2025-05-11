@@ -1,16 +1,11 @@
-import { useMemo, useState } from 'react';
-import { PageLayout } from 'components/PageLayout';
-import { CoursePageProps } from 'services/models';
-import { StatusTabs, TaskCard } from 'modules/AutoTest/components';
 import { Col, Row } from 'antd';
-import { CourseTaskDetailedDto } from 'api';
 import { ColProps } from 'antd/lib/grid';
+import { PageLayout } from 'components/PageLayout';
+import { StatusTabs, TaskCard } from 'modules/AutoTest/components';
 import { useCourseTaskVerifications } from 'modules/AutoTest/hooks';
 import { CourseTaskStatus } from 'modules/AutoTest/types';
-
-export interface AutoTestsProps extends CoursePageProps {
-  courseTasks: CourseTaskDetailedDto[];
-}
+import { useActiveCourseContext } from 'modules/Course/contexts';
+import { useMemo, useState } from 'react';
 
 const RESPONSIVE_COLUMNS: ColProps = {
   sm: 24,
@@ -20,8 +15,9 @@ const RESPONSIVE_COLUMNS: ColProps = {
   xxl: 6,
 };
 
-function AutoTests({ course, courseTasks }: AutoTestsProps) {
-  const { tasks } = useCourseTaskVerifications(course.id, courseTasks);
+function AutoTests() {
+  const { course } = useActiveCourseContext();
+  const { tasks } = useCourseTaskVerifications(course.id);
   const [activeTab, setActiveTab] = useState(CourseTaskStatus.Available);
   const statuses = useMemo(() => tasks?.map(t => t.status) || [], [tasks]);
   const filteredTasks = useMemo(() => tasks?.filter(t => t.status === activeTab) || [], [tasks, activeTab]);

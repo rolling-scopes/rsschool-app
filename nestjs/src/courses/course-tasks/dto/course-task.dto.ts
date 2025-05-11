@@ -93,7 +93,7 @@ export class CourseTaskDto {
   pairsCount: number | null;
 
   @IsNotEmpty()
-  @ApiProperty()
+  @ApiProperty({ enum: CrossCheckStatus, enumName: 'CrossCheckStatusEnum' })
   crossCheckStatus: CrossCheckStatus;
 
   @ApiProperty({ nullable: true, type: String })

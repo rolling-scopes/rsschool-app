@@ -1,4 +1,4 @@
-FROM node:20-bullseye-slim as builder
+FROM node:22-bullseye-slim as builder
 
 ENV NEXT_RUNTIME nodejs
 
@@ -18,7 +18,7 @@ COPY client/dist client/
 COPY client/.next client/.next
 
 # Lambda Container
-FROM public.ecr.aws/lambda/nodejs:20
+FROM public.ecr.aws/lambda/nodejs:22
 
 ENV NODE_ENV production
 ENV TZ utc

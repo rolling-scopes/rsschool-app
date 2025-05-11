@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { MentorRegistryDto, RegistryApi, InviteMentorsDto } from 'api';
-import { PreferredStudentsLocation } from 'common/enums/mentor';
+import { PreferredStudentsLocation } from '@common/enums/mentor';
 import { MentorRegistryTabsMode } from 'modules/MentorRegistry/constants';
 
 export type MentorResponse = {
@@ -72,11 +72,10 @@ export class MentorRegistryService {
     }
   }
 
-  public async updateMentor(githubId: string, data: any) {
-    const response = await this.axios.put(`/mentor/${githubId}`, data, {
-      baseURL: `/api/v2/registry`,
+  public async updateMentor(githubId: string, data: { preselectedCourses: string[] }) {
+    await this.registryApi.approveMentor(githubId, {
+      preselectedCourses: data.preselectedCourses,
     });
-    return response.data.data;
   }
 
   public async cancelMentorRegistry(githubId: string) {

@@ -7,14 +7,14 @@ type Props = {
   url?: string;
   githubId: string;
   onSendInviteRepository: (githubId: string) => Promise<void>;
-  updateUrl: () => void;
+  onUpdateUrl: () => void;
 };
 
 const getGithubRepoName = (url: string | null | undefined) => (url ? (url.split('/').pop() ?? '') : '');
 
 export function RepositoryCard(props: Props) {
   const { Text, Paragraph } = Typography;
-  const { url, githubId, onSendInviteRepository, updateUrl } = props;
+  const { url, githubId, onSendInviteRepository, onUpdateUrl } = props;
   const repoName = getGithubRepoName(url);
   const hasRepo = !!url;
   const [loading, withLoading] = useLoading(false);
@@ -52,7 +52,7 @@ export function RepositoryCard(props: Props) {
     if (shouldShowInformation) {
       showInformation();
     }
-    updateUrl();
+    onUpdateUrl();
   });
 
   return (
