@@ -1,9 +1,8 @@
 import { PageLayout } from 'components/PageLayout';
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useMemo } from 'react';
 import Masonry from 'react-masonry-css';
 import css from 'styled-jsx/css';
 
-import { StudentsApi } from '@client/api';
 import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import {
   AvailableReviewCard,
@@ -16,8 +15,6 @@ import {
 } from 'modules/StudentDashboard';
 import { CourseService } from 'services/course';
 
-const studentsApi = new StudentsApi();
-
 function Page() {
   const { githubId } = useContext(SessionContext);
   const { course } = useActiveCourseContext();
@@ -25,14 +22,8 @@ function Page() {
   const { fullName, usePrivateRepositories, alias } = course;
 
   const courseService = useMemo(() => new CourseService(course.id), [course.id]);
-  const [repositoryUrl, setRepositoryUrl] = useState('');
 
-  const updateUrl = async () => {
-    const { data } = await studentsApi.getStudentSummary(course.id, githubId);
-    setRepositoryUrl(data.repository ? data.repository : '');
-  };
-
-  const { data, loading } = useDashboardData(course.id, githubId);
+  const { data, loading, run } = useDashboardData(course.id, githubId);
 
   const studentPosition = data?.studentSummary?.rank ?? 0;
   const maxCourseScore = data?.maxCourseScore ?? 0;
@@ -60,9 +51,9 @@ function Page() {
     usePrivateRepositories && (
       <RepositoryCard
         githubId={githubId}
-        url={repositoryUrl}
+        url={data?.studentSummary.repository ?? ''}
         onSendInviteRepository={courseService.sendInviteRepository.bind(courseService)}
-        updateUrl={updateUrl}
+        onUpdateUrl={() => run()}
       />
     ),
   ].filter(Boolean) as JSX.Element[];
@@ -71,11 +62,7 @@ function Page() {
     <PageLayout loading={loading} title="Student dashboard" background="#F0F2F5" showCourseName>
       <>
         <Masonry
-          breakpointCols={{
-            default: 3,
-            1180: 2,
-            800: 1,
-          }}
+          breakpointCols={{ default: 3, 1180: 2, 800: 1 }}
           className={masonryClassName}
           columnClassName={masonryColumnClassName}
         >
