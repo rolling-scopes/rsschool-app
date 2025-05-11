@@ -23,6 +23,9 @@ export const courseMiddleware = async (ctx: Router.RouterContext, next: Next) =>
   await next();
 };
 
+/**
+ * This middleware exists TEMPORARY for compatibility with /nestjs part as we need to add roles to the user session
+ */
 export const userRolesMiddleware = async (ctx: Router.RouterContext, next: Next) => {
   const user = ctx.state?.user as JwtToken;
 
@@ -55,6 +58,20 @@ export const userRolesMiddleware = async (ctx: Router.RouterContext, next: Next)
       roles: current.roles.includes(CourseRole.Mentor) ? current.roles : current.roles.concat([CourseRole.Mentor]),
     };
   });
+  authDetails.courseUsers.forEach(courseUser => {
+    const current = enrichedUser.courses[courseUser.courseId] ?? { mentorId: null, studentId: null, roles: [] };
+    if (courseUser.isManager && !current.roles.includes(CourseRole.Manager)) {
+      current.roles.push(CourseRole.Manager);
+    }
+    if (courseUser.isSupervisor && !current.roles.includes(CourseRole.Supervisor)) {
+      current.roles.push(CourseRole.Supervisor);
+    }
+    if (courseUser.isDementor && !current.roles.includes(CourseRole.Dementor)) {
+      current.roles.push(CourseRole.Dementor);
+    }
+    enrichedUser.courses[courseUser.courseId] = current;
+  });
+
   ctx.state.user = enrichedUser;
   await next();
 };
