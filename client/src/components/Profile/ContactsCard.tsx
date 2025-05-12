@@ -144,12 +144,28 @@ const ContactsCard = ({ connections, data, isEditingModeEnabled, sendConfirmatio
     setIsSaveDisabled(!readyToUpdate);
   }, [hasError, values, displayValues]);
 
+  const noDataDescriptionWithNote: JSX.Element = (
+    <div style={{ textAlign: 'center' }}>
+      Contacts aren't filled in.
+      <br />
+      <br />
+      <strong>
+        Your contact information will only be visible to course coordinators, RS School admins, and the mentor assigned
+        to you.
+      </strong>
+      <br />
+      Please make sure to provide at least one reliable way to contact you.
+      <br />
+      <strong>Telegram is preferred.</strong>
+    </div>
+  );
+
   return (
     <CommonCardWithSettingsModal
       title="Contacts"
       icon={<ContactsOutlined />}
       content={content}
-      noDataDescription="Contacts aren't filled in"
+      noDataDescription={noDataDescriptionWithNote}
       isEditingModeEnabled={isEditingModeEnabled}
       saveProfile={handleSave}
       cancelChanges={handleCancel}
