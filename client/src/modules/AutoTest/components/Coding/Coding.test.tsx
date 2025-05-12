@@ -30,7 +30,7 @@ describe('Coding', () => {
     type                                        | text
     ${CourseTaskDetailedDtoTypeEnum.Codewars}   | ${/Please use the next username in your/i}
     ${CourseTaskDetailedDtoTypeEnum.Codewars}   | ${/codewars profile/i}
-    ${CourseTaskDetailedDtoTypeEnum.Jstask}     | ${/Tests run on Node.js version 16. Please make sure your solution works on Node.js version 16./i}
+    ${CourseTaskDetailedDtoTypeEnum.Jstask}     | ${/Tests run on Node.js version 22. Please make sure your solution works on Node.js version 22./i}
     ${CourseTaskDetailedDtoTypeEnum.Jstask}     | ${/The system will run tests in the following repository and will update the score based on the result:/i}
     ${CourseTaskDetailedDtoTypeEnum.Jstask}     | ${/https:\/\/github.com\/github-id\/github-repo-name/i}
     ${CourseTaskDetailedDtoTypeEnum.Kotlintask} | ${/The system will run tests in the following repository and will update the score based on the result:/i}
