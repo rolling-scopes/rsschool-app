@@ -1,3 +1,4 @@
+import { rsAppRegistryUrlPattern, weAreCommunityUrlPattern } from '@client/services/validators';
 import useRequest from 'ahooks/lib/useRequest';
 import { Checkbox, Col, DatePicker, Flex, Form, Input, InputNumber, Modal, Radio, Row, Select, Spin } from 'antd';
 import { CoursesApi, CreateCourseDto, DisciplineDto, IdNameDto, UpdateCourseDto } from 'api';
@@ -7,7 +8,9 @@ import utc from 'dayjs/plugin/utc';
 import { Course } from 'services/models';
 dayjs.extend(utc);
 
-const wearecommunityRegex = new RegExp('^(https?://)?(www\\.)?wearecommunity\\.io.*$');
+const weAreCommunityOrRsAppRegistryRegex = new RegExp(
+  `^(${weAreCommunityUrlPattern.source})|(${rsAppRegistryUrlPattern.source})$`,
+);
 
 const courseApi = new CoursesApi();
 const courseIcons = Object.entries(DEFAULT_COURSE_ICONS).map(([key, config]) => ({ ...config, id: key }));
@@ -87,6 +90,18 @@ export function CourseModal(props: CourseModalProps) {
 
   const descriptionUrl = Form.useWatch('descriptionUrl', form);
 
+  const handleFieldsChange = (changedFields: any[], allFields: any[]) => {
+    const aliasField = changedFields.find(field => field.name[0] === 'alias');
+    const weAreCommunityUrlField = allFields.find(field => field.name[0] === 'wearecommunityUrl');
+
+    const isWeAreCommunityUrl = weAreCommunityUrlPattern.test(weAreCommunityUrlField.value);
+
+    if (aliasField && !isWeAreCommunityUrl) {
+      const defaultRSAppURL = `https://app.rs.school/registry/student?course=${aliasField.value}`;
+      form.setFieldsValue({ wearecommunityUrl: defaultRSAppURL });
+    }
+  };
+
   return (
     <Modal
       style={{ top: 20 }}
@@ -119,6 +134,7 @@ export function CourseModal(props: CourseModalProps) {
           initialValues={response.data}
           layout="vertical"
           form={form}
+          onFieldsChange={handleFieldsChange}
           onFinish={(values: FormData) => updateResponse.runAsync(values)}
           style={{ paddingTop: 16 }}
         >
@@ -298,9 +314,14 @@ export function CourseModal(props: CourseModalProps) {
           <Row gutter={24}>
             <Col sm={12} span={24}>
               <Form.Item
-                rules={[{ message: 'Please enter wearecommunity.io URL', pattern: wearecommunityRegex }]}
+                rules={[
+                  {
+                    message: 'Please enter RS APP or WeAreCommunity.io URL',
+                    pattern: weAreCommunityOrRsAppRegistryRegex,
+                  },
+                ]}
                 name="wearecommunityUrl"
-                label="wearecommunity.io URL"
+                label="RS APP or WeAreCommunity URL"
               >
                 <Input />
               </Form.Item>

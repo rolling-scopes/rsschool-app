@@ -17,3 +17,6 @@ export const githubUsernamePattern = /^[a-zA-Z0-9](?:[a-zA-Z0-9]|-(?=[a-zA-Z0-9]
 export const notUrlPattern = /^((?!\/).)*$/g;
 
 export const passwordPattern = /^\d+_[a-zA-Z0-9]+$/;
+
+export const weAreCommunityUrlPattern = /^(https?:\/\/)?(www\.)?wearecommunity\.io.*$/;
+export const rsAppRegistryUrlPattern = /^(https?:\/\/)?(www\.)?app\.rs\.school\/registry\/student\?course=.+$/;
