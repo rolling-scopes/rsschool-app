@@ -134,7 +134,7 @@ export const createInterviews = (logger: ILogger) => async (ctx: Router.RouterCo
     }
 
     if (courseTask.isCreatingInterviewPairs) {
-      setResponse(ctx, StatusCodes.PROCESSING, { message: 'course task is already being processed' });
+      setResponse(ctx, StatusCodes.CONFLICT, { message: 'course task is already being processed' });
       return;
     }
 
