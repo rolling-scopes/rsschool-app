@@ -16,3 +16,4 @@ export * from './CourseLabel/CourseLabel';
 export * from './NoCourses/NoCourses';
 export * from './Header/Header';
 export * from './RegistrationForm/RegistrationForm';
+export * from './CourseCertificateAlert/CourseCertificateAlert';
