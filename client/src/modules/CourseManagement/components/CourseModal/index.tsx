@@ -1,6 +1,22 @@
 import { rsAppRegistryUrlPattern, weAreCommunityUrlPattern } from '@client/services/validators';
 import useRequest from 'ahooks/lib/useRequest';
-import { Checkbox, Col, DatePicker, Flex, Form, Input, InputNumber, Modal, Radio, Row, Select, Spin } from 'antd';
+import {
+  Checkbox,
+  Col,
+  DatePicker,
+  Flex,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Radio,
+  Row,
+  Select,
+  Spin,
+  Typography,
+} from 'antd';
+import { RuleObject } from 'antd/es/form';
+import { StoreValue } from 'antd/es/form/interface';
 import { CoursesApi, CreateCourseDto, DisciplineDto, IdNameDto, UpdateCourseDto } from 'api';
 import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
 import dayjs from 'dayjs';
@@ -8,6 +24,7 @@ import utc from 'dayjs/plugin/utc';
 import { Course } from 'services/models';
 dayjs.extend(utc);
 
+const rsAppStudentRegistryURL = 'https://app.rs.school/registry/student?course=';
 const weAreCommunityOrRsAppRegistryRegex = new RegExp(
   `^(${weAreCommunityUrlPattern.source})|(${rsAppRegistryUrlPattern.source})$`,
 );
@@ -89,17 +106,26 @@ export function CourseModal(props: CourseModalProps) {
   );
 
   const descriptionUrl = Form.useWatch('descriptionUrl', form);
+  const alias: string = Form.useWatch('alias', form);
+  const wearecommunityUrl = Form.useWatch('wearecommunityUrl', form);
 
-  const handleFieldsChange = (changedFields: any[], allFields: any[]) => {
-    const aliasField = changedFields.find(field => field.name[0] === 'alias');
-    const weAreCommunityUrlField = allFields.find(field => field.name[0] === 'wearecommunityUrl');
+  const validateWeAreCommunityUrl = (getFieldValue: (name: string) => StoreValue) => {
+    return (_: RuleObject, value: StoreValue) => {
+      if (!value) return Promise.resolve();
 
-    const isWeAreCommunityUrl = weAreCommunityUrlPattern.test(weAreCommunityUrlField.value);
+      if (!weAreCommunityOrRsAppRegistryRegex.test(value)) {
+        return Promise.reject('Please enter RS App or wearecommunity.io URL');
+      }
 
-    if (aliasField && !isWeAreCommunityUrl) {
-      const defaultRSAppURL = `https://app.rs.school/registry/student?course=${aliasField.value}`;
-      form.setFieldsValue({ wearecommunityUrl: defaultRSAppURL });
-    }
+      const alias = getFieldValue('alias');
+      const matchedAlias: string | undefined = value.match(/\?course=(.+)$/)?.[1];
+
+      if (alias && matchedAlias && matchedAlias !== alias) {
+        return Promise.reject(`URL must end with ${alias}`);
+      }
+
+      return Promise.resolve();
+    };
   };
 
   return (
@@ -134,7 +160,6 @@ export function CourseModal(props: CourseModalProps) {
           initialValues={response.data}
           layout="vertical"
           form={form}
-          onFieldsChange={handleFieldsChange}
           onFinish={(values: FormData) => updateResponse.runAsync(values)}
           style={{ paddingTop: 16 }}
         >
@@ -314,17 +339,30 @@ export function CourseModal(props: CourseModalProps) {
           <Row gutter={24}>
             <Col sm={12} span={24}>
               <Form.Item
-                rules={[
-                  {
-                    message: 'Please enter RS APP or WeAreCommunity.io URL',
-                    pattern: weAreCommunityOrRsAppRegistryRegex,
-                  },
-                ]}
                 name="wearecommunityUrl"
-                label="RS APP or WeAreCommunity URL"
+                label="RS App or WeAreCommunity URL"
+                dependencies={['alias']}
+                rules={[
+                  ({ getFieldValue }) => ({
+                    validator: validateWeAreCommunityUrl(getFieldValue),
+                  }),
+                ]}
               >
-                <Input />
+                <Input title={wearecommunityUrl || ''} placeholder="Enter URL" />
               </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={24}>
+            <Col sm={18} span={24}>
+              {alias && (
+                <Typography.Text
+                  style={{ marginTop: -4, marginBottom: 12, display: 'block' }}
+                  copyable
+                  type="secondary"
+                >
+                  {`${rsAppStudentRegistryURL}${alias}`}
+                </Typography.Text>
+              )}
             </Col>
           </Row>
 
