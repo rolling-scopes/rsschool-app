@@ -1,5 +1,22 @@
+import { rsAppRegistryUrlPattern, weAreCommunityUrlPattern } from '@client/services/validators';
 import useRequest from 'ahooks/lib/useRequest';
-import { Checkbox, Col, DatePicker, Flex, Form, Input, InputNumber, Modal, Radio, Row, Select, Spin } from 'antd';
+import {
+  Checkbox,
+  Col,
+  DatePicker,
+  Flex,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Radio,
+  Row,
+  Select,
+  Spin,
+  Typography,
+} from 'antd';
+import { RuleObject } from 'antd/es/form';
+import { StoreValue } from 'antd/es/form/interface';
 import { CoursesApi, CreateCourseDto, DisciplineDto, IdNameDto, UpdateCourseDto } from 'api';
 import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
 import dayjs from 'dayjs';
@@ -7,7 +24,10 @@ import utc from 'dayjs/plugin/utc';
 import { Course } from 'services/models';
 dayjs.extend(utc);
 
-const wearecommunityRegex = new RegExp('^(https?://)?(www\\.)?wearecommunity\\.io.*$');
+const rsAppStudentRegistryURL = 'https://app.rs.school/registry/student?course=';
+const weAreCommunityOrRsAppRegistryRegex = new RegExp(
+  `^(${weAreCommunityUrlPattern.source})|(${rsAppRegistryUrlPattern.source})$`,
+);
 
 const courseApi = new CoursesApi();
 const courseIcons = Object.entries(DEFAULT_COURSE_ICONS).map(([key, config]) => ({ ...config, id: key }));
@@ -86,6 +106,27 @@ export function CourseModal(props: CourseModalProps) {
   );
 
   const descriptionUrl = Form.useWatch('descriptionUrl', form);
+  const alias: string = Form.useWatch('alias', form);
+  const wearecommunityUrl = Form.useWatch('wearecommunityUrl', form);
+
+  const validateWeAreCommunityUrl = (getFieldValue: (name: string) => StoreValue) => {
+    return (_: RuleObject, value: StoreValue) => {
+      if (!value) return Promise.resolve();
+
+      if (!weAreCommunityOrRsAppRegistryRegex.test(value)) {
+        return Promise.reject('Please enter RS App or wearecommunity.io URL');
+      }
+
+      const alias = getFieldValue('alias');
+      const matchedAlias: string | undefined = value.match(/\?course=(.+)$/)?.[1];
+
+      if (alias && matchedAlias && matchedAlias !== alias) {
+        return Promise.reject(`URL must end with ${alias}`);
+      }
+
+      return Promise.resolve();
+    };
+  };
 
   return (
     <Modal
@@ -298,12 +339,30 @@ export function CourseModal(props: CourseModalProps) {
           <Row gutter={24}>
             <Col sm={12} span={24}>
               <Form.Item
-                rules={[{ message: 'Please enter wearecommunity.io URL', pattern: wearecommunityRegex }]}
                 name="wearecommunityUrl"
-                label="wearecommunity.io URL"
+                label="RS App or WeAreCommunity URL"
+                dependencies={['alias']}
+                rules={[
+                  ({ getFieldValue }) => ({
+                    validator: validateWeAreCommunityUrl(getFieldValue),
+                  }),
+                ]}
               >
-                <Input />
+                <Input title={wearecommunityUrl || ''} placeholder="Enter URL" />
               </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={24}>
+            <Col sm={18} span={24}>
+              {alias && (
+                <Typography.Text
+                  style={{ marginTop: -4, marginBottom: 12, display: 'block' }}
+                  copyable
+                  type="secondary"
+                >
+                  {`${rsAppStudentRegistryURL}${alias}`}
+                </Typography.Text>
+              )}
             </Col>
           </Row>
 
