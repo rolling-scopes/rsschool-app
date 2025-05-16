@@ -129,5 +129,5 @@ export class CourseTask {
   teamDistribution: TeamDistribution;
 
   @Column({ default: false, type: 'boolean' })
-  isProcessing: boolean;
+  isCreatingInterviewPairs: boolean;
 }

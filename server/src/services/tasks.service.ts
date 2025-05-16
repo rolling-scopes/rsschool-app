@@ -23,8 +23,8 @@ export async function changeCourseTaskStatus(courseTask: CourseTask, crossCheckS
   await getRepository(CourseTask).save({ ...courseTask, crossCheckStatus });
 }
 
-export async function changeCourseTaskProcessing(courseTaskId: number, isProcessing: boolean) {
-  await getRepository(CourseTask).update(courseTaskId, { isProcessing });
+export async function changeCourseTaskProcessing(courseTaskId: number, isCreatingInterviewPairs: boolean) {
+  await getRepository(CourseTask).update(courseTaskId, { isCreatingInterviewPairs });
 }
 
 export function isSubmissionDeadlinePassed({ studentEndDate }: CourseTask) {
