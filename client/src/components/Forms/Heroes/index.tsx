@@ -3,7 +3,7 @@ import { FormLayout } from 'antd/es/form/Form';
 import { useCallback, useEffect, useState } from 'react';
 import Masonry from 'react-masonry-css';
 import css from 'styled-jsx/css';
-import { IGratitudeGetRequest, IGratitudeGetResponse, HeroesFormData } from 'common/interfaces/gratitude';
+import { IGratitudeGetRequest, IGratitudeGetResponse, HeroesFormData } from '@common/interfaces/gratitude';
 import heroesBadges from 'configs/heroes-badges';
 import { GratitudeService } from 'services/gratitude';
 import { onlyDefined } from 'utils/onlyDefined';

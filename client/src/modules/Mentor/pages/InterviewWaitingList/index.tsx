@@ -17,27 +17,42 @@ import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { isCourseManager, isMentor } from 'domain/user';
 import { AvailableStudentDto, CoursesInterviewsApi, InterviewDto, TaskDtoTypeEnum } from 'api';
-import { getApiConfiguration } from 'utils/axios';
 import { getRating } from 'domain/interview';
-import { SessionContext } from 'modules/Course/contexts';
 import { CustomPopconfirm } from 'components/common/CustomPopconfirm';
+import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
+import { useRequest } from 'ahooks';
+import { useRouter } from 'next/router';
+import dayjs from 'dayjs';
 
-const api = new CoursesInterviewsApi(getApiConfiguration());
+const api = new CoursesInterviewsApi();
 
 export type PageProps = CoursePageProps & { interview: InterviewDto };
 
-export function InterviewWaitingList({ course, interview }: PageProps) {
+export function InterviewWaitingList() {
   const session = useContext(SessionContext);
+  const { course } = useActiveCourseContext();
   const courseId = course.id;
+  const router = useRouter();
+  const interviewId = Number(router.query.interviewId);
   const isPowerUser = useMemo(() => isCourseManager(session, courseId), [session, courseId]);
   const [loading, withLoading] = useLoading(false);
   const [availableStudents, setAvailableStudents] = useState<AvailableStudentDto[]>([]);
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
-  const isStageInterview = interview.type === TaskDtoTypeEnum.StageInterview;
+
+  const { data: interview } = useRequest(async () => {
+    const { data } = await api.getInterview(interviewId, courseId);
+    const isStage = data.type === TaskDtoTypeEnum.StageInterview;
+    if (!isStage && dayjs(data.startDate).isAfter(dayjs())) {
+      router.push(`/403`);
+    }
+    return data;
+  });
+
+  const isStageInterview = interview?.type === TaskDtoTypeEnum.StageInterview;
 
   useAsync(
     withLoading(async () => {
-      const { data } = await api.getAvailableStudents(courseId, interview.id);
+      const { data } = await api.getAvailableStudents(courseId, interviewId);
       setAvailableStudents(data);
     }),
     [],
@@ -47,7 +62,7 @@ export function InterviewWaitingList({ course, interview }: PageProps) {
     if (isStageInterview) {
       await courseService.createInterview(githubId, session.githubId);
     } else {
-      await courseService.addInterviewPair(`${interview.id}`, session.githubId, githubId);
+      await courseService.addInterviewPair(`${interviewId}`, session.githubId, githubId);
     }
     removeStudentFromList(githubId);
   });
@@ -63,7 +78,7 @@ export function InterviewWaitingList({ course, interview }: PageProps) {
   });
 
   return (
-    <PageLayout loading={loading} title={`${interview.name.trim()}: Wait list`} showCourseName>
+    <PageLayout loading={loading} title={`${interview?.name.trim()}: Wait list`} showCourseName>
       <Table
         pagination={{ pageSize: 100 }}
         size="small"

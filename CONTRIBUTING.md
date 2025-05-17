@@ -15,48 +15,48 @@
 
 2. Clone the repository to your local machine (<https://help.github.com/articles/cloning-a-repository/>)
 
-    ```command-line
-    git clone git@github.com:[username]/rsschool-app.git
-    ```
+   ```command-line
+   git clone git@github.com:[username]/rsschool-app.git
+   ```
 
 3. Navigate into the directory where you've cloned the source code and install NPM dependencies
 
-    ```command-line
-    cd rsschool-app
-    npm install
-    ```
+   ```command-line
+   cd rsschool-app
+   npm install
+   ```
 
 4. Create a branch for your feature
 
-    ```command-line
-    git checkout -b feature-x master
-    ```
+   ```command-line
+   git checkout -b feature-x master
+   ```
 
 5. The application requires a connection to a Postgres database. Here is how to get test database running locally:
 
-    Run a Postgres Database locally using Podman & podman-compose
+   Run a Postgres Database locally using Podman & podman-compose
 
-    ```command-line
-    npm run db:up
-    ```
+   ```command-line
+   npm run db:up
+   ```
 
-    Restore a test database snapshot
+   Restore a test database snapshot
 
-    ```command-line
-    npm run db:restore
-    ```
+   ```command-line
+   npm run db:restore
+   ```
 
-    If you are done with development, stop the database;
+   If you are done with development, stop the database;
 
-    ```command-line
-    npm run db:down
-    ```
+   ```command-line
+   npm run db:down
+   ```
 
 6. Run the application in development mode with live reload:
 
-    ```command-line
-    npm start
-    ```
+   ```command-line
+   npm start
+   ```
 
 7. Do hacking 👩‍💻👨‍💻
 
@@ -64,7 +64,7 @@
 
 9. By default locally, you will be logged with `admin` access. If you want to change it, need to set `RSSCHOOL_AUTH_DEV_ADMIN` to `false` in `nestjs/.env` file
 
-    **IMPORTANT:** Never commit changes to `.env` file
+   **IMPORTANT:** Never commit changes to `.env` file
 
 10. Do not forget to write unit-tests for your feature following [Unit-Tests Style Guide](#unit-tests-style-guide). We use [Jest](https://facebook.github.io/jest/) for unit-tests.
 
@@ -121,12 +121,14 @@ See more about TypeORM migrations at official docs [Migrations](https://github.c
 
 ## Pull Requests
 
-- Check how to create a [Pull Request](https://help.github.com/articles/creating-a-pull-request/)
-- Send a pull request to `master` branch
-- Fill template
-- Write a meaningful description
-- Include screenshots and animated GIFs in your pull request whenever possible
-- Add `deploy` label if you want to test your changes
+- Check how to create a [Pull Request](https://help.github.com/articles/creating-a-pull-request/) (PR).
+- PR titles must follow [Conventional Commits](#git-commit-messages).
+- Do not include issue IDs in the PR title.
+- Use GitHub's [Draft PR](https://github.blog/2019-02-14-introducing-draft-pull-requests/) feature instead of using "WIP" (Work In Progress) in the title.
+- Consider adding relevant `area:*` label(s) to your PR.
+- Add the `deploy` label if you want the PR deployed to the staging environment. **NOTE**: This feature does not work for PRs opened from forks due to security limitations.
+- Write a clear and meaningful description for your PR.
+- Include screenshots and animated GIFs in your PR description whenever possible to demonstrate changes.
 
 ## Style Guides
 

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { TeamDistributionApi, TeamDistributionDetailedDto, TeamDistributionStudentDto } from 'api';
 import { useAsync } from 'react-use';
 import StudentsTable from '../StudentsTable/StudentsTable';
-import { IPaginationInfo } from 'common/types/pagination';
+import { IPaginationInfo } from '@common/types/pagination';
 import { useLoading } from 'components/useLoading';
 
 type Props = {

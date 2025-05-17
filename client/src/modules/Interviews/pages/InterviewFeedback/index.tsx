@@ -6,7 +6,7 @@ import { PageLayoutSimple } from 'components/PageLayout';
 import { InputType, templates } from 'data/interviews';
 import { Fragment, useMemo, useState } from 'react';
 import { CourseService } from 'services/course';
-import type { FeedbackProps } from './getServerSideProps';
+import { FeedbackProps } from '../../data/getInterviewData';
 import { ScoreSelector } from 'components/ScoreSelector';
 import { useRouter } from 'next/router';
 

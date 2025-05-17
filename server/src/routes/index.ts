@@ -1,25 +1,21 @@
 import Router from '@koa/router';
 
+import { courseRoute } from './course';
+import { feedbackRoute } from './feedback';
+import { filesRoute } from './file';
 import { errorHandlerMiddleware } from './logging';
 import { publicMeRouter } from './me';
-import { courseRoute } from './course';
-import { usersRoute } from './users';
-import { taskRoute } from './task';
-import { filesRoute } from './file';
-import { taskResultRoute } from './taskResult';
-import { studentRoute } from './student';
-import { tasksRoute } from './tasks';
-import { taskVerification } from './taskVerification';
 import { profileRoute } from './profile';
 import { registryRouter } from './registry';
-import { sessionRoute } from './session';
-import { activityRoute } from './activity';
-import { feedbackRoute } from './feedback';
 import { repositoryRoute } from './repository';
+import { taskRoute } from './task';
+import { tasksRoute } from './tasks';
+import { taskVerification } from './taskVerification';
+import { usersRoute } from './users';
 
 import { ILogger } from '../logger';
-import { courseMiddleware, userRolesMiddleware } from './middlewares';
 import { checksRoute } from './checks';
+import { courseMiddleware, userRolesMiddleware } from './middlewares';
 
 export * from './logging';
 
@@ -38,18 +34,14 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
 
   // public routes
 
-  applyRouter(router, sessionRoute(logger));
   applyRouter(router, publicMeRouter(logger));
   applyRouter(router, registryRouter(logger));
   applyRouter(router, courseRoute(logger));
   applyRouter(router, usersRoute(logger));
   applyRouter(router, taskRoute(logger));
-  applyRouter(router, taskResultRoute(logger));
-  applyRouter(router, studentRoute(logger));
   applyRouter(router, tasksRoute(logger));
   applyRouter(router, taskVerification(logger));
   applyRouter(router, profileRoute(logger));
-  applyRouter(router, activityRoute(logger));
   applyRouter(router, feedbackRoute(logger));
   applyRouter(router, checksRoute(logger));
   applyRouter(router, filesRoute(logger));

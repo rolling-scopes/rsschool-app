@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "target": "ES2015",
     "emitDecoratorMetadata": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
@@ -14,14 +13,16 @@
     "declaration": false,
     "isolatedModules": true,
     "jsx": "preserve",
-    "module": "commonjs",
+    "target": "ES2015",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "noEmit": true,
     "skipLibCheck": true,
     "lib": ["dom", "es2015", "es2016", "es2017"],
     "baseUrl": "src",
     "paths": {
-      "common/*": ["../../common/*"]
+      "@common/*": ["../../common/*"],
+      "@client/*": ["./*"]
     },
     "incremental": true
   },

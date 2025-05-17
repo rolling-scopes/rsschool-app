@@ -943,6 +943,7 @@
             "required": true,
             "in": "query",
             "schema": {
+              "type": "string",
               "enum": [
                 "rank",
                 "totalScore",
@@ -953,15 +954,14 @@
                 "mentor",
                 "totalScoreChangeDate",
                 "repositoryLastActivityDate"
-              ],
-              "type": "string"
+              ]
             }
           },
           {
             "name": "orderDirection",
             "required": true,
             "in": "query",
-            "schema": { "enum": ["asc", "desc"], "type": "string" }
+            "schema": { "type": "string", "enum": ["asc", "desc"] }
           },
           { "name": "current", "required": true, "in": "query", "schema": { "type": "string" } },
           { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "string" } },
@@ -2802,6 +2802,20 @@
         "summary": "",
         "tags": ["contributors"]
       }
+    },
+    "/session": {
+      "get": {
+        "operationId": "getSession",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AuthUserDto" } } }
+          }
+        },
+        "summary": "",
+        "tags": ["session"]
+      }
     }
   },
   "info": { "title": "", "description": "", "version": "1.0.0", "contact": {} },
@@ -3270,6 +3284,7 @@
           "endDate"
         ]
       },
+      "CrossCheckStatusEnum": { "type": "string", "enum": ["initial", "distributed", "completed"] },
       "Validations": {
         "type": "object",
         "properties": { "githubIdInUrl": { "type": "boolean" }, "githubPrInUrl": { "type": "boolean" } },
@@ -3310,7 +3325,7 @@
           "maxScore": { "type": "number" },
           "scoreWeight": { "type": "number" },
           "pairsCount": { "type": "number", "nullable": true },
-          "crossCheckStatus": { "type": "string" },
+          "crossCheckStatus": { "allOf": [{ "$ref": "#/components/schemas/CrossCheckStatusEnum" }] },
           "submitText": { "type": "string", "nullable": true },
           "validations": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/Validations" }] }
         },
@@ -3370,7 +3385,7 @@
           "maxScore": { "type": "number" },
           "scoreWeight": { "type": "number" },
           "pairsCount": { "type": "number", "nullable": true },
-          "crossCheckStatus": { "type": "string" },
+          "crossCheckStatus": { "allOf": [{ "$ref": "#/components/schemas/CrossCheckStatusEnum" }] },
           "submitText": { "type": "string", "nullable": true },
           "validations": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/Validations" }] },
           "publicAttributes": { "type": "object" },
@@ -5534,6 +5549,34 @@
       "UpdateContributorDto": {
         "type": "object",
         "properties": { "description": { "type": "string" }, "userId": { "type": "number" } }
+      },
+      "AuthUserDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "githubId": { "type": "string" },
+          "roles": { "type": "object", "additionalProperties": { "type": "string", "enum": ["mentor", "student"] } },
+          "isAdmin": { "type": "boolean" },
+          "isHirer": { "type": "boolean" },
+          "appRoles": { "type": "array", "items": { "type": "string" } },
+          "courses": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "roles": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["manager", "supervisor", "student", "mentor", "dementor", "activist"]
+                  }
+                }
+              },
+              "required": ["roles"]
+            }
+          }
+        },
+        "required": ["id", "githubId", "roles", "isAdmin", "isHirer", "appRoles", "courses"]
       }
     }
   }

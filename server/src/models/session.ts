@@ -1,3 +1,10 @@
+export interface JwtToken {
+  id: number;
+  githubId: string;
+  isAdmin: boolean;
+  isHirer: boolean;
+}
+
 export interface IUserSession {
   id: number;
   isAdmin: boolean;

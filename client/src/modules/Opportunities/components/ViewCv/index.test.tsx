@@ -71,10 +71,10 @@ const mockOrigin = 'htps://example.com';
 const mockUuid = '13791ec3-83b9-44ce-95c5-f06837a71966';
 
 describe('ViewCV', () => {
-  let originalWindowLocation: Location;
+  let originalWindowLocation: string;
 
   beforeAll(() => {
-    originalWindowLocation = window.location;
+    originalWindowLocation = window.location.href;
     Object.defineProperty(window, 'location', {
       writable: true,
       value: { origin: mockOrigin },
@@ -82,7 +82,7 @@ describe('ViewCV', () => {
   });
 
   afterAll(() => {
-    window.location = originalWindowLocation;
+    window.location.href = originalWindowLocation;
   });
 
   test('should display loading screeen if loading is true', () => {

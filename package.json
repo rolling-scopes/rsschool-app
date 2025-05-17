@@ -8,7 +8,7 @@
     "client"
   ],
   "engines": {
-    "node": ">=20",
+    "node": ">=22",
     "npm": ">=10"
   },
   "scripts": {
@@ -17,6 +17,7 @@
     "lint": "turbo run lint",
     "test": "turbo run test",
     "test:ci": "turbo run test:ci",
+    "compile": "turbo run compile",
     "format": "prettier --write client server nestjs common setup docs .github",
     "ci:format": "prettier --check client server nestjs common setup docs .github",
     "db:restore": "podman exec -i db psql -U rs_master -d rs_school < ./setup/backup-local.sql",
@@ -26,7 +27,7 @@
     "db:down": "podman compose -f ./setup/docker-compose.yml down"
   },
   "dependencies": {
-    "axios": "1.7.9",
+    "axios": "1.8.4",
     "dayjs": "^1.11",
     "lodash": "4.17.21",
     "typeorm": "0.3.20"
@@ -34,17 +35,18 @@
   "devDependencies": {
     "@total-typescript/ts-reset": "0.6.1",
     "@types/jest": "29.5.14",
-    "@types/lodash": "4.17.13",
-    "@types/node": "20.17.10",
-    "dotenv": "^16",
-    "eslint": "9.17.0",
-    "eslint-config-turbo": "2.3.3",
-    "eslint-plugin-jest": "^28.10.0",
+    "@types/lodash": "4.17.16",
+    "@types/node": "22.15.3",
+    "dotenv": "^16.5.0",
+    "eslint": "9.26.0",
+    "eslint-config-turbo": "2.5.2",
+    "eslint-plugin-jest": "28.11.0",
     "jest": "29.7.0",
-    "prettier": "3.4.2",
-    "turbo": "2.3.3",
-    "typescript": "5.7.2",
-    "typescript-eslint": "^8.18.2"
+    "prettier": "3.5.3",
+    "ts-node": "10.9.2",
+    "turbo": "2.5.2",
+    "typescript": "5.8.3",
+    "typescript-eslint": "8.31.1"
   },
   "packageManager": "npm@10.7.0"
 }

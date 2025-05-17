@@ -57,7 +57,7 @@ export class TaskVerificationsController {
     @Req() req: CurrentRequest,
     @Param('courseId', ParseIntPipe) courseId: number,
     @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
-    @Body() body: unknown,
+    @Body() body: Record<string, unknown>,
   ) {
     const courseStatus = req.user.courses[courseId];
     const studentId = courseStatus?.studentId;

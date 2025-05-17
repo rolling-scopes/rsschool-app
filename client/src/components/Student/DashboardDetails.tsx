@@ -6,7 +6,7 @@ import {
   UndoOutlined,
 } from '@ant-design/icons';
 import { Button, Descriptions, Drawer, Popconfirm } from 'antd';
-import { MentorBasic } from 'common/models';
+import { MentorBasic } from '@common/models';
 import { CommentModal } from 'components/CommentModal';
 import { MentorSearch } from 'components/MentorSearch';
 import { useState } from 'react';

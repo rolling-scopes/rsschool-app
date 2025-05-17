@@ -54,7 +54,7 @@ function Coding({ courseTask, githubId }: CodingProps) {
     <>
       {courseTask.type === CourseTaskDetailedDtoTypeEnum.Jstask && (
         <Paragraph type="warning" strong>
-          Tests run on Node.js version 16. Please make sure your solution works on Node.js version 16.
+          Tests run on Node.js version 22. Please make sure your solution works on Node.js version 22.
         </Paragraph>
       )}
       <Paragraph>

@@ -3,7 +3,6 @@ import {
   CalendarTwoTone,
   CheckCircleTwoTone,
   GoldTwoTone,
-  CheckSquareTwoTone,
   CodeTwoTone,
   DashboardTwoTone,
   FireTwoTone,
@@ -15,7 +14,7 @@ import {
 import { Session } from 'components/withSession';
 import React from 'react';
 import { Course } from 'services/models';
-import { isStudent, isAdmin, isTaskOwner, isMentor, isCourseManager, isActiveStudent, isDementor } from 'domain/user';
+import { isStudent, isAdmin, isMentor, isCourseManager, isActiveStudent, isDementor } from 'domain/user';
 import { getAutoTestRoute } from 'services/routes';
 import { MenuProps } from 'antd';
 import Router from 'next/router';
@@ -66,7 +65,7 @@ const links: LinkData[] = [
   },
   {
     name: 'Score',
-    icon: <FireTwoTone twoToneColor="orange" />,
+    icon: <FireTwoTone twoToneColor="#ffa500" />,
     getUrl: (course: Course) => `/course/score?course=${course.alias}`,
     access: anyAccess,
   },
@@ -81,13 +80,6 @@ const links: LinkData[] = [
     icon: <GoldTwoTone twoToneColor="#7f00ff" />,
     getUrl: (course: Course) => `/course/mentor/students?course=${course.alias}`,
     access: every(isMentor),
-  },
-  {
-    name: 'Submit Scores',
-    icon: <CheckSquareTwoTone twoToneColor="#52c41a" />,
-    getUrl: (course: Course) => `/course/submit-scores?course=${course.alias}`,
-    access: every(some(isTaskOwner, isAdmin, isCourseManager)),
-    courseAccess: everyCourse(isCourseNotCompleted),
   },
   {
     name: 'Cross-Check: Submit',
@@ -112,7 +104,7 @@ const links: LinkData[] = [
   },
   {
     name: 'Interviews',
-    icon: <AudioTwoTone twoToneColor="orange" />,
+    icon: <AudioTwoTone twoToneColor="#ffa500" />,
     getUrl: (course: Course) => `/course/mentor/interviews?course=${course.alias}`,
     access: every(isMentor),
     courseAccess: everyCourse(isCourseNotCompleted),
@@ -126,7 +118,7 @@ const links: LinkData[] = [
   },
   {
     name: 'Expel/Unassign Student',
-    icon: <StopTwoTone twoToneColor="red" />,
+    icon: <StopTwoTone twoToneColor="#ff0000" />,
     getUrl: (course: Course) => `/course/mentor/expel-student?course=${course.alias}`,
     access: every(isMentor),
     courseAccess: everyCourse(isCourseNotCompleted),
