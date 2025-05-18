@@ -1,4 +1,4 @@
-import { rsAppRegistryUrlPattern, weAreCommunityUrlPattern } from '@client/services/validators';
+import { weAreCommunityUrlPattern } from '@client/services/validators';
 import useRequest from 'ahooks/lib/useRequest';
 import {
   Checkbox,
@@ -15,8 +15,7 @@ import {
   Spin,
   Typography,
 } from 'antd';
-import { RuleObject } from 'antd/es/form';
-import { StoreValue } from 'antd/es/form/interface';
+
 import { CoursesApi, CreateCourseDto, DisciplineDto, IdNameDto, UpdateCourseDto } from 'api';
 import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
 import dayjs from 'dayjs';
@@ -25,9 +24,6 @@ import { Course } from 'services/models';
 dayjs.extend(utc);
 
 const rsAppStudentRegistryURL = 'https://app.rs.school/registry/student?course=';
-const weAreCommunityOrRsAppRegistryRegex = new RegExp(
-  `^(${weAreCommunityUrlPattern.source})|(${rsAppRegistryUrlPattern.source})$`,
-);
 
 const courseApi = new CoursesApi();
 const courseIcons = Object.entries(DEFAULT_COURSE_ICONS).map(([key, config]) => ({ ...config, id: key }));
@@ -107,26 +103,7 @@ export function CourseModal(props: CourseModalProps) {
 
   const descriptionUrl = Form.useWatch('descriptionUrl', form);
   const alias: string = Form.useWatch('alias', form);
-  const wearecommunityUrl = Form.useWatch('wearecommunityUrl', form);
-
-  const validateWeAreCommunityUrl = (getFieldValue: (name: string) => StoreValue) => {
-    return (_: RuleObject, value: StoreValue) => {
-      if (!value) return Promise.resolve();
-
-      if (!weAreCommunityOrRsAppRegistryRegex.test(value)) {
-        return Promise.reject('Please enter RS App or wearecommunity.io URL');
-      }
-
-      const alias = getFieldValue('alias');
-      const matchedAlias: string | undefined = value.match(/\?course=(.+)$/)?.[1];
-
-      if (alias && matchedAlias && matchedAlias !== alias) {
-        return Promise.reject(`URL must end with ${alias}`);
-      }
-
-      return Promise.resolve();
-    };
-  };
+  const weAreCommunityUrl = Form.useWatch('wearecommunityUrl', form);
 
   return (
     <Modal
@@ -340,33 +317,36 @@ export function CourseModal(props: CourseModalProps) {
             <Col sm={12} span={24}>
               <Form.Item
                 name="wearecommunityUrl"
-                label="RS App or WeAreCommunity URL"
-                dependencies={['alias']}
+                label="WeAreCommunity URL"
                 rules={[
-                  ({ getFieldValue }) => ({
-                    validator: validateWeAreCommunityUrl(getFieldValue),
-                  }),
+                  {
+                    message: 'Please enter wearecommunity.io URL',
+                    pattern: weAreCommunityUrlPattern,
+                  },
                 ]}
               >
-                <Input title={wearecommunityUrl || ''} placeholder="Enter URL" />
+                <Input title={weAreCommunityUrl || ''} placeholder="Enter URL" />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={24}>
-            <Col sm={18} span={24}>
+            <Col sm={22} span={24}>
+              <Typography.Text style={{ whiteSpace: 'pre-line' }} type="secondary">
+                {`This field specifies the URL that will be used for the “Enroll” button on the rs.school course page.
+                    – If you enter a WeAreCommunity URL, that link will be used.
+                    – Otherwise, the RS APP registration link will be used:`}
+              </Typography.Text>
               {alias && (
                 <Typography.Text
-                  style={{ marginTop: -4, marginBottom: 12, display: 'block' }}
+                  type="success"
+                  style={{ display: 'block' }}
                   copyable
-                  type="secondary"
-                >
-                  {`${rsAppStudentRegistryURL}${alias}`}
-                </Typography.Text>
+                >{`${rsAppStudentRegistryURL}${alias}`}</Typography.Text>
               )}
             </Col>
           </Row>
 
-          <Form.Item name="usePrivateRepositories" valuePropName="checked">
+          <Form.Item style={{ marginTop: 8 }} name="usePrivateRepositories" valuePropName="checked">
             <Checkbox>Use Private Repositories</Checkbox>
           </Form.Item>
 
