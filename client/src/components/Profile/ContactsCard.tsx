@@ -11,7 +11,7 @@ import { Contact, ContactsKeys } from 'services/user';
 import ContactsCardForm from './ContactsCardForm';
 import { epamEmailPattern } from 'services/validators';
 
-const { Text } = Typography;
+const { Paragraph, Text } = Typography;
 
 type ConnectionValue = {
   value: string;
@@ -145,19 +145,21 @@ const ContactsCard = ({ connections, data, isEditingModeEnabled, sendConfirmatio
   }, [hasError, values, displayValues]);
 
   const noDataDescriptionWithNote: JSX.Element = (
-    <div style={{ textAlign: 'center' }}>
+    <Paragraph style={{ color: 'rgba(0, 0, 0, 0.25)' }}>
       Contacts aren't filled in.
       <br />
       <br />
-      <strong>
+      <Text strong type="secondary">
         Your contact information will only be visible to course coordinators, RS School admins, and the mentor assigned
         to you.
-      </strong>
+      </Text>
       <br />
       Please make sure to provide at least one reliable way to contact you.
       <br />
-      <strong>Telegram is preferred.</strong>
-    </div>
+      <Text strong type="secondary">
+        Telegram is preferred.
+      </Text>
+    </Paragraph>
   );
 
   return (
