@@ -7,7 +7,7 @@ import utc from 'dayjs/plugin/utc';
 import { Course } from 'services/models';
 dayjs.extend(utc);
 
-const wearecommunityRegex = new RegExp('^(https?://)?(www\\.)?wearecommunity\\.io.*$');
+const wearecommunityRegex = new RegExp('^(https?://)?(app\\.rs\\.school/registry/student\\?course=|((www\\.)?wearecommunity\\.io.*))$');
 
 const courseApi = new CoursesApi();
 const courseIcons = Object.entries(DEFAULT_COURSE_ICONS).map(([key, config]) => ({ ...config, id: key }));
@@ -298,9 +298,9 @@ export function CourseModal(props: CourseModalProps) {
           <Row gutter={24}>
             <Col sm={12} span={24}>
               <Form.Item
-                rules={[{ message: 'Please enter wearecommunity.io URL', pattern: wearecommunityRegex }]}
+                rules={[{ message: 'Please enter a valid RS APP or WeAreCommunity URL', pattern: wearecommunityRegex }]}
                 name="wearecommunityUrl"
-                label="wearecommunity.io URL"
+                label="RS APP or WeAreCommunity URL"
               >
                 <Input />
               </Form.Item>
@@ -390,9 +390,16 @@ function getInitialValues(modalData: Partial<Course>): FormData {
   const range = getDateRange(modalData.startDate, modalData.endDate);
   const personalMentoringDateRange =
     getDateRange(modalData.personalMentoringStartDate, modalData.personalMentoringEndDate) || range;
+
+  let wearecommunityUrl = modalData.wearecommunityUrl ?? undefined;
+  // props.courseId is not directly accessible here, so we check modalData.id which is equivalent for this logic
+  if (modalData.id == null && modalData.alias) {
+    wearecommunityUrl = `https://app.rs.school/registry/student?course=${modalData.alias}`;
+  }
+
   return {
     ...modalData,
-    wearecommunityUrl: modalData.wearecommunityUrl ?? undefined,
+    wearecommunityUrl: wearecommunityUrl,
     minStudentsPerMentor: modalData.minStudentsPerMentor || 2,
     certificateThreshold: modalData.certificateThreshold ?? 70,
     inviteOnly: !!modalData.inviteOnly,
