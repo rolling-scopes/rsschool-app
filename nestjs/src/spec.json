@@ -920,7 +920,6 @@
             "required": true,
             "in": "query",
             "schema": {
-              "type": "string",
               "enum": [
                 "rank",
                 "totalScore",
@@ -931,14 +930,15 @@
                 "mentor",
                 "totalScoreChangeDate",
                 "repositoryLastActivityDate"
-              ]
+              ],
+              "type": "string"
             }
           },
           {
             "name": "orderDirection",
             "required": true,
             "in": "query",
-            "schema": { "type": "string", "enum": ["asc", "desc"] }
+            "schema": { "enum": ["asc", "desc"], "type": "string" }
           },
           { "name": "current", "required": true, "in": "query", "schema": { "type": "string" } },
           { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "string" } },
@@ -1160,6 +1160,18 @@
           }
         },
         "summary": "",
+        "tags": ["team distribution"]
+      }
+    },
+    "/courses/{courseId}/team-distribution/{id}/students/{studentId}": {
+      "delete": {
+        "operationId": "TeamDistributionController_deleteStudentFromDistribution",
+        "parameters": [
+          { "name": "studentId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": { "200": { "description": "" } },
         "tags": ["team distribution"]
       }
     },
