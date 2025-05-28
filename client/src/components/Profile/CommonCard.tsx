@@ -5,7 +5,7 @@ import EditOutlined from '@ant-design/icons/EditOutlined';
 const { Title } = Typography;
 
 type Props = {
-  noDataDescription?: string;
+  noDataDescription?: string | JSX.Element;
   title: string;
   icon: JSX.Element;
   content: JSX.Element | null;
