@@ -277,6 +277,7 @@ export function CourseModal(props: CourseModalProps) {
                     { label: 'AWS Fundamentals', value: 'https://rs.school/courses/aws-fundamentals' },
                     { label: 'AWS Cloud Developer', value: 'https://rs.school/courses/aws-cloud-developer' },
                     { label: 'AWS DevOps', value: 'https://rs.school/courses/aws-devops' },
+                    { label: 'AWS AI', value: 'https://rs.school/courses/aws-ai' },
                     { label: 'Custom', value: 'custom' },
                   ]}
                 ></Select>
