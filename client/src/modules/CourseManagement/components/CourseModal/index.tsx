@@ -23,7 +23,9 @@ import utc from 'dayjs/plugin/utc';
 import { Course } from 'services/models';
 dayjs.extend(utc);
 
-const rsAppStudentRegistryURL = 'https://app.rs.school/registry/student?course=';
+const rsAppStudentRegistryBaseURL = 'https://app.rs.school/registry/student?course=';
+
+const buildRSAppStudentRegistryURL = (alias: string) => `${rsAppStudentRegistryBaseURL}${alias}`;
 
 const courseApi = new CoursesApi();
 const courseIcons = Object.entries(DEFAULT_COURSE_ICONS).map(([key, config]) => ({ ...config, id: key }));
@@ -338,11 +340,9 @@ export function CourseModal(props: CourseModalProps) {
                     – Otherwise, the RS APP registration link will be used:`}
               </Typography.Text>
               {alias && (
-                <Typography.Text
-                  type="success"
-                  style={{ display: 'block' }}
-                  copyable
-                >{`${rsAppStudentRegistryURL}${alias}`}</Typography.Text>
+                <Typography.Text type="success" style={{ display: 'block' }} copyable>
+                  {buildRSAppStudentRegistryURL(alias)}
+                </Typography.Text>
               )}
             </Col>
           </Row>
@@ -414,7 +414,7 @@ function createRecord(values: FormData) {
     logo: values.logo,
     minStudentsPerMentor: values.minStudentsPerMentor,
     certificateThreshold: values.certificateThreshold,
-    wearecommunityUrl: values.wearecommunityUrl,
+    wearecommunityUrl: values.wearecommunityUrl || buildRSAppStudentRegistryURL(values.alias ?? ''),
   };
   return record;
 }
