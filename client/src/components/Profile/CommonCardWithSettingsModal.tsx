@@ -5,7 +5,7 @@ import CommonCard from './CommonCard';
 type Props = {
   profileSettingsContent: JSX.Element;
   isEditingModeEnabled: boolean;
-  noDataDescription?: string;
+  noDataDescription?: string | JSX.Element;
   settingsTitle?: string;
   title: string;
   icon: JSX.Element;
