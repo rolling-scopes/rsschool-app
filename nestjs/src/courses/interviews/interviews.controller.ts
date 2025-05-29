@@ -34,6 +34,7 @@ import { InterviewFeedbackService } from './interviewFeedback.service';
 import { InterviewFeedbackDto } from './dto/get-interview-feedback.dto';
 import { PutInterviewFeedbackDto } from './dto/put-interview-feedback.dto';
 import { RegistrationInterviewDto } from './dto/registration-interview.dto';
+import { InterviewPairDto } from './dto/interview-pair.dto';
 
 @Controller('courses/:courseId/interviews')
 @ApiTags('courses interviews')
@@ -79,6 +80,20 @@ export class InterviewsController {
       throw new NotFoundException(`Interview ${interviewId} doesn't exist`);
     }
     return new InterviewDto(data);
+  }
+
+  @Get('/:interviewId/pairs')
+  @CacheTTL(DEFAULT_CACHE_TTL)
+  @UseInterceptors(CacheInterceptor)
+  @ApiOkResponse({ type: [InterviewPairDto] })
+  @ApiForbiddenResponse()
+  @ApiBadRequestResponse()
+  @ApiParam({ name: 'courseId', type: Number })
+  @ApiOperation({ operationId: 'getInterviewPairs' })
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  public async getInterviewPairs(@Param('interviewId', ParseIntPipe) interviewId: number) {
+    const data = await this.interviewsService.getInterviewPairs(interviewId);
+    return data;
   }
 
   @Post('/:interviewId/register')
