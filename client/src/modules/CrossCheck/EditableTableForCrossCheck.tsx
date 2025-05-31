@@ -1,13 +1,18 @@
-import { Form, Table } from 'antd';
-import React, { useState } from 'react';
+import { Form } from 'antd';
+import type { DragEndEvent } from '@dnd-kit/core';
+import { DndContext } from '@dnd-kit/core';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { EditableCellForCrossCheck } from './EditableCellForCrossCheck';
 import { CriteriaDto, CriteriaDtoTypeEnum } from 'api';
 import { CriteriaActions } from './CriteriaActions';
 import { EditableTableColumnsDataIndex } from './constants';
+import { DragSortTable } from './components/DragSortTable';
 
 interface IEditableTableProps {
   dataCriteria: CriteriaDto[];
-  setDataCriteria: (data: CriteriaDto[]) => void;
+  setDataCriteria: Dispatch<SetStateAction<CriteriaDto[]>>;
 }
 
 export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableProps) => {
@@ -51,6 +56,24 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
         : criteria,
     );
     setDataCriteria(newData);
+  };
+
+  const onDragEnd = ({ active, over }: DragEndEvent) => {
+    if (active.id !== over?.id) {
+      setDataCriteria(previous => {
+        const activeIndex = previous.findIndex(i => i.key === active.id);
+        const overIndex = previous.findIndex(i => i.key === over?.id);
+        return [...previous].map((item, index) => {
+          if (index === activeIndex) {
+            return previous[overIndex];
+          }
+          if (index === overIndex) {
+            return previous[activeIndex];
+          }
+          return item;
+        });
+      });
+    }
   };
 
   const columns = [
@@ -109,20 +132,24 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
 
   return (
     <Form form={form} component={false}>
-      <Table
-        rowKey="index"
-        components={{
-          body: {
-            cell: EditableCellForCrossCheck,
-          },
-        }}
-        style={{ wordBreak: 'break-word', fontStyle: 'normal' }}
-        size="small"
-        dataSource={dataCriteria}
-        columns={mergedColumns}
-        rowClassName="editable-row"
-        pagination={false}
-      />
+      <DndContext modifiers={[restrictToVerticalAxis]} onDragEnd={onDragEnd}>
+        <SortableContext items={dataCriteria.map(i => i.key)} strategy={verticalListSortingStrategy}>
+          <DragSortTable
+            rowKey="key"
+            components={{
+              body: {
+                cell: EditableCellForCrossCheck,
+              },
+            }}
+            style={{ wordBreak: 'break-word', fontStyle: 'normal' }}
+            size="small"
+            dataSource={dataCriteria}
+            columns={mergedColumns}
+            rowClassName="editable-row"
+            pagination={false}
+          />
+        </SortableContext>
+      </DndContext>
     </Form>
   );
 };
