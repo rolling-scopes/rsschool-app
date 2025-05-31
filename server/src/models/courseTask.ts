@@ -127,4 +127,7 @@ export class CourseTask {
   @ManyToOne(() => TeamDistribution, teamDistribution => teamDistribution.courseTasks)
   @JoinColumn()
   teamDistribution: TeamDistribution;
+
+  @Column({ default: false, type: 'boolean' })
+  isCreatingInterviewPairs: boolean;
 }
