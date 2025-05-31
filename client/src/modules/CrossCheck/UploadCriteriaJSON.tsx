@@ -48,7 +48,7 @@ export const UploadCriteriaJSON = ({ onLoad }: IUploadCriteriaJSON) => {
       onChange={handleChange}
       // This is to override default behavior of the uploader (send request to the server)
       // We don't need it, because we handle file client-side
-      customRequest={(opts) => opts.onSuccess?.(null)}
+      customRequest={opts => opts.onSuccess?.(null)}
     >
       <Button
         icon={<UploadOutlined />}
