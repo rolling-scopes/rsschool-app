@@ -19,7 +19,6 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
     setMax(0);
     setMaxPenalty(0);
     setText('');
-    setType('title');
   };
 
   const onSave = () => {
