@@ -9,10 +9,11 @@ import {
 } from 'modules/CrossCheck';
 import { DeleteAllCrossCheckCriteriaButton } from 'modules/CrossCheck/DeleteAllCrossCheckCriteriaButton';
 import { LABELS } from 'modules/Tasks/constants';
+import { Dispatch, SetStateAction } from 'react';
 
 type Props = {
   dataCriteria: CriteriaDto[];
-  setDataCriteria: (criteria: CriteriaDto[]) => void;
+  setDataCriteria: Dispatch<SetStateAction<CriteriaDto[]>>;
 };
 
 export function CrossCheckTaskCriteriaPanel({ dataCriteria, setDataCriteria }: Props) {
