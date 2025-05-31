@@ -11,6 +11,7 @@ type Props = {
   pagination: false | TablePaginationConfig;
   handleChange?: TableProps<TeamDistributionStudentDto>['onChange'];
   loading?: boolean;
+  onDelete?: (student: TeamDistributionStudentDto) => void;
 };
 
 export default function StudentsTable({
@@ -20,10 +21,11 @@ export default function StudentsTable({
   pagination,
   handleChange,
   loading,
+  onDelete,
 }: Props) {
   const columns = useMemo(
-    () => getColumns(teamLeadId).filter(el => !notVisibleColumn.includes(el.key as StudentsTableColumnKey)),
-    [notVisibleColumn, teamLeadId],
+    () => getColumns(teamLeadId, onDelete).filter(el => !notVisibleColumn.includes(el.key as StudentsTableColumnKey)),
+    [notVisibleColumn, teamLeadId, onDelete],
   );
 
   return (
