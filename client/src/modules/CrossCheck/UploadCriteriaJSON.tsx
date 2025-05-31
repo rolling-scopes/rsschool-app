@@ -42,7 +42,14 @@ export const UploadCriteriaJSON = ({ onLoad }: IUploadCriteriaJSON) => {
   };
 
   return (
-    <Upload data-testid="uploader" accept=".JSON" onChange={handleChange}>
+    <Upload
+      data-testid="uploader"
+      accept=".JSON"
+      onChange={handleChange}
+      // This is to override default behavior of the uploader (send request to the server)
+      // We don't need it, because we handle file client-side
+      customRequest={(opts) => opts.onSuccess?.(null)}
+    >
       <Button
         icon={<UploadOutlined />}
         title='required format: \n{ criteria: {"type": "string", "max": number, "text": "string"}}'
