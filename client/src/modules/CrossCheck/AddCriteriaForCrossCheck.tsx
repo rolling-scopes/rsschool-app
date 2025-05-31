@@ -78,13 +78,13 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
 
       {type === TaskType.Subtask && (
         <Item label="Add Max Score">
-          <InputNumber value={max} min={0} step={1} onChange={changeMax} />
+          <InputNumber type="number" value={max} min={0} step={1} onChange={changeMax} />
         </Item>
       )}
 
       {type === TaskType.Penalty && (
         <Item label="Add Max Penalty">
-          <InputNumber value={maxPenalty} step={1} onChange={changeMaxPenalty} />
+          <InputNumber type="number" value={maxPenalty} step={1} onChange={changeMaxPenalty} />
         </Item>
       )}
 
