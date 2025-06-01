@@ -9,6 +9,7 @@ import { CriteriaDto, CriteriaDtoTypeEnum } from 'api';
 import { CriteriaActions } from './CriteriaActions';
 import { EditableTableColumnsDataIndex } from './constants';
 import { DragSortTable } from './components/DragSortTable';
+import { arrayMoveImmutable } from './utils/arrayMoveImmutable';
 
 interface IEditableTableProps {
   dataCriteria: CriteriaDto[];
@@ -63,15 +64,7 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
       setDataCriteria(previous => {
         const activeIndex = previous.findIndex(i => i.key === active.id);
         const overIndex = previous.findIndex(i => i.key === over?.id);
-        return [...previous].map((item, index) => {
-          if (index === activeIndex) {
-            return previous[overIndex];
-          }
-          if (index === overIndex) {
-            return previous[activeIndex];
-          }
-          return item;
-        });
+        return arrayMoveImmutable(previous, activeIndex, overIndex);
       });
     }
   };
