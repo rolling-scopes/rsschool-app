@@ -1,5 +1,21 @@
+import { weAreCommunityUrlPattern } from '@client/services/validators';
 import useRequest from 'ahooks/lib/useRequest';
-import { Checkbox, Col, DatePicker, Flex, Form, Input, InputNumber, Modal, Radio, Row, Select, Spin } from 'antd';
+import {
+  Checkbox,
+  Col,
+  DatePicker,
+  Flex,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Radio,
+  Row,
+  Select,
+  Spin,
+  Typography,
+} from 'antd';
+
 import { CoursesApi, CreateCourseDto, DisciplineDto, IdNameDto, UpdateCourseDto } from 'api';
 import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
 import dayjs from 'dayjs';
@@ -7,7 +23,9 @@ import utc from 'dayjs/plugin/utc';
 import { Course } from 'services/models';
 dayjs.extend(utc);
 
-const wearecommunityRegex = new RegExp('^(https?://)?(www\\.)?wearecommunity\\.io.*$');
+const rsAppStudentRegistryBaseURL = 'https://app.rs.school/registry/student?course=';
+
+const buildRSAppStudentRegistryURL = (alias: string) => `${rsAppStudentRegistryBaseURL}${alias}`;
 
 const courseApi = new CoursesApi();
 const courseIcons = Object.entries(DEFAULT_COURSE_ICONS).map(([key, config]) => ({ ...config, id: key }));
@@ -88,6 +106,8 @@ export function CourseModal(props: CourseModalProps) {
   );
 
   const descriptionUrl = Form.useWatch('descriptionUrl', form);
+  const alias: string = Form.useWatch('alias', form);
+  const weAreCommunityUrl = Form.useWatch('wearecommunityUrl', form);
   const anyCertificateChecked = Form.useWatch('anyCertificate', form);
 
   const certificateOptions = [
@@ -291,6 +311,7 @@ export function CourseModal(props: CourseModalProps) {
                     { label: 'AWS Fundamentals', value: 'https://rs.school/courses/aws-fundamentals' },
                     { label: 'AWS Cloud Developer', value: 'https://rs.school/courses/aws-cloud-developer' },
                     { label: 'AWS DevOps', value: 'https://rs.school/courses/aws-devops' },
+                    { label: 'AWS AI', value: 'https://rs.school/courses/aws-ai' },
                     { label: 'Custom', value: 'custom' },
                   ]}
                 ></Select>
@@ -312,12 +333,31 @@ export function CourseModal(props: CourseModalProps) {
           <Row gutter={24}>
             <Col sm={14} span={24}>
               <Form.Item
-                rules={[{ message: 'Please enter wearecommunity.io URL', pattern: wearecommunityRegex }]}
                 name="wearecommunityUrl"
-                label="wearecommunity.io URL"
+                label="WeAreCommunity URL"
+                rules={[
+                  {
+                    message: 'Please enter wearecommunity.io URL',
+                    pattern: weAreCommunityUrlPattern,
+                  },
+                ]}
               >
-                <Input />
+                <Input title={weAreCommunityUrl || ''} placeholder="Enter URL" />
               </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={24}>
+            <Col sm={22} span={24}>
+              <Typography.Text style={{ whiteSpace: 'pre-line' }} type="secondary">
+                {`This field specifies the URL that will be used for the “Enroll” button on the rs.school course page.
+                    – If you enter a WeAreCommunity URL, that link will be used.
+                    – Otherwise, the RS APP registration link will be used:`}
+              </Typography.Text>
+              {alias && (
+                <Typography.Text type="success" style={{ display: 'block' }} copyable>
+                  {buildRSAppStudentRegistryURL(alias)}
+                </Typography.Text>
+              )}
             </Col>
           </Row>
           <Row gutter={24}>
@@ -332,7 +372,7 @@ export function CourseModal(props: CourseModalProps) {
             </Col>
           </Row>
 
-          <Form.Item name="usePrivateRepositories" valuePropName="checked">
+          <Form.Item style={{ marginTop: 8 }} name="usePrivateRepositories" valuePropName="checked">
             <Checkbox>Use Private Repositories</Checkbox>
           </Form.Item>
 
@@ -399,7 +439,7 @@ function createRecord(values: FormData) {
     logo: values.logo,
     minStudentsPerMentor: values.minStudentsPerMentor,
     certificateThreshold: values.certificateThreshold,
-    wearecommunityUrl: values.wearecommunityUrl,
+    wearecommunityUrl: values.wearecommunityUrl || buildRSAppStudentRegistryURL(values.alias ?? ''),
     certificateDisciplines: values.anyCertificate
       ? []
       : values.certificateDisciplines?.length

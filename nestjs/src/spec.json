@@ -659,6 +659,29 @@
         "tags": ["courses interviews"]
       }
     },
+    "/courses/{courseId}/interviews/{interviewId}/pairs": {
+      "get": {
+        "operationId": "getInterviewPairs",
+        "parameters": [
+          { "name": "interviewId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/InterviewPairDto" } }
+              }
+            }
+          },
+          "400": { "description": "" },
+          "403": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["courses interviews"]
+      }
+    },
     "/courses/{courseId}/interviews/{interviewId}/register": {
       "post": {
         "operationId": "registerToInterview",
@@ -3596,6 +3619,18 @@
           "attributes",
           "studentRegistrationStartDate"
         ]
+      },
+      "InterviewStatus": { "type": "number", "enum": [1, 0] },
+      "InterviewPairDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "result": { "type": "number", "nullable": true },
+          "status": { "allOf": [{ "$ref": "#/components/schemas/InterviewStatus" }] },
+          "interviewer": { "$ref": "#/components/schemas/PersonDto" },
+          "student": { "$ref": "#/components/schemas/PersonDto" }
+        },
+        "required": ["id", "result", "status", "interviewer", "student"]
       },
       "AvailableStudentDto": {
         "type": "object",

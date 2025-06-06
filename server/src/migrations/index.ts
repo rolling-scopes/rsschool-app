@@ -59,6 +59,7 @@ import { CourseTask1730926720293 } from './1730926720293-CourseTask';
 import { Contributor1734874453585 } from './1734874453585-Contributor';
 import { Course1736458672717 } from './1736458672717-Course';
 import { CoursePersonalMentoringDates1738250779923 } from './1738250779923-CoursePersonalMentoringDates';
+import { CourseTaskInterviewCreatingPairs1747380525126 } from './1747380525126-CourseTaskInterviewCreatingPairs';
 import { Course1746467689328 } from './1746467689328-Course';
 
 export const migrations = [
@@ -123,5 +124,6 @@ export const migrations = [
   Contributor1734874453585,
   Course1736458672717,
   CoursePersonalMentoringDates1738250779923,
+  CourseTaskInterviewCreatingPairs1747380525126,
   Course1746467689328,
 ];
