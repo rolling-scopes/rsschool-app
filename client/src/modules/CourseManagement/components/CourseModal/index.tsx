@@ -441,7 +441,7 @@ function createRecord(values: FormData) {
     logo: values.logo,
     minStudentsPerMentor: values.minStudentsPerMentor,
     certificateThreshold: values.certificateThreshold,
-    wearecommunityUrl: values.wearecommunityUrl || buildRSAppStudentRegistryURL(values.alias ?? ''),
+    wearecommunityUrl: values.wearecommunityUrl,
     certificateDisciplines: values.anyCertificate
       ? []
       : values.certificateDisciplines?.length
