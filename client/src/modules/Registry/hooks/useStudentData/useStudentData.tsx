@@ -268,7 +268,10 @@ async function getMissingDisciplines(
   let missingDisciplines = '';
 
   const disciplineIds = course.certificateDisciplines;
-  const { data } = (await disciplinesApi.getDisciplinesByIds({ ids: disciplineIds })) as { data: IdName[] };
+  const { data = [] } =
+    disciplineIds && disciplineIds?.length
+      ? ((await disciplinesApi.getDisciplinesByIds({ ids: disciplineIds })) as { data: IdName[] })
+      : {};
 
   const certifiedStudentCourseIds =
     studentStats
@@ -279,8 +282,8 @@ async function getMissingDisciplines(
       .filter(item => item.certificate)
       .map(item => item.courseId) || [];
 
-  if (disciplineIds.includes(0)) {
-    if (!certifiedStudentCourseIds.length) {
+  if (!disciplineIds?.length) {
+    if (Array.isArray(disciplineIds) && !certifiedStudentCourseIds.length) {
       missingDisciplines = 'any';
     }
   } else {

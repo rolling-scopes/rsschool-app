@@ -332,6 +332,18 @@ export function CourseModal(props: CourseModalProps) {
 
           <Row gutter={24}>
             <Col sm={14} span={24}>
+              RS school certificates are required
+              <Form.Item name="anyCertificate" valuePropName="checked">
+                <Checkbox>Any course</Checkbox>
+              </Form.Item>
+              <Form.Item name="certificateDisciplines" hidden={anyCertificateChecked} style={{ marginTop: -16 }}>
+                <Select mode="multiple" optionFilterProp="label" placeholder="none" options={certificateOptions} />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row gutter={24}>
+            <Col sm={14} span={24}>
               <Form.Item
                 name="wearecommunityUrl"
                 label="WeAreCommunity URL"
@@ -346,6 +358,7 @@ export function CourseModal(props: CourseModalProps) {
               </Form.Item>
             </Col>
           </Row>
+
           <Row gutter={24}>
             <Col sm={22} span={24}>
               <Typography.Text style={{ whiteSpace: 'pre-line' }} type="secondary">
@@ -358,17 +371,6 @@ export function CourseModal(props: CourseModalProps) {
                   {buildRSAppStudentRegistryURL(alias)}
                 </Typography.Text>
               )}
-            </Col>
-          </Row>
-          <Row gutter={24}>
-            <Col sm={14} span={24}>
-              RS school certificates are required
-              <Form.Item name="anyCertificate" valuePropName="checked">
-                <Checkbox>Any course</Checkbox>
-              </Form.Item>
-              <Form.Item name="certificateDisciplines" hidden={anyCertificateChecked} style={{ marginTop: -16 }}>
-                <Select mode="multiple" optionFilterProp="label" placeholder="none" options={certificateOptions} />
-              </Form.Item>
             </Col>
           </Row>
 
