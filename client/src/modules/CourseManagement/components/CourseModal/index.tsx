@@ -52,7 +52,8 @@ type FormData = {
   discipline?: { id: number } | null;
   courseId?: number;
   wearecommunityUrl?: string;
-  certificateDisciplines?: number[];
+  anyCertificate?: boolean;
+  certificateDisciplines?: number[] | null;
 };
 
 export function CourseModal(props: CourseModalProps) {
@@ -87,24 +88,14 @@ export function CourseModal(props: CourseModalProps) {
   );
 
   const descriptionUrl = Form.useWatch('descriptionUrl', form);
+  const anyCertificateChecked = Form.useWatch('anyCertificate', form);
 
   const certificateOptions = [
-    { value: 0, label: 'any' },
     ...props.disciplines.map(({ id, name }) => ({
       value: id,
       label: name,
     })),
   ];
-
-  const handleCertificateChange = (selectedValues: number[]) => {
-    if (selectedValues.includes(0)) {
-      form.setFieldsValue({ certificateDisciplines: [0] });
-    } else {
-      form.setFieldsValue({
-        certificateDisciplines: selectedValues.filter(value => value !== 0),
-      });
-    }
-  };
 
   return (
     <Modal
@@ -319,7 +310,7 @@ export function CourseModal(props: CourseModalProps) {
           </Row>
 
           <Row gutter={24}>
-            <Col sm={12} span={24}>
+            <Col sm={14} span={24}>
               <Form.Item
                 rules={[{ message: 'Please enter wearecommunity.io URL', pattern: wearecommunityRegex }]}
                 name="wearecommunityUrl"
@@ -328,15 +319,15 @@ export function CourseModal(props: CourseModalProps) {
                 <Input />
               </Form.Item>
             </Col>
-            <Col sm={12} span={24}>
-              <Form.Item name={'certificateDisciplines'} label="RS school certificates are required">
-                <Select
-                  mode="multiple"
-                  optionFilterProp="label"
-                  placeholder="none"
-                  options={certificateOptions}
-                  onChange={handleCertificateChange}
-                />
+          </Row>
+          <Row gutter={24}>
+            <Col sm={14} span={24}>
+              RS school certificates are required
+              <Form.Item name="anyCertificate" valuePropName="checked">
+                <Checkbox>Any course</Checkbox>
+              </Form.Item>
+              <Form.Item name="certificateDisciplines" hidden={anyCertificateChecked} style={{ marginTop: -16 }}>
+                <Select mode="multiple" optionFilterProp="label" placeholder="none" options={certificateOptions} />
               </Form.Item>
             </Col>
           </Row>
@@ -409,7 +400,11 @@ function createRecord(values: FormData) {
     minStudentsPerMentor: values.minStudentsPerMentor,
     certificateThreshold: values.certificateThreshold,
     wearecommunityUrl: values.wearecommunityUrl,
-    certificateDisciplines: values.certificateDisciplines?.map(String),
+    certificateDisciplines: values.anyCertificate
+      ? []
+      : values.certificateDisciplines?.length
+        ? values.certificateDisciplines.map(String)
+        : null,
   };
   return record;
 }
@@ -427,7 +422,8 @@ function getInitialValues(modalData: Partial<Course>): FormData {
     getDateRange(modalData.personalMentoringStartDate, modalData.personalMentoringEndDate) || range;
   return {
     ...modalData,
-    certificateDisciplines: modalData.certificateDisciplines,
+    anyCertificate: modalData.certificateDisciplines?.length === 0 ? true : false,
+    certificateDisciplines: modalData.certificateDisciplines ? modalData.certificateDisciplines : [],
     wearecommunityUrl: modalData.wearecommunityUrl ?? undefined,
     minStudentsPerMentor: modalData.minStudentsPerMentor || 2,
     certificateThreshold: modalData.certificateThreshold ?? 70,

@@ -920,7 +920,6 @@
             "required": true,
             "in": "query",
             "schema": {
-              "type": "string",
               "enum": [
                 "rank",
                 "totalScore",
@@ -931,14 +930,15 @@
                 "mentor",
                 "totalScoreChangeDate",
                 "repositoryLastActivityDate"
-              ]
+              ],
+              "type": "string"
             }
           },
           {
             "name": "orderDirection",
             "required": true,
             "in": "query",
-            "schema": { "type": "string", "enum": ["asc", "desc"] }
+            "schema": { "enum": ["asc", "desc"], "type": "string" }
           },
           { "name": "current", "required": true, "in": "query", "schema": { "type": "string" } },
           { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "string" } },
@@ -3010,7 +3010,7 @@
           "minStudentsPerMentor": { "type": "number" },
           "certificateThreshold": { "type": "number" },
           "wearecommunityUrl": { "type": "string", "nullable": true },
-          "certificateDisciplines": { "type": "array", "items": { "type": "number" } }
+          "certificateDisciplines": { "nullable": true, "type": "array", "items": { "type": "number" } }
         },
         "required": [
           "id",
@@ -3070,7 +3070,7 @@
           "minStudentsPerMentor": { "type": "number" },
           "certificateThreshold": { "type": "number" },
           "wearecommunityUrl": { "type": "string" },
-          "certificateDisciplines": { "type": "array", "items": { "type": "string" } }
+          "certificateDisciplines": { "nullable": true, "type": "array", "items": { "type": "string" } }
         },
         "required": [
           "name",
@@ -3110,7 +3110,7 @@
           "minStudentsPerMentor": { "type": "number" },
           "certificateThreshold": { "type": "number" },
           "wearecommunityUrl": { "type": "string", "nullable": true },
-          "certificateDisciplines": { "type": "array", "items": { "type": "string" } }
+          "certificateDisciplines": { "nullable": true, "type": "array", "items": { "type": "string" } }
         },
         "required": ["certificateThreshold"]
       },
@@ -4535,7 +4535,7 @@
           "minStudentsPerMentor": { "type": "number" },
           "certificateThreshold": { "type": "number" },
           "wearecommunityUrl": { "type": "string", "nullable": true },
-          "certificateDisciplines": { "type": "array", "items": { "type": "number" } }
+          "certificateDisciplines": { "nullable": true, "type": "array", "items": { "type": "number" } }
         },
         "required": [
           "id",

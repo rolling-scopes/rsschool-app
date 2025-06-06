@@ -253,7 +253,7 @@ CREATE TABLE public.course (
     "wearecommunityUrl" character varying,
     "personalMentoringStartDate" timestamp with time zone,
     "personalMentoringEndDate" timestamp with time zone,
-    "certificateDisciplines" text DEFAULT ''::text NOT NULL
+    "certificateDisciplines" text DEFAULT NULL
 );
 
 
@@ -2607,8 +2607,8 @@ COPY public.contributor (id, created_date, updated_date, deleted_date, user_id, 
 --
 
 COPY public.course (id, "createdDate", "updatedDate", name, year, "primarySkillId", "primarySkillName", "locationName", alias, completed, description, "descriptionUrl", planned, "startDate", "endDate", "fullName", "registrationEndDate", "inviteOnly", "discordServerId", "certificateIssuer", "usePrivateRepositories", "personalMentoring", logo, "disciplineId", "minStudentsPerMentor", "certificateThreshold", "wearecommunityUrl", "personalMentoringStartDate", "personalMentoringEndDate", "certificateDisciplines") FROM stdin;
-13	2019-10-21 08:05:31.068833	2020-04-06 15:14:44.116961	RS 2020 Q1	\N	javascript	JavaScript	\N	rs-2020-q1	f	Javascript / Frontend Курс.\nВводное занятие - 2 февраля\nОрганизационный вебинар начнется 2 февраля в 12:00 по минскому времени (GMT+3). Мы расскажем о процессе обучения в RS School и выдадим задания для первого этапа обучения.\n\nВебинар будет транслироваться на канале https://www.youtube.com/c/rollingscopesschool.\nРекомендуем подписаться на канал и нажать колокольчик, чтобы не пропустить начало трансляции. \n\nЕсли у вас не будет возможности присоединиться к онлайн-трансляции, не переживайте! \nЗапись вебинара будет размещена на канале в открытом доступе.\n\nОписание тренинга\nОсновной сайт: https://rs.school/js/\n\nПодробная информация о школе:  https://docs.rs.school	\N	f	2020-02-02 09:01:56.398+00	2020-07-31 08:01:56.398+00	Rolling Scopes School 2020 Q1: JavaScript/Front-end	2020-04-15 08:40:46.24+00	f	\N	\N	t	t	\N	\N	2	70	\N	\N	\N
-11	2019-08-27 07:36:13.565873	2025-01-30 19:25:33.198749	RS 2019 Q3	\N	javascript	JavaScript	\N	rs-2019-q3	t	RS 2019 Q3	https://rs.school/courses/javascript-preschool-ru	f	2019-09-09 00:00:00+00	2020-01-31 00:00:00+00	Rolling Scopes School 2019 Q3	\N	f	2	\N	t	t	\N	1	2	70	\N	2019-09-23 00:00:00+00	2020-01-31 00:00:00+00
+13	2019-10-21 08:05:31.068833	2020-04-06 15:14:44.116961	RS 2020 Q1	\N	javascript	JavaScript	\N	rs-2020-q1	f	Javascript / Frontend Курс.\nВводное занятие - 2 февраля\nОрганизационный вебинар начнется 2 февраля в 12:00 по минскому времени (GMT+3). Мы расскажем о процессе обучения в RS School и выдадим задания для первого этапа обучения.\n\nВебинар будет транслироваться на канале https://www.youtube.com/c/rollingscopesschool.\nРекомендуем подписаться на канал и нажать колокольчик, чтобы не пропустить начало трансляции. \n\nЕсли у вас не будет возможности присоединиться к онлайн-трансляции, не переживайте! \nЗапись вебинара будет размещена на канале в открытом доступе.\n\nОписание тренинга\nОсновной сайт: https://rs.school/js/\n\nПодробная информация о школе:  https://docs.rs.school	\N	f	2020-02-02 09:01:56.398+00	2020-07-31 08:01:56.398+00	Rolling Scopes School 2020 Q1: JavaScript/Front-end	2020-04-15 08:40:46.24+00	f	\N	\N	t	t	\N	\N	2	70	\N	\N	\N	\N
+11	2019-08-27 07:36:13.565873	2025-01-30 19:25:33.198749	RS 2019 Q3	\N	javascript	JavaScript	\N	rs-2019-q3	t	RS 2019 Q3	https://rs.school/courses/javascript-preschool-ru	f	2019-09-09 00:00:00+00	2020-01-31 00:00:00+00	Rolling Scopes School 2019 Q3	\N	f	2	\N	t	t	\N	1	2	70	\N	2019-09-23 00:00:00+00	2020-01-31 00:00:00+00	\N
 23	2020-02-25 09:28:08.842897	2025-05-06 07:02:01.153175	TEST COURSE	\N	javascript	JavaScript	\N	test-course	f	TEST COURSE	https://rs.school/courses/angular	f	2021-05-31 00:00:00+00	2023-06-30 00:00:00+00	TEST COURSE	\N	t	2	\N	t	t	angular	3	2	70	\N	2021-05-31 00:00:00+00	2023-06-30 00:00:00+00	3
 \.
 

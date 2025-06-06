@@ -118,6 +118,6 @@ export class UpdateCourseDto {
 
   @IsArray()
   @IsOptional()
-  @ApiPropertyOptional()
-  certificateDisciplines?: string[];
+  @ApiPropertyOptional({ nullable: true, type: [String] })
+  certificateDisciplines?: string[] | null;
 }

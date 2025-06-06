@@ -30,7 +30,7 @@ export class CourseDto {
     this.minStudentsPerMentor = course.minStudentsPerMentor;
     this.certificateThreshold = course.certificateThreshold;
     this.wearecommunityUrl = course.wearecommunityUrl;
-    this.certificateDisciplines = course.certificateDisciplines.map(id => Number(id));
+    this.certificateDisciplines = course.certificateDisciplines?.map(id => Number(id)) ?? null;
   }
 
   @ApiProperty()
@@ -120,6 +120,6 @@ export class CourseDto {
   @ApiProperty({ nullable: true, type: String })
   wearecommunityUrl: string | null;
 
-  @ApiProperty({ type: [Number] })
-  certificateDisciplines: number[];
+  @ApiProperty({ nullable: true, type: [Number] })
+  certificateDisciplines: number[] | null;
 }

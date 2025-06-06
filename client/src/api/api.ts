@@ -1159,7 +1159,7 @@ export interface CourseDto {
      * @type {Array<number>}
      * @memberof CourseDto
      */
-    'certificateDisciplines': Array<number>;
+    'certificateDisciplines': Array<number> | null;
 }
 /**
  * 
@@ -2066,7 +2066,7 @@ export interface CreateCourseDto {
      * @type {Array<string>}
      * @memberof CreateCourseDto
      */
-    'certificateDisciplines': Array<string>;
+    'certificateDisciplines': Array<string> | null;
 }
 /**
  * 
@@ -4999,7 +4999,7 @@ export interface ProfileCourseDto {
      * @type {Array<number>}
      * @memberof ProfileCourseDto
      */
-    'certificateDisciplines': Array<number>;
+    'certificateDisciplines': Array<number> | null;
 }
 /**
  * 
@@ -6820,7 +6820,7 @@ export interface UpdateCourseDto {
      * @type {Array<string>}
      * @memberof UpdateCourseDto
      */
-    'certificateDisciplines'?: Array<string>;
+    'certificateDisciplines'?: Array<string> | null;
 }
 /**
  * 

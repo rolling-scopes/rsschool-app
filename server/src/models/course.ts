@@ -121,6 +121,6 @@ export class Course {
   @Column({ nullable: true, type: 'varchar' })
   wearecommunityUrl: string | null;
 
-  @Column({ type: 'simple-array', default: '' })
-  certificateDisciplines: string[];
+  @Column({ type: 'simple-array', default: null, nullable: true })
+  certificateDisciplines: string[] | null;
 }

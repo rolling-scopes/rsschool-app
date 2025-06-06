@@ -108,6 +108,6 @@ export class CreateCourseDto {
 
   @IsArray()
   @IsOptional()
-  @ApiProperty()
-  certificateDisciplines?: string[];
+  @ApiProperty({ nullable: true, type: [String] })
+  certificateDisciplines?: string[] | null;
 }
