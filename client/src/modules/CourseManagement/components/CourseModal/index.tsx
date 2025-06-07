@@ -1,3 +1,4 @@
+import { QuestionCircleOutlined } from '@ant-design/icons';
 import { weAreCommunityUrlPattern } from '@client/services/validators';
 import useRequest from 'ahooks/lib/useRequest';
 import {
@@ -15,6 +16,7 @@ import {
   Spin,
   Typography,
 } from 'antd';
+import { Tooltip } from 'antd/lib';
 
 import { CoursesApi, CreateCourseDto, DisciplineDto, IdNameDto, UpdateCourseDto } from 'api';
 import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
@@ -70,6 +72,8 @@ type FormData = {
   discipline?: { id: number } | null;
   courseId?: number;
   wearecommunityUrl?: string;
+  anyCertificate?: boolean;
+  certificateDisciplines?: number[] | null;
 };
 
 export function CourseModal(props: CourseModalProps) {
@@ -106,6 +110,14 @@ export function CourseModal(props: CourseModalProps) {
   const descriptionUrl = Form.useWatch('descriptionUrl', form);
   const alias: string = Form.useWatch('alias', form);
   const weAreCommunityUrl = Form.useWatch('wearecommunityUrl', form);
+  const anyCertificateChecked = Form.useWatch('anyCertificate', form);
+
+  const certificateOptions = [
+    ...props.disciplines.map(({ id, name }) => ({
+      value: id,
+      label: name,
+    })),
+  ];
 
   return (
     <Modal
@@ -243,7 +255,11 @@ export function CourseModal(props: CourseModalProps) {
 
           <Row gutter={24}>
             <Col md={8} sm={12} span={24}>
-              <Form.Item name="registrationEndDate" label="Registration End Date">
+              <Form.Item
+                name="registrationEndDate"
+                label="Registration End Date"
+                getValueFromEvent={date => date?.utc().endOf('day')}
+              >
                 <DatePicker style={{ width: '100%' }} />
               </Form.Item>
             </Col>
@@ -317,7 +333,27 @@ export function CourseModal(props: CourseModalProps) {
           </Row>
 
           <Row gutter={24}>
-            <Col sm={12} span={24}>
+            <Col sm={14} span={24}>
+              RS school certificates required for registration (by disciplines){' '}
+              <Tooltip title='If "Any course" checked, students will be able to register for the course if they have at least 1 RS School course certificate regardless of the discipline. Otherwise, students will be able to register for the course if they have at least 1 RS School course certificate for the one of the selected disciplines. If nothing is selected - no restrictions are applied.'>
+                <QuestionCircleOutlined style={{ opacity: 0.5 }} />
+              </Tooltip>
+              <Form.Item name="anyCertificate" valuePropName="checked">
+                <Checkbox>Any course</Checkbox>
+              </Form.Item>
+              <Form.Item name="certificateDisciplines" hidden={anyCertificateChecked} style={{ marginTop: -16 }}>
+                <Select
+                  mode="multiple"
+                  optionFilterProp="label"
+                  placeholder="Select disciplines"
+                  options={certificateOptions}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row gutter={24}>
+            <Col sm={14} span={24}>
               <Form.Item
                 name="wearecommunityUrl"
                 label="WeAreCommunity URL"
@@ -332,6 +368,7 @@ export function CourseModal(props: CourseModalProps) {
               </Form.Item>
             </Col>
           </Row>
+
           <Row gutter={24}>
             <Col sm={22} span={24}>
               <Typography.Text style={{ whiteSpace: 'pre-line' }} type="secondary">
@@ -414,7 +451,12 @@ function createRecord(values: FormData) {
     logo: values.logo,
     minStudentsPerMentor: values.minStudentsPerMentor,
     certificateThreshold: values.certificateThreshold,
-    wearecommunityUrl: values.wearecommunityUrl || buildRSAppStudentRegistryURL(values.alias ?? ''),
+    wearecommunityUrl: values.wearecommunityUrl,
+    certificateDisciplines: values.anyCertificate
+      ? []
+      : values.certificateDisciplines?.length
+        ? values.certificateDisciplines.map(String)
+        : null,
   };
   return record;
 }
@@ -432,6 +474,8 @@ function getInitialValues(modalData: Partial<Course>): FormData {
     getDateRange(modalData.personalMentoringStartDate, modalData.personalMentoringEndDate) || range;
   return {
     ...modalData,
+    anyCertificate: modalData.certificateDisciplines?.length === 0 ? true : false,
+    certificateDisciplines: modalData.certificateDisciplines ? modalData.certificateDisciplines : [],
     wearecommunityUrl: modalData.wearecommunityUrl ?? undefined,
     minStudentsPerMentor: modalData.minStudentsPerMentor || 2,
     certificateThreshold: modalData.certificateThreshold ?? 70,
