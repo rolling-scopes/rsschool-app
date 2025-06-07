@@ -61,10 +61,6 @@ export class InterviewService {
     return taskCheckPairs;
   }
 
-  public async getInterviewPairs(courseTaskId: number) {
-    return this.interviewRepository.findByInterviewId(courseTaskId);
-  }
-
   public async cancelInterviewPair(pairId: number) {
     return this.interviewRepository.cancelById(pairId);
   }
