@@ -10,6 +10,7 @@ import { useLoading } from 'components/useLoading';
 type Props = {
   distribution: TeamDistributionDetailedDto;
   isManager: boolean;
+  reloadDistribution: () => Promise<TeamDistributionDetailedDto | undefined>;
 };
 
 type StudentsState = {
@@ -23,7 +24,7 @@ const { confirm } = Modal;
 
 const teamDistributionApi = new TeamDistributionApi();
 
-export default function StudentsWithoutTeamSection({ distribution, isManager }: Props) {
+export default function StudentsWithoutTeamSection({ distribution, isManager, reloadDistribution }: Props) {
   const [students, setStudents] = useState<StudentsState>({
     content: [],
     pagination: { current: 1, pageSize: 10 },
@@ -63,6 +64,7 @@ export default function StudentsWithoutTeamSection({ distribution, isManager }: 
           );
           message.success('Student removed successfully');
           await getStudents(students.pagination);
+          await reloadDistribution();
         } catch {
           message.error('Failed to remove student. Please try again later.');
         }

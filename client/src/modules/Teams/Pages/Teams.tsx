@@ -126,7 +126,13 @@ function Teams() {
         return <TeamsSection distribution={distribution} toggleTeamModal={toggleTeamModal} isManager={isManager} />;
 
       case 'students':
-        return <StudentsWithoutTeamSection distribution={distribution} isManager={isManager} />;
+        return (
+          <StudentsWithoutTeamSection
+            distribution={distribution}
+            isManager={isManager}
+            reloadDistribution={loadDistribution}
+          />
+        );
 
       case 'myTeam':
         return (
