@@ -1,4 +1,4 @@
-import { EntityRepository, AbstractRepository, getRepository, getManager, Brackets } from 'typeorm';
+import { EntityRepository, AbstractRepository, getRepository, Brackets } from 'typeorm';
 import { TaskChecker, TaskInterviewResult, TaskInterviewStudent } from '../models';
 import { courseService, userService } from '../services';
 import { InterviewStatus, InterviewDetails, InterviewPair } from '../../../common/models/interview';
@@ -11,10 +11,6 @@ export class InterviewRepository extends AbstractRepository<TaskChecker> {
 
   public findByStudent(courseId: number, githubId: string): Promise<InterviewDetails[]> {
     return this.getInterviews(courseId, githubId, 'student');
-  }
-
-  public findByInterviewId(id: number): Promise<InterviewPair[]> {
-    return this.getInterviewPairs(id);
   }
 
   public async addStudent(courseId: number, courseTaskId: number, studentId: number) {
@@ -170,53 +166,6 @@ export class InterviewRepository extends AbstractRepository<TaskChecker> {
       };
     });
     return students;
-  }
-
-  private async getInterviewPairs(courseTaskId: number): Promise<InterviewPair[]> {
-    const result = await getManager().query(
-      `
-      SELECT
-        tc.id,
-        tir.score,
-        m_user."firstName" AS "interviewerFirstName",
-        m_user."lastName" AS "interviewerLastName",
-        m_user."githubId" AS "interviewerGithubId",
-        s_user."firstName" AS "studentFirstName",
-        s_user."lastName" AS "studentLastName",
-        s_user."githubId" AS "studentGithubId"
-      FROM task_checker AS tc
-      LEFT JOIN task_interview_result AS tir ON tc."studentId" = tir."studentId"
-                AND tc."courseTaskId" = tir."courseTaskId"
-                AND tc."mentorId" = tir."mentorId"
-      LEFT JOIN mentor AS m ON m.id = tc."mentorId"
-      LEFT JOIN student AS s ON s.id = tc."studentId"
-      LEFT JOIN "user" AS m_user ON m_user.id = m."userId"
-      LEFT JOIN "user" AS s_user ON s_user.id = s."userId"
-      WHERE tc."courseTaskId" = $1
-    `,
-      [courseTaskId],
-    );
-    return result.map((item: any) => {
-      return {
-        id: item.id,
-        result: item.score,
-        status: item.score || item.score === 0 ? InterviewStatus.Completed : InterviewStatus.NotCompleted,
-        interviewer: {
-          githubId: item.interviewerGithubId,
-          name: userService.createName({
-            firstName: item.interviewerFirstName,
-            lastName: item.interviewerLastName,
-          }),
-        },
-        student: {
-          githubId: item.studentGithubId,
-          name: userService.createName({
-            firstName: item.studentFirstName,
-            lastName: item.studentLastName,
-          }),
-        },
-      } as InterviewPair;
-    });
   }
 }
 
