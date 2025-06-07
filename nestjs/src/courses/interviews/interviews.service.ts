@@ -107,7 +107,11 @@ export class InterviewsService {
       .leftJoin('tc.student', 'student')
       .leftJoin('mentor.user', 'mentorUser')
       .leftJoin('student.user', 'studentUser')
-      .leftJoin(TaskInterviewResult, 'tir', 'tc.studentId = tir.studentId AND tc.courseTaskId = tir.courseTaskId')
+      .leftJoin(
+        TaskInterviewResult,
+        'tir',
+        'tc.studentId = tir.studentId AND tc.courseTaskId = tir.courseTaskId AND tc.mentorId = tir.mentorId',
+      )
       .addSelect([
         'tc.id',
         'tir.score',
@@ -125,8 +129,8 @@ export class InterviewsService {
 
     return records.map(record => ({
       id: record.tc_id,
-      result: record.tir_score || null,
-      status: record.tir_score ? InterviewStatus.Completed : InterviewStatus.NotCompleted,
+      result: record.tir_score,
+      status: record.tir_score || record.tir_score === 0 ? InterviewStatus.Completed : InterviewStatus.NotCompleted,
       interviewer: {
         id: record.mentorUser_id,
         githubId: record.mentorUser_githubId,
