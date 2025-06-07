@@ -1,3 +1,4 @@
+import { QuestionCircleOutlined } from '@ant-design/icons';
 import { weAreCommunityUrlPattern } from '@client/services/validators';
 import useRequest from 'ahooks/lib/useRequest';
 import {
@@ -15,6 +16,7 @@ import {
   Spin,
   Typography,
 } from 'antd';
+import { Tooltip } from 'antd/lib';
 
 import { CoursesApi, CreateCourseDto, DisciplineDto, IdNameDto, UpdateCourseDto } from 'api';
 import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
@@ -332,12 +334,20 @@ export function CourseModal(props: CourseModalProps) {
 
           <Row gutter={24}>
             <Col sm={14} span={24}>
-              RS school certificates are required
+              RS school certificates required for registration (by disciplines){' '}
+              <Tooltip title='If "Any course" checked, students will be able to register for the course if they have at least 1 RS School course certificate regardless of the discipline. Otherwise, students will be able to register for the course if they have at least 1 RS School course certificate for the one of the selected disciplines. If nothing is selected - no restrictions are applied.'>
+                <QuestionCircleOutlined style={{ opacity: 0.5 }} />
+              </Tooltip>
               <Form.Item name="anyCertificate" valuePropName="checked">
                 <Checkbox>Any course</Checkbox>
               </Form.Item>
               <Form.Item name="certificateDisciplines" hidden={anyCertificateChecked} style={{ marginTop: -16 }}>
-                <Select mode="multiple" optionFilterProp="label" placeholder="none" options={certificateOptions} />
+                <Select
+                  mode="multiple"
+                  optionFilterProp="label"
+                  placeholder="Select disciplines"
+                  options={certificateOptions}
+                />
               </Form.Item>
             </Col>
           </Row>
