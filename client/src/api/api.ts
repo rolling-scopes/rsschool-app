@@ -20200,6 +20200,47 @@ export const TeamDistributionApiAxiosParamCreator = function (configuration?: Co
         },
         /**
          * 
+         * @param {number} studentId 
+         * @param {number} courseId 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamDistributionControllerDeleteStudentFromDistribution: async (studentId: number, courseId: number, id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'studentId' is not null or undefined
+            assertParamExists('teamDistributionControllerDeleteStudentFromDistribution', 'studentId', studentId)
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('teamDistributionControllerDeleteStudentFromDistribution', 'courseId', courseId)
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('teamDistributionControllerDeleteStudentFromDistribution', 'id', id)
+            const localVarPath = `/courses/{courseId}/team-distribution/{id}/students/{studentId}`
+                .replace(`{${"studentId"}}`, encodeURIComponent(String(studentId)))
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {number} courseId 
          * @param {number} id 
          * @param {*} [options] Override http request option.
@@ -20407,6 +20448,18 @@ export const TeamDistributionApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {number} studentId 
+         * @param {number} courseId 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async teamDistributionControllerDeleteStudentFromDistribution(studentId: number, courseId: number, id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.teamDistributionControllerDeleteStudentFromDistribution(studentId, courseId, id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {number} courseId 
          * @param {number} id 
          * @param {*} [options] Override http request option.
@@ -20521,6 +20574,17 @@ export const TeamDistributionApiFactory = function (configuration?: Configuratio
          */
         submitScore(courseId: number, id: number, taskId: number, options?: any): AxiosPromise<TeamDistributionDto> {
             return localVarFp.submitScore(courseId, id, taskId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} studentId 
+         * @param {number} courseId 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        teamDistributionControllerDeleteStudentFromDistribution(studentId: number, courseId: number, id: number, options?: any): AxiosPromise<void> {
+            return localVarFp.teamDistributionControllerDeleteStudentFromDistribution(studentId, courseId, id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -20648,6 +20712,19 @@ export class TeamDistributionApi extends BaseAPI {
      */
     public submitScore(courseId: number, id: number, taskId: number, options?: AxiosRequestConfig) {
         return TeamDistributionApiFp(this.configuration).submitScore(courseId, id, taskId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} studentId 
+     * @param {number} courseId 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TeamDistributionApi
+     */
+    public teamDistributionControllerDeleteStudentFromDistribution(studentId: number, courseId: number, id: number, options?: AxiosRequestConfig) {
+        return TeamDistributionApiFp(this.configuration).teamDistributionControllerDeleteStudentFromDistribution(studentId, courseId, id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

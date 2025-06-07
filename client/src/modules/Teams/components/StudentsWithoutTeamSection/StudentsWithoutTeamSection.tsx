@@ -1,4 +1,4 @@
-import { Col, Input, Row, Space, TablePaginationConfig, Typography } from 'antd';
+import { Col, Input, Row, Space, TablePaginationConfig, Typography, message, Modal } from 'antd';
 import { useState } from 'react';
 
 import { TeamDistributionApi, TeamDistributionDetailedDto, TeamDistributionStudentDto } from 'api';
@@ -9,6 +9,8 @@ import { useLoading } from 'components/useLoading';
 
 type Props = {
   distribution: TeamDistributionDetailedDto;
+  isManager: boolean;
+  reloadDistribution: () => Promise<TeamDistributionDetailedDto | undefined>;
 };
 
 type StudentsState = {
@@ -18,10 +20,11 @@ type StudentsState = {
 };
 
 const { Title } = Typography;
+const { confirm } = Modal;
 
 const teamDistributionApi = new TeamDistributionApi();
 
-export default function StudentsWithoutTeamSection({ distribution }: Props) {
+export default function StudentsWithoutTeamSection({ distribution, isManager, reloadDistribution }: Props) {
   const [students, setStudents] = useState<StudentsState>({
     content: [],
     pagination: { current: 1, pageSize: 10 },
@@ -45,6 +48,30 @@ export default function StudentsWithoutTeamSection({ distribution }: Props) {
     setStudents({ ...students, ...data });
   });
 
+  const handleDeleteStudent = async (student: TeamDistributionStudentDto) => {
+    confirm({
+      title: 'Are you sure you want to remove this student?',
+      content: `This will remove ${student.fullName} from the team distribution.`,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk: async () => {
+        try {
+          await teamDistributionApi.teamDistributionControllerDeleteStudentFromDistribution(
+            student.id,
+            distribution.courseId,
+            distribution.id,
+          );
+          message.success('Student removed successfully');
+          await getStudents(students.pagination);
+          await reloadDistribution();
+        } catch {
+          message.error('Failed to remove student. Please try again later.');
+        }
+      },
+    });
+  };
+
   useAsync(async () => await getStudents(students.pagination), [distribution, search]);
 
   return (
@@ -62,6 +89,7 @@ export default function StudentsWithoutTeamSection({ distribution }: Props) {
         pagination={students.pagination}
         handleChange={getStudents}
         loading={loading}
+        onDelete={isManager ? handleDeleteStudent : undefined}
       />
     </Space>
   );
