@@ -943,7 +943,6 @@
             "required": true,
             "in": "query",
             "schema": {
-              "type": "string",
               "enum": [
                 "rank",
                 "totalScore",
@@ -954,14 +953,15 @@
                 "mentor",
                 "totalScoreChangeDate",
                 "repositoryLastActivityDate"
-              ]
+              ],
+              "type": "string"
             }
           },
           {
             "name": "orderDirection",
             "required": true,
             "in": "query",
-            "schema": { "type": "string", "enum": ["asc", "desc"] }
+            "schema": { "enum": ["asc", "desc"], "type": "string" }
           },
           { "name": "current", "required": true, "in": "query", "schema": { "type": "string" } },
           { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "string" } },
@@ -1918,6 +1918,28 @@
       "get": {
         "operationId": "getDisciplines",
         "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/DisciplineDto" } }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": ["disciplines"]
+      }
+    },
+    "/disciplines/ids": {
+      "post": {
+        "operationId": "getDisciplinesByIds",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/DisciplineIdsDto" } } }
+        },
         "responses": {
           "200": {
             "description": "",
@@ -3010,7 +3032,8 @@
           "discipline": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/IdNameDto" }] },
           "minStudentsPerMentor": { "type": "number" },
           "certificateThreshold": { "type": "number" },
-          "wearecommunityUrl": { "type": "string", "nullable": true }
+          "wearecommunityUrl": { "type": "string", "nullable": true },
+          "certificateDisciplines": { "nullable": true, "type": "array", "items": { "type": "number" } }
         },
         "required": [
           "id",
@@ -3041,7 +3064,8 @@
           "discipline",
           "minStudentsPerMentor",
           "certificateThreshold",
-          "wearecommunityUrl"
+          "wearecommunityUrl",
+          "certificateDisciplines"
         ]
       },
       "CreateCourseDto": {
@@ -3068,9 +3092,19 @@
           "logo": { "type": "string" },
           "minStudentsPerMentor": { "type": "number" },
           "certificateThreshold": { "type": "number" },
-          "wearecommunityUrl": { "type": "string" }
+          "wearecommunityUrl": { "type": "string" },
+          "certificateDisciplines": { "nullable": true, "type": "array", "items": { "type": "string" } }
         },
-        "required": ["name", "startDate", "endDate", "fullName", "alias", "certificateThreshold", "wearecommunityUrl"]
+        "required": [
+          "name",
+          "startDate",
+          "endDate",
+          "fullName",
+          "alias",
+          "certificateThreshold",
+          "wearecommunityUrl",
+          "certificateDisciplines"
+        ]
       },
       "UpdateCourseDto": {
         "type": "object",
@@ -3098,7 +3132,8 @@
           "disciplineId": { "type": "number" },
           "minStudentsPerMentor": { "type": "number" },
           "certificateThreshold": { "type": "number" },
-          "wearecommunityUrl": { "type": "string", "nullable": true }
+          "wearecommunityUrl": { "type": "string", "nullable": true },
+          "certificateDisciplines": { "nullable": true, "type": "array", "items": { "type": "string" } }
         },
         "required": ["certificateThreshold"]
       },
@@ -4534,7 +4569,8 @@
           "discipline": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/IdNameDto" }] },
           "minStudentsPerMentor": { "type": "number" },
           "certificateThreshold": { "type": "number" },
-          "wearecommunityUrl": { "type": "string", "nullable": true }
+          "wearecommunityUrl": { "type": "string", "nullable": true },
+          "certificateDisciplines": { "nullable": true, "type": "array", "items": { "type": "number" } }
         },
         "required": [
           "id",
@@ -4565,7 +4601,8 @@
           "discipline",
           "minStudentsPerMentor",
           "certificateThreshold",
-          "wearecommunityUrl"
+          "wearecommunityUrl",
+          "certificateDisciplines"
         ]
       },
       "UpdateUserDto": {
@@ -4712,6 +4749,11 @@
           "updatedDate": { "type": "string" }
         },
         "required": ["name", "id", "createdDate", "updatedDate"]
+      },
+      "DisciplineIdsDto": {
+        "type": "object",
+        "properties": { "ids": { "type": "array", "items": { "type": "number" } } },
+        "required": ["ids"]
       },
       "UpdateDisciplineDto": { "type": "object", "properties": { "name": { "type": "string" } }, "required": ["name"] },
       "ApproveMentorDto": {

@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { RegistrationPageLayout } from 'components/RegistrationPageLayout';
 import { useStudentData } from 'modules/Registry/hooks';
-import { NoCourses, RegistrationForm } from 'modules/Registry/components';
+import { NoCourses, RegistrationForm, CourseCertificateAlert } from 'modules/Registry/components';
 import { SessionContext } from 'modules/Course/contexts';
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
 
 export function StudentRegistry({ courseAlias }: Props) {
   const session = useContext(SessionContext);
-  const { courses, loading, registered, steps, currentStep, form, handleSubmit } = useStudentData(
+  const { courses, loading, registered, steps, currentStep, form, handleSubmit, missingDisciplines } = useStudentData(
     session.githubId,
     courseAlias,
   );
@@ -18,6 +18,8 @@ export function StudentRegistry({ courseAlias }: Props) {
   let content: React.ReactNode;
   if (loading || registered) {
     content = null;
+  } else if (missingDisciplines && courses.length) {
+    content = <CourseCertificateAlert certificateDiscipline={missingDisciplines} />;
   } else if (!courses.length) {
     content = <NoCourses />;
   } else {
