@@ -23,6 +23,7 @@ export enum StudentsTableColumnKey {
   Location = 'location',
   Contacts = 'contacts',
   Student = 'student',
+  Action = 'action',
 }
 
 export enum StudentsTableColumnName {
@@ -34,4 +35,5 @@ export enum StudentsTableColumnName {
   Location = 'Location',
   Contacts = 'Contacts',
   Student = 'Student',
+  Action = 'Action',
 }

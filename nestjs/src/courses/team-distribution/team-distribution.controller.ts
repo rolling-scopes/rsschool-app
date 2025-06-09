@@ -137,6 +137,18 @@ export class TeamDistributionController {
     }
   }
 
+  @Delete('/:id/students/:studentId')
+  @UseGuards(RoleGuard)
+  @ApiOkResponse()
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  public async deleteStudentFromDistribution(
+    @Param('studentId', ParseIntPipe) studentId: number,
+    @Param('courseId', ParseIntPipe) _: number,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    await this.teamDistributionStudentService.deleteStudentFromTeamDistribution(studentId, id);
+  }
+
   @Get('/:id/detailed')
   @UseGuards(RoleGuard, RegisteredStudentOrPowerUserGuard)
   @ApiOkResponse({ type: TeamDistributionDetailedDto })

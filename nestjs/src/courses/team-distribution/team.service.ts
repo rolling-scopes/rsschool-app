@@ -59,7 +59,7 @@ export class TeamService {
       .map(student => ({ ...student, distributed: false }));
     const distributedStudents = studentsNeedingUpdate
       .filter(student => distributedStudentIds.includes(student.studentId))
-      .map(student => ({ ...student, distributed: true }));
+      .map(student => ({ ...student, distributed: true, active: true }));
 
     await this.teamDistributionStudentService.saveTeamDistributionStudents([
       ...notDistributedStudents,
