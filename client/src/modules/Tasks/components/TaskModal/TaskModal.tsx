@@ -1,5 +1,5 @@
 import { Row, Col, Form, Input, Select, Card, Space, Tag, Empty, Typography } from 'antd';
-import { useMemo } from 'react';
+import { Dispatch, SetStateAction, useMemo } from 'react';
 import union from 'lodash/union';
 import { TaskDto, CriteriaDto, DisciplineDto } from 'api';
 import { ModalForm } from 'components/Forms';
@@ -25,7 +25,7 @@ export type ModalProps = {
   disciplines: DisciplineDto[];
   mode: ModalFormMode;
   toggleModal: (data?: FormValues) => void;
-  setDataCriteria: (criteria: CriteriaDto[]) => void;
+  setDataCriteria: Dispatch<SetStateAction<CriteriaDto[]>>;
   handleModalSubmit: (values: FormValues) => Promise<void>;
 };
 
