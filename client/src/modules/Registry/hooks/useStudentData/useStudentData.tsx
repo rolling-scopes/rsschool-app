@@ -9,7 +9,7 @@ import { Location } from '@common/models';
 import { Form, message, Modal, Typography } from 'antd';
 import { useRouter } from 'next/router';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { ProfileApi } from 'api';
+import { DisciplinesApi, ProfileApi } from 'api';
 import { TYPES } from 'configs/registry';
 import { ERROR_MESSAGES } from 'modules/Registry/constants';
 
@@ -25,6 +25,7 @@ type IdName = {
 const cdnService = new CdnService();
 const profileApi = new ProfileApi();
 const userService = new UserService();
+const disciplinesApi = new DisciplinesApi();
 
 export function useStudentData(githubId: string, courseAlias: string | undefined) {
   const router = useRouter();
@@ -33,6 +34,7 @@ export function useStudentData(githubId: string, courseAlias: string | undefined
   const [currentStep, setCurrentStep] = useState(0);
   const [location, setLocation] = useState(null as Location | null);
   const [loading, setLoading] = useState(false);
+  const [missingDisciplines, setMissingDisciplines] = useState('');
 
   const { value: student, loading: dataLoading } = useAsync(async () => {
     const [profile, profileInfo, courses] = await Promise.all([
@@ -46,6 +48,12 @@ export function useStudentData(githubId: string, courseAlias: string | undefined
     if (courseAlias) {
       const currentCourse = courses.find(course => course.alias === courseAlias);
       const value = registeredForCourses.some(({ id }) => id === currentCourse?.id);
+
+      if (currentCourse) {
+        const missingDisciplines = await getMissingDisciplines(currentCourse, profileInfo?.studentStats, courses);
+        setMissingDisciplines(missingDisciplines);
+      }
+
       if (value) {
         setRegistered(value);
         return;
@@ -56,7 +64,17 @@ export function useStudentData(githubId: string, courseAlias: string | undefined
 
     const activeCourses = courseAlias
       ? courses.filter(isCourseOpenForRegistryWithAlias(courseAlias))
-      : courses.filter(isCourseOpenForRegistry(registeredForCourses)).sort(sortByStartDate);
+      : (
+          await Promise.all(
+            courses.filter(isCourseOpenForRegistry(registeredForCourses)).map(async course => ({
+              course,
+              hasMissingDisciplines: !!(await getMissingDisciplines(course, profileInfo?.studentStats, courses)),
+            })),
+          )
+        )
+          .filter(({ hasMissingDisciplines }) => !hasMissingDisciplines)
+          .map(({ course }) => course)
+          .sort(sortByStartDate);
 
     form.setFieldsValue(getInitialValues(profile, activeCourses));
 
@@ -171,6 +189,7 @@ export function useStudentData(githubId: string, courseAlias: string | undefined
     currentStep,
     form,
     handleSubmit,
+    missingDisciplines,
   } as const;
 }
 
@@ -239,4 +258,55 @@ function sortByStartDate(a: Course, b: Course) {
 
 function getStatus(course: Course) {
   return course.planned ? 'Planned' : 'Active';
+}
+
+async function getMissingDisciplines(
+  course: Course,
+  studentStats: StudentStats[] | undefined,
+  courses: Course[],
+): Promise<string> {
+  let missingDisciplines = '';
+
+  const disciplineIds = course.certificateDisciplines;
+  const { data = [] } =
+    disciplineIds && disciplineIds?.length
+      ? ((await disciplinesApi.getDisciplinesByIds({ ids: disciplineIds })) as { data: IdName[] })
+      : {};
+
+  const certifiedStudentCourseIds =
+    studentStats
+      ?.map(course => ({
+        courseId: course.courseId,
+        certificate: course.certificateId,
+      }))
+      .filter(item => item.certificate)
+      .map(item => item.courseId) || [];
+
+  if (!disciplineIds?.length) {
+    if (Array.isArray(disciplineIds) && !certifiedStudentCourseIds.length) {
+      missingDisciplines = 'any';
+    }
+  } else {
+    const studentCertifiedDisciplineNames = [
+      ...new Set(
+        courses
+          .filter(course => certifiedStudentCourseIds.includes(course.id))
+          .map(course => course.discipline?.name)
+          .filter(Boolean),
+      ),
+    ];
+
+    const requiredDisciplineNames = data.map(discipline => discipline.name);
+    const hasAllRequiredDisciplines = requiredDisciplineNames.every(name =>
+      studentCertifiedDisciplineNames.includes(name),
+    );
+
+    if (!hasAllRequiredDisciplines) {
+      missingDisciplines = requiredDisciplineNames
+        .filter(name => !studentCertifiedDisciplineNames.includes(name))
+        .join(', ');
+    }
+  }
+
+  return missingDisciplines;
 }
