@@ -6,7 +6,7 @@ export function NoCourses() {
     <Result
       status="info"
       icon={<MehTwoTone />}
-      title="There are no planned courses."
+      title="There are no available courses."
       subTitle="Please come back later."
       extra={
         <Button type="primary" href="/">

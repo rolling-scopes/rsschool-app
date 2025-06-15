@@ -1,8 +1,8 @@
-import { Space, Tag, Typography } from 'antd';
+import { Space, Tag, Typography, Button } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { TeamDistributionStudentDto } from 'api';
 import { StudentsTableColumnKey, StudentsTableColumnName } from 'modules/Teams/constants';
-import { TeamOutlined } from '@ant-design/icons';
+import { TeamOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Breakpoint } from 'antd/lib';
 import { StudentDiscord } from 'components/StudentDiscord';
 const { Text, Link } = Typography;
@@ -74,10 +74,21 @@ function renderContacts(_v: string, student: TeamDistributionStudentDto) {
   );
 }
 
+function renderDeleteAction(
+  student: TeamDistributionStudentDto,
+  onDelete?: (student: TeamDistributionStudentDto) => void,
+) {
+  if (!onDelete) return null;
+  return <Button type="text" danger icon={<DeleteOutlined />} onClick={() => onDelete(student)} />;
+}
+
 const DISPLAY_TABLE_BREAKPOINTS: Breakpoint[] = ['md'];
 const DISPLAY_TABLE_MOBILE_BREAKPOINT: Breakpoint[] = ['xs'];
 
-export const getColumns = (teamLeadId?: number): ColumnsType<TeamDistributionStudentDto> => [
+export const getColumns = (
+  teamLeadId?: number,
+  onDelete?: (student: TeamDistributionStudentDto) => void,
+): ColumnsType<TeamDistributionStudentDto> => [
   {
     key: StudentsTableColumnKey.Name,
     title: StudentsTableColumnName.Name,
@@ -141,4 +152,15 @@ export const getColumns = (teamLeadId?: number): ColumnsType<TeamDistributionStu
     render: renderContacts,
     responsive: DISPLAY_TABLE_MOBILE_BREAKPOINT,
   },
+  ...(onDelete
+    ? [
+        {
+          key: StudentsTableColumnKey.Action,
+          title: StudentsTableColumnName.Action,
+          width: '10%',
+          render: (_v: string, student: TeamDistributionStudentDto) => renderDeleteAction(student, onDelete),
+          responsive: DISPLAY_TABLE_BREAKPOINTS,
+        },
+      ]
+    : []),
 ];
