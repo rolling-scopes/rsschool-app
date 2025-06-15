@@ -1,5 +1,5 @@
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import { weAreCommunityUrlPattern } from '@client/services/validators';
+import { rsAppRegistryUrlPattern, weAreCommunityUrlPattern } from '@client/services/validators';
 import useRequest from 'ahooks/lib/useRequest';
 import {
   Checkbox,
@@ -28,6 +28,10 @@ dayjs.extend(utc);
 const rsAppStudentRegistryBaseURL = 'https://app.rs.school/registry/student?course=';
 
 const buildRSAppStudentRegistryURL = (alias: string) => `${rsAppStudentRegistryBaseURL}${alias}`;
+
+const weAreCommunityOrRsAppRegistryRegex = new RegExp(
+  `^(${weAreCommunityUrlPattern.source})|(${rsAppRegistryUrlPattern.source})$`,
+);
 
 const courseApi = new CoursesApi();
 const courseIcons = Object.entries(DEFAULT_COURSE_ICONS).map(([key, config]) => ({ ...config, id: key }));
@@ -118,6 +122,24 @@ export function CourseModal(props: CourseModalProps) {
       label: name,
     })),
   ];
+
+  const validateWeAreCommunityUrl = () => {
+    return (_: any, value: string) => {
+      if (!value) return Promise.resolve();
+
+      if (!weAreCommunityOrRsAppRegistryRegex.test(value)) {
+        return Promise.reject('Please enter RS APP or wearecommunity.io URL');
+      }
+
+      const matchedAlias: string | undefined = value.match(/\?course=(.+)$/)?.[1];
+
+      if (alias && matchedAlias && matchedAlias !== alias) {
+        return Promise.reject(`URL must end with ${alias}`);
+      }
+
+      return Promise.resolve();
+    };
+  };
 
   return (
     <Modal
@@ -358,10 +380,9 @@ export function CourseModal(props: CourseModalProps) {
                 name="wearecommunityUrl"
                 label="WeAreCommunity URL"
                 rules={[
-                  {
-                    message: 'Please enter wearecommunity.io URL',
-                    pattern: weAreCommunityUrlPattern,
-                  },
+                  () => ({
+                    validator: validateWeAreCommunityUrl(),
+                  }),
                 ]}
               >
                 <Input title={weAreCommunityUrl || ''} placeholder="Enter URL" />
@@ -451,7 +472,7 @@ function createRecord(values: FormData) {
     logo: values.logo,
     minStudentsPerMentor: values.minStudentsPerMentor,
     certificateThreshold: values.certificateThreshold,
-    wearecommunityUrl: values.wearecommunityUrl,
+    wearecommunityUrl: values.wearecommunityUrl || buildRSAppStudentRegistryURL(values.alias ?? ''),
     certificateDisciplines: values.anyCertificate
       ? []
       : values.certificateDisciplines?.length
