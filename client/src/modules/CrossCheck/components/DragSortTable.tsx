@@ -28,7 +28,7 @@ const DragSortTableRow = ({ children, ...props }: RowProps) => {
   );
 };
 
-export const DragSortTable = (props: TableProps<any>) => {
+export const DragSortTable = <T extends object>(props: TableProps<T>) => {
   return (
     <Table
       {...props}
