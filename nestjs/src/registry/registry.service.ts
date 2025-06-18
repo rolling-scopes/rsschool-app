@@ -171,8 +171,8 @@ export class RegistryService {
       req.andWhere(
         new Brackets(qb => {
           qb.where(`mentorRegistry.preselectedCourses = ''`).orWhere(
-            `(SELECT COUNT(*) FROM mentor WHERE mentor.userId = mentorRegistry.userId)
-                < cardinality(string_to_array(mentorRegistry.preselectedCourses, ','))`,
+            `(SELECT COUNT(*) FROM mentor WHERE mentor.userId = mentorRegistry.userId AND mentor.courseId = ANY(string_to_array(mentorRegistry.preselectedCourses, ',')::int[]))
+              < cardinality(string_to_array(mentorRegistry.preselectedCourses, ','))`,
           );
         }),
       );
