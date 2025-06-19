@@ -1,5 +1,5 @@
 import FileExcelOutlined from '@ant-design/icons/FileExcelOutlined';
-import { Alert, Button, Col, Form, message, notification, Row, Select, Space, Tabs, Typography } from 'antd';
+import { Alert, Button, Col, Form, message, notification, Row, Select, Space, Tabs, Tooltip, Typography } from 'antd';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 
@@ -140,6 +140,17 @@ function Page() {
 
   const handleModalSubmit = useCallback(
     async (values: FormData) => {
+      const originalData = modalData?.record?.preselectedCourses?.map(String).sort();
+      const updatedData = values.preselectedCourses?.map(String).sort();
+
+      const isSame =
+        originalData?.length === updatedData?.length && originalData.every((value, i) => value === updatedData[i]);
+
+      if (isSame) {
+        setModalData(null);
+        return;
+      }
+
       try {
         setModalLoading(true);
         if (modalData?.record?.githubId) {
@@ -164,6 +175,13 @@ function Page() {
     if (!data) {
       return null;
     }
+
+    const allShownCourses = courses.filter(
+      course =>
+        (course.completed && data.preselectedCourses.includes(course.id)) ||
+        (!course.completed && course.personalMentoring),
+    );
+
     return (
       <ModalForm
         data={data}
@@ -174,13 +192,17 @@ function Page() {
       >
         <Form.Item name="preselectedCourses" label="Pre-Selected Courses">
           <Select mode="multiple" optionFilterProp="children">
-            {courses
-              .filter(course => !course.completed && course.personalMentoring)
-              .map(course => (
-                <Select.Option key={course.id} value={course.id}>
-                  {course.name}
-                </Select.Option>
-              ))}
+            {allShownCourses.map(course => (
+              <Select.Option key={course.id} value={course.id}>
+                {course.completed ? (
+                  <Tooltip title="Completed course">
+                    <span style={{ color: 'red' }}>{course.name}</span>
+                  </Tooltip>
+                ) : (
+                  course.name
+                )}
+              </Select.Option>
+            ))}
           </Select>
         </Form.Item>
       </ModalForm>
