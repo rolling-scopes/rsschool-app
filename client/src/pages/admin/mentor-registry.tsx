@@ -140,11 +140,11 @@ function Page() {
 
   const handleModalSubmit = useCallback(
     async (values: FormData) => {
-      const originalData = modalData?.record?.preselectedCourses?.map(String).sort();
-      const updatedData = values.preselectedCourses?.map(String).sort();
+      const originalSortedData = modalData?.record?.preselectedCourses.map(courseId => String(courseId)).sort();
+      const updatedPreselectedCourses = values.preselectedCourses.map(courseId => String(courseId));
+      const updatedSortedData = updatedPreselectedCourses.sort();
 
-      const isSame =
-        originalData?.length === updatedData?.length && originalData.every((value, i) => value === updatedData[i]);
+      const isSame = JSON.stringify(originalSortedData) === JSON.stringify(updatedSortedData);
 
       if (isSame) {
         setModalData(null);
@@ -155,7 +155,7 @@ function Page() {
         setModalLoading(true);
         if (modalData?.record?.githubId) {
           await mentorRegistryService.updateMentor(modalData.record.githubId, {
-            preselectedCourses: values.preselectedCourses.map(v => String(v)),
+            preselectedCourses: updatedPreselectedCourses,
           });
         }
         setModalData(null);
@@ -176,11 +176,11 @@ function Page() {
       return null;
     }
 
-    const allShownCourses = courses.filter(
-      course =>
-        (course.completed && data.preselectedCourses.includes(course.id)) ||
-        (!course.completed && course.personalMentoring),
-    );
+    const allShownCourses = courses.filter(course => {
+      const isCompletedAndPreselected = course.completed && data.preselectedCourses.includes(course.id);
+      const isActiveWithPersonalMentoring = !course.completed && course.personalMentoring;
+      return isCompletedAndPreselected || isActiveWithPersonalMentoring;
+    });
 
     return (
       <ModalForm
