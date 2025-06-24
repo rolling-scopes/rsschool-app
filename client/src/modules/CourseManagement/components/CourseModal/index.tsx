@@ -215,11 +215,11 @@ export function CourseModal(props: CourseModalProps) {
             <Col md={8} sm={12} span={24}>
               <Form.Item
                 name="discordServerId"
-                label="Discord Server"
-                rules={[{ required: true, message: 'Please select discord server' }]}
+                label="Discord/Telegram channel"
+                rules={[{ required: true, message: 'Please select discord/telegram channel' }]}
               >
                 <Select
-                  placeholder="Select discord server"
+                  placeholder="Select discord/telegram channel"
                   options={props.discordServers.map(({ id, name }) => ({ value: id, label: name }))}
                 />
               </Form.Item>

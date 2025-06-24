@@ -106,10 +106,10 @@ const adminMenuItems: AdminMenuItemsData[] = [
     access: session => isAdmin(session) || isAnyCoursePowerUser(session),
   },
   {
-    name: 'Discord Servers',
+    name: 'Discord/Telegram',
     key: 'discordServers',
     icon: <DiscordOutlined />,
-    href: '/admin/discord-server',
+    href: '/admin/discord-telegram',
     access: session => isAdmin(session),
   },
   {
