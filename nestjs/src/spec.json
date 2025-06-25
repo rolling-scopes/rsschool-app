@@ -2147,25 +2147,16 @@
         "tags": ["discord-servers"]
       }
     },
-    "/discord-servers/reduced": {
+    "/discord-servers/{id}": {
       "get": {
-        "operationId": "getReducedDiscordServers",
-        "parameters": [],
+        "operationId": "getDiscordServerById",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
         "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/IdNameDto" } }
-              }
-            }
-          }
+          "200": { "description": "", "content": { "application/json": { "schema": { "type": "string" } } } }
         },
         "summary": "",
         "tags": ["discord-servers"]
-      }
-    },
-    "/discord-servers/{id}": {
+      },
       "put": {
         "operationId": "updateDiscordServer",
         "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
@@ -2189,6 +2180,24 @@
           "200": {
             "description": "",
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/DiscordServerDto" } } }
+          }
+        },
+        "summary": "",
+        "tags": ["discord-servers"]
+      }
+    },
+    "/discord-servers/reduced": {
+      "get": {
+        "operationId": "getReducedDiscordServers",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/IdNameDto" } }
+              }
+            }
           }
         },
         "summary": "",
