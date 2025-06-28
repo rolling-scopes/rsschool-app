@@ -15,6 +15,10 @@ export class DiscordServersService {
     return this.repository.find();
   }
 
+  public async getById(id: number) {
+    return this.repository.findOneBy({ id });
+  }
+
   public create(data: CreateDiscordServerDto) {
     return this.repository.save(data);
   }
