@@ -322,6 +322,8 @@ export const MentorRegistryTableContainer = ({
 
   const handleTagClose = (removedTag: string) => {
     const [removedTagName, removedTagValue] = removedTag.split(':');
+    if (!removedTagValue) return;
+
     switch (removedTagName) {
       case MentorsRegistryColumnName.Tech:
         {

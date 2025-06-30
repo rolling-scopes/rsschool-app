@@ -26,7 +26,7 @@ export function LocationSelect(props: Props) {
     setValue(value);
   };
 
-  const handleSelect = (value: any) => {
+  const handleSelect = (value: string) => {
     setValue(value, false);
     props.onChange(toLocation(value));
   };

@@ -19,7 +19,7 @@ export class LoggingMiddleware implements NestMiddleware {
         method: req.method,
         status: res.statusCode,
         duration: this.getDurationInMilliseconds(start),
-        userId: (req.user as any)?.id ?? null,
+        userId: (req.user as { id: number })?.id ?? null,
       });
     });
 

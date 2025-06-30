@@ -7,7 +7,9 @@ export function arrayMoveMutable(array: CriteriaDto[], fromIndex: number, toInde
     const endIndex = toIndex < 0 ? array.length + toIndex : toIndex;
 
     const [item] = array.splice(fromIndex, 1);
-    array.splice(endIndex, 0, item);
+    if (item) {
+      array.splice(endIndex, 0, item);
+    }
   }
 }
 

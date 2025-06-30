@@ -107,10 +107,12 @@ function Page() {
 
     const [activeSolutionReview] = solutionReviews;
 
-    form.setFieldValue('comment', activeSolutionReview.comment.slice(markdownLabel.length));
-    setScore(activeSolutionReview.score);
-    if (activeSolutionReview.criteria) {
-      setCriteriaData(activeSolutionReview.criteria);
+    if (activeSolutionReview) {
+      form.setFieldValue('comment', activeSolutionReview.comment.slice(markdownLabel.length));
+      setScore(activeSolutionReview.score);
+      if (activeSolutionReview.criteria) {
+        setCriteriaData(activeSolutionReview.criteria);
+      }
     }
     setState({ loading: false, data: solutionReviews ?? [] });
   };
@@ -141,7 +143,7 @@ function Page() {
     }
   }, [historicalCommentSelected]);
 
-  const submitReview = withLoading(async values => {
+  const submitReview = withLoading(async (values: any) => {
     try {
       if (values.maxScore != null && values.maxScore < score) {
         message.error(`The score (${score}) exceeds the maximum score (${values.maxScore}) for the task.`);

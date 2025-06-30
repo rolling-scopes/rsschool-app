@@ -9,7 +9,7 @@ const { Footer } = Layout;
 
 const maxDonatorsShown = 21;
 
-class FooterLayout extends React.Component<any, any> {
+class FooterLayout extends React.Component {
   getYear() {
     const date = new Date();
     return date.getFullYear();

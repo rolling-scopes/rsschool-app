@@ -18,7 +18,7 @@ describe('paginate', () => {
   it('calls skip() with correct offset for first page', async () => {
     const mockQuery = mockRepository().createQueryBuilder();
 
-    await paginate(mockQuery as unknown as SelectQueryBuilder<any>, { page: 1, limit: 10 });
+    await paginate(mockQuery as unknown as SelectQueryBuilder<Record<string, unknown>>, { page: 1, limit: 10 });
 
     expect(skipSpy).toHaveBeenCalledWith(0);
   });
@@ -26,7 +26,7 @@ describe('paginate', () => {
   it('calls skip() with correct offset for 1 + n page', async () => {
     const mockQuery = mockRepository().createQueryBuilder();
 
-    await paginate(mockQuery as unknown as SelectQueryBuilder<any>, { page: 3, limit: 10 });
+    await paginate(mockQuery as unknown as SelectQueryBuilder<Record<string, unknown>>, { page: 3, limit: 10 });
 
     expect(skipSpy).toHaveBeenCalledWith(20);
   });
@@ -35,7 +35,7 @@ describe('paginate', () => {
     const mockQuery = mockRepository().createQueryBuilder();
     const limit = 10;
 
-    await paginate(mockQuery as unknown as SelectQueryBuilder<any>, { page: 1, limit });
+    await paginate(mockQuery as unknown as SelectQueryBuilder<Record<string, unknown>>, { page: 1, limit });
 
     expect(takeSpy).toHaveBeenCalledWith(limit);
   });
@@ -45,7 +45,10 @@ describe('paginate', () => {
     const items = [1, 2, 3];
     mockQuery.getManyAndCount = jest.fn().mockReturnValue([items, 0]);
 
-    const actual = await paginate(mockQuery as unknown as SelectQueryBuilder<any>, { page: 1, limit: 10 });
+    const actual = await paginate(mockQuery as unknown as SelectQueryBuilder<Record<string, unknown>>, {
+      page: 1,
+      limit: 10,
+    });
 
     expect(actual.items).toEqual(items);
   });
@@ -55,7 +58,10 @@ describe('paginate', () => {
     const items = [1, 2, 3];
     mockQuery.getManyAndCount = jest.fn().mockReturnValue([items, 0]);
 
-    const actual = await paginate(mockQuery as unknown as SelectQueryBuilder<any>, { page: 1, limit: 10 });
+    const actual = await paginate(mockQuery as unknown as SelectQueryBuilder<Record<string, unknown>>, {
+      page: 1,
+      limit: 10,
+    });
 
     expect(actual.meta.itemCount).toEqual(items.length);
   });
@@ -66,7 +72,10 @@ describe('paginate', () => {
     const total = 121;
     mockQuery.getManyAndCount = jest.fn().mockReturnValue([items, total]);
 
-    const actual = await paginate(mockQuery as unknown as SelectQueryBuilder<any>, { page: 1, limit: 10 });
+    const actual = await paginate(mockQuery as unknown as SelectQueryBuilder<Record<string, unknown>>, {
+      page: 1,
+      limit: 10,
+    });
 
     expect(actual.meta.total).toEqual(total);
   });
@@ -75,7 +84,10 @@ describe('paginate', () => {
     const mockQuery = mockRepository().createQueryBuilder();
     const page = 34;
 
-    const actual = await paginate(mockQuery as unknown as SelectQueryBuilder<any>, { page, limit: 10 });
+    const actual = await paginate(mockQuery as unknown as SelectQueryBuilder<Record<string, unknown>>, {
+      page,
+      limit: 10,
+    });
 
     expect(actual.meta.current).toEqual(page);
   });
@@ -84,7 +96,10 @@ describe('paginate', () => {
     const mockQuery = mockRepository().createQueryBuilder();
     const limit = 34;
 
-    const actual = await paginate(mockQuery as unknown as SelectQueryBuilder<any>, { page: 1, limit });
+    const actual = await paginate(mockQuery as unknown as SelectQueryBuilder<Record<string, unknown>>, {
+      page: 1,
+      limit,
+    });
 
     expect(actual.meta.pageSize).toEqual(limit);
   });
@@ -96,7 +111,10 @@ describe('paginate', () => {
     const total = 42;
     mockQuery.getManyAndCount = jest.fn().mockReturnValue([items, total]);
 
-    const actual = await paginate(mockQuery as unknown as SelectQueryBuilder<any>, { page: 1, limit });
+    const actual = await paginate(mockQuery as unknown as SelectQueryBuilder<Record<string, unknown>>, {
+      page: 1,
+      limit,
+    });
 
     expect(actual.meta.totalPages).toEqual(5);
   });

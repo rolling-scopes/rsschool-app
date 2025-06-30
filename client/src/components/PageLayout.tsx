@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, ReactNode } from 'react';
 import { Header } from './Header';
 import { Button, Col, Layout, Result, Row, Spin, theme } from 'antd';
 import { AdminSider } from './Sider/AdminSider';
@@ -9,7 +9,7 @@ type Props = {
   error?: Error;
   showCourseName?: boolean;
   title?: string;
-  children?: any;
+  children?: ReactNode;
   noData?: boolean;
   background?: string;
   withMargin?: boolean;

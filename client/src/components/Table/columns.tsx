@@ -1,11 +1,26 @@
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Input, InputRef } from 'antd';
+import { ColumnType } from 'antd/lib/table';
 import get from 'lodash/get';
 
 const searchRef = { current: null as InputRef | null };
-export function getColumnSearchProps(dataIndex: string | string[], label?: string) {
+
+export function getColumnSearchProps<T = unknown>(
+  dataIndex: string | string[],
+  label?: string,
+): Pick<ColumnType<T>, 'filterDropdown' | 'filterIcon' | 'onFilter' | 'onFilterDropdownOpenChange'> {
   return {
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: any) => (
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+    }: {
+      setSelectedKeys: (keys: React.Key[]) => void;
+      selectedKeys: React.Key[];
+      confirm: () => void;
+      clearFilters?: () => void;
+    }) => (
       <div style={{ padding: 8 }}>
         <Input
           ref={node => (searchRef.current = node)}
@@ -28,7 +43,7 @@ export function getColumnSearchProps(dataIndex: string | string[], label?: strin
         </Button>
         <Button
           onClick={() => {
-            clearFilters();
+            clearFilters?.();
             confirm();
           }}
           size="small"
@@ -39,14 +54,14 @@ export function getColumnSearchProps(dataIndex: string | string[], label?: strin
       </div>
     ),
     filterIcon: (filtered: boolean) => <SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />,
-    onFilter: (value: any, record: any) => {
+    onFilter: (value: boolean | React.Key, record) => {
       if (value == null) {
         return false;
       }
       const fields = Array.isArray(dataIndex) ? dataIndex : [dataIndex];
 
       const val = fields.some(field =>
-        (get(record as any, field) || '').toString().toLowerCase().includes(value.toLowerCase()),
+        (get(record, field) || '').toString().toLowerCase().includes(value.toString().toLowerCase()),
       );
       return val;
     },

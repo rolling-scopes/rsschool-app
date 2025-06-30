@@ -24,7 +24,8 @@ import { CourseRole } from 'services/models';
 
 const { Text } = Typography;
 
-type Stats = { activeStudentsCount: number; studentsCount: number; countries: any[] };
+type Stats = { activeStudentsCount: number; studentsCount: number; countries: unknown[] };
+
 type CertificateCriteria = {
   courseTaskIds?: number[];
   minScore?: number;
@@ -206,7 +207,7 @@ function Page() {
     setStats(calculateStats(courseStudents));
   }
 
-  function getColumns(): ColumnProps<any>[] {
+  function getColumns(): ColumnProps<StudentDetails>[] {
     return [
       {
         title: 'Active',
@@ -220,14 +221,14 @@ function Page() {
         dataIndex: 'githubId',
         sorter: stringSorter('githubId'),
         key: 'githubId',
-        render: (_, record: any) => <PersonCell value={record} />,
+        render: (_, record) => <PersonCell value={record} />,
         ...getColumnSearchProps(['githubId', 'name']),
       },
       {
         title: 'Mentor',
         dataIndex: 'mentor',
-        sorter: stringSorter<any>('mentor.githubId'),
-        render: (value: any) => (value ? <PersonCell value={value} /> : null),
+        sorter: stringSorter('mentor.githubId' as keyof StudentDetails),
+        render: value => (value ? <PersonCell value={value} /> : null),
         ...getColumnSearchProps(['mentor.githubId', 'mentor.name']),
       },
       {
@@ -249,7 +250,7 @@ function Page() {
         title: 'Screening',
         dataIndex: 'interviews',
         width: 60,
-        render: (value: any[]) => {
+        render: (value: StudentDetails['interviews']) => {
           if (value.length === 0) {
             return <MinusCircleOutlined title="No Interview" />;
           }
@@ -280,7 +281,7 @@ function Page() {
         dataIndex: 'actions',
         fixed: 'right',
         width: 60,
-        render: (_: any, record: StudentDetails) => (
+        render: (_, record) => (
           <Button type="default" onClick={() => setDetails(record)}>
             More
           </Button>

@@ -7,6 +7,10 @@ export function StepsContent() {
   const { activeStepIndex, steps, next, prev, onValuesChange, loading, isFinalStep } = useContext(StepContext);
   const step = steps[activeStepIndex];
 
+  if (!step) {
+    return <div>Step not found</div>;
+  }
+
   return (
     <Spin spinning={loading}>
       <StepForm

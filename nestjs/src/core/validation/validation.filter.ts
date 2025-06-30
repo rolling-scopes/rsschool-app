@@ -5,7 +5,7 @@ import { ValidationException } from './validation.exception';
 export class ValidationFilter implements ExceptionFilter {
   private logger = new Logger(ValidationFilter.name);
 
-  catch(exception: ValidationException, host: ArgumentsHost): any {
+  catch(exception: ValidationException, host: ArgumentsHost) {
     const context = host.switchToHttp();
     const response = context.getResponse();
     this.logger.warn(exception.validationErrors.join('\n'));
