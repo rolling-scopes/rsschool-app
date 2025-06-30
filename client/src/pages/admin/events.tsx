@@ -9,7 +9,7 @@ import { CourseRole } from 'services/models';
 import { EVENT_TYPES } from 'data/eventTypes';
 import { CreateEventDto, DisciplineDto, DisciplinesApi, EventDto, EventsApi } from 'api';
 import { ColumnsType } from 'antd/lib/table';
-import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { CustomPopconfirm } from 'components/common/CustomPopconfirm';
 
 const { Content } = Layout;
@@ -215,10 +215,8 @@ function getInitialValues(modalData: Partial<EventDto>) {
 
 export default function () {
   return (
-    <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Manager]} anyCoursePowerUser>
-        <Page />
-      </SessionProvider>
-    </ActiveCourseProvider>
+    <SessionProvider allowedRoles={[CourseRole.Manager]} anyCoursePowerUser>
+      <Page />
+    </SessionProvider>
   );
 }

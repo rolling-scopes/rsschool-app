@@ -5,7 +5,7 @@ import { AdminPageLayout } from 'components/PageLayout';
 import { AssignStudentModal } from 'components/Student';
 import { PersonCell, getColumnSearchProps, numberSorter, stringSorter } from 'components/Table';
 import { Session } from 'components/withSession';
-import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import { useMemo, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
@@ -279,10 +279,8 @@ function Page() {
 
 export default function () {
   return (
-    <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Manager, CourseRole.Supervisor]}>
-        <Page />
-      </SessionProvider>
-    </ActiveCourseProvider>
+    <SessionProvider allowedRoles={[CourseRole.Manager, CourseRole.Supervisor]}>
+      <Page />
+    </SessionProvider>
   );
 }

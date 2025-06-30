@@ -19,7 +19,7 @@ import { useMemo, useState, useContext } from 'react';
 import { useAsync, useToggle } from 'react-use';
 import { CourseService, StudentDetails } from 'services/course';
 import { CourseRole } from 'services/models';
-import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 
 const { Text } = Typography;
 
@@ -308,18 +308,16 @@ function calculateStats(students: StudentDetails[]) {
     studentsCount: students.length,
     countries: keys(countries).map(k => ({
       name: k,
-      count: countries[k].count,
-      totalCount: countries[k].totalCount,
+      count: countries[k]?.count,
+      totalCount: countries[k]?.totalCount,
     })),
   };
 }
 
 export default function () {
   return (
-    <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Manager, CourseRole.Supervisor, CourseRole.Dementor]}>
-        <Page />
-      </SessionProvider>
-    </ActiveCourseProvider>
+    <SessionProvider allowedRoles={[CourseRole.Manager, CourseRole.Supervisor, CourseRole.Dementor]}>
+      <Page />
+    </SessionProvider>
   );
 }

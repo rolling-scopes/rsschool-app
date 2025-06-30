@@ -11,7 +11,7 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import { useLoading } from 'components/useLoading';
 import { GithubAvatar } from 'components/GithubAvatar';
-import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 
 type HandleChangeValue = (skillName: string) => (value: any) => void;
 
@@ -413,10 +413,8 @@ function deserializeFromJson(json: any) {
 
 export default function () {
   return (
-    <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Mentor, CourseRole.Manager]}>
-        <Page />
-      </SessionProvider>
-    </ActiveCourseProvider>
+    <SessionProvider allowedRoles={[CourseRole.Mentor, CourseRole.Manager]}>
+      <Page />
+    </SessionProvider>
   );
 }
