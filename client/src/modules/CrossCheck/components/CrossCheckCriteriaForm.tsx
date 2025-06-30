@@ -16,7 +16,7 @@ export interface CriteriaFormProps {
   setScore: (value: number) => void;
   criteriaData: CrossCheckCriteriaDataDto[];
   setCriteriaData: (newData: CrossCheckCriteriaDataDto[]) => void;
-  initialData: CrossCheckSolutionReviewDto;
+  initialData?: CrossCheckSolutionReviewDto;
   setIsSkipped: (value: boolean) => void;
   isSkipped: boolean;
 }
@@ -49,7 +49,7 @@ export function CrossCheckCriteriaForm({
       }, 0);
       setScore(totalPoints > 0 ? totalPoints : 0);
     } else {
-      setScore(initialData.score);
+      setScore(initialData?.score ?? 0);
     }
   }, [criteriaData, initialData]);
 

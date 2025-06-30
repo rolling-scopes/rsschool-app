@@ -100,7 +100,7 @@ export function tagsCoursesRendererWithRemainingNumber(_: undefined, { courses }
   }
 
   const [firstCourse] = courses;
-  const firstTag = { value: firstCourse.name, ...(firstCourse.isActive && { color: 'blue' }) };
+  const firstTag = { value: firstCourse?.name ?? '', ...(firstCourse?.isActive && { color: 'blue' }) };
   const remainingCoursesCount = courses.length - 1;
 
   const tags = [firstTag];

@@ -45,7 +45,7 @@ export function Interviews() {
               interviewTask={interviewTask}
               key={interviewTask.id}
               course={course}
-              interviews={interviewsByTask[interviewTask.name]}
+              interviews={interviewsByTask[interviewTask.name] ?? []}
               fetchStudentInterviews={fetchStudentInterviews}
             />
           ))}

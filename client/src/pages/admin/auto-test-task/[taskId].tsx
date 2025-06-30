@@ -107,7 +107,7 @@ function Page() {
                     // Related issue: https://github.com/rolling-scopes/rsschool-app/issues/2572
                     selectedAnswers: question.multiple
                       ? selectedTask?.attributes.answers[index]
-                      : selectedTask?.attributes.answers[index][0],
+                      : (selectedTask?.attributes.answers[index]?.[0] ?? ''),
                   } as SelfEducationQuestionSelectedAnswersDto
                 }
                 questionIndex={index}

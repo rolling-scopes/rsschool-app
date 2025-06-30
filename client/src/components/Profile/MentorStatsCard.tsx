@@ -36,11 +36,13 @@ export function MentorStatsCard(props: Props) {
 
   return (
     <>
-      <MentorStatsModal
-        stats={stats[courseIndex]}
-        isVisible={isMentorStatsModalVisible}
-        onHide={hideMentortStatsModal}
-      />
+      {stats[courseIndex] ? (
+        <MentorStatsModal
+          stats={stats[courseIndex]}
+          isVisible={isMentorStatsModalVisible}
+          onHide={hideMentortStatsModal}
+        />
+      ) : null}
       <MentorEndorsement
         onClose={() => setIsEndorsmentModalVisible(false)}
         open={isEndorsmentModalVisible}

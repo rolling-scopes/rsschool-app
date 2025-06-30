@@ -1,9 +1,10 @@
 import { Spin, Layout } from 'antd';
 import { Header } from './Header';
+import { ReactNode } from 'react';
 
 const { Content } = Layout;
 
-type Props = { loading: boolean; title?: string; children?: any };
+type Props = { loading: boolean; title?: string; children?: ReactNode };
 
 export function RegistrationPageLayout(props: Props) {
   return (

@@ -36,7 +36,7 @@ const socialLinks = [
 
 type LinkInfo = { icon: React.ReactNode; name: string; link: string; newTab: boolean };
 
-class SocialNetworks extends React.Component<any, any> {
+class SocialNetworks extends React.Component {
   render() {
     return (
       <Row gutter={[16, 8]}>

@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { Layout, Spin } from 'antd';
 import { Course } from 'services/models';
 import { CourseNoAccess } from '../modules/Course/components/CourseNoAccess';
@@ -8,7 +9,7 @@ type Props = {
   githubId: string;
   course: Course;
   title?: string;
-  children?: any;
+  children?: ReactNode;
   showCourseName?: boolean;
 };
 
