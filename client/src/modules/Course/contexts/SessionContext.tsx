@@ -42,10 +42,16 @@ export function SessionProvider(props: Props) {
     data: session,
     loading,
     error,
-  } = useRequest(async () => {
-    const response = await sessionApi.getSession();
-    return response.data;
-  });
+  } = useRequest(
+    async () => {
+      const response = await sessionApi.getSession();
+      return response.data;
+    },
+    {
+      cacheKey: 'session',
+      staleTime: 1000 * 60 * 15,
+    },
+  );
 
   useEffect(() => {
     if (!error) {

@@ -13,7 +13,7 @@ import { markdownLabel } from 'components/Forms/PreparedComment';
 import { PageLayout } from 'components/PageLayout';
 import { useLoading } from 'components/useLoading';
 import { UserSearch } from 'components/UserSearch';
-import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { AssignmentLink, CrossCheckAssignmentLink } from 'modules/CrossCheck/components/CrossCheckAssignmentLink';
 import { CrossCheckCriteriaForm } from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
 import { CrossCheckHistory } from 'modules/CrossCheck/components/CrossCheckHistory';
@@ -313,10 +313,8 @@ function Page() {
 
 export default function () {
   return (
-    <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Student]}>
-        <Page />
-      </SessionProvider>
-    </ActiveCourseProvider>
+    <SessionProvider allowedRoles={[CourseRole.Student]}>
+      <Page />
+    </SessionProvider>
   );
 }

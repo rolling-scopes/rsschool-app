@@ -1,18 +1,17 @@
-import React, { useState, useMemo, useEffect, ChangeEvent, useContext } from 'react';
-import { useAsync } from 'react-use';
-import { Form, Typography, Rate, Input, Radio, Button, Divider, InputNumber, Space } from 'antd';
-import { PageLayoutSimple } from 'components/PageLayout';
-import { CourseRole } from 'services/models';
-import { StudentBasic } from 'services/models';
-import { CourseService } from 'services/course';
+import { Button, Divider, Form, Input, InputNumber, Radio, Rate, Space, Typography } from 'antd';
 import { AxiosError } from 'axios';
-import keys from 'lodash/keys';
-import get from 'lodash/get';
-import set from 'lodash/set';
-import { useLoading } from 'components/useLoading';
 import { GithubAvatar } from 'components/GithubAvatar';
-import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { PageLayoutSimple } from 'components/PageLayout';
+import { useLoading } from 'components/useLoading';
 import { useMessage } from 'hooks';
+import get from 'lodash/get';
+import keys from 'lodash/keys';
+import set from 'lodash/set';
+import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { ChangeEvent, useContext, useEffect, useMemo, useState } from 'react';
+import { useAsync } from 'react-use';
+import { CourseService } from 'services/course';
+import { CourseRole, StudentBasic } from 'services/models';
 
 type HandleChangeValue = (skillName: string) => (value: any) => void;
 
@@ -370,7 +369,7 @@ function Page() {
         initialValues={resume}
         layout="vertical"
         onFinish={handleSubmit}
-        onFinishFailed={({ errorFields: [errorField] }) => form.scrollToField(errorField.name)}
+        onFinishFailed={({ errorFields: [errorField] }) => form.scrollToField(errorField?.name)}
       >
         <Space align="baseline">
           <Typography.Title level={4}>Student: </Typography.Title>{' '}
@@ -415,10 +414,8 @@ function deserializeFromJson(json: any) {
 
 export default function () {
   return (
-    <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Mentor, CourseRole.Manager]}>
-        <Page />
-      </SessionProvider>
-    </ActiveCourseProvider>
+    <SessionProvider allowedRoles={[CourseRole.Mentor, CourseRole.Manager]}>
+      <Page />
+    </SessionProvider>
   );
 }

@@ -3,7 +3,6 @@ import { Button, Row, Space, Statistic, Switch, Table, Typography } from 'antd';
 import { ColumnProps } from 'antd/lib/table/Column';
 import { AdminPageLayout } from 'components/PageLayout';
 import { DashboardDetails } from 'components/Student';
-import { CertificateCriteriaModal, ExpelCriteriaModal } from 'modules/CourseManagement/components';
 import {
   boolIconRenderer,
   boolSorter,
@@ -14,13 +13,14 @@ import {
 } from 'components/Table';
 import { useLoading } from 'components/useLoading';
 import { isAdmin, isCourseManager, isCourseSupervisor } from 'domain/user';
+import { useMessage } from 'hooks';
 import keys from 'lodash/keys';
-import { useMemo, useState, useContext } from 'react';
+import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { CertificateCriteriaModal, ExpelCriteriaModal } from 'modules/CourseManagement/components';
+import { useContext, useMemo, useState } from 'react';
 import { useAsync, useToggle } from 'react-use';
 import { CourseService, StudentDetails } from 'services/course';
 import { CourseRole } from 'services/models';
-import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
-import { useMessage } from 'hooks';
 
 const { Text } = Typography;
 
@@ -310,18 +310,16 @@ function calculateStats(students: StudentDetails[]) {
     studentsCount: students.length,
     countries: keys(countries).map(k => ({
       name: k,
-      count: countries[k].count,
-      totalCount: countries[k].totalCount,
+      count: countries[k]?.count,
+      totalCount: countries[k]?.totalCount,
     })),
   };
 }
 
 export default function () {
   return (
-    <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Manager, CourseRole.Supervisor, CourseRole.Dementor]}>
-        <Page />
-      </SessionProvider>
-    </ActiveCourseProvider>
+    <SessionProvider allowedRoles={[CourseRole.Manager, CourseRole.Supervisor, CourseRole.Dementor]}>
+      <Page />
+    </SessionProvider>
   );
 }

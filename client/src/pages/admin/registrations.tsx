@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { formatMonthFriendly } from 'services/formatter';
 import { Course, CourseRole } from 'services/models';
 import { AdminPageLayout } from 'components/PageLayout';
-import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 
 const defaultRowGutter = 24;
 const PAGINATION = 200;
@@ -235,10 +235,8 @@ function Page() {
 
 export default function () {
   return (
-    <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Manager, CourseRole.Supervisor]}>
-        <Page />
-      </SessionProvider>
-    </ActiveCourseProvider>
+    <SessionProvider allowedRoles={[CourseRole.Manager, CourseRole.Supervisor]}>
+      <Page />
+    </SessionProvider>
   );
 }
