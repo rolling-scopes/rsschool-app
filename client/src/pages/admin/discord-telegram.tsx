@@ -46,7 +46,7 @@ function Page() {
       const { data } = await discordServersService.getDiscordServers();
       setData(data);
     } catch {
-      message.error('Failed to delete discord server. Please try later.');
+      message.error('Failed to delete discord/telegram channel. Please try later.');
     }
   };
 
@@ -65,7 +65,7 @@ function Page() {
         await loadData();
         setModalData(null);
       } catch {
-        message.error('An error occurred. Cannot save discord server.');
+        message.error('An error occurred. Cannot save discord/telegram channel.');
       } finally {
         setModalLoading(false);
       }
@@ -78,7 +78,7 @@ function Page() {
       modalData ? (
         <ModalForm
           data={modalData}
-          title="Discord Server"
+          title="Discord/Telegram channel"
           submit={handleModalSubmit}
           cancel={() => setModalData(null)}
           getInitialValues={getInitialValues}
@@ -115,10 +115,10 @@ function Page() {
   );
 
   return (
-    <AdminPageLayout title="Manage Discord Servers" loading={loading} courses={courses}>
+    <AdminPageLayout title="Manage Discord/Telegram" loading={loading} courses={courses}>
       <Content style={{ margin: 8 }}>
         <Button type="primary" onClick={handleAddItem}>
-          Add Discord Server
+          Add Discord/Telegram channel
         </Button>
         <Table
           size="small"
