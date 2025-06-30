@@ -109,6 +109,9 @@ export function SubmitScorePage() {
           <Upload
             fileList={Array.from(selectedFileList).map(([, file]) => file)}
             onChange={handleFileChose}
+            // This is to override default behavior of the uploader (send request to the server)
+            // We don't need it, because we handle file client-side
+            customRequest={opts => opts.onSuccess?.(null)}
             accept=".csv"
           >
             <Button>
