@@ -1,12 +1,10 @@
-import { ActiveCourseProvider, SessionProvider } from 'modules/Course/contexts';
+import { SessionProvider } from 'modules/Course/contexts';
 import { ConnectionConfirmed } from 'modules/Notifications/pages/ConnectionConfirmedPage';
 
 function Page() {
   return (
     <SessionProvider>
-      <ActiveCourseProvider>
-        <ConnectionConfirmed />
-      </ActiveCourseProvider>
+      <ConnectionConfirmed />
     </SessionProvider>
   );
 }

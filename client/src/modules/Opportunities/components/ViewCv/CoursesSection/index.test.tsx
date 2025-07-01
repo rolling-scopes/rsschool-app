@@ -35,7 +35,7 @@ const mockCourses = [
     fullName: 'Rolling Scopes School 2020 Q4: Android',
     rank: 444,
   },
-] as ResumeCourseDto[];
+] as [ResumeCourseDto, ResumeCourseDto, ResumeCourseDto, ResumeCourseDto];
 
 describe('CoursesSection', () => {
   test('should display nothing if courses are not provided', () => {

@@ -6,7 +6,7 @@ import { PageLayoutSimple } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
 import { UserService } from 'services/user';
 import { AxiosError } from 'axios';
-import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 
 interface IGratitude {
   userIds: number[];
@@ -142,9 +142,7 @@ function GratitudePage() {
 function Page() {
   return (
     <SessionProvider>
-      <ActiveCourseProvider>
-        <GratitudePage />
-      </ActiveCourseProvider>
+      <GratitudePage />
     </SessionProvider>
   );
 }

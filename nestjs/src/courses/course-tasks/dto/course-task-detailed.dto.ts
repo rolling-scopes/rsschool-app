@@ -20,7 +20,7 @@ export class CourseTaskDetailedDto extends CourseTaskDto {
   }
 
   @ApiProperty()
-  publicAttributes: any;
+  publicAttributes: unknown;
 
   @ApiProperty()
   githubRepoName: string;

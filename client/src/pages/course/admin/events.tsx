@@ -13,7 +13,7 @@ import { EventDto, EventsApi } from 'api';
 
 import tz from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { CourseRole } from 'services/models';
 import { CustomPopconfirm } from 'components/common/CustomPopconfirm';
 
@@ -159,10 +159,8 @@ function getColumns(
 
 export default function () {
   return (
-    <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Manager]}>
-        <Page />
-      </SessionProvider>
-    </ActiveCourseProvider>
+    <SessionProvider allowedRoles={[CourseRole.Manager]}>
+      <Page />
+    </SessionProvider>
   );
 }

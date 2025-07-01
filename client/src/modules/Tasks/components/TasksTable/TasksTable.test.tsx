@@ -4,6 +4,7 @@ import { TasksTable } from './TasksTable';
 import { ColumnName } from 'modules/Tasks/types';
 import { TASK_TYPES } from 'data/taskTypes';
 import { COURSE_NAME_MOCK, generateTasksData } from 'modules/Tasks/utils/test-utils';
+import assert from 'assert';
 
 const renderTasksTable = (data: TaskDto[] = generateTasksData(1), handleEditItem = jest.fn()) => {
   render(<TasksTable data={data} handleEditItem={handleEditItem} />);
@@ -33,20 +34,20 @@ describe('TasksTable', () => {
 
   test.each`
     value
-    ${mockData.id}
-    ${mockData.name}
-    ${mockData.discipline.name}
-    ${mockData.tags[0]}
-    ${mockData.tags[1]}
-    ${mockData.skills[0]}
-    ${mockData.skills[1]}
-    ${mockData.type}
-    ${mockData.githubRepoName}
-    ${mockData.courses[0].name}
+    ${mockData?.id}
+    ${mockData?.name}
+    ${mockData?.discipline.name}
+    ${mockData?.tags[0]}
+    ${mockData?.tags[1]}
+    ${mockData?.skills[0]}
+    ${mockData?.skills[1]}
+    ${mockData?.type}
+    ${mockData?.githubRepoName}
+    ${mockData?.courses[0]?.name}
   `('should render data field "$value"', ({ value }) => {
     renderTasksTable();
 
-    const [dataField] = screen.getAllByText(value);
+    const [dataField] = screen.getAllByText(value ?? '');
     expect(dataField).toBeInTheDocument();
   });
 
@@ -79,8 +80,11 @@ describe('TasksTable', () => {
     renderTasksTable(data, handleEditItem);
 
     const links = screen.getAllByText('Edit');
+
     data.forEach((task, i) => {
-      fireEvent.click(links[i]);
+      const link = links[i];
+      assert(link);
+      fireEvent.click(link);
       expect(handleEditItem).toHaveBeenCalledWith(task);
     });
   });
@@ -101,7 +105,7 @@ describe('TasksTable', () => {
 
   describe('filter & search data', () => {
     test('should check filter in dropdown when tag is selected', async () => {
-      const tag = TASK_TYPES[0].name;
+      const tag = TASK_TYPES[0]?.name ?? '';
       const data = generateTasksData();
       renderTasksTable(data);
 
@@ -119,7 +123,7 @@ describe('TasksTable', () => {
     });
 
     test('should reset filter on Reset click', async () => {
-      const tag = TASK_TYPES[0].name;
+      const tag = TASK_TYPES[0]?.name ?? '';
       const data = generateTasksData();
       renderTasksTable(data);
 
@@ -144,7 +148,7 @@ describe('TasksTable', () => {
     test('should render only filtered by Type data', async () => {
       const data = generateTasksData();
       const selectedTag = TASK_TYPES[0];
-      const notSelectedTags = data.filter(elem => elem.type !== selectedTag.id).map(task => task.type);
+      const notSelectedTags = data.filter(elem => elem.type !== selectedTag?.id).map(task => task.type);
       renderTasksTable(data);
 
       // find and click filter button for Type column
@@ -154,7 +158,9 @@ describe('TasksTable', () => {
 
       // find and click selected Type tag
       const filtersDropdown = await screen.findByRole('menu');
-      const menuItem = within(filtersDropdown).getByRole('menuitem', { name: new RegExp(selectedTag.name, 'i') });
+      const menuItem = within(filtersDropdown).getByRole('menuitem', {
+        name: new RegExp(selectedTag?.name ?? '', 'i'),
+      });
       fireEvent.click(menuItem);
 
       // submit filter
@@ -162,7 +168,7 @@ describe('TasksTable', () => {
       fireEvent.click(okBtn);
 
       // find filtered in rows
-      const filteredInRow = screen.getByText(selectedTag.id);
+      const filteredInRow = screen.getByText(selectedTag?.id ?? '');
       expect(filteredInRow).toBeInTheDocument();
 
       // check that other data rows aren't rendered
@@ -179,7 +185,9 @@ describe('TasksTable', () => {
       // find and click filter button for Used in Courses column
       const [, tagFilterBtn] = screen.getAllByRole('button', { name: /filter/i });
       expect(tagFilterBtn).toBeInTheDocument();
-      fireEvent.click(tagFilterBtn);
+      if (tagFilterBtn) {
+        fireEvent.click(tagFilterBtn);
+      }
 
       // find and click selected course tag
       const filtersDropdown = await screen.findByRole('menu');
@@ -207,7 +215,9 @@ describe('TasksTable', () => {
       // find and click filter button for Used in Courses column
       const [, tagFilterBtn] = screen.getAllByRole('button', { name: /filter/i });
       expect(tagFilterBtn).toBeInTheDocument();
-      fireEvent.click(tagFilterBtn);
+      if (tagFilterBtn) {
+        fireEvent.click(tagFilterBtn);
+      }
 
       // find and click selected tag
       const filtersDropdown = await screen.findByRole('menu');
@@ -231,7 +241,7 @@ describe('TasksTable', () => {
 
     test('should render only data filtered by Name column search', async () => {
       const data = generateTasksData();
-      const searchQuery = TASK_TYPES[0].id;
+      const searchQuery = TASK_TYPES[0]?.id ?? '';
       renderTasksTable(data);
 
       // Check that all items rendered
@@ -254,12 +264,13 @@ describe('TasksTable', () => {
       // Find the line with search query and no others
       const item = await screen.findByText(searchQuery);
       expect(item).toBeInTheDocument();
-      expect(screen.queryByText(data[1].name)).not.toBeInTheDocument();
+      const secondTaskName = data[1]?.name ?? 'non-existent';
+      expect(screen.queryByText(secondTaskName)).not.toBeInTheDocument();
     });
 
     test('should render all data when search query is cleared', async () => {
       const data = generateTasksData();
-      const searchQuery = TASK_TYPES[0].id;
+      const searchQuery = TASK_TYPES[0]?.id ?? '';
       renderTasksTable(data);
 
       // Find and click search button for column
@@ -277,7 +288,8 @@ describe('TasksTable', () => {
       // Find the line with search query and no others
       const item = await screen.findByText(searchQuery);
       expect(item).toBeInTheDocument();
-      expect(screen.queryByText(data[1].name)).not.toBeInTheDocument();
+      const secondTaskName = data[1]?.name ?? 'non-existent';
+      expect(screen.queryByText(secondTaskName)).not.toBeInTheDocument();
 
       // Reset search
       const inputResetBtn = screen.getByRole('button', { name: /reset/i });

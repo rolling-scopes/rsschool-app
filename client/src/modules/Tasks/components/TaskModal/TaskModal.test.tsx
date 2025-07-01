@@ -133,7 +133,7 @@ function generateData(isEmpty = false): ModalProps {
   const formData: FormValues = {
     ...tasks[0],
     attributes: undefined,
-    discipline: tasks[0].discipline.id,
+    discipline: tasks[0]?.discipline?.id,
   };
 
   if (isEmpty) {

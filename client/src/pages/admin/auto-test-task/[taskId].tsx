@@ -3,7 +3,7 @@ import { Descriptions, Divider, Form, Space, Switch, Tag, Typography } from 'ant
 import { AutoTestsApi, SelfEducationQuestionSelectedAnswersDto } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
 import { Question } from 'modules/AutoTest/components';
-import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { CourseRole } from 'services/models';
@@ -107,7 +107,7 @@ function Page() {
                     // Related issue: https://github.com/rolling-scopes/rsschool-app/issues/2572
                     selectedAnswers: question.multiple
                       ? selectedTask?.attributes.answers[index]
-                      : selectedTask?.attributes.answers[index][0],
+                      : (selectedTask?.attributes.answers[index]?.[0] ?? ''),
                   } as SelfEducationQuestionSelectedAnswersDto
                 }
                 questionIndex={index}
@@ -122,10 +122,8 @@ function Page() {
 
 export default function () {
   return (
-    <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Manager]}>
-        <Page />
-      </SessionProvider>
-    </ActiveCourseProvider>
+    <SessionProvider allowedRoles={[CourseRole.Manager]}>
+      <Page />
+    </SessionProvider>
   );
 }

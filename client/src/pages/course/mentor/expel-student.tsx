@@ -7,7 +7,7 @@ import { isMentor, getMentorId } from 'domain/user';
 import { useMemo, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
-import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 
 type ActionOnStudent = 'expel' | 'unassign' | 'self-study';
 
@@ -153,10 +153,8 @@ function Page() {
 
 export default function () {
   return (
-    <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Mentor, CourseRole.Manager]}>
-        <Page />
-      </SessionProvider>
-    </ActiveCourseProvider>
+    <SessionProvider allowedRoles={[CourseRole.Mentor, CourseRole.Manager]}>
+      <Page />
+    </SessionProvider>
   );
 }

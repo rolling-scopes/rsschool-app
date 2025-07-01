@@ -3,7 +3,7 @@ import { useContext, useMemo } from 'react';
 import Masonry from 'react-masonry-css';
 import css from 'styled-jsx/css';
 
-import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import {
   AvailableReviewCard,
   MainStatsCard,
@@ -97,10 +97,8 @@ const { className: masonryColumnClassName, styles: masonryColumnStyles } = css.r
 
 export default function () {
   return (
-    <ActiveCourseProvider>
-      <SessionProvider allowedRoles={['student']}>
-        <Page />
-      </SessionProvider>
-    </ActiveCourseProvider>
+    <SessionProvider allowedRoles={['student']}>
+      <Page />
+    </SessionProvider>
   );
 }

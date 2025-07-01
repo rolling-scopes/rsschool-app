@@ -26,7 +26,7 @@ export function StepForm({ step, next, back, isFirst, isLast, onValuesChange }: 
       onFinish={next}
       onValuesChange={onValuesChange}
       initialValues={getInitialQuestions(step)}
-      onFinishFailed={({ errorFields: [errorField] }) => form.scrollToField(errorField.name)}
+      onFinishFailed={({ errorFields: [errorField] }) => errorField && form.scrollToField(errorField.name)}
     >
       <Space direction="vertical" style={{ width: '100%' }}>
         <Form.Item>

@@ -6,6 +6,7 @@ import { ConfigService } from '../../config';
 
 import { AuthService } from '../auth.service';
 import { JWT_COOKIE_NAME } from '../constants';
+import { type Profile } from 'passport';
 
 @Injectable()
 export class DevStrategy extends PassportStrategy(Strategy, 'dev') {
@@ -16,12 +17,12 @@ export class DevStrategy extends PassportStrategy(Strategy, 'dev') {
     super();
   }
 
-  public async validate(req: CurrentRequest): Promise<any> {
+  public async validate(req: CurrentRequest): Promise<unknown> {
     const profile = {
       provider: '',
       id: '',
       username: this.config.auth.dev.username,
-    } as any;
+    } as Profile;
 
     const user = await this.authService.createAuthUser(profile, this.config.auth.dev.admin);
     req.user = user;
