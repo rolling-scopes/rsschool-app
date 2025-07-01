@@ -1,7 +1,7 @@
 import App from 'next/app';
 import Head from 'next/head';
 
-import { ActiveCourseProvider } from '@client/modules/Course/contexts';
+import { ActiveCourseProvider } from 'modules/Course/contexts';
 import 'antd/dist/reset.css';
 import { initializeFeatures } from 'services/features';
 import { Analytics } from '../components/Analytics';
