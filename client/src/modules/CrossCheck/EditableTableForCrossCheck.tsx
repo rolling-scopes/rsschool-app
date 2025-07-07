@@ -76,16 +76,31 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
       dataIndex: 'drag',
       width: 40,
       align: 'center' as const,
-      render: (_: any, record: CriteriaDto) => <DragHandle id={record.key} />,
+      render: (_: unknown, record: CriteriaDto) => <DragHandle id={record.key} />,
     },
-    { title: 'Type', dataIndex: EditableTableColumnsDataIndex.Type, width: '18%', editable: true },
-    { title: 'Max', dataIndex: EditableTableColumnsDataIndex.Max, width: '10%', editable: true },
-    { title: 'Text', dataIndex: EditableTableColumnsDataIndex.Text, width: '52%', editable: true },
+    {
+      title: 'Type',
+      dataIndex: EditableTableColumnsDataIndex.Type,
+      width: '18%',
+      editable: true,
+    },
+    {
+      title: 'Max',
+      dataIndex: EditableTableColumnsDataIndex.Max,
+      width: '10%',
+      editable: true,
+    },
+    {
+      title: 'Text',
+      dataIndex: EditableTableColumnsDataIndex.Text,
+      width: '52%',
+      editable: true,
+    },
     {
       title: 'Actions',
       dataIndex: EditableTableColumnsDataIndex.Actions,
       width: '20%',
-      render: (_: any, record: CriteriaDto) => (
+      render: (_: unknown, record: CriteriaDto) => (
         <CriteriaActions
           editing={isEditing(record)}
           record={record}
@@ -122,7 +137,11 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
         <SortableContext items={dataCriteria.map(i => i.key)} strategy={verticalListSortingStrategy}>
           <DragSortTable
             rowKey="key"
-            components={{ body: { cell: EditableCellForCrossCheck } }}
+            components={{
+              body: {
+                cell: EditableCellForCrossCheck,
+              },
+            }}
             style={{ wordBreak: 'break-word', fontStyle: 'normal' }}
             size="small"
             dataSource={dataCriteria}

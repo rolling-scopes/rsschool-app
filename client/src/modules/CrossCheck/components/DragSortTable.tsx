@@ -9,7 +9,9 @@ interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
 }
 
 const DragSortTableRow = ({ children, ...props }: RowProps) => {
-  const { attributes, setNodeRef, transform, transition, isDragging } = useSortable({ id: props['data-row-key'] });
+  const { attributes, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: props['data-row-key'],
+  });
 
   const style: React.CSSProperties = {
     ...props.style,
@@ -29,7 +31,13 @@ export const DragSortTable = <T extends object>(props: TableProps<T>) => {
   return (
     <Table
       {...props}
-      components={{ ...props.components, body: { ...props.components?.body, row: DragSortTableRow } }}
+      components={{
+        ...props.components,
+        body: {
+          ...props.components?.body,
+          row: DragSortTableRow,
+        },
+      }}
     />
   );
 };
