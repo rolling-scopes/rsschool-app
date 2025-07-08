@@ -38,9 +38,9 @@ export class DiscordServersController {
     return items.map(item => new IdNameDto(item));
   }
 
-  @Get(':id')
+  @Get('invite/:id')
   @RequiredRoles([Role.Admin, CourseRole.Mentor])
-  @ApiOperation({ operationId: 'getDiscordServerById' })
+  @ApiOperation({ operationId: 'getInviteLinkByDiscordServerId' })
   @ApiOkResponse({ type: String })
   public async getById(@Param('id', ParseIntPipe) id: number) {
     const item = await this.service.getById(id);
