@@ -19,23 +19,24 @@ function Instructions({ discordServerId }: InstructionsProps) {
   useEffect(() => {
     if (!discordServerId) return;
 
-    async function fetchTelegramLink() {
-      const discordServerData = await discordServer.getDiscordServerById(discordServerId);
+    const updateTelegramLink = async () => {
+      const response = await discordServer.getDiscordServerById(discordServerId);
+      const telegramInviteURL = response.data;
 
       const updatedSteps = steps.map(step => {
         if (!step.links) return step;
 
         const updatedLinks = step.links.map(link =>
-          link.title === 'telegram' ? { ...link, url: discordServerData.data } : link,
+          link.title === 'telegram' ? { ...link, url: telegramInviteURL } : link,
         );
 
         return { ...step, links: updatedLinks };
       });
 
       setSteps(updatedSteps);
-    }
+    };
 
-    fetchTelegramLink();
+    updateTelegramLink();
   }, []);
 
   return (

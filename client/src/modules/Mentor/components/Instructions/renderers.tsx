@@ -38,7 +38,11 @@ export const renderSocialLinks = (links: Record<'title' | 'url', string>[]) => (
 export const renderDescription = (text: string) => {
   return (
     <Text>
-      <div dangerouslySetInnerHTML={{ __html: text }}></div>
+      <div
+        dangerouslySetInnerHTML={{
+          __html: text,
+        }}
+      />
     </Text>
   );
 };
