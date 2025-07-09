@@ -6,6 +6,7 @@ export const LoadingScreen = (
     show: boolean;
   }>,
 ) => {
+  const { token } = theme.useToken();
   if (!props.show) {
     return <>{props.children}</>;
   }
@@ -20,7 +21,7 @@ export const LoadingScreen = (
         width: '100vw',
         position: 'fixed',
         height: '100vh',
-        background: theme.useToken().token.colorBgContainer,
+        background: token.colorBgContainer,
       }}
     >
       <Spin tip="Loading..." size="default">
