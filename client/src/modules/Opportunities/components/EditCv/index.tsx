@@ -102,67 +102,65 @@ export const EditCV = (props: Props) => {
 
   return (
     <LoadingScreen show={loading}>
-      <Layout
-        style={{
-          margin: '10px auto',
-          maxWidth: '960px',
-        }}
-      >
-        <Content>
-          <Space
-            direction="horizontal"
-            align="start"
+      <Content>
+        <Space
+          direction="horizontal"
+          align="start"
+          style={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'space-around',
+          }}
+        >
+          <Col
             style={{
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'space-around',
+              margin: '10px auto',
+              maxWidth: '960px',
             }}
           >
-            <Col>
-              <Row justify="center" style={{ marginBottom: '15px' }}>
-                <Button
-                  style={{
-                    ...buttonStyle,
-                    backgroundColor: '#52C41A',
-                    borderColor: '#52C41A',
-                  }}
-                  type="primary"
-                  color="green"
-                  htmlType="button"
-                  onClick={handleSave}
-                  icon={<SaveOutlined />}
-                >
-                  Save CV
-                </Button>
-                <Button style={buttonStyle} type="default" htmlType="button" onClick={() => props.switchView()}>
-                  Cancel
-                </Button>
-              </Row>
-              <Row>
-                {validationFailed ? (
-                  <Alert
-                    style={{ marginBottom: '10px', width: '100%' }}
-                    showIcon
-                    type="error"
-                    message="All required fields must be filled first"
-                  />
-                ) : null}
-              </Row>
-              <Row>{userData && <GeneralInfoForm ref={userFormRef} userData={userData} />}</Row>
-              <Row>{contacts && <ContactsForm ref={contactsFormRef} contactsList={contacts} />}</Row>
-              <Row>
-                {visibleCourses && (
-                  <VisibleCoursesForm
-                    ref={visibleCoursesFormRef}
-                    courses={props.courses}
-                    visibleCourses={visibleCourses}
-                  />
-                )}
-              </Row>
-            </Col>
-          </Space>
-        </Content>
-      </Layout>
+            <Row justify="center" style={{ marginBottom: '15px' }}>
+              <Button
+                style={{
+                  ...buttonStyle,
+                  backgroundColor: '#52C41A',
+                  borderColor: '#52C41A',
+                }}
+                type="primary"
+                color="green"
+                htmlType="button"
+                onClick={handleSave}
+                icon={<SaveOutlined />}
+              >
+                Save CV
+              </Button>
+              <Button style={buttonStyle} type="default" htmlType="button" onClick={() => props.switchView()}>
+                Cancel
+              </Button>
+            </Row>
+            <Row>
+              {validationFailed ? (
+                <Alert
+                  style={{ marginBottom: '10px', width: '100%' }}
+                  showIcon
+                  type="error"
+                  message="All required fields must be filled first"
+                />
+              ) : null}
+            </Row>
+            <Row>{userData && <GeneralInfoForm ref={userFormRef} userData={userData} />}</Row>
+            <Row>{contacts && <ContactsForm ref={contactsFormRef} contactsList={contacts} />}</Row>
+            <Row>
+              {visibleCourses && (
+                <VisibleCoursesForm
+                  ref={visibleCoursesFormRef}
+                  courses={props.courses}
+                  visibleCourses={visibleCourses}
+                />
+              )}
+            </Row>
+          </Col>
+        </Space>
+      </Content>
     </LoadingScreen>
   );
 };
