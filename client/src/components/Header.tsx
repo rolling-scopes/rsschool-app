@@ -86,6 +86,7 @@ export function Header({ title, showCourseName }: Props) {
       size={0}
       style={{
         width: '100%',
+        boxShadow: token.boxShadow
       }}
     >
       <nav
