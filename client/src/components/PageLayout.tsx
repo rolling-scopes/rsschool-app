@@ -49,8 +49,13 @@ export function PageLayout(props: Props) {
 }
 
 export function PageLayoutSimple(props: Props) {
+  const { token } = theme.useToken();
   return (
-    <Layout>
+    <Layout
+      style={{
+        background: props.background ? props.background : token.colorBgContainer,
+      }}
+    >
       <Header title={props.title} showCourseName={props.showCourseName} />
       <Layout.Content>
         {props.noData ? (
@@ -90,7 +95,7 @@ export function AdminPageLayout({
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Header title={title} showCourseName={showCourseName} />
-      <Layout style={{ background: '#e5e5e5' }}>
+      <Layout>
         <AdminSider courses={courses} />
         <Layout.Content
           style={{
