@@ -78,6 +78,8 @@ export function Header({ title, showCourseName }: Props) {
     return [...items, { type: 'divider' }, lastItem];
   }, [currentRoute]);
 
+  const { token } = theme.useToken();
+
   return (
     <Space
       direction="vertical"
@@ -89,8 +91,8 @@ export function Header({ title, showCourseName }: Props) {
       <nav
         className="nav no-print"
         style={{
-          background: theme.useToken().token.colorBgContainer,
-          color: theme.useToken().token.colorTextBase,
+          background: token.colorBgContainer,
+          color: token.colorTextBase,
           padding: '8px',
           display: 'flex',
           flexWrap: 'wrap',
@@ -128,10 +130,6 @@ export function Header({ title, showCourseName }: Props) {
 }
 
 const styles = css`
-  //:global(li:has(.menu-item-active)) {
-  //  background-color: #e0f2ff;
-  //}
-
   @media all and (max-width: 768px) {
     .title {
       width: 100%;
