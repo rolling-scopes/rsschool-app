@@ -81,7 +81,7 @@ function TeamDistributions() {
   };
 
   return (
-    <PageLayout loading={loading} title="RS Teams" background="#F0F2F5" showCourseName>
+    <PageLayout loading={loading} title="RS Teams" showCourseName>
       {openTeamDistributionModal && (
         <TeamDistributionModal
           data={teamDistributionData}

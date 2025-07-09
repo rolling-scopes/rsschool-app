@@ -1,7 +1,11 @@
 import * as React from 'react';
-import { Spin } from 'antd';
+import { Spin, theme } from 'antd';
 
-export const LoadingScreen = (props: React.PropsWithChildren<{ show: boolean }>) => {
+export const LoadingScreen = (
+  props: React.PropsWithChildren<{
+    show: boolean;
+  }>,
+) => {
   if (!props.show) {
     return <>{props.children}</>;
   }
@@ -16,9 +20,10 @@ export const LoadingScreen = (props: React.PropsWithChildren<{ show: boolean }>)
         width: '100vw',
         position: 'fixed',
         height: '100vh',
+        background: theme.useToken().token.colorBgContainer
       }}
     >
-      <Spin tip="Loading..." style={{ fontSize: 20 }}>
+      <Spin tip="Loading..." size='default'>
         <div className="content" />
       </Spin>
       <style jsx>{`
@@ -26,11 +31,10 @@ export const LoadingScreen = (props: React.PropsWithChildren<{ show: boolean }>)
           z-index: 1;
           top: 0;
           left: 0;
-          background-color: #fff;
         }
 
         .content {
-          padding: 100px;
+          padding: 50px;
         }
       `}</style>
     </div>

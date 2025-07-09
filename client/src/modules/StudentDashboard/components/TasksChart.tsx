@@ -2,6 +2,7 @@ import { Pie, PieConfig } from '@ant-design/plots';
 import { getTaskStatusColor } from 'modules/Schedule';
 import React from 'react';
 import capitalize from 'lodash/capitalize';
+import { theme } from 'antd';
 
 type Item = { status: string; value: number };
 
@@ -60,7 +61,7 @@ export function TasksChart({ data, onItemSelected }: Props) {
           return capitalize(datum.status);
         },
         style: {
-          color: 'rgba(0,0,0,0.45)',
+          color: theme.useToken().token.colorTextBase,
           fontSize: '14px',
         },
       },

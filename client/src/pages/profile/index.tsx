@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import Masonry from 'react-masonry-css';
 import { useRouter } from 'next/router';
-import { Result, Spin, message } from 'antd';
+import { message, Result, Spin, theme } from 'antd';
 import { ProfileApi, UpdateProfileInfoDto, UpdateUserDtoLanguagesEnum } from 'api';
 import { Header } from 'components/Header';
 import { LoadingScreen } from 'components/LoadingScreen';
@@ -47,6 +47,8 @@ const Profile = () => {
   const [isProfileOwner, setIsProfileOwner] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [connections, setConnections] = useState<Connections>({});
+
+  const { token } = theme.useToken();
 
   const fetchData = async () => {
     try {
@@ -184,7 +186,7 @@ const Profile = () => {
       <Header />
       <Spin spinning={isSaving} delay={200}>
         {profile ? (
-          <div style={{ padding: 10 }}>
+          <div style={{ padding: 10, background: token.colorBgContainer }}>
             <Masonry
               breakpointCols={{
                 default: 4,

@@ -156,7 +156,6 @@ function Teams() {
     <PageLayout
       loading={loadingDistribution || loading}
       title="RS Teams"
-      background="#F0F2F5"
       showCourseName
       withMargin={false}
     >

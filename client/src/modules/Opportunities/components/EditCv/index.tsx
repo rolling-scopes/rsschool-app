@@ -1,22 +1,22 @@
-import { useState, createRef, RefObject } from 'react';
-import { Layout, Space, Button, Row, Col, Alert, notification } from 'antd';
+import { createRef, RefObject, useState } from 'react';
+import { Alert, Button, Col, Layout, notification, Row, Space } from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
 import { FormInstance } from 'antd/lib/form';
-import { ResumeCourseDto, OpportunitiesApi, FormDataDto } from 'api';
+import { FormDataDto, OpportunitiesApi, ResumeCourseDto } from 'api';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { ContactsForm } from './ContactsForm';
 import { GeneralInfoForm } from './GeneralInfoForm';
 import { VisibleCoursesForm } from './VisibleCoursesForm';
 import {
+  AllDataToSubmit,
+  AllUserCVData,
   Contacts,
   UserData,
-  AllUserCVData,
-  AllDataToSubmit,
   UserDataToSubmit,
-  VisibleCoursesFormData,
   VisibleCourses,
+  VisibleCoursesFormData,
 } from 'modules/Opportunities/models';
-import { transformFieldsData, splitDataForForms } from 'modules/Opportunities/transformers';
+import { splitDataForForms, transformFieldsData } from 'modules/Opportunities/transformers';
 
 const { Content } = Layout;
 
@@ -97,22 +97,35 @@ export const EditCV = (props: Props) => {
 
     setLoading(false);
 
-    notification.success({ message: 'CV sucessfully updated', duration: 2 });
+    notification.success({ message: 'CV successfully updated', duration: 2 });
   };
 
   return (
     <LoadingScreen show={loading}>
-      <Layout style={{ margin: 'auto', marginBottom: '10px', maxWidth: '960px' }}>
+      <Layout
+        style={{
+          margin: '10px auto',
+          maxWidth: '960px',
+        }}
+      >
         <Content>
           <Space
             direction="horizontal"
             align="start"
-            style={{ width: '100%', display: 'flex', backgroundColor: '#FFF', justifyContent: 'space-around' }}
+            style={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'space-around',
+            }}
           >
             <Col>
               <Row justify="center" style={{ marginBottom: '15px' }}>
                 <Button
-                  style={{ ...buttonStyle, backgroundColor: '#52C41A', borderColor: '#52C41A' }}
+                  style={{
+                    ...buttonStyle,
+                    backgroundColor: '#52C41A',
+                    borderColor: '#52C41A',
+                  }}
                   type="primary"
                   color="green"
                   htmlType="button"

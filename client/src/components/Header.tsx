@@ -1,14 +1,13 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useContext, useMemo } from 'react';
-import { Button, Dropdown, Menu, Space } from 'antd';
-import type { MenuProps } from 'antd';
+import { Button, Dropdown, Menu, MenuProps, Space, theme } from 'antd';
 import {
   EyeOutlined,
   LogoutOutlined,
+  NotificationOutlined,
   QuestionCircleFilled,
   SolutionOutlined,
-  NotificationOutlined,
 } from '@ant-design/icons';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { SolidarityUkraine } from './SolidarityUkraine';
@@ -83,12 +82,15 @@ export function Header({ title, showCourseName }: Props) {
     <Space
       direction="vertical"
       size={0}
-      style={{ boxShadow: '0px 2px 8px #F0F1F2', backgroundColor: '#ffffff', width: '100%' }}
+      style={{
+        width: '100%',
+      }}
     >
       <nav
         className="nav no-print"
         style={{
-          background: '#fff',
+          background: theme.useToken().token.colorBgContainer,
+          color: theme.useToken().token.colorTextBase,
           padding: '8px',
           display: 'flex',
           flexWrap: 'wrap',
@@ -126,9 +128,9 @@ export function Header({ title, showCourseName }: Props) {
 }
 
 const styles = css`
-  :global(li:has(.menu-item-active)) {
-    background-color: #e0f2ff;
-  }
+  //:global(li:has(.menu-item-active)) {
+  //  background-color: #e0f2ff;
+  //}
 
   @media all and (max-width: 768px) {
     .title {

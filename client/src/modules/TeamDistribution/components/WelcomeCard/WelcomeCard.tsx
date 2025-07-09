@@ -13,12 +13,19 @@ export default function WelcomeCard({ isManager, handleCreateTeamDistribution }:
   const mobileView = useMedia('(max-width: 768px)');
   return (
     <Card
-      title={<Text>{isManager ? 'Create student teams to solve group tasks!' : 'Become a member of the team!'}</Text>}
-      style={{ marginTop: 24, backgroundColor: '#D6E4FF' }}
+      title={
+        <Text style={{ color: '#000' }}>
+          {isManager ? 'Create student teams to solve group tasks!' : 'Become a member of the team!'}
+        </Text>
+      }
+      style={{
+        marginTop: 24,
+        backgroundColor: '#D6E4FF',
+      }}
     >
       <Row gutter={[24, 12]} style={{ minHeight: '100px' }}>
         <Col sm={24} md={12}>
-          <Text>
+          <Text style={{ color: '#000' }}>
             Group task – it is a possibility to unite with your colleagues to develop the best solutions, and to gain
             knowledge and skills.
             <br /> To become a member of a team, you can create your own team or join an existing team. If you don't
@@ -26,7 +33,15 @@ export default function WelcomeCard({ isManager, handleCreateTeamDistribution }:
           </Text>
         </Col>
         {!mobileView && (
-          <Col md={12} style={{ position: 'relative', display: 'flex', justifyContent: 'end', paddingRight: '24px' }}>
+          <Col
+            md={12}
+            style={{
+              position: 'relative',
+              display: 'flex',
+              justifyContent: 'end',
+              paddingRight: '24px',
+            }}
+          >
             <div
               style={{
                 backgroundImage: `url(https://cdn.rs.school/sloths/stickers/welcome/image.png)`,

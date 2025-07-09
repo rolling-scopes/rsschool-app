@@ -2,7 +2,7 @@ import { Col, Divider, Row } from 'antd';
 import { useEffect, useState } from 'react';
 import { ResumeDto } from 'api';
 import { LoadingScreen } from 'components/LoadingScreen';
-import { useViewData, useExpiration } from 'modules/Opportunities/hooks';
+import { useExpiration, useViewData } from 'modules/Opportunities/hooks';
 import { ExpirationTooltip } from 'modules/Opportunities/components/ExpirationTooltip';
 import { ExpirationState } from 'modules/Opportunities/constants';
 import { AboutSection } from './AboutSection';
@@ -61,7 +61,12 @@ export const ViewCV = ({ initialData, publicMode, onRemoveConsent, switchView }:
               <Col xs={12} sm={12} md={24} lg={24} style={{ marginTop: 16 }}>
                 <PersonalSection user={userData} />
               </Col>
-              <Divider style={{ margin: '8px 0', backgroundColor: '#262626' }} />
+              <Divider
+                style={{
+                  margin: '8px 0',
+                  backgroundColor: '#262626',
+                }}
+              />
               <Col xs={12} sm={12} md={24} lg={24} style={{ marginTop: 16 }}>
                 <ContactsSection contacts={contacts} />
               </Col>
