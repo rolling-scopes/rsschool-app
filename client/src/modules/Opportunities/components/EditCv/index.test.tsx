@@ -122,6 +122,6 @@ describe('EditCV', () => {
       expect(mockOnUpdateResume).toHaveBeenCalled();
     });
 
-    expect(await screen.findByText(/cv sucessfully updated/i)).toBeInTheDocument();
+    expect(await screen.findByText(/cv successfully updated/i)).toBeInTheDocument();
   });
 });
