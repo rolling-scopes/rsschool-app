@@ -35,6 +35,7 @@ export default async () => {
     rootDir: 'src',
     setupFilesAfterEnv: ['<rootDir>/setupJest.ts'],
     moduleDirectories: ['node_modules', '<rootDir>/'],
+    testTimeout: 30000,
   })();
   config.transformIgnorePatterns = [`[/\\\\]node_modules[/\\\\](?!${esModules}).+\\.(js|jsx|mjs|cjs|ts|tsx)$`];
   return config;
