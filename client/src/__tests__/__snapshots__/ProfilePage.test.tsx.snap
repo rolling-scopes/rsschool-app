@@ -3,9 +3,9 @@
 exports[`ProfilePage Should render correctly if full profile info is in the state 1`] = `
 <div>
   <div
-    class="jsx-58a81771df76c199 loading-screen"
+    class="jsx-993c0e32ff744759 loading-screen"
     data-testid="loading-screen"
-    style="justify-content: center; align-items: center; display: flex; width: 100vw; position: fixed; height: 100vh;"
+    style="justify-content: center; align-items: center; display: flex; width: 100vw; position: fixed; height: 100vh; background: rgb(255, 255, 255);"
   >
     <div
       class="ant-spin-nested-loading css-dev-only-do-not-override-1v2lwm6"
@@ -15,7 +15,6 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
           aria-busy="true"
           aria-live="polite"
           class="ant-spin ant-spin-spinning ant-spin-show-text css-dev-only-do-not-override-1v2lwm6"
-          style="font-size: 20px;"
         >
           <span
             class="ant-spin-dot ant-spin-dot-spin"
@@ -44,7 +43,7 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
         class="ant-spin-container ant-spin-blur"
       >
         <div
-          class="jsx-58a81771df76c199 content"
+          class="jsx-993c0e32ff744759 content"
         />
       </div>
     </div>
