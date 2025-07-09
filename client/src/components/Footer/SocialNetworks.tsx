@@ -43,7 +43,11 @@ class SocialNetworks extends React.Component<any, any> {
         {socialLinks.map((linkInfo: LinkInfo) => {
           return (
             <Col key={linkInfo.link}>
-              <a target={linkInfo.newTab ? '_blank' : '_self'} href={linkInfo.link} style={{ color: 'var(--text-primary-color)' }}>
+              <a
+                target={linkInfo.newTab ? '_blank' : '_self'}
+                href={linkInfo.link}
+                style={{ color: 'var(--text-primary-color)' }}
+              >
                 <Space>
                   {linkInfo.icon}
                   {linkInfo.name}

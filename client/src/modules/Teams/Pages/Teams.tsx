@@ -153,12 +153,7 @@ function Teams() {
   };
 
   return (
-    <PageLayout
-      loading={loadingDistribution || loading}
-      title="RS Teams"
-      showCourseName
-      withMargin={false}
-    >
+    <PageLayout loading={loadingDistribution || loading} title="RS Teams" showCourseName withMargin={false}>
       {openTeamModal && distribution && (
         <TeamModal
           mode={mode}

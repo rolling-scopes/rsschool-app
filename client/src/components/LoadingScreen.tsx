@@ -20,10 +20,10 @@ export const LoadingScreen = (
         width: '100vw',
         position: 'fixed',
         height: '100vh',
-        background: theme.useToken().token.colorBgContainer
+        background: theme.useToken().token.colorBgContainer,
       }}
     >
-      <Spin tip="Loading..." size='default'>
+      <Spin tip="Loading..." size="default">
         <div className="content" />
       </Spin>
       <style jsx>{`
