@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Badge, Card, Col, Row, Space, Typography } from 'antd';
 import { INSTRUCTIONS_TEXT, renderDescription, renderSocialLinks } from '.';
 import { DiscordServersApi } from 'api';
+import { useAsyncEffect } from 'ahooks';
 
 interface InstructionsProps {
   discordServerId: number;
@@ -16,27 +17,23 @@ function Instructions({ discordServerId }: InstructionsProps) {
   const { title, description } = INSTRUCTIONS_TEXT;
   const [steps, setSteps] = useState(INSTRUCTIONS_TEXT.steps);
 
-  useEffect(() => {
+  useAsyncEffect(async () => {
     if (!discordServerId) return;
 
-    const updateTelegramLink = async () => {
-      const response = await discordServer.getDiscordServerById(discordServerId);
-      const telegramInviteURL = response.data;
+    const response = await discordServer.getInviteLinkByDiscordServerId(discordServerId);
+    const telegramInviteURL = response.data;
 
-      const updatedSteps = steps.map(step => {
-        if (!step.links) return step;
+    const updatedSteps = steps.map(step => {
+      if (!step.links) return step;
 
-        const updatedLinks = step.links.map(link =>
-          link.title === 'telegram' ? { ...link, url: telegramInviteURL } : link,
-        );
+      const updatedLinks = step.links.map(link =>
+        link.title === 'telegram' ? { ...link, url: telegramInviteURL } : link,
+      );
 
-        return { ...step, links: updatedLinks };
-      });
+      return { ...step, links: updatedLinks };
+    });
 
-      setSteps(updatedSteps);
-    };
-
-    updateTelegramLink();
+    setSteps(updatedSteps);
   }, []);
 
   return (
