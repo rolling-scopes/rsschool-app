@@ -9,7 +9,8 @@
     --text-primary-color: #ffffff;
   }
 
-  .header-logo {
+  .header-logo,
+  .login-image {
     filter: invert(1);
   }
 }
