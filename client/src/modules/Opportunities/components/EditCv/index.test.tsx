@@ -5,6 +5,15 @@ import { Contacts, UserData } from 'modules/Opportunities/models';
 import { OpportunitiesApi } from 'api';
 import { EditCV } from './index';
 
+const mockSuccessNotification = jest.fn();
+jest.mock('hooks/useMessage', () => ({
+  useMessage: () => ({
+    notification: {
+      success: mockSuccessNotification,
+    },
+  }),
+}));
+
 const enum EditCvForms {
   GeneralInfoForm,
   ContactsForm,
@@ -122,6 +131,9 @@ describe('EditCV', () => {
       expect(mockOnUpdateResume).toHaveBeenCalled();
     });
 
-    expect(await screen.findByText(/cv successfully updated/i)).toBeInTheDocument();
+    expect(mockSuccessNotification).toHaveBeenCalledWith({
+      message: 'CV successfully updated',
+      duration: 2
+    });
   });
 });
