@@ -9,7 +9,7 @@ interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
 }
 
 const DragSortTableRow = ({ children, ...props }: RowProps) => {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+  const { attributes, setNodeRef, transform, transition, isDragging } = useSortable({
     id: props['data-row-key'],
   });
 
@@ -17,12 +17,11 @@ const DragSortTableRow = ({ children, ...props }: RowProps) => {
     ...props.style,
     transform: CSS.Transform.toString(transform),
     transition,
-    cursor: 'move',
     ...(isDragging ? { position: 'relative', zIndex: 9999 } : {}),
   };
 
   return (
-    <tr {...props} ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <tr {...props} ref={setNodeRef} style={style} {...attributes}>
       {children}
     </tr>
   );
