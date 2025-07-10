@@ -20,6 +20,22 @@ interface SubmitResult {
   messages?: string[];
 }
 
+interface SubmitFormValues {
+  files: {
+    fileList: UploadFile[];
+  };
+  courseTaskId: number;
+}
+
+interface IncomingFiles {
+  fileList: UploadFile[];
+}
+
+interface StudentScore {
+  score: number;
+  studentGithubId: string;
+}
+
 const courseTasksApi = new CoursesTasksApi();
 
 export function SubmitScorePage() {
@@ -41,26 +57,17 @@ export function SubmitScorePage() {
   const handleTaskChange = () => setSubmitResults([]);
 
   const handleFileChose = (info: UploadChangeParam<UploadFile>) => {
-    let newSelectedFileList: Map<string, UploadFile> = new Map(selectedFileList);
-    switch (info.file.status) {
-      case 'uploading':
-      case 'done': {
-        newSelectedFileList.set(info.file.uid, info.file);
-        break;
-      }
-      case 'removed': {
-        newSelectedFileList.delete(info.file.uid);
-        break;
-      }
-      default: {
-        newSelectedFileList = new Map();
-      }
-    }
+    const newSelectedFileList = new Map<string, UploadFile>();
+
+    info.fileList.forEach(file => {
+      newSelectedFileList.set(file.uid, file);
+    });
+
     setSelectedFileList(newSelectedFileList);
     setSubmitResults([]);
   };
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: SubmitFormValues) => {
     try {
       setLoading(true);
       const results = await parseFiles(values.files);
@@ -73,7 +80,7 @@ export function SubmitScorePage() {
       if (error.message.match(/^Incorrect data/)) {
         message.error(error.message);
       } else {
-        message.error('An error occured. Please try later.');
+        message.error('An error occurred. Please try later.');
       }
     } finally {
       setLoading(false);
@@ -107,12 +114,11 @@ export function SubmitScorePage() {
         />
         <Form.Item label="CSV File" name="files" rules={[{ required: true, message: 'Please select csv-file' }]}>
           <Upload
+            beforeUpload={() => false}
             fileList={Array.from(selectedFileList).map(([, file]) => file)}
             onChange={handleFileChose}
-            // This is to override default behavior of the uploader (send request to the server)
-            // We don't need it, because we handle file client-side
-            customRequest={opts => opts.onSuccess?.(null)}
             accept=".csv"
+            multiple
           >
             <Button>
               <UploadOutlined /> Select files
@@ -164,80 +170,78 @@ export function SubmitScorePage() {
   );
 }
 
-async function parseFiles(incomingFiles: any) {
+async function parseFiles(incomingFiles: IncomingFiles): Promise<StudentScore[]> {
   const files = incomingFiles.fileList;
+
   const filesContent: string[] = await Promise.all(
     files.map(
-      (file: any) =>
-        new Promise((res, rej) => {
+      file =>
+        new Promise<string>((res, rej) => {
           const reader = new FileReader();
-          reader.readAsText(file.originFileObj, 'utf-8');
-          reader.onload = ({ target }) => res(target ? target.result : '');
+          reader.readAsText(file.originFileObj as Blob, 'utf-8');
+          reader.onload = ({ target }) => res((target?.result as string) || '');
           reader.onerror = e => rej(e);
         }),
     ),
   );
-  const scores = (await Promise.all(filesContent.map((content: string) => csv().fromString(content))))
-    .reduce((acc, cur) => acc.concat(cur), [])
-    .map(item => {
-      if (isUndefined(item.Github) || isUndefined(item.Score)) {
-        throw new Error('Incorrect data: CSV file should content the headers named "Github" and "Score"!');
-      }
-      return {
-        score: parseInt(item.Score, 10),
-        github: filterLogin(item.Github).toLowerCase(),
-      };
-    });
+
+  const parsedRecords = await Promise.all(filesContent.map(content => csv().fromString(content)));
+  const scores = parsedRecords.flat().map(item => {
+    if (isUndefined(item.Github) || isUndefined(item.Score)) {
+      throw new Error('Incorrect data: CSV file should contain the headers named "Github" and "Score"!');
+    }
+
+    const parsedScore = parseInt(item.Score, 10);
+    return {
+      score: isNaN(parsedScore) ? 0 : parsedScore,
+      github: filterLogin(item.Github).toLowerCase(),
+    };
+  });
+
   const uniqueStudents = new Map<string, number>();
   scores.forEach(({ github, score }) => {
     const current = uniqueStudents.get(github);
-    if (current) {
-      if (current < score) {
-        uniqueStudents.set(github, score);
-      }
-    } else {
+    if (typeof current !== 'number' || current < score) {
       uniqueStudents.set(github, score);
     }
   });
-  const data = Array.from(uniqueStudents).map(([github, score]) => ({
+
+  return Array.from(uniqueStudents).map(([studentGithubId, score]) => ({
+    studentGithubId,
     score,
-    studentGithubId: github,
   }));
-  return data;
 }
 
 async function uploadResults(
   courseService: CourseService,
   courseTaskId: number,
-  data: { score: any; studentGithubId: any }[],
-) {
+  data: StudentScore[],
+): Promise<SubmitResult[]> {
   const results = await courseService.postMultipleScores(courseTaskId, data);
   const groupedByStatus = new Map<string, SubmitResult>();
 
   results.forEach(({ status, value }: { status: string; value: string | number }) => {
     const current = groupedByStatus.get(status);
+
     if (current) {
-      const newStatus = {
+      const newStatus: SubmitResult = {
         status,
         count: current.count + 1,
-      } as SubmitResult;
-      if (status === 'skipped' && typeof value === 'string') {
-        newStatus.messages = (current.messages ?? []).concat([value]);
-      }
+        messages:
+          status === 'skipped' && typeof value === 'string' ? (current.messages ?? []).concat(value) : current.messages,
+      };
       groupedByStatus.set(status, newStatus);
     } else {
-      const newStatus = {
+      const newStatus: SubmitResult = {
         status,
         count: 1,
-      } as SubmitResult;
-      if (status === 'skipped' && typeof value === 'string') {
-        newStatus.messages = [value];
-      }
+        messages: status === 'skipped' && typeof value === 'string' ? [value] : undefined,
+      };
       groupedByStatus.set(status, newStatus);
     }
   });
-  const submitResults = Array.from(groupedByStatus).map(([, submitResult]) => submitResult);
-  return submitResults;
+
+  return Array.from(groupedByStatus.values());
 }
 
 function Page() {
