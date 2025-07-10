@@ -1,4 +1,4 @@
-import { Col, Divider, Row } from 'antd';
+import { Col, Divider, Flex, Row, theme } from 'antd';
 import { useEffect, useState } from 'react';
 import { ResumeDto } from 'api';
 import { LoadingScreen } from 'components/LoadingScreen';
@@ -31,6 +31,8 @@ export const ViewCV = ({ initialData, publicMode, onRemoveConsent, switchView }:
     setUrl(`${window.location.origin}/cv/${uuid}`);
   }, [uuid]);
 
+  const { token } = theme.useToken();
+
   return (
     <LoadingScreen show={loading}>
       {publicMode ? (
@@ -56,7 +58,12 @@ export const ViewCV = ({ initialData, publicMode, onRemoveConsent, switchView }:
             <Row>
               <NameTitle userData={userData} />
             </Row>
-            <Divider style={{ margin: '8px 0', backgroundColor: '#262626' }} />
+            <Divider
+              style={{
+                margin: '8px 0',
+                backgroundColor: token.colorBgContainer,
+              }}
+            />
             <Row gutter={24}>
               <Col xs={12} sm={12} md={24} lg={24} style={{ marginTop: 16 }}>
                 <PersonalSection user={userData} />
@@ -64,7 +71,7 @@ export const ViewCV = ({ initialData, publicMode, onRemoveConsent, switchView }:
               <Divider
                 style={{
                   margin: '8px 0',
-                  backgroundColor: '#262626',
+                  backgroundColor: token.colorBgContainer,
                 }}
               />
               <Col xs={12} sm={12} md={24} lg={24} style={{ marginTop: 16 }}>
@@ -73,10 +80,12 @@ export const ViewCV = ({ initialData, publicMode, onRemoveConsent, switchView }:
             </Row>
           </Col>
           <Col xl={16} lg={16} md={14} sm={24} xs={24}>
-            <AboutSection notes={userData.notes} />
-            <CoursesSection visibleCourses={initialData.visibleCourses} courses={courses ?? []} />
-            <FeedbackSection data={feedbacks} />
-            <GratitudeSection data={gratitudes} />
+            <Flex vertical gap="small">
+              <AboutSection notes={userData.notes} />
+              <CoursesSection visibleCourses={initialData.visibleCourses} courses={courses ?? []} />
+              <FeedbackSection data={feedbacks} />
+              <GratitudeSection data={gratitudes} />
+            </Flex>
           </Col>
         </Row>
       )}
