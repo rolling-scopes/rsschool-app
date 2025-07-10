@@ -5,7 +5,7 @@ import 'antd/dist/reset.css';
 import { initializeFeatures } from 'services/features';
 import { Analytics } from '../components/Analytics';
 import '../styles/main.css';
-import { ThemeProvider } from '@client/providers/ThemeProvider';
+import { MessageProvider, ThemeProvider } from '@client/providers';
 
 class RsSchoolApp extends App {
   render() {
@@ -20,7 +20,9 @@ class RsSchoolApp extends App {
           <title>App / The Rolling Scopes School</title>
         </Head>
         <ThemeProvider>
-          <Component {...pageProps} />
+          <MessageProvider>
+            <Component {...pageProps} />
+          </MessageProvider>
         </ThemeProvider>
       </>
     );
