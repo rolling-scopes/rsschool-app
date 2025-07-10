@@ -1,4 +1,4 @@
-import { message, notification, Row } from 'antd';
+import { message, Row } from 'antd';
 import { useMemo, useState, useContext } from 'react';
 import { PageLayout } from 'components/PageLayout';
 import {
@@ -15,7 +15,7 @@ import { CreateTeamDto, TeamApi, TeamDto, JoinTeamDto, TeamDistributionApi } fro
 import { showCreateTeamResultModal, showJoinTeamResultModal } from '../utils/showConfirmationModals';
 import { useLoading } from 'components/useLoading';
 import { useDistribution } from '../hooks';
-import { useModalForm } from 'hooks';
+import { useMessage, useModalForm } from 'hooks';
 import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
 import { useRouter } from 'next/router';
 
@@ -26,6 +26,7 @@ function Teams() {
   const session = useContext(SessionContext);
   const { course } = useActiveCourseContext();
   const router = useRouter();
+  const { notification } = useMessage();
 
   const teamDistributionId = Number(router.query.teamDistributionId);
 

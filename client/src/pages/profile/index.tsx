@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import Masonry from 'react-masonry-css';
 import { useRouter } from 'next/router';
-import { message, Result, Spin, theme } from 'antd';
+import { Result, Spin, theme } from 'antd';
 import { ProfileApi, UpdateProfileInfoDto, UpdateUserDtoLanguagesEnum } from 'api';
 import { Header } from 'components/Header';
 import { LoadingScreen } from 'components/LoadingScreen';
@@ -22,6 +22,7 @@ import { ProfileInfo, ProfileMainCardData, UserService } from 'services/user';
 import { ActiveCourseProvider, SessionContext, SessionProvider } from 'modules/Course/contexts';
 import { useAsync } from 'react-use';
 import { checkIsProfileOwner, getStudentCoreJSInterviews, hadStudentCoreJSInterview } from 'utils/profilePageUtils';
+import { useMessage } from 'hooks';
 
 type ConnectionValue = {
   value: string;
@@ -41,6 +42,7 @@ const userService = new UserService();
 const notificationsService = new NotificationsService();
 
 const Profile = () => {
+  const { message } = useMessage();
   const router = useRouter();
   const session = useContext(SessionContext);
   const [profile, setProfile] = useState<ProfileInfo | null>(null);

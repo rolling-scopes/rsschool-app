@@ -3,17 +3,17 @@ import { PageLayout } from 'components/PageLayout';
 import { isCourseManager, isDementor } from 'domain/user';
 import { TeamDistributionApi, TeamDistributionDto } from 'api';
 import { TeamDistributionModal } from 'modules/TeamDistribution/components/TeamDistributionModal/';
-import { message } from 'antd';
 import { useAsync } from 'react-use';
 import { TeamDistributionCard } from 'modules/TeamDistribution/components/TeamDistributionCard';
 import { WelcomeCard } from 'modules/TeamDistribution/components/WelcomeCard';
-import { useModalForm } from 'hooks';
+import { useMessage, useModalForm } from 'hooks';
 import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
 import { SubmitScoreModal } from 'modules/TeamDistribution/components/SubmitScoreModal';
 
 const teamDistributionApi = new TeamDistributionApi();
 
 function TeamDistributions() {
+  const { message } = useMessage();
   const session = useContext(SessionContext);
   const { course } = useActiveCourseContext();
   const [distributions, setDistributions] = useState<TeamDistributionDto[]>([]);

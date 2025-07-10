@@ -1,8 +1,9 @@
-import { Button, Form, InputNumber, Input, message } from 'antd';
+import { Button, Form, Input, InputNumber } from 'antd';
 import React, { ChangeEventHandler, useMemo, useState } from 'react';
 import { CrossCheckCriteriaType, IAddCriteriaForCrossCheck } from 'services/course';
 import { CriteriaTypeSelect } from './CriteriaTypeSelect';
 import { TaskType } from './constants';
+import { useMessage } from 'hooks';
 
 const { Item } = Form;
 const { TextArea } = Input;
@@ -15,6 +16,8 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
   const DEFAULT_KEY = '0';
   const DEFAULT_INDEX = 0;
 
+  const { message } = useMessage();
+
   const clearInputs = () => {
     setMax(0);
     setMaxPenalty(0);
@@ -25,18 +28,18 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
     const criteriaDetails =
       type === TaskType.Title
         ? {
-            key: DEFAULT_KEY,
-            text: text,
-            type: type,
-            index: DEFAULT_INDEX,
-          }
+          key: DEFAULT_KEY,
+          text: text,
+          type: type,
+          index: DEFAULT_INDEX,
+        }
         : {
-            key: DEFAULT_KEY,
-            max: type === TaskType.Penalty ? -Math.abs(maxPenalty) : max,
-            text: text,
-            type: type,
-            index: DEFAULT_INDEX,
-          };
+          key: DEFAULT_KEY,
+          max: type === TaskType.Penalty ? -Math.abs(maxPenalty) : max,
+          text: text,
+          type: type,
+          index: DEFAULT_INDEX,
+        };
     onCreate(criteriaDetails);
     clearInputs();
     message.success('Criteria added.');

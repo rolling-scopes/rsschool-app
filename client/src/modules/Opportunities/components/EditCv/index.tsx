@@ -1,5 +1,5 @@
 import { createRef, RefObject, useState } from 'react';
-import { Alert, Button, Col, Layout, notification, Row, Space } from 'antd';
+import { Alert, Button, Col, Layout, Row, Space } from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
 import { FormInstance } from 'antd/lib/form';
 import { FormDataDto, OpportunitiesApi, ResumeCourseDto } from 'api';
@@ -17,6 +17,7 @@ import {
   VisibleCoursesFormData,
 } from 'modules/Opportunities/models';
 import { splitDataForForms, transformFieldsData } from 'modules/Opportunities/transformers';
+import { useMessage } from 'hooks';
 
 const { Content } = Layout;
 
@@ -35,6 +36,7 @@ const service = new OpportunitiesApi();
 const buttonStyle = { width: 'fit-content', margin: '5px' };
 
 export const EditCV = (props: Props) => {
+  const { notification } = useMessage();
   const [loading, setLoading] = useState<boolean>(false);
   const [contacts, setContacts] = useState<Contacts | null>(props.contacts);
   const [userData, setUserData] = useState<UserData | null>(props.userData);

@@ -1,7 +1,8 @@
-import { Modal, Typography, message } from 'antd';
+import { Modal, Typography } from 'antd';
 import { StudentSearch } from 'components/StudentSearch';
 import { useCallback, useState } from 'react';
 import { CourseService } from 'services/course';
+import { useMessage } from 'hooks';
 
 const { Text } = Typography;
 
@@ -14,6 +15,7 @@ type Props = {
 
 export function AssignStudentModal(props: Props) {
   const [studentGithubId, setStudentGithubId] = useState<string | null>(null);
+  const { message } = useMessage();
 
   const addStudent = useCallback(async () => {
     if (!studentGithubId) {
@@ -32,7 +34,8 @@ export function AssignStudentModal(props: Props) {
     <Modal
       title={
         <>
-          <Text>Assign Student to</Text> <Text underline>{props.mentorGithuId}</Text>
+          <Text>Assign Student to</Text>
+          <Text underline>{props.mentorGithuId}</Text>
         </>
       }
       open={props.open}
