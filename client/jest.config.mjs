@@ -35,6 +35,11 @@ export default async () => {
     rootDir: 'src',
     setupFilesAfterEnv: ['<rootDir>/setupJest.ts'],
     moduleDirectories: ['node_modules', '<rootDir>/'],
+    moduleNameMapper: {
+      '^@client/hooks$': '<rootDir>/__mocks__/hooks',
+      '^@client/(.*)$': '<rootDir>/$1',
+      '^@common/(.*)$': '<rootDir>/../../common/$1',
+    },
     testTimeout: 30000,
   })();
   config.transformIgnorePatterns = [`[/\\\\]node_modules[/\\\\](?!${esModules}).+\\.(js|jsx|mjs|cjs|ts|tsx)$`];
