@@ -133,7 +133,7 @@ describe('EditCV', () => {
 
     expect(mockSuccessNotification).toHaveBeenCalledWith({
       message: 'CV successfully updated',
-      duration: 2
+      duration: 2,
     });
   });
 });

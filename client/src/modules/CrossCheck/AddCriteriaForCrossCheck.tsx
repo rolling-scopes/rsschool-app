@@ -28,18 +28,18 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
     const criteriaDetails =
       type === TaskType.Title
         ? {
-          key: DEFAULT_KEY,
-          text: text,
-          type: type,
-          index: DEFAULT_INDEX,
-        }
+            key: DEFAULT_KEY,
+            text: text,
+            type: type,
+            index: DEFAULT_INDEX,
+          }
         : {
-          key: DEFAULT_KEY,
-          max: type === TaskType.Penalty ? -Math.abs(maxPenalty) : max,
-          text: text,
-          type: type,
-          index: DEFAULT_INDEX,
-        };
+            key: DEFAULT_KEY,
+            max: type === TaskType.Penalty ? -Math.abs(maxPenalty) : max,
+            text: text,
+            type: type,
+            index: DEFAULT_INDEX,
+          };
     onCreate(criteriaDetails);
     clearInputs();
     message.success('Criteria added.');
