@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useContext, useMemo } from 'react';
-import { Button, Dropdown, Menu, MenuProps, Space, theme } from 'antd';
+import { Button, Dropdown, Flex, Menu, MenuProps, Space, theme } from 'antd';
 import {
   EyeOutlined,
   LogoutOutlined,
@@ -15,6 +15,7 @@ import { SessionContext } from 'modules/Course/contexts';
 import { getNavigationItems } from 'modules/Home/data/links';
 import { useActiveCourseContext } from 'modules/Course/contexts/ActiveCourseContext';
 import css from 'styled-jsx/css';
+import ThemeSwitch from '@client/components/ThemeSwitch';
 
 type Props = {
   showCourseName?: boolean;
@@ -114,15 +115,16 @@ export function Header({ title, showCourseName }: Props) {
         <div className="title">
           <b>{title}</b> {showCourseName ? course?.name : null}
         </div>
-        <div className="profile">
+        <Flex align="center">
+          <ThemeSwitch />
           {session.githubId && (
             <Dropdown menu={{ items: menuItems }} trigger={['click']}>
-              <Button type="link">
+              <Button type="link" style={{ display: 'flex', alignItems: 'center' }}>
                 <GithubAvatar githubId={session?.githubId} size={32} />
               </Button>
             </Dropdown>
           )}
-        </div>
+        </Flex>
         <style jsx>{styles}</style>
       </nav>
       <Menu selectedKeys={[currentRoute]} mode="horizontal" items={courseLinks} />

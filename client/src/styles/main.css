@@ -1,18 +1,16 @@
-:root {
+:root:has(.dark) {
+  --bg-primary-color: #151515;
+  --text-primary-color: #ffffff;
+}
+
+:root:has(.light) {
   --bg-primary-color: #fff;
   --text-primary-color: #000;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-primary-color: #151515;
-    --text-primary-color: #ffffff;
-  }
-
-  .header-logo,
-  .login-image {
-    filter: invert(1);
-  }
+.dark .header-logo ,
+.dark .login-image {
+  filter: invert(1);
 }
 
 html,
