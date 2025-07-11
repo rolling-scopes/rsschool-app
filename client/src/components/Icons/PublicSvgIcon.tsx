@@ -23,7 +23,7 @@ export function PublicSvgIcon({ src, alt = '', size = 'fit-content' }: Props) {
 
   return (
     <span
-      style={{ width: size, height: size }}
+      style={{ width: size, height: size, display: 'inline-block' }}
       role="img"
       aria-label={alt}
       dangerouslySetInnerHTML={{ __html: svgContent }}
