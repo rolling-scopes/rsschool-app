@@ -3,12 +3,12 @@ import { MessageInstance } from 'antd/es/message/interface';
 import { NotificationInstance } from 'antd/es/notification/interface';
 import { createContext, ReactNode } from 'react';
 
-type MessageProvider = {
+type MessageProviderType = {
   message: MessageInstance;
   notification: NotificationInstance;
 };
 
-const MessageContext = createContext<MessageProvider>({
+const MessageContext = createContext<MessageProviderType>({
   message,
   notification,
 });
