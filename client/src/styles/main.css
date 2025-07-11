@@ -8,7 +8,7 @@
   --text-primary-color: #000;
 }
 
-.dark .header-logo ,
+.dark .header-logo,
 .dark .login-image {
   filter: invert(1);
 }

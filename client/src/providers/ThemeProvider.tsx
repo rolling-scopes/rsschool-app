@@ -43,9 +43,7 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
   }
 
   function getSystemTheme(): AppTheme {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches
-      ? AppTheme.Dark
-      : AppTheme.Light;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? AppTheme.Dark : AppTheme.Light;
   }
 
   function updateThemeFromSystem() {
