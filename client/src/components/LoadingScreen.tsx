@@ -1,11 +1,9 @@
 import * as React from 'react';
 import { Spin, theme } from 'antd';
 
-export const LoadingScreen = (
-  props: React.PropsWithChildren<{
-    show: boolean;
-  }>,
-) => {
+type Props = React.PropsWithChildren<{ show: boolean }>;
+
+export const LoadingScreen = (props: Props) => {
   const { token } = theme.useToken();
   if (!props.show) {
     return <>{props.children}</>;
