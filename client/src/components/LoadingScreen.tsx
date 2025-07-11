@@ -25,17 +25,13 @@ export const LoadingScreen = (
       }}
     >
       <Spin tip="Loading..." size="default">
-        <div className="content" />
+        <div style={{ padding: '50px' }} />
       </Spin>
       <style jsx>{`
         .loading-screen {
           z-index: 1;
           top: 0;
           left: 0;
-        }
-
-        .content {
-          padding: 50px;
         }
       `}</style>
     </div>
