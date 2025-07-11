@@ -23,7 +23,6 @@ type ThemeSwitchProps = {
 };
 
 export default function ThemeSwitch({ showTitle }: ThemeSwitchProps) {
-  console.log(showTitle);
   const { themeChange, theme, autoTheme, changeAutoTheme } = useTheme();
   const { token } = antTheme.useToken();
 
