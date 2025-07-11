@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 
-export function PublicSvgIcon({ src, alt = '', size = 'fit-content' }: { src: string; alt?: string; size?: string }) {
+type Props = { src: string; alt?: string; size?: string };
+
+export function PublicSvgIcon({ src, alt = '', size = 'fit-content' }: Props) {
   const [svgContent, setSvgContent] = useState<string>('');
 
   useEffect(() => {
