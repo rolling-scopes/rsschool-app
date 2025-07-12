@@ -9,7 +9,7 @@ export const INSTRUCTIONS_TEXT = {
         { title: 'github', url: 'https://github.com/rolling-scopes/rsschool-app' },
         { title: 'discord', url: 'https://discord.com/invite/PRADsJB' },
         { title: 'linkedin', url: 'https://www.linkedin.com/company/the-rolling-scopes-school/' },
-        { title: 'telegram', url: 'https://t.me/joinchat/HqpGRxNRANkGN2xx9bL8zQ' },
+        { title: 'telegram', url: '' },
       ],
     },
     {

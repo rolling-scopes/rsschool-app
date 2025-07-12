@@ -13990,15 +13990,11 @@ export const DiscordServersApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * 
-         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getDiscordServerById: async (id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('getDiscordServerById', 'id', id)
-            const localVarPath = `/discord-servers/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+        getDiscordServers: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/discord-servers`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -14023,11 +14019,15 @@ export const DiscordServersApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getDiscordServers: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/discord-servers`;
+        getInviteLinkByDiscordServerId: async (id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getInviteLinkByDiscordServerId', 'id', id)
+            const localVarPath = `/discord-servers/invite/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -14150,21 +14150,21 @@ export const DiscordServersApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {number} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getDiscordServerById(id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getDiscordServerById(id, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async getDiscordServers(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<DiscordServerDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getDiscordServers(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getInviteLinkByDiscordServerId(id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getInviteLinkByDiscordServerId(id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -14217,20 +14217,20 @@ export const DiscordServersApiFactory = function (configuration?: Configuration,
         },
         /**
          * 
-         * @param {number} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getDiscordServerById(id: number, options?: any): AxiosPromise<string> {
-            return localVarFp.getDiscordServerById(id, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         getDiscordServers(options?: any): AxiosPromise<Array<DiscordServerDto>> {
             return localVarFp.getDiscordServers(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getInviteLinkByDiscordServerId(id: number, options?: any): AxiosPromise<string> {
+            return localVarFp.getInviteLinkByDiscordServerId(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -14284,23 +14284,23 @@ export class DiscordServersApi extends BaseAPI {
 
     /**
      * 
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DiscordServersApi
-     */
-    public getDiscordServerById(id: number, options?: AxiosRequestConfig) {
-        return DiscordServersApiFp(this.configuration).getDiscordServerById(id, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DiscordServersApi
      */
     public getDiscordServers(options?: AxiosRequestConfig) {
         return DiscordServersApiFp(this.configuration).getDiscordServers(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DiscordServersApi
+     */
+    public getInviteLinkByDiscordServerId(id: number, options?: AxiosRequestConfig) {
+        return DiscordServersApiFp(this.configuration).getInviteLinkByDiscordServerId(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
