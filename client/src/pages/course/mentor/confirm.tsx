@@ -177,8 +177,8 @@ const SuccessComponent = ({ discordServerId }: SuccessComponentProps) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const discordServerData = await discordServer.getDiscordServerById(discordServerId);
-      setMentorsChat(discordServerData.data);
+      const telegramInviteLinkResponse = await discordServer.getInviteLinkByDiscordServerId(discordServerId);
+      setMentorsChat(telegramInviteLinkResponse.data);
     };
 
     fetchData();
