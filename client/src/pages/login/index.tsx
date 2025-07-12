@@ -38,7 +38,7 @@ export default function LoginPage() {
           />
         </Card>
         <Flex align="center" justify="center" style={{ marginTop: 20 }}>
-          <ThemeSwitch showTitle={true} />
+          <ThemeSwitch />
         </Flex>
       </div>
       <style jsx>{styles}</style>

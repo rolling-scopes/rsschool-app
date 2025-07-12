@@ -1,7 +1,7 @@
-import { Dropdown, Flex, MenuProps, Space, theme as antTheme, Typography } from 'antd';
+import { Dropdown, Flex, MenuProps, theme as antTheme, Tooltip } from 'antd';
 import { useTheme } from 'hooks';
 import { AppTheme } from '@client/providers';
-import { BulbOutlined, MoonOutlined, SunOutlined } from '@ant-design/icons';
+import { MoonOutlined, SkinOutlined, SunOutlined } from '@ant-design/icons';
 
 const THEME_CONFIG = {
   [AppTheme.Dark]: {
@@ -13,16 +13,12 @@ const THEME_CONFIG = {
     label: 'Light Theme',
   },
   auto: {
-    icon: <BulbOutlined />,
+    icon: <SkinOutlined />,
     label: 'Auto Theme',
   },
 };
 
-type ThemeSwitchProps = {
-  showTitle?: boolean;
-};
-
-export default function ThemeSwitch({ showTitle }: ThemeSwitchProps) {
+export default function ThemeSwitch() {
   const { themeChange, theme, autoTheme, changeAutoTheme } = useTheme();
   const { token } = antTheme.useToken();
 
@@ -31,27 +27,27 @@ export default function ThemeSwitch({ showTitle }: ThemeSwitchProps) {
   const items: MenuProps['items'] = [
     {
       label: (
-        <Space>
-          {THEME_CONFIG[AppTheme.Dark].icon} {THEME_CONFIG[AppTheme.Dark].label}
-        </Space>
+        <Tooltip title={THEME_CONFIG[AppTheme.Dark].label} placement="bottomLeft">
+          {THEME_CONFIG[AppTheme.Dark].icon}
+        </Tooltip>
       ),
       key: 'dark',
       onClick: () => themeChange(AppTheme.Dark),
     },
     {
       label: (
-        <Space>
-          {THEME_CONFIG[AppTheme.Light].icon} {THEME_CONFIG[AppTheme.Light].label}
-        </Space>
+        <Tooltip title={THEME_CONFIG[AppTheme.Light].label} placement="bottomLeft">
+          {THEME_CONFIG[AppTheme.Light].icon}
+        </Tooltip>
       ),
       key: 'light',
       onClick: () => themeChange(AppTheme.Light),
     },
     {
       label: (
-        <Space>
-          {THEME_CONFIG.auto.icon} {THEME_CONFIG.auto.label}
-        </Space>
+        <Tooltip title={THEME_CONFIG.auto.label} placement="bottomLeft">
+          {THEME_CONFIG.auto.icon}
+        </Tooltip>
       ),
       key: 'auto',
       onClick: () => changeAutoTheme(),
@@ -65,13 +61,16 @@ export default function ThemeSwitch({ showTitle }: ThemeSwitchProps) {
       justify="center"
       gap="small"
       style={{
-        fontSize: 22,
+        fontSize: 18,
         cursor: 'pointer',
         color: token.colorTextLabel,
       }}
     >
-      {showTitle && <Typography>Color theme</Typography>}
-      <Dropdown menu={{ items }}>{themeIcon}</Dropdown>
+      <Tooltip title="Change color theme">
+        <Dropdown menu={{ items }} placement="bottom" trigger={['click']}>
+          {themeIcon}
+        </Dropdown>
+      </Tooltip>
     </Flex>
   );
 }
