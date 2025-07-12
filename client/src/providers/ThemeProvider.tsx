@@ -22,7 +22,12 @@ const ThemeContext = createContext<ThemeProviderType>({
 
 const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [appTheme, setAppTheme] = useState<AppTheme>(AppTheme.Light);
-  const [auto, setAuto] = useState<boolean>(true);
+  const [auto, setAuto] = useState<boolean>(false);
+  const DARK_MODE_MEDIA_QUERY = '(prefers-color-scheme: dark)';
+
+  function getSystemTheme(): AppTheme {
+    return window.matchMedia(DARK_MODE_MEDIA_QUERY).matches ? AppTheme.Dark : AppTheme.Light;
+  }
 
   function applyTheme(newTheme: AppTheme) {
     const body = document.querySelector('body');
@@ -34,34 +39,45 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
   }
 
   function toggleAppTheme(newTheme: AppTheme) {
-    setAuto(false);
     applyTheme(newTheme);
+    setAuto(false);
+    localStorage.setItem('app-theme', newTheme);
   }
 
   function toggleAutoTheme() {
-    setAuto(prev => !prev);
-  }
-
-  function getSystemTheme(): AppTheme {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? AppTheme.Dark : AppTheme.Light;
-  }
-
-  function updateThemeFromSystem() {
-    if (auto) {
-      applyTheme(getSystemTheme());
-    }
+    setAuto(prev => {
+      const newAutoState = !prev;
+      if (newAutoState) {
+        localStorage.removeItem('app-theme');
+        applyTheme(getSystemTheme());
+      }
+      return newAutoState;
+    });
   }
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    if (!auto) return;
 
-    updateThemeFromSystem();
+    const mediaQuery = window.matchMedia(DARK_MODE_MEDIA_QUERY);
+    applyTheme(getSystemTheme());
 
-    const handleThemeChange = () => updateThemeFromSystem();
+    const handleThemeChange = () => auto && applyTheme(getSystemTheme());
     mediaQuery.addEventListener('change', handleThemeChange);
 
     return () => mediaQuery.removeEventListener('change', handleThemeChange);
   }, [auto]);
+
+  useEffect(() => {
+    const storedTheme = localStorage.getItem('app-theme') as AppTheme;
+    const isValidTheme = Object.values(AppTheme).includes(storedTheme);
+
+    if (isValidTheme) {
+      setAuto(false);
+      applyTheme(storedTheme);
+    } else {
+      setAuto(true);
+    }
+  }, []);
 
   return (
     <ThemeContext.Provider
