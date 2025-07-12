@@ -10,6 +10,7 @@ import { CriteriaActions } from './CriteriaActions';
 import { EditableTableColumnsDataIndex } from './constants';
 import { DragSortTable } from './components/DragSortTable';
 import { arrayMoveImmutable } from './utils/arrayMoveImmutable';
+import { DragHandle } from './components/DragHandle';
 
 interface IEditableTableProps {
   dataCriteria: CriteriaDto[];
@@ -71,6 +72,13 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
 
   const columns = [
     {
+      title: '⇅',
+      dataIndex: 'drag',
+      width: 40,
+      align: 'center' as const,
+      render: (_: unknown, record: CriteriaDto) => <DragHandle id={record.key} />,
+    },
+    {
       title: 'Type',
       dataIndex: EditableTableColumnsDataIndex.Type,
       width: '18%',
@@ -92,7 +100,7 @@ export const EditableTable = ({ dataCriteria, setDataCriteria }: IEditableTableP
       title: 'Actions',
       dataIndex: EditableTableColumnsDataIndex.Actions,
       width: '20%',
-      render: (_: any, record: CriteriaDto) => (
+      render: (_: unknown, record: CriteriaDto) => (
         <CriteriaActions
           editing={isEditing(record)}
           record={record}
