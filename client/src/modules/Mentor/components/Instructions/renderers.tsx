@@ -21,11 +21,17 @@ const getSocialLinkIcon = (title: string) => {
 
 export const renderSocialLinks = (links: Record<'title' | 'url', string>[]) => (
   <Space size="middle" style={{ width: '100%', justifyContent: 'center' }}>
-    {links.map(link => (
-      <Link key={link.title} href={link.url} target="_blank">
-        {getSocialLinkIcon(link.title)}
-      </Link>
-    ))}
+    {links.map(link =>
+      link.url ? (
+        <Link key={link.title} href={link.url} target="_blank">
+          {getSocialLinkIcon(link.title)}
+        </Link>
+      ) : (
+        <span key={link.title} style={{ cursor: 'not-allowed', opacity: 0.5 }}>
+          {getSocialLinkIcon(link.title)}
+        </span>
+      ),
+    )}
   </Space>
 );
 
@@ -36,7 +42,7 @@ export const renderDescription = (text: string) => {
         dangerouslySetInnerHTML={{
           __html: text,
         }}
-      ></div>
+      />
     </Text>
   );
 };
