@@ -23,6 +23,6 @@ export function Steps() {
     if (index === activeStepIndex) {
       return 'process';
     }
-    return steps[index].isCompleted ? 'finish' : 'wait';
+    return steps[index]?.isCompleted ? 'finish' : 'wait';
   }
 }

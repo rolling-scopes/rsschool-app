@@ -36,7 +36,9 @@ const EducationCard = ({ isEditingModeEnabled, data, updateProfile }: Props) => 
 
     setUniversities(prev => {
       const university = prev[index];
-      university[field] = value;
+      if (university) {
+        university[field] = value;
+      }
       return [...prev];
     });
   };

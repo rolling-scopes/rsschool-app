@@ -1,11 +1,11 @@
-import { Col, Form, Row, Typography } from 'antd';
+import { Col, Form, message, Row, Typography } from 'antd';
 import React, { useState } from 'react';
 import { ModalSubmitForm } from 'components/Forms/ModalSubmitForm';
 import { MentorReviewDto, MentorReviewsApi } from 'api';
 import isEmpty from 'lodash/isEmpty';
 import { MentorSearch } from 'components/MentorSearch';
 import { useActiveCourseContext } from 'modules/Course/contexts';
-import { useLoading } from 'components/useLoading';
+import useRequest from 'ahooks/lib/useRequest';
 
 const mentorReviewsApi = new MentorReviewsApi();
 
@@ -22,7 +22,6 @@ const SUCCESS_MESSAGE = 'Reviewer has been successfully assigned';
 
 function AssignReviewerModal({ review, onClose, onSubmit }: AssignReviewerModalProps) {
   const { course } = useActiveCourseContext();
-  const [loading, withLoading] = useLoading(false);
 
   const [submitted, setSubmitted] = useState(false);
   const [errorText, setErrorText] = useState('');
@@ -30,15 +29,16 @@ function AssignReviewerModal({ review, onClose, onSubmit }: AssignReviewerModalP
   const courseId = course.id;
   const { solutionUrl, taskDescriptionUrl, taskName, student, taskId, studentId } = review || {};
 
-  const assignReviewer = withLoading(async (courseId, courseTaskId, mentorId, studentId) => {
-    await mentorReviewsApi.assignReviewer(courseId, { courseTaskId, mentorId, studentId });
+  const { runAsync: assignReviewer, loading } = useRequest(mentorReviewsApi.assignReviewer, {
+    manual: true,
+    onError: () => message.error('An unexpected error occurred. Please try later.'),
   });
 
   const handleSubmit = async (values: any) => {
     const { mentorId } = values;
     try {
       if (mentorId) {
-        await assignReviewer(course.id, taskId, mentorId, studentId);
+        await assignReviewer(course.id, { courseTaskId: taskId!, mentorId, studentId: studentId! });
         setSubmitted(true);
         onSubmit();
       }

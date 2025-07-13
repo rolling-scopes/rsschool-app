@@ -38,7 +38,7 @@ export function RegistrationForm({ form, handleSubmit, steps, currentStep, initi
           initialValues={initialValues}
           onChange={update}
           onFinish={handleSubmit}
-          onFinishFailed={({ errorFields: [errorField] }) => form.scrollToField(errorField.name)}
+          onFinishFailed={({ errorFields: [errorField] }) => errorField && form.scrollToField(errorField.name)}
         >
           <Row justify="center" gutter={[0, 24]}>
             <Col>
@@ -55,7 +55,7 @@ export function RegistrationForm({ form, handleSubmit, steps, currentStep, initi
             >
               <Steps current={currentStep} responsive={false} items={stepItems} />
             </Col>
-            <Col span={24}>{steps[currentStep].content}</Col>
+            <Col span={24}>{steps[currentStep]?.content}</Col>
             <Col span={24} flex="none">
               <Footer />
             </Col>

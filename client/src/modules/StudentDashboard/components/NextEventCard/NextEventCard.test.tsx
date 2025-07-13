@@ -14,8 +14,8 @@ describe('NextEventCard', () => {
     text
     ${'Available tasks'}
     ${'View all'}
-    ${NEXT_EVENTS[0].name}
-    ${NEXT_EVENTS[0].tag}
+    ${NEXT_EVENTS[0]?.name}
+    ${NEXT_EVENTS[0]?.tag}
     ${'Feb 01'}
   `('should render $text', ({ text }: { text: string }) => {
     render(<NextEventCard {...PROPS_MOCK} />);
@@ -42,7 +42,7 @@ function generateAvailableTasks(count = 3): CourseScheduleItemDto[] {
     },
     status: 'available',
     score: idx + 20,
-    tag: Object.values(CourseScheduleItemDtoTagEnum)[idx],
+    tag: Object.values(CourseScheduleItemDtoTagEnum)[idx] as CourseScheduleItemDtoTagEnum,
     descriptionUrl: 'task-description-url',
   }));
 }

@@ -10,7 +10,7 @@ import { CourseRole } from 'services/models';
 import { UserService } from 'services/user';
 import { UserGroupApi, UserGroupDto } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
-import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 
 const userGroupService = new UserGroupApi();
 const userService = new UserService();
@@ -263,15 +263,22 @@ function createRecords(groups: UserGroupDto[]) {
   const data = groups.reduce(
     (users, group) => {
       group.users.forEach(({ id }) => {
-        users[id] = users[id] ?? {};
-        users[id].isManager = users[id].isManager || group.roles.includes(CourseRole.Manager);
-        users[id].isSupervisor = users[id].isSupervisor || group.roles.includes(CourseRole.Supervisor);
-        users[id].isDementor = users[id].isDementor || group.roles.includes(CourseRole.Dementor);
-        users[id].isActivist = users[id].isActivist || group.roles.includes(CourseRole.Activist);
+        const user = users[id] ?? {
+          isManager: false,
+          isSupervisor: false,
+          isDementor: false,
+          isActivist: false,
+        };
+
+        users[id] = user;
+        users[id].isManager = user.isManager || group.roles.includes(CourseRole.Manager) || false;
+        users[id].isSupervisor = user.isSupervisor || group.roles.includes(CourseRole.Supervisor);
+        users[id].isDementor = user.isDementor || group.roles.includes(CourseRole.Dementor);
+        users[id].isActivist = user.isActivist || group.roles.includes(CourseRole.Activist);
       });
       return users;
     },
-    {} as Record<string, { isManager: boolean; isSupervisor: boolean; isDementor: boolean; isActivist: boolean }>,
+    {} as Pick<CourseUserDto, 'isManager' | 'isSupervisor' | 'isDementor' | 'isActivist'>[],
   );
   return Object.entries(data).map(([id, roles]) => ({ ...roles, userId: Number(id) }));
 }
@@ -282,10 +289,8 @@ function getInitialValues(modalData: Partial<CourseUserDto> | UserGroupDto[]) {
 
 export default function () {
   return (
-    <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Manager]}>
-        <Page />
-      </SessionProvider>
-    </ActiveCourseProvider>
+    <SessionProvider allowedRoles={[CourseRole.Manager]}>
+      <Page />
+    </SessionProvider>
   );
 }

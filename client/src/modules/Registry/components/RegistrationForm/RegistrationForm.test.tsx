@@ -56,7 +56,7 @@ describe('RegistrationForm', () => {
   test('should render current step content', async () => {
     renderForm();
 
-    const content = await screen.findByText(`${steps[0].title}-content`);
+    const content = await screen.findByText(`${steps[0]?.title}-content`);
     expect(content).toBeInTheDocument();
   });
 });

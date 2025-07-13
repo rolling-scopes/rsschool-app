@@ -44,7 +44,10 @@ export function getFeedbackFromTemplate(interviewFeedback: InterviewFeedbackDto,
  */
 export function getDefaultStep(feedback: Feedback) {
   for (let i = 0; i < feedback.steps.length; i++) {
-    const { isCompleted, id, values } = feedback.steps[i];
+    const step = feedback.steps[i];
+    if (!step) continue;
+
+    const { isCompleted, id, values } = step;
 
     if (!isCompleted || isInterviewCanceled(id, values) || i === feedback.steps.length - 1) {
       return i;
@@ -124,7 +127,11 @@ export function getUpdatedFeedback({
   interviewMaxScore: number;
 }) {
   const { steps } = feedback;
-  const isCanceled = isInterviewCanceled(steps[activeStepIndex].id, newValues);
+  const activeStep = steps[activeStepIndex];
+  if (!activeStep) {
+    throw new Error('Active step not found');
+  }
+  const isCanceled = isInterviewCanceled(activeStep.id, newValues);
 
   const feedbackValues = {
     steps: generateFeedbackValues(steps, activeStepIndex, newValues, isCanceled),
