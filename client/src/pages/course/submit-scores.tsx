@@ -192,8 +192,13 @@ async function parseFiles(incomingFiles: IncomingFiles): Promise<StudentScore[]>
     }
 
     const parsedScore = parseInt(item.Score, 10);
+    console.log(parsedScore);
+    if (isNaN(parsedScore)) {
+      throw new Error(`Incorrect data: Cannot parse "Score" for Github ${item.Github}`);
+    }
+
     return {
-      score: isNaN(parsedScore) ? 0 : parsedScore,
+      score: parsedScore,
       github: filterLogin(item.Github).toLowerCase(),
     };
   });
@@ -201,7 +206,7 @@ async function parseFiles(incomingFiles: IncomingFiles): Promise<StudentScore[]>
   const uniqueStudents = new Map<string, number>();
   scores.forEach(({ github, score }) => {
     const current = uniqueStudents.get(github);
-    if (typeof current !== 'number' || current < score) {
+    if (!current || current < score) {
       uniqueStudents.set(github, score);
     }
   });
