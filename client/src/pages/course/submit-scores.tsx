@@ -192,7 +192,6 @@ async function parseFiles(incomingFiles: IncomingFiles): Promise<StudentScore[]>
     }
 
     const parsedScore = parseInt(item.Score, 10);
-    console.log(parsedScore);
     if (isNaN(parsedScore)) {
       throw new Error(`Incorrect data: Cannot parse "Score" for Github ${item.Github}`);
     }
