@@ -34,8 +34,7 @@ export function AssignStudentModal(props: Props) {
     <Modal
       title={
         <>
-          <Text>Assign Student to</Text>
-          <Text underline>{props.mentorGithuId}</Text>
+          <Text>Assign Student to</Text> <Text underline>{props.mentorGithuId}</Text>
         </>
       }
       open={props.open}
