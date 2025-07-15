@@ -31,15 +31,7 @@ export default function WelcomeCard({ isManager, handleCreateTeamDistribution }:
           </Text>
         </Col>
         {!mobileView && (
-          <Col
-            md={12}
-            style={{
-              position: 'relative',
-              display: 'flex',
-              justifyContent: 'end',
-              paddingRight: '24px',
-            }}
-          >
+          <Col md={12} style={{ position: 'relative', display: 'flex', justifyContent: 'end', paddingRight: '24px' }}>
             <div
               style={{
                 backgroundImage: `url(https://cdn.rs.school/sloths/stickers/welcome/image.png)`,

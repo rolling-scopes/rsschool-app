@@ -168,11 +168,7 @@ describe('TableView', () => {
       .spyOn(ReactUse, 'useLocalStorage')
       // Mock useLocalStorage for combinedFilter
       .mockReturnValueOnce([
-        {
-          types: [TagsEnum.Coding, TagsEnum.Test, TagsEnum.Interview],
-          statuses: [],
-          tags: [],
-        },
+        { types: [TagsEnum.Coding, TagsEnum.Test, TagsEnum.Interview], statuses: [], tags: [] },
         jest.fn(),
         jest.fn(),
       ]);
@@ -209,11 +205,7 @@ describe('TableView', () => {
         {
           types,
           statuses: [],
-          tags: types.map(t => ({
-            label: `${ColumnName.Type}: ${t}`,
-            value: t,
-            tagType: ColumnName.Type,
-          })),
+          tags: types.map(t => ({ label: `${ColumnName.Type}: ${t}`, value: t, tagType: ColumnName.Type })),
         },
         setFilterMock,
         jest.fn(),

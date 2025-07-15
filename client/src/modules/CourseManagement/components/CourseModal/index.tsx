@@ -201,16 +201,7 @@ export function CourseModal(props: CourseModalProps) {
             </Col>
 
             <Col md={8} sm={12} span={24}>
-              <Form.Item
-                name="name"
-                label=" Course Name"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please enter name',
-                  },
-                ]}
-              >
+              <Form.Item name="name" label=" Course Name" rules={[{ required: true, message: 'Please enter name' }]}>
                 <Input />
               </Form.Item>
             </Col>
@@ -227,12 +218,7 @@ export function CourseModal(props: CourseModalProps) {
               <Form.Item
                 name="discordServerId"
                 label="Discord/Telegram channel"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please select discord/telegram channel',
-                  },
-                ]}
+                rules={[{ required: true, message: 'Please select discord/telegram channel' }]}
               >
                 <Select
                   placeholder="Select discord/telegram channel"
@@ -242,16 +228,7 @@ export function CourseModal(props: CourseModalProps) {
             </Col>
 
             <Col md={8} sm={12} span={24}>
-              <Form.Item
-                name="alias"
-                label="Alias"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please enter alias',
-                  },
-                ]}
-              >
+              <Form.Item name="alias" label="Alias" rules={[{ required: true, message: 'Please enter alias' }]}>
                 <Input />
               </Form.Item>
             </Col>
@@ -282,12 +259,7 @@ export function CourseModal(props: CourseModalProps) {
               <Form.Item
                 name={['discipline', 'id']}
                 label="Disciplines"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please select a discipline',
-                  },
-                ]}
+                rules={[{ required: true, message: 'Please select a discipline' }]}
               >
                 <Select
                   placeholder="Select a discipline"
@@ -299,13 +271,7 @@ export function CourseModal(props: CourseModalProps) {
               <Form.Item
                 name="range"
                 label="Start - End Date"
-                rules={[
-                  {
-                    required: true,
-                    type: 'array',
-                    message: 'Please enter course date range',
-                  },
-                ]}
+                rules={[{ required: true, type: 'array', message: 'Please enter course date range' }]}
               >
                 <DatePicker.RangePicker />
               </Form.Item>
@@ -345,11 +311,7 @@ export function CourseModal(props: CourseModalProps) {
                 name="minStudentsPerMentor"
                 label="Min Students per Mentor"
                 rules={[
-                  {
-                    min: 1,
-                    type: 'integer',
-                    message: 'Ensure that the input, if provided, is a positive integer.',
-                  },
+                  { min: 1, type: 'integer', message: 'Ensure that the input, if provided, is a positive integer.' },
                 ]}
               >
                 <InputNumber step={1} />
@@ -362,56 +324,21 @@ export function CourseModal(props: CourseModalProps) {
               <Form.Item
                 name="descriptionUrl"
                 label="Description Url"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please enter course description',
-                  },
-                ]}
+                rules={[{ required: true, message: 'Please enter course description' }]}
                 shouldUpdate
               >
                 <Select
                   options={[
-                    {
-                      label: 'JavaScript Preschool RU',
-                      value: 'https://rs.school/courses/javascript-preschool-ru',
-                    },
-                    {
-                      label: 'JavaScript',
-                      value: 'https://rs.school/courses/javascript',
-                    },
-                    {
-                      label: 'JavaScript RU',
-                      value: 'https://rs.school/courses/javascript-ru',
-                    },
-                    {
-                      label: 'React',
-                      value: 'https://rs.school/courses/reactjs',
-                    },
-                    {
-                      label: 'Angular',
-                      value: 'https://rs.school/courses/angular',
-                    },
-                    {
-                      label: 'Node.js',
-                      value: 'https://rs.school/courses/nodejs',
-                    },
-                    {
-                      label: 'AWS Fundamentals',
-                      value: 'https://rs.school/courses/aws-fundamentals',
-                    },
-                    {
-                      label: 'AWS Cloud Developer',
-                      value: 'https://rs.school/courses/aws-cloud-developer',
-                    },
-                    {
-                      label: 'AWS DevOps',
-                      value: 'https://rs.school/courses/aws-devops',
-                    },
-                    {
-                      label: 'AWS AI',
-                      value: 'https://rs.school/courses/aws-ai',
-                    },
+                    { label: 'JavaScript Preschool RU', value: 'https://rs.school/courses/javascript-preschool-ru' },
+                    { label: 'JavaScript', value: 'https://rs.school/courses/javascript' },
+                    { label: 'JavaScript RU', value: 'https://rs.school/courses/javascript-ru' },
+                    { label: 'React', value: 'https://rs.school/courses/reactjs' },
+                    { label: 'Angular', value: 'https://rs.school/courses/angular' },
+                    { label: 'Node.js', value: 'https://rs.school/courses/nodejs' },
+                    { label: 'AWS Fundamentals', value: 'https://rs.school/courses/aws-fundamentals' },
+                    { label: 'AWS Cloud Developer', value: 'https://rs.school/courses/aws-cloud-developer' },
+                    { label: 'AWS DevOps', value: 'https://rs.school/courses/aws-devops' },
+                    { label: 'AWS AI', value: 'https://rs.school/courses/aws-ai' },
                     { label: 'Custom', value: 'custom' },
                   ]}
                 ></Select>
@@ -498,13 +425,7 @@ export function CourseModal(props: CourseModalProps) {
                     <Form.Item
                       name="personalMentoringDateRange"
                       label="Personal Mentoring Dates"
-                      rules={[
-                        {
-                          required: true,
-                          type: 'array',
-                          message: 'Please enter mentoring dates',
-                        },
-                      ]}
+                      rules={[{ required: true, type: 'array', message: 'Please enter mentoring dates' }]}
                     >
                       <DatePicker.RangePicker style={{ width: '100%' }} />
                     </Form.Item>

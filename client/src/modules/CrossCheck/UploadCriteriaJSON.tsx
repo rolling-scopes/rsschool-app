@@ -27,9 +27,7 @@ export const UploadCriteriaJSON = ({ onLoad }: IUploadCriteriaJSON) => {
       fileReader.readAsText(info.file.originFileObj as Blob, 'UTF-8');
       fileReader.onload = (e: Event) => {
         const target = e.target as Element & { result: string };
-        const { criteria } = JSON.parse(target.result) as {
-          criteria: CriteriaDto[];
-        };
+        const { criteria } = JSON.parse(target.result) as { criteria: CriteriaDto[] };
         const transformedCriteria = criteria?.map((item: CriteriaJSONType) => {
           if (item.type === TaskType.Title) {
             return { type: item.type, text: item.title };
