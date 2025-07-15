@@ -1,11 +1,12 @@
 import { Dispatch, SetStateAction } from 'react';
 import { ClockCircleOutlined, EditFilled, EditOutlined } from '@ant-design/icons';
-import { Button, Col, notification, Row, Spin, Tag, Timeline, Typography } from 'antd';
+import { Button, Col, Row, Spin, Tag, Timeline, Typography } from 'antd';
 import { useSolutionReviewSettings } from 'modules/CrossCheck/hooks';
 import { markdownLabel } from 'components/Forms/PreparedComment';
 import { SolutionReview } from 'modules/CrossCheck/components/SolutionReview';
 import { SolutionReviewSettingsPanel } from 'modules/CrossCheck/components/SolutionReviewSettingsPanel';
 import { CrossCheckMessageDtoRoleEnum, CrossCheckSolutionReviewDto } from 'api';
+import { useMessage } from 'hooks';
 
 type CrossCheckHistoryState = {
   loading: boolean;
@@ -23,6 +24,7 @@ type Props = {
 };
 
 export function CrossCheckHistory(props: Props) {
+  const { notification } = useMessage();
   const courseTaskId = props.courseTaskId;
   const solutionReviewSettings = useSolutionReviewSettings();
 

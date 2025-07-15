@@ -9,7 +9,7 @@ export function ConnectionConfirmed() {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <PageLayout loading={false} title="Connection confirmed" background="#fff">
+      <PageLayout loading={false} title="Connection confirmed">
         <Alert
           type="success"
           showIcon

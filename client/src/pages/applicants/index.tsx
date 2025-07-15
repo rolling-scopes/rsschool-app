@@ -5,7 +5,7 @@ import { LoadingScreen } from 'components/LoadingScreen';
 import { dateRenderer, getColumnSearchProps, stringSorter } from 'components/Table';
 import { SessionContext, SessionProvider } from 'modules/Course/contexts';
 import { withRouter } from 'next/router';
-import { useCallback, useEffect, useState, useContext } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 
 const { Content } = Layout;
 
@@ -123,8 +123,8 @@ function ApplicantsPage() {
     <>
       <Header />
       <LoadingScreen show={loading}>
-        <Layout style={{ margin: 'auto', backgroundColor: '#FFF' }}>
-          <Content style={{ backgroundColor: '#FFF', minHeight: '60vh', margin: 'auto' }}>
+        <Layout style={{ margin: 'auto' }}>
+          <Content style={{ minHeight: '60vh', margin: 'auto' }}>
             <Table
               pagination={{ pageSize: 100 }}
               style={{ minWidth: '99vw' }}

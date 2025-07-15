@@ -59,7 +59,7 @@ function Page() {
   ].filter(Boolean) as JSX.Element[];
 
   return (
-    <PageLayout loading={loading} title="Student dashboard" background="#F0F2F5" showCourseName>
+    <PageLayout loading={loading} title="Student dashboard" showCourseName>
       <>
         <Masonry
           breakpointCols={{ default: 3, 1180: 2, 800: 1 }}

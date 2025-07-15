@@ -1,5 +1,5 @@
 import { EyeFilled, EyeInvisibleFilled } from '@ant-design/icons';
-import { Button, Checkbox, Col, Form, message, Modal, Row, Typography } from 'antd';
+import { Button, Checkbox, Col, Form, Modal, Row, Typography } from 'antd';
 import {
   CrossCheckCriteriaDataDto,
   CrossCheckMessageDtoRoleEnum,
@@ -24,6 +24,7 @@ import { useAsync, useLocalStorage } from 'react-use';
 import { CourseService } from 'services/course';
 import { CourseRole } from 'services/models';
 import { getQueryString } from 'utils/queryParams-utils';
+import { useMessage } from 'hooks';
 
 enum LocalStorage {
   IsUsernameVisible = 'crossCheckIsUsernameVisible',
@@ -36,6 +37,7 @@ const colSizes = { xs: 24, sm: 18, md: 12, lg: 12, xl: 10 };
 const criteriaApi = new TasksCriteriaApi();
 
 function Page() {
+  const { message } = useMessage();
   const { course } = useActiveCourseContext();
   const session = useContext(SessionContext);
   const router = useRouter();

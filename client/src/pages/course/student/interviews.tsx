@@ -90,7 +90,7 @@ function StudentInterviewPage() {
   const getInterviewItem = (interviewName: string) => data.find(d => d.name === interviewName) ?? null;
 
   return (
-    <PageLayout loading={loading} title="Interviews" background="#F0F2F5" showCourseName>
+    <PageLayout loading={loading} title="Interviews" showCourseName>
       <Spin spinning={loading}>
         {interviews.length === 0 ? (
           <NoInterviewsAlert />

@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react';
 import { Header } from './Header';
-import { Spin, Row, Col, Layout, Result, Button } from 'antd';
+import { Button, Col, Layout, Result, Row, Spin, theme } from 'antd';
 import { AdminSider } from './Sider/AdminSider';
 import { Course } from 'services/models';
 
@@ -18,9 +18,15 @@ type Props = {
 export function PageLayout(props: Props) {
   if (process.env.NODE_ENV !== 'production' && props.error) console.error(props.error);
   const withMargin = props.withMargin ?? true;
+  const { token } = theme.useToken();
 
   return (
-    <Layout style={{ background: props.background ?? 'transparent', minHeight: '100vh' }}>
+    <Layout
+      style={{
+        minHeight: '100vh',
+        background: props.background ? props.background : token.colorBgContainer,
+      }}
+    >
       <Header title={props.title} showCourseName={props.showCourseName} />
       {props.error ? (
         <Result
@@ -43,8 +49,13 @@ export function PageLayout(props: Props) {
 }
 
 export function PageLayoutSimple(props: Props) {
+  const { token } = theme.useToken();
   return (
-    <Layout style={{ background: 'transparent' }}>
+    <Layout
+      style={{
+        background: props.background ? props.background : token.colorBgContainer,
+      }}
+    >
       <Header title={props.title} showCourseName={props.showCourseName} />
       <Layout.Content>
         {props.noData ? (
@@ -84,9 +95,15 @@ export function AdminPageLayout({
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Header title={title} showCourseName={showCourseName} />
-      <Layout style={{ background: '#e5e5e5' }}>
+      <Layout>
         <AdminSider courses={courses} />
-        <Layout.Content style={{ background: '#fff', margin: 16, padding: 16, ...styles }}>
+        <Layout.Content
+          style={{
+            margin: 16,
+            padding: 16,
+            ...styles,
+          }}
+        >
           <Spin spinning={loading}>{children}</Spin>
         </Layout.Content>
       </Layout>

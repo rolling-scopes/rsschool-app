@@ -6,6 +6,7 @@ import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts'
 import { AttemptsAnswers, Exercise, TaskDescription, VerificationInformation } from 'modules/AutoTest/components';
 import { useCourseTaskVerifications, useVerificationsAnswers } from 'modules/AutoTest/hooks';
 import { useRouter } from 'next/router';
+import { theme } from 'antd';
 
 export interface AutoTestTaskProps extends CoursePageProps {
   task: CourseTaskDetailedDto;
@@ -22,12 +23,14 @@ function Task() {
   const { answers, showAnswers, hideAnswers } = useVerificationsAnswers(course.id, courseTaskId);
   const courseTask = tasks?.find(t => t.id === courseTaskId);
 
+  const { token } = theme.useToken();
+
   if (!courseTask) {
     return null;
   }
 
   return (
-    <PageLayout loading={false} title="Auto-tests" background="#F0F2F5" withMargin={false} showCourseName>
+    <PageLayout loading={false} title="Auto-tests" withMargin={false} showCourseName background={token.colorBgLayout}>
       <TaskDescription courseAlias={course.alias} courseTask={courseTask} />
       <div style={{ margin: 16 }}>
         {!answers ? (

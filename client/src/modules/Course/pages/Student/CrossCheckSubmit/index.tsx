@@ -1,5 +1,5 @@
 import { useRequest } from 'ahooks';
-import { Alert, Button, Checkbox, Col, Form, Input, message, Modal, Result, Row } from 'antd';
+import { Alert, Button, Checkbox, Col, Form, Input, Modal, Result, Row } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { Rule } from 'antd/lib/form';
 import { CoursesTasksApi, CrossCheckFeedbackDto, CrossCheckMessageDtoRoleEnum, CrossCheckStatusEnum } from 'api';
@@ -17,6 +17,7 @@ import { useContext, useEffect, useMemo, useState } from 'react';
 import { CourseService, CrossCheckComment, CrossCheckCriteria, CrossCheckReview, TaskSolution } from 'services/course';
 import { githubPrUrl, privateRsRepoPattern, urlWithIpPattern } from 'services/validators';
 import { getQueryString } from 'utils/queryParams-utils';
+import { useMessage } from 'hooks';
 
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
 
@@ -67,6 +68,7 @@ export function CrossCheckSubmit() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [submitDeadlinePassed, setSubmitDeadlinePassed] = useState<boolean>(false);
+  const { message } = useMessage();
 
   const [authorId, setAuthorId] = useState<number | null>(null);
 

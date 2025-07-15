@@ -1,8 +1,9 @@
-import { Button, Form, InputNumber, Input, message } from 'antd';
+import { Button, Form, Input, InputNumber } from 'antd';
 import React, { ChangeEventHandler, useMemo, useState } from 'react';
 import { CrossCheckCriteriaType, IAddCriteriaForCrossCheck } from 'services/course';
 import { CriteriaTypeSelect } from './CriteriaTypeSelect';
 import { TaskType } from './constants';
+import { useMessage } from 'hooks';
 
 const { Item } = Form;
 const { TextArea } = Input;
@@ -14,6 +15,8 @@ export const AddCriteriaForCrossCheck = ({ onCreate }: IAddCriteriaForCrossCheck
   const [text, setText] = useState('');
   const DEFAULT_KEY = '0';
   const DEFAULT_INDEX = 0;
+
+  const { message } = useMessage();
 
   const clearInputs = () => {
     setMax(0);

@@ -1,6 +1,7 @@
-import { PlayCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
+import { CheckCircleTwoTone, PlayCircleTwoTone } from '@ant-design/icons';
 import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
 import { Course } from 'services/models';
+import { PublicSvgIcon } from '@client/components/Icons/PublicSvgIcon';
 
 export const CourseIcon = ({ course }: { course: Course }) => {
   if (course.completed) {
@@ -18,14 +19,5 @@ export const CourseIcon = ({ course }: { course: Course }) => {
 };
 
 function Logo({ url }: { url: string }) {
-  return (
-    <>
-      <img width={16} height={16} src={url} className="img" />
-      <style jsx>{`
-        .img {
-          vertical-align: -0.125em;
-        }
-      `}</style>
-    </>
-  );
+  return <PublicSvgIcon src={url} size="16px" />;
 }

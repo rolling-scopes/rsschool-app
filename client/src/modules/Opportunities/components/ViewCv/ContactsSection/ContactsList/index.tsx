@@ -1,5 +1,5 @@
 import { useCopyToClipboard } from 'react-use';
-import { Typography, Button, notification } from 'antd';
+import { Typography, Button } from 'antd';
 import {
   PhoneOutlined,
   MailOutlined,
@@ -14,6 +14,7 @@ import { Contacts, ContactType } from 'modules/Opportunities/models';
 import { getContactsToRender } from 'modules/Opportunities/data/getContactsToRender';
 
 import { Link } from 'modules/Opportunities/components/Link';
+import { useMessage } from 'hooks';
 
 const { Text } = Typography;
 
@@ -22,6 +23,7 @@ type Props = {
 };
 
 export const ContactsList = ({ contacts }: Props) => {
+  const { notification } = useMessage();
   const contactsToRender = getContactsToRender(contacts);
   const [, copyToClipboard] = useCopyToClipboard();
 

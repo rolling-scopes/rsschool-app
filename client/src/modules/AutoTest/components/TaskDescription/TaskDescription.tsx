@@ -1,4 +1,4 @@
-import { Row, Col, Space, Typography } from 'antd';
+import { Row, Col, Space, Typography, theme } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { getAutoTestRoute } from 'services/routes';
 import { TaskDeadlineDate } from '..';
@@ -14,8 +14,10 @@ type TaskDescriptionProps = {
 function TaskDescription({ courseAlias, courseTask }: TaskDescriptionProps) {
   const { descriptionUrl, name, studentStartDate, studentEndDate, state } = courseTask;
 
+  const { token } = theme.useToken();
+
   return (
-    <Row style={{ background: 'white', padding: '16px 24px' }}>
+    <Row style={{ background: token.colorBgContainer, padding: '16px 24px' }}>
       <Col flex="auto">
         <Title level={3}>
           <Space size={24}>

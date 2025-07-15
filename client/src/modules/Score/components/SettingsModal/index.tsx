@@ -1,5 +1,5 @@
 import { Button, Checkbox, Form, Modal, Row, Col } from 'antd';
-import { Store } from 'rc-field-form/lib/interface';
+import { Store } from 'antd/lib/form/interface';
 import type { CourseTaskDto } from 'api';
 
 type Props = {

@@ -1,7 +1,8 @@
-import { Row, Modal, Button, Divider, Alert, Typography, notification } from 'antd';
+import { Row, Modal, Button, Divider, Alert, Typography } from 'antd';
 import { useCallback } from 'react';
 import { useCopyToClipboard } from 'react-use';
 import { DeleteOutlined, EditOutlined, ShareAltOutlined } from '@ant-design/icons';
+import { useMessage } from 'hooks';
 
 const { Text, Paragraph } = Typography;
 
@@ -15,6 +16,7 @@ type Props = {
 };
 
 export const ActionButtons = ({ onRemoveConsent, switchView, url, isExpired }: Props) => {
+  const { notification } = useMessage();
   const [, copyToClipboard] = useCopyToClipboard();
   const showDeletionConfirmationModal = useCallback(() => {
     const title = (

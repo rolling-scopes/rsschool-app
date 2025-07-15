@@ -1,13 +1,15 @@
 import { useState, useMemo, useCallback, ReactNode } from 'react';
-import { Button, message, Spin } from 'antd';
+import { Button, Spin } from 'antd';
 import { NotificationsService } from 'modules/Notifications/services/notifications';
 import { useLoading } from 'components/useLoading';
 import { useAsync } from 'react-use';
 import { NotificationSettingsTable } from 'modules/Notifications/components/NotificationSettingsTable';
 import { NotificationSettingsModal } from 'modules/Notifications/components/NotificationSettingsModal';
 import { NotificationDto } from 'api';
+import { useMessage } from 'hooks';
 
 export function AdminNotificationsPage() {
+  const { message } = useMessage();
   const [notifications, setNotifications] = useState<NotificationDto[]>([]);
   const [loading, withLoading] = useLoading(false);
   const service = useMemo(() => new NotificationsService(), []);

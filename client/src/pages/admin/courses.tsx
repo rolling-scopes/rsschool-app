@@ -1,5 +1,5 @@
 import { useRequest } from 'ahooks';
-import { Button, Image, Layout, Table } from 'antd';
+import { Button, Layout, Table } from 'antd';
 import { CoursesApi, DisciplinesApi, DiscordServersApi } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
 import { boolIconRenderer, dateUtcRenderer, stringSorter, stringTrimRenderer } from 'components/Table';
@@ -11,6 +11,8 @@ import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseC
 import { CourseModal } from 'modules/CourseManagement/components/CourseModal';
 import { useContext, useState } from 'react';
 import { Course, CourseRole } from 'services/models';
+import { PublicSvgIcon } from '@client/components/Icons';
+
 dayjs.extend(utc);
 
 const disciplinesApi = new DisciplinesApi();
@@ -73,7 +75,7 @@ function getColumns(handleEditItem: any) {
     {
       title: 'Logo',
       dataIndex: 'logo',
-      render: (logo: string) => <Image width={25} preview={false} src={DEFAULT_COURSE_ICONS[logo]?.active} />,
+      render: (logo: string) => <PublicSvgIcon size="25px" src={DEFAULT_COURSE_ICONS[logo]?.active} />,
     },
     {
       title: 'Name',

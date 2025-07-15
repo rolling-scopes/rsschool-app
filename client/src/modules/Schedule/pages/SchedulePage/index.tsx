@@ -1,4 +1,4 @@
-import { Alert } from 'antd';
+import { Alert, theme } from 'antd';
 import {
   CourseDto,
   CourseEventDto,
@@ -83,9 +83,11 @@ export function SchedulePage() {
   const eventTags = useMemo(() => uniq(data.map(item => item.tag)), [data]);
   const statuses = useMemo(() => data.map(({ status }) => status), [data]);
 
+  const { token } = theme.useToken();
+
   return (
     <>
-      <PageLayout loading={loading} error={error} title="Schedule" showCourseName>
+      <PageLayout loading={loading} error={error} title="Schedule" showCourseName background={token.colorBgLayout}>
         <StatusTabs activeTab={selectedTab} statuses={statuses} onTabChange={setSelectedTab} mobileView={mobileView}>
           {!mobileView && (
             <SettingsPanel
@@ -134,7 +136,6 @@ export function SchedulePage() {
         <style jsx>
           {`
             :global(.ant-layout-content) {
-              background-color: #f0f2f5;
               margin: 16px 0 0 !important;
               padding: 0 24px 24px;
             }

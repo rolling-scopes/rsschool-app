@@ -1,4 +1,4 @@
-import { Rule } from 'rc-field-form/lib/interface';
+import { Rule } from 'antd/lib/form';
 import { githubUsernamePattern } from 'services/validators';
 
 const validationMessages = {

@@ -113,32 +113,28 @@ describe('TableView', () => {
       field                   | searchQuery
       ${ColumnName.Name}      | ${'Course Item 0'}
       ${ColumnName.Organizer} | ${'organizer 0'}
-    `(
-      'by "$field" column search',
-      async ({ field, searchQuery }: { field: string; searchQuery: string }) => {
-        const data = generateCourseData();
-        render(<TableView settings={PROPS_SETTINGS_MOCK} data={data} />);
-        // Check that all items rendered
-        expect(screen.getAllByText(/Course Item/)).toHaveLength(data.length);
-        // Find and click search button for column
-        const columnHeader = screen.getByRole('columnheader', { name: new RegExp(field, 'i') });
-        const searchButton = within(columnHeader).getByRole('button', { name: /search/i });
-        fireEvent.click(searchButton);
-        // Type search query inside search input
-        const searchInput = await screen.findByRole('textbox');
-        fireEvent.change(searchInput, { target: { value: searchQuery } });
+    `('by "$field" column search', async ({ field, searchQuery }: { field: string; searchQuery: string }) => {
+      const data = generateCourseData();
+      render(<TableView settings={PROPS_SETTINGS_MOCK} data={data} />);
+      // Check that all items rendered
+      expect(screen.getAllByText(/Course Item/)).toHaveLength(data.length);
+      // Find and click search button for column
+      const columnHeader = screen.getByRole('columnheader', { name: new RegExp(field, 'i') });
+      const searchButton = within(columnHeader).getByRole('button', { name: /search/i });
+      fireEvent.click(searchButton);
+      // Type search query inside search input
+      const searchInput = await screen.findByRole('textbox');
+      fireEvent.change(searchInput, { target: { value: searchQuery } });
 
-        // Apply search
-        const inputSearchBtn = screen.getByRole('button', { name: /search search/i });
-        fireEvent.click(inputSearchBtn);
+      // Apply search
+      const inputSearchBtn = screen.getByRole('button', { name: /search search/i });
+      fireEvent.click(inputSearchBtn);
 
-        // Find the line with search query and no others
-        const item = await screen.findByText(searchQuery);
-        expect(item).toBeInTheDocument();
-        expect(screen.queryByText(data[1].name)).not.toBeInTheDocument();
-      },
-      10000,
-    );
+      // Find the line with search query and no others
+      const item = await screen.findByText(searchQuery);
+      expect(item).toBeInTheDocument();
+      expect(screen.queryByText(data[1].name)).not.toBeInTheDocument();
+    });
   });
 
   describe('should hide data', () => {

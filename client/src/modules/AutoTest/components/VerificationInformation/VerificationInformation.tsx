@@ -1,4 +1,4 @@
-import { Row, Col, Space, Button, Alert, Typography, Tooltip } from 'antd';
+import { Alert, Button, Col, Row, Space, theme, Tooltip, Typography } from 'antd';
 import { VerificationsTable } from 'modules/AutoTest/components';
 import { useAttemptsMessage } from 'modules/AutoTest/hooks';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
@@ -29,9 +29,18 @@ function VerificationInformation({
 
   const isSelfEducationTask = courseTask.type === CourseTaskDetailedDtoTypeEnum.Selfeducation;
 
+  const { token } = theme.useToken();
+
   return (
     <>
-      <Row style={{ background: 'white', padding: '24px 24px 12px' }} gutter={[0, 24]} justify="end">
+      <Row
+        style={{
+          background: token.colorBgContainer,
+          padding: '24px 24px 12px',
+        }}
+        gutter={[0, 24]}
+        justify="end"
+      >
         <Col span={24}>
           <Alert showIcon type="info" message={explanation} />
         </Col>
@@ -67,7 +76,14 @@ function VerificationInformation({
         )}
       </Row>
       {isTableVisible && (
-        <Row style={{ background: 'white', padding: '0 24px 24px' }} gutter={[0, 24]} justify="center">
+        <Row
+          style={{
+            background: token.colorBgContainer,
+            padding: '0 24px 24px',
+          }}
+          gutter={[0, 24]}
+          justify="center"
+        >
           <Col span={24}>
             <VerificationsTable maxScore={maxScore} verifications={verifications} loading={loading} />
           </Col>

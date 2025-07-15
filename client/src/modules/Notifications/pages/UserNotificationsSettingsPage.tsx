@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
-import { Button, message, Space } from 'antd';
+import { Button, Space } from 'antd';
 import {
   NotificationsService,
   NotificationChannel,
@@ -12,8 +12,10 @@ import { PageLayout } from 'components/PageLayout';
 import { NotificationsTable } from '../components/NotificationsUserSettingsTable';
 import { Consents, Connection } from '../components/Consents';
 import { UpdateNotificationUserSettingsDto } from 'api';
+import { useMessage } from 'hooks';
 
 export function UserNotificationsPage() {
+  const { message } = useMessage();
   const [notifications, setNotifications] = useState<UserNotificationSettings[]>([]);
   const [loading, withLoading] = useLoading(false);
   const service = useMemo(() => new NotificationsService(), []);

@@ -1,5 +1,5 @@
 import { BranchesOutlined, CheckCircleTwoTone, ClockCircleTwoTone, MinusCircleOutlined } from '@ant-design/icons';
-import { Button, message, Row, Space, Statistic, Switch, Table, Typography } from 'antd';
+import { Button, Row, Space, Statistic, Switch, Table, Typography } from 'antd';
 import { ColumnProps } from 'antd/lib/table/Column';
 import { AdminPageLayout } from 'components/PageLayout';
 import { DashboardDetails } from 'components/Student';
@@ -20,6 +20,7 @@ import { useAsync, useToggle } from 'react-use';
 import { CourseService, StudentDetails } from 'services/course';
 import { CourseRole } from 'services/models';
 import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { useMessage } from 'hooks';
 
 const { Text } = Typography;
 
@@ -37,6 +38,7 @@ type ExpelCriteria = {
 };
 
 function Page() {
+  const { message } = useMessage();
   const { course, courses } = useActiveCourseContext();
   const session = useContext(SessionContext);
 

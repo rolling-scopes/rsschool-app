@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useAsync } from 'react-use';
-import { Alert, Button, Form, Input, message, Select } from 'antd';
+import { Alert, Button, Form, Input, Select } from 'antd';
 import { BadgeDto, BadgeEnum, GratitudesApi } from 'api';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
 import { UserService } from 'services/user';
 import { AxiosError } from 'axios';
 import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { useMessage } from 'hooks';
 
 interface IGratitude {
   userIds: number[];
@@ -19,6 +20,7 @@ const gratitudesApi = new GratitudesApi();
 const userService = new UserService();
 
 function GratitudePage() {
+  const { message } = useMessage();
   const { course, courses } = useActiveCourseContext();
   const [badges, setBadges] = useState<BadgeDto[]>([]);
   const [loading, setLoading] = useState(false);

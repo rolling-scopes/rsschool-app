@@ -1,7 +1,7 @@
 import { Table, TablePaginationConfig } from 'antd';
 import { ColumnType, TableProps } from 'antd/lib/table';
 import { FilterValue, SorterResult } from 'antd/lib/table/interface';
-import { Store } from 'rc-field-form/lib/interface';
+import { Store } from 'antd/lib/form/interface';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocalStorage } from 'react-use';
 import isUndefined from 'lodash/isUndefined';

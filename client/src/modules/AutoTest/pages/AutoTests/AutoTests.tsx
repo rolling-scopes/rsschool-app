@@ -23,8 +23,8 @@ function AutoTests() {
   const filteredTasks = useMemo(() => tasks?.filter(t => t.status === activeTab) || [], [tasks, activeTab]);
 
   return (
-    <PageLayout loading={false} title="Auto-tests" background="#F0F2F5" withMargin={false} showCourseName>
-      <Row gutter={24} style={{ background: 'white', marginRight: 0, marginBottom: 24, padding: '0 16px' }}>
+    <PageLayout loading={false} title="Auto-tests" withMargin={false} showCourseName>
+      <Row gutter={24} style={{ marginRight: 0, marginBottom: 24, padding: '0 16px' }}>
         <Col span={24}>
           <StatusTabs statuses={statuses} activeTab={activeTab} onTabChange={setActiveTab} />
         </Col>

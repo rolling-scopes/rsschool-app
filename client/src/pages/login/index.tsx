@@ -1,7 +1,8 @@
 import { GithubOutlined } from '@ant-design/icons';
-import { Button, Card } from 'antd';
+import { Button, Card, Flex } from 'antd';
 import * as React from 'react';
 import css from 'styled-jsx/css';
+import ThemeSwitch from '@client/components/ThemeSwitch';
 
 const { Meta } = Card;
 
@@ -36,6 +37,9 @@ export default function LoginPage() {
             description="In order to access the RS School App, you need to login with your GitHub account"
           />
         </Card>
+        <Flex align="center" justify="center" style={{ marginTop: 20 }}>
+          <ThemeSwitch />
+        </Flex>
       </div>
       <style jsx>{styles}</style>
     </main>
@@ -49,6 +53,7 @@ const styles = css`
     background-image: url('/static/images/logo-rsschool3.png');
     margin: 0 auto 50px;
   }
+
   .login-form {
     position: absolute;
     top: 50%;

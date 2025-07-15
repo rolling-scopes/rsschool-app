@@ -1,5 +1,4 @@
 import { Col, DatePicker, Form, Input, Row, Select, Typography } from 'antd';
-import TextArea from 'antd/lib/input/TextArea';
 import { DisciplinesApi, EventsApi } from 'api';
 import { ModalForm } from 'components/Forms';
 import { UserSearch } from 'components/UserSearch';
@@ -15,6 +14,7 @@ import { getInitialValues, submitEvent } from './formState';
 
 const { Option } = Select;
 const { Title } = Typography;
+const { TextArea } = Input;
 
 type Props = {
   data: Partial<CourseEvent>;

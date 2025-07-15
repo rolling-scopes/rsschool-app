@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, Input, message, Space, Typography } from 'antd';
+import { Button, Checkbox, Form, Input, Space, Typography } from 'antd';
 import { AxiosError } from 'axios';
 import { CommentInput } from 'components/Forms';
 import { GithubAvatar } from 'components/GithubAvatar';
@@ -9,6 +9,7 @@ import { CourseService } from 'services/course';
 import { FeedbackProps } from '../../data/getInterviewData';
 import { ScoreSelector } from 'components/ScoreSelector';
 import { useRouter } from 'next/router';
+import { useMessage } from 'hooks';
 
 type FormAnswer = {
   questionId: string;
@@ -26,6 +27,8 @@ export function InterviewFeedback({ course, type, interviewTaskId, githubId }: F
 
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [loading, setLoading] = useState(false);
+
+  const { message } = useMessage();
 
   const questions = useMemo(() => template.categories.flatMap(c => c.questions), [type]);
 

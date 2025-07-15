@@ -1,4 +1,4 @@
-import { Col, Row, Typography, Form, Space, Button } from 'antd';
+import { Button, Col, Form, Row, Space, theme, Typography } from 'antd';
 import { TaskVerificationAttemptDto } from 'api';
 import { Question } from 'modules/AutoTest/components';
 import dayjs from 'dayjs';
@@ -13,8 +13,10 @@ type Props = {
 const { Title, Text } = Typography;
 
 function AttemptsAnswers({ attempts, hideAnswers }: Props) {
+  const { token } = theme.useToken();
+
   return (
-    <Row style={{ background: 'white', padding: 24 }} gutter={[0, 24]} justify="center">
+    <Row style={{ background: token.colorBgContainer, padding: 24 }} gutter={[0, 24]} justify="center">
       <Col xs={24} lg={18} xl={12}>
         <Row style={{ marginBottom: 16 }} wrap={false}>
           <Col flex="auto">Check your incorrect answers per attempt.</Col>

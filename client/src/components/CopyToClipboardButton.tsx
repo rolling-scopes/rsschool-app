@@ -1,6 +1,7 @@
-import { Button, ButtonProps, notification } from 'antd';
+import { Button, ButtonProps } from 'antd';
 import CopyTwoTone from '@ant-design/icons/CopyTwoTone';
 import { useCopyToClipboard } from 'react-use';
+import { useMessage } from 'hooks';
 
 type Props = {
   value: string;
@@ -8,6 +9,7 @@ type Props = {
 };
 
 export default function CopyToClipboardButton({ value, type = 'dashed' }: Props) {
+  const { notification } = useMessage();
   const [, copyToClipboard] = useCopyToClipboard();
 
   const handleClick = () => {

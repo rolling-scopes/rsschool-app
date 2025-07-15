@@ -8,3 +8,4 @@ export * from './ScoreIcon';
 export * from './TelegramIcon';
 export * from './GitHubLogoIcon';
 export * from './RSLogoIcon';
+export { PublicSvgIcon } from './PublicSvgIcon';
