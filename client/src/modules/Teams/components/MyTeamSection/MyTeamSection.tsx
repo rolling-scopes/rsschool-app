@@ -1,9 +1,10 @@
-import { Button, notification, Row, Space, Typography } from 'antd';
+import { Button, Row, Space, Typography } from 'antd';
 import { EditTwoTone, CopyOutlined, RedoOutlined } from '@ant-design/icons';
 import { useMemo } from 'react';
 import { TeamApi, TeamDistributionDetailedDto, TeamDto } from 'api';
 import StudentsTable from '../StudentsTable/StudentsTable';
 import { useCopyToClipboard } from 'react-use';
+import { useMessage } from 'hooks';
 
 const { Text, Title } = Typography;
 
@@ -29,6 +30,7 @@ export default function MyTeamSection({
   setActiveTab,
 }: Props) {
   const myTeam = distribution.myTeam;
+  const { notification } = useMessage();
 
   const isTeamLead = useMemo(() => studentId === myTeam?.teamLeadId, [studentId, myTeam?.teamLeadId]);
   const [, copyToClipboard] = useCopyToClipboard();
