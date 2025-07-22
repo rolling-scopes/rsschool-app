@@ -50,7 +50,7 @@ function AttemptsAnswers({ attempts, hideAnswers }: Props) {
                     </Col>
                   </Row>
                   {attempt.questions?.map((question, questionIdx) => (
-                    <Question key={questionIdx} question={question} questionIndex={questionIdx} />
+                    <Question key={questionIdx} question={question} />
                   ))}
                 </Fragment>
               ))}
