@@ -1,22 +1,23 @@
-import { useState, createRef, RefObject } from 'react';
-import { Layout, Space, Button, Row, Col, Alert, notification } from 'antd';
+import { createRef, RefObject, useState } from 'react';
+import { Alert, Button, Col, Layout, Row, Space } from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
 import { FormInstance } from 'antd/lib/form';
-import { ResumeCourseDto, OpportunitiesApi, FormDataDto } from 'api';
+import { FormDataDto, OpportunitiesApi, ResumeCourseDto } from 'api';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { ContactsForm } from './ContactsForm';
 import { GeneralInfoForm } from './GeneralInfoForm';
 import { VisibleCoursesForm } from './VisibleCoursesForm';
 import {
+  AllDataToSubmit,
+  AllUserCVData,
   Contacts,
   UserData,
-  AllUserCVData,
-  AllDataToSubmit,
   UserDataToSubmit,
-  VisibleCoursesFormData,
   VisibleCourses,
+  VisibleCoursesFormData,
 } from 'modules/Opportunities/models';
-import { transformFieldsData, splitDataForForms } from 'modules/Opportunities/transformers';
+import { splitDataForForms, transformFieldsData } from 'modules/Opportunities/transformers';
+import { useMessage } from 'hooks';
 
 const { Content } = Layout;
 
@@ -35,6 +36,7 @@ const service = new OpportunitiesApi();
 const buttonStyle = { width: 'fit-content', margin: '5px' };
 
 export const EditCV = (props: Props) => {
+  const { notification } = useMessage();
   const [loading, setLoading] = useState<boolean>(false);
   const [contacts, setContacts] = useState<Contacts | null>(props.contacts);
   const [userData, setUserData] = useState<UserData | null>(props.userData);
@@ -97,59 +99,70 @@ export const EditCV = (props: Props) => {
 
     setLoading(false);
 
-    notification.success({ message: 'CV sucessfully updated', duration: 2 });
+    notification.success({ message: 'CV successfully updated', duration: 2 });
   };
 
   return (
     <LoadingScreen show={loading}>
-      <Layout style={{ margin: 'auto', marginBottom: '10px', maxWidth: '960px' }}>
-        <Content>
-          <Space
-            direction="horizontal"
-            align="start"
-            style={{ width: '100%', display: 'flex', backgroundColor: '#FFF', justifyContent: 'space-around' }}
+      <Content>
+        <Space
+          direction="horizontal"
+          align="start"
+          style={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'space-around',
+          }}
+        >
+          <Col
+            style={{
+              margin: '10px auto',
+              maxWidth: '960px',
+            }}
           >
-            <Col>
-              <Row justify="center" style={{ marginBottom: '15px' }}>
-                <Button
-                  style={{ ...buttonStyle, backgroundColor: '#52C41A', borderColor: '#52C41A' }}
-                  type="primary"
-                  color="green"
-                  htmlType="button"
-                  onClick={handleSave}
-                  icon={<SaveOutlined />}
-                >
-                  Save CV
-                </Button>
-                <Button style={buttonStyle} type="default" htmlType="button" onClick={() => props.switchView()}>
-                  Cancel
-                </Button>
-              </Row>
-              <Row>
-                {validationFailed ? (
-                  <Alert
-                    style={{ marginBottom: '10px', width: '100%' }}
-                    showIcon
-                    type="error"
-                    message="All required fields must be filled first"
-                  />
-                ) : null}
-              </Row>
-              <Row>{userData && <GeneralInfoForm ref={userFormRef} userData={userData} />}</Row>
-              <Row>{contacts && <ContactsForm ref={contactsFormRef} contactsList={contacts} />}</Row>
-              <Row>
-                {visibleCourses && (
-                  <VisibleCoursesForm
-                    ref={visibleCoursesFormRef}
-                    courses={props.courses}
-                    visibleCourses={visibleCourses}
-                  />
-                )}
-              </Row>
-            </Col>
-          </Space>
-        </Content>
-      </Layout>
+            <Row justify="center" style={{ marginBottom: '15px' }}>
+              <Button
+                style={{
+                  ...buttonStyle,
+                  backgroundColor: '#52C41A',
+                  borderColor: '#52C41A',
+                }}
+                type="primary"
+                color="green"
+                htmlType="button"
+                onClick={handleSave}
+                icon={<SaveOutlined />}
+              >
+                Save CV
+              </Button>
+              <Button style={buttonStyle} type="default" htmlType="button" onClick={() => props.switchView()}>
+                Cancel
+              </Button>
+            </Row>
+            <Row>
+              {validationFailed ? (
+                <Alert
+                  style={{ marginBottom: '10px', width: '100%' }}
+                  showIcon
+                  type="error"
+                  message="All required fields must be filled first"
+                />
+              ) : null}
+            </Row>
+            <Row>{userData && <GeneralInfoForm ref={userFormRef} userData={userData} />}</Row>
+            <Row>{contacts && <ContactsForm ref={contactsFormRef} contactsList={contacts} />}</Row>
+            <Row>
+              {visibleCourses && (
+                <VisibleCoursesForm
+                  ref={visibleCoursesFormRef}
+                  courses={props.courses}
+                  visibleCourses={visibleCourses}
+                />
+              )}
+            </Row>
+          </Col>
+        </Space>
+      </Content>
     </LoadingScreen>
   );
 };

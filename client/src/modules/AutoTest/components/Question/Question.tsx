@@ -4,12 +4,11 @@ import css from 'styled-jsx/css';
 
 const { Title } = Typography;
 
-type Props = {
+type QuestionProps = {
   question: SelfEducationQuestionSelectedAnswersDto;
-  questionIndex: number;
 };
 
-function Question({ question: selfEducationQuestion, questionIndex }: Props): JSX.Element {
+function Question({ question: selfEducationQuestion }: QuestionProps): JSX.Element {
   const { question, questionImage, answers, answersType, multiple, selectedAnswers } = selfEducationQuestion;
   const Element = multiple ? Checkbox : Radio;
 
@@ -35,38 +34,32 @@ function Question({ question: selfEducationQuestion, questionIndex }: Props): JS
             </Col>
           </Row>
         }
-        name={`answer-${questionIndex}`}
-        valuePropName="checked"
       >
-        <Element.Group value={selectedAnswers}>
-          <Space direction="vertical" size="small">
-            {answers?.map((answer, answerIndex) => {
-              const checked = Array.isArray(selectedAnswers)
-                ? selectedAnswers?.includes(answerIndex)
-                : selectedAnswers === answerIndex;
+        <Space direction="vertical" size="small">
+          {answers?.map((answer, answerIndex) => {
+            const checked = selectedAnswers?.includes(answerIndex);
 
-              return (
-                <Element key={answerIndex} value={answerIndex} checked={checked}>
-                  {answersType === 'image' ? (
-                    <>
-                      ({answerIndex + 1}){' '}
-                      <img
-                        src={answer}
-                        style={{
-                          width: '100%',
-                          maxWidth: '400px',
-                          marginBottom: '10px',
-                        }}
-                      />
-                    </>
-                  ) : (
-                    answer
-                  )}
-                </Element>
-              );
-            })}
-          </Space>
-        </Element.Group>
+            return (
+              <Element key={answerIndex} value={answerIndex} checked={checked}>
+                {answersType === 'image' ? (
+                  <>
+                    ({answerIndex + 1}){' '}
+                    <img
+                      src={answer}
+                      style={{
+                        width: '100%',
+                        maxWidth: '400px',
+                        marginBottom: '10px',
+                      }}
+                    />
+                  </>
+                ) : (
+                  answer
+                )}
+              </Element>
+            );
+          })}
+        </Space>
       </Form.Item>
       <style jsx>{styles}</style>
     </div>

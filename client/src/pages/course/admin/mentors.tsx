@@ -6,7 +6,6 @@ import { AssignStudentModal } from 'components/Student';
 import { PersonCell, getColumnSearchProps, numberSorter, stringSorter } from 'components/Table';
 import { Session } from 'components/withSession';
 import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
-import { MenuInfo } from 'rc-menu/lib/interface';
 import { useMemo, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
@@ -123,7 +122,7 @@ function Page() {
     }
   };
 
-  const handleMenuClick = async (menuItem: MenuInfo, mentor: MentorDetailsDto) => {
+  const handleMenuClick = async (menuItem: { key: string }, mentor: MentorDetailsDto) => {
     switch (menuItem.key) {
       case 'student': {
         setCurrentMentor(mentor.githubId);

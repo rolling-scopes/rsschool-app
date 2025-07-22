@@ -1,14 +1,13 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useContext, useMemo } from 'react';
-import { Button, Dropdown, Menu, Space } from 'antd';
-import type { MenuProps } from 'antd';
+import { Button, Dropdown, Flex, Menu, MenuProps, Space, theme } from 'antd';
 import {
   EyeOutlined,
   LogoutOutlined,
+  NotificationOutlined,
   QuestionCircleFilled,
   SolutionOutlined,
-  NotificationOutlined,
 } from '@ant-design/icons';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { SolidarityUkraine } from './SolidarityUkraine';
@@ -16,6 +15,7 @@ import { SessionContext } from 'modules/Course/contexts';
 import { getNavigationItems } from 'modules/Home/data/links';
 import { useActiveCourseContext } from 'modules/Course/contexts/ActiveCourseContext';
 import css from 'styled-jsx/css';
+import ThemeSwitch from '@client/components/ThemeSwitch';
 
 type Props = {
   showCourseName?: boolean;
@@ -79,16 +79,22 @@ export function Header({ title, showCourseName }: Props) {
     return [...items, { type: 'divider' }, lastItem];
   }, [currentRoute]);
 
+  const { token } = theme.useToken();
+
   return (
     <Space
       direction="vertical"
       size={0}
-      style={{ boxShadow: '0px 2px 8px #F0F1F2', backgroundColor: '#ffffff', width: '100%' }}
+      style={{
+        width: '100%',
+        boxShadow: token.boxShadow,
+      }}
     >
       <nav
         className="nav no-print"
         style={{
-          background: '#fff',
+          background: token.colorBgContainer,
+          color: token.colorTextBase,
           padding: '8px',
           display: 'flex',
           flexWrap: 'wrap',
@@ -109,15 +115,16 @@ export function Header({ title, showCourseName }: Props) {
         <div className="title">
           <b>{title}</b> {showCourseName ? course?.name : null}
         </div>
-        <div className="profile">
+        <Flex align="center">
+          <ThemeSwitch />
           {session.githubId && (
             <Dropdown menu={{ items: menuItems }} trigger={['click']}>
-              <Button type="link">
+              <Button type="link" style={{ display: 'flex', alignItems: 'center' }}>
                 <GithubAvatar githubId={session?.githubId} size={32} />
               </Button>
             </Dropdown>
           )}
-        </div>
+        </Flex>
         <style jsx>{styles}</style>
       </nav>
       <Menu selectedKeys={[currentRoute]} mode="horizontal" items={courseLinks} />
@@ -126,10 +133,6 @@ export function Header({ title, showCourseName }: Props) {
 }
 
 const styles = css`
-  :global(li:has(.menu-item-active)) {
-    background-color: #e0f2ff;
-  }
-
   @media all and (max-width: 768px) {
     .title {
       width: 100%;
