@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Layout, Typography, Modal } from 'antd';
+import { Layout, Modal, theme, Typography } from 'antd';
 import { AxiosError } from 'axios';
 import dayjs from 'dayjs';
 import Head from 'next/head';
@@ -83,6 +83,8 @@ export function EditPage() {
     setEditMode(true);
   });
 
+  const { token } = theme.useToken();
+
   return (
     <>
       <Head>
@@ -90,8 +92,8 @@ export function EditPage() {
       </Head>
       <LoadingScreen show={loading}>
         <Header title="My CV" />
-        <Layout className="cv-layout">
-          <Content className="print-no-padding" style={{ maxWidth: 960, backgroundColor: '#FFF', margin: 'auto' }}>
+        <Layout style={{ background: token.colorBgContainer }}>
+          <Content className="print-no-padding" style={{ maxWidth: 960, margin: 'auto' }}>
             <EditViewCv
               githubId={githubId}
               consent={consent}
@@ -109,9 +111,6 @@ export function EditPage() {
         html,
         body {
           font-family: 'Ubuntu', sans-serif;
-        }
-        .cv-layout {
-          background-color: white !important;
         }
       `}</style>
     </>

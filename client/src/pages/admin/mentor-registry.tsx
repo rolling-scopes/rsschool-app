@@ -270,7 +270,7 @@ function Page() {
         </Space>
         <style jsx>{styles}</style>
       </Row>
-      <Col style={{ background: '#f0f2f5', padding: 24 }}>
+      <Col style={{ padding: 24 }}>
         <Alert
           message={
             <>

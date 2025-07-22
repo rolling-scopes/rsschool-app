@@ -12,6 +12,7 @@ import { StudentsWithCertificateCard } from '../components/StudentsWithCertifica
 import { StudentsEligibleForCertificationCard } from '../components/StudentsEligibleForCertificationCard';
 import { TaskPerformanceCard } from '../components/TaskPerformanceCard';
 import { StudentsCertificatesCountriesCard } from '../components/StudentsCertificatesCountriesCard';
+import { theme } from 'antd';
 
 const gapSize = 24;
 
@@ -83,8 +84,10 @@ function CourseStatistic() {
       },
   ].filter(Boolean);
 
+  const { token } = theme.useToken();
+
   return (
-    <PageLayout loading={loading} title="Course Statistics" showCourseName background="#F0F2F5">
+    <PageLayout loading={loading} title="Course Statistics" showCourseName background={token.colorBgLayout}>
       <Masonry
         breakpointCols={masonryBreakPoints}
         className={masonryClassName}
