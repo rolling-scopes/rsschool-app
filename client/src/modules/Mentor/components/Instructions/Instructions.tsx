@@ -1,12 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Badge, Card, Col, Row, Space, Typography } from 'antd';
 import { INSTRUCTIONS_TEXT, renderDescription, renderSocialLinks } from '.';
+import { DiscordServersApi } from 'api';
+import { useAsyncEffect } from 'ahooks';
+
+interface InstructionsProps {
+  discordServerId: number;
+}
 
 const { Meta, Grid } = Card;
 const { Text } = Typography;
 
-function Instructions() {
-  const { title, description, steps } = INSTRUCTIONS_TEXT;
+const discordServer = new DiscordServersApi();
+
+function Instructions({ discordServerId }: InstructionsProps) {
+  const { title, description } = INSTRUCTIONS_TEXT;
+  const [steps, setSteps] = useState(INSTRUCTIONS_TEXT.steps);
+
+  useAsyncEffect(async () => {
+    if (!discordServerId) return;
+
+    const response = await discordServer.getInviteLinkByDiscordServerId(discordServerId);
+    const telegramInviteURL = response.data;
+
+    const updatedSteps = steps.map(step => {
+      if (!step.links) return step;
+
+      const updatedLinks = step.links.map(link =>
+        link.title === 'telegram' ? { ...link, url: telegramInviteURL } : link,
+      );
+
+      return { ...step, links: updatedLinks };
+    });
+
+    setSteps(updatedSteps);
+  }, []);
 
   return (
     <Card bordered={false}>

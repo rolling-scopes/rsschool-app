@@ -5,7 +5,7 @@ import GithubFilled from '@ant-design/icons/GithubFilled';
 import LinkedinOutlined from '@ant-design/icons/LinkedinOutlined';
 import { DiscordOutlined } from 'components/Icons/DiscordOutlined';
 
-const iconStyle = { fontSize: 24, color: '#000' };
+const iconStyle = { fontSize: 24 };
 
 const socialLinks = [
   {
@@ -43,7 +43,11 @@ class SocialNetworks extends React.Component<any, any> {
         {socialLinks.map((linkInfo: LinkInfo) => {
           return (
             <Col key={linkInfo.link}>
-              <a target={linkInfo.newTab ? '_blank' : '_self'} href={linkInfo.link} style={{ color: '#202020' }}>
+              <a
+                target={linkInfo.newTab ? '_blank' : '_self'}
+                href={linkInfo.link}
+                style={{ color: 'var(--text-primary-color)' }}
+              >
                 <Space>
                   {linkInfo.icon}
                   {linkInfo.name}

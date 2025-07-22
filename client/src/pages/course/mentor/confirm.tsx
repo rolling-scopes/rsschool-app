@@ -1,8 +1,8 @@
 import { Button, Col, Form, message, Result, Row, Typography } from 'antd';
-import { CourseDto as Course } from 'api';
+import { CourseDto as Course, DiscordServersApi } from 'api';
 import { PageLayout, PageLayoutSimple } from 'components/PageLayout';
 import { useRouter } from 'next/router';
-import { useMemo, useState, useContext } from 'react';
+import { useMemo, useState, useContext, useEffect } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { CoursesService } from 'services/courses';
@@ -10,10 +10,17 @@ import { MentorRegistryService, MentorResponse } from 'services/mentorRegistry';
 import { Warning } from 'components/Warning';
 import { MentorOptions } from 'components/MentorOptions';
 import { SessionContext, SessionProvider } from 'modules/Course/contexts';
+import { LoadingScreen } from '@client/components/LoadingScreen';
 
 const { Link } = Typography;
 
+type SuccessComponentProps = {
+  discordServerId: number;
+};
+
 const mentorRegistry = new MentorRegistryService();
+const discordServer = new DiscordServersApi();
+
 function Page() {
   const session = useContext(SessionContext);
   const [form] = Form.useForm();
@@ -149,7 +156,7 @@ function Page() {
   if (success) {
     return (
       <PageLayout {...pageProps}>
-        <SuccessComponent />
+        <SuccessComponent discordServerId={course.discordServerId} />
       </PageLayout>
     );
   }
@@ -165,14 +172,27 @@ function Page() {
   );
 }
 
-const SuccessComponent = () => {
+const SuccessComponent = ({ discordServerId }: SuccessComponentProps) => {
+  const [mentorsChat, setMentorsChat] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const telegramInviteLinkResponse = await discordServer.getInviteLinkByDiscordServerId(discordServerId);
+      setMentorsChat(telegramInviteLinkResponse.data);
+    };
+
+    fetchData();
+  }, [discordServerId]);
+
+  if (!mentorsChat) return <LoadingScreen show={!mentorsChat} />;
+
   const titleCmp = (
     <Row gutter={24} justify="center">
       <Col xs={18} sm={16} md={12}>
         <p>Thanks for the confirmation!</p>
         <p>You are mentor now!</p>
         <Typography.Paragraph type="secondary">
-          Join our <a href="https://t.me/joinchat/HqpGRxNRANkGN2xx9bL8zQ">RSSchool Mentors FAQ</a> Telegram group.
+          Join our <a href={mentorsChat}>RSSchool Mentors FAQ</a> Telegram group.
         </Typography.Paragraph>
         <p>
           <Button type="primary" size="large" href="/">

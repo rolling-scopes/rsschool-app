@@ -5,11 +5,11 @@ import { CriteriaDto, TaskDtoTypeEnum } from 'api';
 import { CrossCheckTaskCriteriaPanel, GitHubPanel, JsonAttributesPanel } from 'modules/Tasks/components';
 import { TASK_SETTINGS_HEADERS } from 'modules/Tasks/constants';
 import { Settings, SettingsSet } from 'modules/Tasks/types';
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 type Props = {
   dataCriteria: CriteriaDto[];
-  setDataCriteria: (criteria: CriteriaDto[]) => void;
+  setDataCriteria: Dispatch<SetStateAction<CriteriaDto[]>>;
   taskType: TaskDtoTypeEnum | undefined;
 };
 

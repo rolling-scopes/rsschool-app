@@ -14019,6 +14019,39 @@ export const DiscordServersApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getInviteLinkByDiscordServerId: async (id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getInviteLinkByDiscordServerId', 'id', id)
+            const localVarPath = `/discord-servers/invite/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -14126,6 +14159,16 @@ export const DiscordServersApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getInviteLinkByDiscordServerId(id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getInviteLinkByDiscordServerId(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -14179,6 +14222,15 @@ export const DiscordServersApiFactory = function (configuration?: Configuration,
          */
         getDiscordServers(options?: any): AxiosPromise<Array<DiscordServerDto>> {
             return localVarFp.getDiscordServers(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getInviteLinkByDiscordServerId(id: number, options?: any): AxiosPromise<string> {
+            return localVarFp.getInviteLinkByDiscordServerId(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -14238,6 +14290,17 @@ export class DiscordServersApi extends BaseAPI {
      */
     public getDiscordServers(options?: AxiosRequestConfig) {
         return DiscordServersApiFp(this.configuration).getDiscordServers(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DiscordServersApi
+     */
+    public getInviteLinkByDiscordServerId(id: number, options?: AxiosRequestConfig) {
+        return DiscordServersApiFp(this.configuration).getInviteLinkByDiscordServerId(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

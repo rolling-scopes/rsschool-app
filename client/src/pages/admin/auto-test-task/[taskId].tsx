@@ -96,6 +96,7 @@ function Page() {
               {selectedTask?.attributes?.public?.tresholdPercentage}
             </Descriptions.Item>
           </Descriptions>
+          <Divider style={{ border: 'none', margin: '16px 0' }} />
           <Form layout="vertical" requiredMark={false} disabled={true}>
             {selectedTask?.attributes.public.questions.map((question, index) => (
               <Question
@@ -105,12 +106,9 @@ function Page() {
                     ...question,
                     // TODO: Investigate and fix potential type mismatch for selectedAnswers.
                     // Related issue: https://github.com/rolling-scopes/rsschool-app/issues/2572
-                    selectedAnswers: question.multiple
-                      ? selectedTask?.attributes.answers[index]
-                      : selectedTask?.attributes.answers[index][0],
+                    selectedAnswers: selectedTask?.attributes.answers[index],
                   } as SelfEducationQuestionSelectedAnswersDto
                 }
-                questionIndex={index}
               />
             ))}
           </Form>

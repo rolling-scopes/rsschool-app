@@ -1,4 +1,4 @@
-import { Col, Input, Row, Space, TablePaginationConfig, Typography, message, Modal } from 'antd';
+import { Col, Input, Row, Space, TablePaginationConfig, Typography, Modal } from 'antd';
 import { useState } from 'react';
 
 import { TeamDistributionApi, TeamDistributionDetailedDto, TeamDistributionStudentDto } from 'api';
@@ -6,6 +6,7 @@ import { useAsync } from 'react-use';
 import StudentsTable from '../StudentsTable/StudentsTable';
 import { IPaginationInfo } from '@common/types/pagination';
 import { useLoading } from 'components/useLoading';
+import { useMessage } from 'hooks';
 
 type Props = {
   distribution: TeamDistributionDetailedDto;
@@ -25,6 +26,7 @@ const { confirm } = Modal;
 const teamDistributionApi = new TeamDistributionApi();
 
 export default function StudentsWithoutTeamSection({ distribution, isManager, reloadDistribution }: Props) {
+  const { message } = useMessage();
   const [students, setStudents] = useState<StudentsState>({
     content: [],
     pagination: { current: 1, pageSize: 10 },

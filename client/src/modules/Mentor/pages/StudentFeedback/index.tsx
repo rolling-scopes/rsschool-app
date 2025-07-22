@@ -6,11 +6,12 @@ import { useContext } from 'react';
 import { CreateStudentFeedbackDto, StudentsFeedbacksApi } from 'api';
 import { FeedbackForm } from 'modules/Feedback/components/FeedbackForm';
 import { useRouter } from 'next/router';
-import { message } from 'antd';
+import { useMessage } from 'hooks';
 
 const api = new StudentsFeedbacksApi();
 
 export function StudentFeedback() {
+  const { message } = useMessage();
   const { course } = useActiveCourseContext();
   const session = useContext(SessionContext);
   const { id: courseId } = course;
