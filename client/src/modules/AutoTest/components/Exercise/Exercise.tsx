@@ -1,6 +1,6 @@
 import { Coding, JupyterNotebook, SelfEducation } from 'modules/AutoTest/components';
 import { CourseTaskDetailedDtoTypeEnum } from 'api';
-import { Col, ColProps, Form, Row } from 'antd';
+import { Col, ColProps, Form, Row, theme } from 'antd';
 import { useCourseTaskSubmit } from 'modules/AutoTest/hooks';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
 import { useEffect, useState } from 'react';
@@ -62,8 +62,10 @@ function Exercise({ githubId, courseId, courseTask, finishTask }: ExerciseProps)
     }
   };
 
+  const { token } = theme.useToken();
+
   return (
-    <Row style={{ background: 'white', padding: '0 24px 24px' }} gutter={[0, 24]} justify="center">
+    <Row style={{ background: token.colorBgContainer, padding: '0 24px 24px' }} gutter={[0, 24]} justify="center">
       <Col {...responsiveColumns(courseTask.type)}>
         <Form
           form={form}

@@ -1,4 +1,4 @@
-import { Alert, Checkbox, Form, message, Select, Space, Spin } from 'antd';
+import { Alert, Checkbox, Form, Select, Space, Spin } from 'antd';
 import { useAsync } from 'react-use';
 import { InviteMentorsDto } from 'api';
 import { ModalForm } from 'components/Forms';
@@ -8,6 +8,7 @@ import { MentorRegistryService } from 'services/mentorRegistry';
 import { DisciplinesApi } from 'api';
 
 import 'react-quill/dist/quill.snow.css';
+import { useMessage } from 'hooks';
 
 type Props = {
   onCancel: () => void;
@@ -16,6 +17,7 @@ const mentorRegistryService = new MentorRegistryService();
 const disciplinesApi = new DisciplinesApi();
 
 function InviteMentorsModal({ onCancel }: Props) {
+  const { message } = useMessage();
   const [loading, withLoading] = useLoading(false);
   const submit = withLoading(async (data: InviteMentorsDto) => {
     await mentorRegistryService.inviteMentors(data);

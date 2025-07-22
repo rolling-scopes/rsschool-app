@@ -1,4 +1,4 @@
-import { Typography, Button, Modal, notification } from 'antd';
+import { Typography, Button, Modal } from 'antd';
 import { useCallback } from 'react';
 import { useEffectOnce } from 'react-use';
 import {
@@ -9,6 +9,7 @@ import {
 } from '@ant-design/icons';
 import { OpportunitiesApi } from 'api';
 import { ExpirationState } from 'modules/Opportunities/constants';
+import { useMessage } from 'hooks';
 
 const { Text, Paragraph } = Typography;
 
@@ -21,6 +22,7 @@ type Props = {
 };
 
 export const ExpirationTooltip = ({ expirationDate, expirationState, publicMode }: Props) => {
+  const { notification } = useMessage();
   const textStyle = { fontSize: '12px' };
 
   useEffectOnce(() => {

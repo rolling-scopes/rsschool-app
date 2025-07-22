@@ -1,4 +1,4 @@
-import { Alert, Button, Col, Layout, List, Row } from 'antd';
+import { Alert, Button, Col, Layout, List, Row, theme } from 'antd';
 import { AlertDto, AlertsApi } from 'api';
 import { AdminSider } from 'components/Sider/AdminSider';
 import { FooterLayout } from 'components/Footer';
@@ -12,7 +12,7 @@ import { SystemAlerts } from 'modules/Home/components/SystemAlerts';
 import { getCourseLinks } from 'modules/Home/data/links';
 import { useStudentSummary } from 'modules/Home/hooks/useStudentSummary';
 import Link from 'next/link';
-import { useMemo, useState, useContext } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
 import { MentorRegistryService } from 'services/mentorRegistry';
@@ -70,10 +70,12 @@ export function HomePage() {
 
   const { courseTasks, studentSummary } = useStudentSummary(session, course);
 
+  const { token } = theme.useToken();
+
   return (
-    <Layout style={{ minHeight: '100vh', background: '#fff' }}>
+    <Layout style={{ minHeight: '100vh' }}>
       <Header />
-      <Layout style={{ background: '#fff' }}>
+      <Layout style={{ background: token.colorBgContainer }}>
         {isPowerUser && <AdminSider courses={courses} activeCourse={course} />}
         <Content style={{ margin: 16, marginBottom: 32 }}>
           {!course && <NoCourse courses={allCourses} preselectedCourses={preselectedCourses} />}

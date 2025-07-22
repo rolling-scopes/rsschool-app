@@ -1,10 +1,11 @@
-import { Upload, Button, message } from 'antd';
+import { Button, Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import React from 'react';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload';
 import { CriteriaDto } from 'api';
 import { CrossCheckCriteriaType } from 'services/course';
 import { TaskType } from './constants';
+import { useMessage } from 'hooks';
 
 interface IUploadCriteriaJSON {
   onLoad: (data: CriteriaDto[]) => void;
@@ -18,6 +19,8 @@ export type CriteriaJSONType = {
 };
 
 export const UploadCriteriaJSON = ({ onLoad }: IUploadCriteriaJSON) => {
+  const { message } = useMessage();
+
   const handleChange = (info: UploadChangeParam<UploadFile<any>>) => {
     if (info.file.status === 'done') {
       const fileReader = new FileReader();

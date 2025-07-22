@@ -1,7 +1,24 @@
+:root:has(.dark) {
+  --bg-primary-color: #151515;
+  --text-primary-color: #ffffff;
+}
+
+:root:has(.light) {
+  --bg-primary-color: #fff;
+  --text-primary-color: #000;
+}
+
+.dark .header-logo,
+.dark .login-image {
+  filter: invert(1);
+}
+
 html,
 body,
 #root {
   height: 100%;
+  background: var(--bg-primary-color);
+  color: var(--text-primary-color);
 }
 
 .rs-link {
@@ -96,10 +113,12 @@ thead.ant-table-thead > tr > th {
   .no-print {
     display: none !important;
   }
+
   .print-black {
     color: black !important;
     background-color: white !important;
   }
+
   .print-no-padding {
     padding: 0 !important;
     margin: 0 !important;
