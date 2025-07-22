@@ -1,5 +1,5 @@
 import UploadOutlined from '@ant-design/icons/UploadOutlined';
-import { Button, Form, List, message, Table, Typography, Upload } from 'antd';
+import { Button, Form, List, Table, Typography, Upload } from 'antd';
 import type { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { CourseTaskSelect } from 'components/Forms';
@@ -13,6 +13,7 @@ import { isCourseManager } from 'domain/user';
 import { CoursesTasksApi, CourseTaskDto } from 'api';
 import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { CourseRole } from 'services/models';
+import { useMessage } from 'hooks';
 
 interface SubmitResult {
   status: string;
@@ -39,6 +40,7 @@ interface StudentScore {
 const courseTasksApi = new CoursesTasksApi();
 
 export function SubmitScorePage() {
+  const { message } = useMessage();
   const session = useContext(SessionContext);
   const { course } = useActiveCourseContext();
   const [form] = Form.useForm();

@@ -1,5 +1,5 @@
 import { MoreOutlined } from '@ant-design/icons';
-import { Button, Dropdown, message, Table } from 'antd';
+import { Button, Dropdown, Table } from 'antd';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
 import { ColumnsType } from 'antd/lib/table';
 import { CoursesTasksApi, CourseTaskDto, CrossCheckStatusEnum } from 'api';
@@ -18,10 +18,12 @@ import { useCallback, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { CourseRole } from 'services/models';
+import { useMessage } from 'hooks';
 
 const courseTasksApi = new CoursesTasksApi();
 
 function Page() {
+  const { message } = useMessage();
   const { course, courses } = useActiveCourseContext();
   const courseId = course.id;
   const service = useMemo(() => new CourseService(courseId), [courseId]);
