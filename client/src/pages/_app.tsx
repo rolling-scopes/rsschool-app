@@ -5,11 +5,13 @@ import 'antd/dist/reset.css';
 import { initializeFeatures } from 'services/features';
 import { Analytics } from '../components/Analytics';
 import '../styles/main.css';
+import { MessageProvider, ThemeProvider } from '@client/providers';
 
 class RsSchoolApp extends App {
   render() {
     const { Component, pageProps, router } = this.props;
     initializeFeatures(router.query);
+
     return (
       <>
         <Analytics />
@@ -17,7 +19,11 @@ class RsSchoolApp extends App {
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
           <title>App / The Rolling Scopes School</title>
         </Head>
-        <Component {...pageProps} />
+        <ThemeProvider>
+          <MessageProvider>
+            <Component {...pageProps} />
+          </MessageProvider>
+        </ThemeProvider>
       </>
     );
   }

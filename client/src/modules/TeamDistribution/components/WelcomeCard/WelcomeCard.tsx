@@ -1,4 +1,5 @@
-import { Button, Card, Col, Row, Typography } from 'antd';
+import { Button, Card, Col, Row, theme, Typography } from 'antd';
+
 import { PlusOutlined } from '@ant-design/icons';
 import { useMedia } from 'react-use';
 
@@ -11,10 +12,14 @@ type Props = {
 
 export default function WelcomeCard({ isManager, handleCreateTeamDistribution }: Props) {
   const mobileView = useMedia('(max-width: 768px)');
+  const { token } = theme.useToken();
   return (
     <Card
       title={<Text>{isManager ? 'Create student teams to solve group tasks!' : 'Become a member of the team!'}</Text>}
-      style={{ marginTop: 24, backgroundColor: '#D6E4FF' }}
+      style={{
+        marginTop: 24,
+        backgroundColor: token.colorPrimaryBg,
+      }}
     >
       <Row gutter={[24, 12]} style={{ minHeight: '100px' }}>
         <Col sm={24} md={12}>

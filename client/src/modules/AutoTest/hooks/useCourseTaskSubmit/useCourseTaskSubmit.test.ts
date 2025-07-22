@@ -4,13 +4,24 @@ import { IpynbFile, useCourseTaskSubmit } from './useCourseTaskSubmit';
 import { FilesService } from 'services/files';
 import { act } from 'react-dom/test-utils';
 import { AxiosError } from 'axios';
-import { notification } from 'antd';
 import * as UserUtils from 'domain/user';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
 
 jest.mock('services/files');
 jest.mock('domain/user');
 jest.mock('api');
+
+const mockErrorNotification = jest.fn();
+const mockSuccessNotification = jest.fn();
+
+jest.mock('hooks/useMessage', () => ({
+  useMessage: () => ({
+    notification: {
+      error: mockErrorNotification,
+      success: mockSuccessNotification,
+    },
+  }),
+}));
 
 const uploadFileMock = jest.fn().mockImplementation(() => ({ s3Key: 'some-string' }));
 (FilesService as jest.Mock).mockImplementation(() => ({ uploadFile: uploadFileMock }));
@@ -91,9 +102,7 @@ describe('useCourseTaskSubmit', () => {
       'and status code is $statusCode should trigger error notification',
       async ({ statusCode, message }: { statusCode: number; message: string }) => {
         const error = generateAxiosError(statusCode);
-        const notificationMock = jest.fn();
         jest.spyOn(CourseTaskVerificationsApi.prototype, 'createTaskVerification').mockRejectedValueOnce(error);
-        jest.spyOn(notification, 'error').mockImplementationOnce(() => notificationMock);
 
         const courseTask = generateCourseTask();
         const { submit } = renderUseCourseTaskSubmit(courseTask);
@@ -102,7 +111,7 @@ describe('useCourseTaskSubmit', () => {
           await submit({});
         });
 
-        expect(notification.error).toHaveBeenCalledWith({
+        expect(mockErrorNotification).toHaveBeenCalledWith({
           message,
           duration: statusCode === 401 ? null : undefined,
         });
@@ -120,7 +129,6 @@ describe('useCourseTaskSubmit', () => {
         const error = generateAxiosError(403);
         jest.spyOn(UserUtils, 'isExpelledStudent').mockImplementationOnce(() => isExpelled);
         jest.spyOn(CourseTaskVerificationsApi.prototype, 'createTaskVerification').mockRejectedValueOnce(error);
-        jest.spyOn(notification, 'error').mockImplementationOnce(() => jest.fn());
 
         const courseTask = generateCourseTask(CourseTaskDetailedDtoTypeEnum.Jstask, perHour);
         const { submit } = renderUseCourseTaskSubmit(courseTask);
@@ -129,7 +137,7 @@ describe('useCourseTaskSubmit', () => {
           await submit({});
         });
 
-        expect(notification.error).toHaveBeenCalledWith({
+        expect(mockErrorNotification).toHaveBeenCalledWith({
           message,
           duration: undefined,
         });

@@ -6,9 +6,17 @@ const mockUrl = 'https://example.com';
 const mockSwitchView = jest.fn();
 const mockCopyToClipboard = jest.fn();
 const mockOnRemoveConsent = jest.fn();
-
 jest.mock('react-use', () => ({
   useCopyToClipboard: () => [jest.fn(), mockCopyToClipboard],
+}));
+
+const mockSuccessNotification = jest.fn();
+jest.mock('hooks/useMessage', () => ({
+  useMessage: () => ({
+    notification: {
+      success: mockSuccessNotification,
+    },
+  }),
 }));
 
 describe('ActionButtons', () => {
@@ -45,10 +53,8 @@ describe('ActionButtons', () => {
 
     fireEvent.click(shareButton);
 
-    const successNotification = await screen.findByText('Copied to clipboard');
-
     expect(mockCopyToClipboard).toHaveBeenCalledWith(mockUrl);
-    expect(successNotification).toBeInTheDocument();
+    expect(mockSuccessNotification).toHaveBeenCalledWith({ message: 'Copied to clipboard' });
   });
 
   test('should not to clipboard by click on Share button if url is not provided', async () => {
@@ -58,10 +64,8 @@ describe('ActionButtons', () => {
 
     fireEvent.click(shareButton);
 
-    const successNotification = await screen.findByText('Copied to clipboard');
-
     expect(mockCopyToClipboard).not.toHaveBeenCalled();
-    expect(successNotification).toBeInTheDocument();
+    expect(mockSuccessNotification).not.toHaveBeenCalled();
   });
 
   test('should disable Share button should if CV is expired', () => {

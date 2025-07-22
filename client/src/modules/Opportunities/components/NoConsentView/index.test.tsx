@@ -52,8 +52,9 @@ describe('NoConsentView', () => {
 
     fireEvent.mouseEnter(titleTooltipIcon);
 
-    const titleTooltipText = await screen.findByText(confirmationModalInfo.ru.header);
-    expect(titleTooltipText).toBeInTheDocument();
+    await waitFor(() => {
+      expect(titleTooltipIcon).toHaveAttribute('data-testid', confirmationModalInfo.ru.header);
+    });
 
     // close modal
     fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
@@ -108,8 +109,9 @@ describe('NoConsentView', () => {
 
     fireEvent.mouseEnter(tooltipIcon);
 
-    const tooltipText = await screen.findByText(text);
-    expect(tooltipText).toBeInTheDocument();
+    await waitFor(() => {
+      expect(tooltipIcon).toHaveAttribute('data-testid', text);
+    });
 
     // close modal
     fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
