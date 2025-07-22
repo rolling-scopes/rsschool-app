@@ -1,4 +1,4 @@
-import { Button, Form, Input, message, Radio, Typography } from 'antd';
+import { Button, Form, Input, Radio, Typography } from 'antd';
 import { CoursesApi, MentorsApi, MentorStudentDto } from 'api';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
@@ -8,12 +8,14 @@ import { useMemo, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { useMessage } from 'hooks';
 
 type ActionOnStudent = 'expel' | 'unassign' | 'self-study';
 
 const coursesApi = new CoursesApi();
 
 function Page() {
+  const { message } = useMessage();
   const { course } = useActiveCourseContext();
   const session = useContext(SessionContext);
   const courseId = course.id;
