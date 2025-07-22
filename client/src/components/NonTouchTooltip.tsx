@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
 import { Tooltip, TooltipProps } from 'antd';
 
 type NonTouchTooltipProps = PropsWithChildren<{
@@ -7,8 +7,14 @@ type NonTouchTooltipProps = PropsWithChildren<{
 }>;
 
 export default function NonTouchTooltip({ title, placement, children }: NonTouchTooltipProps) {
-  const isTouchDevice = () => 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-  if (isTouchDevice()) {
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+  useEffect(() => {
+    const checkTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    setIsTouchDevice(checkTouchDevice);
+  }, []);
+
+  if (isTouchDevice) {
     return children;
   }
 
