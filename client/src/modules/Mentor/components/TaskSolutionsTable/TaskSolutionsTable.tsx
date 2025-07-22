@@ -35,12 +35,12 @@ function TaskSolutionsTable({ mentorId, onChange, data, loading, courseId }: Tas
 
   return (
     <>
-      <Row style={{ background: 'white' }}>
+      <Row>
         <Col span={24}>
           <TaskStatusTabs statuses={statuses} onTabChange={setActiveTab} activeTab={activeTab} />
         </Col>
       </Row>
-      <Row style={{ padding: '0 24px', background: 'white' }}>
+      <Row style={{ padding: '0 24px'}}>
         <Col span={24}>
           <Table
             locale={{
@@ -59,7 +59,7 @@ function TaskSolutionsTable({ mentorId, onChange, data, loading, courseId }: Tas
         </Col>
       </Row>
       {isReviewRandomTaskVisible && (
-        <Row style={{ background: 'white', padding: '24px 0' }} justify="center">
+        <Row style={{ padding: '24px 0' }} justify="center">
           <Col>
             <ReviewRandomTask mentorId={mentorId} courseId={courseId} onClick={onChange} />
           </Col>
