@@ -40,7 +40,6 @@ export function SubtaskCriteria({ subtaskData, updateCriteriaData }: SubtaskCrit
     <div style={{ border: '1px solid #F5F5F5', margin: '24px 0', backgroundColor }}>
       <div
         style={{
-          background: '#FAFAFA',
           borderBottom: '1px solid #F5F5F5',
           padding: '14px 12px',
         }}

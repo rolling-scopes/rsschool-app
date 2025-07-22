@@ -94,7 +94,7 @@ export function CrossCheckCriteriaForm({
   };
 
   return (
-    <div style={{ margin: '0 auto', backgroundColor: 'white' }}>
+    <div style={{ margin: '0 auto' }}>
       {criteriaData?.length ? (
         <Button style={{ marginBottom: '16px' }} type="primary" onClick={skipConfirmation}>
           {isSkipped ? 'Show' : 'Skip'} cross check form
