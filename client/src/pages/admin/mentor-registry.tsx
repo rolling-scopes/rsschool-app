@@ -233,19 +233,10 @@ function Page() {
     return tabs.map(el => tabRenderer(el, activeTab));
   }, [activeTab, allData]);
 
-  const handleTabChange = useCallback(() => {
-    if (activeTab === MentorRegistryTabsMode.New) {
-      setActiveTab(MentorRegistryTabsMode.All);
-      setAllData([]);
-      setData([]);
-      setCurrentPage(1);
-    } else {
-      setActiveTab(MentorRegistryTabsMode.New);
-      setAllData([]);
-      setData([]);
-      setCurrentPage(1);
-    }
-  }, [activeTab]);
+  const handleTabChange = useCallback((key: string) => {
+    setActiveTab(key as MentorRegistryTabsMode);
+    setCurrentPage(1);
+  }, []);
 
   const handleModalDataChange = (mode: ModalDataMode, record: MentorRegistryDto) => {
     setIsModalOpen(true);
@@ -260,7 +251,13 @@ function Page() {
   return (
     <AdminPageLayout title="Mentor Registry" loading={loading} courses={courses} styles={{ margin: 0, padding: 0 }}>
       <Row justify="space-between" style={{ padding: '0 24px', minHeight: 64 }} align="bottom" className="tabs">
-        <Tabs tabBarStyle={{ margin: '0' }} activeKey={activeTab} items={tabs} onChange={handleTabChange} />
+        <Tabs
+          className="custom-mentor-registry-tabs"
+          tabBarStyle={{ margin: '0' }}
+          activeKey={activeTab}
+          items={tabs}
+          onChange={handleTabChange}
+        />
         <Space style={{ alignSelf: 'center' }}>
           <Button icon={<FileExcelOutlined />} onClick={() => (window.location.href = `/api/registry/mentors/csv`)}>
             Export CSV
@@ -273,7 +270,7 @@ function Page() {
         </Space>
         <style jsx>{styles}</style>
       </Row>
-      <Col style={{ background: '#f0f2f5', padding: 24 }}>
+      <Col style={{ padding: 24 }}>
         <Alert
           message={
             <>
@@ -347,6 +344,9 @@ export default function () {
 }
 
 export const styles = css`
+  :global(.custom-mentor-registry-tabs .ant-tabs-tab) {
+    min-width: 100px;
+  }
   @media (min-width: 575px) {
     .tabs {
       padding: '12px 24px 0';
