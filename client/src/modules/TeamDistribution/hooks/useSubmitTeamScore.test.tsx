@@ -1,15 +1,20 @@
 import { useSubmitTeamScore } from './useSubmitTeamScore';
 import { TeamDistributionApi } from 'api';
-import { message } from 'antd';
 import { renderHook } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 
 jest.mock('api');
-jest.mock('antd', () => ({
-  message: {
-    error: jest.fn(),
-    success: jest.fn(),
-  },
+
+const mockError = jest.fn();
+const mockSuccess = jest.fn();
+
+jest.mock('hooks/useMessage', () => ({
+  useMessage: () => ({
+    message: {
+      error: mockError,
+      success: mockSuccess,
+    },
+  }),
 }));
 
 describe('useSubmitTeamScore', () => {
@@ -43,8 +48,8 @@ describe('useSubmitTeamScore', () => {
 
     expect(TeamDistributionApi.prototype.submitScore).toHaveBeenCalledTimes(0);
     expect(result.current.taskId).toBe(null);
-    expect(message.success).toHaveBeenCalledTimes(0);
-    expect(message.error).toHaveBeenCalledWith('Please select a task before submitting.');
+    expect(mockSuccess).toHaveBeenCalledTimes(0);
+    expect(mockError).toHaveBeenCalledWith('Please select a task before submitting.');
   });
 
   it('should handle successful score submission', async () => {
@@ -62,7 +67,7 @@ describe('useSubmitTeamScore', () => {
 
     expect(TeamDistributionApi.prototype.submitScore).toHaveBeenCalledWith(1, 2, 3);
     expect(result.current.taskId).toBe(null);
-    expect(message.success).toHaveBeenCalledWith('Score submitted successfully.');
+    expect(mockSuccess).toHaveBeenCalledWith('Score submitted successfully.');
   });
 
   it('should handle failed score submission', async () => {
@@ -78,6 +83,6 @@ describe('useSubmitTeamScore', () => {
       result.current.handleSubmit();
     });
 
-    expect(message.error).toHaveBeenCalledWith('Error occurred while submitting score.');
+    expect(mockError).toHaveBeenCalledWith('Error occurred while submitting score.');
   });
 });

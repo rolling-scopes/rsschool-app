@@ -1,4 +1,4 @@
-import { Alert, Button, Col, Divider, Form, message, notification, Row, Spin, Typography } from 'antd';
+import { Alert, Button, Col, Divider, Form, notification, Row, Spin, Typography } from 'antd';
 import { Comment } from '@ant-design/compatible';
 import PreparedComment, { markdownLabel } from 'components/Forms/PreparedComment';
 import { ScoreIcon } from 'components/Icons/ScoreIcon';
@@ -14,6 +14,7 @@ import { MessageSendingPanel } from './MessageSendingPanel';
 import { UserAvatar } from './UserAvatar';
 import { Username } from './Username';
 import { CrossCheckCriteriaDataDto, CrossCheckMessageDtoRoleEnum, CrossCheckSolutionReviewDto } from 'api';
+import { useMessage } from 'hooks';
 
 const { Text } = Typography;
 
@@ -62,6 +63,7 @@ function SolutionReview(props: SolutionReviewProps) {
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const amountUnreadMessages = getAmountUnreadMessages(currentRole, messages);
   const howManyUnreadMessagesText = getHowManyUnreadMessagesText(amountUnreadMessages);
+  const { message } = useMessage();
 
   useEffect(() => {
     if (!courseTaskId || !amountUnreadMessages) return;

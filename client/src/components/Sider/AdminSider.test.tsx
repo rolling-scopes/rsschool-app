@@ -48,6 +48,7 @@ describe('AdminSider', () => {
       minStudentsPerMentor: 5,
       certificateThreshold: 60,
       wearecommunityUrl: null,
+      certificateDisciplines: null,
     },
   ];
 
@@ -56,7 +57,6 @@ describe('AdminSider', () => {
     githubId: 'test-user',
     isAdmin: true,
     isHirer: false,
-    isActivist: false,
     courses: {},
   };
 
