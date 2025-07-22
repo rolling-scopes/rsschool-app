@@ -6,12 +6,13 @@ import { useCallback, useEffect, useState } from 'react';
 import { CdnService } from 'services/cdn';
 import { GeneralSection, DoneSection } from 'modules/Registry/components';
 import { Location } from '@common/models';
-import { Form, message, Modal, Typography } from 'antd';
+import { Form, Modal, Typography } from 'antd';
 import { useRouter } from 'next/router';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { DisciplinesApi, ProfileApi } from 'api';
 import { TYPES } from 'configs/registry';
 import { ERROR_MESSAGES } from 'modules/Registry/constants';
+import { useMessage } from 'hooks';
 
 const { Title, Text } = Typography;
 
@@ -28,6 +29,7 @@ const userService = new UserService();
 const disciplinesApi = new DisciplinesApi();
 
 export function useStudentData(githubId: string, courseAlias: string | undefined) {
+  const { message } = useMessage();
   const router = useRouter();
   const [form] = Form.useForm<StudentFormData>();
   const [registered, setRegistered] = useState<boolean | null>(null);

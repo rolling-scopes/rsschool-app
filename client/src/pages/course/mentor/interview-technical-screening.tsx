@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, ChangeEvent, useContext } from 'react';
 import { useAsync } from 'react-use';
-import { Form, Typography, Rate, Input, Radio, Button, message, Divider, InputNumber, Space } from 'antd';
+import { Form, Typography, Rate, Input, Radio, Button, Divider, InputNumber, Space } from 'antd';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { CourseRole } from 'services/models';
 import { StudentBasic } from 'services/models';
@@ -12,6 +12,7 @@ import set from 'lodash/set';
 import { useLoading } from 'components/useLoading';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { useMessage } from 'hooks';
 
 type HandleChangeValue = (skillName: string) => (value: any) => void;
 
@@ -258,6 +259,7 @@ const renderResume = (handleSkillChange: HandleChangeValue) => (
 );
 
 function Page() {
+  const { message } = useMessage();
   const { course } = useActiveCourseContext();
   const session = useContext(SessionContext);
   const courseId = course.id;

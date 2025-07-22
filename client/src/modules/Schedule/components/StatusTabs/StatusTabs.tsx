@@ -22,7 +22,7 @@ const StatusTabs: FC<StatusTabsProps> = ({ statuses, activeTab, onTabChange, chi
   const getActiveTab = () => (!activeTab || Array.isArray(activeTab) ? ALL_TAB_KEY : activeTab);
 
   return (
-    <Row gutter={mobileView ? 0 : 48} style={{ background: 'white' }}>
+    <Row gutter={mobileView ? 0 : 48}>
       <Col span={24}>
         <Tabs
           tabBarStyle={{ marginBottom: 0 }}

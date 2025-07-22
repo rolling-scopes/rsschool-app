@@ -23,6 +23,8 @@ import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { Course } from 'services/models';
+import { PublicSvgIcon } from '@client/components/Icons';
+
 dayjs.extend(utc);
 
 const rsAppStudentRegistryBaseURL = 'https://app.rs.school/registry/student?course=';
@@ -242,8 +244,9 @@ export function CourseModal(props: CourseModalProps) {
                   options={courseIcons.map(icon => ({
                     value: icon.id,
                     label: (
-                      <Flex>
-                        <img src={icon.active} /> <span style={{ paddingLeft: 4 }}>{icon.label}</span>
+                      <Flex gap="small" align="center">
+                        <PublicSvgIcon src={icon.active} alt={icon.label} size={'2.5ch'} />
+                        <span>{icon.label}</span>
                       </Flex>
                     ),
                   }))}
