@@ -83,7 +83,6 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
     // FIXME: remove the if statement after enabling auto-theme above
     if ((storedTheme as string) === 'auto') {
-      console.log('auto theme');
       setAuto(true);
     }
   }, []);
