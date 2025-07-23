@@ -28,9 +28,7 @@ export default function ThemeSwitch() {
   const items: MenuProps['items'] = [
     {
       label: (
-        <NonTouchTooltip title={THEME_CONFIG[AppTheme.Dark].label}>
-          {THEME_CONFIG[AppTheme.Dark].icon}
-        </NonTouchTooltip>
+        <NonTouchTooltip title={THEME_CONFIG[AppTheme.Dark].label}>{THEME_CONFIG[AppTheme.Dark].icon}</NonTouchTooltip>
       ),
       key: 'dark',
       onClick: () => themeChange(AppTheme.Dark),
@@ -45,11 +43,7 @@ export default function ThemeSwitch() {
       onClick: () => themeChange(AppTheme.Light),
     },
     {
-      label: (
-        <NonTouchTooltip title={THEME_CONFIG.auto.label}>
-          {THEME_CONFIG.auto.icon}
-        </NonTouchTooltip>
-      ),
+      label: <NonTouchTooltip title={THEME_CONFIG.auto.label}>{THEME_CONFIG.auto.icon}</NonTouchTooltip>,
       key: 'auto',
       onClick: () => changeAutoTheme(),
     },

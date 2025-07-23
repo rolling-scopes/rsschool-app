@@ -40,7 +40,7 @@ function TaskSolutionsTable({ mentorId, onChange, data, loading, courseId }: Tas
           <TaskStatusTabs statuses={statuses} onTabChange={setActiveTab} activeTab={activeTab} />
         </Col>
       </Row>
-      <Row style={{ padding: '0 24px'}}>
+      <Row style={{ padding: '0 24px' }}>
         <Col span={24}>
           <Table
             locale={{
