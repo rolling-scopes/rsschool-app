@@ -79,6 +79,8 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
+  const { token } = theme.useToken();
+
   return (
     <ThemeContext.Provider
       value={{
@@ -93,6 +95,28 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
           algorithm: appTheme === AppTheme.Dark ? theme.darkAlgorithm : theme.defaultAlgorithm,
         }}
       >
+        <style jsx global>{`
+          :root::-webkit-scrollbar-thumb {
+            background: ${token.colorTextLabel};
+          }
+
+          :global(.ant-table) {
+            :global(.ant-table-container) {
+              :global(.ant-table-body),
+              :global(.ant-table-content) {
+                scrollbar-width: thin;
+                scrollbar-color: ${token.colorTextLabel} transparent;
+                scrollbar-gutter: stable;
+              }
+            }
+          }
+
+          :global(.ant-modal-content) {
+            scrollbar-width: thin;
+            scrollbar-color: ${token.colorTextLabel} transparent;
+            scrollbar-gutter: stable;
+          }
+        `}</style>
         {children}
       </ConfigProvider>
     </ThemeContext.Provider>

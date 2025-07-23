@@ -1,3 +1,7 @@
+:root {
+  --scroll-size: 8px;
+}
+
 :root:has(.dark) {
   --bg-primary-color: #151515;
   --text-primary-color: #ffffff;
@@ -6,6 +10,20 @@
 :root:has(.light) {
   --bg-primary-color: #fff;
   --text-primary-color: #000;
+}
+
+:root::-webkit-scrollbar {
+  width: var(--scroll-size);
+  height: var(--scroll-size);
+  background: none;
+}
+
+:root::-webkit-scrollbar-thumb {
+  border-radius: calc(var(--scroll-size) / 2);
+}
+
+:root::-webkit-scrollbar-track {
+  margin: calc(var(--scroll-size) / 2);
 }
 
 .dark .header-logo,
