@@ -104,7 +104,8 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
         }}
       >
         <style jsx global>{`
-          :root::-webkit-scrollbar-thumb {
+          :root::-webkit-scrollbar-thumb,
+          textarea::-webkit-scrollbar-thumb {
             background: ${token.colorTextLabel};
           }
 

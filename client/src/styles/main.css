@@ -12,17 +12,20 @@
   --text-primary-color: #000;
 }
 
-:root::-webkit-scrollbar {
+:root::-webkit-scrollbar,
+textarea::-webkit-scrollbar {
   width: var(--scroll-size);
   height: var(--scroll-size);
   background: none;
 }
 
-:root::-webkit-scrollbar-thumb {
+:root::-webkit-scrollbar-thumb,
+textarea::-webkit-scrollbar-thumb {
   border-radius: calc(var(--scroll-size) / 2);
 }
 
-:root::-webkit-scrollbar-track {
+:root::-webkit-scrollbar-track,
+textarea::-webkit-scrollbar-track {
   margin: calc(var(--scroll-size) / 2);
 }
 
