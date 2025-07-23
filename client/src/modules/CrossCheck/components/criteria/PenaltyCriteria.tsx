@@ -1,5 +1,5 @@
 import React from 'react';
-import { Radio, RadioChangeEvent, Typography } from 'antd';
+import { Radio, RadioChangeEvent, theme, Typography } from 'antd';
 import { CrossCheckCriteriaDataDto } from 'api';
 
 const { Text } = Typography;
@@ -25,6 +25,8 @@ export function PenaltyCriteria({ penaltyData, updateCriteriaData }: PenaltyCrit
     updateCriteriaData(updatedEntry);
   };
 
+  const { token } = theme.useToken();
+
   return (
     <div
       style={{
@@ -32,8 +34,8 @@ export function PenaltyCriteria({ penaltyData, updateCriteriaData }: PenaltyCrit
         justifyContent: 'space-between',
         alignItems: 'center',
         gap: '10px',
-        background: '#FAFAFA',
-        borderBottom: '1px solid #F5F5F5',
+        background: token.colorBgLayout,
+        borderBottom: `1px solid ${token.colorBorder}`,
         margin: '24px 0',
         padding: '14px 12px',
       }}
