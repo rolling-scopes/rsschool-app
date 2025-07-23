@@ -48,7 +48,10 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
     setAuto(prev => {
       const newAutoState = !prev;
       if (newAutoState) {
-        localStorage.removeItem('app-theme');
+        localStorage.setItem('app-theme', 'auto');
+        // FIXME: remove the line above and uncomment the line bellow
+        //  after enabling auto-theme
+        // localStorage.removeItem('app-theme');
         applyTheme(getSystemTheme());
       }
       return newAutoState;
@@ -76,6 +79,12 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
       applyTheme(storedTheme);
     } else {
       // setAuto(true); // FIXME: temporary disable set auto theme by default
+    }
+
+    // FIXME: remove the if statement after enabling auto-theme above
+    if ((storedTheme as string) === 'auto') {
+      console.log('auto theme');
+      setAuto(true);
     }
   }, []);
 
