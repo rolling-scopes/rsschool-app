@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { List, Typography } from 'antd';
+import { List, theme, Typography } from 'antd';
 import ContactsOutlined from '@ant-design/icons/ContactsOutlined';
 import isEqual from 'lodash/isEqual';
 import { UpdateProfileInfoDto } from 'api';
@@ -144,8 +144,10 @@ const ContactsCard = ({ connections, data, isEditingModeEnabled, sendConfirmatio
     setIsSaveDisabled(!readyToUpdate);
   }, [hasError, values, displayValues]);
 
+  const {token} = theme.useToken()
+
   const noDataDescriptionWithNote: JSX.Element = (
-    <Paragraph style={{ color: 'rgba(0, 0, 0, 0.25)' }}>
+    <Paragraph style={{ color: token.colorTextDisabled }}>
       Contacts aren't filled in.
       <br />
       <br />
