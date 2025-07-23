@@ -33,7 +33,6 @@ textarea {
   resize: none !important;
 }
 
-
 .dark .header-logo,
 .dark .login-image {
   filter: invert(1);
