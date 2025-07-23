@@ -75,7 +75,7 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
       setAuto(false);
       applyTheme(storedTheme);
     } else {
-      setAuto(true);
+      // setAuto(true); // FIXME: temporary disable set auto theme by default
     }
   }, []);
 
