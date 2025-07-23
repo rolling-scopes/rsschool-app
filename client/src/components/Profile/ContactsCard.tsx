@@ -144,7 +144,7 @@ const ContactsCard = ({ connections, data, isEditingModeEnabled, sendConfirmatio
     setIsSaveDisabled(!readyToUpdate);
   }, [hasError, values, displayValues]);
 
-  const {token} = theme.useToken()
+  const { token } = theme.useToken();
 
   const noDataDescriptionWithNote: JSX.Element = (
     <Paragraph style={{ color: token.colorTextDisabled }}>
