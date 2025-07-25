@@ -7,7 +7,7 @@ type Props = { loading: boolean; title?: string; children?: any };
 
 export function RegistrationPageLayout(props: Props) {
   return (
-    <Layout style={{ minHeight: '100vh', backgroundColor: '#F0F2F5' }}>
+    <Layout style={{ minHeight: '100vh' }}>
       <Header />
       <Content style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <Spin spinning={props.loading}>{props.children}</Spin>
