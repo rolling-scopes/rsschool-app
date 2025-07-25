@@ -1,5 +1,5 @@
 import { Button, Col, Form, message, Result, Row, Typography } from 'antd';
-import { CourseDto as Course, DiscordServersApi } from 'api';
+import { AuthApi, CourseDto as Course, DiscordServersApi } from 'api';
 import { PageLayout, PageLayoutSimple } from 'components/PageLayout';
 import { useRouter } from 'next/router';
 import { useMemo, useState, useContext, useEffect } from 'react';
@@ -20,6 +20,7 @@ type SuccessComponentProps = {
 
 const mentorRegistry = new MentorRegistryService();
 const discordServer = new DiscordServersApi();
+const authApi = new AuthApi();
 
 function Page() {
   const session = useContext(SessionContext);
@@ -90,6 +91,8 @@ function Page() {
         preferedStudentsLocation: values.preferedStudentsLocation,
         students: values.students?.map((s: any) => Number(s.value)) ?? [],
       });
+
+      await authApi.clearAuthUserSessionCache(session.id);
       setSuccess(true);
     } catch {
       message.error('An error occurred. Please try later.');

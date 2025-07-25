@@ -1,4 +1,17 @@
-import { Body, Controller, Get, Logger, Post, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  ForbiddenException,
+  Get,
+  Logger,
+  Param,
+  ParseIntPipe,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
@@ -77,5 +90,13 @@ export class AuthController {
     return {
       link,
     };
+  }
+
+  @Delete('cache/:userId')
+  @ApiOperation({ operationId: 'clearAuthUserSessionCache' })
+  @UseGuards(DefaultGuard)
+  async clearAuthUserSessionCache(@Param('userId', ParseIntPipe) userId: number, @Req() req: CurrentRequest) {
+    if (req.user.id !== userId) throw new ForbiddenException();
+    await this.authService.clearAuthUserSessionCache(userId);
   }
 }
