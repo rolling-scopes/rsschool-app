@@ -18,7 +18,7 @@ function MentorDashboard() {
       {data?.length ? (
         <TaskSolutionsTable data={data} loading={loading} onChange={run} mentorId={mentorId} courseId={courseId} />
       ) : (
-        <Instructions discordServerId={discordServerId} />
+        <Instructions courseId={courseId} discordServerId={discordServerId} />
       )}
     </PageLayout>
   );

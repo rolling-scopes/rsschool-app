@@ -5,6 +5,7 @@ import { DiscordServersApi } from 'api';
 import { useAsyncEffect } from 'ahooks';
 
 interface InstructionsProps {
+  courseId: number;
   discordServerId: number;
 }
 
@@ -13,14 +14,14 @@ const { Text } = Typography;
 
 const discordServer = new DiscordServersApi();
 
-function Instructions({ discordServerId }: InstructionsProps) {
+function Instructions({ courseId, discordServerId }: InstructionsProps) {
   const { title, description } = INSTRUCTIONS_TEXT;
   const [steps, setSteps] = useState(INSTRUCTIONS_TEXT.steps);
 
   useAsyncEffect(async () => {
     if (!discordServerId) return;
 
-    const response = await discordServer.getInviteLinkByDiscordServerId(discordServerId);
+    const response = await discordServer.getInviteLinkByDiscordServerId(courseId, discordServerId);
     const telegramInviteURL = response.data;
 
     const updatedSteps = steps.map(step => {
