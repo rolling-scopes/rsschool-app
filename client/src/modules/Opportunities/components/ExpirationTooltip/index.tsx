@@ -23,6 +23,8 @@ type Props = {
 
 export const ExpirationTooltip = ({ expirationDate, expirationState, publicMode }: Props) => {
   const { notification } = useMessage();
+  const [modal, contextHolder] = Modal.useModal();
+
   const textStyle = { fontSize: '12px' };
 
   useEffectOnce(() => {
@@ -58,7 +60,7 @@ export const ExpirationTooltip = ({ expirationDate, expirationState, publicMode 
         <ExclamationCircleTwoTone twoToneColor="#FFA940" />
       );
 
-    Modal.confirm({
+    modal.confirm({
       icon,
       title,
       content,
@@ -147,8 +149,11 @@ export const ExpirationTooltip = ({ expirationDate, expirationState, publicMode 
   }
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }} className="no-print">
-      {content}
-    </div>
+    <>
+      {contextHolder}
+      <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }} className="no-print">
+        {content}
+      </div>
+    </>
   );
 };

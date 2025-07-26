@@ -4,11 +4,17 @@ import { Typography, List, Button, Progress, Modal, Divider } from 'antd';
 import CommonCard from './CommonCard';
 import StudentStatsModal from './StudentStatsModal';
 import { StudentStats } from '@common/models/profile';
-import { BookOutlined, FullscreenOutlined, SafetyCertificateTwoTone } from '@ant-design/icons';
+import {
+  BookOutlined,
+  FullscreenOutlined,
+  LogoutOutlined,
+  ReloadOutlined,
+  SafetyCertificateTwoTone,
+  WarningTwoTone,
+} from '@ant-design/icons';
 import { CoursesApi } from 'api';
-import { WarningTwoTone, ReloadOutlined, LogoutOutlined } from '@ant-design/icons';
 
-const { Text, Paragraph } = Typography;
+const { Text, Paragraph, Title } = Typography;
 
 type Props = {
   data: StudentStats[];
@@ -22,6 +28,7 @@ type State = {
   scoredTasks: number[];
   isStudentStatsModalVisible: boolean;
   isExpelConfirmationModalVisible: boolean;
+  courseId?: number;
 };
 
 const coursesService = new CoursesApi();
@@ -37,10 +44,12 @@ class StudentStatsCard extends React.Component<Props, State> {
     scoredTasks: [],
     isStudentStatsModalVisible: false,
     isExpelConfirmationModalVisible: false,
+    courseId: undefined,
   };
 
   shouldComponentUpdate = (_nextProps: Props, nextState: State) =>
     !isEqual(nextState.isStudentStatsModalVisible, this.state.isStudentStatsModalVisible) ||
+    !isEqual(nextState.isExpelConfirmationModalVisible, this.state.isExpelConfirmationModalVisible) ||
     !isEqual(nextState.coursesProgress, this.state.coursesProgress);
 
   private showStudentStatsModal = (courseIndex: number) => {
@@ -48,31 +57,9 @@ class StudentStatsCard extends React.Component<Props, State> {
   };
 
   private showExpelConfirmationModal = (courseId: number) => {
-    const { isExpelConfirmationModalVisible } = this.state;
-
-    const content = (
-      <>
-        <Divider />
-        {messages.map((text, i) => (
-          <Paragraph key={i}>{text}</Paragraph>
-        ))}
-        <Divider />
-        {messagesRu.map((text, i) => (
-          <Paragraph key={i}>{text}</Paragraph>
-        ))}
-      </>
-    );
-
-    Modal.confirm({
-      icon: <WarningTwoTone twoToneColor="red" />,
-      title: 'Leaving Course ?',
-      content: content,
-      onOk: () => this.selfExpelStudent(courseId),
-      visible: isExpelConfirmationModalVisible,
-      onCancel: () => this.hideExpelConfirmationModal(),
-      okButtonProps: { danger: true },
-      okText: 'Leave Course',
-      cancelText: 'Continue studying',
+    this.setState({
+      isExpelConfirmationModalVisible: true,
+      courseId,
     });
   };
 
@@ -81,10 +68,14 @@ class StudentStatsCard extends React.Component<Props, State> {
   };
 
   private hideExpelConfirmationModal = () => {
-    this.setState({ isExpelConfirmationModalVisible: false });
+    this.setState({
+      isExpelConfirmationModalVisible: false,
+      courseId: undefined,
+    });
   };
 
-  private selfExpelStudent = async (courseId: number) => {
+  private selfExpelStudent = async (courseId?: number) => {
+    if (!courseId) return;
     await coursesService.leaveCourse(courseId);
     window.location.reload();
   };
@@ -116,6 +107,30 @@ class StudentStatsCard extends React.Component<Props, State> {
           isVisible={isStudentStatsModalVisible}
           onHide={this.hideStudentStatsModal}
         />
+        <Modal
+          title={
+            <Title level={4}>
+              <WarningTwoTone twoToneColor="red" /> Leaving Course ?
+            </Title>
+          }
+          open={this.state.isExpelConfirmationModalVisible}
+          onOk={this.selfExpelStudent.bind(this, this.state.courseId)}
+          okText="Leave Course"
+          okButtonProps={{ danger: true }}
+          onCancel={this.hideExpelConfirmationModal}
+          cancelText="Continue studying"
+        >
+          <>
+            <Divider />
+            {messages.map((text, i) => (
+              <Paragraph key={i}>{text}</Paragraph>
+            ))}
+            <Divider />
+            {messagesRu.map((text, i) => (
+              <Paragraph key={i}>{text}</Paragraph>
+            ))}
+          </>
+        </Modal>
         <CommonCard
           title="Student Statistics"
           icon={<BookOutlined />}

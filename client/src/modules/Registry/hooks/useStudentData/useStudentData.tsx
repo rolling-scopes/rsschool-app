@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { CdnService } from 'services/cdn';
 import { GeneralSection, DoneSection } from 'modules/Registry/components';
 import { Location } from '@common/models';
-import { Form, Modal, Typography } from 'antd';
+import { Form, Modal, theme, Typography } from 'antd';
 import { useRouter } from 'next/router';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { DisciplinesApi, ProfileApi } from 'api';
@@ -37,6 +37,9 @@ export function useStudentData(githubId: string, courseAlias: string | undefined
   const [location, setLocation] = useState(null as Location | null);
   const [loading, setLoading] = useState(false);
   const [missingDisciplines, setMissingDisciplines] = useState('');
+  const [modal, modalContext] = Modal.useModal();
+
+  const { token } = theme.useToken();
 
   const { value: student, loading: dataLoading } = useAsync(async () => {
     const [profile, profileInfo, courses] = await Promise.all([
@@ -106,8 +109,8 @@ export function useStudentData(githubId: string, courseAlias: string | undefined
       };
 
       if (student?.registeredForCourses.length) {
-        Modal.confirm({
-          icon: <ExclamationCircleOutlined size={16} style={{ color: '#1890FF' }} />,
+        modal.confirm({
+          icon: <ExclamationCircleOutlined size={16} style={{ color: token.colorInfo }} />,
           title: (
             <Title level={5} style={{ verticalAlign: 'middle' }}>
               Course registration warning
@@ -191,6 +194,7 @@ export function useStudentData(githubId: string, courseAlias: string | undefined
     currentStep,
     form,
     handleSubmit,
+    modalContext,
     missingDisciplines,
   } as const;
 }

@@ -33,6 +33,7 @@ export const confirmationModalInfo = {
 
 export const NoConsentView = (props: Props) => {
   const { isOwner, giveConsent } = props;
+  const [modal, contextHolder] = Modal.useModal();
 
   const confirmationModalContent = (
     <List
@@ -57,7 +58,7 @@ export const NoConsentView = (props: Props) => {
   );
 
   const showConfirmationModal = () => {
-    Modal.confirm({
+    modal.confirm({
       icon: null,
       content: confirmationModalContent,
       maskClosable: true,
@@ -68,23 +69,30 @@ export const NoConsentView = (props: Props) => {
     });
   };
 
-  return isOwner ? (
-    <Result
-      icon={<span></span>}
-      title={<Title>You don't have a CV yet.</Title>}
-      subTitle={<Text style={{ fontSize: '24px' }}>You can create a public CV that can be shared with employers.</Text>}
-      extra={
-        <Button
-          style={{ width: '140px', height: '44px' }}
-          type="primary"
-          htmlType="button"
-          onClick={showConfirmationModal}
-        >
-          <PlusOutlined /> Create CV
-        </Button>
-      }
-    />
-  ) : (
-    <Result status={403} title="This user doesn't have CV yet" />
+  return (
+    <>
+      {contextHolder}
+      {isOwner ? (
+        <Result
+          icon={<span></span>}
+          title={<Title>You don't have a CV yet.</Title>}
+          subTitle={
+            <Text style={{ fontSize: '24px' }}>You can create a public CV that can be shared with employers.</Text>
+          }
+          extra={
+            <Button
+              style={{ width: '140px', height: '44px' }}
+              type="primary"
+              htmlType="button"
+              onClick={showConfirmationModal}
+            >
+              <PlusOutlined /> Create CV
+            </Button>
+          }
+        />
+      ) : (
+        <Result status={403} title="This user doesn't have CV yet" />
+      )}
+    </>
   );
 };

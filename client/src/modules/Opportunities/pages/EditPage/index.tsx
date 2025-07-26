@@ -21,6 +21,7 @@ export function EditPage() {
   const [editMode, setEditMode] = useState<boolean>(false);
   const [consent, setConsent] = useState<boolean>(false);
   const [resume, setResume] = useState<ResumeDto | null>(null);
+  const [modal, contextHolder] = Modal.useModal();
 
   const switchView = () => setEditMode(!editMode);
 
@@ -69,7 +70,7 @@ export function EditPage() {
       </>
     );
 
-    Modal.info({
+    modal.info({
       title,
       content,
       okText: 'Got it',
@@ -85,6 +86,7 @@ export function EditPage() {
 
   return (
     <>
+      {contextHolder}
       <Head>
         <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700&display=swap" rel="stylesheet" />
       </Head>

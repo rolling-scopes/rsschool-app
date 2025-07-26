@@ -1,10 +1,10 @@
-import { Form, Input, message, Space, Typography } from 'antd';
-import TextArea from 'antd/lib/input/TextArea';
-import Modal from 'antd/lib/modal/Modal';
+import { Form, Input, message, Space, Typography, Modal } from 'antd';
 import { CreateTeamDto, TeamDto } from 'api';
 import { StudentSearch } from 'components/StudentSearch';
 import { useLoading } from 'components/useLoading';
 import { urlPattern } from 'services/validators';
+
+const { TextArea } = Input;
 
 type Props = {
   data?: Partial<TeamDto>;

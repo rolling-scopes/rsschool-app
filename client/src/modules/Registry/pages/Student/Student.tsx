@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { RegistrationPageLayout } from 'components/RegistrationPageLayout';
 import { useStudentData } from 'modules/Registry/hooks';
-import { NoCourses, RegistrationForm, CourseCertificateAlert } from 'modules/Registry/components';
+import { CourseCertificateAlert, NoCourses, RegistrationForm } from 'modules/Registry/components';
 import { SessionContext } from 'modules/Course/contexts';
 
 type Props = {
@@ -10,10 +10,8 @@ type Props = {
 
 export function StudentRegistry({ courseAlias }: Props) {
   const session = useContext(SessionContext);
-  const { courses, loading, registered, steps, currentStep, form, handleSubmit, missingDisciplines } = useStudentData(
-    session.githubId,
-    courseAlias,
-  );
+  const { courses, loading, registered, steps, currentStep, form, handleSubmit, modalContext, missingDisciplines } =
+    useStudentData(session.githubId, courseAlias);
 
   let content: React.ReactNode;
   if (loading || registered) {
@@ -34,5 +32,10 @@ export function StudentRegistry({ courseAlias }: Props) {
     );
   }
 
-  return <RegistrationPageLayout loading={loading}>{content}</RegistrationPageLayout>;
+  return (
+    <RegistrationPageLayout loading={loading}>
+      {modalContext}
+      {content}
+    </RegistrationPageLayout>
+  );
 }

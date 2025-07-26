@@ -1,5 +1,5 @@
 import { GithubFilled, WarningTwoTone } from '@ant-design/icons';
-import { Button, Col, Modal, Row, Spin, Typography } from 'antd';
+import { Button, Col, Modal, Row, Spin, theme, Typography } from 'antd';
 import { useLoading } from 'components/useLoading';
 import CommonCard from './CommonDashboardCard';
 
@@ -18,12 +18,14 @@ export function RepositoryCard(props: Props) {
   const repoName = getGithubRepoName(url);
   const hasRepo = !!url;
   const [loading, withLoading] = useLoading(false);
+  const [modal, contextHolder] = Modal.useModal();
+  const { token } = theme.useToken();
 
   const showInformation = () => {
-    Modal.info({
+    modal.info({
       okText: 'Got it',
-      icon: <WarningTwoTone twoToneColor="red" />,
-      title: <h3 style={{ color: 'red' }}>Important</h3>,
+      icon: <WarningTwoTone twoToneColor={token.colorWarning} />,
+      title: <h3 style={{ color: token.colorWarning }}>Important</h3>,
       content: (
         <div>
           <p>GitHub will automatically send you an invite to access your private repository.</p>
@@ -57,6 +59,7 @@ export function RepositoryCard(props: Props) {
 
   return (
     <Spin spinning={loading}>
+      {contextHolder}
       <CommonCard
         title="Your repository"
         content={
@@ -74,7 +77,7 @@ export function RepositoryCard(props: Props) {
                   </div>
                 ) : (
                   <div style={{ marginBottom: 7 }}>
-                    <Text style={{ color: '#ff5500' }} strong>
+                    <Text style={{ color: token.colorWarning }} strong>
                       {`Your repository hasn't been created yet`}
                     </Text>
                   </div>
