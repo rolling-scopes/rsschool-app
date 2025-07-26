@@ -180,7 +180,7 @@ function Teams() {
           handleJoinTeam={handleJoinTeam}
         />
       ) : null}
-      <Row style={{ background: 'white', padding: '24px', margin: 24 }}>{contentRenderers()}</Row>
+      <Row style={{ padding: '24px', margin: 24 }}>{contentRenderers()}</Row>
     </PageLayout>
   );
 }
