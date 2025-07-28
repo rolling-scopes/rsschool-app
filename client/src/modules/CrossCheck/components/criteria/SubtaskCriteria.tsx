@@ -42,7 +42,7 @@ export function SubtaskCriteria({ subtaskData, updateCriteriaData }: SubtaskCrit
     <div style={{ border: `1px solid ${token.colorBorder}`, margin: '24px 0', background: token[colorToken] }}>
       <div
         style={{
-          borderBottom: '1px solid #F5F5F5',
+          borderBottom: `1px solid ${token.colorBorder}`,
           padding: '14px 12px',
         }}
       >
