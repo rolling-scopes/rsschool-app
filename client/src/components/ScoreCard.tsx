@@ -1,3 +1,5 @@
+import { theme } from 'antd';
+
 type Props = {
   value: number;
   selected: boolean;
@@ -11,6 +13,7 @@ export const ScoreCard: React.FC<Props> = ({ value, selected, onSelect }) => {
     if (value <= 7) return 'selected-yellow';
     return 'selected-green';
   };
+  const { token } = theme.useToken();
   return (
     <>
       <div className={`card ${selected ? 'selected' : ''} ${getSelectedClass()}`} onClick={() => onSelect(value)}>
@@ -23,8 +26,8 @@ export const ScoreCard: React.FC<Props> = ({ value, selected, onSelect }) => {
           transform-style: preserve-3d;
           width: 56px;
           height: 40px;
-          background: white;
-          border: 2px solid #ccc;
+          background: ${token.colorBgContainerDisabled};
+          border: 2px solid ${token.colorBorder};
           border-radius: 12px;
           display: flex;
           justify-content: center;
@@ -48,18 +51,18 @@ export const ScoreCard: React.FC<Props> = ({ value, selected, onSelect }) => {
         }
 
         .selected-red {
-          border-color: #ff4d4f;
-          background: #fff1f0;
+          border-color: ${token.colorError};
+          background: ${token.colorErrorBg};
         }
 
         .selected-yellow {
-          border-color: #ffdb1f;
-          background: #fffbe6;
+          border-color: ${token.colorWarning};
+          background: ${token.colorWarningBg};
         }
 
         .selected-green {
-          border-color: #52c41a;
-          background: #f6ffed;
+          border-color: ${token.colorSuccess};
+          background: ${token.colorSuccessBg};
         }
 
         .card-stick {
@@ -75,15 +78,15 @@ export const ScoreCard: React.FC<Props> = ({ value, selected, onSelect }) => {
         }
 
         .selected-red .card-stick {
-          background: #ff4d4f;
+          background: ${token.colorError};
         }
 
         .selected-yellow .card-stick {
-          background: #ffdb1f;
+          background: ${token.colorWarning};
         }
 
         .selected-green .card-stick {
-          background: #52c41a;
+          background: ${token.colorSuccess};
         }
       `}</style>
     </>
