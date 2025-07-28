@@ -38,9 +38,10 @@ export function Actions({
 }: Props) {
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const endDateText = dateWithTimeZoneRenderer(timezone, 'YYYY-MM-DD HH:mm')(distribution.endDate);
+  const [modal, contextHolder] = Modal.useModal();
 
   const handleCancel = async () => {
-    Modal.confirm({
+    modal.confirm({
       title: 'Cancel registration',
       content: (
         <>
@@ -58,6 +59,7 @@ export function Actions({
 
   const renderRegistrationCancelSection = () => (
     <>
+      {contextHolder}
       You can{' '}
       <LinkButton type="danger" underline onClick={handleCancel}>
         Cancel

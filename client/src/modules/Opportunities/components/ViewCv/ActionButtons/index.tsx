@@ -18,6 +18,8 @@ type Props = {
 export const ActionButtons = ({ onRemoveConsent, switchView, url, isExpired }: Props) => {
   const { notification } = useMessage();
   const [, copyToClipboard] = useCopyToClipboard();
+  const [modal, contextHolder] = Modal.useModal();
+
   const showDeletionConfirmationModal = useCallback(() => {
     const title = (
       <>
@@ -52,7 +54,7 @@ export const ActionButtons = ({ onRemoveConsent, switchView, url, isExpired }: P
       </>
     );
 
-    Modal.confirm({
+    modal.confirm({
       icon: null,
       title: title,
       content: confirmationModalContent,
@@ -65,27 +67,30 @@ export const ActionButtons = ({ onRemoveConsent, switchView, url, isExpired }: P
   }, [onRemoveConsent]);
 
   return (
-    <Row justify="center" style={{ paddingTop: '10px' }} className="no-print">
-      <Button style={buttonStyle} type="primary" htmlType="button" onClick={switchView} icon={<EditOutlined />}>
-        Edit CV
-      </Button>
-      <Button
-        disabled={isExpired}
-        style={buttonStyle}
-        htmlType="button"
-        onClick={() => {
-          if (url) {
-            copyToClipboard(url);
-            notification.success({ message: 'Copied to clipboard' });
-          }
-        }}
-        icon={<ShareAltOutlined />}
-      >
-        Share
-      </Button>
-      <Button style={buttonStyle} htmlType="button" onClick={showDeletionConfirmationModal} icon={<DeleteOutlined />}>
-        Delete
-      </Button>
-    </Row>
+    <>
+      {contextHolder}
+      <Row justify="center" style={{ paddingTop: '10px' }} className="no-print">
+        <Button style={buttonStyle} type="primary" htmlType="button" onClick={switchView} icon={<EditOutlined />}>
+          Edit CV
+        </Button>
+        <Button
+          disabled={isExpired}
+          style={buttonStyle}
+          htmlType="button"
+          onClick={() => {
+            if (url) {
+              copyToClipboard(url);
+              notification.success({ message: 'Copied to clipboard' });
+            }
+          }}
+          icon={<ShareAltOutlined />}
+        >
+          Share
+        </Button>
+        <Button style={buttonStyle} htmlType="button" onClick={showDeletionConfirmationModal} icon={<DeleteOutlined />}>
+          Delete
+        </Button>
+      </Row>
+    </>
   );
 };
