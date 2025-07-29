@@ -1,6 +1,6 @@
 import * as React from 'react';
 import isEqual from 'lodash/isEqual';
-import { Typography, List, Button, Progress, Modal, Divider } from 'antd';
+import { Typography, List, Button, Progress } from 'antd';
 import CommonCard from './CommonCard';
 import StudentStatsModal from './StudentStatsModal';
 import { StudentStats } from '@common/models/profile';
@@ -10,11 +10,11 @@ import {
   LogoutOutlined,
   ReloadOutlined,
   SafetyCertificateTwoTone,
-  WarningTwoTone,
 } from '@ant-design/icons';
 import { CoursesApi } from 'api';
+import StudentLeaveCourse from '@client/components/Profile/StudentLeaveCourse';
 
-const { Text, Paragraph, Title } = Typography;
+const { Text } = Typography;
 
 type Props = {
   data: StudentStats[];
@@ -32,10 +32,6 @@ type State = {
 };
 
 const coursesService = new CoursesApi();
-
-const messages = ['Are you sure you want to leave the course?', 'Your learning will be stopped.'];
-
-const messagesRu = ['Вы уверены, что хотите покинуть курс?', 'Ваше обучение будет прекращено.'];
 
 class StudentStatsCard extends React.Component<Props, State> {
   state = {
@@ -107,30 +103,11 @@ class StudentStatsCard extends React.Component<Props, State> {
           isVisible={isStudentStatsModalVisible}
           onHide={this.hideStudentStatsModal}
         />
-        <Modal
-          title={
-            <Title level={4}>
-              <WarningTwoTone twoToneColor="red" /> Leaving Course ?
-            </Title>
-          }
-          open={this.state.isExpelConfirmationModalVisible}
+        <StudentLeaveCourse
+          isOpen={this.state.isExpelConfirmationModalVisible}
           onOk={this.selfExpelStudent.bind(this, this.state.courseId)}
-          okText="Leave Course"
-          okButtonProps={{ danger: true }}
           onCancel={this.hideExpelConfirmationModal}
-          cancelText="Continue studying"
-        >
-          <>
-            <Divider />
-            {messages.map((text, i) => (
-              <Paragraph key={i}>{text}</Paragraph>
-            ))}
-            <Divider />
-            {messagesRu.map((text, i) => (
-              <Paragraph key={i}>{text}</Paragraph>
-            ))}
-          </>
-        </Modal>
+        />
         <CommonCard
           title="Student Statistics"
           icon={<BookOutlined />}
