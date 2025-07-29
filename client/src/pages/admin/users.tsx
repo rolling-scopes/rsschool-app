@@ -30,7 +30,7 @@ function Page() {
             <Row gutter={12}>
               <Col span={6}>
                 <Form.Item name="searchText">
-                  <Input width={200} placeholder="Search by github or name" />
+                  <Input allowClear={true} type='search' width={200} placeholder="Search by github or name" />
                 </Form.Item>
               </Col>
               <Col span={6}>
