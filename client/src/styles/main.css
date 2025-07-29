@@ -29,10 +29,6 @@ textarea::-webkit-scrollbar-track {
   margin: calc(var(--scroll-size) / 2);
 }
 
-textarea {
-  resize: none !important;
-}
-
 .dark .header-logo,
 .dark .login-image {
   filter: invert(1);
