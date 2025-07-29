@@ -1,13 +1,11 @@
-import { Form, Input, Select } from 'antd';
-import Checkbox from 'antd/lib/checkbox/Checkbox';
-import TextArea from 'antd/lib/input/TextArea';
+import { Form, Input, Select, Checkbox, Tabs } from 'antd';
 import { NotificationDto, NotificationType } from 'api';
 import { ModalForm } from 'components/Forms';
 import React from 'react';
 import { NotificationTemlate } from '../services/notifications';
-import { Tabs } from 'antd';
 
 const { TabPane } = Tabs;
+const { TextArea } = Input;
 
 type Props = {
   notification?: NotificationDto;
