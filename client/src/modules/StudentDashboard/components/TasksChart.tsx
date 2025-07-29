@@ -68,6 +68,7 @@ export function TasksChart({ data, onItemSelected }: Props) {
       content: {
         offsetY: 0,
         style: {
+          color: theme.useToken().token.colorTextBase,
           fontSize: '30px',
         },
       },
