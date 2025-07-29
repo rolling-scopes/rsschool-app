@@ -40,7 +40,11 @@ export const NoConsentView = (props: Props) => {
       header={
         <Title level={4} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           {confirmationModalInfo.en.header}
-          <Tooltip placement="topLeft" title={confirmationModalInfo.ru.header}>
+          <Tooltip
+            placement="topLeft"
+            title={confirmationModalInfo.ru.header}
+            getPopupContainer={triggerNode => triggerNode.parentElement || document.body}
+          >
             <QuestionCircleOutlined data-testid={confirmationModalInfo.ru.header} />
           </Tooltip>
         </Title>
@@ -49,7 +53,11 @@ export const NoConsentView = (props: Props) => {
       renderItem={(text, idx) => (
         <Item style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <Paragraph>{text}</Paragraph>
-          <Tooltip placement="topLeft" title={confirmationModalInfo.ru.availableDataList[idx]}>
+          <Tooltip
+            placement="topLeft"
+            title={confirmationModalInfo.ru.availableDataList[idx]}
+            getPopupContainer={triggerNode => triggerNode.parentElement || document.body}
+          >
             <QuestionCircleOutlined data-testid={confirmationModalInfo.ru.availableDataList[idx]} />
           </Tooltip>
         </Item>
