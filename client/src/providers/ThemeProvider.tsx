@@ -87,7 +87,31 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  const { token } = theme.useToken();
+  const lightTheme = {
+    // TODO: add custom color token values for the light theme
+  };
+
+  const darkTheme = {
+    // Text
+    colorTextBase: '#ffffff',
+    colorText: '#ffffff',
+    colorTextSecondary: '#bfffffff',
+    colorTextLabel: '#c2d8d8',
+    colorTextDescription: '#b5ccfb',
+    colorTextPlaceholder: '#6c9cdf',
+    colorTextDisabled: '#546883',
+
+    // Link color variants
+    colorLink: '#5897ee',
+    colorLinkHover: '#9fc2f3',
+
+    // Background
+    colorBgContainer: '#151515',
+    colorBgContainerDisabled: '#142525ff',
+
+    // Border
+    colorBorder: '#434343',
+  };
 
   return (
     <ThemeContext.Provider
@@ -100,6 +124,7 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
     >
       <ConfigProvider
         theme={{
+          token: appTheme === AppTheme.Dark ? darkTheme : lightTheme,
           algorithm: appTheme === AppTheme.Dark ? theme.darkAlgorithm : theme.defaultAlgorithm,
         }}
       >
