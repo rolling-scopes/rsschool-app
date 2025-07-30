@@ -33,7 +33,7 @@ textarea::-webkit-scrollbar-track {
 textarea::-webkit-resizer {
   border-width: 3px;
   border-style: solid;
-  border-color: transparent var(--scroll-color) var(--text-secondary-color) transparent;
+  border-color: transparent var(--scroll-color) var(--scroll-color) transparent;
   border-radius: 0 0 4px 0;
   background: var(--bg-primary-color);
 }
