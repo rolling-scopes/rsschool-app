@@ -106,7 +106,7 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
         <style jsx global>{`
           :root::-webkit-scrollbar-thumb,
           textarea::-webkit-scrollbar-thumb {
-            background: ${token.colorTextLabel};
+            background: var(--scroll-color);
           }
 
           :global(.ant-table) {
@@ -114,7 +114,7 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
               :global(.ant-table-body),
               :global(.ant-table-content) {
                 scrollbar-width: thin;
-                scrollbar-color: ${token.colorTextLabel} transparent;
+                scrollbar-color: var(--scroll-color) transparent;
                 scrollbar-gutter: stable;
               }
             }
@@ -122,7 +122,7 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
           :global(.ant-modal-content) {
             scrollbar-width: thin;
-            scrollbar-color: ${token.colorTextLabel} transparent;
+            scrollbar-color: var(--scroll-color) transparent;
             scrollbar-gutter: stable;
           }
         `}</style>

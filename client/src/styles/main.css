@@ -5,18 +5,19 @@
 :root:has(.dark) {
   --bg-primary-color: #151515;
   --text-primary-color: #ffffff;
+  --scroll-color: #434343;
 }
 
 :root:has(.light) {
   --bg-primary-color: #fff;
   --text-primary-color: #000;
+  --scroll-color: #bfbfbf;
 }
 
 :root::-webkit-scrollbar,
 textarea::-webkit-scrollbar {
   width: var(--scroll-size);
   height: var(--scroll-size);
-  background: none;
 }
 
 :root::-webkit-scrollbar-thumb,
@@ -29,8 +30,12 @@ textarea::-webkit-scrollbar-track {
   margin: calc(var(--scroll-size) / 2);
 }
 
-textarea {
-  resize: none !important;
+textarea::-webkit-resizer {
+  border-width: 3px;
+  border-style: solid;
+  border-color: transparent var(--scroll-color) var(--text-secondary-color) transparent;
+  border-radius: 0 0 4px 0;
+  background: var(--bg-primary-color);
 }
 
 .dark .header-logo,
