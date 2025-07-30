@@ -88,7 +88,9 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const lightTheme = {
-    // TODO: add custom color token values for the light theme
+    // Link color variants
+    colorLink: '#4466b3',
+    colorLinkHover: '#006bff',
   };
 
   const darkTheme = {
