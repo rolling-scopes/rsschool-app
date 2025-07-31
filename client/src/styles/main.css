@@ -34,6 +34,16 @@ textarea::-webkit-scrollbar-track {
   filter: invert(1);
 }
 
+/* Workaround for the incorrect background color when autofill suggestions are active*/
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: var(--text-primary-color);
+  transition: background-color 100s ease-in-out 0s;
+}
+
 html,
 body,
 #root {
