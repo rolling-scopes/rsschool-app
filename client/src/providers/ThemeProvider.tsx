@@ -87,7 +87,33 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  const { token } = theme.useToken();
+  const lightTheme = {
+    // Link color variants
+    colorLink: '#4466b3',
+    colorLinkHover: '#006bff',
+  };
+
+  const darkTheme = {
+    // Text
+    colorTextBase: '#ffffff',
+    colorText: '#ffffff',
+    colorTextSecondary: '#bfffffff',
+    colorTextLabel: '#c2d8d8',
+    colorTextDescription: '#b5ccfb',
+    colorTextPlaceholder: '#6c9cdf',
+    colorTextDisabled: '#546883',
+
+    // Link color variants
+    colorLink: '#5897ee',
+    colorLinkHover: '#9fc2f3',
+
+    // Background
+    colorBgContainer: '#151515',
+    colorBgContainerDisabled: '#142525ff',
+
+    // Border
+    colorBorder: '#434343',
+  };
 
   return (
     <ThemeContext.Provider
@@ -100,13 +126,14 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
     >
       <ConfigProvider
         theme={{
+          token: appTheme === AppTheme.Dark ? darkTheme : lightTheme,
           algorithm: appTheme === AppTheme.Dark ? theme.darkAlgorithm : theme.defaultAlgorithm,
         }}
       >
         <style jsx global>{`
           :root::-webkit-scrollbar-thumb,
           textarea::-webkit-scrollbar-thumb {
-            background: ${token.colorTextLabel};
+            background: var(--scroll-color);
           }
 
           :global(.ant-table) {
@@ -114,7 +141,7 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
               :global(.ant-table-body),
               :global(.ant-table-content) {
                 scrollbar-width: thin;
-                scrollbar-color: ${token.colorTextLabel} transparent;
+                scrollbar-color: var(--scroll-color) transparent;
                 scrollbar-gutter: stable;
               }
             }
@@ -122,7 +149,7 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
           :global(.ant-modal-content) {
             scrollbar-width: thin;
-            scrollbar-color: ${token.colorTextLabel} transparent;
+            scrollbar-color: var(--scroll-color) transparent;
             scrollbar-gutter: stable;
           }
         `}</style>

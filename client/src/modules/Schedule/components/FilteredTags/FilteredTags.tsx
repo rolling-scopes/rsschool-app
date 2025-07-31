@@ -15,7 +15,7 @@ export const FilteredTags = ({ tagFilters, onTagClose, onClearAllButtonClick, fi
   return (
     <>
       {tagFilters?.length > 0 ? (
-        <Row style={{ padding: 12, background: token.colorBgContainer }}>
+        <Row style={{ padding: 12, background: token.colorBgContainer, marginBottom: 4, borderRadius: 4 }}>
           <Col flex="auto">
             <FilterFilled
               style={{

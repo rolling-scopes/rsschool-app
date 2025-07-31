@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { TrophyOutlined, FireOutlined } from '@ant-design/icons';
-import { Card, Typography, Image } from 'antd';
+import { Card, Typography, Image, Divider } from 'antd';
 import CommonCard from './CommonDashboardCard';
 
 const DEFAULT_POSITION = 999999;
@@ -30,6 +30,7 @@ export function MainStatsCard({ totalScore, position, maxCourseScore, totalStude
           <Card.Grid hoverable={false} style={gridStyle}>
             <Image preview={false} src="/static/images/im-fine.svg" />
           </Card.Grid>
+          <Divider />
           <Card.Grid hoverable={false} style={gridStyle}>
             <div style={contentColStyle}>
               <div style={contentDivStyle}>
@@ -69,7 +70,7 @@ const STYLE: Record<string, React.CSSProperties> = {
   },
   gridStyle: {
     width: '100%',
-    boxShadow: '0 1px 0 0 #f0f0f0 inset',
+    boxShadow: 'none',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
