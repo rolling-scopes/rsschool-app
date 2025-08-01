@@ -30,7 +30,7 @@
     "koa-jwt": "3.6.0",
     "koa-static": "5.0.0",
     "luxon": "2.3.0",
-    "moment-timezone": "0.5.34",
+    "moment-timezone": "0.5.35",
     "node-schedule": "2.0.0",
     "octokit": "1.7.1",
     "pg": "8.11.3",
