@@ -2174,10 +2174,13 @@
         "tags": ["discord-servers"]
       }
     },
-    "/discord-servers/invite/{id}": {
+    "/discord-servers/{courseId}/invite/{id}": {
       "get": {
         "operationId": "getInviteLinkByDiscordServerId",
-        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
         "responses": {
           "200": { "description": "", "content": { "application/json": { "schema": { "type": "string" } } } }
         },
