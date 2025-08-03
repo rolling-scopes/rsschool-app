@@ -1,16 +1,56 @@
+:root {
+  --scroll-size: 8px;
+}
+
 :root:has(.dark) {
   --bg-primary-color: #151515;
   --text-primary-color: #ffffff;
+  --scroll-color: #434343;
 }
 
 :root:has(.light) {
   --bg-primary-color: #fff;
   --text-primary-color: #000;
+  --scroll-color: #bfbfbf;
+}
+
+:root::-webkit-scrollbar,
+textarea::-webkit-scrollbar {
+  width: var(--scroll-size);
+  height: var(--scroll-size);
+}
+
+:root::-webkit-scrollbar-thumb,
+textarea::-webkit-scrollbar-thumb {
+  border-radius: calc(var(--scroll-size) / 2);
+}
+
+:root::-webkit-scrollbar-track,
+textarea::-webkit-scrollbar-track {
+  margin: calc(var(--scroll-size) / 2);
+}
+
+textarea::-webkit-resizer {
+  border-width: 3px;
+  border-style: solid;
+  border-color: transparent var(--scroll-color) var(--scroll-color) transparent;
+  border-radius: 0 0 4px 0;
+  background: var(--bg-primary-color);
 }
 
 .dark .header-logo,
 .dark .login-image {
   filter: invert(1);
+}
+
+/* Workaround for the incorrect background color when autofill suggestions are active*/
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: var(--text-primary-color);
+  transition: background-color 100s ease-in-out 0s;
 }
 
 html,

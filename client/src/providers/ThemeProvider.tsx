@@ -48,7 +48,10 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
     setAuto(prev => {
       const newAutoState = !prev;
       if (newAutoState) {
-        localStorage.removeItem('app-theme');
+        localStorage.setItem('app-theme', 'auto');
+        // FIXME: remove the line above and uncomment the line bellow
+        //  after enabling auto-theme
+        // localStorage.removeItem('app-theme');
         applyTheme(getSystemTheme());
       }
       return newAutoState;
@@ -75,9 +78,42 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
       setAuto(false);
       applyTheme(storedTheme);
     } else {
+      // setAuto(true); // FIXME: temporary disable set auto theme by default
+    }
+
+    // FIXME: remove the if statement after enabling auto-theme above
+    if ((storedTheme as string) === 'auto') {
       setAuto(true);
     }
   }, []);
+
+  const lightTheme = {
+    // Link color variants
+    colorLink: '#4466b3',
+    colorLinkHover: '#006bff',
+  };
+
+  const darkTheme = {
+    // Text
+    colorTextBase: '#ffffff',
+    colorText: '#ffffff',
+    colorTextSecondary: '#bfffffff',
+    colorTextLabel: '#c2d8d8',
+    colorTextDescription: '#b5ccfb',
+    colorTextPlaceholder: '#6c9cdf',
+    colorTextDisabled: '#546883',
+
+    // Link color variants
+    colorLink: '#5897ee',
+    colorLinkHover: '#9fc2f3',
+
+    // Background
+    colorBgContainer: '#151515',
+    colorBgContainerDisabled: '#142525ff',
+
+    // Border
+    colorBorder: '#434343',
+  };
 
   return (
     <ThemeContext.Provider
@@ -90,9 +126,33 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
     >
       <ConfigProvider
         theme={{
+          token: appTheme === AppTheme.Dark ? darkTheme : lightTheme,
           algorithm: appTheme === AppTheme.Dark ? theme.darkAlgorithm : theme.defaultAlgorithm,
         }}
       >
+        <style jsx global>{`
+          :root::-webkit-scrollbar-thumb,
+          textarea::-webkit-scrollbar-thumb {
+            background: var(--scroll-color);
+          }
+
+          :global(.ant-table) {
+            :global(.ant-table-container) {
+              :global(.ant-table-body),
+              :global(.ant-table-content) {
+                scrollbar-width: thin;
+                scrollbar-color: var(--scroll-color) transparent;
+                scrollbar-gutter: stable;
+              }
+            }
+          }
+
+          :global(.ant-modal-content) {
+            scrollbar-width: thin;
+            scrollbar-color: var(--scroll-color) transparent;
+            scrollbar-gutter: stable;
+          }
+        `}</style>
         {children}
       </ConfigProvider>
     </ThemeContext.Provider>
