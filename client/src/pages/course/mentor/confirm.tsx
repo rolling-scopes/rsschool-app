@@ -2,7 +2,7 @@ import { Button, Col, Form, message, Result, Row, Typography } from 'antd';
 import { AuthApi, CourseDto as Course, DiscordServersApi } from 'api';
 import { PageLayout, PageLayoutSimple } from 'components/PageLayout';
 import { useRouter } from 'next/router';
-import { useMemo, useState, useContext, useEffect } from 'react';
+import { useMemo, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { CoursesService } from 'services/courses';
@@ -11,10 +11,12 @@ import { Warning } from 'components/Warning';
 import { MentorOptions } from 'components/MentorOptions';
 import { SessionContext, SessionProvider } from 'modules/Course/contexts';
 import { LoadingScreen } from '@client/components/LoadingScreen';
+import { useAsyncEffect } from 'ahooks';
 
 const { Link } = Typography;
 
 type SuccessComponentProps = {
+  courseId: number;
   discordServerId: number;
 };
 
@@ -159,7 +161,7 @@ function Page() {
   if (success) {
     return (
       <PageLayout {...pageProps}>
-        <SuccessComponent discordServerId={course.discordServerId} />
+        <SuccessComponent courseId={course.id} discordServerId={course.discordServerId} />
       </PageLayout>
     );
   }
@@ -175,16 +177,12 @@ function Page() {
   );
 }
 
-const SuccessComponent = ({ discordServerId }: SuccessComponentProps) => {
+const SuccessComponent = ({ courseId, discordServerId }: SuccessComponentProps) => {
   const [mentorsChat, setMentorsChat] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const telegramInviteLinkResponse = await discordServer.getInviteLinkByDiscordServerId(discordServerId);
-      setMentorsChat(telegramInviteLinkResponse.data);
-    };
-
-    fetchData();
+  useAsyncEffect(async () => {
+    const telegramInviteLinkResponse = await discordServer.getInviteLinkByDiscordServerId(courseId, discordServerId);
+    setMentorsChat(telegramInviteLinkResponse.data);
   }, [discordServerId]);
 
   if (!mentorsChat) return <LoadingScreen show={!mentorsChat} />;
