@@ -38,11 +38,14 @@ export class DiscordServersController {
     return items.map(item => new IdNameDto(item));
   }
 
-  @Get('invite/:id')
-  @RequiredRoles([Role.Admin, CourseRole.Mentor])
+  @Get(':courseId/invite/:id')
+  @RequiredRoles([Role.Admin, CourseRole.Mentor], true)
   @ApiOperation({ operationId: 'getInviteLinkByDiscordServerId' })
   @ApiOkResponse({ type: String })
-  public async getInviteLinkById(@Param('id', ParseIntPipe) id: number) {
+  public async getInviteLinkById(
+    @Param('courseId', ParseIntPipe) _courseId: number,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
     const item = await this.service.getById(id);
     return item?.mentorsChatUrl;
   }
