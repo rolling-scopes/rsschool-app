@@ -29,7 +29,7 @@
     "koa-bodyparser": "4.2.1",
     "koa-jwt": "3.6.0",
     "koa-static": "5.0.0",
-    "luxon": "2.3.0",
+    "luxon": "2.5.2",
     "moment-timezone": "0.5.35",
     "node-schedule": "2.0.0",
     "octokit": "1.7.1",
