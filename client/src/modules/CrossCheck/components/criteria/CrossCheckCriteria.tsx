@@ -1,4 +1,4 @@
-import { Typography } from 'antd';
+import { theme, Typography } from 'antd';
 import { CrossCheckCriteriaDataDto } from 'api';
 import { getCriteriaStatusColor } from 'modules/CrossCheck';
 import { TaskType } from '../../constants';
@@ -15,24 +15,31 @@ export function CrossCheckCriteria({ criteria }: Props) {
     criteriaItem => criteriaItem.type.toLocaleLowerCase() === TaskType.Penalty && criteriaItem.point,
   );
 
+  const { token } = theme.useToken();
+
   return (
     <>
       {criteria
         .filter(criteriaItem => criteriaItem.type.toLocaleLowerCase() === TaskType.Subtask)
         .map(criteriaItem => {
-          const backgroundColor = getCriteriaStatusColor(criteriaItem.point ?? 0, criteriaItem.max);
+          const colorToken = getCriteriaStatusColor(criteriaItem.point ?? 0, criteriaItem.max);
 
           return (
             <div
               key={criteriaItem.key}
-              style={{ border: '1px solid #F5F5F5', margin: '24px 0', paddingBottom: '14px', backgroundColor }}
+              style={{
+                border: `1px solid ${token.colorBorder}`,
+                margin: '24px 0',
+                paddingBottom: '14px',
+                backgroundColor: token[colorToken],
+              }}
             >
               <div
                 style={{
                   display: 'block',
                   fontSize: '14px',
-                  background: '#FAFAFA',
-                  borderBottom: '1px solid #F5F5F5',
+                  background: token.colorBgLayout,
+                  borderBottom: `1px solid ${token.colorBorder}`,
                   padding: '14px 12px',
                   marginBottom: '14px',
                 }}

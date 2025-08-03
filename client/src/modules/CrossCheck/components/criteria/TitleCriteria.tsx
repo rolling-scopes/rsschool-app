@@ -1,4 +1,4 @@
-import { Typography } from 'antd';
+import { theme, Typography } from 'antd';
 import { CrossCheckCriteriaDataDto } from 'api';
 import React from 'react';
 
@@ -8,13 +8,14 @@ interface TitleCriteriaProps {
 const { Text } = Typography;
 
 export function TitleCriteria({ titleData }: TitleCriteriaProps) {
+  const { token } = theme.useToken();
   return (
     <div
       style={{
         display: 'block',
         fontSize: '14px',
         marginTop: '10px',
-        background: '#E6F7FF',
+        background: token.blue2,
         border: '1px solid #91D5FF',
         borderRadius: '2px',
         padding: '9px',

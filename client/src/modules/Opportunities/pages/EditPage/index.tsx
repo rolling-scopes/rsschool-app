@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Layout, Modal, theme, Typography } from 'antd';
+import { Layout, Modal, Typography } from 'antd';
 import { AxiosError } from 'axios';
 import dayjs from 'dayjs';
 import Head from 'next/head';
@@ -21,6 +21,7 @@ export function EditPage() {
   const [editMode, setEditMode] = useState<boolean>(false);
   const [consent, setConsent] = useState<boolean>(false);
   const [resume, setResume] = useState<ResumeDto | null>(null);
+  const [modal, contextHolder] = Modal.useModal();
 
   const switchView = () => setEditMode(!editMode);
 
@@ -69,7 +70,7 @@ export function EditPage() {
       </>
     );
 
-    Modal.info({
+    modal.info({
       title,
       content,
       okText: 'Got it',
@@ -83,29 +84,26 @@ export function EditPage() {
     setEditMode(true);
   });
 
-  const { token } = theme.useToken();
-
   return (
     <>
+      {contextHolder}
       <Head>
         <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700&display=swap" rel="stylesheet" />
       </Head>
       <LoadingScreen show={loading}>
         <Header title="My CV" />
-        <Layout style={{ background: token.colorBgContainer }}>
-          <Content className="print-no-padding" style={{ maxWidth: 960, margin: 'auto' }}>
-            <EditViewCv
-              githubId={githubId}
-              consent={consent}
-              data={resume}
-              editMode={editMode || resume == null}
-              switchView={switchView}
-              onRemoveConsent={handleDeleteConsent}
-              onCreateConsent={handleCreateConsent}
-              onUpdateResume={() => getData()}
-            />
-          </Content>
-        </Layout>
+        <Content className="print-no-padding" style={{ maxWidth: 960, margin: 'auto' }}>
+          <EditViewCv
+            githubId={githubId}
+            consent={consent}
+            data={resume}
+            editMode={editMode || resume == null}
+            switchView={switchView}
+            onRemoveConsent={handleDeleteConsent}
+            onCreateConsent={handleCreateConsent}
+            onUpdateResume={() => getData()}
+          />
+        </Content>
       </LoadingScreen>
       <style jsx global>{`
         html,

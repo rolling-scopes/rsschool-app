@@ -1,4 +1,4 @@
-import { message, Row } from 'antd';
+import { message, Modal, Row, Typography } from 'antd';
 import { useMemo, useState, useContext } from 'react';
 import { PageLayout } from 'components/PageLayout';
 import {
@@ -12,12 +12,14 @@ import {
 import { isActiveStudent, isCourseManager } from 'domain/user';
 import { useCopyToClipboard } from 'react-use';
 import { CreateTeamDto, TeamApi, TeamDto, JoinTeamDto, TeamDistributionApi } from 'api';
-import { showCreateTeamResultModal, showJoinTeamResultModal } from '../utils/showConfirmationModals';
 import { useLoading } from 'components/useLoading';
 import { useDistribution } from '../hooks';
 import { useMessage, useModalForm } from 'hooks';
 import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
 import { useRouter } from 'next/router';
+import CheckCircleTwoTone from '@ant-design/icons/CheckCircleTwoTone';
+
+const { Title, Text } = Typography;
 
 const teamApi = new TeamApi();
 const teamDistributionApi = new TeamDistributionApi();
@@ -27,6 +29,7 @@ function Teams() {
   const { course } = useActiveCourseContext();
   const router = useRouter();
   const { notification } = useMessage();
+  const [modal, contextHolder] = Modal.useModal();
 
   const teamDistributionId = Number(router.query.teamDistributionId);
 
@@ -75,7 +78,15 @@ function Teams() {
       const { data: team } = await teamApi.joinTeam(course.id, teamDistributionId, teamId, record);
       await loadDistribution();
       setShowJoinTeamModal(false);
-      showJoinTeamResultModal(team);
+      modal.success({
+        title: <Title level={5}>Successfully joined to the {team.name}</Title>,
+        content: (
+          <div>
+            <Text type="secondary">{team.description}</Text>
+          </div>
+        ),
+        okText: 'Next',
+      });
     } catch {
       message.error('Failed to join to team. Please try later.');
     }
@@ -109,7 +120,21 @@ function Teams() {
         await teamApi.updateTeam(course.id, teamDistributionId, id, record);
       } else {
         const { data: team } = await teamApi.createTeam(course.id, teamDistributionId, record);
-        showCreateTeamResultModal(team, copyPassword);
+        modal.confirm({
+          title: <Title level={5}>{team.name} is created successfully</Title>,
+          content: (
+            <div>
+              <Title level={5}>As a team lead you get an invitation password to join members</Title>
+              <Text type="secondary">{team.description}</Text>
+            </div>
+          ),
+          cancelText: 'Next',
+          cancelButtonProps: { type: 'primary' },
+          onOk: () => copyPassword(team.id),
+          okText: 'Copy invitation password',
+          okButtonProps: { type: 'default' },
+          icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
+        });
       }
       await loadDistribution();
       toggleTeamModal();
@@ -155,6 +180,7 @@ function Teams() {
 
   return (
     <PageLayout loading={loadingDistribution || loading} title="RS Teams" showCourseName withMargin={false}>
+      {contextHolder}
       {openTeamModal && distribution && (
         <TeamModal
           mode={mode}
@@ -180,7 +206,7 @@ function Teams() {
           handleJoinTeam={handleJoinTeam}
         />
       ) : null}
-      <Row style={{ background: 'white', padding: '24px', margin: 24 }}>{contentRenderers()}</Row>
+      <Row style={{ padding: '24px', margin: 24 }}>{contentRenderers()}</Row>
     </PageLayout>
   );
 }

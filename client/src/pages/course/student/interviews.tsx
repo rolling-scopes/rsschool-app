@@ -18,6 +18,7 @@ function StudentInterviewPage() {
   const [interviews, setInterviews] = useState<InterviewDto[]>([]);
   const [registeredInterviews, setRegisteredInterviews] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [modal, contextHolder] = Modal.useModal();
 
   useAsync(async () => {
     try {
@@ -42,7 +43,7 @@ function StudentInterviewPage() {
   }, [course.id]);
 
   const handleRegister = async (interviewId: string) => {
-    Modal.confirm({
+    modal.confirm({
       title: 'Are you ready to participate in the interview?',
       content: (
         <>
@@ -91,6 +92,7 @@ function StudentInterviewPage() {
 
   return (
     <PageLayout loading={loading} title="Interviews" showCourseName>
+      {contextHolder}
       <Spin spinning={loading}>
         {interviews.length === 0 ? (
           <NoInterviewsAlert />

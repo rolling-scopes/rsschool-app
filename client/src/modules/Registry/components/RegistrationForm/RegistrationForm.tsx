@@ -1,4 +1,4 @@
-import { Col, Form, FormInstance, Row, Steps } from 'antd';
+import { Col, Form, FormInstance, Row, Steps, theme } from 'antd';
 import { Store } from 'antd/lib/form/interface';
 import { useUpdate } from 'react-use';
 import { Footer, Header } from 'modules/Registry/components';
@@ -26,6 +26,7 @@ export function RegistrationForm({ form, handleSubmit, steps, currentStep, initi
     [steps, isSmallScreen],
   );
   const title = type === 'mentor' ? FORM_TITLES.mentorForm : FORM_TITLES.studentForm;
+  const { token } = theme.useToken();
 
   return (
     <Row justify="center" style={{ paddingBlock: 24 }}>
@@ -47,7 +48,7 @@ export function RegistrationForm({ form, handleSubmit, steps, currentStep, initi
             <Col
               span={24}
               style={{
-                background: '#FFFFFF',
+                background: token.colorBgContainer,
                 borderRadius: 2,
                 paddingBlock: 16,
                 paddingInline: 60,

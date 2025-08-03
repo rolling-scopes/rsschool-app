@@ -63,7 +63,7 @@ function VerificationInformation({
               </Button>
               {isSelfEducationTask && (
                 <Tooltip
-                  placement="top"
+                  placement="topRight"
                   title={allowCheckAnswers ? '' : 'Will be available after the deadline and at least 1 attempt'}
                 >
                   <Button disabled={!allowCheckAnswers} onClick={showAnswers}>

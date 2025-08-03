@@ -1,4 +1,5 @@
 import { ScoreCard } from './ScoreCard';
+import { theme } from 'antd';
 
 type ScoreSelectorProps = {
   value?: number;
@@ -6,6 +7,7 @@ type ScoreSelectorProps = {
 };
 
 export const ScoreSelector: React.FC<ScoreSelectorProps> = ({ value, onChange }) => {
+  const { token } = theme.useToken();
   return (
     <div className="container">
       {Array.from({ length: 10 }, (_, i) => i + 1).map(num => (
@@ -44,7 +46,7 @@ export const ScoreSelector: React.FC<ScoreSelectorProps> = ({ value, onChange })
           top: 23px;
           font-size: 12px;
           font-weight: 900;
-          background: white;
+          background: ${token.colorBgContainer};
         }
       `}</style>
     </div>

@@ -1,5 +1,4 @@
-import { Form, Input, Typography } from 'antd';
-import Modal from 'antd/lib/modal/Modal';
+import { Form, Input, Typography, Modal } from 'antd';
 import { JoinTeamDto } from 'api';
 import { passwordPattern } from 'services/validators';
 
