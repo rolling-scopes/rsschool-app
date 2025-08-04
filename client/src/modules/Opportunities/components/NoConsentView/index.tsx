@@ -33,13 +33,18 @@ export const confirmationModalInfo = {
 
 export const NoConsentView = (props: Props) => {
   const { isOwner, giveConsent } = props;
+  const [modal, contextHolder] = Modal.useModal();
 
   const confirmationModalContent = (
     <List
       header={
         <Title level={4} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           {confirmationModalInfo.en.header}
-          <Tooltip placement="topLeft" title={confirmationModalInfo.ru.header}>
+          <Tooltip
+            placement="topLeft"
+            title={confirmationModalInfo.ru.header}
+            getPopupContainer={triggerNode => triggerNode.parentElement || document.body}
+          >
             <QuestionCircleOutlined data-testid={confirmationModalInfo.ru.header} />
           </Tooltip>
         </Title>
@@ -48,7 +53,11 @@ export const NoConsentView = (props: Props) => {
       renderItem={(text, idx) => (
         <Item style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <Paragraph>{text}</Paragraph>
-          <Tooltip placement="topLeft" title={confirmationModalInfo.ru.availableDataList[idx]}>
+          <Tooltip
+            placement="topLeft"
+            title={confirmationModalInfo.ru.availableDataList[idx]}
+            getPopupContainer={triggerNode => triggerNode.parentElement || document.body}
+          >
             <QuestionCircleOutlined data-testid={confirmationModalInfo.ru.availableDataList[idx]} />
           </Tooltip>
         </Item>
@@ -57,7 +66,7 @@ export const NoConsentView = (props: Props) => {
   );
 
   const showConfirmationModal = () => {
-    Modal.confirm({
+    modal.confirm({
       icon: null,
       content: confirmationModalContent,
       maskClosable: true,
@@ -68,23 +77,30 @@ export const NoConsentView = (props: Props) => {
     });
   };
 
-  return isOwner ? (
-    <Result
-      icon={<span></span>}
-      title={<Title>You don't have a CV yet.</Title>}
-      subTitle={<Text style={{ fontSize: '24px' }}>You can create a public CV that can be shared with employers.</Text>}
-      extra={
-        <Button
-          style={{ width: '140px', height: '44px' }}
-          type="primary"
-          htmlType="button"
-          onClick={showConfirmationModal}
-        >
-          <PlusOutlined /> Create CV
-        </Button>
-      }
-    />
-  ) : (
-    <Result status={403} title="This user doesn't have CV yet" />
+  return (
+    <>
+      {contextHolder}
+      {isOwner ? (
+        <Result
+          icon={<span></span>}
+          title={<Title>You don't have a CV yet.</Title>}
+          subTitle={
+            <Text style={{ fontSize: '24px' }}>You can create a public CV that can be shared with employers.</Text>
+          }
+          extra={
+            <Button
+              style={{ width: '140px', height: '44px' }}
+              type="primary"
+              htmlType="button"
+              onClick={showConfirmationModal}
+            >
+              <PlusOutlined /> Create CV
+            </Button>
+          }
+        />
+      ) : (
+        <Result status={403} title="This user doesn't have CV yet" />
+      )}
+    </>
   );
 };

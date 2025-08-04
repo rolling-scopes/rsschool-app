@@ -1,4 +1,4 @@
-import { Input, Typography, InputNumber, Slider } from 'antd';
+import { Input, Typography, InputNumber, Slider, theme } from 'antd';
 import { useMemo } from 'react';
 import isUndefined from 'lodash/isUndefined';
 import isNil from 'lodash/isNil';
@@ -17,7 +17,7 @@ export function SubtaskCriteria({ subtaskData, updateCriteriaData }: SubtaskCrit
   const maxScore = subtaskData.max;
   const comment = subtaskData.textComment;
   const criteriaScore = subtaskData.point;
-  const backgroundColor = getCriteriaStatusColor(criteriaScore ?? 0, maxScore);
+  const colorToken = getCriteriaStatusColor(criteriaScore ?? 0, maxScore);
 
   const updateSubtaskData = ({ textComment, point }: { textComment?: string; point?: number | null }) => {
     const updatedEntry = {
@@ -36,12 +36,13 @@ export function SubtaskCriteria({ subtaskData, updateCriteriaData }: SubtaskCrit
     return false;
   }, [criteriaScore, comment, maxScore]);
 
+  const { token } = theme.useToken();
+
   return (
-    <div style={{ border: '1px solid #F5F5F5', margin: '24px 0', backgroundColor }}>
+    <div style={{ border: `1px solid ${token.colorBorder}`, margin: '24px 0', background: token[colorToken] }}>
       <div
         style={{
-          background: '#FAFAFA',
-          borderBottom: '1px solid #F5F5F5',
+          borderBottom: `1px solid ${token.colorBorder}`,
           padding: '14px 12px',
         }}
       >

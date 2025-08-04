@@ -1,7 +1,8 @@
-import { Dropdown, Flex, MenuProps, theme as antTheme, Tooltip } from 'antd';
+import { Dropdown, Flex, MenuProps, theme as antTheme } from 'antd';
 import { useTheme } from 'hooks';
 import { AppTheme } from '@client/providers';
 import { MoonOutlined, SkinOutlined, SunOutlined } from '@ant-design/icons';
+import NonTouchTooltip from '@client/components/NonTouchTooltip';
 
 const THEME_CONFIG = {
   [AppTheme.Dark]: {
@@ -27,28 +28,22 @@ export default function ThemeSwitch() {
   const items: MenuProps['items'] = [
     {
       label: (
-        <Tooltip title={THEME_CONFIG[AppTheme.Dark].label} placement="bottomLeft">
-          {THEME_CONFIG[AppTheme.Dark].icon}
-        </Tooltip>
+        <NonTouchTooltip title={THEME_CONFIG[AppTheme.Dark].label}>{THEME_CONFIG[AppTheme.Dark].icon}</NonTouchTooltip>
       ),
       key: 'dark',
       onClick: () => themeChange(AppTheme.Dark),
     },
     {
       label: (
-        <Tooltip title={THEME_CONFIG[AppTheme.Light].label} placement="bottomLeft">
+        <NonTouchTooltip title={THEME_CONFIG[AppTheme.Light].label}>
           {THEME_CONFIG[AppTheme.Light].icon}
-        </Tooltip>
+        </NonTouchTooltip>
       ),
       key: 'light',
       onClick: () => themeChange(AppTheme.Light),
     },
     {
-      label: (
-        <Tooltip title={THEME_CONFIG.auto.label} placement="bottomLeft">
-          {THEME_CONFIG.auto.icon}
-        </Tooltip>
-      ),
+      label: <NonTouchTooltip title={THEME_CONFIG.auto.label}>{THEME_CONFIG.auto.icon}</NonTouchTooltip>,
       key: 'auto',
       onClick: () => changeAutoTheme(),
     },
@@ -66,11 +61,11 @@ export default function ThemeSwitch() {
         color: token.colorTextLabel,
       }}
     >
-      <Tooltip title="Change color theme">
+      <NonTouchTooltip title="Change color theme">
         <Dropdown menu={{ items }} placement="bottom" trigger={['click']}>
           {themeIcon}
         </Dropdown>
-      </Tooltip>
+      </NonTouchTooltip>
     </Flex>
   );
 }

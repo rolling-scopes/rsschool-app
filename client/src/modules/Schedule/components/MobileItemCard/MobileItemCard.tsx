@@ -18,7 +18,7 @@ export const MobileItemCard = ({
 }) => {
   const timezoneOffset = `(UTC ${dayjs().tz(timezone).format('Z')})`;
   return (
-    <div style={{ padding: '12px 0px', backgroundColor: 'white', borderBottom: '1px groove' }}>
+    <div style={{ padding: '12px 0px', borderBottom: '1px groove' }}>
       <Row gutter={12} wrap={false}>
         <Col flex="1">
           <Link href={item.descriptionUrl ? item.descriptionUrl : ''} target="_blank">

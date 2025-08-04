@@ -7,12 +7,13 @@ import { Course } from 'services/models';
 import CopyToClipboardButton from 'components/CopyToClipboardButton';
 import { MentorsRegistryColumnKey, MentorsRegistryColumnName, TABS, MentorRegistryTabsMode } from '../constants';
 import { FilterValue } from 'antd/lib/table/interface';
-import { Button, Dropdown, Tooltip, message } from 'antd';
+import { Button, Dropdown, Tooltip, message, theme } from 'antd';
 import { MoreOutlined, MessageTwoTone } from '@ant-design/icons';
 import { ColumnType } from 'antd/lib/table';
 import { DisciplineDto, MentorRegistryDto } from 'api';
 import { ModalDataMode } from 'pages/admin/mentor-registry';
 import css from 'styled-jsx/css';
+import { PublicSvgIcon } from '@client/components/Icons';
 
 interface ChildrenProp {
   setCurrentPage: Dispatch<SetStateAction<number>>;
@@ -68,6 +69,8 @@ export const MentorRegistryTableContainer = ({
   currentPage,
   total,
 }: Props) => {
+  const { token } = theme.useToken();
+
   const renderPreselectedCourses = (courses: Course[]) => {
     return (values: number[], record: MentorRegistryDto) => {
       return values
@@ -93,7 +96,11 @@ export const MentorRegistryTableContainer = ({
     const isMentor = record.courses.some(id => !record.preselectedCourses.includes(id));
     return (
       <div className="info-icons">
-        {isMentor ? <div title="Mentor in the past" className="icon-mentor" /> : null}
+        {isMentor ? (
+          <div title="Mentor in the past" style={{ color: token.colorTextSecondary }}>
+            <PublicSvgIcon src="/static/svg/master-yoda.svg" size="1rem" />
+          </div>
+        ) : null}
         {record.comment && (
           <Tooltip placement="top" title={record.comment}>
             <MessageTwoTone />
@@ -394,14 +401,6 @@ const mentorRegistryStyles = css`
 
   .icon-flag-uk {
     background-image: url(/static/images/united-kingdom.png);
-    background-position: center;
-    background-size: contain;
-    width: 16px;
-    height: 16px;
-  }
-
-  .icon-mentor {
-    background-image: url(/static/svg/master-yoda.svg);
     background-position: center;
     background-size: contain;
     width: 16px;

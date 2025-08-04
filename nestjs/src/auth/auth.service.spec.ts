@@ -9,6 +9,7 @@ import { HttpService } from '@nestjs/axios';
 import { UserNotificationsService } from '../users-notifications/users.notifications.service';
 import { NotificationUserConnection } from '@entities/notificationUserConnection';
 import { LoginState } from '@entities/loginState';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -28,6 +29,7 @@ describe('AuthService', () => {
         { provide: UserNotificationsService, useValue: {} },
         { provide: HttpService, useValue: {} },
         { provide: getRepositoryToken(NotificationUserConnection), useValue: {} },
+        { provide: CACHE_MANAGER, useValue: { del: jest.fn() } },
       ],
     }).compile();
 
