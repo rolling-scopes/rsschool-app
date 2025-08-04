@@ -1,7 +1,7 @@
 import { LoginData, LoginState } from '@entities/loginState';
 import { User } from '@entities/user';
 import { HttpService } from '@nestjs/axios';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { Request } from 'express';
 import { customAlphabet } from 'nanoid/async';
@@ -16,6 +16,7 @@ import { lastValueFrom } from 'rxjs';
 import * as dayjs from 'dayjs';
 import { NotificationUserConnection } from '@entities/notificationUserConnection';
 import { CourseUser } from '@entities/courseUser';
+import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 
 const nanoid = customAlphabet('1234567890abcdef', 10);
 
@@ -53,6 +54,7 @@ export class AuthService {
     @InjectRepository(NotificationUserConnection)
     private notificationUserConnectionRepository: Repository<NotificationUserConnection>,
     private httpService: HttpService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {
     this.admins = configService.users.admins;
     this.hirers = configService.users.hirers;
@@ -231,5 +233,10 @@ export class AuthService {
       mentors: result.mentors ?? [],
       courseUsers: result.courseUsers ?? [],
     };
+  }
+
+  public async clearAuthUserSessionCache(userId: number) {
+    const cacheKey = `auth-user-${userId}`;
+    await this.cacheManager.del(cacheKey);
   }
 }
