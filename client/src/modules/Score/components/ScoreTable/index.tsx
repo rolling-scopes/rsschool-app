@@ -97,13 +97,33 @@ export function ScoreTable(props: Props) {
         courseService.getStudentCourseScore(props.session?.githubId as string),
         courseTasksApi.getCourseTasks(props.course.id),
       ]);
+
+      const {
+        content,
+        pagination: { totalPages },
+      } = courseScore;
+
+      const {
+        pagination: { current: currentPage },
+      } = students;
+
+      if (currentPage > totalPages) {
+        const { content, pagination } = await courseService.getCourseScore(
+          { ...students.pagination, current: totalPages },
+          filters,
+          students.order,
+        );
+        setStudents({ ...students, content, pagination: { ...pagination, current: totalPages } });
+      } else {
+        setStudents({ ...students, content, pagination: courseScore.pagination });
+      }
+
       const sortedTasks = courseTasks.data
         .filter(task => !!task.studentEndDate || props.course.completed)
         .map(task => ({
           ...task,
           isVisible: !notVisibleColumns.includes(String(task.id)),
         }));
-      setStudents({ ...students, content: courseScore.content, pagination: courseScore.pagination });
       setStudentScore(studentCourseScore);
       setCourseTasks(sortedTasks);
       setColumns(
