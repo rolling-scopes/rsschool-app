@@ -97,6 +97,19 @@ export function ScoreTable(props: Props) {
         courseService.getStudentCourseScore(props.session?.githubId as string),
         courseTasksApi.getCourseTasks(props.course.id),
       ]);
+
+      const {
+        pagination: { totalPages },
+      } = courseScore;
+      const {
+        pagination: { current: currentPage },
+      } = students;
+
+      if (currentPage > totalPages) {
+        setStudents({ ...students, pagination: { ...courseScore.pagination, current: totalPages } });
+        return;
+      }
+
       const sortedTasks = courseTasks.data
         .filter(task => !!task.studentEndDate || props.course.completed)
         .map(task => ({
