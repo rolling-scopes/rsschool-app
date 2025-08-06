@@ -72,8 +72,8 @@ export function CrossCheckCriteria({ criteria }: Props) {
               style={{
                 display: 'inline-block',
                 width: '100%',
-                backgroundColor: '#fff2f2',
-                border: '1px #ffb0b0 solid',
+                backgroundColor: token.red3,
+                border: `1px solid ${token.colorBorder}`,
                 padding: '14px 12px',
               }}
             >
