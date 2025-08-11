@@ -44,8 +44,6 @@ export class EndorsementService {
       const result = await this.openAI.chat.completions.create({
         model: 'gpt-5',
         messages: [{ role: 'user', content: prompt.text }],
-        temperature: prompt.temperature ?? 0.5,
-        reasoning_effort: 'minimal',
       });
       this.logger.log(`Open AI response received`, result);
       const content = result.choices[0]?.message?.content ?? '';
