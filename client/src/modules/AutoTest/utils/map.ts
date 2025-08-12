@@ -3,12 +3,15 @@ import dayjs from 'dayjs';
 import { SelfEducationPublicAttributes, Verification } from 'services/course';
 import { CourseTaskState, CourseTaskStatus, CourseTaskVerifications } from '../types';
 
-function getState({ studentEndDate }: CourseTaskDetailedDto, verifications: Verification[]): CourseTaskState {
+function getState(courseTask: CourseTaskDetailedDto, verifications: Verification[]): CourseTaskState {
   const now = dayjs();
-  const end = dayjs(studentEndDate);
+  const end = dayjs(courseTask.studentEndDate);
   const attemptsCount = verifications?.length || 0;
 
-  if (attemptsCount > 0) {
+  const publicAttributes = courseTask.publicAttributes as SelfEducationPublicAttributes;
+  const isScorePassed = verifications?.some(v => v.score >= publicAttributes.tresholdPercentage) ?? false;
+
+  if (isScorePassed) {
     return CourseTaskState.Completed;
   }
 
