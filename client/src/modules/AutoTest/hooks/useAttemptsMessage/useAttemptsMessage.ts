@@ -48,7 +48,7 @@ export function useAttemptsMessage(courseTask: CourseTaskVerifications) {
     if (tresholdPercentage && maxAttemptsNumber) {
       let str = `You must score at least ${tresholdPercentage}% of points to pass. You have only ${maxAttemptsNumber} attempts.`;
 
-      if (strictAttemptsMode) {
+      if (!strictAttemptsMode) {
         str += ' After limit attempts is over you can get only half of a score.';
       }
 
