@@ -23,18 +23,29 @@ function getState(courseTask: CourseTaskDetailedDto, verifications: Verification
 }
 
 function getStatus(
-  { studentEndDate, maxScore }: CourseTaskDetailedDto,
+  { studentEndDate, maxScore, publicAttributes }: CourseTaskDetailedDto,
   verifications: Verification[],
 ): CourseTaskStatus {
   const attemptsCount = verifications?.length || 0;
   const now = dayjs();
   const end = dayjs(studentEndDate);
 
+  const publicAttr = publicAttributes as SelfEducationPublicAttributes;
+  const isMaxAttemptsCount = attemptsCount >= publicAttr.maxAttemptsNumber;
+
   if (now.isAfter(end) && !attemptsCount) {
     return CourseTaskStatus.Missed;
   }
 
+  if (publicAttr.strictAttemptsMode && isMaxAttemptsCount) {
+    return CourseTaskStatus.Done;
+  }
+
   if (maxScore === verifications[0]?.score || (now.isAfter(end) && attemptsCount)) {
+    return CourseTaskStatus.Done;
+  }
+
+  if (isMaxAttemptsCount && maxScore / 2 === verifications[0]?.score) {
     return CourseTaskStatus.Done;
   }
 
