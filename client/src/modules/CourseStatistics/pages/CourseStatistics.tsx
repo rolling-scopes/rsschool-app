@@ -2,7 +2,6 @@ import { PageLayout } from 'components/PageLayout';
 import { useActiveCourseContext } from 'modules/Course/contexts';
 import Masonry from 'react-masonry-css';
 import { StudentsCountriesCard } from '../components/StudentsCountriesCard';
-import { useCourseStats } from '../hooks';
 import { StudentsStatsCard } from '../components/StudentsStatsCard';
 import css from 'styled-jsx/css';
 import { MentorsCountriesCard } from '../components/MentorsCountriesCard/MentorsCountriesCard';
@@ -12,13 +11,34 @@ import { StudentsWithCertificateCard } from '../components/StudentsWithCertifica
 import { StudentsEligibleForCertificationCard } from '../components/StudentsEligibleForCertificationCard';
 import { TaskPerformanceCard } from '../components/TaskPerformanceCard';
 import { StudentsCertificatesCountriesCard } from '../components/StudentsCertificatesCountriesCard';
-import { theme } from 'antd';
+import { Flex, Switch, theme, Typography } from 'antd';
+import CalendarOutlined from '@ant-design/icons/CalendarOutlined';
+import { FundProjectionScreenOutlined } from '@ant-design/icons';
+import { useEffect, useState } from 'react';
+import { useCoursesStats } from '../hooks/useCourseStats/useCourseStats';
 
 const gapSize = 24;
 
+enum StatScope {
+  Current = 'Current',
+  Timeline = 'Timeline',
+}
+
 function CourseStatistic() {
-  const { course } = useActiveCourseContext();
-  const { loading, value: stats } = useCourseStats(course.id);
+  const [statScope, setStatScope] = useState<StatScope>(StatScope.Current);
+  const { course, courses } = useActiveCourseContext();
+  const { token } = theme.useToken();
+  const [ids, setIds] = useState<number[]>([]);
+  const { loading, coursesData: stats } = useCoursesStats(ids);
+
+  useEffect(() => {
+    if (statScope === StatScope.Timeline) {
+      const ids = courses.map(course => course.id);
+      setIds(ids);
+    } else {
+      setIds([course.id]);
+    }
+  }, [course, courses, statScope]);
 
   const masonryBreakPoints = {
     default: 4,
@@ -84,10 +104,21 @@ function CourseStatistic() {
       },
   ].filter(Boolean);
 
-  const { token } = theme.useToken();
+  const handleStatScope = () => {
+    setStatScope(prev => (prev === StatScope.Current ? StatScope.Timeline : StatScope.Current));
+  };
 
   return (
     <PageLayout loading={loading} title="Course Statistics" showCourseName background={token.colorBgLayout}>
+      <Flex justify="space-between" align="center" gap="1rem" style={{ paddingBottom: '1rem' }}>
+        <Typography>{statScope === StatScope.Current ? 'Current course' : 'Period of time'}</Typography>
+        <Switch
+          checkedChildren={<FundProjectionScreenOutlined />}
+          unCheckedChildren={<CalendarOutlined />}
+          checked={statScope === StatScope.Current}
+          onChange={handleStatScope}
+        />
+      </Flex>
       <Masonry
         breakpointCols={masonryBreakPoints}
         className={masonryClassName}
