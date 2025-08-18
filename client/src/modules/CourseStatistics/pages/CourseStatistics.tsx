@@ -150,14 +150,14 @@ function CourseStatistic() {
 
   const handleYearSelection: DatePickerProps['onChange'] = date => {
     if (!date) {
-      getCoursesByDate();
+      clearCourseSelection()
       return;
     }
 
-    const selectedYear = date.year();
+    const selected = date.year();
     setSelectedCourse('Select the course');
     setSelectedYear(date.year());
-    getCoursesByDate(selectedYear);
+    getCoursesByDate(selected);
   };
 
   return (
