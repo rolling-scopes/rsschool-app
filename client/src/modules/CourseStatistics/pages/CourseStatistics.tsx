@@ -11,9 +11,9 @@ import { StudentsWithCertificateCard } from '../components/StudentsWithCertifica
 import { StudentsEligibleForCertificationCard } from '../components/StudentsEligibleForCertificationCard';
 import { TaskPerformanceCard } from '../components/TaskPerformanceCard';
 import { StudentsCertificatesCountriesCard } from '../components/StudentsCertificatesCountriesCard';
-import { Flex, Switch, theme, Typography } from 'antd';
+import { Button, DatePicker, DatePickerProps, Dropdown, Flex, MenuProps, Space, Switch, theme, Typography } from 'antd';
 import CalendarOutlined from '@ant-design/icons/CalendarOutlined';
-import { FundProjectionScreenOutlined } from '@ant-design/icons';
+import { ClearOutlined, DownOutlined, FundProjectionScreenOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import { useCoursesStats } from '../hooks/useCourseStats/useCourseStats';
 
@@ -27,14 +27,19 @@ enum StatScope {
 function CourseStatistic() {
   const [statScope, setStatScope] = useState<StatScope>(StatScope.Current);
   const { course, courses } = useActiveCourseContext();
+  const [coursesItems, setCoursesItems] = useState<MenuProps['items']>([]);
   const { token } = theme.useToken();
   const [ids, setIds] = useState<number[]>([]);
+  const [selectedCourse, setSelectedCourse] = useState<string | undefined>('Select the course');
+  const [selectedYear, setSelectedYear] = useState<number>();
   const { loading, coursesData: stats } = useCoursesStats(ids);
 
   useEffect(() => {
     if (statScope === StatScope.Timeline) {
       const ids = courses.map(course => course.id);
       setIds(ids);
+      const list = courses.map(({ fullName, id }) => ({ label: fullName, key: id.toString() }));
+      setCoursesItems(list);
     } else {
       setIds([course.id]);
     }
@@ -108,10 +113,76 @@ function CourseStatistic() {
     setStatScope(prev => (prev === StatScope.Current ? StatScope.Timeline : StatScope.Current));
   };
 
+  const getCoursesByDate = (selectedYear: number = 0) => {
+    const ids = courses
+      .map(({ startDate, id }) => {
+        const year = new Date(startDate).getFullYear();
+        if (year >= selectedYear) {
+          return id;
+        }
+      })
+      .filter(Boolean);
+    setIds(ids);
+
+    const list = courses
+      .map(({ fullName, id, startDate }) => {
+        const year = new Date(startDate).getFullYear();
+        if (year >= selectedYear) {
+          return { label: fullName, key: id.toString() };
+        }
+      })
+      .filter(Boolean);
+    setCoursesItems(list);
+  };
+
+  const handleCourseSelection: MenuProps['onClick'] = e => {
+    const id = Number(e.key);
+    setIds([id]);
+    const label = courses?.find(el => el.id === id)?.fullName;
+    setSelectedCourse(label);
+    setSelectedYear(undefined);
+  };
+
+  const clearCourseSelection = () => {
+    setSelectedCourse('Select the course');
+    getCoursesByDate(selectedYear);
+  };
+
+  const handleYearSelection: DatePickerProps['onChange'] = date => {
+    if (!date) {
+      getCoursesByDate();
+      return;
+    }
+
+    const selectedYear = date.year();
+    setSelectedCourse('Select the course');
+    setSelectedYear(date.year());
+    getCoursesByDate(selectedYear);
+  };
+
   return (
     <PageLayout loading={loading} title="Course Statistics" showCourseName background={token.colorBgLayout}>
       <Flex justify="space-between" align="center" gap="1rem" style={{ paddingBottom: '1rem' }}>
-        <Typography>{statScope === StatScope.Current ? 'Current course' : 'Period of time'}</Typography>
+        {statScope === StatScope.Current ? (
+          <Typography>Course: {course.name}</Typography>
+        ) : (
+          <>
+            <Space>
+              <Dropdown trigger={['click']} menu={{ items: coursesItems, onClick: handleCourseSelection }}>
+                <Button>
+                  <Space>
+                    {selectedCourse}
+                    <DownOutlined />
+                  </Space>
+                </Button>
+              </Dropdown>
+              <Button shape="circle" onClick={clearCourseSelection}>
+                <ClearOutlined />
+              </Button>
+            </Space>
+            <DatePicker onChange={handleYearSelection} picker="year" />
+          </>
+        )}
         <Switch
           checkedChildren={<FundProjectionScreenOutlined />}
           unCheckedChildren={<CalendarOutlined />}
