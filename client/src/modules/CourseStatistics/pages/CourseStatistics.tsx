@@ -30,7 +30,8 @@ function CourseStatistic() {
   const [coursesItems, setCoursesItems] = useState<MenuProps['items']>([]);
   const { token } = theme.useToken();
   const [ids, setIds] = useState<number[]>([]);
-  const [selectedCourse, setSelectedCourse] = useState<string | undefined>('Select the course');
+  const selectCourseDefaultMessage = 'Select the course';
+  const [selectedCourse, setSelectedCourse] = useState<string | undefined>(selectCourseDefaultMessage);
   const [selectedYear, setSelectedYear] = useState<number>();
   const { loading, coursesData: stats } = useCoursesStats(ids);
 
@@ -144,7 +145,7 @@ function CourseStatistic() {
   };
 
   const clearCourseSelection = () => {
-    setSelectedCourse('Select the course');
+    setSelectedCourse(selectCourseDefaultMessage);
     getCoursesByDate(selectedYear);
   };
 
@@ -155,7 +156,7 @@ function CourseStatistic() {
     }
 
     const selected = date.year();
-    setSelectedCourse('Select the course');
+    setSelectedCourse(selectCourseDefaultMessage);
     setSelectedYear(date.year());
     getCoursesByDate(selected);
   };
