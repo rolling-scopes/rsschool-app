@@ -25,6 +25,14 @@ export class CourseAccessService {
     return !!user.courses[courseId];
   }
 
+  public async canAccessCourseList(user: AuthUser, courseIds: number[]): Promise<number[]> {
+    if (user.appRoles?.includes(Role.Admin)) {
+      return courseIds;
+    }
+
+    return courseIds.filter(courseId => !!user.courses[courseId]);
+  }
+
   public canAccessCourseAsManager(user: AuthUser, courseId: number): boolean {
     return user.courses[courseId]?.roles.includes(CourseRole.Manager) || user.isAdmin;
   }

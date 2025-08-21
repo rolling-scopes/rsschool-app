@@ -3,7 +3,9 @@ import {
   ForbiddenException,
   Get,
   Param,
+  ParseArrayPipe,
   ParseIntPipe,
+  Query,
   Req,
   UseGuards,
   UseInterceptors,
@@ -14,9 +16,15 @@ import { CourseGuard, CurrentRequest, DefaultGuard } from '../../auth';
 import { ONE_HOUR_CACHE_TTL } from '../../constants';
 import { CourseAccessService } from '../course-access.service';
 import { CourseStatsService } from './course-stats.service';
-import { CourseStatsDto, CountriesStatsDto, CourseMentorsStatsDto, TaskPerformanceStatsDto } from './dto';
+import {
+  CourseStatsDto,
+  CountriesStatsDto,
+  CourseMentorsStatsDto,
+  TaskPerformanceStatsDto,
+  CourseAggregateStatsDto,
+} from './dto';
 
-@Controller('courses/:courseId/stats')
+@Controller('courses')
 @ApiTags('course stats')
 @UseGuards(DefaultGuard)
 export class CourseStatsController {
@@ -25,7 +33,22 @@ export class CourseStatsController {
     private courseAccessService: CourseAccessService,
   ) {}
 
-  @Get('/')
+  @Get('/aggregate/stats')
+  @CacheTTL(ONE_HOUR_CACHE_TTL)
+  @UseInterceptors(CacheInterceptor)
+  @ApiOperation({ operationId: 'getCoursesStats' })
+  @ApiOkResponse({ type: CourseAggregateStatsDto })
+  public async getCoursesStats(
+    @Req() req: CurrentRequest,
+    @Query('ids', new ParseArrayPipe({ items: Number, optional: true })) ids: number[],
+    @Query('year', new ParseIntPipe({ optional: true })) year: number,
+  ) {
+    const allowedCourseIds = await this.courseAccessService.canAccessCourseList(req.user, ids);
+    const data = await this.courseStatsService.getCoursesStats(allowedCourseIds, year);
+    return new CourseAggregateStatsDto(data);
+  }
+
+  @Get('/:courseId/stats')
   @CacheTTL(ONE_HOUR_CACHE_TTL)
   @UseInterceptors(CacheInterceptor)
   @ApiOperation({ operationId: 'getCourseStats' })
@@ -38,7 +61,7 @@ export class CourseStatsController {
     return new CourseStatsDto(data);
   }
 
-  @Get('/mentors')
+  @Get('/:courseId/stats/mentors')
   @CacheTTL(ONE_HOUR_CACHE_TTL)
   @UseInterceptors(CacheInterceptor)
   @UseGuards(DefaultGuard, CourseGuard)
@@ -50,7 +73,7 @@ export class CourseStatsController {
     return new CourseMentorsStatsDto(data);
   }
 
-  @Get('/mentors/countries')
+  @Get('/:courseId/stats/mentors/countries')
   @CacheTTL(ONE_HOUR_CACHE_TTL)
   @UseInterceptors(CacheInterceptor)
   @UseGuards(DefaultGuard, CourseGuard)
@@ -62,7 +85,7 @@ export class CourseStatsController {
     return data;
   }
 
-  @Get('/students/countries')
+  @Get('/:courseId/stats/students/countries')
   @CacheTTL(ONE_HOUR_CACHE_TTL)
   @UseInterceptors(CacheInterceptor)
   @UseGuards(DefaultGuard, CourseGuard)
@@ -74,7 +97,7 @@ export class CourseStatsController {
     return data;
   }
 
-  @Get('/students/certificates/countries')
+  @Get('/:courseId/stats/students/certificates/countries')
   @CacheTTL(ONE_HOUR_CACHE_TTL)
   @UseInterceptors(CacheInterceptor)
   @UseGuards(DefaultGuard, CourseGuard)
@@ -88,7 +111,7 @@ export class CourseStatsController {
     return data;
   }
 
-  @Get('/task/:taskId/performance')
+  @Get('/:courseId/stats/task/:taskId/performance')
   @CacheTTL(ONE_HOUR_CACHE_TTL)
   @UseInterceptors(CacheInterceptor)
   @UseGuards(DefaultGuard, CourseGuard)
