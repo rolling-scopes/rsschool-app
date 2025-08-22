@@ -1,4 +1,4 @@
-import { Card } from 'antd';
+import { Card, Skeleton } from 'antd';
 import { CountriesStatsDto } from 'api';
 import dynamic from 'next/dynamic';
 
@@ -9,6 +9,7 @@ type Props = {
 
 const CountriesChart = dynamic(() => import('../CountriesChart/CountriesChart'), {
   ssr: false,
+  loading: () => <Skeleton active={true} />,
 });
 
 export const StudentsCountriesCard = ({ studentsCountriesStats, activeStudentsCount }: Props) => {

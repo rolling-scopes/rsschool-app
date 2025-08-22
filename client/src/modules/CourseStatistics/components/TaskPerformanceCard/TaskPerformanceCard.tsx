@@ -1,5 +1,5 @@
 import { Datum } from '@antv/g2plot';
-import { Card, Flex, Form, Image, Select, Typography } from 'antd';
+import { Card, Flex, Form, Image, Select, Skeleton, Typography } from 'antd';
 import { CourseStatsApi, CourseTaskDto, TaskPerformanceStatsDto } from 'api';
 import { useActiveCourseContext } from 'modules/Course/contexts';
 import dynamic from 'next/dynamic';
@@ -16,7 +16,10 @@ type Props = {
 
 const { Text } = Typography;
 
-const DonutChart = dynamic(() => import('../DonutChart/DonutChart'), { ssr: false });
+const DonutChart = dynamic(() => import('../DonutChart/DonutChart'), {
+  ssr: false,
+  loading: () => <Skeleton active={true} />,
+});
 
 export const TaskPerformanceCard = ({ tasks }: Props) => {
   const { course } = useActiveCourseContext();

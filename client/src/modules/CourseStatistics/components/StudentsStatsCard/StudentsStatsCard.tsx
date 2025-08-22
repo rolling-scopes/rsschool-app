@@ -1,4 +1,4 @@
-import { Card, Typography } from 'antd';
+import { Card, Skeleton, Typography } from 'antd';
 import { CourseStatsDto } from 'api';
 import dynamic from 'next/dynamic';
 
@@ -10,6 +10,7 @@ const { Text } = Typography;
 
 const StudentsStatsChart = dynamic(() => import('../LiquidChart/LiquidChart'), {
   ssr: false,
+  loading: () => <Skeleton active={true} />,
 });
 
 export const StudentsStatsCard = ({ studentsStats }: Props) => {
