@@ -1,7 +1,7 @@
 import { Student } from '@entities/student';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MoreThanOrEqual, Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { CountriesStatsDto, CountryStatDto } from './dto';
 import {
   Certificate,
@@ -264,9 +264,10 @@ export class CourseStatsService {
     let courseIds = ids;
 
     if (year) {
-      const date = new Date(year.toString());
+      const startDate = new Date(year.toString());
+      const endDate = new Date((year + 1).toString());
       const courses = await this.courseRepository.find({
-        where: { startDate: MoreThanOrEqual(date) },
+        where: { startDate: Between(startDate, endDate) },
       });
       courseIds = courses.map(({ id }) => id);
     }

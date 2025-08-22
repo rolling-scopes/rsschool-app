@@ -11,10 +11,10 @@ import { StudentsWithCertificateCard } from '../components/StudentsWithCertifica
 import { StudentsEligibleForCertificationCard } from '../components/StudentsEligibleForCertificationCard';
 import { TaskPerformanceCard } from '../components/TaskPerformanceCard';
 import { StudentsCertificatesCountriesCard } from '../components/StudentsCertificatesCountriesCard';
-import { Button, DatePicker, DatePickerProps, Dropdown, Flex, MenuProps, Space, Switch, theme, Typography } from 'antd';
+import { DatePicker, DatePickerProps, Empty, Flex, Space, Switch, theme } from 'antd';
 import CalendarOutlined from '@ant-design/icons/CalendarOutlined';
-import { ClearOutlined, DownOutlined, FundProjectionScreenOutlined } from '@ant-design/icons';
-import { useEffect, useState } from 'react';
+import { FundProjectionScreenOutlined } from '@ant-design/icons';
+import { useState } from 'react';
 import { useCoursesStats } from '../hooks/useCourseStats/useCourseStats';
 
 const gapSize = 24;
@@ -26,25 +26,11 @@ enum StatScope {
 
 function CourseStatistic() {
   const [statScope, setStatScope] = useState<StatScope>(StatScope.Current);
-  const { course, courses } = useActiveCourseContext();
-  const [coursesItems, setCoursesItems] = useState<MenuProps['items']>([]);
+  const { course } = useActiveCourseContext();
   const { token } = theme.useToken();
-  const [ids, setIds] = useState<number[]>([]);
-  const selectCourseDefaultMessage = 'Select the course';
-  const [selectedCourse, setSelectedCourse] = useState<string | undefined>(selectCourseDefaultMessage);
+  const [ids, setIds] = useState<number[]>([course.id]);
   const [selectedYear, setSelectedYear] = useState<number>();
-  const { loading, coursesData: stats } = useCoursesStats(ids);
-
-  useEffect(() => {
-    if (statScope === StatScope.Timeline) {
-      const ids = courses.map(course => course.id);
-      setIds(ids);
-      const list = courses.map(({ fullName, id }) => ({ label: fullName, key: id.toString() }));
-      setCoursesItems(list);
-    } else {
-      setIds([course.id]);
-    }
-  }, [course, courses, statScope]);
+  const { loading, coursesData: stats } = useCoursesStats({ ids, year: selectedYear });
 
   const masonryBreakPoints = {
     default: 4,
@@ -110,55 +96,23 @@ function CourseStatistic() {
       },
   ].filter(Boolean);
 
-  const handleStatScope = () => {
-    setStatScope(prev => (prev === StatScope.Current ? StatScope.Timeline : StatScope.Current));
-  };
-
-  const getCoursesByDate = (selectedYear: number = 0) => {
-    const ids = courses
-      .map(({ startDate, id }) => {
-        const year = new Date(startDate).getFullYear();
-        if (year >= selectedYear) {
-          return id;
-        }
-      })
-      .filter(Boolean);
-    setIds(ids);
-
-    const list = courses
-      .map(({ fullName, id, startDate }) => {
-        const year = new Date(startDate).getFullYear();
-        if (year >= selectedYear) {
-          return { label: fullName, key: id.toString() };
-        }
-      })
-      .filter(Boolean);
-    setCoursesItems(list);
-  };
-
-  const handleCourseSelection: MenuProps['onClick'] = e => {
-    const id = Number(e.key);
-    setIds([id]);
-    const label = courses?.find(el => el.id === id)?.fullName;
-    setSelectedCourse(label);
-    setSelectedYear(undefined);
-  };
-
-  const clearCourseSelection = () => {
-    setSelectedCourse(selectCourseDefaultMessage);
-    getCoursesByDate(selectedYear);
+  const handleStatScope = (value: boolean) => {
+    if (value) {
+      setStatScope(StatScope.Current);
+      setIds([course.id]);
+      setSelectedYear(0);
+    } else {
+      setStatScope(StatScope.Timeline);
+      setIds([]);
+    }
   };
 
   const handleYearSelection: DatePickerProps['onChange'] = date => {
     if (!date) {
-      clearCourseSelection();
       return;
     }
 
-    const selected = date.year();
-    setSelectedCourse(selectCourseDefaultMessage);
     setSelectedYear(date.year());
-    getCoursesByDate(selected);
   };
 
   return (
@@ -170,28 +124,11 @@ function CourseStatistic() {
         gap="1rem"
         style={{ paddingBottom: '1rem', minHeight: '3rem' }}
       >
-        {statScope === StatScope.Current ? (
-          <Typography>Course: {course.name}</Typography>
-        ) : (
-          <>
-            <Space>
-              <Dropdown trigger={['click']} menu={{ items: coursesItems, onClick: handleCourseSelection }}>
-                <Button>
-                  <Space>
-                    <Typography.Text ellipsis={true} style={{ width: '15ch' }}>
-                      {selectedCourse}
-                    </Typography.Text>
-                    <DownOutlined />
-                  </Space>
-                </Button>
-              </Dropdown>
-              <Button shape="circle" onClick={clearCourseSelection}>
-                <ClearOutlined />
-              </Button>
-            </Space>
-            <DatePicker onChange={handleYearSelection} picker="year" />
-          </>
-        )}
+        <Space>
+          {statScope === StatScope.Timeline && (
+            <DatePicker allowClear={false} onChange={handleYearSelection} picker="year" />
+          )}
+        </Space>
         <Switch
           checkedChildren={
             <Space>
@@ -207,17 +144,21 @@ function CourseStatistic() {
           onChange={handleStatScope}
         />
       </Flex>
-      <Masonry
-        breakpointCols={masonryBreakPoints}
-        className={masonryClassName}
-        columnClassName={masonryColumnClassName}
-      >
-        {cards.map(({ title, component }) => (
-          <div style={{ marginBottom: gapSize }} key={title}>
-            {component}
-          </div>
-        ))}
-      </Masonry>
+      {statScope === StatScope.Timeline && !selectedYear ? (
+        <Empty description="Please select the year" />
+      ) : (
+        <Masonry
+          breakpointCols={masonryBreakPoints}
+          className={masonryClassName}
+          columnClassName={masonryColumnClassName}
+        >
+          {cards.map(({ title, component }) => (
+            <div style={{ marginBottom: gapSize }} key={title}>
+              {component}
+            </div>
+          ))}
+        </Masonry>
+      )}
       {masonryStyles}
       {masonryColumnStyles}
     </PageLayout>

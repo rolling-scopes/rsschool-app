@@ -5,9 +5,15 @@ import { CoursesStatsDto, CourseStatsApi } from '@client/api';
 
 const courseStatsApi = new CourseStatsApi();
 
-async function fetchCourseStats(ids: number[]): Promise<CoursesStatsDto | { error: boolean }> {
+async function fetchCourseStats({
+  ids = [],
+  year = 0,
+}: {
+  ids?: number[];
+  year?: number;
+}): Promise<CoursesStatsDto | { error: boolean }> {
   try {
-    const { data } = await courseStatsApi.getCoursesStats(ids, 0);
+    const { data } = await courseStatsApi.getCoursesStats(ids, year);
     return data;
   } catch {
     console.error("Couldn't get course(s) stats");
@@ -15,7 +21,7 @@ async function fetchCourseStats(ids: number[]): Promise<CoursesStatsDto | { erro
   }
 }
 
-export function useCoursesStats(ids: number[]) {
+export function useCoursesStats({ ids, year }: { ids?: number[]; year?: number }) {
   const [loading, setLoading] = useState<boolean>(false);
   const [coursesData, setCoursesData] = useState<CoursesStatsDto>();
   const { message } = useMessage();
@@ -23,11 +29,13 @@ export function useCoursesStats(ids: number[]) {
   const cached = useCallback(memoize(fetchCourseStats), []);
 
   useEffect(() => {
-    if (ids.length === 0) {
+    setLoading(true);
+    if (!ids?.length && !year) {
+      setLoading(false);
       return;
     }
-    setLoading(true);
-    cached(ids).then(result => {
+
+    cached({ ids, year }).then(result => {
       setLoading(false);
       if (result && 'error' in result) {
         message.error("Can't load courses data. Please try latter.");
@@ -35,7 +43,7 @@ export function useCoursesStats(ids: number[]) {
         setCoursesData(result);
       }
     });
-  }, [ids, cached]);
+  }, [ids, year, cached]);
 
   return { loading, coursesData };
 }
