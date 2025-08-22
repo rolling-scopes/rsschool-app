@@ -163,7 +163,13 @@ function CourseStatistic() {
 
   return (
     <PageLayout loading={loading} title="Course Statistics" showCourseName background={token.colorBgLayout}>
-      <Flex justify="space-between" align="center" gap="1rem" style={{ paddingBottom: '1rem' }}>
+      <Flex
+        wrap={'wrap'}
+        justify="space-between"
+        align="center"
+        gap="1rem"
+        style={{ paddingBottom: '1rem', minHeight: '3rem' }}
+      >
         {statScope === StatScope.Current ? (
           <Typography>Course: {course.name}</Typography>
         ) : (
@@ -172,7 +178,9 @@ function CourseStatistic() {
               <Dropdown trigger={['click']} menu={{ items: coursesItems, onClick: handleCourseSelection }}>
                 <Button>
                   <Space>
-                    {selectedCourse}
+                    <Typography.Text ellipsis={true} style={{ width: '15ch' }}>
+                      {selectedCourse}
+                    </Typography.Text>
                     <DownOutlined />
                   </Space>
                 </Button>
@@ -185,8 +193,16 @@ function CourseStatistic() {
           </>
         )}
         <Switch
-          checkedChildren={<FundProjectionScreenOutlined />}
-          unCheckedChildren={<CalendarOutlined />}
+          checkedChildren={
+            <Space>
+              Current <FundProjectionScreenOutlined />
+            </Space>
+          }
+          unCheckedChildren={
+            <Space>
+              <CalendarOutlined /> Timeline
+            </Space>
+          }
           checked={statScope === StatScope.Current}
           onChange={handleStatScope}
         />
