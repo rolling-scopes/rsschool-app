@@ -12,8 +12,6 @@ import { StudentsEligibleForCertificationCard } from '../components/StudentsElig
 import { TaskPerformanceCard } from '../components/TaskPerformanceCard';
 import { StudentsCertificatesCountriesCard } from '../components/StudentsCertificatesCountriesCard';
 import { DatePicker, DatePickerProps, Empty, Flex, Space, Switch, theme } from 'antd';
-import CalendarOutlined from '@ant-design/icons/CalendarOutlined';
-import { FundProjectionScreenOutlined } from '@ant-design/icons';
 import { useContext, useState } from 'react';
 import { useCoursesStats } from '../hooks/useCourseStats/useCourseStats';
 
@@ -137,16 +135,8 @@ function CourseStatistic() {
             )}
           </Space>
           <Switch
-            checkedChildren={
-              <Space>
-                Current <FundProjectionScreenOutlined />
-              </Space>
-            }
-            unCheckedChildren={
-              <Space>
-                <CalendarOutlined /> Timeline
-              </Space>
-            }
+            checkedChildren="Current"
+            unCheckedChildren="Timeline"
             checked={statScope === StatScope.Current}
             onChange={handleStatScope}
           />
