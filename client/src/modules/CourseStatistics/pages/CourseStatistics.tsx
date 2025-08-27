@@ -1,5 +1,5 @@
 import { PageLayout } from 'components/PageLayout';
-import { useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
 import Masonry from 'react-masonry-css';
 import { StudentsCountriesCard } from '../components/StudentsCountriesCard';
 import { StudentsStatsCard } from '../components/StudentsStatsCard';
@@ -14,7 +14,7 @@ import { StudentsCertificatesCountriesCard } from '../components/StudentsCertifi
 import { DatePicker, DatePickerProps, Empty, Flex, Space, Switch, theme } from 'antd';
 import CalendarOutlined from '@ant-design/icons/CalendarOutlined';
 import { FundProjectionScreenOutlined } from '@ant-design/icons';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useCoursesStats } from '../hooks/useCourseStats/useCourseStats';
 
 const gapSize = 24;
@@ -25,6 +25,7 @@ enum StatScope {
 }
 
 function CourseStatistic() {
+  const { isAdmin } = useContext(SessionContext);
   const [statScope, setStatScope] = useState<StatScope>(StatScope.Current);
   const { course } = useActiveCourseContext();
   const { token } = theme.useToken();
@@ -117,33 +118,35 @@ function CourseStatistic() {
 
   return (
     <PageLayout loading={loading} title="Course Statistics" showCourseName background={token.colorBgLayout}>
-      <Flex
-        wrap={'wrap'}
-        justify="space-between"
-        align="center"
-        gap="1rem"
-        style={{ paddingBottom: '1rem', minHeight: '3rem' }}
-      >
-        <Space>
-          {statScope === StatScope.Timeline && (
-            <DatePicker allowClear={false} onChange={handleYearSelection} picker="year" />
-          )}
-        </Space>
-        <Switch
-          checkedChildren={
-            <Space>
-              Current <FundProjectionScreenOutlined />
-            </Space>
-          }
-          unCheckedChildren={
-            <Space>
-              <CalendarOutlined /> Timeline
-            </Space>
-          }
-          checked={statScope === StatScope.Current}
-          onChange={handleStatScope}
-        />
-      </Flex>
+      {isAdmin && (
+        <Flex
+          wrap={'wrap'}
+          justify="space-between"
+          align="center"
+          gap="1rem"
+          style={{ paddingBottom: '1rem', minHeight: '3rem' }}
+        >
+          <Space>
+            {statScope === StatScope.Timeline && (
+              <DatePicker allowClear={false} onChange={handleYearSelection} picker="year" />
+            )}
+          </Space>
+          <Switch
+            checkedChildren={
+              <Space>
+                Current <FundProjectionScreenOutlined />
+              </Space>
+            }
+            unCheckedChildren={
+              <Space>
+                <CalendarOutlined /> Timeline
+              </Space>
+            }
+            checked={statScope === StatScope.Current}
+            onChange={handleStatScope}
+          />
+        </Flex>
+      )}
       {statScope === StatScope.Timeline && !selectedYear ? (
         <Empty description="Please select the year" />
       ) : (
