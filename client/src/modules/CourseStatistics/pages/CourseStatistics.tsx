@@ -117,7 +117,12 @@ function CourseStatistic() {
   };
 
   return (
-    <PageLayout loading={loading} title="Course Statistics" showCourseName background={token.colorBgLayout}>
+    <PageLayout
+      loading={loading}
+      title={`Course${statScope === StatScope.Timeline && 's'} Statistics`}
+      showCourseName={statScope === StatScope.Current}
+      background={token.colorBgLayout}
+    >
       {isAdmin && (
         <Flex
           wrap={'wrap'}
