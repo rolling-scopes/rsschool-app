@@ -16,8 +16,8 @@ function CourseStatistic() {
   const { isAdmin } = useContext(SessionContext);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams);
-  const [statScope, setStatScope] = useState<StatScope>(!params.get('course') ? StatScope.Current : StatScope.Timeline);
+  const params = new URLSearchParams(searchParams.toString());
+  const [statScope, setStatScope] = useState<StatScope>(params.get('course') ? StatScope.Current : StatScope.Timeline);
   const { course } = useActiveCourseContext();
   const { token } = theme.useToken();
   const [ids, setIds] = useState<number[]>([course.id]);
