@@ -7,12 +7,16 @@ import { useCoursesStats, useStatCards } from '../hooks';
 import { StatScope } from '../entities';
 import { StatScopeSelector } from '../components/StatScopeSelector';
 import css from 'styled-jsx/css';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const gapSize = 24;
 
 function CourseStatistic() {
   const { isAdmin } = useContext(SessionContext);
-  const [statScope, setStatScope] = useState<StatScope>(StatScope.Current);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
+  const [statScope, setStatScope] = useState<StatScope>(params.get('course') ? StatScope.Current : StatScope.Timeline);
   const { course } = useActiveCourseContext();
   const { token } = theme.useToken();
   const [ids, setIds] = useState<number[]>([course.id]);
@@ -32,9 +36,13 @@ function CourseStatistic() {
       setStatScope(StatScope.Current);
       setIds([course.id]);
       setSelectedYear(0);
+      params.set('course', course.alias);
+      router.push(`?${params.toString()}`);
     } else {
       setStatScope(StatScope.Timeline);
       setIds([]);
+      params.delete('course');
+      router.push('');
     }
   };
 
