@@ -1,17 +1,9 @@
 import { Student } from '@entities/student';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CountriesStatsDto, CountryStatDto } from './dto';
-import {
-  Certificate,
-  Course,
-  CourseTask,
-  Mentor,
-  StageInterview,
-  TaskInterviewResult,
-  TaskResult,
-} from '@entities/index';
+import { Certificate, CourseTask, Mentor, StageInterview, TaskInterviewResult, TaskResult } from '@entities/index';
 import { TaskType } from '@entities/task';
 import { CourseTasksService } from '../course-tasks';
 
@@ -31,8 +23,6 @@ export class CourseStatsService {
     readonly taskInterviewResultRepository: Repository<TaskInterviewResult>,
     @InjectRepository(StageInterview)
     readonly stageInterviewRepository: Repository<StageInterview>,
-    @InjectRepository(Course)
-    private readonly courseRepository: Repository<Course>,
   ) {}
 
   private async getMaxScore(courseId: number): Promise<number> {
@@ -260,18 +250,7 @@ export class CourseStatsService {
     return result as T;
   }
 
-  public async getCoursesStats(ids: number[] = [], year: number = 0) {
-    let courseIds = ids;
-
-    if (year) {
-      const startDate = new Date(year.toString());
-      const endDate = new Date((year + 1).toString());
-      const courses = await this.courseRepository.find({
-        where: { startDate: Between(startDate, endDate) },
-      });
-      courseIds = courses.map(({ id }) => id);
-    }
-
+  public async getCoursesStats(ids: number[] = []) {
     const [
       studentsStatsResolved,
       studentsCountriesResolved,
@@ -280,12 +259,12 @@ export class CourseStatsService {
       courseTasksResolved,
       studentsCertificatesCountriesResolved,
     ] = await Promise.all([
-      Promise.all(courseIds.map(courseId => this.getStudents(courseId))),
-      Promise.all(courseIds.map(courseId => this.getStudentCountries(courseId))),
-      Promise.all(courseIds.map(courseId => this.getMentorCountries(courseId))),
-      Promise.all(courseIds.map(courseId => this.getMentors(courseId))),
-      Promise.all(courseIds.map(courseId => this.taskService.getAll(courseId, undefined, false))),
-      Promise.all(courseIds.map(courseId => this.getStudentsWithCertificatesCountries(courseId))),
+      Promise.all(ids.map(courseId => this.getStudents(courseId))),
+      Promise.all(ids.map(courseId => this.getStudentCountries(courseId))),
+      Promise.all(ids.map(courseId => this.getMentorCountries(courseId))),
+      Promise.all(ids.map(courseId => this.getMentors(courseId))),
+      Promise.all(ids.map(courseId => this.taskService.getAll(courseId, undefined, false))),
+      Promise.all(ids.map(courseId => this.getStudentsWithCertificatesCountries(courseId))),
     ]);
 
     return {

@@ -2,7 +2,7 @@ import { Course } from '@entities/course';
 import { Student } from '@entities/student';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, FindOptionsWhere, In, Repository } from 'typeorm';
 import { AuthUser, CourseRole, Role } from '../auth';
 
 // use this as a mark for identifying self-expelled students.
@@ -25,12 +25,32 @@ export class CourseAccessService {
     return !!user.courses[courseId];
   }
 
-  public async canAccessCourseList(user: AuthUser, courseIds: number[]): Promise<number[]> {
-    if (user.appRoles?.includes(Role.Admin)) {
-      return courseIds;
+  public async canAccessCourseList(user: AuthUser, ids: number[], year: number): Promise<number[]> {
+    const isAdmin = user.appRoles?.includes(Role.Admin);
+    let userCourses: number[] = isAdmin ? ids : Object.keys(user.courses).map(Number);
+
+    if (year) {
+      // if the year is provided, but the course list
+      // is empty, return all courses for the given year
+      // for admins and the courses that the user is enrolled
+      // in for students
+      const startDate = new Date(year.toString());
+      const endDate = new Date((year + 1).toString());
+
+      const condition: FindOptionsWhere<Course> = { startDate: Between(startDate, endDate) };
+
+      if (!isAdmin) {
+        condition.id = In(userCourses);
+      }
+
+      const courses = await this.courseRepository.find({
+        where: condition,
+      });
+
+      userCourses = courses.map(({ id }) => id);
     }
 
-    return courseIds.filter(courseId => !!user.courses[courseId]);
+    return userCourses;
   }
 
   public canAccessCourseAsManager(user: AuthUser, courseId: number): boolean {
