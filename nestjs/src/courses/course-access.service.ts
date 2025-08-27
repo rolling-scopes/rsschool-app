@@ -33,7 +33,7 @@ export class CourseAccessService {
       // if the year is provided, but the course list
       // is empty, return all courses for the given year
       // for admins and the courses that the user is enrolled
-      // in for students
+      // in for students.
       const startDate = new Date(year.toString());
       const endDate = new Date((year + 1).toString());
 
