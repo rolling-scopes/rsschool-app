@@ -1,13 +1,21 @@
 import { DatePicker, DatePickerProps, Flex, Space, Switch, SwitchProps } from 'antd';
 import { StatScope } from '@client/modules/CourseStatistics/entities';
+import dayjs from 'dayjs';
 
 type StatScopeSelectorProps = {
   statScope: StatScope;
   handleYearSelection: DatePickerProps['onChange'];
   handleStatScope: SwitchProps['onChange'];
+  selectedYear?: number;
 };
 
-export function StatScopeSelector({ statScope, handleYearSelection, handleStatScope }: StatScopeSelectorProps) {
+export function StatScopeSelector({
+  statScope,
+  handleYearSelection,
+  handleStatScope,
+  selectedYear,
+}: StatScopeSelectorProps) {
+  const date = selectedYear ? dayjs(String(selectedYear)) : dayjs(new Date());
   return (
     <Flex
       wrap={'wrap'}
@@ -18,7 +26,7 @@ export function StatScopeSelector({ statScope, handleYearSelection, handleStatSc
     >
       <Space>
         {statScope === StatScope.Timeline && (
-          <DatePicker allowClear={false} onChange={handleYearSelection} picker="year" />
+          <DatePicker allowClear={false} onChange={handleYearSelection} picker="year" defaultValue={date} />
         )}
       </Space>
       <Switch

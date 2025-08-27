@@ -8,6 +8,7 @@ import { StatScope } from '../entities';
 import { StatScopeSelector } from '../components/StatScopeSelector';
 import css from 'styled-jsx/css';
 import { useRouter, useSearchParams } from 'next/navigation';
+import dayjs from 'dayjs';
 
 const gapSize = 24;
 
@@ -16,11 +17,11 @@ function CourseStatistic() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams);
-  const [statScope, setStatScope] = useState<StatScope>(params.get('course') ? StatScope.Current : StatScope.Timeline);
+  const [statScope, setStatScope] = useState<StatScope>(!params.get('course') ? StatScope.Current : StatScope.Timeline);
   const { course } = useActiveCourseContext();
   const { token } = theme.useToken();
   const [ids, setIds] = useState<number[]>([course.id]);
-  const [selectedYear, setSelectedYear] = useState<number>();
+  const selectedYear = Number(params.get('year'));
   const { loading, coursesData } = useCoursesStats({ ids, year: selectedYear });
   const { cards } = useStatCards({ coursesData });
 
@@ -35,23 +36,23 @@ function CourseStatistic() {
     if (value) {
       setStatScope(StatScope.Current);
       setIds([course.id]);
-      setSelectedYear(0);
       params.set('course', course.alias);
-      router.push(`?${params.toString()}`);
+      params.delete('year');
     } else {
       setStatScope(StatScope.Timeline);
       setIds([]);
       params.delete('course');
-      router.push('');
+      params.set('year', dayjs(new Date()).year());
     }
+    router.push(`?${params.toString()}`);
   };
 
   const handleYearSelection: DatePickerProps['onChange'] = date => {
     if (!date) {
       return;
     }
-
-    setSelectedYear(date.year());
+    params.set('year', date.year());
+    router.push(`?${params.toString()}`);
   };
 
   return (
@@ -66,10 +67,11 @@ function CourseStatistic() {
           statScope={statScope}
           handleStatScope={handleStatScope}
           handleYearSelection={handleYearSelection}
+          selectedYear={selectedYear}
         />
       )}
       {statScope === StatScope.Timeline && !selectedYear ? (
-        <Empty description="Please select the year" />
+        <Empty description="No data available." />
       ) : (
         <Masonry
           breakpointCols={masonryBreakPoints}
