@@ -42,7 +42,7 @@ function CourseStatistic() {
       setStatScope(StatScope.Timeline);
       setIds([]);
       params.delete('course');
-      params.set('year', dayjs(new Date()).year());
+      params.set('year', dayjs(new Date()).year().toString());
     }
     router.push(`?${params.toString()}`);
   };
@@ -51,7 +51,7 @@ function CourseStatistic() {
     if (!date) {
       return;
     }
-    params.set('year', date.year());
+    params.set('year', date.year().toString());
     router.push(`?${params.toString()}`);
   };
 
