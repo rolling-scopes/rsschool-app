@@ -1,26 +1,14 @@
 import { PageLayout } from 'components/PageLayout';
 import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
 import Masonry from 'react-masonry-css';
-import { StudentsCountriesCard } from '../components/StudentsCountriesCard';
-import { StudentsStatsCard } from '../components/StudentsStatsCard';
-import css from 'styled-jsx/css';
-import { MentorsCountriesCard } from '../components/MentorsCountriesCard/MentorsCountriesCard';
-import { EpamMentorsStatsCard } from '../components/EpamMentorsStatsCard';
-import { StudentsWithMentorsCard } from '../components/StudentsWithMentorsCard';
-import { StudentsWithCertificateCard } from '../components/StudentsWithCertificateCard';
-import { StudentsEligibleForCertificationCard } from '../components/StudentsEligibleForCertificationCard';
-import { TaskPerformanceCard } from '../components/TaskPerformanceCard';
-import { StudentsCertificatesCountriesCard } from '../components/StudentsCertificatesCountriesCard';
-import { DatePicker, DatePickerProps, Empty, Flex, Space, Switch, theme } from 'antd';
+import { DatePickerProps, Empty, theme } from 'antd';
 import { useContext, useState } from 'react';
-import { useCoursesStats } from '../hooks/useCourseStats/useCourseStats';
+import { useCoursesStats, useStatCards } from '../hooks';
+import { StatScope } from '../entities';
+import { StatScopeSelector } from '../components/StatScopeSelector';
+import css from 'styled-jsx/css';
 
 const gapSize = 24;
-
-enum StatScope {
-  Current = 'Current',
-  Timeline = 'Timeline',
-}
 
 function CourseStatistic() {
   const { isAdmin } = useContext(SessionContext);
@@ -29,7 +17,8 @@ function CourseStatistic() {
   const { token } = theme.useToken();
   const [ids, setIds] = useState<number[]>([course.id]);
   const [selectedYear, setSelectedYear] = useState<number>();
-  const { loading, coursesData: stats } = useCoursesStats({ ids, year: selectedYear });
+  const { loading, coursesData } = useCoursesStats({ ids, year: selectedYear });
+  const { cards } = useStatCards({ coursesData });
 
   const masonryBreakPoints = {
     default: 4,
@@ -37,63 +26,6 @@ function CourseStatistic() {
     700: 2,
     500: 1,
   };
-
-  const cards = [
-    stats?.studentsCountries && {
-      title: 'studentsCountriesCard',
-      component: (
-        <StudentsCountriesCard
-          studentsCountriesStats={stats.studentsCountries}
-          activeStudentsCount={stats.studentsStats.activeStudentsCount}
-        />
-      ),
-    },
-    stats?.studentsStats.totalStudents && {
-      title: 'studentsStatsCard',
-      component: <StudentsStatsCard studentsStats={stats.studentsStats} />,
-    },
-    stats?.mentorsCountries &&
-      stats.mentorsStats.mentorsActiveCount && {
-        title: 'mentorsCountriesCard',
-        component: (
-          <MentorsCountriesCard
-            countriesStats={stats.mentorsCountries}
-            activeCount={stats.mentorsStats.mentorsActiveCount}
-          />
-        ),
-      },
-    stats?.mentorsStats.epamMentorsCount && {
-      title: 'mentorsStatsCard',
-      component: <EpamMentorsStatsCard mentorsStats={stats.mentorsStats} />,
-    },
-    stats?.studentsStats.studentsWithMentorCount && {
-      title: 'studentsWithMentorStatsCard',
-      component: <StudentsWithMentorsCard studentsStats={stats.studentsStats} />,
-    },
-    stats?.studentsStats.certifiedStudentsCount && {
-      title: 'studentsWithCertificateStatsCard',
-      component: <StudentsWithCertificateCard studentsStats={stats.studentsStats} />,
-    },
-    !stats?.studentsStats.certifiedStudentsCount &&
-      stats?.studentsStats.eligibleForCertificationCount && {
-        title: 'StudentsEligibleForCertificationCard',
-        component: <StudentsEligibleForCertificationCard studentsStats={stats.studentsStats} />,
-      },
-    stats?.courseTasks && {
-      title: 'taskPerformanceCard',
-      component: <TaskPerformanceCard tasks={stats.courseTasks} />,
-    },
-    stats?.studentsCertificatesCountries &&
-      stats.studentsStats.certifiedStudentsCount && {
-        title: 'studentsCertificatesCountriesCard',
-        component: (
-          <StudentsCertificatesCountriesCard
-            studentsCertificatesCountriesStats={stats.studentsCertificatesCountries}
-            certificatesCount={stats.studentsStats.certifiedStudentsCount}
-          />
-        ),
-      },
-  ].filter(Boolean);
 
   const handleStatScope = (value: boolean) => {
     if (value) {
@@ -122,25 +54,11 @@ function CourseStatistic() {
       background={token.colorBgLayout}
     >
       {isAdmin && (
-        <Flex
-          wrap={'wrap'}
-          justify="space-between"
-          align="center"
-          gap="1rem"
-          style={{ paddingBottom: '1rem', minHeight: '3rem' }}
-        >
-          <Space>
-            {statScope === StatScope.Timeline && (
-              <DatePicker allowClear={false} onChange={handleYearSelection} picker="year" />
-            )}
-          </Space>
-          <Switch
-            checkedChildren="Current"
-            unCheckedChildren="Timeline"
-            checked={statScope === StatScope.Current}
-            onChange={handleStatScope}
-          />
-        </Flex>
+        <StatScopeSelector
+          statScope={statScope}
+          handleStatScope={handleStatScope}
+          handleYearSelection={handleYearSelection}
+        />
       )}
       {statScope === StatScope.Timeline && !selectedYear ? (
         <Empty description="Please select the year" />

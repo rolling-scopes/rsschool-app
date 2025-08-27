@@ -1,1 +1,2 @@
-export { useCoursesStats } from './useCourseStats/useCourseStats';
+export { useCoursesStats } from './useCourseStats';
+export { useStatCards } from './useStatCards';
