@@ -64,10 +64,10 @@ describe('useAttemptsMessage', () => {
 
   it.each`
     publicAttributes                                                                              | verificationsCount | expected
-    ${{ strictAttemptsMode: true, maxAttemptsNumber: MAX_ATTEMPTS, tresholdPercentage: 90 }}      | ${0}               | ${'You must score at least 90% of points to pass. You have only 4 attempts. After limit attempts is over you can get only half of a score.'}
-    ${{ strictAttemptsMode: false, maxAttemptsNumber: MAX_ATTEMPTS, tresholdPercentage: 90 }}     | ${0}               | ${'You must score at least 90% of points to pass. You have only 4 attempts.'}
-    ${{ maxAttemptsNumber: MAX_ATTEMPTS, tresholdPercentage: 90, oneAttemptPerNumberOfHours: 1 }} | ${0}               | ${'You must score at least 90% of points to pass. You have only 4 attempts. You have only one attempt per 1 hours.'}
-    ${{ maxAttemptsNumber: MAX_ATTEMPTS, tresholdPercentage: 90, oneAttemptPerNumberOfHours: 2 }} | ${1}               | ${'You must score at least 90% of points to pass. You have only 4 attempts. You have only one attempt per 2 hours. Next submit is possible in'}
+    ${{ strictAttemptsMode: true, maxAttemptsNumber: MAX_ATTEMPTS, tresholdPercentage: 90 }}      | ${0}               | ${'You must score at least 90% of points to pass. You have only 4 attempts.'}
+    ${{ strictAttemptsMode: false, maxAttemptsNumber: MAX_ATTEMPTS, tresholdPercentage: 90 }}     | ${0}               | ${'You must score at least 90% of points to pass. You have only 4 attempts. After limit attempts is over you can get only half of a score.'}
+    ${{ maxAttemptsNumber: MAX_ATTEMPTS, tresholdPercentage: 90, oneAttemptPerNumberOfHours: 1 }} | ${0}               | ${'You must score at least 90% of points to pass. You have only 4 attempts. After limit attempts is over you can get only half of a score. You have only one attempt per 1 hours.'}
+    ${{ maxAttemptsNumber: MAX_ATTEMPTS, tresholdPercentage: 90, oneAttemptPerNumberOfHours: 2 }} | ${1}               | ${'You must score at least 90% of points to pass. You have only 4 attempts. After limit attempts is over you can get only half of a score. You have only one attempt per 2 hours. Next submit is possible in'}
     ${{ maxAttemptsNumber: undefined, tresholdPercentage: undefined }}                            | ${0}               | ${'You can submit your solution as many times as you need before the deadline. Without fines. After the deadline, the submission will be closed.'}
   `(
     `should return explanation when ${JSON.stringify(`$publicAttributes`)}`,
