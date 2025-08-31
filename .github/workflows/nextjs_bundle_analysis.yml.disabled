@@ -9,8 +9,6 @@ on:
   pull_request:
     branches: [master]
     types: [opened, synchronize]
-    paths-ignore:
-      - 'tools/bumblebee/**'
 
 defaults:
   run:

@@ -4,8 +4,6 @@ on:
   pull_request:
     types: [closed]
     branches: [master]
-    paths-ignore:
-      - 'tools/bumblebee/**'
 
 jobs:
   pr_delete:
