@@ -10366,7 +10366,7 @@ export const CourseStatsApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async getCoursesStats(ids: number[], year: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CoursesStatsDto>> {
-          const localVarAxiosArgs = await localVarAxiosParamCreator.getCoursesStats( ids, year,options);
+          const localVarAxiosArgs = await localVarAxiosParamCreator.getCoursesStats( ids, year, options);
           return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
