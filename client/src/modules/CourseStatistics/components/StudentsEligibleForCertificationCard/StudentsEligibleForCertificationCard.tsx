@@ -1,7 +1,7 @@
 import { Card, Typography } from 'antd';
 import { CourseStatsDto } from 'api';
-import dynamic from 'next/dynamic';
 import { Colors } from '../../data';
+import { dynamicWithSkeleton } from '@client/utils/dynamicWithSkeleton';
 
 type Props = {
   studentsStats: CourseStatsDto;
@@ -9,9 +9,7 @@ type Props = {
 
 const { Text } = Typography;
 
-const LiquidChart = dynamic(() => import('../LiquidChart/LiquidChart'), {
-  ssr: false,
-});
+const LiquidChart = dynamicWithSkeleton(() => import('../LiquidChart/LiquidChart'));
 
 export const StudentsEligibleForCertificationCard = ({ studentsStats }: Props) => {
   return (
