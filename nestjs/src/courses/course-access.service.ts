@@ -25,9 +25,9 @@ export class CourseAccessService {
     return !!user.courses[courseId];
   }
 
-  public async canAccessCourseList(user: AuthUser, ids: number[], year: number): Promise<number[]> {
+  public async userAllowedCourseIds(user: AuthUser, ids: number[], year: number): Promise<number[]> {
     const isAdmin = user.appRoles?.includes(Role.Admin);
-    let userCourses: number[] = isAdmin ? ids : Object.keys(user.courses).map(Number);
+    const userCourses: number[] = isAdmin ? ids : Object.keys(user.courses).map(Number);
 
     if (year) {
       // if the year is provided, but the course list
@@ -47,7 +47,7 @@ export class CourseAccessService {
         where: condition,
       });
 
-      userCourses = courses.map(({ id }) => id);
+      return courses.map(({ id }) => id);
     }
 
     return userCourses;
