@@ -18,7 +18,7 @@ async function fetchCourseStats({ ids = [], year = 0 }: CourseStatsParams): Prom
   }
 }
 
-export function useCoursesStats({ ids, year }: { ids?: number[]; year?: number }) {
+export function useCoursesStats({ ids, year }: CourseStatsParams) {
   const { message } = useMessage();
 
   const service = async () => {
