@@ -1,16 +1,13 @@
 import { PageLayout } from 'components/PageLayout';
 import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
-import Masonry from 'react-masonry-css';
 import { DatePickerProps, Empty, theme } from 'antd';
 import { useContext, useState } from 'react';
-import { useCoursesStats, useStatCards } from '../hooks';
+import { useCoursesStats } from '../hooks';
 import { StatScope } from '../constants';
 import { StatScopeSelector } from '../components/StatScopeSelector';
-import css from 'styled-jsx/css';
+import { StatCards } from '../components/StatCards';
 import { useRouter, useSearchParams } from 'next/navigation';
 import dayjs from 'dayjs';
-
-const gapSize = 24;
 
 function CourseStatistic() {
   const { isAdmin } = useContext(SessionContext);
@@ -23,14 +20,6 @@ function CourseStatistic() {
   const [ids, setIds] = useState<number[]>([course.id]);
   const selectedYear = Number(params.get('year'));
   const { loading, coursesData } = useCoursesStats({ ids, year: selectedYear });
-  const { cards } = useStatCards({ coursesData });
-
-  const masonryBreakPoints = {
-    default: 4,
-    1100: 3,
-    700: 2,
-    500: 1,
-  };
 
   const handleStatScope = (value: boolean) => {
     if (value) {
@@ -73,37 +62,10 @@ function CourseStatistic() {
       {statScope === StatScope.Timeline && !selectedYear ? (
         <Empty description="No data available." />
       ) : (
-        <Masonry
-          breakpointCols={masonryBreakPoints}
-          className={masonryClassName}
-          columnClassName={masonryColumnClassName}
-        >
-          {cards.map(({ title, component }) => (
-            <div style={{ marginBottom: gapSize }} key={title}>
-              {component}
-            </div>
-          ))}
-        </Masonry>
+        <StatCards coursesData={coursesData} />
       )}
-      {masonryStyles}
-      {masonryColumnStyles}
     </PageLayout>
   );
 }
-
-const { className: masonryClassName, styles: masonryStyles } = css.resolve`
-  div {
-    display: flex;
-    margin-left: -${gapSize}px;
-    width: auto;
-    min-height: 85vh;
-  }
-`;
-const { className: masonryColumnClassName, styles: masonryColumnStyles } = css.resolve`
-  div {
-    padding-left: ${gapSize}px;
-    background-clip: padding-box;
-  }
-`;
 
 export default CourseStatistic;
