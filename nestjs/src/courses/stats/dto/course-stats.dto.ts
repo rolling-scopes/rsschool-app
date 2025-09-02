@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CourseTask } from '@entities/courseTask';
 import { CountriesStatsDto } from './countries-stats.dto';
 import { CourseMentorsStatsDto } from './course-mentors-stats.dto';
+import {CourseTaskDto} from '../../course-tasks/dto';
 
 export class CourseStatsDto {
   constructor(stats: {
@@ -40,7 +40,7 @@ export class CourseAggregateStatsDto {
     studentsStats: CourseStatsDto;
     mentorsCountries: CountriesStatsDto;
     mentorsStats: CourseMentorsStatsDto;
-    courseTasks: CourseTask[];
+    courseTasks: CourseTaskDto[];
     studentsCertificatesCountries: CountriesStatsDto;
   }) {
     this.studentsCountries = stats.studentsCountries;
@@ -64,7 +64,7 @@ export class CourseAggregateStatsDto {
   mentorsStats: CourseMentorsStatsDto;
 
   @ApiProperty()
-  courseTasks: CourseTask[];
+  courseTasks: CourseTaskDto[];
 
   @ApiProperty()
   studentsCertificatesCountries: CountriesStatsDto;
