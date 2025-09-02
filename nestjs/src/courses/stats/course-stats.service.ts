@@ -222,12 +222,12 @@ export class CourseStatsService {
       return acc;
     }, {});
 
-    const result = [];
+    const result: { countryName: string; count: number }[] = [];
 
     for (const key in count) {
       result.push({
         countryName: key,
-        count: count[key],
+        count: count[key] || 0,
       });
     }
 
