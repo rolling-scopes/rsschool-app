@@ -4,7 +4,7 @@ import Masonry from 'react-masonry-css';
 import { DatePickerProps, Empty, theme } from 'antd';
 import { useContext, useState } from 'react';
 import { useCoursesStats, useStatCards } from '../hooks';
-import { StatScope } from '../entities';
+import { StatScope } from '../constants';
 import { StatScopeSelector } from '../components/StatScopeSelector';
 import css from 'styled-jsx/css';
 import { useRouter, useSearchParams } from 'next/navigation';

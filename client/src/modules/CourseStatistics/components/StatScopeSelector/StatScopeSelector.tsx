@@ -1,5 +1,5 @@
 import { DatePicker, DatePickerProps, Flex, Space, Switch, SwitchProps } from 'antd';
-import { StatScope } from '@client/modules/CourseStatistics/entities';
+import { StatScope } from '@client/modules/CourseStatistics/constants';
 import dayjs from 'dayjs';
 
 type StatScopeSelectorProps = {
