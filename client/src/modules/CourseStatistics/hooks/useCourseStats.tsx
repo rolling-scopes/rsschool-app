@@ -1,49 +1,40 @@
-import { useCallback, useEffect, useState } from 'react';
 import { useMessage } from '@client/hooks';
-import { memoize } from 'lodash';
 import { CoursesStatsDto, CourseStatsApi } from '@client/api';
+import { useRequest } from 'ahooks';
 
 const courseStatsApi = new CourseStatsApi();
 
-async function fetchCourseStats({
-  ids = [],
-  year = 0,
-}: {
+type CourseStatsParams = {
   ids?: number[];
   year?: number;
-}): Promise<CoursesStatsDto | { error: boolean }> {
+};
+
+async function fetchCourseStats({ ids = [], year = 0 }: CourseStatsParams): Promise<CoursesStatsDto | undefined> {
   try {
     const { data } = await courseStatsApi.getCoursesStats(ids, year);
     return data;
   } catch {
     console.error("Couldn't get course(s) stats");
-    return { error: true };
   }
 }
 
 export function useCoursesStats({ ids, year }: { ids?: number[]; year?: number }) {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [coursesData, setCoursesData] = useState<CoursesStatsDto>();
   const { message } = useMessage();
 
-  const cached = useCallback(memoize(fetchCourseStats), []);
-
-  useEffect(() => {
-    setLoading(true);
+  const service = async () => {
     if (!ids?.length && !year) {
-      setLoading(false);
       return;
     }
+    return fetchCourseStats({ ids, year });
+  };
 
-    cached({ ids, year }).then(result => {
-      setLoading(false);
-      if (result && 'error' in result) {
-        message.error("Can't load courses data. Please try latter.");
-      } else {
-        setCoursesData(result);
-      }
-    });
-  }, [ids, year, cached]);
+  const { data, loading } = useRequest(service, {
+    refreshDeps: [ids, year],
+    retryCount: 3,
+    onError: () => {
+      message.error("Can't load courses data. Please try latter.");
+    },
+  });
 
-  return { loading, coursesData };
+  return { loading, coursesData: data };
 }
