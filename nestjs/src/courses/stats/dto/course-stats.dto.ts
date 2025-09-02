@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { CountriesStatsDto } from './countries-stats.dto';
 import { CourseMentorsStatsDto } from './course-mentors-stats.dto';
-import {CourseTaskDto} from '../../course-tasks/dto';
+import { CourseTaskDto } from '../../course-tasks/dto';
 
 export class CourseStatsDto {
   constructor(stats: {

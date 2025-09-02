@@ -23,7 +23,6 @@ const DonutChart = dynamic(() => import('../DonutChart/DonutChart'), {
 
 export const TaskPerformanceCard = ({ tasks }: Props) => {
   const { course } = useActiveCourseContext();
-  console.log(tasks[0])
 
   const [taskId, setTaskId] = useState<number>();
 

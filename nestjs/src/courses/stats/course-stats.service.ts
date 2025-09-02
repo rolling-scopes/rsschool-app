@@ -6,7 +6,7 @@ import { CountriesStatsDto, CountryStatDto } from './dto';
 import { Certificate, CourseTask, Mentor, StageInterview, TaskInterviewResult, TaskResult } from '@entities/index';
 import { TaskType } from '@entities/task';
 import { CourseTasksService } from '../course-tasks';
-import {CourseTaskDto} from '../course-tasks/dto';
+import { CourseTaskDto } from '../course-tasks/dto';
 
 @Injectable()
 export class CourseStatsService {
@@ -267,7 +267,7 @@ export class CourseStatsService {
       Promise.all(ids.map(courseId => this.taskService.getAll(courseId, undefined, false))),
       Promise.all(ids.map(courseId => this.getStudentsWithCertificatesCountries(courseId))),
     ]);
-    
+
     return {
       studentsCountries: this.mergeCountries(studentsCountriesResolved),
       studentsStats: this.mergeStats(studentsStatsResolved),
