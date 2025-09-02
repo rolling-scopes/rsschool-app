@@ -23,6 +23,7 @@ const DonutChart = dynamic(() => import('../DonutChart/DonutChart'), {
 
 export const TaskPerformanceCard = ({ tasks }: Props) => {
   const { course } = useActiveCourseContext();
+  console.log(tasks[0])
 
   const [taskId, setTaskId] = useState<number>();
 
@@ -35,18 +36,20 @@ export const TaskPerformanceCard = ({ tasks }: Props) => {
 
   return (
     <Card title="Task Performance">
-      <Form.Item name="courseTaskIds">
-        <Select
-          placeholder="Select tasks"
-          showSearch
-          optionFilterProp="label"
-          onChange={(value: number) => setTaskId(value)}
-          options={tasks.map(({ name, id }) => ({
-            label: name,
-            value: id,
-          }))}
-        />
-      </Form.Item>
+      <Form>
+        <Form.Item name="courseTaskIds">
+          <Select
+            placeholder="Select tasks"
+            showSearch
+            optionFilterProp="label"
+            onChange={(value: number) => setTaskId(value)}
+            options={tasks.map(({ name, id }) => ({
+              label: name,
+              value: id,
+            }))}
+          />
+        </Form.Item>
+      </Form>
       <div style={{ height: 250, width: '100%' }}>
         {taskPerformanceStats?.totalAchievement ? (
           <DonutChart data={getChartData(taskPerformanceStats)} config={getChartConfig()} />
