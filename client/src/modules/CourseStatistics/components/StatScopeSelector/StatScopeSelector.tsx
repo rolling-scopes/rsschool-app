@@ -18,7 +18,7 @@ export function StatScopeSelector({
   const date = selectedYear ? dayjs(String(selectedYear)) : dayjs(new Date());
   return (
     <Flex
-      wrap={'wrap'}
+      wrap="wrap"
       justify="space-between"
       align="center"
       gap="1rem"
