@@ -4,7 +4,7 @@ import { ActiveCourseProvider, SessionProvider } from 'modules/Course/contexts';
 function Page() {
   return (
     <ActiveCourseProvider>
-      <SessionProvider adminOnly>
+      <SessionProvider>
         <CourseStatistics />
       </SessionProvider>
     </ActiveCourseProvider>
