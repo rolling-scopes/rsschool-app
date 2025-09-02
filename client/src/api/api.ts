@@ -10181,7 +10181,7 @@ export const CourseStatsApiAxiosParamCreator = function (configuration?: Configu
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCoursesStats: async (ids: number[] = [], year: number = 0, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getCoursesStats: async (ids: number[] = [], year?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
           const localVarUrlObj = new URL('/courses/aggregate/stats', DUMMY_BASE_URL);
           let baseOptions;
   
