@@ -1,17 +1,14 @@
-import { Card, Skeleton } from 'antd';
+import { Card } from 'antd';
 import { CountriesStatsDto } from 'api';
-import dynamic from 'next/dynamic';
 import { Colors } from '../../data';
+import { dynamicWithSkeleton } from '@client/utils/dynamicWithSkeleton';
 
 type Props = {
   countriesStats: CountriesStatsDto;
   activeCount: number;
 };
 
-const CountriesChart = dynamic(() => import('../CountriesChart/CountriesChart'), {
-  ssr: false,
-  loading: () => <Skeleton active={true} />,
-});
+const CountriesChart = dynamicWithSkeleton(() => import('../CountriesChart/CountriesChart'));
 
 export const MentorsCountriesCard = ({ countriesStats, activeCount }: Props) => {
   const { countries } = countriesStats;

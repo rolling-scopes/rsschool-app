@@ -1,7 +1,7 @@
-import { Card, Skeleton, Typography } from 'antd';
+import { Card, Typography } from 'antd';
 import { CourseMentorsStatsDto } from 'api';
-import dynamic from 'next/dynamic';
 import { Colors } from '../../data';
+import { dynamicWithSkeleton } from '@client/utils/dynamicWithSkeleton';
 
 type Props = {
   mentorsStats: CourseMentorsStatsDto;
@@ -9,10 +9,7 @@ type Props = {
 
 const { Text } = Typography;
 
-const LiquidChart = dynamic(() => import('../LiquidChart/LiquidChart'), {
-  ssr: false,
-  loading: () => <Skeleton active={true} />,
-});
+const LiquidChart = dynamicWithSkeleton(() => import('../LiquidChart/LiquidChart'));
 
 export const EpamMentorsStatsCard = ({ mentorsStats }: Props) => {
   return (

@@ -1,12 +1,12 @@
 import { Datum } from '@antv/g2plot';
-import { Card, Flex, Form, Image, Select, Skeleton, Typography } from 'antd';
+import { Card, Flex, Form, Image, Select, Typography } from 'antd';
 import { CourseStatsApi, CourseTaskDto, TaskPerformanceStatsDto } from 'api';
 import { useActiveCourseContext } from 'modules/Course/contexts';
-import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { useAsync } from 'react-use';
 import { Colors, StudentPerformanceDescription, StudentPerformanceType } from '../../data';
 import { PieConfig } from '@ant-design/plots';
+import { dynamicWithSkeleton } from '@client/utils/dynamicWithSkeleton';
 
 const courseStatsApi = new CourseStatsApi();
 
@@ -16,10 +16,7 @@ type Props = {
 
 const { Text } = Typography;
 
-const DonutChart = dynamic(() => import('../DonutChart/DonutChart'), {
-  ssr: false,
-  loading: () => <Skeleton active={true} />,
-});
+const DonutChart = dynamicWithSkeleton(() => import('../DonutChart/DonutChart'));
 
 export const TaskPerformanceCard = ({ tasks }: Props) => {
   const { course } = useActiveCourseContext();

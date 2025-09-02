@@ -1,16 +1,13 @@
-import { Card, Skeleton } from 'antd';
+import { Card } from 'antd';
 import { CountriesStatsDto } from 'api';
-import dynamic from 'next/dynamic';
+import { dynamicWithSkeleton } from '@client/utils/dynamicWithSkeleton';
 
 type Props = {
   studentsCountriesStats: CountriesStatsDto;
   activeStudentsCount: number;
 };
 
-const CountriesChart = dynamic(() => import('../CountriesChart/CountriesChart'), {
-  ssr: false,
-  loading: () => <Skeleton active={true} />,
-});
+const CountriesChart = dynamicWithSkeleton(() => import('../CountriesChart/CountriesChart'));
 
 export const StudentsCountriesCard = ({ studentsCountriesStats, activeStudentsCount }: Props) => {
   const { countries } = studentsCountriesStats;
