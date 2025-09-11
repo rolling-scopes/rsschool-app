@@ -43,7 +43,7 @@ export class CourseStatsController {
     @Query('ids', new ParseArrayPipe({ items: Number, optional: true })) ids: number[],
     @Query('year', new ParseIntPipe({ optional: true })) year: number,
   ) {
-    const allowedCourseIds = await this.courseAccessService.userAllowedCourseIds(req.user, ids, year);
+    const allowedCourseIds = await this.courseAccessService.getUserAllowedCourseIds(req.user, ids, year);
     const data = await this.courseStatsService.getCoursesStats(allowedCourseIds);
     return new CourseAggregateStatsDto(data);
   }

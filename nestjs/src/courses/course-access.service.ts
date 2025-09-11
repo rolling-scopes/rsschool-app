@@ -25,7 +25,7 @@ export class CourseAccessService {
     return !!user.courses[courseId];
   }
 
-  public async userAllowedCourseIds(user: AuthUser, ids: number[], year: number): Promise<number[]> {
+  public async getUserAllowedCourseIds(user: AuthUser, ids: number[], year: number): Promise<number[]> {
     const isAdmin = user.appRoles?.includes(Role.Admin);
     const userCourses: number[] = isAdmin ? ids : Object.keys(user.courses).map(Number);
 
