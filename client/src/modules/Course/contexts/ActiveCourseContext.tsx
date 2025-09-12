@@ -7,6 +7,7 @@ import { UserService } from 'services/user';
 import { WelcomeCard } from 'components/WelcomeCard';
 import { Alert, Col, notification, Row } from 'antd';
 import useRequest from 'ahooks/lib/useRequest';
+import { AxiosError } from 'axios';
 
 type ActiveCourseContextType = {
   course: ProfileCourseDto;
@@ -24,28 +25,34 @@ export const useActiveCourseContext = () => {
   return useContext(ActiveCourseContext);
 };
 
-type Props = React.PropsWithChildren;
+type Props = React.PropsWithChildren<{
+  publicRoutes: string[];
+}>;
 
-export const ActiveCourseProvider = ({ children }: Props) => {
+export const ActiveCourseProvider = ({ children, publicRoutes }: Props) => {
   const router = useRouter();
 
   // course alias
   const alias = router.query.course;
+  const isPublicRoute = publicRoutes?.includes(router.pathname);
 
   const [storageCourseId, setStorageCourseId] = useLocalStorage<string>('activeCourseId');
   const [activeCourse, setActiveCourse] = useState<ProfileCourseDto>();
 
   const { data, loading } = useRequest(() => resolveCourse(alias, storageCourseId), {
-    ready: router.isReady,
+    ready: router.isReady && !isPublicRoute,
     onSuccess: ([course]) => setCourse(course),
-    onError: () => {
+    onError: error => {
       const { pathname, search } = document.location;
       const redirectUrl = encodeURIComponent(`${pathname}${search}`);
       router.push('/login', { pathname: '/login', query: { url: redirectUrl } });
-      notification.error({
-        message: 'Error occurred during login',
-        description: 'Please try again later or contact course manager',
-      });
+
+      if ((error as AxiosError).status !== 401) {
+        notification.error({
+          message: 'Error occurred during login',
+          description: 'Please try again later or contact course manager',
+        });
+      }
     },
     // cache course info for 15 minutes
     cacheKey: `course-${String(alias)}`,
@@ -83,6 +90,10 @@ export const ActiveCourseProvider = ({ children }: Props) => {
         {children}
       </ActiveCourseContext.Provider>
     );
+  }
+
+  if (isPublicRoute && router.isReady) {
+    return <>{children}</>;
   }
 
   return <LoadingScreen show={loading} />;

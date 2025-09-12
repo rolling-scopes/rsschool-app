@@ -22,7 +22,7 @@ class RsSchoolApp extends App {
         </Head>
         <ThemeProvider>
           <MessageProvider>
-            <ActiveCourseProvider>
+            <ActiveCourseProvider publicRoutes={['/login']}>
               <Component {...pageProps} />
             </ActiveCourseProvider>
           </MessageProvider>
