@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-type Props = { src: string; alt?: string; size?: string };
+type Props = { src?: string; alt?: string; size?: string };
 
 export function PublicSvgIcon({ src, alt = '', size = 'fit-content' }: Props) {
   const [svgContent, setSvgContent] = useState<string>('');
@@ -8,6 +8,9 @@ export function PublicSvgIcon({ src, alt = '', size = 'fit-content' }: Props) {
   useEffect(() => {
     const loadSvg = async () => {
       try {
+        if (!src) {
+          return;
+        }
         const response = await fetch(src);
         if (response.ok) {
           const text = await response.text();

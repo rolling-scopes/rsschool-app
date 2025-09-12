@@ -1,7 +1,7 @@
 import { ProfileCourseDto } from 'api';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { useRouter } from 'next/router';
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
 import { useLocalStorage } from 'react-use';
 import { UserService } from 'services/user';
 import { WelcomeCard } from 'components/WelcomeCard';
@@ -39,7 +39,7 @@ export const ActiveCourseProvider = ({ children, publicRoutes }: Props) => {
   const [storageCourseId, setStorageCourseId] = useLocalStorage<string>('activeCourseId');
   const [activeCourse, setActiveCourse] = useState<ProfileCourseDto>();
 
-  const { data, loading } = useRequest(() => resolveCourse(alias, storageCourseId), {
+  const { data, loading, refresh } = useRequest(() => resolveCourse(alias, storageCourseId), {
     ready: router.isReady && !isPublicRoute,
     onSuccess: ([course]) => setCourse(course),
     onError: error => {
@@ -66,6 +66,11 @@ export const ActiveCourseProvider = ({ children, publicRoutes }: Props) => {
     }
   }, []);
 
+  const value = useMemo(
+    () => (data && activeCourse ? { course: activeCourse, courses: data?.[1] ?? [], setCourse, refresh } : undefined),
+    [activeCourse, data, setCourse, refresh],
+  );
+
   if (alias && activeCourse && activeCourse.alias !== alias) {
     return (
       <Row justify="center">
@@ -84,12 +89,8 @@ export const ActiveCourseProvider = ({ children, publicRoutes }: Props) => {
     return <WelcomeCard />;
   }
 
-  if (data && activeCourse) {
-    return (
-      <ActiveCourseContext.Provider value={{ course: activeCourse, courses: data[1], setCourse }}>
-        {children}
-      </ActiveCourseContext.Provider>
-    );
+  if (value) {
+    return <ActiveCourseContext.Provider value={value}>{children}</ActiveCourseContext.Provider>;
   }
 
   if (isPublicRoute && router.isReady) {
