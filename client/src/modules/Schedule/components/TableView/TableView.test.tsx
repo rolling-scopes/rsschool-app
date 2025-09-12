@@ -133,7 +133,7 @@ describe('TableView', () => {
       // Find the line with search query and no others
       const item = await screen.findByText(searchQuery);
       expect(item).toBeInTheDocument();
-      expect(screen.queryByText(data[1].name)).not.toBeInTheDocument();
+      expect(screen.queryByText(data[1]?.name ?? '')).not.toBeInTheDocument();
     });
   });
 
@@ -175,7 +175,9 @@ describe('TableView', () => {
     render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
 
     const [, tagFilterBtn] = screen.getAllByRole('button', { name: /filter/i });
-    fireEvent.click(tagFilterBtn);
+    if (tagFilterBtn) {
+      fireEvent.click(tagFilterBtn);
+    }
 
     const filtersDropdown = await screen.findByRole('menu');
     const menuItem = within(filtersDropdown).getByRole('menuitem', { name: new RegExp(tag, 'i') });
@@ -237,7 +239,7 @@ function generateCourseData(
         name: '',
         githubId: `organizer ${idx}`,
       },
-      status: statusMock[idx],
+      status: statusMock[idx] ?? StatusEnum.Done,
       score: idx + 20,
       tag: 'test',
       descriptionUrl: '',

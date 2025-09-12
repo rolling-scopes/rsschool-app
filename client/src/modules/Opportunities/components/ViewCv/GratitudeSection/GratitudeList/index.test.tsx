@@ -1,3 +1,4 @@
+import assert from 'node:assert';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { GratitudeDto } from 'api';
 import { GratitudeList } from './index';
@@ -33,11 +34,13 @@ describe('GratitudeList', () => {
   test('should display gratitudes list if provided', () => {
     render(<GratitudeList feedback={mockGratitudes} showCount={mockGratitudes.length} />);
 
-    const gratitudeComment1 = screen.getByText(mockGratitudes[0].comment);
+    assert.ok(mockGratitudes.length === 3);
+
+    const gratitudeComment1 = screen.getByText(mockGratitudes[0]!.comment);
     const timeAgo1 = screen.getByText('11 hours ago');
-    const gratitudeComment2 = screen.getByText(mockGratitudes[1].comment);
+    const gratitudeComment2 = screen.getByText(mockGratitudes[1]!.comment);
     const timeAgo2 = screen.getByText('a day ago');
-    const gratitudeComment3 = screen.getByText(mockGratitudes[2].comment);
+    const gratitudeComment3 = screen.getByText(mockGratitudes[2]!.comment);
     const timeAgo3 = screen.getByText('3 months ago');
 
     expect(gratitudeComment1).toBeInTheDocument();

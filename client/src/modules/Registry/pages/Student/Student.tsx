@@ -1,8 +1,8 @@
-import { useContext } from 'react';
 import { RegistrationPageLayout } from 'components/RegistrationPageLayout';
-import { useStudentData } from 'modules/Registry/hooks';
-import { CourseCertificateAlert, NoCourses, RegistrationForm } from 'modules/Registry/components';
 import { SessionContext } from 'modules/Course/contexts';
+import { CourseCertificateAlert, NoCourses, RegistrationForm } from 'modules/Registry/components';
+import { useStudentData } from 'modules/Registry/hooks';
+import { useContext } from 'react';
 
 type Props = {
   courseAlias?: string;

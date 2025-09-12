@@ -69,6 +69,7 @@ export function ScoreTable(props: Props) {
     filters: ScoreTableFiltersModified,
     order: TableScoreOrder,
   ) => {
+    if (!getPagedData) return;
     const data = await getPagedData(pagination as IPaginationInfo, filters as ScoreTableFilters, order as ScoreOrder);
     setStudents({ ...students, content: data.content, pagination: data.pagination });
   };

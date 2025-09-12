@@ -12,7 +12,7 @@ import {
   getColumnSearchProps,
   stringSorter,
 } from 'components/Table';
-import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { CourseTaskModal } from 'modules/CourseManagement/components/CourseTaskModal';
 import { useCallback, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
@@ -261,10 +261,8 @@ function getColumns(getDropdownMenu: (record: CourseTaskDto) => any): ColumnsTyp
 
 export default function () {
   return (
-    <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Manager]}>
-        <Page />
-      </SessionProvider>
-    </ActiveCourseProvider>
+    <SessionProvider allowedRoles={[CourseRole.Manager]}>
+      <Page />
+    </SessionProvider>
   );
 }

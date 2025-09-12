@@ -1,6 +1,6 @@
 import { useRequest } from 'ahooks';
 import { TaskDtoTypeEnum } from 'api';
-import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { getInterviewData, getStageInterviewData, PageProps } from 'modules/Interviews/data';
 import { StageInterviewFeedback } from 'modules/Interviews/pages/StageInterviewFeedback';
 import { InterviewFeedback } from 'modules/Interviews/pages/InterviewFeedback';
@@ -9,11 +9,9 @@ import { CourseRole } from 'services/models';
 
 export default function (props: PageProps) {
   return (
-    <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Mentor]} course={props.course}>
-        <FeedbackWrapper />
-      </SessionProvider>
-    </ActiveCourseProvider>
+    <SessionProvider allowedRoles={[CourseRole.Mentor]} course={props.course}>
+      <FeedbackWrapper />
+    </SessionProvider>
   );
 }
 

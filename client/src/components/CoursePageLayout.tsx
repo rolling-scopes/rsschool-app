@@ -2,13 +2,14 @@ import { Layout, Spin, theme } from 'antd';
 import { Course } from 'services/models';
 import { CourseNoAccess } from '../modules/Course/components/CourseNoAccess';
 import { Header } from './Header';
+import { ReactNode } from 'react';
 
 type Props = {
   loading: boolean;
   githubId: string;
   course: Course;
   title?: string;
-  children?: any;
+  children?: ReactNode;
   showCourseName?: boolean;
 };
 

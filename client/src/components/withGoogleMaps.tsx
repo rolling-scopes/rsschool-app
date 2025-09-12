@@ -4,8 +4,8 @@ import { mapsApiKey } from 'configs/gcp';
 
 const url = `https://maps.googleapis.com/maps/api/js?key=${mapsApiKey}&libraries=places&language=en`;
 
-function withGoogleMaps(WrappedComponent: React.ComponentType<any>) {
-  return class extends React.Component<any> {
+function withGoogleMaps<T = object>(WrappedComponent: React.ComponentType<T>) {
+  return class extends React.Component<T> {
     render() {
       return (
         <>

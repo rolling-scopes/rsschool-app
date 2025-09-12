@@ -1,3 +1,4 @@
+import { APIGatewayEvent, APIGatewayProxyHandler, APIGatewayProxyResult, Callback, Context } from 'aws-lambda';
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import * as express from 'express';
@@ -6,7 +7,7 @@ import { AppModule } from './app.module';
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const serverlessExpress = require('@vendia/serverless-express');
 
-let cachedServer: any;
+let cachedServer: (event: APIGatewayEvent, context: Context, callback: Callback) => Promise<APIGatewayProxyResult>;
 
 async function bootstrap() {
   if (!cachedServer) {
@@ -19,7 +20,7 @@ async function bootstrap() {
   return cachedServer;
 }
 
-export const handler = async (event: any, context: any, callback: any) => {
+export const handler: APIGatewayProxyHandler = async (event, context, callback) => {
   const server = await bootstrap();
   const result = await server(event, context, callback);
 

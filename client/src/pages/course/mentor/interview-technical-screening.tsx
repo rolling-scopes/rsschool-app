@@ -1,19 +1,21 @@
-import React, { useState, useMemo, useEffect, ChangeEvent, useContext } from 'react';
-import { useAsync } from 'react-use';
-import { Form, Typography, Rate, Input, Radio, Button, Divider, InputNumber, Space } from 'antd';
-import { PageLayoutSimple } from 'components/PageLayout';
-import { CourseRole } from 'services/models';
-import { StudentBasic } from 'services/models';
-import { CourseService } from 'services/course';
+import { Button, Divider, Form, Input, InputNumber, Radio, Rate, Space, Typography } from 'antd';
 import { AxiosError } from 'axios';
-import keys from 'lodash/keys';
-import get from 'lodash/get';
-import set from 'lodash/set';
-import { useLoading } from 'components/useLoading';
 import { GithubAvatar } from 'components/GithubAvatar';
-import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { PageLayoutSimple } from 'components/PageLayout';
+import { useLoading } from 'components/useLoading';
 import { useMessage } from 'hooks';
+import get from 'lodash/get';
+import keys from 'lodash/keys';
+import set from 'lodash/set';
+import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { ChangeEvent, useContext, useEffect, useMemo, useState } from 'react';
+import { useAsync } from 'react-use';
+import { CourseService } from 'services/course';
+import { CourseRole, StudentBasic } from 'services/models';
 
+type FormValues = typeof defaultInitialValues;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type HandleChangeValue = (skillName: string) => (value: any) => void;
 
 const SKILLS_LEVELS = [
@@ -305,6 +307,7 @@ function Page() {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const calculateResult = (result: any) => {
     const { skills, programmingTask } = result;
     const commonSkills = Object.values(skills.common).filter(Boolean) as number[];
@@ -323,7 +326,7 @@ function Page() {
     return Math.floor(rating * 10);
   };
 
-  const handleSubmit = withLoading(async (values: any) => {
+  const handleSubmit = withLoading(async (values: FormValues) => {
     if (!githubId || !values['resume-verdict'] || loading) {
       return;
     }
@@ -344,7 +347,7 @@ function Page() {
       message.success('You interview feedback has been submitted. Thank you.');
       form.resetFields();
     } catch (e) {
-      const error = e as AxiosError<any>;
+      const error = e as AxiosError<{ data?: { message?: string } }>;
       const errorMessage = error?.response?.data?.data?.message ?? 'An error occurred. Please try later.';
       message.error(errorMessage);
     }
@@ -370,7 +373,7 @@ function Page() {
         initialValues={resume}
         layout="vertical"
         onFinish={handleSubmit}
-        onFinishFailed={({ errorFields: [errorField] }) => form.scrollToField(errorField.name)}
+        onFinishFailed={({ errorFields: [errorField] }) => form.scrollToField(errorField?.name)}
       >
         <Space align="baseline">
           <Typography.Title level={4}>Student: </Typography.Title>{' '}
@@ -396,29 +399,30 @@ function Page() {
   );
 }
 
-function serializeToJson(values: any) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function serializeToJson(values: FormValues): any {
   return keys(values)
     .filter(v => v !== 'githubId')
     .reduce((acc, key) => {
-      return set(acc, key.split('-').join('.'), values[key]);
+      return set(acc, key.split('-').join('.'), values[key as keyof FormValues]);
     }, {});
 }
 
-function deserializeFromJson(json: any) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function deserializeFromJson(json: Record<string, unknown>): any {
   return keys(defaultInitialValues)
     .filter(key => key !== 'githubId')
     .reduce((acc, key) => {
-      acc[key] = get(json, key.split('-'));
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (acc as any)[key] = get(json, key.split('-'));
       return acc;
-    }, {} as any);
+    }, {} as FormValues);
 }
 
 export default function () {
   return (
-    <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Mentor, CourseRole.Manager]}>
-        <Page />
-      </SessionProvider>
-    </ActiveCourseProvider>
+    <SessionProvider allowedRoles={[CourseRole.Mentor, CourseRole.Manager]}>
+      <Page />
+    </SessionProvider>
   );
 }

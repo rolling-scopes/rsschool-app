@@ -1,11 +1,13 @@
 import { ProfileCourseDto } from 'api';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { useRouter } from 'next/router';
-import React, { useContext, useEffect, useState } from 'react';
-import { useAsync, useLocalStorage } from 'react-use';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
+import { useLocalStorage } from 'react-use';
 import { UserService } from 'services/user';
 import { WelcomeCard } from 'components/WelcomeCard';
-import { Alert, Col, Row } from 'antd';
+import { Alert, Col, notification, Row } from 'antd';
+import useRequest from 'ahooks/lib/useRequest';
+import { AxiosError } from 'axios';
 
 type ActiveCourseContextType = {
   course: ProfileCourseDto;
@@ -23,50 +25,51 @@ export const useActiveCourseContext = () => {
   return useContext(ActiveCourseContext);
 };
 
-type Props = React.PropsWithChildren;
+type Props = React.PropsWithChildren<{
+  publicRoutes: string[];
+}>;
 
-let coursesCache: ProfileCourseDto[] | undefined;
-
-export const ActiveCourseProvider = ({ children }: Props) => {
+export const ActiveCourseProvider = ({ children, publicRoutes }: Props) => {
   const router = useRouter();
+
+  // course alias
   const alias = router.query.course;
-  const [storageCourseId] = useLocalStorage('activeCourseId');
+  const isPublicRoute = publicRoutes?.includes(router.pathname);
+
+  const [storageCourseId, setStorageCourseId] = useLocalStorage<string>('activeCourseId');
   const [activeCourse, setActiveCourse] = useState<ProfileCourseDto>();
-  const [loading, setLoading] = useState(true);
 
-  const { error } = useAsync(async () => {
-    if (router.isReady) {
-      if (!coursesCache) {
-        coursesCache = await new UserService().getCourses();
+  const { data, loading, refresh } = useRequest(() => resolveCourse(alias, storageCourseId), {
+    ready: router.isReady && !isPublicRoute,
+    onSuccess: ([course]) => setCourse(course),
+    onError: error => {
+      const { pathname, search } = document.location;
+      const redirectUrl = encodeURIComponent(`${pathname}${search}`);
+      router.push('/login', { pathname: '/login', query: { url: redirectUrl } });
+
+      if ((error as AxiosError).status !== 401) {
+        notification.error({
+          message: 'Error occurred during login',
+          description: 'Please try again later or contact course manager',
+        });
       }
+    },
+    // cache course info for 15 minutes
+    cacheKey: `course-${String(alias)}`,
+    staleTime: 1000 * 60 * 15,
+  });
 
-      const course =
-        coursesCache.find(course => course.alias === alias) ??
-        coursesCache.find(course => course.id === storageCourseId) ??
-        coursesCache[0];
-
-      setCourse(course);
-      setLoading(false);
+  const setCourse = useCallback((course: ProfileCourseDto | null) => {
+    if (course) {
+      setActiveCourse(course);
+      setStorageCourseId(course.id.toString());
     }
-  }, [router.isReady]);
+  }, []);
 
-  const setCourse = (course: ProfileCourseDto) => {
-    setActiveCourse(course);
-    localStorage.setItem('activeCourseId', course.id.toString());
-  };
-
-  useEffect(() => {
-    if (!error) {
-      return;
-    }
-    const { pathname, search } = document.location;
-    const redirectUrl = encodeURIComponent(`${pathname}${search}`);
-    router.push('/login', { pathname: '/login', query: { url: redirectUrl } });
-  }, [error]);
-
-  if (!loading && !activeCourse && !coursesCache?.length) {
-    return <WelcomeCard />;
-  }
+  const value = useMemo(
+    () => (data && activeCourse ? { course: activeCourse, courses: data?.[1] ?? [], setCourse, refresh } : undefined),
+    [activeCourse, data, setCourse, refresh],
+  );
 
   if (alias && activeCourse && activeCourse.alias !== alias) {
     return (
@@ -82,13 +85,31 @@ export const ActiveCourseProvider = ({ children }: Props) => {
     );
   }
 
-  if (activeCourse && coursesCache) {
-    return (
-      <ActiveCourseContext.Provider value={{ course: activeCourse, courses: coursesCache, setCourse }}>
-        {children}
-      </ActiveCourseContext.Provider>
-    );
+  if (data && data[0] === null) {
+    return <WelcomeCard />;
+  }
+
+  if (value) {
+    return <ActiveCourseContext.Provider value={value}>{children}</ActiveCourseContext.Provider>;
+  }
+
+  if (isPublicRoute && router.isReady) {
+    return <>{children}</>;
   }
 
   return <LoadingScreen show={loading} />;
 };
+
+async function resolveCourse(
+  alias: string | string[] | undefined,
+  storageCourseId?: string,
+): Promise<[ProfileCourseDto | null, ProfileCourseDto[]]> {
+  const courses = await new UserService().getCourses();
+
+  const course =
+    courses.find(course => course.alias === alias) ??
+    courses.find(course => String(course.id) === String(storageCourseId)) ??
+    courses[0] ??
+    null;
+  return [course, courses] as const;
+}

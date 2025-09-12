@@ -58,10 +58,13 @@ export function UserNotificationsPage() {
     async (dataIndex: string[], record: UserNotificationSettings, checked: boolean) => {
       const newData = [...notifications];
       const index = notifications.findIndex(item => record.id === item.id);
-      newData[index] = { ...newData[index] };
-      const notification = newData[index];
-
-      set(notification, dataIndex, checked);
+      if (index >= 0 && newData[index]) {
+        newData[index] = { ...newData[index] };
+        const notification = newData[index];
+        if (notification) {
+          set(notification, dataIndex, checked);
+        }
+      }
 
       setNotifications(newData);
     },
@@ -91,7 +94,7 @@ export function UserNotificationsPage() {
           Object.keys(notification.settings).forEach(channelId => {
             raw.push({
               channelId,
-              enabled: (notification.settings as Record<string, boolean>)[channelId],
+              enabled: (notification.settings as Record<string, boolean>)[channelId] ?? false,
               notificationId: notification.id,
             });
           });

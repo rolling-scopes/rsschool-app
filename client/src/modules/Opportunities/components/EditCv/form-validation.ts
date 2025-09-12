@@ -9,9 +9,7 @@ const validationMessages = {
   invalid: (fieldName: string): string => `This is not a valid ${fieldName}`,
 };
 
-export const contactsValidationRules: {
-  [key: string]: Rule[];
-} = {
+export const contactsValidationRules = {
   phone: [
     {
       max: 25,
@@ -33,7 +31,7 @@ export const contactsValidationRules: {
       whitespace: true,
       message: validationMessages.whitespace,
     },
-  ],
+  ] as Rule[],
   email: [
     {
       type: 'email',
@@ -91,7 +89,7 @@ export const contactsValidationRules: {
       whitespace: true,
       message: validationMessages.whitespace,
     },
-  ],
+  ] as Rule[],
   website: [
     {
       type: 'url',
@@ -106,11 +104,9 @@ export const contactsValidationRules: {
       message: validationMessages.whitespace,
     },
   ],
-};
+} as const;
 
-export const userDataValidationRules: {
-  [key: string]: Rule[];
-} = {
+export const userDataValidationRules = {
   name: [
     {
       required: true,
@@ -213,4 +209,4 @@ export const userDataValidationRules: {
       message: validationMessages.whitespace,
     },
   ],
-};
+} as const;

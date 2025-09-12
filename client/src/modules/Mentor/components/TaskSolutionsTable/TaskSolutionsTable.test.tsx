@@ -81,7 +81,11 @@ describe('TaskSolutionsTable', () => {
     describe('and when deadline passed', () => {
       it('should render date as warning', () => {
         const data = [
-          { ...generateData()[0], resultScore: null, endDate: new Date('1970-05-05T00:00:00').toISOString() },
+          {
+            ...(generateData()[0] as MentorDashboardDto),
+            resultScore: null,
+            endDate: new Date('1970-05-05T00:00:00').toISOString(),
+          },
         ];
         render(<TaskSolutionsTable {...mockProps} data={data} />);
 
@@ -92,7 +96,11 @@ describe('TaskSolutionsTable', () => {
 
     it('should render "-" instead of result score', () => {
       const data = [
-        { ...generateData()[0], resultScore: null, endDate: new Date('1970-05-05T00:00:00').toISOString() },
+        {
+          ...(generateData()[0] as MentorDashboardDto),
+          resultScore: null,
+          endDate: new Date('1970-05-05T00:00:00').toISOString(),
+        },
       ];
       render(<TaskSolutionsTable {...mockProps} data={data} />);
 

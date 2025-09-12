@@ -37,7 +37,7 @@ export function TasksChart({ data, onItemSelected }: Props) {
       itemMarginBottom: 20,
       itemName: {
         formatter: (status, _, index) => {
-          return `${capitalize(status)} ${data[index].value}`;
+          return `${capitalize(status)} ${data[index]?.value ?? ''}`;
         },
         style: {
           fontSize: 14,

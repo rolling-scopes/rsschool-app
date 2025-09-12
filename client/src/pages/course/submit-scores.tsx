@@ -11,7 +11,7 @@ import { CourseService } from 'services/course';
 import { filterLogin } from 'utils/text-utils';
 import { isCourseManager } from 'domain/user';
 import { CoursesTasksApi, CourseTaskDto } from 'api';
-import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { CourseRole } from 'services/models';
 import { useMessage } from 'hooks';
 
@@ -44,7 +44,7 @@ export function SubmitScorePage() {
   const session = useContext(SessionContext);
   const { course } = useActiveCourseContext();
   const [form] = Form.useForm();
-  const courseId = course.id;
+  const courseId = course?.id ?? 0;
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const [courseTasks, setCourseTasks] = useState([] as CourseTaskDto[]);
   const [loading, setLoading] = useState(false);
@@ -252,11 +252,9 @@ async function uploadResults(
 
 function Page() {
   return (
-    <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Manager]}>
-        <SubmitScorePage />
-      </SessionProvider>
-    </ActiveCourseProvider>
+    <SessionProvider allowedRoles={[CourseRole.Manager]}>
+      <SubmitScorePage />
+    </SessionProvider>
   );
 }
 

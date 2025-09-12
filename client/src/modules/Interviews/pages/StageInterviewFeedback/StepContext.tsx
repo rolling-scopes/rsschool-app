@@ -45,7 +45,9 @@ export function StepContextProvider(props: PropsWithChildren<ContextProps>) {
   const [activeStepIndex, setActiveIndex] = useState(() => getDefaultStep(feedback));
   const activeStep = feedback.steps[activeStepIndex];
 
-  const [isFinished, setIsFinished] = useState(() => isInterviewCanceled(activeStep.id, activeStep.values));
+  const [isFinished, setIsFinished] = useState(() =>
+    activeStep ? isInterviewCanceled(activeStep.id, activeStep.values) : false,
+  );
   const isFinalStep = activeStepIndex === feedback.steps.length - 1 || isFinished;
 
   const saveFeedback = withLoading(async (values: InterviewFeedbackValues) => {
@@ -73,9 +75,11 @@ export function StepContextProvider(props: PropsWithChildren<ContextProps>) {
 
   const onValuesChange = useCallback(
     (_: InterviewFeedbackValues, values: InterviewFeedbackValues) => {
-      setIsFinished(isInterviewCanceled(activeStep.id, values));
+      if (activeStep) {
+        setIsFinished(isInterviewCanceled(activeStep.id, values));
+      }
     },
-    [activeStep.id],
+    [activeStep?.id],
   );
 
   const next = useCallback(
