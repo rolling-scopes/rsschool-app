@@ -27,7 +27,7 @@ export async function paginate<T extends ObjectLiteral>(
   queryBuilder: SelectQueryBuilder<T>,
   { page, limit }: { page: number; limit: number },
 ): Promise<{ items: T[]; meta: PaginationMeta }> {
-  const queryBuilderWithLimit = queryBuilder.take(limit).skip((page - 1) * limit);
+  const queryBuilderWithLimit = queryBuilder.take(limit).skip(Math.max((page - 1) * limit, 0));
 
   const [items, total] = await queryBuilderWithLimit.getManyAndCount();
   const totalPages = Math.ceil(total / limit);
