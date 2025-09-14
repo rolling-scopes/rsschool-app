@@ -13,7 +13,7 @@ import { markdownLabel } from 'components/Forms/PreparedComment';
 import { PageLayout } from 'components/PageLayout';
 import { useLoading } from 'components/useLoading';
 import { UserSearch } from 'components/UserSearch';
-import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { AssignmentLink, CrossCheckAssignmentLink } from 'modules/CrossCheck/components/CrossCheckAssignmentLink';
 import { CrossCheckCriteriaForm } from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
 import { CrossCheckHistory } from 'modules/CrossCheck/components/CrossCheckHistory';
@@ -107,10 +107,12 @@ function Page() {
 
     const [activeSolutionReview] = solutionReviews;
 
-    form.setFieldValue('comment', activeSolutionReview.comment.slice(markdownLabel.length));
-    setScore(activeSolutionReview.score);
-    if (activeSolutionReview.criteria) {
-      setCriteriaData(activeSolutionReview.criteria);
+    if (activeSolutionReview) {
+      form.setFieldValue('comment', activeSolutionReview.comment.slice(markdownLabel.length));
+      setScore(activeSolutionReview.score);
+      if (activeSolutionReview.criteria) {
+        setCriteriaData(activeSolutionReview.criteria);
+      }
     }
     setState({ loading: false, data: solutionReviews ?? [] });
   };
@@ -141,7 +143,7 @@ function Page() {
     }
   }, [historicalCommentSelected]);
 
-  const submitReview = withLoading(async values => {
+  const submitReview = withLoading(async (values: any) => {
     try {
       if (values.maxScore != null && values.maxScore < score) {
         message.error(`The score (${score}) exceeds the maximum score (${values.maxScore}) for the task.`);
@@ -313,10 +315,8 @@ function Page() {
 
 export default function () {
   return (
-    <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Student]}>
-        <Page />
-      </SessionProvider>
-    </ActiveCourseProvider>
+    <SessionProvider allowedRoles={[CourseRole.Student]}>
+      <Page />
+    </SessionProvider>
   );
 }

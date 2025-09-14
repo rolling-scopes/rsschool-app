@@ -3,6 +3,11 @@ import { StudentSearch } from './StudentSearch';
 import { ModalForm } from './Forms';
 import { MentorSearch } from './MentorSearch';
 
+interface FormValues {
+  studentGithubId: string;
+  mentorGithubId: string;
+}
+
 type Props = {
   visible: boolean;
   courseId: number;
@@ -11,7 +16,7 @@ type Props = {
 };
 
 export function StudentMentorModal(props: Props) {
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: FormValues) => {
     props.onOk(values.studentGithubId, values.mentorGithubId);
   };
 
@@ -20,7 +25,12 @@ export function StudentMentorModal(props: Props) {
   }
 
   return (
-    <ModalForm title="Student/Mentor" data={{}} submit={handleSubmit} cancel={props.onCancel}>
+    <ModalForm
+      title="Student/Mentor"
+      data={{ studentGithubId: '', mentorGithubId: '' }}
+      submit={handleSubmit}
+      cancel={props.onCancel}
+    >
       <Row gutter={24}>
         <Col span={24}>
           <Form.Item

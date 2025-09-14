@@ -91,7 +91,7 @@ export function Header({ title, showCourseName }: Props) {
       }}
     >
       <nav
-        className="nav no-print"
+        className="nav no-print page-header"
         style={{
           background: token.colorBgContainer,
           color: token.colorTextBase,

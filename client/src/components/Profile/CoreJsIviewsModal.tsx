@@ -5,15 +5,18 @@ import { CoreJsInterviewsData } from './CoreJsIviewsCard';
 const { Text } = Typography;
 
 type Props = {
-  stats: CoreJsInterviewsData;
+  stats?: CoreJsInterviewsData;
   interviewIndex: number;
   isVisible: boolean;
   onHide: () => void;
 };
 
 const CoreJsIviewsModal = ({ stats, isVisible, onHide, interviewIndex }: Props) => {
-  const { courseFullName, interviews } = stats;
-  const { score, comment, answers, interviewer } = interviews[interviewIndex];
+  const { courseFullName, interviews } = stats ?? {};
+  if (!interviews?.[interviewIndex]) {
+    return null;
+  }
+  const { score, comment, answers, interviewer } = interviews[interviewIndex]!;
 
   return (
     <Modal

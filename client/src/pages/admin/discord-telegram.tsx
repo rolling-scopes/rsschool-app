@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
 import { DiscordServersApi, UpdateDiscordServerDto, DiscordServerDto } from 'api';
 import { AdminPageLayout } from 'components/PageLayout';
-import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { CustomPopconfirm } from 'components/common/CustomPopconfirm';
 
 const { Content } = Layout;
@@ -183,10 +183,8 @@ function getInitialValues(modalData: Partial<DiscordServerDto>) {
 
 export default function () {
   return (
-    <ActiveCourseProvider>
-      <SessionProvider adminOnly>
-        <Page />
-      </SessionProvider>
-    </ActiveCourseProvider>
+    <SessionProvider adminOnly>
+      <Page />
+    </SessionProvider>
   );
 }

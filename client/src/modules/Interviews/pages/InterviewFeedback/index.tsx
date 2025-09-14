@@ -81,7 +81,7 @@ export function InterviewFeedback({ course, type, interviewTaskId, githubId }: F
         form={form}
         layout="vertical"
         onFinish={handleSubmit}
-        onFinishFailed={({ errorFields: [errorField] }) => form.scrollToField(errorField.name)}
+        onFinishFailed={({ errorFields: [errorField] }) => errorField && form.scrollToField(errorField.name)}
       >
         <Space align="baseline">
           <Typography.Title level={4}>Student: </Typography.Title>{' '}

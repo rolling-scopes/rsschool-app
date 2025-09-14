@@ -18,7 +18,7 @@ const gapSize = 24;
 
 function CourseStatistic() {
   const { course } = useActiveCourseContext();
-  const { loading, value: stats } = useCourseStats(course.id);
+  const { loading, value: stats } = useCourseStats(course?.id ?? 0);
 
   const masonryBreakPoints = {
     default: 4,

@@ -3,7 +3,7 @@ import { Button, Col, Input, List, Row, Layout, Form } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { AdminPageLayout } from 'components/PageLayout';
 import { CourseRole } from 'services/models';
-import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { UsersApi, UserSearchDto } from 'api';
 
 const { Content } = Layout;
@@ -94,10 +94,8 @@ function UserField({ label, value }: { label?: string; value: string | string[] 
 
 export default function () {
   return (
-    <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Manager]} anyCoursePowerUser>
-        <Page />
-      </SessionProvider>
-    </ActiveCourseProvider>
+    <SessionProvider allowedRoles={[CourseRole.Manager]} anyCoursePowerUser>
+      <Page />
+    </SessionProvider>
   );
 }

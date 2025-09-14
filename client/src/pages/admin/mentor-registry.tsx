@@ -10,7 +10,7 @@ import { ModalForm } from 'components/Forms';
 import { AdminPageLayout } from 'components/PageLayout';
 import { tabRenderer } from 'components/TabsWithCounter/renderers';
 import { useLoading } from 'components/useLoading';
-import { ActiveCourseProvider, SessionContext, SessionProvider } from 'modules/Course/contexts';
+import { SessionContext, SessionProvider } from 'modules/Course/contexts';
 import {
   CombinedFilter,
   MentorRegistryDeleteModal,
@@ -335,11 +335,9 @@ function Page() {
 
 export default function () {
   return (
-    <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Manager, CourseRole.Supervisor]} anyCoursePowerUser>
-        <Page />
-      </SessionProvider>
-    </ActiveCourseProvider>
+    <SessionProvider allowedRoles={[CourseRole.Manager, CourseRole.Supervisor]} anyCoursePowerUser>
+      <Page />
+    </SessionProvider>
   );
 }
 

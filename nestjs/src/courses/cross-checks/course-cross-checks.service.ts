@@ -113,7 +113,7 @@ export class CourseCrossCheckService {
       orderBy: OrderField;
       orderDirection: OrderDirection;
     },
-  ): Promise<{ items: CrossCheckPair[]; pagination: any }> {
+  ): Promise<{ items: CrossCheckPair[]; pagination: Pagination }> {
     const query = this.taskSolutionCheckerRepository
       .createQueryBuilder('tsc')
       .leftJoin(CourseTask, 'ct', 'tsc."courseTaskId" = ct.id')
@@ -212,9 +212,9 @@ export class CourseCrossCheckService {
       .where('ct."courseId" = :courseId', { courseId })
       .andWhere('ct."id" = :courseTaskId', { courseTaskId });
 
-    const rawData = await query.getRawMany();
+    const rawData = await query.getRawMany<{ githubId: string; url: string }>();
 
-    const result = rawData.map((data: any) => ({
+    const result = rawData.map(data => ({
       githubId: data.githubId,
       solutionUrl: data.url,
     }));

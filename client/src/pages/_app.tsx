@@ -1,6 +1,7 @@
 import App from 'next/app';
 import Head from 'next/head';
 
+import { ActiveCourseProvider } from 'modules/Course/contexts';
 import 'antd/dist/reset.css';
 import { initializeFeatures } from 'services/features';
 import { Analytics } from '../components/Analytics';
@@ -21,7 +22,9 @@ class RsSchoolApp extends App {
         </Head>
         <ThemeProvider>
           <MessageProvider>
-            <Component {...pageProps} />
+            <ActiveCourseProvider publicRoutes={['/login']}>
+              <Component {...pageProps} />
+            </ActiveCourseProvider>
           </MessageProvider>
         </ThemeProvider>
       </>

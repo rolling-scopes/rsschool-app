@@ -42,11 +42,13 @@ class PreScreeningIviewsCard extends React.PureComponent<Props, State> {
 
     return (
       <>
-        <PreScreeningIviewModal
-          interviewResult={interviewResult}
-          isVisible={isPreScreeningIviewModalVisible}
-          onHide={this.hidePreScreeningIviewModal}
-        />
+        {interviewResult ? (
+          <PreScreeningIviewModal
+            interviewResult={interviewResult}
+            isVisible={isPreScreeningIviewModalVisible}
+            onHide={this.hidePreScreeningIviewModal}
+          />
+        ) : null}
         <CommonCard
           title="Pre-Screening Interviews"
           icon={<QuestionCircleOutlined />}

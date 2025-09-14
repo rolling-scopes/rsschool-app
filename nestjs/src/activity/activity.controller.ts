@@ -92,7 +92,7 @@ export class ActivityController {
   }
 }
 
-function createComparisonSignature(body: any, secret: string) {
+function createComparisonSignature(body: unknown, secret: string) {
   const hmac = crypto.createHmac('sha1', secret);
   const selfSignature = hmac.update(JSON.stringify(body)).digest('hex');
   return `sha1=${selfSignature}`;
