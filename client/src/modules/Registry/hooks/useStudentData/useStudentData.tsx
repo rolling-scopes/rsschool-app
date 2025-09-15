@@ -45,7 +45,7 @@ export function useStudentData(githubId: string, courseAlias?: string) {
     const [profile, profileInfo, courses] = await Promise.all([
       userService.getMyProfile(),
       userService.getProfileInfo(githubId),
-      userService.getCourses(),
+      cdnService.getCourses(),
     ]);
 
     const registeredForCourses = enrolledOtherCourses(profileInfo?.studentStats, courses);

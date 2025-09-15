@@ -35,7 +35,7 @@ export function useMentorData(courseAlias?: string | string[]) {
     setLoading(true);
     const [profile, courses, disciplinesData] = await Promise.all([
       userService.getMyProfile(),
-      userService.getCourses(),
+      cdnService.getCourses(),
       disciplinesApi.getDisciplines(),
     ]);
     const activeCourses = getActiveCourses(courses, courseAlias);
