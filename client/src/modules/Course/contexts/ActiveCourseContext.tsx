@@ -13,12 +13,14 @@ type ActiveCourseContextType = {
   course: ProfileCourseDto;
   courses: ProfileCourseDto[];
   setCourse: (course: ProfileCourseDto) => void;
+  refresh: () => void;
 };
 
 const ActiveCourseContext = React.createContext<ActiveCourseContextType>({
   course: {} as ProfileCourseDto,
   courses: [],
   setCourse: () => {},
+  refresh: () => {},
 });
 
 export const useActiveCourseContext = () => {
@@ -54,9 +56,6 @@ export const ActiveCourseProvider = ({ children, publicRoutes }: Props) => {
         });
       }
     },
-    // cache course info for 15 minutes
-    cacheKey: `course-${String(alias)}`,
-    staleTime: 1000 * 60 * 15,
   });
 
   const setCourse = useCallback((course: ProfileCourseDto | null) => {
@@ -70,6 +69,10 @@ export const ActiveCourseProvider = ({ children, publicRoutes }: Props) => {
     () => (data && activeCourse ? { course: activeCourse, courses: data?.[1] ?? [], setCourse, refresh } : undefined),
     [activeCourse, data, setCourse, refresh],
   );
+
+  if (isPublicRoute && router.isReady) {
+    return <>{children}</>;
+  }
 
   if (alias && activeCourse && activeCourse.alias !== alias) {
     return (
@@ -91,10 +94,6 @@ export const ActiveCourseProvider = ({ children, publicRoutes }: Props) => {
 
   if (value) {
     return <ActiveCourseContext.Provider value={value}>{children}</ActiveCourseContext.Provider>;
-  }
-
-  if (isPublicRoute && router.isReady) {
-    return <>{children}</>;
   }
 
   return <LoadingScreen show={loading} />;

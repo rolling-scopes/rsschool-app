@@ -28,7 +28,7 @@ const profileApi = new ProfileApi();
 const userService = new UserService();
 const disciplinesApi = new DisciplinesApi();
 
-export function useStudentData(githubId: string, courseAlias: string | undefined) {
+export function useStudentData(githubId: string, courseAlias?: string) {
   const { message } = useMessage();
   const router = useRouter();
   const [form] = Form.useForm<StudentFormData>();
@@ -45,7 +45,7 @@ export function useStudentData(githubId: string, courseAlias: string | undefined
     const [profile, profileInfo, courses] = await Promise.all([
       userService.getMyProfile(),
       userService.getProfileInfo(githubId),
-      cdnService.getCourses(),
+      userService.getCourses(),
     ]);
 
     const registeredForCourses = enrolledOtherCourses(profileInfo?.studentStats, courses);
