@@ -1,10 +1,10 @@
 import { SessionProvider } from 'modules/Course/contexts';
 import { MentorRegistry } from 'modules/Registry/pages';
 
-function MentorRegistryPage(props: { courseAlias?: string }) {
+function MentorRegistryPage() {
   return (
     <SessionProvider>
-      <MentorRegistry {...props} />
+      <MentorRegistry />
     </SessionProvider>
   );
 }
