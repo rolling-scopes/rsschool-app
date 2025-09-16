@@ -3,7 +3,6 @@ import { Button, Row, Space, Statistic, Switch, Table, Typography } from 'antd';
 import { ColumnProps } from 'antd/lib/table/Column';
 import { AdminPageLayout } from 'components/PageLayout';
 import { DashboardDetails } from 'components/Student';
-import { CertificateCriteriaModal, ExpelCriteriaModal } from 'modules/CourseManagement/components';
 import {
   boolIconRenderer,
   boolSorter,
@@ -14,17 +13,19 @@ import {
 } from 'components/Table';
 import { useLoading } from 'components/useLoading';
 import { isAdmin, isCourseManager, isCourseSupervisor } from 'domain/user';
+import { useMessage } from 'hooks';
 import keys from 'lodash/keys';
-import { useMemo, useState, useContext } from 'react';
+import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { CertificateCriteriaModal, ExpelCriteriaModal } from 'modules/CourseManagement/components';
+import { useContext, useMemo, useState } from 'react';
 import { useAsync, useToggle } from 'react-use';
 import { CourseService, StudentDetails } from 'services/course';
 import { CourseRole } from 'services/models';
-import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
-import { useMessage } from 'hooks';
 
 const { Text } = Typography;
 
-type Stats = { activeStudentsCount: number; studentsCount: number; countries: any[] };
+type Stats = { activeStudentsCount: number; studentsCount: number; countries: unknown[] };
+
 type CertificateCriteria = {
   courseTaskIds?: number[];
   minScore?: number;
@@ -206,7 +207,7 @@ function Page() {
     setStats(calculateStats(courseStudents));
   }
 
-  function getColumns(): ColumnProps<any>[] {
+  function getColumns(): ColumnProps<StudentDetails>[] {
     return [
       {
         title: 'Active',
@@ -220,14 +221,14 @@ function Page() {
         dataIndex: 'githubId',
         sorter: stringSorter('githubId'),
         key: 'githubId',
-        render: (_, record: any) => <PersonCell value={record} />,
+        render: (_, record) => <PersonCell value={record} />,
         ...getColumnSearchProps(['githubId', 'name']),
       },
       {
         title: 'Mentor',
         dataIndex: 'mentor',
-        sorter: stringSorter<any>('mentor.githubId'),
-        render: (value: any) => (value ? <PersonCell value={value} /> : null),
+        sorter: stringSorter('mentor.githubId' as keyof StudentDetails),
+        render: value => (value ? <PersonCell value={value} /> : null),
         ...getColumnSearchProps(['mentor.githubId', 'mentor.name']),
       },
       {
@@ -249,7 +250,7 @@ function Page() {
         title: 'Screening',
         dataIndex: 'interviews',
         width: 60,
-        render: (value: any[]) => {
+        render: (value: StudentDetails['interviews']) => {
           if (value.length === 0) {
             return <MinusCircleOutlined title="No Interview" />;
           }
@@ -280,7 +281,7 @@ function Page() {
         dataIndex: 'actions',
         fixed: 'right',
         width: 60,
-        render: (_: any, record: StudentDetails) => (
+        render: (_, record) => (
           <Button type="default" onClick={() => setDetails(record)}>
             More
           </Button>
@@ -310,18 +311,16 @@ function calculateStats(students: StudentDetails[]) {
     studentsCount: students.length,
     countries: keys(countries).map(k => ({
       name: k,
-      count: countries[k].count,
-      totalCount: countries[k].totalCount,
+      count: countries[k]?.count,
+      totalCount: countries[k]?.totalCount,
     })),
   };
 }
 
 export default function () {
   return (
-    <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Manager, CourseRole.Supervisor, CourseRole.Dementor]}>
-        <Page />
-      </SessionProvider>
-    </ActiveCourseProvider>
+    <SessionProvider allowedRoles={[CourseRole.Manager, CourseRole.Supervisor, CourseRole.Dementor]}>
+      <Page />
+    </SessionProvider>
   );
 }

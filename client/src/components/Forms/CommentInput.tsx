@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Input, Form } from 'antd';
 
-export function CommentInput(props: { [key: string]: any; notRequired?: boolean }) {
+export function CommentInput(props: { [key: string]: unknown; notRequired?: boolean }) {
   const { notRequired, ...otherProps } = props;
   return (
     <Form.Item

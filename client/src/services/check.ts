@@ -44,7 +44,10 @@ export class CheckService {
     return result.data.data;
   }
 
-  private saveToCache(taskId: number, type: routesType, data: IBadReview) {
-    this.cache = { ...this.cache, [taskId]: { ...this.cache[taskId], [type]: data } };
+  private saveToCache(taskId: number, type: routesType, data: IBadReview[]) {
+    if (!this.cache[taskId]) {
+      this.cache[taskId] = {} as Record<routesType, IBadReview[]>;
+    }
+    this.cache[taskId][type] = data;
   }
 }

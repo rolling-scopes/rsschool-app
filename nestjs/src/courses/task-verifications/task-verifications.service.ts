@@ -15,7 +15,7 @@ export type VerificationEvent = {
   courseTask: {
     id: number;
     type: string;
-    [key: string]: any;
+    [key: string]: unknown;
   };
   studentId: number;
   githubId: string;
@@ -68,7 +68,15 @@ export class TaskVerificationsService {
         const questionsWithIncorrectAnswers: SelfEducationQuestionSelectedAnswersDto[] = verification.answers
           .filter(answer => !answer.isCorrect)
           .map(answer => {
-            const taskQuestion = (verification.courseTask.task.attributes as any).public.questions[answer.index];
+            const taskQuestion = (
+              verification.courseTask.task.attributes as {
+                public: { questions: SelfEducationQuestionSelectedAnswersDto[] };
+              }
+            ).public.questions[answer.index];
+
+            if (!taskQuestion) {
+              return null;
+            }
 
             return new SelfEducationQuestionSelectedAnswersDto({
               answers: taskQuestion.answers,
@@ -78,7 +86,8 @@ export class TaskVerificationsService {
               answersType: taskQuestion.answersType,
               questionImage: taskQuestion.questionImage,
             });
-          });
+          })
+          .filter(Boolean);
 
         return new TaskVerificationAttemptDto(verification, questionsWithIncorrectAnswers);
       });

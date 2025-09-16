@@ -5,8 +5,8 @@ import { AdminPageLayout } from 'components/PageLayout';
 import { AssignStudentModal } from 'components/Student';
 import { PersonCell, getColumnSearchProps, numberSorter, stringSorter } from 'components/Table';
 import { Session } from 'components/withSession';
-import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
-import { useMemo, useState, useContext } from 'react';
+import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { useContext, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { relativeDays } from 'services/formatter';
@@ -69,11 +69,11 @@ function Page() {
 
     const studentsGroupCount = records.reduce(
       (acc, { studentsCount, maxStudentsLimit, isActive }) => {
-        acc[0] += studentsCount ? studentsCount : 0;
-        acc[1] += maxStudentsLimit && isActive ? maxStudentsLimit : 0;
+        acc[0] = (acc[0] ?? 0) + (studentsCount ? studentsCount : 0);
+        acc[1] = (acc[1] ?? 0) + (maxStudentsLimit && isActive ? maxStudentsLimit : 0);
         return acc;
       },
-      [0, 0],
+      [0, 0] as [number, number],
     );
 
     setLoading(false);
@@ -82,7 +82,7 @@ function Page() {
       recordCount: mentorsStats.mentorsActiveCount,
       students: studentsValueName.map((valueName, idx) => ({
         studentsGroupName: valueName,
-        totalCount: studentsGroupCount[idx],
+        totalCount: studentsGroupCount[idx] ?? 0,
       })),
     });
   }, []);
@@ -150,7 +150,7 @@ function Page() {
     <AdminPageLayout loading={loading} title="Course Mentors" showCourseName courses={courses}>
       <div style={{ maxWidth: 310, flex: 'auto', border: '1px rgba(0, 0, 0, 0.06) dashed', padding: '10px' }}>
         <Statistic title="Active Mentors" value={stats?.recordCount} />
-        <Statistic title="Max Students Count" value={stats?.students[1].totalCount} />
+        <Statistic title="Max Students Count" value={stats?.students[1]?.totalCount ?? 0} />
         <Table
           pagination={false}
           size="small"
@@ -183,7 +183,7 @@ function Page() {
             dataIndex: 'githubId',
             sorter: stringSorter('githubId'),
             width: 200,
-            render: (_, record: any) => <PersonCell value={record} />,
+            render: (_, record) => <PersonCell value={record} />,
             ...getColumnSearchProps(['githubId', 'name']),
           },
           {
@@ -217,33 +217,33 @@ function Page() {
           {
             title: 'Screenings',
             dataIndex: ['screenings'],
-            sorter: numberSorter('screenings.completed' as any),
+            sorter: numberSorter('screenings.completed' as keyof MentorDetailsDto),
             width: 80,
-            render: (value: any) => `${value.completed} / ${value.total}`,
+            render: value => `${value.completed} / ${value.total}`,
           },
           {
             title: 'Interviews',
             dataIndex: ['interviews'],
-            sorter: numberSorter('interviews.completed' as any),
+            sorter: numberSorter('interviews.completed' as keyof MentorDetailsDto),
             width: 80,
-            render: (value: any) => `${value.completed} / ${value.total}`,
+            render: value => `${value.completed} / ${value.total}`,
           },
           {
             title: 'Students',
             dataIndex: 'studentsCount',
-            sorter: numberSorter('studentsCount' as any),
+            sorter: numberSorter('studentsCount'),
             width: 80,
           },
           {
             title: 'Checked Tasks',
             dataIndex: 'taskResultsStats',
-            sorter: numberSorter('taskResultsStats.checked' as any),
-            render: (value: any) => `${value.checked} / ${value.total}`,
+            sorter: numberSorter('taskResultsStats.checked' as keyof MentorDetailsDto),
+            render: value => `${value.checked} / ${value.total}`,
           },
           {
             title: 'Last Checked Task',
             dataIndex: ['taskResultsStats', 'lastUpdatedDate'],
-            sorter: numberSorter('taskResultsStats.lastUpdatedDate' as any),
+            sorter: numberSorter('taskResultsStats.lastUpdatedDate' as keyof MentorDetailsDto),
             render: (value: string) => (value ? `${relativeDays(value)} days ago` : null),
           },
           {
@@ -278,10 +278,8 @@ function Page() {
 
 export default function () {
   return (
-    <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Manager, CourseRole.Supervisor]}>
-        <Page />
-      </SessionProvider>
-    </ActiveCourseProvider>
+    <SessionProvider allowedRoles={[CourseRole.Manager, CourseRole.Supervisor]}>
+      <Page />
+    </SessionProvider>
   );
 }

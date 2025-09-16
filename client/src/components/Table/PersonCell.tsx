@@ -1,7 +1,7 @@
 import React from 'react';
 import { GithubUserLink } from 'components/GithubUserLink';
 
-type Person = { name: string; githubId: string; cityName: string | null; countryName?: string | null };
+type Person = { name: string; githubId: string; cityName?: string | null; countryName?: string | null };
 type Props = { value: Person; showCountry?: boolean };
 export function PersonCell({ value, showCountry }: Props) {
   const hasName = value.name;

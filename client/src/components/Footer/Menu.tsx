@@ -4,7 +4,12 @@ import Link from 'next/link';
 
 type LinkInfo = { icon: React.ReactNode; name: string; link: string; newTab: boolean };
 
-class Menu extends React.Component<any, any> {
+type MenuProps = {
+  title: string;
+  data: LinkInfo[];
+};
+
+class Menu extends React.Component<MenuProps> {
   render() {
     return (
       <div style={{ marginBottom: 16 }}>

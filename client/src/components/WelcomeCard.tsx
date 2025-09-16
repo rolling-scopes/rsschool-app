@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Row, Image, Layout, Space, Typography, Alert, Button } from 'antd';
+import { Row, Image, Layout, Space, Typography, Alert, Button, Divider } from 'antd';
 
 const { Text } = Typography;
 
@@ -18,16 +18,8 @@ export function WelcomeCard() {
       </Row>
       <Row justify="center">
         <Space direction="vertical" align="center" size="middle" style={{ padding: '20px' }}>
-          <Alert
-            message="Oops, looks like we couldn't find your profile in RS School App! 🤔"
-            type="warning"
-            showIcon
-          />
-          <Text>No worries—you have a couple of options:</Text>
+          <Alert message="Welcome to RS School App! Please register to continue" type="info" showIcon />
           <Space direction="vertical" align="center">
-            <Link href="/login">
-              <Button type="primary">Log in with another GitHub account 🔄</Button>
-            </Link>
             <Space wrap>
               <Link href="/registry/student">
                 <Button type="default">Register as a student 🎓</Button>
@@ -36,6 +28,13 @@ export function WelcomeCard() {
                 <Button type="default">Register as a mentor 🌟</Button>
               </Link>
             </Space>
+
+            <Divider />
+
+            <Text>If you made a mistake and used the wrong GitHub account, you can log in with another one:</Text>
+            <Link href="/login">
+              <Button type="default">Log in with another GitHub account 🔄</Button>
+            </Link>
           </Space>
         </Space>
       </Row>

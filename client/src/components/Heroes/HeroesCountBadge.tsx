@@ -15,7 +15,7 @@ function HeroesCountBadge({ badge: { badgeId, count = 0, comment, date } }: Hero
         <Tooltip
           title={
             <>
-              {heroesBadges[badgeId].name}
+              {heroesBadges[badgeId]?.name ?? ''}
               {comment && date && (
                 <>
                   <br />
@@ -27,7 +27,7 @@ function HeroesCountBadge({ badge: { badgeId, count = 0, comment, date } }: Hero
             </>
           }
         >
-          <Avatar src={`/static/svg/badges/${heroesBadges[badgeId].url}`} alt={`${badgeId} badge`} size={48} />
+          <Avatar src={`/static/svg/badges/${heroesBadges[badgeId]?.url ?? ''}`} alt={`${badgeId} badge`} size={48} />
         </Tooltip>
       </Badge>
     </div>

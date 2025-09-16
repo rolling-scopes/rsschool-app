@@ -10,7 +10,7 @@ export class BasicStrategy extends PassportStrategy(Strategy, 'basic') {
     super({ passReqToCallback: true });
   }
 
-  public async validate(_: any, username: string, password: string) {
+  public async validate(_: unknown, username: string, password: string) {
     const { root } = this.configService.users;
 
     if (root.username === username && root.password === password) {

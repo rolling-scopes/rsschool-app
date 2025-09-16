@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import { useAsync } from 'react-use';
 import { Alert, Button, Form, Input, Select } from 'antd';
 import { BadgeDto, BadgeEnum, GratitudesApi } from 'api';
+import { AxiosError } from 'axios';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
-import { UserService } from 'services/user';
-import { AxiosError } from 'axios';
-import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { useMessage } from 'hooks';
+import { SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { useState } from 'react';
+import { useAsync } from 'react-use';
+import { UserService } from 'services/user';
 
 interface IGratitude {
   userIds: number[];
@@ -144,9 +144,7 @@ function GratitudePage() {
 function Page() {
   return (
     <SessionProvider>
-      <ActiveCourseProvider>
-        <GratitudePage />
-      </ActiveCourseProvider>
+      <GratitudePage />
     </SessionProvider>
   );
 }

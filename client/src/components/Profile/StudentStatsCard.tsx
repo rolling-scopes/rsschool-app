@@ -98,11 +98,13 @@ class StudentStatsCard extends React.Component<Props, State> {
     const { isStudentStatsModalVisible, courseIndex, coursesProgress } = this.state;
     return (
       <>
-        <StudentStatsModal
-          stats={stats[courseIndex]}
-          isVisible={isStudentStatsModalVisible}
-          onHide={this.hideStudentStatsModal}
-        />
+        {stats[courseIndex] ? (
+          <StudentStatsModal
+            stats={stats[courseIndex]}
+            isVisible={isStudentStatsModalVisible}
+            onHide={this.hideStudentStatsModal}
+          />
+        ) : null}
         <StudentLeaveCourse
           isOpen={this.state.isExpelConfirmationModalVisible}
           onOk={this.selfExpelStudent.bind(this, this.state.courseId)}

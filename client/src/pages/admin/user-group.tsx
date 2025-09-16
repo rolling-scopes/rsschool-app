@@ -9,7 +9,7 @@ import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseRole } from 'services/models';
 import { UserService } from 'services/user';
-import { ActiveCourseProvider, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { CustomPopconfirm } from 'components/common/CustomPopconfirm';
 
 const { Content } = Layout;
@@ -227,10 +227,8 @@ function getInitialValues(modalData: Partial<UserGroupDto>) {
 
 export default function () {
   return (
-    <ActiveCourseProvider>
-      <SessionProvider adminOnly>
-        <Page />
-      </SessionProvider>
-    </ActiveCourseProvider>
+    <SessionProvider adminOnly>
+      <Page />
+    </SessionProvider>
   );
 }

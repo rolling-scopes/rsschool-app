@@ -2,13 +2,13 @@ import { Button, Form, Input, Radio, Typography } from 'antd';
 import { CoursesApi, MentorsApi, MentorStudentDto } from 'api';
 import { PageLayoutSimple } from 'components/PageLayout';
 import { UserSearch } from 'components/UserSearch';
-import { CourseRole } from 'services/models';
-import { isMentor, getMentorId } from 'domain/user';
-import { useMemo, useState, useContext } from 'react';
+import { getMentorId, isMentor } from 'domain/user';
+import { useMessage } from 'hooks';
+import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { useContext, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
-import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
-import { useMessage } from 'hooks';
+import { CourseRole } from 'services/models';
 
 type ActionOnStudent = 'expel' | 'unassign' | 'self-study';
 
@@ -155,10 +155,8 @@ function Page() {
 
 export default function () {
   return (
-    <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Mentor, CourseRole.Manager]}>
-        <Page />
-      </SessionProvider>
-    </ActiveCourseProvider>
+    <SessionProvider allowedRoles={[CourseRole.Mentor, CourseRole.Manager]}>
+      <Page />
+    </SessionProvider>
   );
 }

@@ -6,13 +6,13 @@ import { PublicSvgIcon } from '@client/components/Icons/PublicSvgIcon';
 export const CourseIcon = ({ course }: { course: Course }) => {
   if (course.completed) {
     return course.logo && DEFAULT_COURSE_ICONS[course.logo] ? (
-      <Logo url={DEFAULT_COURSE_ICONS[course.logo].archived} />
+      <Logo url={DEFAULT_COURSE_ICONS[course.logo]?.archived ?? ''} />
     ) : (
       <CheckCircleTwoTone style={{ display: 'inline' }} twoToneColor="#aaa" />
     );
   }
   return course.logo && DEFAULT_COURSE_ICONS[course.logo] ? (
-    <Logo url={DEFAULT_COURSE_ICONS[course.logo].active} />
+    <Logo url={DEFAULT_COURSE_ICONS[course.logo]?.active ?? ''} />
   ) : (
     <PlayCircleTwoTone style={{ display: 'inline' }} />
   );

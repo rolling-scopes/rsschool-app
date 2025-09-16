@@ -7,7 +7,7 @@ import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { isCourseManager } from 'domain/user';
-import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { CourseModal } from 'modules/CourseManagement/components/CourseModal';
 import { useContext, useState } from 'react';
 import { Course, CourseRole } from 'services/models';
@@ -138,10 +138,8 @@ function getColumns(handleEditItem: any) {
 
 export default function () {
   return (
-    <ActiveCourseProvider>
-      <SessionProvider allowedRoles={[CourseRole.Manager]} anyCoursePowerUser>
-        <Page />
-      </SessionProvider>
-    </ActiveCourseProvider>
+    <SessionProvider allowedRoles={[CourseRole.Manager]} anyCoursePowerUser>
+      <Page />
+    </SessionProvider>
   );
 }

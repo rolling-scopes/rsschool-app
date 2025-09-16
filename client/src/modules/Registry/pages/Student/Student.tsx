@@ -1,17 +1,15 @@
-import { useContext } from 'react';
 import { RegistrationPageLayout } from 'components/RegistrationPageLayout';
-import { useStudentData } from 'modules/Registry/hooks';
-import { CourseCertificateAlert, NoCourses, RegistrationForm } from 'modules/Registry/components';
 import { SessionContext } from 'modules/Course/contexts';
+import { CourseCertificateAlert, NoCourses, RegistrationForm } from 'modules/Registry/components';
+import { useStudentData } from 'modules/Registry/hooks';
+import { useRouter } from 'next/router';
+import { useContext } from 'react';
 
-type Props = {
-  courseAlias?: string;
-};
-
-export function StudentRegistry({ courseAlias }: Props) {
+export function StudentRegistry() {
   const session = useContext(SessionContext);
+  const router = useRouter();
   const { courses, loading, registered, steps, currentStep, form, handleSubmit, modalContext, missingDisciplines } =
-    useStudentData(session.githubId, courseAlias);
+    useStudentData(session.githubId, router.query.course as string | undefined);
 
   let content: React.ReactNode;
   if (loading || registered) {

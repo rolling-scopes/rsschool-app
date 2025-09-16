@@ -4,7 +4,7 @@ import { useMemo, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { InterviewDetails } from 'domain/interview';
-import { ActiveCourseProvider, SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { CoursesInterviewsApi, CourseTaskDtoTypeEnum, InterviewDto, TaskDtoTypeEnum } from 'api';
 import { InterviewCard, NoInterviewsAlert } from 'modules/Interview/Student';
 
@@ -122,9 +122,7 @@ function StudentInterviewPage() {
 export default function () {
   return (
     <SessionProvider>
-      <ActiveCourseProvider>
-        <StudentInterviewPage />
-      </ActiveCourseProvider>
+      <StudentInterviewPage />
     </SessionProvider>
   );
 }

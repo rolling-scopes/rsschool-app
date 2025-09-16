@@ -75,7 +75,7 @@ export class TaskDto {
   public skills: string[];
 
   @ApiProperty()
-  public attributes: Record<string, any>;
+  public attributes: Record<string, unknown>;
 
   @ApiProperty({ type: [UsedCourseDto] })
   public courses: UsedCourseDto[];

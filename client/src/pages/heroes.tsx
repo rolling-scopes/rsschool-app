@@ -1,7 +1,7 @@
 import { PageLayout } from 'components/PageLayout';
 import { HeroesForm } from '../components/Forms/Heroes';
 import { useState } from 'react';
-import { ActiveCourseProvider, SessionProvider } from 'modules/Course/contexts';
+import { SessionProvider } from 'modules/Course/contexts';
 import { Tabs } from 'antd';
 import HeroesRadarTab from 'components/Heroes/HeroesRadarTab';
 
@@ -15,11 +15,9 @@ function Page() {
 
   return (
     <SessionProvider>
-      <ActiveCourseProvider>
-        <PageLayout loading={loading} title="Heroes">
-          <Tabs items={tabs} />
-        </PageLayout>
-      </ActiveCourseProvider>
+      <PageLayout loading={loading} title="Heroes">
+        <Tabs items={tabs} />
+      </PageLayout>
     </SessionProvider>
   );
 }

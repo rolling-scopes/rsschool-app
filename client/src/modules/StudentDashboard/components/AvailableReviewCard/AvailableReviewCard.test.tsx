@@ -34,7 +34,7 @@ describe('AvailableReviewCard', () => {
   });
 
   it('should not render divider when 1 review', () => {
-    render(<AvailableReviewCard availableReviews={[availableReviews[0]]} courseAlias={courseAlias} />);
+    render(<AvailableReviewCard availableReviews={availableReviews.slice(0, 1)} courseAlias={courseAlias} />);
     const divider = screen.queryByRole('separator');
     expect(divider).not.toBeInTheDocument();
   });
