@@ -47,7 +47,7 @@ export type Contacts = {
 
 export interface FieldData {
   name: string[];
-  value: any;
+  value: unknown;
   touched: boolean;
   validating: boolean;
   errors: string[];

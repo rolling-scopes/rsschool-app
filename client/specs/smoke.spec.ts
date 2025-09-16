@@ -6,7 +6,7 @@ test.beforeEach(async ({ page }) => {
   await page.context().clearCookies();
   await page.goto(url);
   await page.getByRole('button', { name: /sign up with gitHub/i }).click();
-  await page.waitForSelector('.profile');
+  await page.waitForSelector('.page-header');
 });
 
 test.describe('Home', () => {

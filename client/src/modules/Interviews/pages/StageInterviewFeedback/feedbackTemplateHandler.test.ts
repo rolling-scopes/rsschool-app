@@ -48,12 +48,12 @@ describe('getFeedbackFromTemplate', () => {
     expect(feedback.isCompleted).toBe(true);
     expect(feedback.version).toBe(1);
 
-    expect(feedback.steps[0].isCompleted).toBe(true);
-    expect(feedback.steps[0].values?.interviewResult).toBe('completed');
-    expect(feedback.steps[1].isCompleted).toBe(true);
-    expect(feedback.steps[1].values).toEqual({ questions: [{ value: 3 }], score: 30 });
+    expect(feedback.steps[0]?.isCompleted).toBe(true);
+    expect(feedback.steps[0]?.values?.interviewResult).toBe('completed');
+    expect(feedback.steps[1]?.isCompleted).toBe(true);
+    expect(feedback.steps[1]?.values).toEqual({ questions: [{ value: 3 }], score: 30 });
 
-    expect(feedback.steps[2].isCompleted).toBe(undefined);
+    expect(feedback.steps[2]?.isCompleted).toBe(undefined);
   });
 });
 
@@ -142,9 +142,9 @@ describe('getUpdatedFeedback', () => {
 
     const updatedFeedback = getUpdatedFeedback({ feedback, newValues, activeStepIndex, interviewMaxScore: 100 });
 
-    expect(updatedFeedback.steps[0].isCompleted).toBe(true);
-    expect(updatedFeedback.steps[1].isCompleted).toBe(true);
-    expect(updatedFeedback.steps[1].values?.questions).toEqual([{ id: '1', title: 'test', value: 3 }]);
+    expect(updatedFeedback.steps[0]?.isCompleted).toBe(true);
+    expect(updatedFeedback.steps[1]?.isCompleted).toBe(true);
+    expect(updatedFeedback.steps[1]?.values?.questions).toEqual([{ id: '1', title: 'test', value: 3 }]);
     expect(updatedFeedback.feedbackValues).toEqual({
       steps: {
         decision: {
@@ -174,10 +174,10 @@ describe('getUpdatedFeedback', () => {
         },
       },
     });
-    expect(updatedFeedback.steps[2].isCompleted).toBe(false);
-    expect(updatedFeedback.steps[2].values).toBeUndefined();
-    expect(updatedFeedback.steps[3].isCompleted).toBe(false);
-    expect(updatedFeedback.steps[3].values).toBeUndefined();
+    expect(updatedFeedback.steps[2]?.isCompleted).toBe(false);
+    expect(updatedFeedback.steps[2]?.values).toBeUndefined();
+    expect(updatedFeedback.steps[3]?.isCompleted).toBe(false);
+    expect(updatedFeedback.steps[3]?.values).toBeUndefined();
     expect(updatedFeedback.isCompleted).toBe(false);
     expect(updatedFeedback.score).toBeUndefined();
     expect(updatedFeedback.decision).toBeUndefined();

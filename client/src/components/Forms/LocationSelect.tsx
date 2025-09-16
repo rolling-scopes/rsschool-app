@@ -26,7 +26,7 @@ export function LocationSelect(props: Props) {
     setValue(value);
   };
 
-  const handleSelect = (value: any) => {
+  const handleSelect = (value: string) => {
     setValue(value, false);
     props.onChange(toLocation(value));
   };
@@ -56,8 +56,8 @@ export function LocationSelect(props: Props) {
 const toLocation = (value: string): Location => {
   const parts = value.split(', ');
   return {
-    cityName: parts[0],
-    countryName: parts[parts.length - 1],
+    cityName: parts[0] ?? '',
+    countryName: parts[parts.length - 1] ?? '',
   };
 };
 

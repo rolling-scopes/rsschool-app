@@ -6,7 +6,7 @@ export function useActiveCourse(courses: Course[]): [Course | null, (courseId: n
   const [courseId, setCourseId] = useState<number>();
   const [storageValue, setStorageValue] = useLocalStorage('activeCourseId');
   const activeCourseId = courseId || Number(storageValue);
-  const course = courses.find(course => course.id === activeCourseId) ?? courses[0];
+  const course = courses.find(course => course.id === activeCourseId) ?? courses[0] ?? null;
   return [
     course,
     (courseId: number) => {

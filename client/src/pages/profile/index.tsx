@@ -19,7 +19,7 @@ import PreScreeningIviewCard from 'components/Profile/PreScreeningIviewCard';
 import { withGoogleMaps } from 'components/withGoogleMaps';
 import { NotificationChannel, NotificationsService } from 'modules/Notifications/services/notifications';
 import { ProfileInfo, ProfileMainCardData, UserService } from 'services/user';
-import { ActiveCourseProvider, SessionContext, SessionProvider } from 'modules/Course/contexts';
+import { SessionContext, SessionProvider } from 'modules/Course/contexts';
 import { useAsync } from 'react-use';
 import { checkIsProfileOwner, getStudentCoreJSInterviews, hadStudentCoreJSInterview } from 'utils/profilePageUtils';
 import { useMessage } from 'hooks';
@@ -229,11 +229,9 @@ const Profile = () => {
 
 function Page() {
   return (
-    <ActiveCourseProvider>
-      <SessionProvider>
-        <Profile />
-      </SessionProvider>
-    </ActiveCourseProvider>
+    <SessionProvider>
+      <Profile />
+    </SessionProvider>
   );
 }
 

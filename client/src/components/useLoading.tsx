@@ -11,7 +11,7 @@ export function useLoading(
 ) {
   const [loading, setLoading] = useState(value);
   const wrapper =
-    <T extends any[], K = any>(action: (...args: T) => Promise<K>) =>
+    <T extends unknown[], K = unknown>(action: (...args: T) => Promise<K>) =>
     async (...args: Parameters<typeof action>) => {
       try {
         setLoading(true);

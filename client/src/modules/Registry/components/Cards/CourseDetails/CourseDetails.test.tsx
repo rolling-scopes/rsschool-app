@@ -6,7 +6,7 @@ import { CourseDetails } from './CourseDetails';
 
 const renderCourseDetails = (courses: CourseDto[] = []) =>
   render(
-    <Form initialValues={courses.length ? { courseId: courses[0].id } : undefined}>
+    <Form initialValues={courses.length ? { courseId: courses[0]?.id } : undefined}>
       <CourseDetails courses={courses} />
     </Form>,
   );
