@@ -45,6 +45,7 @@ export class CourseAccessService {
 
       const courses = await this.courseRepository.find({
         where: condition,
+        select: ['id'],
       });
 
       return courses.map(({ id }) => id);
