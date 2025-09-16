@@ -2,13 +2,16 @@ import { Student } from '@entities/student';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CountryStatDto } from './dto';
+import { CountriesStatsDto, CountryStatDto } from './dto';
 import { Certificate, CourseTask, Mentor, StageInterview, TaskInterviewResult, TaskResult } from '@entities/index';
 import { TaskType } from '@entities/task';
+import { CourseTasksService } from '../course-tasks';
+import { CourseTaskDto } from '../course-tasks/dto';
 
 @Injectable()
 export class CourseStatsService {
   constructor(
+    private taskService: CourseTasksService,
     @InjectRepository(Student)
     private readonly studentRepository: Repository<Student>,
     @InjectRepository(Mentor)
@@ -201,6 +204,77 @@ export class CourseStatsService {
       highAchievement: Number(performanceStats.highAchievement),
       exceptionalAchievement: Number(performanceStats.exceptionalAchievement),
       perfectScores: Number(performanceStats.perfectScores),
+    };
+  }
+
+  private mergeCountries(data: CountriesStatsDto[]): CountriesStatsDto {
+    const countries = data
+      .map(item => item.countries)
+      .flat()
+      .filter(el => !!el.countryName);
+
+    const count = countries.reduce<Record<string, number>>((acc, el) => {
+      const country = el.countryName;
+      if (acc[country]) {
+        acc[country] += el.count;
+      } else {
+        acc[country] = el.count;
+      }
+      return acc;
+    }, {});
+
+    const result: { countryName: string; count: number }[] = [];
+
+    for (const key in count) {
+      result.push({
+        countryName: key,
+        count: count[key] || 0,
+      });
+    }
+
+    return { countries: result } as CountriesStatsDto;
+  }
+
+  private mergeStats<T extends Record<string, number>>(data: T[]): T {
+    const result = data.reduce<Record<string, number>>((acc, el) => {
+      for (const key in el) {
+        const value = el[key] || 0;
+        if (acc[key]) {
+          acc[key] = acc[key] + value;
+        } else {
+          acc[key] = value;
+        }
+      }
+      return acc;
+    }, {});
+
+    return result as T;
+  }
+
+  public async getCoursesStats(ids: number[] = []) {
+    const [
+      studentsStatsResolved,
+      studentsCountriesResolved,
+      mentorsCountriesResolved,
+      mentorsStatsResolved,
+      courseTasksResolved,
+      studentsCertificatesCountriesResolved,
+    ] = await Promise.all([
+      Promise.all(ids.map(courseId => this.getStudents(courseId))),
+      Promise.all(ids.map(courseId => this.getStudentCountries(courseId))),
+      Promise.all(ids.map(courseId => this.getMentorCountries(courseId))),
+      Promise.all(ids.map(courseId => this.getMentors(courseId))),
+      Promise.all(ids.map(courseId => this.taskService.getAll(courseId, undefined, false))),
+      Promise.all(ids.map(courseId => this.getStudentsWithCertificatesCountries(courseId))),
+    ]);
+
+    return {
+      studentsCountries: this.mergeCountries(studentsCountriesResolved),
+      studentsStats: this.mergeStats(studentsStatsResolved),
+      mentorsCountries: this.mergeCountries(mentorsCountriesResolved),
+      mentorsStats: this.mergeStats(mentorsStatsResolved),
+      courseTasks: courseTasksResolved.flat().map(item => new CourseTaskDto(item)),
+      studentsCertificatesCountries: this.mergeCountries(studentsCertificatesCountriesResolved),
     };
   }
 }
