@@ -25,9 +25,10 @@ export class CourseAccessService {
     return !!user.courses[courseId];
   }
 
-  public async getUserAllowedCourseIds(user: AuthUser, ids: number[], year: number): Promise<number[]> {
+  public async getUserAllowedCourseIds(user: AuthUser, ids: number[] = [], year: number): Promise<number[]> {
     const isAdmin = user.appRoles?.includes(Role.Admin);
-    const userCourses: number[] = isAdmin ? ids : Object.keys(user.courses).map(Number);
+    const userCourses: number[] = isAdmin ? ids : Object.keys(user?.courses).map(Number);
+    const coursesIntersection = ids.filter(id => userCourses.includes(id));
 
     if (year) {
       // if the year is provided, but the course list
@@ -45,12 +46,13 @@ export class CourseAccessService {
 
       const courses = await this.courseRepository.find({
         where: condition,
+        select: ['id'],
       });
 
       return courses.map(({ id }) => id);
     }
 
-    return userCourses;
+    return coursesIntersection;
   }
 
   public canAccessCourseAsManager(user: AuthUser, courseId: number): boolean {

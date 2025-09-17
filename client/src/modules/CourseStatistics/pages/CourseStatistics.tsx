@@ -47,7 +47,7 @@ function CourseStatistic() {
   return (
     <PageLayout
       loading={loading}
-      title={`Course${statScope === StatScope.Timeline && 's'} Statistics`}
+      title={`Course${statScope === StatScope.Timeline ? 's' : ''} Statistics`}
       showCourseName={statScope === StatScope.Current}
       background={token.colorBgLayout}
     >
