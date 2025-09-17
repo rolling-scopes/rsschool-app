@@ -78,7 +78,9 @@ export class AuthService {
     }
 
     if (result == null) {
-      const [email] = profile.emails?.filter((email: any) => !!email.primary) ?? [];
+      // Github has "primary" field
+      const emails: (NonNullable<Profile['emails']>[number] & { primary?: boolean })[] = profile.emails ?? [];
+      const [email] = emails.filter(email => !!email.primary) ?? [];
 
       const user: Partial<User> = {
         githubId: username,

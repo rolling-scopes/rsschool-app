@@ -1,123 +1,71 @@
 import { PageLayout } from 'components/PageLayout';
-import { useActiveCourseContext } from 'modules/Course/contexts';
-import Masonry from 'react-masonry-css';
-import { StudentsCountriesCard } from '../components/StudentsCountriesCard';
-import { useCourseStats } from '../hooks';
-import { StudentsStatsCard } from '../components/StudentsStatsCard';
-import css from 'styled-jsx/css';
-import { MentorsCountriesCard } from '../components/MentorsCountriesCard/MentorsCountriesCard';
-import { EpamMentorsStatsCard } from '../components/EpamMentorsStatsCard';
-import { StudentsWithMentorsCard } from '../components/StudentsWithMentorsCard';
-import { StudentsWithCertificateCard } from '../components/StudentsWithCertificateCard';
-import { StudentsEligibleForCertificationCard } from '../components/StudentsEligibleForCertificationCard';
-import { TaskPerformanceCard } from '../components/TaskPerformanceCard';
-import { StudentsCertificatesCountriesCard } from '../components/StudentsCertificatesCountriesCard';
-import { theme } from 'antd';
-
-const gapSize = 24;
+import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
+import { DatePickerProps, Empty, theme } from 'antd';
+import { useContext, useState } from 'react';
+import { useCoursesStats } from '../hooks';
+import { StatScope } from '../constants';
+import { StatScopeSelector } from '../components/StatScopeSelector';
+import { StatCards } from '../components/StatCards';
+import { useRouter, useSearchParams } from 'next/navigation';
+import dayjs from 'dayjs';
 
 function CourseStatistic() {
+  const { isAdmin } = useContext(SessionContext);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams.toString());
+  const [statScope, setStatScope] = useState<StatScope>(params.get('course') ? StatScope.Current : StatScope.Timeline);
   const { course } = useActiveCourseContext();
-  const { loading, value: stats } = useCourseStats(course?.id ?? 0);
+  const { token } = theme.useToken();
+  const [ids, setIds] = useState<number[]>([course.id]);
+  const selectedYear = Number(params.get('year'));
+  const { loading, coursesData } = useCoursesStats({ ids, year: selectedYear });
 
-  const masonryBreakPoints = {
-    default: 4,
-    1100: 3,
-    700: 2,
-    500: 1,
+  const handleStatScope = (value: boolean) => {
+    if (value) {
+      setStatScope(StatScope.Current);
+      setIds([course.id]);
+      params.set('course', course.alias);
+      params.delete('year');
+    } else {
+      setStatScope(StatScope.Timeline);
+      setIds([]);
+      params.delete('course');
+      params.set('year', dayjs(new Date()).year().toString());
+    }
+    router.push(`?${params.toString()}`);
   };
 
-  const cards = [
-    stats?.studentsCountries && {
-      title: 'studentsCountriesCard',
-      component: (
-        <StudentsCountriesCard
-          studentsCountriesStats={stats.studentsCountries}
-          activeStudentsCount={stats.studentsStats.activeStudentsCount}
-        />
-      ),
-    },
-    stats?.studentsStats.totalStudents && {
-      title: 'studentsStatsCard',
-      component: <StudentsStatsCard studentsStats={stats.studentsStats} />,
-    },
-    stats?.mentorsCountries &&
-      stats.mentorsStats.mentorsActiveCount && {
-        title: 'mentorsCountriesCard',
-        component: (
-          <MentorsCountriesCard
-            countriesStats={stats.mentorsCountries}
-            activeCount={stats.mentorsStats.mentorsActiveCount}
-          />
-        ),
-      },
-    stats?.mentorsStats.epamMentorsCount && {
-      title: 'mentorsStatsCard',
-      component: <EpamMentorsStatsCard mentorsStats={stats.mentorsStats} />,
-    },
-    stats?.studentsStats.studentsWithMentorCount && {
-      title: 'studentsWithMentorStatsCard',
-      component: <StudentsWithMentorsCard studentsStats={stats.studentsStats} />,
-    },
-    stats?.studentsStats.certifiedStudentsCount && {
-      title: 'studentsWithCertificateStatsCard',
-      component: <StudentsWithCertificateCard studentsStats={stats.studentsStats} />,
-    },
-    !stats?.studentsStats.certifiedStudentsCount &&
-      stats?.studentsStats.eligibleForCertificationCount && {
-        title: 'StudentsEligibleForCertificationCard',
-        component: <StudentsEligibleForCertificationCard studentsStats={stats.studentsStats} />,
-      },
-    stats?.courseTasks && {
-      title: 'taskPerformanceCard',
-      component: <TaskPerformanceCard tasks={stats.courseTasks} />,
-    },
-    stats?.studentsCertificatesCountries &&
-      stats.studentsStats.certifiedStudentsCount && {
-        title: 'studentsCertificatesCountriesCard',
-        component: (
-          <StudentsCertificatesCountriesCard
-            studentsCertificatesCountriesStats={stats.studentsCertificatesCountries}
-            certificatesCount={stats.studentsStats.certifiedStudentsCount}
-          />
-        ),
-      },
-  ].filter(Boolean);
-
-  const { token } = theme.useToken();
+  const handleYearSelection: DatePickerProps['onChange'] = date => {
+    if (!date) {
+      return;
+    }
+    params.set('year', date.year().toString());
+    router.push(`?${params.toString()}`);
+  };
 
   return (
-    <PageLayout loading={loading} title="Course Statistics" showCourseName background={token.colorBgLayout}>
-      <Masonry
-        breakpointCols={masonryBreakPoints}
-        className={masonryClassName}
-        columnClassName={masonryColumnClassName}
-      >
-        {cards.map(({ title, component }) => (
-          <div style={{ marginBottom: gapSize }} key={title}>
-            {component}
-          </div>
-        ))}
-      </Masonry>
-      {masonryStyles}
-      {masonryColumnStyles}
+    <PageLayout
+      loading={loading}
+      title={`Course${statScope === StatScope.Timeline ? 's' : ''} Statistics`}
+      showCourseName={statScope === StatScope.Current}
+      background={token.colorBgLayout}
+    >
+      {isAdmin && (
+        <StatScopeSelector
+          statScope={statScope}
+          handleStatScope={handleStatScope}
+          handleYearSelection={handleYearSelection}
+          selectedYear={selectedYear}
+        />
+      )}
+      {statScope === StatScope.Timeline && !selectedYear ? (
+        <Empty description="No data available." />
+      ) : (
+        <StatCards coursesData={coursesData} />
+      )}
     </PageLayout>
   );
 }
-
-const { className: masonryClassName, styles: masonryStyles } = css.resolve`
-  div {
-    display: flex;
-    margin-left: -${gapSize}px;
-    width: auto;
-    min-height: 85vh;
-  }
-`;
-const { className: masonryColumnClassName, styles: masonryColumnStyles } = css.resolve`
-  div {
-    padding-left: ${gapSize}px;
-    background-clip: padding-box;
-  }
-`;
 
 export default CourseStatistic;
