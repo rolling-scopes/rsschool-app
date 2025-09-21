@@ -185,12 +185,11 @@ export const renderTask = (name: string, descriptionUrl: string | null) => {
 };
 
 export const coloredDateRenderer = (timeZone: string, format: string, date: 'start' | 'end', infoText: string) => {
-  const now = dayjs();
+  const now = dayjs().utc();
   return (value: string, { startDate, endDate, score, tag }: CourseScheduleItemDto) => {
     let color: BaseType | undefined = undefined;
     const start = dayjs.utc(startDate);
     const end = dayjs.utc(endDate);
-    console.log('after dayjs', start, end);
 
     const isDeadlineSoon = now <= end && end.diff(now, 'hours') < 48 && !score;
     const isCurrent = now >= start && now < end && !score;
