@@ -16,8 +16,8 @@ const createRecord = (eventTemplateId: number, values: any): CreateCourseEventDt
   const record = {
     eventId: eventTemplateId,
     special: values.special ? values.special.join(',') : '',
-    dateTime: values.dateTime ? dayjs(values.dateTime).tz(values.timeZone, true).utc().format() : undefined,
-    endTime: values.endTime ? dayjs(values.endTime).tz(values.timeZone, true).utc().format() : undefined,
+    dateTime: values.dateTime ? dayjs(values.dateTime).tz(values.timeZone, true).format() : undefined,
+    endTime: values.endTime ? dayjs(values.endTime).tz(values.timeZone, true).format() : undefined,
     place: values.place || null,
     organizer: values.taskOwner?.id ? { id: values.taskOwner?.id } : undefined,
   };
