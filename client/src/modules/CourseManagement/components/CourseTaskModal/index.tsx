@@ -153,6 +153,7 @@ export function CourseTaskModal(props: Props) {
               showTime={{
                 format: 'HH:mm',
               }}
+              format={value => value.utc().format('YYYY-MM-DD HH:mm')}
             />
           </Form.Item>
         </Col>
