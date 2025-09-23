@@ -78,7 +78,7 @@ export interface CourseTaskDetails extends CourseTaskDto {
 
 export interface CourseEvent {
   id: number;
-  event: EventDto;
+  event: EventDto & { disciplineId: number | null };
   date?: string;
   time?: string;
   dateTime: string;

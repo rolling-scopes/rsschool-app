@@ -81,11 +81,12 @@ export function getInitialValues(modalData: Partial<CourseEvent>) {
   return {
     ...modalData,
     type: EVENT_TYPES.find(event => event.id === modalData.event?.type)?.id ?? null,
+    disciplineId: modalData?.event?.discipline?.id || modalData?.event?.disciplineId,
     descriptionUrl: modalData.event?.descriptionUrl ? modalData.event.descriptionUrl : '',
     description: modalData.event?.description ? modalData.event.description : '',
     dateTime: dayjs.utc(modalData.dateTime ?? undefined),
     endTime: dayjs.utc(modalData.endTime ?? undefined),
-    organizerId: modalData.organizer ? modalData.organizer.id : undefined,
+    taskOwner: modalData.organizer ? { id: modalData.organizer.id } : undefined,
     special: modalData.special ? modalData.special.split(',') : [],
     timeZone,
   };
