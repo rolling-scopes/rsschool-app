@@ -279,4 +279,7 @@ const styles = css`
   :global(.table-score .ant-table-body) {
     min-height: 200px;
   }
+  :global(.table-score) {
+    margin: 1.5rem 0 0;
+  }
 `;
