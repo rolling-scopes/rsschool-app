@@ -212,11 +212,13 @@ const styles = css`
     padding: 16px;
     border: 2px rgba(24, 144, 255, 0.5) dashed;
   }
+  .card .badge {
+    transform: scale(1);
+    transition: transform 1s ease;
+  }
   .card:hover .badge {
-    transform: scale(6.2);
-    transition: all 1s ease;
-    opacity: 0;
-    z-index: -1;
+    transform: scale(1.5);
+    transition: transform 1s ease;
   }
   .card:hover .badge-bg {
     transition: all 2s ease;
