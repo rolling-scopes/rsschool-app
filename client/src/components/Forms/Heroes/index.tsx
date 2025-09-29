@@ -210,7 +210,6 @@ const styles = css`
   }
   .badge-note {
     padding: 16px;
-    background: rgba(255, 255, 255, 0.7);
     border: 2px rgba(24, 144, 255, 0.5) dashed;
   }
   .card:hover .badge {
@@ -225,7 +224,6 @@ const styles = css`
   }
   .card:hover .badge-note {
     transition: all 1s ease;
-    background: rgba(255, 255, 255, 1);
     border: 2px rgba(24, 144, 255, 1) dashed;
   }
 `;
