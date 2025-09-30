@@ -21,7 +21,7 @@ export function CoursePageLayout(props: Props) {
   }
 
   return (
-    <Layout style={{ minHeight: '100vh', background: token.colorBgContainer }}>
+    <Layout style={{ minHeight: '100vh', background: token.colorBgLayout }}>
       <Header title={props.title} showCourseName={props.showCourseName} />
       <Layout.Content style={{ margin: 16 }}>
         <Spin spinning={props.loading}>{props.children}</Spin>

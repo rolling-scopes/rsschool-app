@@ -1,6 +1,4 @@
 import { ColumnType } from 'antd/es/table';
-import { Button } from 'antd';
-import { SettingFilled } from '@ant-design/icons';
 import { ScoreStudentDto } from 'api';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { dateRenderer, getColumnSearchProps } from 'components/Table';
@@ -13,7 +11,6 @@ type Props = {
   name?: string | string[];
   cityName?: string | string[];
   mentor?: string | string[];
-  handleSettings: () => void;
 };
 
 const getSearchProps = (key: string) => ({
@@ -22,7 +19,7 @@ const getSearchProps = (key: string) => ({
 });
 
 export function getColumns(props: Props): ColumnType<ScoreStudentDto>[] {
-  const { githubId, name, cityName, mentor, handleSettings, taskColumns } = props;
+  const { githubId, name, cityName, mentor, taskColumns } = props;
 
   return [
     {
@@ -115,13 +112,6 @@ export function getColumns(props: Props): ColumnType<ScoreStudentDto>[] {
         </Link>
       ),
       ...getSearchProps('mentor.githubId'),
-    },
-    {
-      title: () => <Button size="small" icon={<SettingFilled />} onClick={handleSettings} />,
-      fixed: 'right',
-      width: 42,
-      align: 'center',
-      render: () => '',
     },
   ];
 }
