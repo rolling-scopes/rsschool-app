@@ -22,6 +22,7 @@ import { Summary } from './Summary';
 type Props = CoursePageProps & {
   onLoading: (value: boolean) => void;
   activeOnly: boolean;
+  setStatData: (data: [number, number]) => void;
 };
 
 type TableScoreOrder = SorterResult<ScoreStudentDto> | SorterResult<ScoreStudentDto>[];
@@ -41,7 +42,7 @@ const courseTasksApi = new CoursesTasksApi();
 export function ScoreTable(props: Props) {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const { activeOnly } = props;
+  const { activeOnly, setStatData } = props;
   const { ['mentor.githubId']: mentor, cityName, githubId, name } = router.query;
 
   const [isVisibleSetting, setIsVisibleSettings] = useState(false);
@@ -179,6 +180,12 @@ export function ScoreTable(props: Props) {
       return prevColumns;
     });
   }, [fixedColumn, loaded]);
+
+  useEffect(() => {
+    Promise.all([courseService.getCourseStudents(false), courseService.getCourseStudents(true)]).then(data => {
+      setStatData([data[0].length, data[1].length]);
+    });
+  }, []);
 
   if (!loaded) {
     return null;
