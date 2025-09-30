@@ -58,7 +58,7 @@ const styles = css`
       pulse 0.7s 10s ease-in 1;
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 820px) {
     .wrapper {
       visibility: hidden;
     }

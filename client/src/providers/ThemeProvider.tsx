@@ -152,6 +152,12 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
             scrollbar-color: var(--scroll-color) transparent;
             scrollbar-gutter: stable;
           }
+
+          :global(.ant-drawer-body) {
+            scrollbar-width: thin;
+            scrollbar-color: var(--scroll-color) transparent;
+            scrollbar-gutter: stable;
+          }
         `}</style>
         {children}
       </ConfigProvider>

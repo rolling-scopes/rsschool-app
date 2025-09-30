@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Badge, Space, Tabs, TabsProps, Typography } from 'antd';
+import { Badge, Button, Space, Tabs, TabsProps, Tooltip, Typography } from 'antd';
 import { ScoreTable } from '@client/modules/Score/components/ScoreTable/index';
 import { CoursePageProps } from '@client/services/models';
 import { useRouter } from 'next/router';
@@ -7,6 +7,7 @@ import { getExportCsvUrl } from '@client/modules/Score/data/getExportCsvUrl';
 import { isExportEnabled } from '@client/modules/Score/data/isExportEnabled';
 import { UpdateAlert } from '@client/modules/Score/pages/ScorePage/UpdateAlert';
 import { ExportCsvButton } from '@client/modules/Score/components/ExportCsvButton';
+import { SettingOutlined } from '@ant-design/icons';
 
 const { Text } = Typography;
 
@@ -27,6 +28,7 @@ export const ScoreTableTabs = ({ tabProps }: Props) => {
   const router = useRouter();
   const { ['mentor.githubId']: mentor, cityName } = router.query;
   const [statData, setStatData] = useState<[number, number]>([0, 0]);
+  const [isVisibleSetting, setIsVisibleSettings] = useState(false);
 
   const { course, session } = tabProps;
 
@@ -34,12 +36,28 @@ export const ScoreTableTabs = ({ tabProps }: Props) => {
     {
       key: 'all',
       label: <TabLabel title="All students" counter={statData[0]} />,
-      children: <ScoreTable {...tabProps} activeOnly={false} setStatData={setStatData} />,
+      children: (
+        <ScoreTable
+          {...tabProps}
+          activeOnly={false}
+          setStatData={setStatData}
+          isVisibleSetting={isVisibleSetting}
+          setIsVisibleSettings={setIsVisibleSettings}
+        />
+      ),
     },
     {
       key: 'active',
       label: <TabLabel title="Active students" counter={statData[1]} />,
-      children: <ScoreTable {...tabProps} activeOnly={true} setStatData={setStatData} />,
+      children: (
+        <ScoreTable
+          {...tabProps}
+          activeOnly={true}
+          setStatData={setStatData}
+          isVisibleSetting={isVisibleSetting}
+          setIsVisibleSettings={setIsVisibleSettings}
+        />
+      ),
     },
   ];
 
@@ -56,9 +74,14 @@ export const ScoreTableTabs = ({ tabProps }: Props) => {
       items={tabs}
       defaultActiveKey="active"
       tabBarExtraContent={
-        <Space style={{ display: 'flex', alignItems: 'center' }}>
+        <Space style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <UpdateAlert />
           <ExportCsvButton enabled={csvEnabled} onClick={handleExportCsv} />
+          <Tooltip title="Table settings" placement="left">
+            <Button shape="circle" type="text" title="Settings" onClick={() => setIsVisibleSettings(true)}>
+              <SettingOutlined style={{ fontSize: '2.5ch', display: 'block' }} />
+            </Button>
+          </Tooltip>
         </Space>
       }
     />
