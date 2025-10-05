@@ -11,7 +11,7 @@ import { CoursesTasksApi, CourseTaskDto, ScoreStudentDto } from 'api';
 import { getColumns } from 'modules/Score/data/getColumns';
 import { getTaskColumns } from 'modules/Score/data/getTaskColumns';
 import { useScorePaging } from 'modules/Score/hooks/useScorePaging';
-import { SettingsModal } from 'modules/Score/components/SettingsModal';
+import { SettingsDrawer } from 'modules/Score/components/SettingsDrawer';
 import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
 import { IPaginationInfo } from '@common/types/pagination';
@@ -22,6 +22,9 @@ import { Summary } from './Summary';
 type Props = CoursePageProps & {
   onLoading: (value: boolean) => void;
   activeOnly: boolean;
+  setStatData: (data: [number, number]) => void;
+  isVisibleSetting: boolean;
+  setIsVisibleSettings: (value: boolean) => void;
 };
 
 type TableScoreOrder = SorterResult<ScoreStudentDto> | SorterResult<ScoreStudentDto>[];
@@ -41,10 +44,9 @@ const courseTasksApi = new CoursesTasksApi();
 export function ScoreTable(props: Props) {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const { activeOnly } = props;
+  const { activeOnly, setStatData, isVisibleSetting, setIsVisibleSettings } = props;
   const { ['mentor.githubId']: mentor, cityName, githubId, name } = router.query;
 
-  const [isVisibleSetting, setIsVisibleSettings] = useState(false);
   const [columns, setColumns] = useState<ColumnType<ScoreStudentDto>[]>([]);
   const [fixedColumn, setFixedColumn] = useState<boolean>(true);
   const [courseTasks, setCourseTasks] = useState([] as CourseTaskDto[]);
@@ -133,7 +135,6 @@ export function ScoreTable(props: Props) {
           name,
           cityName,
           mentor,
-          handleSettings: () => setIsVisibleSettings(true),
           taskColumns: getTaskColumns(sortedTasks),
         }),
       );
@@ -179,6 +180,12 @@ export function ScoreTable(props: Props) {
       return prevColumns;
     });
   }, [fixedColumn, loaded]);
+
+  useEffect(() => {
+    Promise.all([courseService.getCourseStudents(false), courseService.getCourseStudents(true)]).then(data => {
+      setStatData([data[0].length, data[1].length]);
+    });
+  }, [courseService, setStatData]);
 
   if (!loaded) {
     return null;
@@ -247,7 +254,7 @@ export function ScoreTable(props: Props) {
           };
         }}
       />
-      <SettingsModal
+      <SettingsDrawer
         courseTasks={courseTasks}
         isVisible={isVisibleSetting}
         onOk={handleModalOk}
@@ -278,5 +285,8 @@ const styles = css`
   }
   :global(.table-score .ant-table-body) {
     min-height: 200px;
+  }
+  :global(.table-score) {
+    margin: 1.5rem 0 0;
   }
 `;

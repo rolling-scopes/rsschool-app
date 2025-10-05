@@ -1,5 +1,5 @@
 import { FileExcelOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+import { Button, Tooltip } from 'antd';
 
 type Props = {
   enabled?: boolean;
@@ -11,8 +11,10 @@ export function ExportCsvButton(props: Props) {
     return null;
   }
   return (
-    <Button icon={<FileExcelOutlined />} onClick={props.onClick}>
-      Export CSV
-    </Button>
+    <Tooltip title="Export to CSV" placement="left">
+      <Button shape="circle" type="text" onClick={props.onClick}>
+        <FileExcelOutlined style={{ fontSize: '2.5ch', display: 'block' }} />
+      </Button>
+    </Tooltip>
   );
 }

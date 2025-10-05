@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, Modal, Row, Col } from 'antd';
+import { Button, Checkbox, Drawer, Form, Space } from 'antd';
 import { Store } from 'antd/lib/form/interface';
 import type { CourseTaskDto } from 'api';
 
@@ -9,7 +9,7 @@ type Props = {
   onOk: (values: Store) => void;
 };
 
-export function SettingsModal(props: Props) {
+export function SettingsDrawer(props: Props) {
   const { onCancel, onOk, courseTasks, isVisible } = props;
   const [form] = Form.useForm();
 
@@ -38,37 +38,36 @@ export function SettingsModal(props: Props) {
   };
 
   return (
-    <Modal
+    <Drawer
       title="Columns visibility"
       open={isVisible}
-      onOk={onOkHandle}
-      onCancel={onCancel}
-      footer={[
-        <Button key="Select all" onClick={() => fillAllFields(true)} type="text">
-          Select all
-        </Button>,
-        <Button key="Deselect all" onClick={() => fillAllFields(false)} type="text">
-          Deselect all
-        </Button>,
-        <Button key="Cancel" onClick={onCancel}>
-          Cancel
-        </Button>,
-        <Button key="Submit" type="primary" onClick={onOkHandle}>
-          Submit
-        </Button>,
-      ]}
+      onClose={onCancel}
+      footer={
+        <Space>
+          <Button key="Select all" onClick={() => fillAllFields(true)} type="text">
+            Select all
+          </Button>
+          <Button key="Deselect all" onClick={() => fillAllFields(false)} type="text">
+            Deselect all
+          </Button>
+          <Button key="Cancel" onClick={onCancel}>
+            Cancel
+          </Button>
+          <Button key="Save" type="primary" onClick={onOkHandle}>
+            Save
+          </Button>
+        </Space>
+      }
     >
       <Form form={form} initialValues={initialValues} layout="vertical">
-        <Row gutter={[16, 0]} style={{ maxHeight: '60vh', overflowY: 'scroll' }}>
+        <Space style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
           {courseTasks.map(courseTask => (
-            <Col span={12} key={courseTask.id}>
-              <Form.Item name={courseTask.id} valuePropName="checked" style={{ marginBottom: 4 }}>
-                <Checkbox>{courseTask.name}</Checkbox>
-              </Form.Item>
-            </Col>
+            <Form.Item key={courseTask.id} name={courseTask.id} valuePropName="checked" style={{ marginBottom: 4 }}>
+              <Checkbox>{courseTask.name}</Checkbox>
+            </Form.Item>
           ))}
-        </Row>
+        </Space>
       </Form>
-    </Modal>
+    </Drawer>
   );
 }
