@@ -185,7 +185,7 @@ export function ScoreTable(props: Props) {
     Promise.all([courseService.getCourseStudents(false), courseService.getCourseStudents(true)]).then(data => {
       setStatData([data[0].length, data[1].length]);
     });
-  }, []);
+  }, [courseService, setStatData]);
 
   if (!loaded) {
     return null;
