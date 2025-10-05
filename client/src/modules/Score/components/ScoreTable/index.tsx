@@ -101,6 +101,23 @@ export function ScoreTable(props: Props) {
         courseTasksApi.getCourseTasks(props.course.id),
       ]);
 
+      // Get the total number of inactive and active students from the same endpoint
+      // Pagination (page size and page number) doesn't matter - we need to get the
+      // total number of students
+      const [
+        {
+          pagination: { total: active },
+        },
+        {
+          pagination: { total: inactive },
+        },
+      ] = await Promise.all([
+        courseService.getCourseScore({ current: 0, pageSize: 0 }, { activeOnly: true }),
+        courseService.getCourseScore({ current: 0, pageSize: 0 }, { activeOnly: false }),
+      ]);
+
+      setStatData([inactive, active]);
+
       const {
         content,
         pagination: { totalPages },
@@ -180,12 +197,6 @@ export function ScoreTable(props: Props) {
       return prevColumns;
     });
   }, [fixedColumn, loaded]);
-
-  useEffect(() => {
-    Promise.all([courseService.getCourseStudents(false), courseService.getCourseStudents(true)]).then(data => {
-      setStatData([data[0].length, data[1].length]);
-    });
-  }, [courseService, setStatData]);
 
   if (!loaded) {
     return null;
