@@ -13,7 +13,7 @@ export function ExportCsvButton(props: Props) {
   return (
     <Tooltip title="Export to CSV" placement="left">
       <Button shape="circle" type="text" onClick={props.onClick}>
-        <FileExcelOutlined onClick={props.onClick} style={{ fontSize: '2.5ch', display: 'block' }} />
+        <FileExcelOutlined style={{ fontSize: '2.5ch', display: 'block' }} />
       </Button>
     </Tooltip>
   );
