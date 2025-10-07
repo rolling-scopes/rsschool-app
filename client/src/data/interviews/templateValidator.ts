@@ -1,6 +1,6 @@
 import { InterviewTemplate, Question, QuestionCategory } from '@client/data/interviews/types';
 
-class TemplateValidationError extends Error {
+export class TemplateValidationError extends Error {
   constructor(message: string) {
     super(message);
     this.name = 'TemplateValidationError';
