@@ -130,9 +130,11 @@ const ContactsCard = ({ connections, data, isEditingModeEnabled, sendConfirmatio
               ) : null}
             </>
           ) : value ? (
-            <a target="__blank" href={value}>
-              {value}
-            </a>
+            <Text ellipsis>
+              <a target="__blank" href={value}>
+                {value}
+              </a>
+            </Text>
           ) : null}
         </List.Item>
       )}
