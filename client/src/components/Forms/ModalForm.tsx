@@ -13,6 +13,7 @@ type Props<T> = React.PropsWithChildren<{
   okText?: string;
   form?: FormInstance;
   okButtonProps?: ButtonProps;
+  resetOnCancel?: boolean;
 }>;
 
 export function ModalForm<T extends object>(props: Props<T>) {
@@ -41,7 +42,9 @@ export function ModalForm<T extends object>(props: Props<T>) {
       okButtonProps={{ disabled: props.loading, ...props.okButtonProps }}
       onCancel={e => {
         props.cancel(e);
-        form.resetFields();
+        if (props.resetOnCancel !== false) {
+          form.resetFields();
+        }
       }}
     >
       <Spin spinning={props.loading ?? false}>
