@@ -1,11 +1,11 @@
 import {
   BranchesOutlined,
-  CloseCircleTwoTone,
+  CloseCircleOutlined,
   FileExcelOutlined,
   SolutionOutlined,
   UndoOutlined,
 } from '@ant-design/icons';
-import { Button, Descriptions, Drawer, Popconfirm } from 'antd';
+import { Button, Descriptions, Drawer, Popconfirm, theme } from 'antd';
 import { MentorBasic } from '@common/models';
 import { CommentModal } from 'components/CommentModal';
 import { MentorSearch } from 'components/MentorSearch';
@@ -31,6 +31,7 @@ type Props = {
 export function DashboardDetails(props: Props) {
   const [expelMode, setExpelMode] = useState(false);
   const { details } = props;
+  const { token } = theme.useToken();
   if (details == null) {
     return null;
   }
@@ -65,7 +66,11 @@ export function DashboardDetails(props: Props) {
                   title="Are you sure you want to remove the certificate?"
                   onConfirm={props.onRemoveCertificate}
                 >
-                  <Button danger icon={<FileExcelOutlined style={{ color: 'red' }} />} loading={props.isLoading}>
+                  <Button
+                    danger
+                    icon={<FileExcelOutlined style={{ color: token.colorError }} />}
+                    loading={props.isLoading}
+                  >
                     Remove Certificate
                   </Button>
                 </Popconfirm>
@@ -73,8 +78,9 @@ export function DashboardDetails(props: Props) {
             </>
           )}
           <Button
+            danger
             hidden={!details.isActive}
-            icon={<CloseCircleTwoTone twoToneColor="red" />}
+            icon={<CloseCircleOutlined style={{ color: token.colorError }} />}
             onClick={() => setExpelMode(true)}
           >
             Expel
