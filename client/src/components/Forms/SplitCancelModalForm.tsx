@@ -1,4 +1,4 @@
-import { ButtonProps, Form, Modal, Spin } from 'antd';
+import { Button, ButtonProps, Form, Modal, Spin } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
 import React from 'react';
 
@@ -6,16 +6,18 @@ type Props<T> = React.PropsWithChildren<{
   data: T;
   title?: string;
   submit: (arg: any) => void;
-  cancel: (arg: any) => void;
+  onCancel: (arg: any) => void;
+  onFooterCancel: (arg: any) => void;
   onChange?: (values: any) => void;
   getInitialValues?: (arg: any) => any;
   loading?: boolean;
   okText?: string;
   form?: FormInstance;
   okButtonProps?: ButtonProps;
+  resetOnCancel?: boolean;
 }>;
 
-export function ModalForm<T extends object>(props: Props<T>) {
+export function SplitCancelModalForm<T extends object>(props: Props<T>) {
   const antForm = Form.useForm()[0];
   const form = props.form || antForm;
 
@@ -29,20 +31,33 @@ export function ModalForm<T extends object>(props: Props<T>) {
       width={700}
       open={true}
       title={props.title}
-      okText={props.okText ?? 'Save'}
-      onOk={async e => {
-        e.preventDefault();
-        const values = await form.validateFields().catch(() => null);
-        if (values == null) {
-          return;
-        }
-        props.submit(values);
-      }}
-      okButtonProps={{ disabled: props.loading, ...props.okButtonProps }}
       onCancel={e => {
-        props.cancel(e);
-        form.resetFields();
+        props.onCancel(e);
+        if (props.resetOnCancel !== false) {
+          form.resetFields();
+        }
       }}
+      footer={[
+        <Button key="back" onClick={props.onFooterCancel}>
+          Cancel
+        </Button>,
+        <Button
+          key="submit"
+          type="primary"
+          loading={props.loading}
+          onClick={async e => {
+            e.preventDefault();
+            const values = await form.validateFields().catch(() => null);
+            if (values == null) {
+              return;
+            }
+            props.submit(values);
+          }}
+          {...props.okButtonProps}
+        >
+          {props.okText ?? 'Save'}
+        </Button>,
+      ]}
     >
       <Spin spinning={props.loading ?? false}>
         <Form

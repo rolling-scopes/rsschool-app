@@ -2,7 +2,7 @@ import { Row, Col, Form, Input, Select, Card, Space, Tag, Empty, Typography, Mod
 import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import union from 'lodash/union';
 import { TaskDto, CriteriaDto, DisciplineDto } from 'api';
-import { ModalForm } from 'components/Forms';
+
 import { stringSorter } from 'components/Table';
 import { SKILLS } from 'data/skills';
 import { TASK_TYPES } from 'data/taskTypes';
@@ -11,6 +11,7 @@ import { TaskSettings } from 'modules/Tasks/components';
 import { ERROR_MESSAGES, LABELS, MODAL_TITLES, PLACEHOLDERS } from 'modules/Tasks/constants';
 import { FormValues } from 'modules/Tasks/types';
 import { urlPattern } from 'services/validators';
+import { SplitCancelModalForm } from 'components/Forms/SplitCancelModalForm';
 const { Text } = Typography;
 const { TextArea } = Input;
 
@@ -39,6 +40,10 @@ export function TaskModal({
   setDataCriteria,
   handleModalSubmit,
 }: ModalProps) {
+  if (!formData) {
+    return null;
+  }
+
   const [form] = Form.useForm<FormValues>();
   const typeField = Form.useWatch('type', form);
   const [isConfirmVisible, setConfirmVisible] = useState(false);
@@ -66,7 +71,7 @@ export function TaskModal({
     setDataCriteria([]);
   };
 
-  const handleCancel = () => {
+  const handleCloseActions = () => {
     const isDirty = form.isFieldsTouched();
     if (isDirty) {
       setConfirmVisible(true);
@@ -77,6 +82,12 @@ export function TaskModal({
     }
   };
 
+  const handleFooterCancel = () => {
+    toggleModal();
+    setDataCriteria([]);
+    form.resetFields();
+  };
+
   const handleSaveAndClose = async () => {
     setIsSaving(true);
     try {
@@ -84,7 +95,9 @@ export function TaskModal({
       await handleModalSubmit(values);
       setConfirmVisible(false);
     } catch (error) {
-      console.error('Validation or submission failed:', error);
+      if (process.env.NODE_ENV !== 'production') {
+        console.error('Validation or submission failed:', error);
+      }
     } finally {
       setIsSaving(false);
     }
@@ -97,20 +110,17 @@ export function TaskModal({
     form.resetFields();
   };
 
-  if (!formData) {
-    return null;
-  }
-
   return (
     <>
-      <ModalForm
+      <SplitCancelModalForm
         form={form}
         data={formData}
         title={MODAL_TITLES[mode]}
         loading={modalLoading}
         submit={handleModalSubmit}
-        cancel={handleCancel}
+        onCancel={handleCloseActions}
         resetOnCancel={false}
+        onFooterCancel={handleFooterCancel}
       >
         <Form.Item name="name" label={LABELS.name} rules={[{ required: true, message: ERROR_MESSAGES.name }]}>
           <Input placeholder={PLACEHOLDERS.name} />
@@ -192,7 +202,7 @@ export function TaskModal({
           </Col>
         </Row>
         <TaskSettings dataCriteria={dataCriteria} setDataCriteria={setDataCriteria} taskType={typeField} />
-      </ModalForm>
+      </SplitCancelModalForm>
 
       <Modal
         title="You have unsaved changes"
@@ -200,7 +210,7 @@ export function TaskModal({
         onCancel={() => setConfirmVisible(false)}
         footer={[
           <Button key="cancel" onClick={() => setConfirmVisible(false)}>
-            Cancel
+            Keep Editing
           </Button>,
           <Button key="dont_save" danger onClick={handleCloseWithoutSaving}>
             Close without saving
