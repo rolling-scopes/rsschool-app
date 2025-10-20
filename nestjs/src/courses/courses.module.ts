@@ -26,6 +26,7 @@ import {
   TaskVerification,
   TeamDistributionStudent,
   StageInterviewStudent,
+  CourseLeaveSurveyResponse,
 } from '@entities/index';
 
 import { UsersModule } from 'src/users';
@@ -98,6 +99,7 @@ import { ConfigModule } from '../config';
       TeamDistribution,
       TeamDistributionStudent,
       User,
+      CourseLeaveSurveyResponse,
     ]),
     CoreModule,
     UsersModule,

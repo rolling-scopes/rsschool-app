@@ -259,6 +259,19 @@
         "tags": ["courses"]
       }
     },
+    "/courses/{courseId}/leave-survey": {
+      "post": {
+        "operationId": "submitLeaveSurvey",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/LeaveCourseSurveyDto" } } }
+        },
+        "responses": { "201": { "description": "" } },
+        "summary": "",
+        "tags": ["courses"]
+      }
+    },
     "/courses/{courseId}/rejoin": {
       "post": {
         "operationId": "rejoinCourse",
@@ -763,6 +776,28 @@
         "responses": { "403": { "description": "" } },
         "summary": "",
         "tags": ["courses tasks"]
+      }
+    },
+    "/courses/aggregate/stats": {
+      "get": {
+        "operationId": "getCoursesStats",
+        "parameters": [
+          {
+            "name": "ids",
+            "required": true,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          { "name": "year", "required": true, "in": "query", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CourseAggregateStatsDto" } } }
+          }
+        },
+        "summary": "",
+        "tags": ["course stats"]
       }
     },
     "/courses/{courseId}/stats": {
@@ -3173,6 +3208,7 @@
         "required": ["certificateThreshold"]
       },
       "LeaveCourseRequestDto": { "type": "object", "properties": { "comment": { "type": "string" } } },
+      "LeaveCourseSurveyDto": { "type": "object", "properties": {} },
       "Discord": {
         "type": "object",
         "properties": {
@@ -3723,6 +3759,16 @@
         "properties": { "deadlineInHours": { "type": "number" } },
         "required": ["deadlineInHours"]
       },
+      "CountryStatDto": {
+        "type": "object",
+        "properties": { "countryName": { "type": "string" }, "count": { "type": "number" } },
+        "required": ["countryName", "count"]
+      },
+      "CountriesStatsDto": {
+        "type": "object",
+        "properties": { "countries": { "type": "array", "items": { "$ref": "#/components/schemas/CountryStatDto" } } },
+        "required": ["countries"]
+      },
       "CourseStatsDto": {
         "type": "object",
         "properties": {
@@ -3749,15 +3795,24 @@
         },
         "required": ["mentorsActiveCount", "mentorsTotalCount", "epamMentorsCount"]
       },
-      "CountryStatDto": {
+      "CourseAggregateStatsDto": {
         "type": "object",
-        "properties": { "countryName": { "type": "string" }, "count": { "type": "number" } },
-        "required": ["countryName", "count"]
-      },
-      "CountriesStatsDto": {
-        "type": "object",
-        "properties": { "countries": { "type": "array", "items": { "$ref": "#/components/schemas/CountryStatDto" } } },
-        "required": ["countries"]
+        "properties": {
+          "studentsCountries": { "$ref": "#/components/schemas/CountriesStatsDto" },
+          "studentsStats": { "$ref": "#/components/schemas/CourseStatsDto" },
+          "mentorsCountries": { "$ref": "#/components/schemas/CountriesStatsDto" },
+          "mentorsStats": { "$ref": "#/components/schemas/CourseMentorsStatsDto" },
+          "courseTasks": { "type": "array", "items": { "type": "string" } },
+          "studentsCertificatesCountries": { "$ref": "#/components/schemas/CountriesStatsDto" }
+        },
+        "required": [
+          "studentsCountries",
+          "studentsStats",
+          "mentorsCountries",
+          "mentorsStats",
+          "courseTasks",
+          "studentsCertificatesCountries"
+        ]
       },
       "TaskPerformanceStatsDto": {
         "type": "object",

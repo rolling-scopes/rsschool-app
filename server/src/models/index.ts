@@ -6,6 +6,7 @@ import { CourseEvent } from './courseEvent';
 import { CourseManager } from './courseManager';
 import { CourseTask } from './courseTask';
 import { CourseUser } from './courseUser';
+import { CourseLeaveSurveyResponse } from './course-leave-survey-response';
 import { Discipline } from './discipline';
 import { DiscordServer } from './discordServer';
 import { Event } from './event';
@@ -58,6 +59,7 @@ export {
   CourseManager,
   CourseTask,
   CourseUser,
+  CourseLeaveSurveyResponse,
   Discipline,
   DiscordServer,
   Event,
@@ -108,6 +110,7 @@ export const models = [
   CourseManager,
   CourseTask,
   CourseUser,
+  CourseLeaveSurveyResponse,
   Discipline,
   DiscordServer,
   Event,

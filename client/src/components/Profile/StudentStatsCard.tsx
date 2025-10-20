@@ -1,16 +1,11 @@
 import * as React from 'react';
 import isEqual from 'lodash/isEqual';
-import { Typography, List, Button, Progress } from 'antd';
+import { Typography, List, Progress, Button } from 'antd';
+import { BookOutlined, SafetyCertificateTwoTone, LogoutOutlined, ReloadOutlined, FullscreenOutlined } from '@ant-design/icons';
+
 import CommonCard from './CommonCard';
 import StudentStatsModal from './StudentStatsModal';
 import { StudentStats } from '@common/models/profile';
-import {
-  BookOutlined,
-  FullscreenOutlined,
-  LogoutOutlined,
-  ReloadOutlined,
-  SafetyCertificateTwoTone,
-} from '@ant-design/icons';
 import { CoursesApi } from 'api';
 import StudentLeaveCourse from '@client/components/Profile/StudentLeaveCourse';
 
@@ -29,6 +24,7 @@ type State = {
   isStudentStatsModalVisible: boolean;
   isExpelConfirmationModalVisible: boolean;
   courseId?: number;
+  isLoading: boolean;
 };
 
 const coursesService = new CoursesApi();
@@ -41,11 +37,13 @@ class StudentStatsCard extends React.Component<Props, State> {
     isStudentStatsModalVisible: false,
     isExpelConfirmationModalVisible: false,
     courseId: undefined,
+    isLoading: false,
   };
 
   shouldComponentUpdate = (_nextProps: Props, nextState: State) =>
     !isEqual(nextState.isStudentStatsModalVisible, this.state.isStudentStatsModalVisible) ||
     !isEqual(nextState.isExpelConfirmationModalVisible, this.state.isExpelConfirmationModalVisible) ||
+    !isEqual(nextState.isLoading, this.state.isLoading) ||
     !isEqual(nextState.coursesProgress, this.state.coursesProgress);
 
   private showStudentStatsModal = (courseIndex: number) => {
@@ -70,10 +68,28 @@ class StudentStatsCard extends React.Component<Props, State> {
     });
   };
 
-  private selfExpelStudent = async (courseId?: number) => {
+  private selfExpelStudent = async (courseId: number | undefined, surveyData: any) => {
     if (!courseId) return;
-    await coursesService.leaveCourse(courseId);
-    window.location.reload();
+
+    this.setState({ isLoading: true });
+
+    try {
+      const response = await fetch(`/api/course/${courseId}/leave-survey`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(surveyData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit survey');
+      }
+      window.location.reload();
+    } catch (error) {
+      console.error("Failed to submit survey or leave course:", error);
+      this.setState({ isLoading: false });
+    }
   };
 
   private rejoinAsStudent = async (courseId: number) => {
@@ -107,8 +123,9 @@ class StudentStatsCard extends React.Component<Props, State> {
         ) : null}
         <StudentLeaveCourse
           isOpen={this.state.isExpelConfirmationModalVisible}
-          onOk={this.selfExpelStudent.bind(this, this.state.courseId)}
+          onOk={(surveyData) => this.selfExpelStudent(this.state.courseId, surveyData)}
           onCancel={this.hideExpelConfirmationModal}
+          confirmLoading={this.state.isLoading}
         />
         <CommonCard
           title="Student Statistics"

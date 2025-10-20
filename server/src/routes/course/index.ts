@@ -56,6 +56,7 @@ import {
   updateRepositories,
 } from './repository';
 import { getScheduleAsCsv, setScheduleFromCsv } from './schedule';
+import { submitLeaveSurvey } from './survey';
 import {
   createInterviewResult,
   getCrossMentors,
@@ -84,6 +85,9 @@ export function courseRoute(logger: ILogger) {
   addStudentApi(router, logger);
   addStudentCrossCheckApi(router, logger);
   addScheduleApi(router, logger);
+
+  router.post('/leave-survey', courseGuard, submitLeaveSurvey(logger));
+
   return router;
 }
 

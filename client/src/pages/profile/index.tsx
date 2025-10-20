@@ -1,7 +1,8 @@
 import { useContext, useState } from 'react';
 import Masonry from 'react-masonry-css';
 import { useRouter } from 'next/router';
-import { Result, Spin, theme } from 'antd';
+import { Spin, Result, theme } from 'antd';
+
 import { ProfileApi, UpdateProfileInfoDto, UpdateUserDtoLanguagesEnum } from 'api';
 import { Header } from 'components/Header';
 import { LoadingScreen } from 'components/LoadingScreen';
