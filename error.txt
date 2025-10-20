@@ -1,1 +1,0 @@
-   current = current ? current[key] : undefined;   Тип "unknown" невозможно использовать как тип индекса.ts(2538) const key: unknown
