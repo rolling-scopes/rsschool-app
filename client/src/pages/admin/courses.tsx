@@ -9,7 +9,7 @@ import utc from 'dayjs/plugin/utc';
 import { isCourseManager } from 'domain/user';
 import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { CourseModal } from 'modules/CourseManagement/components/CourseModal';
-import ExpelledStudentsStats from 'modules/CourseManagement/components/ExpelledStudentsStats';
+
 import { useContext, useState } from 'react';
 import { Course, CourseRole } from 'services/models';
 import { PublicSvgIcon } from '@client/components/Icons';
@@ -45,7 +45,7 @@ function Page() {
         <Button type="primary" onClick={() => setModalId(null)}>
           Add Course
         </Button>
-        <ExpelledStudentsStats />
+        
         <Table
           size="small"
           style={{ marginTop: 8 }}

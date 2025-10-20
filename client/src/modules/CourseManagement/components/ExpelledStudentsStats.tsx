@@ -46,9 +46,9 @@ const ExpelledStudentsStats: React.FC = () => {
       render: (_text, record) => (
         <div>
           <PublicSvgIcon size="25px" src={DEFAULT_COURSE_ICONS[record.course.logo]?.active} />
-          <Text strong style={{ marginLeft: 8 }}>{record.course.fullName || record.course.name}</Text>
+          <Text strong style={{ marginLeft: 15 }}>{record.course.alias}</Text>
           <br />
-          <Text type="secondary">{record.course.alias}</Text>
+          <Text type="secondary">{record.course.fullName || record.course.name}</Text>
         </div>
       ),
     },
