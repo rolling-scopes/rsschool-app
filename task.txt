@@ -1,0 +1,3 @@
+реализуй Бэкенд    *  API-эндпоинт /api/course/{courseId}/students/csv. - здесь нужно изменить чтобы получать информацию со стрнаницы  http://localhost:3000/course/admin/reports?course=test-course кто сам отчислился и со статистикой  ответов на 3 вопроса и описанием
+
+
