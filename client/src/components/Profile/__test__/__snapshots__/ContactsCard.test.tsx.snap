@@ -170,12 +170,16 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                   </strong>
                 </span>
                  
-                <a
-                  href="http://linkedin_test.com/vasya"
-                  target="__blank"
+                <span
+                  class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-1v2lwm6"
                 >
-                  http://linkedin_test.com/vasya
-                </a>
+                  <a
+                    href="http://linkedin_test.com/vasya"
+                    target="__blank"
+                  >
+                    http://linkedin_test.com/vasya
+                  </a>
+                </span>
               </li>
             </ul>
           </div>
