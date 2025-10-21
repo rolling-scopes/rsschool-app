@@ -1,5 +1,5 @@
 import { Entity, Column, CreateDateColumn, PrimaryColumn, UpdateDateColumn, ManyToOne, Index } from 'typeorm';
-import { Notification } from '.';
+import { Notification } from './notification';
 import { NotificationChannel, NotificationChannelId } from './notificationChannel';
 
 @Entity()
