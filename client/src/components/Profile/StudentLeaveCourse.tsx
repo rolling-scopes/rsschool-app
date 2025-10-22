@@ -1,7 +1,6 @@
 import { WarningOutlined } from '@ant-design/icons';
 import { Divider, Modal, theme, Typography, Checkbox, Space, Form, Input } from 'antd';
 
-
 const { Title, Paragraph } = Typography;
 
 type SurveyResponses = {
@@ -60,7 +59,8 @@ export default function StudentLeaveCourse({ isOpen, onOk, onCancel, confirmLoad
           <Form.Item
             name="reasonForLeaving"
             label="Why are you leaving the course?"
-            rules={[{ required: true, message: 'Please select at least one reason.' }]} >
+            rules={[{ required: true, message: 'Please select at least one reason.' }]}
+          >
             <Checkbox.Group>
               <Space direction="vertical">
                 <Checkbox value="too_difficult">
@@ -87,14 +87,8 @@ export default function StudentLeaveCourse({ isOpen, onOk, onCancel, confirmLoad
             </Checkbox.Group>
           </Form.Item>
 
-          <Form.Item
-            name="otherComments"
-            label="Any other comments or suggestions?"
-          >
-            <Input.TextArea
-              rows={4}
-              placeholder="Enter your feedback here..."
-            />
+          <Form.Item name="otherComments" label="Any other comments or suggestions?">
+            <Input.TextArea rows={4} placeholder="Enter your feedback here..." />
           </Form.Item>
         </Form>
       </>

@@ -17,12 +17,7 @@ import {
   TaskInterviewResult,
 } from '../models';
 
-import {
-  IUserSession,
-  isAdmin,
-  isManager,
-  isSupervisor,
-} from '../models/session';
+import { IUserSession, isAdmin, isManager, isSupervisor } from '../models/session';
 import { createName } from './user.service';
 import { StageInterviewRepository } from '../repositories/stageInterview.repository';
 import { getStageInterviewRating } from './stageInterview.service';

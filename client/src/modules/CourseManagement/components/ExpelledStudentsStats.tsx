@@ -46,7 +46,9 @@ const ExpelledStudentsStats: React.FC = () => {
       render: (_text, record) => (
         <div>
           <PublicSvgIcon size="25px" src={DEFAULT_COURSE_ICONS[record.course.logo]?.active} />
-          <Text strong style={{ marginLeft: 15 }}>{record.course.alias}</Text>
+          <Text strong style={{ marginLeft: 15 }}>
+            {record.course.alias}
+          </Text>
           <br />
           <Text type="secondary">{record.course.fullName || record.course.name}</Text>
         </div>
@@ -56,7 +58,11 @@ const ExpelledStudentsStats: React.FC = () => {
       title: 'Student GitHub',
       dataIndex: ['user', 'githubId'],
       key: 'githubId',
-      render: (githubId) => <a href={`https://github.com/${githubId}`} target="_blank" rel="noopener noreferrer">{githubId}</a>,
+      render: githubId => (
+        <a href={`https://github.com/${githubId}`} target="_blank" rel="noopener noreferrer">
+          {githubId}
+        </a>
+      ),
     },
     {
       title: 'Reasons for Leaving',
@@ -98,52 +104,56 @@ const ExpelledStudentsStats: React.FC = () => {
     }
 
     const exportableColumns = columns.filter(
-      (col): col is ColumnType<DetailedExpelledStat> => 'dataIndex' in col && col.dataIndex !== undefined
+      (col): col is ColumnType<DetailedExpelledStat> => 'dataIndex' in col && col.dataIndex !== undefined,
     );
 
-    const headers = exportableColumns.map(col => {
-      if (Array.isArray(col.title)) {
-        return col.title.join(' ');
-      }
-      return col.title;
-    }).filter(Boolean).join(',');
+    const headers = exportableColumns
+      .map(col => {
+        if (Array.isArray(col.title)) {
+          return col.title.join(' ');
+        }
+        return col.title;
+      })
+      .filter(Boolean)
+      .join(',');
 
     const csvRows = data.map(row => {
-      return exportableColumns.map(col => {
-        let value = '';
-        const dataIndex = col.dataIndex;
+      return exportableColumns
+        .map(col => {
+          let value = '';
+          const dataIndex = col.dataIndex;
 
-                if (Array.isArray(dataIndex)) {
-                  let current: unknown = row;
+          if (Array.isArray(dataIndex)) {
+            let current: unknown = row;
 
-                  for (const k of dataIndex) {
+            for (const k of dataIndex) {
+              const keyAsString = String(k);
 
-                    const keyAsString = String(k);
+              current = current ? (current as Record<string, unknown>)[keyAsString] : undefined;
+            }
 
-                    current = current ? (current as Record<string, unknown>)[keyAsString] : undefined;
-
-                  }
-
-                  value = current !== undefined && current !== null ? String(current) : '';
-
-                }
-
-         else if (typeof dataIndex === 'string' || typeof dataIndex === 'number') {
-          value = row[dataIndex as keyof DetailedExpelledStat] !== undefined && row[dataIndex as keyof DetailedExpelledStat] !== null ? String(row[dataIndex as keyof DetailedExpelledStat]) : '';
-        } else if (col.key === 'reasons') {
-          value = row.reasonForLeaving ? row.reasonForLeaving.map(r => r.replace(/_/g, ' ')).join('; ') : '';
-        } else if (col.key === 'date') {
-          value = row.submittedAt ? new Date(row.submittedAt).toLocaleString() : '';
-        } else if (col.key === 'courseName') {
-          value = row.course ? row.course.alias : '';
-        } else if (col.key === 'githubId') {
-          value = row.user ? row.user.githubId : '';
-        }
-        if (value.includes(',') || value.includes('"')) {
-          return `"${value.replace(/"/g, '""')}"`;
-        }
-        return value;
-      }).join(',');
+            value = current !== undefined && current !== null ? String(current) : '';
+          } else if (typeof dataIndex === 'string' || typeof dataIndex === 'number') {
+            value =
+              row[dataIndex as keyof DetailedExpelledStat] !== undefined &&
+              row[dataIndex as keyof DetailedExpelledStat] !== null
+                ? String(row[dataIndex as keyof DetailedExpelledStat])
+                : '';
+          } else if (col.key === 'reasons') {
+            value = row.reasonForLeaving ? row.reasonForLeaving.map(r => r.replace(/_/g, ' ')).join('; ') : '';
+          } else if (col.key === 'date') {
+            value = row.submittedAt ? new Date(row.submittedAt).toLocaleString() : '';
+          } else if (col.key === 'courseName') {
+            value = row.course ? row.course.alias : '';
+          } else if (col.key === 'githubId') {
+            value = row.user ? row.user.githubId : '';
+          }
+          if (value.includes(',') || value.includes('"')) {
+            return `"${value.replace(/"/g, '""')}"`;
+          }
+          return value;
+        })
+        .join(',');
     });
 
     const csvContent = [headers, ...csvRows].join('\n');
@@ -163,15 +173,20 @@ const ExpelledStudentsStats: React.FC = () => {
   return (
     <div style={{ marginTop: 24 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-        <Title level={4} style={{ margin: 0 }}>Detailed Statistics on Student Departures</Title>
-        <Button type="primary" onClick={handleExportCsv}>Export CSV</Button>
+        <Title level={4} style={{ margin: 0 }}>
+          Detailed Statistics on Student Departures
+        </Title>
+        <Button type="primary" onClick={handleExportCsv}>
+          Export CSV
+        </Button>
       </div>
       <Table
         loading={loading}
         dataSource={data || []}
         columns={columns}
         rowKey="id"
-        pagination={{ pageSize: 20 }}    size="small"
+        pagination={{ pageSize: 20 }}
+        size="small"
       />
     </div>
   );
