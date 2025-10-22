@@ -561,6 +561,48 @@
         "tags": ["courses tasks"]
       }
     },
+    "/courses/{courseId}/tasks/{courseTaskId}/badcomments": {
+      "get": {
+        "operationId": "getCourseTaskBadComments",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/BadCommentCheckerDto" } }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": ["courses tasks"]
+      }
+    },
+    "/courses/{courseId}/tasks/{courseTaskId}/maxscorecheckers": {
+      "get": {
+        "operationId": "getCourseTaskMaxScoreCheckers",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/MaxScoreCheckerDto" } }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": ["courses tasks"]
+      }
+    },
     "/courses/{courseId}/events": {
       "post": {
         "operationId": "createCourseEvent",
@@ -763,6 +805,28 @@
         "responses": { "403": { "description": "" } },
         "summary": "",
         "tags": ["courses tasks"]
+      }
+    },
+    "/courses/aggregate/stats": {
+      "get": {
+        "operationId": "getCoursesStats",
+        "parameters": [
+          {
+            "name": "ids",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "number" } }
+          },
+          { "name": "year", "required": false, "in": "query", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CourseAggregateStatsDto" } } }
+          }
+        },
+        "summary": "",
+        "tags": ["course stats"]
       }
     },
     "/courses/{courseId}/stats": {
@@ -3563,6 +3627,26 @@
         },
         "required": ["studentStartDate", "studentEndDate", "submitText", "validations"]
       },
+      "BadCommentCheckerDto": {
+        "type": "object",
+        "properties": {
+          "checkerGithubId": { "type": "string" },
+          "studentGithubId": { "type": "string" },
+          "checkerScore": { "type": "number" },
+          "comment": { "type": "string" }
+        },
+        "required": ["checkerGithubId", "studentGithubId", "checkerScore", "comment"]
+      },
+      "MaxScoreCheckerDto": {
+        "type": "object",
+        "properties": {
+          "checkerGithubId": { "type": "string" },
+          "studentGithubId": { "type": "string" },
+          "studentAvgScore": { "type": "number" },
+          "checkerScore": { "type": "number" }
+        },
+        "required": ["checkerGithubId", "studentGithubId", "studentAvgScore", "checkerScore"]
+      },
       "Organizer": { "type": "object", "properties": { "id": { "type": "number" } }, "required": ["id"] },
       "CreateCourseEventDto": {
         "type": "object",
@@ -3723,6 +3807,16 @@
         "properties": { "deadlineInHours": { "type": "number" } },
         "required": ["deadlineInHours"]
       },
+      "CountryStatDto": {
+        "type": "object",
+        "properties": { "countryName": { "type": "string" }, "count": { "type": "number" } },
+        "required": ["countryName", "count"]
+      },
+      "CountriesStatsDto": {
+        "type": "object",
+        "properties": { "countries": { "type": "array", "items": { "$ref": "#/components/schemas/CountryStatDto" } } },
+        "required": ["countries"]
+      },
       "CourseStatsDto": {
         "type": "object",
         "properties": {
@@ -3749,15 +3843,24 @@
         },
         "required": ["mentorsActiveCount", "mentorsTotalCount", "epamMentorsCount"]
       },
-      "CountryStatDto": {
+      "CourseAggregateStatsDto": {
         "type": "object",
-        "properties": { "countryName": { "type": "string" }, "count": { "type": "number" } },
-        "required": ["countryName", "count"]
-      },
-      "CountriesStatsDto": {
-        "type": "object",
-        "properties": { "countries": { "type": "array", "items": { "$ref": "#/components/schemas/CountryStatDto" } } },
-        "required": ["countries"]
+        "properties": {
+          "studentsCountries": { "$ref": "#/components/schemas/CountriesStatsDto" },
+          "studentsStats": { "$ref": "#/components/schemas/CourseStatsDto" },
+          "mentorsCountries": { "$ref": "#/components/schemas/CountriesStatsDto" },
+          "mentorsStats": { "$ref": "#/components/schemas/CourseMentorsStatsDto" },
+          "courseTasks": { "type": "array", "items": { "$ref": "#/components/schemas/CourseTaskDto" } },
+          "studentsCertificatesCountries": { "$ref": "#/components/schemas/CountriesStatsDto" }
+        },
+        "required": [
+          "studentsCountries",
+          "studentsStats",
+          "mentorsCountries",
+          "mentorsStats",
+          "courseTasks",
+          "studentsCertificatesCountries"
+        ]
       },
       "TaskPerformanceStatsDto": {
         "type": "object",

@@ -65,7 +65,7 @@ export class TaskVerificationsService {
       }
 
       return taskVerifications.map(verification => {
-        const questionsWithIncorrectAnswers: SelfEducationQuestionSelectedAnswersDto[] = verification.answers
+        const questionsWithIncorrectAnswers = verification.answers
           .filter(answer => !answer.isCorrect)
           .map(answer => {
             const taskQuestion = (
@@ -87,7 +87,7 @@ export class TaskVerificationsService {
               questionImage: taskQuestion.questionImage,
             });
           })
-          .filter(Boolean);
+          .filter(Boolean) as SelfEducationQuestionSelectedAnswersDto[];
 
         return new TaskVerificationAttemptDto(verification, questionsWithIncorrectAnswers);
       });

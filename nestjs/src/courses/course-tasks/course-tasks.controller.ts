@@ -23,15 +23,24 @@ import {
 } from '@nestjs/swagger';
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
 import { CourseTasksService, Status } from './course-tasks.service';
-import { CourseTaskDetailedDto, CourseTaskDto } from './dto';
-import { CreateCourseTaskDto } from './dto/create-course-task.dto';
-import { UpdateCourseTaskDto } from './dto/update-course-task.dto';
+import {
+  CourseTaskDetailedDto,
+  CourseTaskDto,
+  BadCommentCheckerDto,
+  MaxScoreCheckerDto,
+  CreateCourseTaskDto,
+  UpdateCourseTaskDto,
+} from './dto';
+import { CourseTaskChecksService } from './course-task-checks.service';
 
 @Controller('courses/:courseId/tasks')
 @ApiTags('courses tasks')
 @UseGuards(DefaultGuard, RoleGuard)
 export class CourseTasksController {
-  constructor(private courseTasksService: CourseTasksService) {}
+  constructor(
+    private courseTasksService: CourseTasksService,
+    private checksService: CourseTaskChecksService,
+  ) {}
 
   @Get()
   @ApiOkResponse({ type: [CourseTaskDto] })
@@ -143,5 +152,27 @@ export class CourseTasksController {
     @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
   ) {
     await this.courseTasksService.disable(courseTaskId);
+  }
+
+  @Get('/:courseTaskId/badcomments')
+  @ApiOkResponse({ type: [BadCommentCheckerDto] })
+  @ApiOperation({ operationId: 'getCourseTaskBadComments' })
+  @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Dementor])
+  public async getBadComment(
+    @Param('courseId', ParseIntPipe) _: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+  ): Promise<BadCommentCheckerDto[]> {
+    return this.checksService.getCheckersWithoutComments(courseTaskId);
+  }
+
+  @Get('/:courseTaskId/maxscorecheckers')
+  @ApiOkResponse({ type: [MaxScoreCheckerDto] })
+  @ApiOperation({ operationId: 'getCourseTaskMaxScoreCheckers' })
+  @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Dementor])
+  public async getMaxScoreCheckers(
+    @Param('courseId', ParseIntPipe) _: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+  ): Promise<MaxScoreCheckerDto[]> {
+    return this.checksService.getCheckersWithMaxScore(courseTaskId);
   }
 }
