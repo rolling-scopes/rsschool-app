@@ -8,16 +8,29 @@ type SurveyResponses = {
   otherComments?: string;
 };
 
+type ReasonOption = {
+  value: string;
+  labelEn: string;
+  labelRu: string;
+};
+
 type StudentLeaveCourseProps = {
   isOpen: boolean;
   onOk: (surveyData: SurveyResponses) => void;
   onCancel: () => void;
   confirmLoading?: boolean;
+  reasonsOptions: ReasonOption[];
 };
 
 const messages = ['Are you sure you want to leave the course?', 'Your learning will be stopped.'];
 
-export default function StudentLeaveCourse({ isOpen, onOk, onCancel, confirmLoading }: StudentLeaveCourseProps) {
+export default function StudentLeaveCourse({
+  isOpen,
+  onOk,
+  onCancel,
+  confirmLoading,
+  reasonsOptions,
+}: StudentLeaveCourseProps) {
   const {
     token: { colorError },
   } = theme.useToken();
@@ -63,26 +76,13 @@ export default function StudentLeaveCourse({ isOpen, onOk, onCancel, confirmLoad
           >
             <Checkbox.Group>
               <Space direction="vertical">
-                <Checkbox value="too_difficult">
-                  Course was too difficult
-                  <br />
-                  Курс был слишком сложным
-                </Checkbox>
-                <Checkbox value="not_useful">
-                  Course was not useful
-                  <br />
-                  Курс был бесполезным
-                </Checkbox>
-                <Checkbox value="lack_of_time">
-                  Lack of time
-                  <br />
-                  Нехватка времени
-                </Checkbox>
-                <Checkbox value="other">
-                  Other
-                  <br />
-                  Другое
-                </Checkbox>
+                {reasonsOptions.map(option => (
+                  <Checkbox key={option.value} value={option.value}>
+                    {option.labelEn}
+                    <br />
+                    {option.labelRu}
+                  </Checkbox>
+                ))}
               </Space>
             </Checkbox.Group>
           </Form.Item>

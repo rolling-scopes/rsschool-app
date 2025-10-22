@@ -42,8 +42,26 @@ function getExpelledStats(logger: ILogger) {
   };
 }
 
+function deleteExpelledStat(logger: ILogger) {
+  return async (ctx: any) => {
+    const { id } = ctx.params;
+    logger.info(`Deleting expelled student stat with ID: ${id}`);
+    const surveyRepository = getRepository(CourseLeaveSurveyResponse);
+
+    try {
+      await surveyRepository.delete(id);
+      ctx.status = 204;
+    } catch (error) {
+      logger.error(`Failed to delete expelled student stat with ID: ${id}`, error);
+      ctx.status = 500;
+      ctx.body = { error: 'Internal server error' };
+    }
+  };
+}
+
 export function expelledStatsRoute(logger: ILogger) {
   const router = new Router();
   router.get('/course/stats/expelled', getExpelledStats(logger));
+  router.delete('/course/stats/expelled/:id', deleteExpelledStat(logger));
   return router;
 }

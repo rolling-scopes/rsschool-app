@@ -27,6 +27,13 @@ interface DetailedExpelledStat {
   submittedAt: string;
 }
 
+interface UseRequestResultWithRefetch {
+  data: DetailedExpelledStat[] | undefined;
+  error: Error | undefined;
+  loading: boolean;
+  refetch: () => void;
+}
+
 const fetchExpelledStats = async (): Promise<DetailedExpelledStat[]> => {
   const response = await fetch('/api/course/stats/expelled');
   if (!response.ok) {
@@ -36,7 +43,27 @@ const fetchExpelledStats = async (): Promise<DetailedExpelledStat[]> => {
 };
 
 const ExpelledStudentsStats: React.FC = () => {
-  const { data, error, loading } = useRequest(fetchExpelledStats);
+  const { data, error, loading, refetch } = useRequest(fetchExpelledStats) as unknown as UseRequestResultWithRefetch;
+  const [isDeleting, setIsDeleting] = React.useState(false);
+
+  const handleDelete = async (id: string) => {
+    setIsDeleting(true);
+    try {
+      const response = await fetch(`/api/course/stats/expelled/${id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error('Failed to delete stat');
+      }
+      if (typeof refetch === 'function') {
+        refetch();
+      }
+    } catch (err) {
+      console.error('Error deleting stat:', err);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   const columns: ColumnsType<DetailedExpelledStat> = [
     {
@@ -91,6 +118,15 @@ const ExpelledStudentsStats: React.FC = () => {
       dataIndex: 'submittedAt',
       key: 'date',
       render: dateUtcRenderer,
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (_text, record) => (
+        <Button danger onClick={() => handleDelete(record.id)} loading={isDeleting}>
+          Del
+        </Button>
+      ),
     },
   ];
 
