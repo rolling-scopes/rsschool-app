@@ -134,6 +134,9 @@ const ExpelledStudentsStats: React.FC = () => {
     return <p>Failed to load statistics.</p>;
   }
 
+  const [csvUrl, setCsvUrl] = React.useState<string | null>(null);
+  const downloadRef = React.useRef<HTMLAnchorElement>(null);
+
   const handleExportCsv = () => {
     if (!data || data.length === 0) {
       return;
@@ -194,16 +197,16 @@ const ExpelledStudentsStats: React.FC = () => {
 
     const csvContent = [headers, ...csvRows].join('\n');
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    if (link.download !== undefined) {
-      const url = URL.createObjectURL(blob);
-      link.setAttribute('href', url);
-      link.setAttribute('download', 'expelled_students_stats.csv');
-      link.style.visibility = 'hidden';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
+    const url = URL.createObjectURL(blob);
+    setCsvUrl(url);
+
+    setTimeout(() => {
+      if (downloadRef.current) {
+        downloadRef.current.click();
+        URL.revokeObjectURL(url);
+        setCsvUrl(null);
+      }
+    }, 0);
   };
 
   return (
@@ -215,6 +218,14 @@ const ExpelledStudentsStats: React.FC = () => {
         <Button type="primary" onClick={handleExportCsv}>
           Export CSV
         </Button>
+        <a
+          ref={downloadRef}
+          href={csvUrl || ''}
+          download="expelled_students_stats.csv"
+          style={{ display: 'none' }}
+        >
+          Download
+        </a>
       </div>
       <Table
         loading={loading}
