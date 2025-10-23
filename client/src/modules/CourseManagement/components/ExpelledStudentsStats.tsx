@@ -218,12 +218,7 @@ const ExpelledStudentsStats: React.FC = () => {
         <Button type="primary" onClick={handleExportCsv}>
           Export CSV
         </Button>
-        <a
-          ref={downloadRef}
-          href={csvUrl || ''}
-          download="expelled_students_stats.csv"
-          style={{ display: 'none' }}
-        >
+        <a ref={downloadRef} href={csvUrl || ''} download="expelled_students_stats.csv" style={{ display: 'none' }}>
           Download
         </a>
       </div>
