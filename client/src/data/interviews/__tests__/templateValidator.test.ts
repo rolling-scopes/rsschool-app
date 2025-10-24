@@ -1,5 +1,5 @@
 import { InterviewTemplate, Question, QuestionCategory } from '@client/data/interviews';
-import { InterviewTemplateValidator, QuestionCategoryValidator, TemplateValidationError } from '../templateValidator';
+import { interviewTemplateValidator, questionCategoryValidator, TemplateValidationError } from '../templateValidator';
 
 const mockQuestion1: Question = { id: 101, name: 'Q1' };
 const mockQuestion2: Question = { id: 102, name: 'Q2' };
@@ -61,38 +61,38 @@ describe('TemplateValidationError', () => {
   });
 });
 
-describe('QuestionCategoryValidator', () => {
+describe('questionCategoryValidator', () => {
   it('should successfully validate a category with unique question IDs', () => {
-    expect(() => new QuestionCategoryValidator(mockCategory1)).not.toThrow();
+    expect(() => questionCategoryValidator(mockCategory1)).not.toThrow();
   });
 
   it('should successfully validate a category with no questions', () => {
-    expect(() => new QuestionCategoryValidator(mockCategory2)).not.toThrow();
+    expect(() => questionCategoryValidator(mockCategory2)).not.toThrow();
   });
 
   it('should throw TemplateValidationError for duplicate question IDs', () => {
-    expect(() => new QuestionCategoryValidator(mockCategoryWithDuplicateQuestions)).toThrow(TemplateValidationError);
-    expect(() => new QuestionCategoryValidator(mockCategoryWithDuplicateQuestions)).toThrow(
+    expect(() => questionCategoryValidator(mockCategoryWithDuplicateQuestions)).toThrow(TemplateValidationError);
+    expect(() => questionCategoryValidator(mockCategoryWithDuplicateQuestions)).toThrow(
       'Questions must have unique ids. Category ID: 3',
     );
   });
 
   it('should correctly set instance properties on success', () => {
-    const validator = new QuestionCategoryValidator(mockCategory1);
+    const validator = questionCategoryValidator(mockCategory1);
     expect(validator.id).toBe(mockCategory1.id);
     expect(validator.name).toBe(mockCategory1.name);
     expect(validator.questions).toEqual(mockCategory1.questions);
   });
 });
 
-describe('InterviewTemplateValidator', () => {
+describe('interviewTemplateValidator', () => {
   it('should successfully validate a valid template with unique category and question IDs', () => {
-    expect(() => new InterviewTemplateValidator(mockValidTemplate)).not.toThrow();
+    expect(() => interviewTemplateValidator(mockValidTemplate)).not.toThrow();
   });
 
   it('should throw TemplateValidationError for duplicate category IDs', () => {
-    expect(() => new InterviewTemplateValidator(mockTemplateWithDuplicateCategory)).toThrow(TemplateValidationError);
-    expect(() => new InterviewTemplateValidator(mockTemplateWithDuplicateCategory)).toThrow(
+    expect(() => interviewTemplateValidator(mockTemplateWithDuplicateCategory)).toThrow(TemplateValidationError);
+    expect(() => interviewTemplateValidator(mockTemplateWithDuplicateCategory)).toThrow(
       'Categories must have unique ids. Template name: Invalid Template - Dup Cat ID',
     );
   });
@@ -104,14 +104,14 @@ describe('InterviewTemplateValidator', () => {
       examplesUrl: 'url',
     };
 
-    expect(() => new InterviewTemplateValidator(templateWithNestedError)).toThrow(TemplateValidationError);
-    expect(() => new InterviewTemplateValidator(templateWithNestedError)).toThrow(
+    expect(() => interviewTemplateValidator(templateWithNestedError)).toThrow(TemplateValidationError);
+    expect(() => interviewTemplateValidator(templateWithNestedError)).toThrow(
       'Template name Template-WithError. Questions must have unique ids. Category ID: 3',
     );
   });
 
   it('should correctly set instance properties on success', () => {
-    const validator = new InterviewTemplateValidator(mockValidTemplate);
+    const validator = interviewTemplateValidator(mockValidTemplate);
     expect(validator.name).toBe(mockValidTemplate.name);
     expect(validator.examplesUrl).toBe(mockValidTemplate.examplesUrl);
     expect(validator.categories).toEqual(mockValidTemplate.categories);
