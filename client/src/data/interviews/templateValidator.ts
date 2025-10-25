@@ -7,7 +7,7 @@ export class TemplateValidationError extends Error {
   }
 }
 
-export function interviewTemplateValidator(template: InterviewTemplate): InterviewTemplate {
+export function validateInterviewTemplate(template: InterviewTemplate) {
   const { name, categories } = template;
 
   const uniqueCatIds = new Set<number>(categories.map(c => c.id));
@@ -18,7 +18,7 @@ export function interviewTemplateValidator(template: InterviewTemplate): Intervi
 
   try {
     categories.forEach(category => {
-      questionCategoryValidator(category);
+      validateQuestionCategory(category);
     });
   } catch (error: unknown) {
     if (error instanceof TemplateValidationError) {
@@ -26,11 +26,9 @@ export function interviewTemplateValidator(template: InterviewTemplate): Intervi
     }
     throw error;
   }
-
-  return template;
 }
 
-export function questionCategoryValidator(category: QuestionCategory): QuestionCategory {
+export function validateQuestionCategory(category: QuestionCategory) {
   const { id, questions } = category;
 
   const uniqueQuestionIds = new Set<number>(questions.map(q => q.id) ?? []);
@@ -38,6 +36,4 @@ export function questionCategoryValidator(category: QuestionCategory): QuestionC
   if (uniqueQuestionIds.size !== questions.length) {
     throw new TemplateValidationError(`Questions must have unique ids. Category ID: ${id}`);
   }
-
-  return category;
 }

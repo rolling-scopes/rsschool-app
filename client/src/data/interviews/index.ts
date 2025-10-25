@@ -6,7 +6,7 @@ import { shortTrackScreeningTemplate } from './shortTrackScreening';
 import { shortTrackJavaScriptTemplate } from './shortTrackJavaScript';
 import { shortTrackTypeScriptTemplate } from './shortTrackTypeScript';
 import { shortTrackPerformanceTemplate } from 'data/interviews/shortTrackPerformance';
-import { interviewTemplateValidator } from './templateValidator';
+import { validateInterviewTemplate } from './templateValidator';
 
 export * from './types';
 
@@ -22,5 +22,5 @@ export const templates = {
 };
 
 Object.values(templates).forEach(template => {
-  interviewTemplateValidator(template);
+  validateInterviewTemplate(template);
 });
