@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Badge, Button, Space, Tabs, TabsProps, Tooltip, Typography } from 'antd';
+import { Button, Space, Tabs, TabsProps, Tooltip } from 'antd';
 import { ScoreTable } from '@client/modules/Score/components/ScoreTable/index';
 import { CoursePageProps } from '@client/services/models';
 import { useRouter } from 'next/router';
@@ -9,25 +9,15 @@ import { UpdateAlert } from '@client/modules/Score/pages/ScorePage/UpdateAlert';
 import { ExportCsvButton } from '@client/modules/Score/components/ExportCsvButton';
 import { SettingOutlined } from '@ant-design/icons';
 
-const { Text } = Typography;
-
 type Props = {
   tabProps: CoursePageProps & {
     onLoading: (value: boolean) => void;
   };
 };
 
-const TabLabel = ({ title, counter }: { title: string; counter: number }) => (
-  <Space>
-    <Text>{title}</Text>
-    <Badge count={counter} style={{ backgroundColor: '#e6f7ff', color: '#1677ff' }} />
-  </Space>
-);
-
 export const ScoreTableTabs = ({ tabProps }: Props) => {
   const router = useRouter();
   const { ['mentor.githubId']: mentor, cityName } = router.query;
-  const [statData, setStatData] = useState<[number, number]>([0, 0]);
   const [isVisibleSetting, setIsVisibleSettings] = useState(false);
 
   const { course, session } = tabProps;
@@ -35,12 +25,11 @@ export const ScoreTableTabs = ({ tabProps }: Props) => {
   const tabs: TabsProps['items'] = [
     {
       key: 'all',
-      label: <TabLabel title="All students" counter={statData[0]} />,
+      label: 'All students',
       children: (
         <ScoreTable
           {...tabProps}
           activeOnly={false}
-          setStatData={setStatData}
           isVisibleSetting={isVisibleSetting}
           setIsVisibleSettings={setIsVisibleSettings}
         />
@@ -48,12 +37,11 @@ export const ScoreTableTabs = ({ tabProps }: Props) => {
     },
     {
       key: 'active',
-      label: <TabLabel title="Active students" counter={statData[1]} />,
+      label: 'Active students',
       children: (
         <ScoreTable
           {...tabProps}
           activeOnly={true}
-          setStatData={setStatData}
           isVisibleSetting={isVisibleSetting}
           setIsVisibleSettings={setIsVisibleSettings}
         />
