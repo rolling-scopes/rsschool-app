@@ -6,6 +6,8 @@ import { shortTrackScreeningTemplate } from './shortTrackScreening';
 import { shortTrackJavaScriptTemplate } from './shortTrackJavaScript';
 import { shortTrackTypeScriptTemplate } from './shortTrackTypeScript';
 import { shortTrackPerformanceTemplate } from 'data/interviews/shortTrackPerformance';
+import { validateInterviewTemplate } from './templateValidator';
+
 export * from './types';
 
 export const templates = {
@@ -18,3 +20,7 @@ export const templates = {
   shortTrackTypeScript: shortTrackTypeScriptTemplate,
   shortTrackPerformance: shortTrackPerformanceTemplate,
 };
+
+Object.values(templates).forEach(template => {
+  validateInterviewTemplate(template);
+});
