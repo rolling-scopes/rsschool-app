@@ -22,7 +22,6 @@ import { Summary } from './Summary';
 type Props = CoursePageProps & {
   onLoading: (value: boolean) => void;
   activeOnly: boolean;
-  setStatData: (data: [number, number]) => void;
   isVisibleSetting: boolean;
   setIsVisibleSettings: (value: boolean) => void;
 };
@@ -44,7 +43,7 @@ const courseTasksApi = new CoursesTasksApi();
 export function ScoreTable(props: Props) {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const { activeOnly, setStatData, isVisibleSetting, setIsVisibleSettings } = props;
+  const { activeOnly, isVisibleSetting, setIsVisibleSettings } = props;
   const { ['mentor.githubId']: mentor, cityName, githubId, name } = router.query;
 
   const [columns, setColumns] = useState<ColumnType<ScoreStudentDto>[]>([]);
@@ -100,23 +99,6 @@ export function ScoreTable(props: Props) {
         courseService.getStudentCourseScore(props.session?.githubId as string),
         courseTasksApi.getCourseTasks(props.course.id),
       ]);
-
-      // Get the total number of inactive and active students from the same endpoint
-      // Pagination (page size and page number) doesn't matter - we need to get the
-      // total number of students
-      const [
-        {
-          pagination: { total: active },
-        },
-        {
-          pagination: { total: inactive },
-        },
-      ] = await Promise.all([
-        courseService.getCourseScore({ current: 0, pageSize: 0 }, { activeOnly: true }),
-        courseService.getCourseScore({ current: 0, pageSize: 0 }, { activeOnly: false }),
-      ]);
-
-      setStatData([inactive, active]);
 
       const {
         content,
