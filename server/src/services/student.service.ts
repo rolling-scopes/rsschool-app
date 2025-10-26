@@ -1,5 +1,5 @@
 import * as courseService from './course.service';
-import { isDementor, IUserSession } from '../models';
+import { isDementor, IUserSession } from '../models/session';
 import { getCustomRepository } from 'typeorm';
 import { StageInterviewRepository } from '../repositories/stageInterview.repository';
 import { StudentRepository } from '../repositories/student.repository';

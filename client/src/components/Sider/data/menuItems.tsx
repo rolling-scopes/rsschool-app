@@ -216,6 +216,12 @@ const courseManagementMenuItems: CourseManagementMenuItemsData[] = [
     courseAccess: isCourseManager,
   },
   {
+    name: 'Reports',
+    key: 'reports',
+    getUrl: (course: Course) => `/course/admin/reports?course=${course.alias}`,
+    courseAccess: some(isAdmin, isCourseManager, isCourseSupervisor),
+  },
+  {
     name: 'Mentor Tasks Review',
     key: 'mentorTasksReview',
     getUrl: (course: Course) => `/course/admin/mentor-tasks-review?course=${course.alias}`,
