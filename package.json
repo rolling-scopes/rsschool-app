@@ -45,8 +45,8 @@
     "prettier": "3.5.3",
     "ts-node": "10.9.2",
     "turbo": "2.5.2",
-    "typescript": "5.8.3",
-    "typescript-eslint": "8.31.1"
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.46.2"
   },
   "packageManager": "npm@10.7.0"
 }

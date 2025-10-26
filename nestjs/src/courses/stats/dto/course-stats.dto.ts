@@ -63,7 +63,7 @@ export class CourseAggregateStatsDto {
   @ApiProperty()
   mentorsStats: CourseMentorsStatsDto;
 
-  @ApiProperty()
+  @ApiProperty({ type: [CourseTaskDto] })
   courseTasks: CourseTaskDto[];
 
   @ApiProperty()

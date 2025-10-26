@@ -1,4 +1,4 @@
-import { CoursesStatsDto } from '@client/api';
+import { CourseAggregateStatsDto } from 'api';
 import { StudentsCountriesCard } from '@client/modules/CourseStatistics/components/StudentsCountriesCard';
 import { StudentsStatsCard } from '@client/modules/CourseStatistics/components/StudentsStatsCard';
 import { MentorsCountriesCard } from '@client/modules/CourseStatistics/components/MentorsCountriesCard/MentorsCountriesCard';
@@ -12,7 +12,7 @@ import Masonry from 'react-masonry-css';
 import css from 'styled-jsx/css';
 
 type StatCardsProps = {
-  coursesData?: CoursesStatsDto;
+  coursesData?: CourseAggregateStatsDto;
 };
 
 const gapSize = 24;

@@ -1,61 +1,50 @@
+import { useRequest } from 'ahooks';
 import { Button, Col, Modal, Row, Select, Spin } from 'antd';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { CheckService } from 'services/check';
+import { CoursesTasksApi } from 'api';
+import { useEffect, useState } from 'react';
 import { CourseTaskDetails } from 'services/course';
 import { BadReviewTable } from './BadReviewTable';
 
-interface IBadReviewControllersProps {
+type Props = {
   courseTasks: CourseTaskDetails[];
   courseId: number;
-}
+};
 
-export interface IBadReview {
-  checkerScore: number;
-  comment?: string;
-  taskName: string;
-  checkerGithubId: string;
-  studentGithubId: string;
-  studentAvgScore?: number;
-}
+export type checkType = 'badcomment' | 'didnotcheck' | undefined;
 
-export type checkType = 'Bad comment' | 'Did not check' | 'No type';
+const courseTaskService = new CoursesTasksApi();
 
-export function BadReviewControllers({ courseTasks, courseId }: IBadReviewControllersProps) {
+export function BadReviewControllers({ courseTasks, courseId }: Props) {
   const { Option } = Select;
-  const [taskId, setTaskId] = useState<number>();
-  const [data, setData] = useState<IBadReview[]>();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [courseTaskId, setCourseTaskId] = useState<number>();
   const [checkType, setCheckType] = useState<checkType>();
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const checkService = useMemo(() => new CheckService(), []);
 
-  const getData = useCallback(async (): Promise<void> => {
-    if (taskId && checkType) {
-      setIsLoading(true);
-      const dataFromService = await checkService.getData(taskId, checkType, courseId);
-      setData(dataFromService);
-      setIsLoading(false);
-    }
-  }, [taskId, checkType, checkService, courseId]);
+  const dataRequest = useRequest(
+    async () => {
+      if (checkType === 'badcomment') {
+        const { data } = await courseTaskService.getCourseTaskBadComments(courseId, courseTaskId as number);
+        return data;
+      }
+      if (checkType === 'didnotcheck') {
+        const { data } = await courseTaskService.getCourseTaskMaxScoreCheckers(courseId, courseTaskId as number);
+        return data;
+      }
+      return [];
+    },
+    {
+      ready: Boolean(courseTaskId) && Boolean(checkType),
+    },
+  );
 
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
+  const handleCancel = () => setIsModalVisible(false);
 
   const buttonHandler = (type: checkType) => {
     setCheckType(type);
-    showModal();
+    setIsModalVisible(true);
   };
 
-  useEffect(() => setCheckType('No type'), [taskId]);
-
-  useEffect(() => {
-    getData();
-  }, [checkType]);
+  useEffect(() => setCheckType(undefined), [courseTaskId]);
 
   return (
     <>
@@ -64,7 +53,7 @@ export function BadReviewControllers({ courseTasks, courseId }: IBadReviewContro
           <Select
             placeholder="Select task"
             style={{ width: 200 }}
-            onChange={(value: number) => setTaskId(value)}
+            onChange={(value: number) => setCourseTaskId(value)}
             showSearch
             optionFilterProp="label"
           >
@@ -76,25 +65,28 @@ export function BadReviewControllers({ courseTasks, courseId }: IBadReviewContro
           </Select>
         </Col>
         <Col>
-          <Button type="primary" href={`/api/v2/courses/${courseId}/cross-checks/${taskId}/csv`} disabled={!taskId}>
+          <Button
+            type="primary"
+            href={`/api/v2/courses/${courseId}/cross-checks/${courseTaskId}/csv`}
+            disabled={!courseTaskId}
+          >
             Download solutions urls
           </Button>
         </Col>
         <Col>
-          <Button type="primary" danger onClick={() => buttonHandler('Bad comment')} disabled={!taskId}>
+          <Button type="primary" danger onClick={() => buttonHandler('badcomment')} disabled={!courseTaskId}>
             Bad comment
           </Button>
         </Col>
         <Col>
-          <Button type="primary" danger onClick={() => buttonHandler('Did not check')} disabled={!taskId}>
+          <Button type="primary" danger onClick={() => buttonHandler('didnotcheck')} disabled={!courseTaskId}>
             Didn't check
           </Button>
         </Col>
       </Row>
       <Modal
-        title={`Bad checkers in ${checkType}`}
         open={isModalVisible}
-        width={1250}
+        width={1200}
         style={{ top: 20 }}
         onCancel={handleCancel}
         footer={[
@@ -103,7 +95,8 @@ export function BadReviewControllers({ courseTasks, courseId }: IBadReviewContro
           </Button>,
         ]}
       >
-        {isLoading || !data ? <Spin /> : <BadReviewTable data={data} type={checkType!} />}
+        {dataRequest.loading ? <Spin /> : null}
+        {dataRequest.data && !dataRequest.loading ? <BadReviewTable data={dataRequest.data} type={checkType} /> : null}
       </Modal>
     </>
   );

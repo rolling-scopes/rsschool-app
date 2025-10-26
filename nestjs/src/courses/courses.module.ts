@@ -37,7 +37,7 @@ import { CoursesService } from './courses.service';
 import { StudentsService, StudentsController } from './students';
 import { MentorsService, MentorsController } from './mentors';
 import { CourseAccessService } from './course-access.service';
-import { CourseTasksController, CourseTasksService } from './course-tasks';
+import { CourseTasksController, CourseTasksService, CourseTaskChecksService } from './course-tasks';
 import { InterviewsController, InterviewsService, InterviewFeedbackService } from './interviews';
 import { TasksController } from './tasks/tasks.controller';
 import { TasksService } from './tasks/tasks.service';
@@ -130,6 +130,7 @@ import { ConfigModule } from '../config';
   ],
   providers: [
     CourseTasksService,
+    CourseTaskChecksService,
     CourseEventsService,
     CourseUsersService,
     FeedbacksService,
