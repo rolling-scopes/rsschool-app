@@ -25,7 +25,7 @@ export function submitLeaveSurvey(logger: ILogger) {
 
       await surveyRepository.save(newSurveyResponse);
 
-      const comment = `${SELF_EXPELLED_MARK}. Reason: ${reasonForLeaving?.join(', ') || 'N/A'}. Comment: ${otherComments || 'N/A'}`;
+      const comment = `${SELF_EXPELLED_MARK}. Reasons: ${reasonForLeaving?.join(', ') || 'N/A'}. Comment: ${otherComments || 'N/A'}`;
       await studentRepository.expel(courseId, githubId, comment);
 
       ctx.status = 201;

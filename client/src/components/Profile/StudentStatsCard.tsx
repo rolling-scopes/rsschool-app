@@ -144,8 +144,7 @@ class StudentStatsCard extends React.Component<Props, State> {
         throw new Error('Failed to submit survey');
       }
       window.location.reload();
-    } catch (error) {
-      console.error('Failed to submit survey or leave course:', error);
+    } finally {
       this.setState({ isLoading: false });
     }
   };

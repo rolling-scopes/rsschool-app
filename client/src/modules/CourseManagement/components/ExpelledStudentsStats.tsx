@@ -1,69 +1,15 @@
-import { useRequest } from 'ahooks';
-import { Table, Typography, Tag, Button } from 'antd';
+import { Table, Typography, Tag, Button, Row } from 'antd';
 import { ColumnsType, ColumnType } from 'antd/es/table';
 import React from 'react';
 import { PublicSvgIcon } from '@client/components/Icons';
 import { DEFAULT_COURSE_ICONS } from '@client/configs/course-icons';
 import { dateUtcRenderer } from '@client/components/Table';
+import { useExpelledStats, DetailedExpelledStat } from '@client/modules/CourseManagement/hooks/useExpelledStats';
 
 const { Title, Text } = Typography;
 
-interface DetailedExpelledStat {
-  id: string;
-  course: {
-    id: string;
-    name: string;
-    fullName: string;
-    alias: string;
-    description: string;
-    logo: string;
-  };
-  user: {
-    id: string;
-    githubId: string;
-  };
-  reasonForLeaving: string[];
-  otherComments: string;
-  submittedAt: string;
-}
-
-interface UseRequestResultWithRefetch {
-  data: DetailedExpelledStat[] | undefined;
-  error: Error | undefined;
-  loading: boolean;
-  refetch: () => void;
-}
-
-const fetchExpelledStats = async (): Promise<DetailedExpelledStat[]> => {
-  const response = await fetch('/api/course/stats/expelled');
-  if (!response.ok) {
-    throw new Error('Failed to fetch stats');
-  }
-  return response.json() as Promise<DetailedExpelledStat[]>;
-};
-
 const ExpelledStudentsStats: React.FC = () => {
-  const { data, error, loading, refetch } = useRequest(fetchExpelledStats) as unknown as UseRequestResultWithRefetch;
-  const [isDeleting, setIsDeleting] = React.useState(false);
-
-  const handleDelete = async (id: string) => {
-    setIsDeleting(true);
-    try {
-      const response = await fetch(`/api/course/stats/expelled/${id}`, {
-        method: 'DELETE',
-      });
-      if (!response.ok) {
-        throw new Error('Failed to delete stat');
-      }
-      if (typeof refetch === 'function') {
-        refetch();
-      }
-    } catch (err) {
-      console.error('Error deleting stat:', err);
-    } finally {
-      setIsDeleting(false);
-    }
-  };
+  const { data, error, loading, isDeleting, handleDelete } = useExpelledStats();
 
   const columns: ColumnsType<DetailedExpelledStat> = [
     {
@@ -96,10 +42,7 @@ const ExpelledStudentsStats: React.FC = () => {
       dataIndex: 'reasonForLeaving',
       key: 'reasons',
       render: (reasons: string[]) => {
-        if (!reasons) {
-          return null;
-        }
-        return (
+        return !reasons ? null : (
           <>
             {reasons.map(reason => (
               <Tag key={reason}>{reason.replace(/_/g, ' ')}</Tag>
@@ -124,18 +67,76 @@ const ExpelledStudentsStats: React.FC = () => {
       key: 'action',
       render: (_text, record) => (
         <Button danger onClick={() => handleDelete(record.id)} loading={isDeleting}>
-          Del
+          Delete
         </Button>
       ),
     },
   ];
 
   if (error) {
-    return <p>Failed to load statistics.</p>;
+    return <Typography.Paragraph>Failed to load statistics.</Typography.Paragraph>;
   }
 
   const [csvUrl, setCsvUrl] = React.useState<string | null>(null);
   const downloadRef = React.useRef<HTMLAnchorElement>(null);
+
+  const escapeCSVValue = (value: string): string => {
+    if (value.includes(',') || value.includes('"')) {
+      return `"${value.replace(/"/g, '""')}"`;
+    }
+    return value;
+  };
+
+  const getValueFromDataIndex = (row: DetailedExpelledStat, dataIndex: unknown): string => {
+    if (Array.isArray(dataIndex)) {
+      let current: unknown = row;
+
+      for (const key of dataIndex) {
+        const keyAsString = String(key);
+        current = current ? (current as Record<string, unknown>)[keyAsString] : undefined;
+      }
+
+      return current !== undefined && current !== null ? String(current) : '';
+    }
+
+    if (typeof dataIndex === 'string' || typeof dataIndex === 'number') {
+      const value = row[dataIndex as keyof DetailedExpelledStat];
+      return value !== undefined && value !== null ? String(value) : '';
+    }
+
+    return '';
+  };
+
+  const getSpecialColumnValue = (row: DetailedExpelledStat, columnKey: string): string => {
+    switch (columnKey) {
+      case 'reasons':
+        return row.reasonForLeaving ? row.reasonForLeaving.map(r => r.replace(/_/g, ' ')).join('; ') : '';
+      case 'date':
+        return row.submittedAt ? new Date(row.submittedAt).toLocaleString() : '';
+      case 'courseName':
+        return row.course ? row.course.alias : '';
+      case 'githubId':
+        return row.user ? row.user.githubId : '';
+      default:
+        return '';
+    }
+  };
+
+  const formatRowToCsv = (row: DetailedExpelledStat, exportableColumns: ColumnType<DetailedExpelledStat>[]): string => {
+    return exportableColumns
+      .map(col => {
+        let value = '';
+
+        if (col.dataIndex) {
+          value = getValueFromDataIndex(row, col.dataIndex);
+        } else if (col.key) {
+          value = getSpecialColumnValue(row, String(col.key));
+        }
+
+        return escapeCSVValue(value);
+      })
+      .join(',');
+  };
 
   const handleExportCsv = () => {
     if (!data || data.length === 0) {
@@ -156,44 +157,7 @@ const ExpelledStudentsStats: React.FC = () => {
       .filter(Boolean)
       .join(',');
 
-    const csvRows = data.map(row => {
-      return exportableColumns
-        .map(col => {
-          let value = '';
-          const dataIndex = col.dataIndex;
-
-          if (Array.isArray(dataIndex)) {
-            let current: unknown = row;
-
-            for (const k of dataIndex) {
-              const keyAsString = String(k);
-
-              current = current ? (current as Record<string, unknown>)[keyAsString] : undefined;
-            }
-
-            value = current !== undefined && current !== null ? String(current) : '';
-          } else if (typeof dataIndex === 'string' || typeof dataIndex === 'number') {
-            value =
-              row[dataIndex as keyof DetailedExpelledStat] !== undefined &&
-              row[dataIndex as keyof DetailedExpelledStat] !== null
-                ? String(row[dataIndex as keyof DetailedExpelledStat])
-                : '';
-          } else if (col.key === 'reasons') {
-            value = row.reasonForLeaving ? row.reasonForLeaving.map(r => r.replace(/_/g, ' ')).join('; ') : '';
-          } else if (col.key === 'date') {
-            value = row.submittedAt ? new Date(row.submittedAt).toLocaleString() : '';
-          } else if (col.key === 'courseName') {
-            value = row.course ? row.course.alias : '';
-          } else if (col.key === 'githubId') {
-            value = row.user ? row.user.githubId : '';
-          }
-          if (value.includes(',') || value.includes('"')) {
-            return `"${value.replace(/"/g, '""')}"`;
-          }
-          return value;
-        })
-        .join(',');
-    });
+    const csvRows = data.map(row => formatRowToCsv(row, exportableColumns));
 
     const csvContent = [headers, ...csvRows].join('\n');
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -210,8 +174,9 @@ const ExpelledStudentsStats: React.FC = () => {
   };
 
   return (
-    <div style={{ marginTop: 24 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+    <>
+      <div style={{ marginTop: 24 }}>
+        <Row justify="space-between" align="middle" style={{ marginBottom: 16 }} />
         <Title level={4} style={{ margin: 0 }}>
           Detailed Statistics on Student Departures
         </Title>
@@ -230,7 +195,7 @@ const ExpelledStudentsStats: React.FC = () => {
         pagination={{ pageSize: 20 }}
         size="small"
       />
-    </div>
+    </>
   );
 };
 
