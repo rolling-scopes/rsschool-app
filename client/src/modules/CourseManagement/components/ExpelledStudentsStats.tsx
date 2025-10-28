@@ -53,8 +53,8 @@ const ExpelledStudentsStats: React.FC = () => {
     },
     {
       title: 'Other Comments',
-      dataIndex: 'otherComments',
-      key: 'otherComments',
+      dataIndex: 'otherComment',
+      key: 'otherComment',
     },
     {
       title: 'Date',

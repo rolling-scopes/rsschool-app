@@ -25,7 +25,7 @@ export class CourseLeaveSurveyResponse {
   reasonForLeaving: string[];
 
   @Column({ type: 'text', nullable: true })
-  otherComments: string;
+  otherComment: string;
 
   @CreateDateColumn({ type: 'timestamp' })
   submittedAt: Date;

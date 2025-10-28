@@ -5,7 +5,7 @@ export class AddCourseLeaveSurveyResponse1760699701354 implements MigrationInter
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE "course_leave_survey_responses" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "userId" integer NOT NULL, "courseId" integer NOT NULL, "reasonForLeaving" text array, "otherComments" text, "submittedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_da291c26b3b92584820c0d02323" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "course_leave_survey_responses" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "userId" integer NOT NULL, "courseId" integer NOT NULL, "reasonForLeaving" text array, "otherComment" text, "submittedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_da291c26b3b92584820c0d02323" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
       `ALTER TABLE "course_leave_survey_responses" ADD CONSTRAINT "FK_bb5c64d5636045dbeaf485b7c75" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,

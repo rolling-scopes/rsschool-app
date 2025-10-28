@@ -28,7 +28,7 @@ function getExpelledStats(logger: ILogger) {
           githubId: res.user.githubId,
         },
         reasonForLeaving: res.reasonForLeaving,
-        otherComments: res.otherComments,
+        otherComment: res.otherComment,
         submittedAt: res.submittedAt,
       }));
 

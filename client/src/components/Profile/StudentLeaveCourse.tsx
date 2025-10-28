@@ -5,7 +5,7 @@ const { Title, Paragraph } = Typography;
 
 type SurveyResponses = {
   reasonForLeaving?: string[];
-  otherComments?: string;
+  otherComment?: string;
 };
 
 type ReasonOption = {
@@ -87,7 +87,7 @@ export default function StudentLeaveCourse({
             </Checkbox.Group>
           </Form.Item>
 
-          <Form.Item name="otherComments" label="Any other comments or suggestions?">
+          <Form.Item name="otherComment" label="Any other comments or suggestions?">
             <Input.TextArea rows={4} placeholder="Enter your feedback here..." />
           </Form.Item>
         </Form>

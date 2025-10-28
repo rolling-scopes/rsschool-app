@@ -16,7 +16,7 @@ export interface DetailedExpelledStat {
     githubId: string;
   };
   reasonForLeaving: string[];
-  otherComments: string;
+  otherComment: string;
   submittedAt: string;
 }
 

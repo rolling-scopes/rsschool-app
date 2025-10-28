@@ -9,7 +9,7 @@ export function submitLeaveSurvey(logger: ILogger) {
   return async (ctx: any) => {
     const surveyRepository = getRepository(CourseLeaveSurveyResponse);
     const studentRepository = getCustomRepository(StudentRepository);
-    const { reasonForLeaving, otherComments } = ctx.request.body;
+    const { reasonForLeaving, otherComment } = ctx.request.body;
     const { courseId } = ctx.params;
     const { id: userId, githubId } = ctx.state.user;
 
@@ -20,12 +20,12 @@ export function submitLeaveSurvey(logger: ILogger) {
         userId,
         courseId,
         reasonForLeaving,
-        otherComments,
+        otherComment,
       });
 
       await surveyRepository.save(newSurveyResponse);
 
-      const comment = `${SELF_EXPELLED_MARK}. Reasons: ${reasonForLeaving?.join(', ') || 'N/A'}. Comment: ${otherComments || 'N/A'}`;
+      const comment = `${SELF_EXPELLED_MARK}. Reasons: ${reasonForLeaving?.join(', ') || 'N/A'}. Comment: ${otherComment || 'N/A'}`;
       await studentRepository.expel(courseId, githubId, comment);
 
       ctx.status = 201;
