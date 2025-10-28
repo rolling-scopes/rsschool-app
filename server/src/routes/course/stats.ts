@@ -8,7 +8,7 @@ function getExpelledStats(logger: ILogger) {
     logger.info('Fetching detailed expelled students statistics');
     const surveyRepository = getRepository(CourseLeaveSurveyResponse);
 
-    try {
+
       const responses = await surveyRepository.find({
         relations: ['user', 'course'],
       });
@@ -34,13 +34,9 @@ function getExpelledStats(logger: ILogger) {
 
       ctx.status = 200;
       ctx.body = detailedStats;
-    } catch (error) {
-      logger.error('Failed to fetch detailed expelled students statistics', error);
-      ctx.status = 500;
-      ctx.body = { error: 'Internal server error' };
     }
   };
-}
+
 
 function deleteExpelledStat(logger: ILogger) {
   return async (ctx: any) => {
