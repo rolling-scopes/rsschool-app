@@ -30,6 +30,7 @@ export function ModalForm<T extends object>(props: Props<T>) {
       open={true}
       title={props.title}
       okText={props.okText ?? 'Save'}
+      maskClosable={false}
       onOk={async e => {
         e.preventDefault();
         const values = await form.validateFields().catch(() => null);
@@ -40,8 +41,22 @@ export function ModalForm<T extends object>(props: Props<T>) {
       }}
       okButtonProps={{ disabled: props.loading, ...props.okButtonProps }}
       onCancel={e => {
-        props.cancel(e);
-        form.resetFields();
+        if (form.isFieldsTouched()) {
+          Modal.confirm({
+            title: 'Are you sure you want to discard changes?',
+            content: 'You will lose all unsaved changes.',
+            okText: 'Yes, discard',
+            cancelText: 'Keep editing',
+            okButtonProps: { danger: true },
+            onOk: () => {
+              props.cancel(e);
+              form.resetFields();
+            },
+          });
+        } else {
+          props.cancel(e);
+          form.resetFields();
+        }
       }}
     >
       <Spin spinning={props.loading ?? false}>
