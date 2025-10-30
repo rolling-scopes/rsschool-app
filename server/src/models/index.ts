@@ -63,7 +63,6 @@ export {
   Discipline,
   DiscordServer,
   Event,
-  ExternalAccount,
   Feedback,
   LoginState,
   Mentor,
