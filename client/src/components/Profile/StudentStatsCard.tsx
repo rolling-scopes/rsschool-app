@@ -6,13 +6,15 @@ import StudentStatsModal from './StudentStatsModal';
 import { StudentStats } from '@common/models/profile';
 import {
   BookOutlined,
-  FullscreenOutlined,
   LogoutOutlined,
   ReloadOutlined,
   SafetyCertificateTwoTone,
 } from '@ant-design/icons';
 import { CoursesApi } from 'api';
 import StudentLeaveCourse from '@client/components/Profile/StudentLeaveCourse';
+import {
+  ExpandButtonWidget
+} from '@client/components/Profile/ui/ExpandButtonWidget';
 
 const { Text } = Typography;
 
@@ -190,9 +192,7 @@ class StudentStatsCard extends React.Component<Props, State> {
                         ''
                       )}
                     </div>
-                    <Button type="dashed" onClick={this.showStudentStatsModal.bind(null, idx)}>
-                      <FullscreenOutlined />
-                    </Button>
+                    <ExpandButtonWidget onClick={this.showStudentStatsModal.bind(null, idx)}/>
                   </List.Item>
                 );
               }}

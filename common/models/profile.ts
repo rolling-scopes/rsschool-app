@@ -128,6 +128,27 @@ export interface PublicFeedback {
   };
 }
 
+export interface CoreJsInterviewFeedback {
+  courseFullName: string;
+  courseName: string;
+  locationName: string | null;
+  interviews: {
+    answers: {
+      answer?: boolean;
+      questionText: string;
+      questionId: string;
+    }[];
+    interviewer: {
+      name: string;
+      githubId: string;
+    };
+    comment: string;
+    score: number;
+    name: string;
+    interviewDate?: string;
+  }[];
+}
+
 export interface StageInterviewDetailedFeedback {
   decision: string;
   isGoodCandidate: boolean;

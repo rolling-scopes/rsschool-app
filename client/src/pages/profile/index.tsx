@@ -23,6 +23,7 @@ import { SessionContext, SessionProvider } from 'modules/Course/contexts';
 import { useAsync } from 'react-use';
 import { checkIsProfileOwner, getStudentCoreJSInterviews, hadStudentCoreJSInterview } from 'utils/profilePageUtils';
 import { useMessage } from 'hooks';
+import InterviewCard from '@client/components/Profile/InterviewCard';
 
 type ConnectionValue = {
   value: string;
@@ -165,6 +166,10 @@ const Profile = () => {
       />
     ),
     profile?.discord !== undefined && <DiscordCard data={profile.discord} isProfileOwner={isProfileOwner} />,
+    <InterviewCard
+      coreJsInterview={getStudentCoreJSInterviews(profile?.studentStats || [])}
+      prescreeningInterview={profile?.stageInterviewFeedback}
+    />,
     profile?.publicFeedback?.length && <PublicFeedbackCard data={profile.publicFeedback} />,
     profile?.studentStats?.length && (
       <StudentStatsCard username={session.githubId} data={profile.studentStats} isProfileOwner={isProfileOwner} />
