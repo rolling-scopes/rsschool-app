@@ -6,12 +6,10 @@ import { CourseEvent } from './courseEvent';
 import { CourseManager } from './courseManager';
 import { CourseTask } from './courseTask';
 import { CourseUser } from './courseUser';
-
 import { Discipline } from './discipline';
 import { DiscordServer } from './discordServer';
 import { Event } from './event';
-import { User } from './user';
-import { Session } from 'inspector';
+import { ExternalAccount, User } from './user';
 import { Feedback } from './feedback';
 import { History } from './history';
 import { LoginState } from './loginState';
@@ -63,6 +61,7 @@ export {
   Discipline,
   DiscordServer,
   Event,
+  ExternalAccount,
   Feedback,
   LoginState,
   Mentor,
@@ -78,7 +77,6 @@ export {
   Registry,
   RepositoryEvent,
   Resume,
-  Session,
   StageInterview,
   StageInterviewFeedback,
   StageInterviewStudent,
@@ -87,7 +85,6 @@ export {
   Task,
   TaskArtefact,
   TaskChecker,
-  TaskCriteria,
   TaskInterviewResult,
   TaskInterviewStudent,
   TaskResult,
@@ -130,7 +127,6 @@ export const models = [
   Registry,
   RepositoryEvent,
   Resume,
-  Session,
   StageInterview,
   StageInterviewFeedback,
   StageInterviewStudent,

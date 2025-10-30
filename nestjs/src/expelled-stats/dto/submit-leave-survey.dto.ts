@@ -1,12 +1,12 @@
 import { IsArray, IsOptional, IsString } from 'class-validator';
 
 export class SubmitLeaveSurveyDto {
+  @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  @IsOptional()
   reasonForLeaving?: string[];
 
-  @IsString()
   @IsOptional()
+  @IsString()
   otherComment?: string;
 }

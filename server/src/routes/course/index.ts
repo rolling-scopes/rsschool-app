@@ -84,7 +84,6 @@ export function courseRoute(logger: ILogger) {
   addStudentApi(router, logger);
   addStudentCrossCheckApi(router, logger);
   addScheduleApi(router, logger);
-
   return router;
 }
 

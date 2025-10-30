@@ -1,21 +1,21 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from '../../server/src/models/user';
-import { Course } from '../../server/src/models/course';
+import { User } from '../../../../server/src/models/user';
+import { Course } from '../../../../server/src/models/course';
 
 @Entity('course_leave_survey_responses')
 export class CourseLeaveSurveyResponse {
   @PrimaryGeneratedColumn('uuid')
-  id!: string;
+  id: string;
 
-  @Column({ type: 'uuid' })
-  userId: string;
+  @Column({ type: 'integer' })
+  userId: number;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'userId' })
   user: User;
 
-  @Column({ type: 'uuid' })
-  courseId: string;
+  @Column({ type: 'integer' })
+  courseId: number;
 
   @ManyToOne(() => Course)
   @JoinColumn({ name: 'courseId' })

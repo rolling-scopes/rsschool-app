@@ -1,6 +1,8 @@
-import { Controller, Get, Delete, Param, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Delete, Param, HttpCode, HttpStatus, Post, Body, Req, UseGuards } from '@nestjs/common';
 import { ExpelledStatsService } from './expelled-stats.service';
-import { DetailedExpelledStat } from '../../../client/src/modules/CourseManagement/hooks/useExpelledStats';
+import { DetailedExpelledStat } from './dto/detailed-expelled-stat.dto';
+import { SubmitLeaveSurveyDto } from './dto/submit-leave-survey.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('course/stats/expelled')
 export class ExpelledStatsController {
@@ -27,6 +29,23 @@ export class ExpelledStatsController {
       otherComment: res.otherComment,
       submittedAt: res.submittedAt,
     }));
+  }
+
+  @Post(':courseId/leave-survey')
+  @UseGuards(AuthGuard('jwt'))
+  async submitLeaveSurvey(
+    @Param('courseId') courseId: number,
+    @Body() submitLeaveSurveyDto: SubmitLeaveSurveyDto,
+    @Req() req: any,
+  ) {
+    const userId = req.user.id;
+    const { reasonForLeaving, otherComment } = submitLeaveSurveyDto;
+    return this.expelledStatsService.submitLeaveSurvey(
+      userId,
+      courseId,
+      reasonForLeaving,
+      otherComment,
+    );
   }
 
   @Delete(':id')

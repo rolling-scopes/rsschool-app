@@ -61,7 +61,6 @@ import { Course1736458672717 } from './1736458672717-Course';
 import { CoursePersonalMentoringDates1738250779923 } from './1738250779923-CoursePersonalMentoringDates';
 import { CourseTaskInterviewCreatingPairs1747380525126 } from './1747380525126-CourseTaskInterviewCreatingPairs';
 import { Course1746467689328 } from './1746467689328-Course';
-import { AddCourseLeaveSurveyResponse1760699701354 } from './1760699701354-AddCourseLeaveSurveyResponse';
 
 export const migrations = [
   UserMigration1630340371992,
@@ -127,5 +126,4 @@ export const migrations = [
   CoursePersonalMentoringDates1738250779923,
   CourseTaskInterviewCreatingPairs1747380525126,
   Course1746467689328,
-  AddCourseLeaveSurveyResponse1760699701354,
 ];

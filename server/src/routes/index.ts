@@ -8,7 +8,6 @@ import { publicMeRouter } from './me';
 import { profileRoute } from './profile';
 import { registryRouter } from './registry';
 import { repositoryRoute } from './repository';
-import { expelledStatsRoute } from './course/stats';
 import { taskRoute } from './task';
 import { tasksRoute } from './tasks';
 import { taskVerification } from './taskVerification';
@@ -47,7 +46,6 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, checksRoute(logger));
   applyRouter(router, filesRoute(logger));
   applyRouter(router, repositoryRoute(logger));
-  applyRouter(router, expelledStatsRoute());
 
   return { publicRouter: router };
 };
