@@ -5,7 +5,7 @@ import { Course } from '../../server/src/models/course';
 @Entity('course_leave_survey_responses')
 export class CourseLeaveSurveyResponse {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ type: 'uuid' })
   userId: string;
