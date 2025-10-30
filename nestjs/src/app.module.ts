@@ -33,6 +33,7 @@ import { AutoTestModule } from './auto-test/auto-test.module';
 import { ContributorsModule } from './contributors';
 import { ListenersModule } from './listeners';
 import { SessionModule } from './session/session.module';
+import { ExpelledStatsModule } from './expelled-stats/expelled-stats.module';
 
 @Module({
   imports: [
@@ -74,6 +75,7 @@ import { SessionModule } from './session/session.module';
     ContributorsModule,
     ListenersModule,
     SessionModule,
+    ExpelledStatsModule,
   ],
   controllers: [],
   providers: [Logger, ConfigService],
