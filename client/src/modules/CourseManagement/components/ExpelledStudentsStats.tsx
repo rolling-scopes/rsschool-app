@@ -41,15 +41,9 @@ const ExpelledStudentsStats: React.FC = () => {
       title: 'Reasons for Leaving',
       dataIndex: 'reasonForLeaving',
       key: 'reasons',
-      render: (reasons: string[]) => {
-        return !reasons ? null : (
-          <>
-            {reasons.map(reason => (
-              <Tag key={reason}>{reason.replace(/_/g, ' ')}</Tag>
-            ))}
-          </>
-        );
-      },
+      render: (reasons?: string[]) => (
+        <>{reasons?.map(reason => <Tag key={reason}>{reason.replace(/_/g, ' ')}</Tag>)}</>
+      ),
     },
     {
       title: 'Other Comments',

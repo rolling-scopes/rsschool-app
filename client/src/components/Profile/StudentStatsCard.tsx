@@ -132,7 +132,7 @@ class StudentStatsCard extends React.Component<Props, State> {
     this.setState({ isLoading: true });
 
     try {
-      const response = await fetch(`/api/course/${courseId}/leave-survey`, {
+      const response = await fetch(`/api/v2/course/stats/expelled/${courseId}/leave-survey`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -246,9 +246,7 @@ class StudentStatsCard extends React.Component<Props, State> {
                             danger
                             size="small"
                             onClick={() => this.showExpelConfirmationModal(courseId)}
-                          >
-                            Leave course
-                          </Button>
+                          ></Button>
                         ) : isSelfExpelled ? (
                           <Button
                             icon={<ReloadOutlined />}

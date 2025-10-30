@@ -6,11 +6,11 @@ import { CourseEvent } from './courseEvent';
 import { CourseManager } from './courseManager';
 import { CourseTask } from './courseTask';
 import { CourseUser } from './courseUser';
-import { CourseLeaveSurveyResponse } from './course-leave-survey-response';
+
 import { Discipline } from './discipline';
 import { DiscordServer } from './discordServer';
 import { Event } from './event';
-import { ExternalAccount, User } from './user';
+import { User } from './user';
 import { Session } from 'inspector';
 import { Feedback } from './feedback';
 import { History } from './history';
@@ -60,7 +60,6 @@ export {
   CourseManager,
   CourseTask,
   CourseUser,
-  CourseLeaveSurveyResponse,
   Discipline,
   DiscordServer,
   Event,
@@ -113,7 +112,6 @@ export const models = [
   CourseManager,
   CourseTask,
   CourseUser,
-  CourseLeaveSurveyResponse,
   Discipline,
   DiscordServer,
   Event,
