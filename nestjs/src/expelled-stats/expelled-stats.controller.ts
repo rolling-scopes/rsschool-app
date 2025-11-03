@@ -40,12 +40,7 @@ export class ExpelledStatsController {
   ) {
     const userId = req.user.id;
     const { reasonForLeaving, otherComment } = submitLeaveSurveyDto;
-    return this.expelledStatsService.submitLeaveSurvey(
-      userId,
-      courseId,
-      reasonForLeaving,
-      otherComment,
-    );
+    return this.expelledStatsService.submitLeaveSurvey(userId, courseId, reasonForLeaving, otherComment);
   }
 
   @Delete(':id')
