@@ -132,8 +132,15 @@ class StudentStatsCard extends React.Component<Props, State> {
     this.setState({ isLoading: true });
 
     try {
-      const comment = JSON.stringify(surveyData);
-      await coursesService.leaveCourse(courseId, { comment });
+      await coursesService.leaveCourse(courseId, { comment: surveyData.otherComment });
+
+      await fetch(`/api/v2/course/stats/expelled/${courseId}/leave-survey`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(surveyData),
+      });
 
       window.location.reload();
     } finally {
