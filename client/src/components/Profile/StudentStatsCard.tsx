@@ -132,17 +132,9 @@ class StudentStatsCard extends React.Component<Props, State> {
     this.setState({ isLoading: true });
 
     try {
-      const response = await fetch(`/api/v2/course/stats/expelled/${courseId}/leave-survey`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(surveyData),
-      });
+      const comment = JSON.stringify(surveyData);
+      await coursesService.leaveCourse(courseId, { comment });
 
-      if (!response.ok) {
-        throw new Error('Failed to submit survey');
-      }
       window.location.reload();
     } finally {
       this.setState({ isLoading: false });
