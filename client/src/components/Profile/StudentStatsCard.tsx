@@ -245,7 +245,9 @@ class StudentStatsCard extends React.Component<Props, State> {
                             danger
                             size="small"
                             onClick={() => this.showExpelConfirmationModal(courseId)}
-                          ></Button>
+                          >
+                            Leave Course
+                          </Button>
                         ) : isSelfExpelled ? (
                           <Button
                             icon={<ReloadOutlined />}
