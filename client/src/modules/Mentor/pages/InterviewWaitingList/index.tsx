@@ -1,5 +1,5 @@
 import { Button, Table } from 'antd';
-import { Rating } from 'components/Rating';
+import { Rating } from 'components/Profile/ui';
 import { PageLayout } from 'components/PageLayout';
 import {
   getColumnSearchProps,

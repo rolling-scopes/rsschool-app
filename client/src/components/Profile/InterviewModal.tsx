@@ -2,13 +2,14 @@ import { Flex, Modal, Space, Table, Tag, Typography } from 'antd';
 import { CoreJsInterviewFeedback, LegacyFeedback, StageInterviewDetailedFeedback } from '@common/models';
 import { DecisionTag, getRating } from '@client/domain/interview';
 import { Decision } from '@client/data/interviews/technical-screening';
-import { Rating } from '@client/components/Rating';
+import {
+  InterviewerWidget,
+  IsGoodCandidateWidget,
+  LegacyScreeningFeedback,
+  PrescreeningFeedback,
+  Rating,
+} from '@client/components/Profile/ui';
 import { formatDate } from '@client/services/formatter';
-import { LegacyScreeningFeedback } from '@client/components/Profile/LegacyScreeningFeedback';
-import { PrescreeningFeedback } from '@client/components/Profile/PrescreeningFeedback';
-import { InterviewerWidget } from '@client/components/Profile/ui/InterviewerWidget';
-import { IsGoodCandidateWidget } from '@client/components/Profile/ui/IsGoodCandidateWidget';
-import * as React from 'react';
 
 const { Text } = Typography;
 

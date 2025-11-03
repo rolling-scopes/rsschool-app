@@ -13,15 +13,13 @@ import ContactsCard from 'components/Profile/ContactsCard';
 import PublicFeedbackCard from 'components/Profile/PublicFeedbackCard';
 import StudentStatsCard from 'components/Profile/StudentStatsCard';
 import { MentorStatsCard } from 'components/Profile/MentorStatsCard';
-import CoreJsIviewsCard from 'components/Profile/CoreJsIviewsCard';
 import LanguagesCard from 'components/Profile/LanguagesCard';
-import PreScreeningIviewCard from 'components/Profile/PreScreeningIviewCard';
 import { withGoogleMaps } from 'components/withGoogleMaps';
 import { NotificationChannel, NotificationsService } from 'modules/Notifications/services/notifications';
 import { ProfileInfo, ProfileMainCardData, UserService } from 'services/user';
 import { SessionContext, SessionProvider } from 'modules/Course/contexts';
 import { useAsync } from 'react-use';
-import { checkIsProfileOwner, getStudentCoreJSInterviews, hadStudentCoreJSInterview } from 'utils/profilePageUtils';
+import { checkIsProfileOwner, getStudentCoreJSInterviews } from 'utils/profilePageUtils';
 import { useMessage } from 'hooks';
 import InterviewCard from '@client/components/Profile/InterviewCard';
 
@@ -167,7 +165,7 @@ const Profile = () => {
     ),
     profile?.discord !== undefined && <DiscordCard data={profile.discord} isProfileOwner={isProfileOwner} />,
     <InterviewCard
-      coreJsInterview={getStudentCoreJSInterviews(profile?.studentStats || [])}
+      coreJsInterview={getStudentCoreJSInterviews(profile?.studentStats)}
       prescreeningInterview={profile?.stageInterviewFeedback}
     />,
     profile?.publicFeedback?.length && <PublicFeedbackCard data={profile.publicFeedback} />,
@@ -177,10 +175,6 @@ const Profile = () => {
     profile?.mentorStats?.length && githubId && (
       <MentorStatsCard isAdmin={isAdmin} githubId={githubId} data={profile.mentorStats} />
     ),
-    profile?.studentStats?.length && hadStudentCoreJSInterview(profile.studentStats) && (
-      <CoreJsIviewsCard data={getStudentCoreJSInterviews(profile.studentStats)} />
-    ),
-    profile?.stageInterviewFeedback?.length && <PreScreeningIviewCard data={profile.stageInterviewFeedback} />,
   ].filter(Boolean) as JSX.Element[];
 
   const preloadData = useAsync(async () => {

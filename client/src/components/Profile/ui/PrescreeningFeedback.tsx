@@ -1,5 +1,5 @@
 import { Typography, Table, Row, Space } from 'antd';
-import { Rating } from 'components/Rating';
+import { Rating } from './Rating';
 import { StageInterviewDetailedFeedback } from '@common/models/profile';
 import {
   CODING_LEVELS,

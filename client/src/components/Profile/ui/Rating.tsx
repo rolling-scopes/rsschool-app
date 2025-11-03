@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Rate, Space, Typography } from 'antd';
 
 type Props = { rating: number; tooltips?: string[] };

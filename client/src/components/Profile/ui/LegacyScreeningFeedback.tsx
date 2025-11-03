@@ -1,6 +1,5 @@
-import * as React from 'react';
 import { Tag, Typography, Table } from 'antd';
-import { Rating } from 'components/Rating';
+import { Rating } from './Rating';
 import { LegacyFeedback } from '@common/models/profile';
 import { ENGLISH_LEVELS } from 'data/english';
 import { CODING_LEVELS, SKILLS_LEVELS } from 'data/interviews/technical-screening';

@@ -1,26 +1,13 @@
 import CommonCard from '@client/components/Profile/CommonCard';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import * as React from 'react';
 import { ReactNode, useState } from 'react';
-import { Flex, List, Space, Typography } from 'antd';
+import { Empty, Flex, List, Space, Typography } from 'antd';
 import { formatDate } from '@client/services/formatter';
 import { DecisionTag, getRating } from '@client/domain/interview';
 import { Decision } from '@client/data/interviews/technical-screening';
-import { Rating } from '@client/components/Rating';
-import {
-  CoreJsInterviewFeedback,
-  StageInterviewDetailedFeedback
-} from '@common/models';
+import { ExpandButtonWidget, InterviewerWidget, IsGoodCandidateWidget, Rating } from '@client/components/Profile/ui/';
+import { CoreJsInterviewFeedback, StageInterviewDetailedFeedback } from '@common/models';
 import InterviewModal from '@client/components/Profile/InterviewModal';
-import {
-  InterviewerWidget
-} from '@client/components/Profile/ui/InterviewerWidget';
-import {
-  ExpandButtonWidget
-} from '@client/components/Profile/ui/ExpandButtonWidget';
-import {
-  IsGoodCandidateWidget
-} from '@client/components/Profile/ui/IsGoodCandidateWidget';
 
 const { Text } = Typography;
 
@@ -57,7 +44,7 @@ function InterviewCardListItem({
 }
 
 function renderCoreJsInterviews({ cardData, setModalData }: CardRenderProps<CoreJsInterviewFeedback>) {
-  if (!cardData) return null;
+  if (!cardData || cardData.length === 0) return null;
   return (
     <List
       itemLayout="horizontal"
@@ -158,14 +145,16 @@ export default function InterviewCard(props: InterviewCardProps) {
         icon={<QuestionCircleOutlined />}
         content={
           <>
-            {renderCoreJsInterviews({
-              cardData: props.coreJsInterview,
-              setModalData: (interviewIdx, data) => showModal({ type: 'coreJs', data, interviewIdx }),
-            })}
+            {!props.prescreeningInterview && !props.coreJsInterview && <Empty />}
 
             {renderPrescreeningInterviewCard({
               cardData: props.prescreeningInterview,
               setModalData: (interviewIdx, data) => showModal({ type: 'preScreening', data, interviewIdx }),
+            })}
+
+            {renderCoreJsInterviews({
+              cardData: props.coreJsInterview,
+              setModalData: (interviewIdx, data) => showModal({ type: 'coreJs', data, interviewIdx }),
             })}
           </>
         }

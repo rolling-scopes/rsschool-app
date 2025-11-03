@@ -1,11 +1,8 @@
-import { StudentStats } from '@common/models';
-import { CoreJsInterviewsData } from 'components/Profile/CoreJsIviewsCard';
+import { CoreJsInterviewFeedback, StudentStats } from '@common/models';
 
-export const hadStudentCoreJSInterview = (stats: StudentStats[]) =>
-  stats.some((student: StudentStats) => student.tasks.some(({ interviewFormAnswers }) => interviewFormAnswers));
-
-export const getStudentCoreJSInterviews = (stats: StudentStats[]) =>
-  stats
+export const getStudentCoreJSInterviews = (stats?: StudentStats[]) => {
+  if (!stats || stats.length === 0) return;
+  return stats
     .filter((student: StudentStats) => student.tasks.some(({ interviewFormAnswers }) => interviewFormAnswers))
     .map(({ tasks, courseFullName, courseName, locationName }) => ({
       courseFullName,
@@ -21,7 +18,8 @@ export const getStudentCoreJSInterviews = (stats: StudentStats[]) =>
           name,
           interviewDate,
         })),
-    })) as CoreJsInterviewsData[];
+    })) as CoreJsInterviewFeedback[];
+};
 
 export const checkIsProfileOwner = (githubId: string, requestedGithubId: string): boolean => {
   return githubId === requestedGithubId;

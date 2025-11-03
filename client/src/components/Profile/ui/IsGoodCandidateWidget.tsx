@@ -1,5 +1,4 @@
 import { Tag, Typography } from 'antd';
-import * as React from 'react';
 
 const {Text} = Typography;
 
