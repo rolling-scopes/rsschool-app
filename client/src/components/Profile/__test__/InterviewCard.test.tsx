@@ -48,7 +48,7 @@ describe('InterviewCard', () => {
     expect(screen.getByText('3.40')).toBeInTheDocument();
     expect(screen.getByText('Date: 2020-05-17')).toBeInTheDocument();
 
-    const expandButton =screen.getByTestId('expand-button');
+    const expandButton = screen.getByTestId('expand-button');
     expect(expandButton).toBeInTheDocument();
     await userEvent.click(expandButton);
 
@@ -86,7 +86,7 @@ describe('InterviewCard', () => {
     expect(screen.getByText(/Score:/i)).toBeInTheDocument();
     expect(screen.getByText('Date: 2021-06-01')).toBeInTheDocument();
 
-    const expandButton =screen.getByTestId('expand-button');
+    const expandButton = screen.getByTestId('expand-button');
     expect(expandButton).toBeInTheDocument();
     await userEvent.click(expandButton);
 

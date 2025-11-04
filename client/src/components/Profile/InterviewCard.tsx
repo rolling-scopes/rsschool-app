@@ -5,16 +5,8 @@ import { Empty, Flex, List, Space, Typography } from 'antd';
 import { formatDate } from '@client/services/formatter';
 import { DecisionTag, getRating } from '@client/domain/interview';
 import { Decision } from '@client/data/interviews/technical-screening';
-import {
-  ExpandButtonWidget,
-  InterviewerWidget,
-  IsGoodCandidateWidget,
-  Rating
-} from '@client/components/Profile/ui/';
-import {
-  CoreJsInterviewFeedback,
-  StageInterviewDetailedFeedback
-} from '@common/models';
+import { ExpandButtonWidget, InterviewerWidget, IsGoodCandidateWidget, Rating } from '@client/components/Profile/ui/';
+import { CoreJsInterviewFeedback, StageInterviewDetailedFeedback } from '@common/models';
 import InterviewModal from '@client/components/Profile/InterviewModal';
 
 const { Text } = Typography;

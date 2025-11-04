@@ -17,9 +17,7 @@ export function Rating(props: Props) {
       {tooltips ? (
         <Typography.Text>{tooltips[Math.round(rating) - 1]}</Typography.Text>
       ) : (
-        <Typography.Text>
-          {rating.toFixed(2)}
-        </Typography.Text>
+        <Typography.Text>{rating.toFixed(2)}</Typography.Text>
       )}
     </Space>
   );
