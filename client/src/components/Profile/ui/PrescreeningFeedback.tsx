@@ -100,7 +100,7 @@ function SkillTable({ skills, tooltips }: { skills: InterviewQuestion[]; tooltip
     <Table
       dataSource={skills}
       size="small"
-      rowKey="key"
+      rowKey="id"
       pagination={false}
       columns={[
         {
