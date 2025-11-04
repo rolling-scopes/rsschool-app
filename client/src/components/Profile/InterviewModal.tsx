@@ -7,9 +7,9 @@ import {
   IsGoodCandidateWidget,
   LegacyScreeningFeedback,
   PrescreeningFeedback,
-  Rating,
 } from '@client/components/Profile/ui';
 import { formatDate } from '@client/services/formatter';
+import { Rating } from '@client/components/Rating';
 
 const { Text } = Typography;
 
