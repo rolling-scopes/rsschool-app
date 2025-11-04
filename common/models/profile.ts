@@ -1,5 +1,4 @@
-import { EnglishLevel } from './';
-import { InterviewFeedbackValues } from 'client/src/data/interviews/technical-screening';
+import { EnglishLevel, InterviewFeedbackValues } from './';
 
 export interface Location {
   cityName: string;
