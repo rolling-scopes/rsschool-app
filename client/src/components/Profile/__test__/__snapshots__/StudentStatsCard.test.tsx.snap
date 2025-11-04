@@ -149,7 +149,11 @@ exports[`StudentStatsCard should render correctly 1`] = `
                   </p>
                 </div>
                 <button
+                  aria-label="Open details"
                   class="ant-btn css-dev-only-do-not-override-1v2lwm6 ant-btn-dashed"
+                  data-testid="expand-button"
+                  style="padding: 0.3em 0.5em;"
+                  title="Open details"
                   type="button"
                 >
                   <span
@@ -263,7 +267,11 @@ exports[`StudentStatsCard should render correctly 1`] = `
                   </p>
                 </div>
                 <button
+                  aria-label="Open details"
                   class="ant-btn css-dev-only-do-not-override-1v2lwm6 ant-btn-dashed"
+                  data-testid="expand-button"
+                  style="padding: 0.3em 0.5em;"
+                  title="Open details"
                   type="button"
                 >
                   <span
