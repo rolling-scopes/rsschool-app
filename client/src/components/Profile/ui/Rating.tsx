@@ -6,18 +6,18 @@ export function Rating(props: Props) {
   const { rating, tooltips } = props;
 
   return (
-    <Space align='center'>
+    <Space align="center">
       <Rate
         tooltips={tooltips}
         allowHalf={true}
         value={roundHalf(rating)}
         disabled={true}
-        style={{display: 'flex', justifyContent: 'center', flexWrap: 'wrap'}}
+        style={{ display: 'flex', flexWrap: 'nowrap', fontSize: 'clamp(0.9em, 1.5vw, 1.5em)', fontWeight: 'bold' }}
       />
       {tooltips ? (
-        <Typography.Text className="ant-rate-text">{tooltips[Math.round(rating) - 1]}</Typography.Text>
+        <Typography.Text>{tooltips[Math.round(rating) - 1]}</Typography.Text>
       ) : (
-        <Typography.Text className="ant-rate-text" style={{ fontWeight: 'bold' }}>
+        <Typography.Text>
           {rating.toFixed(2)}
         </Typography.Text>
       )}
