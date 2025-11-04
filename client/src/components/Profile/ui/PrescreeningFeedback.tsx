@@ -1,14 +1,8 @@
-import { Typography, Table, Row, Space } from 'antd';
+import { Row, Space, Table, Typography } from 'antd';
 import { Rating } from './Rating';
 import { StageInterviewDetailedFeedback } from '@common/models/profile';
-import {
-  CODING_LEVELS,
-  FeedbackStepId,
-  InterviewFeedbackStepData,
-  InterviewFeedbackValues,
-  InterviewQuestion,
-  SKILLS_LEVELS,
-} from 'data/interviews/technical-screening';
+import { CODING_LEVELS, FeedbackStepId, SKILLS_LEVELS } from 'data/interviews/technical-screening';
+import { InterviewFeedbackStepData, InterviewFeedbackValues, InterviewQuestion } from '@common/models';
 
 const { Text, Title } = Typography;
 
