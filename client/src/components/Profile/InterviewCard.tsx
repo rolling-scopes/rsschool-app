@@ -116,6 +116,9 @@ type ModalProps =
 export default function InterviewCard(props: InterviewCardProps) {
   const [modalContent, setModalContent] = useState<ModalProps>(null);
 
+  const hasPre = Array.isArray(props.prescreeningInterview) && props.prescreeningInterview.length > 0;
+  const hasCore = Array.isArray(props.coreJsInterview) && props.coreJsInterview.length > 0;
+
   function showModal(modalData: ModalProps) {
     setModalContent(modalData);
   }
@@ -141,11 +144,11 @@ export default function InterviewCard(props: InterviewCardProps) {
         />
       )}
       <CommonCard
-        title="Inteviews"
+        title="Interviews"
         icon={<QuestionCircleOutlined />}
         content={
           <>
-            {!props.prescreeningInterview && !props.coreJsInterview && <Empty />}
+            {!hasPre && !hasCore && <Empty />}
 
             {renderPrescreeningInterviewCard({
               cardData: props.prescreeningInterview,
