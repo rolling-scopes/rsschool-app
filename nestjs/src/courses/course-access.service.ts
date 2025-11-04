@@ -61,7 +61,11 @@ export class CourseAccessService {
     return user.courses[courseId]?.roles.includes(CourseRole.Manager) || user.isAdmin;
   }
 
-  public async leaveAsStudent(courseId: number, studentId: number, leaveCourseDto: LeaveCourseRequestDto): Promise<void> {
+  public async leaveAsStudent(
+    courseId: number,
+    studentId: number,
+    leaveCourseDto: LeaveCourseRequestDto,
+  ): Promise<void> {
     const [student, course] = await Promise.all([
       this.studentRepository.findOneByOrFail({ id: studentId }),
       this.courseRepository.findOneByOrFail({ id: courseId }),

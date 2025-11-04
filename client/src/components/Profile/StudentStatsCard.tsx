@@ -135,11 +135,11 @@ class StudentStatsCard extends React.Component<Props, State> {
     try {
       await axios.post(`/api/v2/courses/${courseId}/leave`, surveyData);
 
-              window.location.reload();
-            } finally {
-              this.setState({ isLoading: false });
-            }
-          };
+      window.location.reload();
+    } finally {
+      this.setState({ isLoading: false });
+    }
+  };
   private rejoinAsStudent = async (courseId: number) => {
     await coursesService.rejoinCourse(courseId);
     window.location.reload();

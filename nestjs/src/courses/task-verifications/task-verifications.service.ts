@@ -36,7 +36,7 @@ export class TaskVerificationsService {
     readonly cloudService: CloudApiService,
 
     readonly seflEducationService: SelfEducationService,
-  ) { }
+  ) {}
 
   public async getAnswersByAttempts(courseTaskId: number, studentId: number): Promise<TaskVerificationAttemptDto[]> {
     const courseTask = await this.courseTasksRepository.findOneByOrFail({ id: courseTaskId });

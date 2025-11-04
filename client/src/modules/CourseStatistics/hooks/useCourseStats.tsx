@@ -1,5 +1,5 @@
 import { useMessage } from '@client/hooks';
-import { CoursesStatsDto, CourseStatsApi } from '@client/api';
+import { CourseAggregateStatsDto, CourseStatsApi } from '@client/api';
 import { useRequest } from 'ahooks';
 
 const courseStatsApi = new CourseStatsApi();
@@ -9,9 +9,12 @@ type CourseStatsParams = {
   year?: number;
 };
 
-async function fetchCourseStats({ ids = [], year = 0 }: CourseStatsParams): Promise<CoursesStatsDto | undefined> {
+async function fetchCourseStats({
+  ids = [],
+  year = 0,
+}: CourseStatsParams): Promise<CourseAggregateStatsDto | undefined> {
   try {
-    const { data } = await courseStatsApi.getCoursesStats(ids, year);
+    const { data } = await courseStatsApi.getCoursesStats(ids.map(String), year);
     return data;
   } catch {
     console.error("Couldn't get course(s) stats");
