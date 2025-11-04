@@ -31,7 +31,7 @@ describe('InterviewModal', () => {
     expect(screen.getByText(/JS Course 2021 CoreJS Interview Feedback/)).toBeInTheDocument();
     expect(screen.getByText(/Score:/)).toBeInTheDocument();
     expect(screen.getByText('42')).toBeInTheDocument();
-    expect(screen.getByText('Interviewer:')).toBeInTheDocument();
+    expect(screen.getByText(/Interviewer/)).toBeInTheDocument();
     expect(screen.getByText('Alice')).toBeInTheDocument();
     expect(screen.getByText(/Great student/)).toBeInTheDocument();
 
@@ -68,8 +68,7 @@ describe('InterviewModal', () => {
     expect(screen.getByText(/Rolling Scopes School 2020 Q1 Pre-Screening Interview Feedback/)).toBeInTheDocument();
     expect(screen.getByText('Completed')).toBeInTheDocument();
     expect(screen.getByText('3.40')).toBeInTheDocument();
-    expect(screen.getByText('Date: 2020-05-17')).toBeInTheDocument();
-    expect(screen.getByText('Interviewer:')).toBeInTheDocument();
+    expect(screen.getByText(/Interviewer/)).toBeInTheDocument();
     expect(screen.getByText('Inter Viewer')).toBeInTheDocument();
   });
 

@@ -10,11 +10,11 @@ export function DateWidget({ date }: { date?: string }) {
   }
   const { token } = theme.useToken();
   return (
-    <Flex gap='0.2em' vertical>
+    <Flex gap="0.2em" vertical>
       <Text style={{ color: token.colorTextTertiary, fontSize: '1em' }}>Date</Text>
       <Space>
         <CalendarOutlined size={24} />
-        <Text data-testid='date-widget'>{formatDate(date)}</Text>
+        <Text data-testid="date-widget">{formatDate(date)}</Text>
       </Space>
     </Flex>
   );

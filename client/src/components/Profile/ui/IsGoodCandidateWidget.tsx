@@ -7,5 +7,10 @@ export function IsGoodCandidateWidget({ isGoodCandidate }: { isGoodCandidate: bo
     return null;
   }
 
-  return <Text>Good candidate: {isGoodCandidate ? <Tag color="green">Yes</Tag> : <Tag color="red">No</Tag>}</Text>;
+  return (
+    <Text>
+      <Text style={{ fontWeight: 'bold' }}>Good candidate:</Text>{' '}
+      {isGoodCandidate ? <Tag color="green">Yes</Tag> : <Tag color="red">No</Tag>}
+    </Text>
+  );
 }

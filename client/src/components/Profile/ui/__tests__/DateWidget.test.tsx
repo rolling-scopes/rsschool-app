@@ -4,7 +4,7 @@ import { DateWidget } from '@client/components/Profile/ui';
 describe('DateWidget', () => {
   it('returns null when no date provided', () => {
     render(<DateWidget />);
-    const element = screen.queryByTestId('date-widget')
+    const element = screen.queryByTestId('date-widget');
     expect(element).not.toBeInTheDocument();
   });
 

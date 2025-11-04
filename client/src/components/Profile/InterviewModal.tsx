@@ -7,8 +7,8 @@ import {
   IsGoodCandidateWidget,
   LegacyScreeningFeedback,
   PrescreeningFeedback,
+  ScoreWidget,
 } from '@client/components/Profile/ui';
-import { formatDate } from '@client/services/formatter';
 import { Rating } from '@client/components/Rating';
 
 const { Text } = Typography;
@@ -27,9 +27,7 @@ function renderCoreJsModal({ data, idx }: { data: CoreJsInterviewFeedback; idx: 
   const { score, comment, answers, interviewer } = data.interviews[idx];
   return (
     <Flex vertical gap="0.5em">
-      <Text>
-        Score: <Text mark>{score}</Text>
-      </Text>
+      <ScoreWidget score={score} />
       <InterviewerWidget interviewer={interviewer} />
       {comment && (
         <Text style={{ paddingBottom: '1em' }}>
@@ -64,15 +62,14 @@ function renderPreScreeningModal({ data }: { data: StageInterviewDetailedFeedbac
     return null;
   }
 
-  const { date, score, interviewer, isGoodCandidate, feedback, version, maxScore, decision } = data;
+  const { score, interviewer, isGoodCandidate, feedback, version, maxScore, decision } = data;
 
   return (
     <Flex vertical gap="0.5em">
-      <Space align="center">
+      <Space align="center" style={{ marginBlock: '0.5em' }}>
         <DecisionTag decision={decision as Decision} />
         <Rating rating={getRating(score, maxScore, version)} />
       </Space>
-      <Text>Date: {formatDate(date)}</Text>
       <IsGoodCandidateWidget isGoodCandidate={isGoodCandidate} />
       <InterviewerWidget interviewer={interviewer} />
       {version === 0 && <LegacyScreeningFeedback feedback={feedback as LegacyFeedback} />}

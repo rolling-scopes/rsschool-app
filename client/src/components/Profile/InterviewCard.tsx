@@ -1,11 +1,16 @@
 import CommonCard from '@client/components/Profile/CommonCard';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { ReactNode, useState } from 'react';
-import { Empty, Flex, List, Space, Typography } from 'antd';
-import { formatDate } from '@client/services/formatter';
+import { Empty, Flex, List, Typography } from 'antd';
 import { DecisionTag, getRating } from '@client/domain/interview';
 import { Decision } from '@client/data/interviews/technical-screening';
-import { ExpandButtonWidget, InterviewerWidget, IsGoodCandidateWidget } from '@client/components/Profile/ui/';
+import {
+  DateWidget,
+  ExpandButtonWidget,
+  InterviewerWidget,
+  IsGoodCandidateWidget,
+  ScoreWidget,
+} from '@client/components/Profile/ui/';
 import { CoreJsInterviewFeedback, StageInterviewDetailedFeedback } from '@common/models';
 import InterviewModal from '@client/components/Profile/InterviewModal';
 import { Rating } from '@client/components/Rating';
@@ -25,27 +30,38 @@ type CardRenderProps<T> = {
 function InterviewCardListItem({
   keyIndex,
   interviewer,
+  date,
   onClick,
   children,
 }: {
   keyIndex: number;
   interviewer: { name: string; githubId: string };
+  date?: string;
   onClick: () => void;
   children: ReactNode;
 }) {
   return (
-    <List.Item style={{ display: 'flex', justifyContent: 'space-between' }} key={keyIndex}>
-      <Flex vertical gap={'0.5em'}>
-        {children}
-        <InterviewerWidget interviewer={interviewer} />
+    <List.Item
+      key={keyIndex}
+      style={{
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        gap: '0.5em',
+      }}
+    >
+      {children}
+      <Flex justify="space-between" align="center" style={{ width: '100%', paddingBlock: '0.5em' }}>
+        <InterviewerWidget interviewer={interviewer} vertical />
+        <DateWidget date={date} />
+        <ExpandButtonWidget onClick={onClick} />
       </Flex>
-      <ExpandButtonWidget onClick={onClick} />
     </List.Item>
   );
 }
 
 function renderCoreJsInterviews({ cardData, setModalData }: CardRenderProps<CoreJsInterviewFeedback>) {
   if (!cardData || cardData.length === 0) return null;
+
   return (
     <List
       itemLayout="horizontal"
@@ -57,6 +73,7 @@ function renderCoreJsInterviews({ cardData, setModalData }: CardRenderProps<Core
             key={interviewIndex}
             keyIndex={interviewIndex}
             interviewer={interviewer}
+            date={interviewDate}
             onClick={() => setModalData(interviewIndex, cardData[idx])}
           >
             <Text strong>
@@ -64,10 +81,7 @@ function renderCoreJsInterviews({ cardData, setModalData }: CardRenderProps<Core
               {locationName && ` / ${locationName}`}
             </Text>
             <Text>{name}</Text>
-            <Text>
-              Score: <Text mark>{score}</Text>
-            </Text>
-            {interviewDate && <Text>Date: {formatDate(interviewDate)}</Text>}
+            <ScoreWidget score={score} />
           </InterviewCardListItem>
         ))
       }
@@ -86,15 +100,13 @@ function renderPrescreeningInterviewCard({ cardData, setModalData }: CardRenderP
         <InterviewCardListItem
           keyIndex={idx}
           interviewer={interviewer}
+          date={date}
           onClick={() => setModalData(idx, cardData[idx])}
         >
           <Text strong>{courseName}</Text>
           <Text>Pre-Screening Interview</Text>
-          <Space>
-            <DecisionTag decision={decision as Decision} />
-          </Space>
+          <DecisionTag decision={decision as Decision} />
           <Rating rating={getRating(score, maxScore, version)} />
-          <Text>Date: {formatDate(date)}</Text>
           <IsGoodCandidateWidget isGoodCandidate={isGoodCandidate} />
         </InterviewCardListItem>
       )}

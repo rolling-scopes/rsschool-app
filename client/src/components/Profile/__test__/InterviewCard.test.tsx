@@ -46,7 +46,6 @@ describe('InterviewCard', () => {
     expect(screen.getByText('Pre-Screening Interview')).toBeInTheDocument();
     expect(screen.getByText('Completed')).toBeInTheDocument();
     expect(screen.getByText('3.40')).toBeInTheDocument();
-    expect(screen.getByText('Date: 2020-05-17')).toBeInTheDocument();
 
     const expandButton = screen.getByTestId('expand-button');
     expect(expandButton).toBeInTheDocument();
@@ -84,7 +83,6 @@ describe('InterviewCard', () => {
     expect(screen.getByText(/JS Course/i)).toBeInTheDocument();
     expect(screen.getByText('CoreJS Interview A')).toBeInTheDocument();
     expect(screen.getByText(/Score:/i)).toBeInTheDocument();
-    expect(screen.getByText('Date: 2021-06-01')).toBeInTheDocument();
 
     const expandButton = screen.getByTestId('expand-button');
     expect(expandButton).toBeInTheDocument();
