@@ -26,7 +26,7 @@ function renderCoreJsModal({ data, idx }: { data: CoreJsInterviewFeedback; idx: 
   }
   const { score, comment, answers, interviewer } = data.interviews[idx];
   return (
-    <Flex vertical gap={'0.5em'}>
+    <Flex vertical gap="0.5em">
       <Text>
         Score: <Text mark>{score}</Text>
       </Text>
@@ -67,7 +67,7 @@ function renderPreScreeningModal({ data }: { data: StageInterviewDetailedFeedbac
   const { date, score, interviewer, isGoodCandidate, feedback, version, maxScore, decision } = data;
 
   return (
-    <Flex vertical gap={'0.5em'}>
+    <Flex vertical gap="0.5em">
       <Space align="center">
         <DecisionTag decision={decision as Decision} />
         <Rating rating={getRating(score, maxScore, version)} />
@@ -86,7 +86,7 @@ export default function InterviewModal({ isVisible, onHide, coreJs, prescreening
     ? `${coreJs.data.courseFullName} CoreJS Interview Feedback`
     : `${prescreening?.data.courseFullName} Pre-Screening Interview Feedback`;
   return (
-    <Modal title={title} open={isVisible} onCancel={onHide} footer={null} width={'80%'}>
+    <Modal title={title} open={isVisible} onCancel={onHide} footer={null} width="80%">
       {coreJs && renderCoreJsModal(coreJs)}
       {prescreening && renderPreScreeningModal(prescreening)}
     </Modal>
