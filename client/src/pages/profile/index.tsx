@@ -164,11 +164,11 @@ const Profile = () => {
       />
     ),
     profile?.discord !== undefined && <DiscordCard data={profile.discord} isProfileOwner={isProfileOwner} />,
+    profile?.publicFeedback?.length && <PublicFeedbackCard data={profile.publicFeedback} />,
     <InterviewCard
       coreJsInterview={getStudentCoreJSInterviews(profile?.studentStats)}
       prescreeningInterview={profile?.stageInterviewFeedback}
     />,
-    profile?.publicFeedback?.length && <PublicFeedbackCard data={profile.publicFeedback} />,
     profile?.studentStats?.length && (
       <StudentStatsCard username={session.githubId} data={profile.studentStats} isProfileOwner={isProfileOwner} />
     ),
