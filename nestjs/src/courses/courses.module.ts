@@ -70,6 +70,8 @@ import { CourseStudentsController } from './course-students/course-students.cont
 import { CourseStudentsService } from './course-students/course-students.service';
 import { MentorReviewsController, MentorReviewsService } from './mentor-reviews';
 import { ConfigModule } from '../config';
+import { ExpelledStatsService } from './expelled-stats.service';
+import { CourseLeaveSurveyResponse } from './entities/course-leave-survey-response.entity';
 
 @Module({
   imports: [
@@ -98,6 +100,7 @@ import { ConfigModule } from '../config';
       TeamDistribution,
       TeamDistributionStudent,
       User,
+      CourseLeaveSurveyResponse,
     ]),
     CoreModule,
     UsersModule,
@@ -156,7 +159,8 @@ import { ConfigModule } from '../config';
     CourseMentorsService,
     CourseStudentsService,
     MentorReviewsService,
+    ExpelledStatsService,
   ],
-  exports: [CourseTasksService, CourseUsersService, CoursesService, StudentsService],
+  exports: [CourseTasksService, CourseUsersService, CoursesService, StudentsService, ExpelledStatsService],
 })
 export class CoursesModule {}

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import isEqual from 'lodash/isEqual';
 import { Typography, List, Button, Progress } from 'antd';
+import axios from 'axios';
 import CommonCard from './CommonCard';
 import StudentStatsModal from './StudentStatsModal';
 import { StudentStats } from '@common/models/profile';
@@ -132,22 +133,13 @@ class StudentStatsCard extends React.Component<Props, State> {
     this.setState({ isLoading: true });
 
     try {
-      await coursesService.leaveCourse(courseId, { comment: surveyData.otherComment });
+      await axios.post(`/api/v2/courses/${courseId}/leave`, surveyData);
 
-      await fetch(`/api/v2/course/stats/expelled/${courseId}/leave-survey`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(surveyData),
-      });
-
-      window.location.reload();
-    } finally {
-      this.setState({ isLoading: false });
-    }
-  };
-
+              window.location.reload();
+            } finally {
+              this.setState({ isLoading: false });
+            }
+          };
   private rejoinAsStudent = async (courseId: number) => {
     await coursesService.rejoinCourse(courseId);
     window.location.reload();
