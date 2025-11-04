@@ -61,6 +61,7 @@ function renderCoreJsInterviews({ cardData, setModalData }: CardRenderProps<Core
       renderItem={({ courseName, locationName, interviews }, idx) =>
         interviews.map(({ score, interviewer, name, interviewDate }, interviewIndex) => (
           <InterviewCardListItem
+            key={interviewIndex}
             keyIndex={interviewIndex}
             interviewer={interviewer}
             onClick={() => setModalData(interviewIndex, cardData[idx])}
@@ -82,7 +83,7 @@ function renderCoreJsInterviews({ cardData, setModalData }: CardRenderProps<Core
 }
 
 function renderPrescreeningInterviewCard({ cardData, setModalData }: CardRenderProps<StageInterviewDetailedFeedback>) {
-  if (!cardData) return null;
+  if (!cardData || cardData.length === 0) return null;
   return (
     <List
       itemLayout="horizontal"
