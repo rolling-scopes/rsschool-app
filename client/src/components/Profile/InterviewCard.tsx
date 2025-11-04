@@ -1,7 +1,7 @@
 import CommonCard from '@client/components/Profile/CommonCard';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import { ReactNode, useState } from 'react';
-import { Empty, Flex, List, Typography } from 'antd';
+import { CSSProperties, ReactNode, useState } from 'react';
+import { Empty, Flex, List, theme, Typography } from 'antd';
 import { DecisionTag, getRating } from '@client/domain/interview';
 import { Decision } from '@client/data/interviews/technical-screening';
 import {
@@ -33,12 +33,14 @@ function InterviewCardListItem({
   date,
   onClick,
   children,
+  styles,
 }: {
   keyIndex: number;
   interviewer: { name: string; githubId: string };
   date?: string;
   onClick: () => void;
   children: ReactNode;
+  styles?: CSSProperties;
 }) {
   return (
     <List.Item
@@ -49,17 +51,23 @@ function InterviewCardListItem({
         gap: '0.5em',
       }}
     >
-      {children}
-      <Flex justify="space-between" align="center" style={{ width: '100%', paddingBlock: '0.5em' }}>
+      <Flex justify="space-between" style={{ width: '100%' }}>
+        <Flex vertical align="flex-start" gap="0.5em">
+          {children}
+        </Flex>
+        <ExpandButtonWidget onClick={onClick} />
+      </Flex>
+      <Flex justify="space-between" align="center" wrap="wrap" gap="1em" style={{ width: '100%', ...styles }}>
         <InterviewerWidget interviewer={interviewer} vertical />
         <DateWidget date={date} />
-        <ExpandButtonWidget onClick={onClick} />
       </Flex>
     </List.Item>
   );
 }
 
 function renderCoreJsInterviews({ cardData, setModalData }: CardRenderProps<CoreJsInterviewFeedback>) {
+  const { token } = theme.useToken();
+
   if (!cardData || cardData.length === 0) return null;
 
   return (
@@ -75,6 +83,10 @@ function renderCoreJsInterviews({ cardData, setModalData }: CardRenderProps<Core
             interviewer={interviewer}
             date={interviewDate}
             onClick={() => setModalData(interviewIndex, cardData[idx])}
+            styles={{
+              borderBottom: interviewIndex !== interviews.length - 1 ? `1px solid ${token.colorBorder}` : 'none',
+              paddingBottom: '1.5em',
+            }}
           >
             <Text strong>
               {courseName}
@@ -90,7 +102,10 @@ function renderCoreJsInterviews({ cardData, setModalData }: CardRenderProps<Core
 }
 
 function renderPrescreeningInterviewCard({ cardData, setModalData }: CardRenderProps<StageInterviewDetailedFeedback>) {
+  const { token } = theme.useToken();
+
   if (!cardData || cardData.length === 0) return null;
+
   return (
     <List
       itemLayout="horizontal"
@@ -102,6 +117,7 @@ function renderPrescreeningInterviewCard({ cardData, setModalData }: CardRenderP
           interviewer={interviewer}
           date={date}
           onClick={() => setModalData(idx, cardData[idx])}
+          styles={{ borderBottom: `1px solid ${token.colorBorder}`, paddingBottom: '1.5em' }}
         >
           <Text strong>{courseName}</Text>
           <Text>Pre-Screening Interview</Text>

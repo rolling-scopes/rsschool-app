@@ -6,7 +6,7 @@ export function ScoreWidget({ score }: { score: number }) {
   const { token } = theme.useToken();
   return (
     <Text>
-      Score: <Tag color={token.colorBgSpotlight}>{score}</Tag>
+      <Text strong>Score:</Text> <Tag color={token.colorBgSpotlight}>{score}</Tag>
     </Text>
   );
 }

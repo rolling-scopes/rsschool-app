@@ -16,10 +16,10 @@ export function InterviewerWidget({
     <a href={`/profile?githubId=${interviewer.githubId}`}>
       <Flex gap="0.2em" vertical={vertical}>
         <Text
+          strong={!vertical}
           style={{
             color: vertical ? token.colorTextTertiary : token.colorTextBase,
             fontSize: '1em',
-            fontWeight: vertical ? 'normal' : 'bold',
             marginInlineEnd: '0.5ch',
           }}
         >
