@@ -23,7 +23,12 @@ export function GithubUserLink({ value, isUserIconHidden = false, fullName, copy
 
   return (
     <div className="link-user">
-      <a title='Open Rolling Scopes App profile page' target="_blank" className="link-user-profile" href={`/profile?githubId=${value}`}>
+      <a
+        title="Open Rolling Scopes App profile page"
+        target="_blank"
+        className="link-user-profile"
+        href={`/profile?githubId=${value}`}
+      >
         {!isUserIconHidden && <GithubAvatar githubId={value} size={24} />}
         {fullName || value}
       </a>

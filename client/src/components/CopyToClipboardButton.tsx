@@ -17,5 +17,5 @@ export default function CopyToClipboardButton({ value, type = 'dashed' }: Props)
     await message.success(`Copied ${value} to clipboard`);
   };
 
-  return <Button data-testid='copy-to-clipboard' type={type} icon={<CopyOutlined />} onClick={handleClick} />;
+  return <Button data-testid="copy-to-clipboard" type={type} icon={<CopyOutlined />} onClick={handleClick} />;
 }

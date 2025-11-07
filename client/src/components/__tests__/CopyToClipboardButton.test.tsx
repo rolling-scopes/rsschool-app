@@ -30,17 +30,17 @@ describe('CopyToClipboardButton', () => {
   });
 
   it('should render button with copy icon', () => {
-    render(<CopyToClipboardButton value={TEST_VALUE}/>)
-    const icon = screen.getByRole('img')
-    expect(icon).toBeInTheDocument()
-    expect(icon).toHaveClass('anticon anticon-copy')
-  })
+    render(<CopyToClipboardButton value={TEST_VALUE} />);
+    const icon = screen.getByRole('img');
+    expect(icon).toBeInTheDocument();
+    expect(icon).toHaveClass('anticon anticon-copy');
+  });
 
   it('should copy text to clipboard on click', async () => {
     render(<CopyToClipboardButton value={TEST_VALUE} />);
     const button = screen.getByTestId('copy-to-clipboard');
 
-    act(() => button.click())
+    act(() => button.click());
 
     expect(mockCopyToClipboard).toHaveBeenCalledWith(TEST_VALUE);
     expect(mockSuccess).toHaveBeenCalledWith(`Copied ${TEST_VALUE} to clipboard`);
