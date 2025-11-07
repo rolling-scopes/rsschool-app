@@ -1,7 +1,7 @@
 import { Button, ButtonProps } from 'antd';
-import CopyTwoTone from '@ant-design/icons/CopyTwoTone';
 import { useCopyToClipboard } from 'react-use';
 import { useMessage } from 'hooks';
+import { CopyOutlined } from '@ant-design/icons';
 
 type Props = {
   value: string;
@@ -9,13 +9,13 @@ type Props = {
 };
 
 export default function CopyToClipboardButton({ value, type = 'dashed' }: Props) {
-  const { notification } = useMessage();
+  const { message } = useMessage();
   const [, copyToClipboard] = useCopyToClipboard();
 
-  const handleClick = () => {
+  const handleClick = async () => {
     copyToClipboard(value);
-    notification.success({ message: 'Copied to clipboard', duration: 2 });
+    await message.success(`Copied ${value} to clipboard`);
   };
 
-  return <Button type={type} icon={<CopyTwoTone />} onClick={handleClick} />;
+  return <Button data-testid="copy-to-clipboard" type={type} icon={<CopyOutlined />} onClick={handleClick} />;
 }
