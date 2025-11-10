@@ -11,7 +11,8 @@ const { Title, Text } = Typography;
 
 const ExpelledStudentsStats: React.FC = () => {
   const { data, error, loading, isDeleting, handleDelete } = useExpelledStats();
-
+  const [csvUrl, setCsvUrl] = React.useState<string | null>(null);
+  const downloadRef = React.useRef<HTMLAnchorElement>(null);
   const columns: ColumnsType<DetailedExpelledStat> = [
     {
       title: 'Course',
@@ -71,9 +72,6 @@ const ExpelledStudentsStats: React.FC = () => {
   if (error) {
     return <Typography.Paragraph>Failed to load statistics.</Typography.Paragraph>;
   }
-
-  const [csvUrl, setCsvUrl] = React.useState<string | null>(null);
-  const downloadRef = React.useRef<HTMLAnchorElement>(null);
 
   const escapeCSVValue = (value: string): string => {
     if (value.includes(',') || value.includes('"')) {

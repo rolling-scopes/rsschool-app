@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { DetailedExpelledStat } from '@common/models';
 
 const fetchExpelledStats = async (): Promise<DetailedExpelledStat[]> => {
-  const response = await fetch('/api/v2/course/stats/expelled');
+  const response = await fetch('/api/v2/courses/stats/expelled');
   if (!response.ok) {
     throw new Error('Failed to fetch stats');
   }
@@ -17,7 +17,7 @@ export const useExpelledStats = () => {
   const handleDelete = async (id: string) => {
     setIsDeleting(true);
     try {
-      const response = await fetch(`/api/v2/course/stats/expelled/${id}`, {
+      const response = await fetch(`/api/v2/courses/stats/expelled/${id}`, {
         method: 'DELETE',
       });
       if (!response.ok) {
