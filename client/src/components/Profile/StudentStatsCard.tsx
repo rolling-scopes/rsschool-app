@@ -5,6 +5,7 @@ import axios from 'axios';
 import CommonCard from './CommonCard';
 import StudentStatsModal from './StudentStatsModal';
 import { StudentStats } from '@common/models/profile';
+import { CourseLeaveReason } from '@client/data/course-leave-reasons';
 import {
   BookOutlined,
   FullscreenOutlined,
@@ -37,52 +38,52 @@ const coursesService = new CoursesApi();
 
 const reasonsOptions = [
   {
-    value: 'too_difficult',
+    value: CourseLeaveReason.TooDifficult,
     labelEn: 'Course was too difficult',
     labelRu: 'Курс был слишком сложным',
   },
   {
-    value: 'not_useful',
+    value: CourseLeaveReason.NotUseful,
     labelEn: 'Course was not useful',
     labelRu: 'Курс был бесполезным',
   },
   {
-    value: 'lack_of_time',
+    value: CourseLeaveReason.LackOfTime,
     labelEn: 'Lack of time',
     labelRu: 'Нехватка времени',
   },
   {
-    value: 'other',
+    value: CourseLeaveReason.Other,
     labelEn: 'Other',
     labelRu: 'Другое',
   },
   {
-    value: 'no_interest',
+    value: CourseLeaveReason.NoInterest,
     labelEn: 'Lost interest in the subject',
     labelRu: 'Потерял интерес к предмету',
   },
   {
-    value: 'poor_quality',
+    value: CourseLeaveReason.PoorQuality,
     labelEn: 'Course quality was poor',
     labelRu: 'Низкое качество курса',
   },
   {
-    value: 'found_alternative',
+    value: CourseLeaveReason.FoundAlternative,
     labelEn: 'Found an alternative course/opportunity',
     labelRu: 'Нашел альтернативный курс/возможность',
   },
   {
-    value: 'personal_reasons',
+    value: CourseLeaveReason.PersonalReasons,
     labelEn: 'Personal reasons',
     labelRu: 'Личные причины',
   },
   {
-    value: 'got_job',
+    value: CourseLeaveReason.GotJob,
     labelEn: 'Got a job',
     labelRu: 'Устроился на работу',
   },
   {
-    value: 'got_internship',
+    value: CourseLeaveReason.GotInternship,
     labelEn: 'Got an internship',
     labelRu: 'Устроился на стажировку',
   },

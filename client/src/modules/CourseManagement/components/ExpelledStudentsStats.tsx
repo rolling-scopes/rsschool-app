@@ -4,7 +4,8 @@ import React from 'react';
 import { PublicSvgIcon } from '@client/components/Icons';
 import { DEFAULT_COURSE_ICONS } from '@client/configs/course-icons';
 import { dateUtcRenderer } from '@client/components/Table';
-import { useExpelledStats, DetailedExpelledStat } from '@client/modules/CourseManagement/hooks/useExpelledStats';
+import { useExpelledStats } from '@client/modules/CourseManagement/hooks/useExpelledStats';
+import { DetailedExpelledStat } from '@common/models';
 
 const { Title, Text } = Typography;
 
