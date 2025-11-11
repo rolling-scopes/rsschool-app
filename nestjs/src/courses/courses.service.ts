@@ -19,6 +19,10 @@ export class CoursesService {
     return this.repository.findOneOrFail({ where: { id }, relations: ['discipline'] });
   }
 
+  public async getByAlias(alias: string) {
+    return this.repository.findOneOrFail({ where: { alias }, relations: ['discipline'] });
+  }
+
   public async update(id: number, course: UpdateCourseDto) {
     await this.repository.update(id, course);
     const updated = await this.repository.findOneByOrFail({ id });

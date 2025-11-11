@@ -1,4 +1,4 @@
-import { ProfileCourseDto } from 'api';
+import { CoursesApi, ProfileCourseDto } from 'api';
 import { LoadingScreen } from 'components/LoadingScreen';
 import { useRouter } from 'next/router';
 import React, { useCallback, useContext, useMemo, useState } from 'react';
@@ -8,6 +8,7 @@ import { WelcomeCard } from 'components/WelcomeCard';
 import { Alert, Col, notification, Row } from 'antd';
 import useRequest from 'ahooks/lib/useRequest';
 import { AxiosError } from 'axios';
+import { MentorRegistryService } from '@client/services/mentorRegistry';
 
 type ActiveCourseContextType = {
   course: ProfileCourseDto;
@@ -29,17 +30,20 @@ export const useActiveCourseContext = () => {
 
 type Props = React.PropsWithChildren<{
   publicRoutes: string[];
+  mentorConfirmRoute: string;
 }>;
 
-export const ActiveCourseProvider = ({ children, publicRoutes }: Props) => {
+export const ActiveCourseProvider = ({ children, publicRoutes, mentorConfirmRoute }: Props) => {
   const router = useRouter();
 
   // course alias
   const alias = router.query.course;
   const isPublicRoute = publicRoutes?.includes(router.pathname);
+  const isMentorConfirmRoute = router.pathname === mentorConfirmRoute;
 
   const [storageCourseId, setStorageCourseId] = useLocalStorage<string>('activeCourseId');
   const [activeCourse, setActiveCourse] = useState<ProfileCourseDto>();
+  const [isMentorInvited, setIsMentorInvited] = useState(false);
 
   const { data, loading, refresh } = useRequest(() => resolveCourse(alias, storageCourseId), {
     ready: router.isReady && !isPublicRoute,
@@ -58,6 +62,28 @@ export const ActiveCourseProvider = ({ children, publicRoutes }: Props) => {
     },
   });
 
+  const { loading: mentorLoading } = useRequest(
+    async () => {
+      const mentor = await new MentorRegistryService().getMentor();
+      if (!mentor) {
+        return false;
+      }
+      const courseToConfirm = await new CoursesApi().getCourseByAlias(alias as string);
+      const isInvited = mentor?.preselectedCourses?.includes(courseToConfirm?.data.id) ?? false;
+      return isInvited;
+    },
+    {
+      ready: router.isReady && isMentorConfirmRoute && typeof alias === 'string' && Boolean(alias),
+      onSuccess: isInvited => setIsMentorInvited(isInvited),
+      onError: () => {
+        notification.error({
+          message: 'Mentor check failed',
+          description: 'Please try again later or contact course manager',
+        });
+      },
+    },
+  );
+
   const setCourse = useCallback((course: ProfileCourseDto | null) => {
     if (course) {
       setActiveCourse(course);
@@ -74,7 +100,9 @@ export const ActiveCourseProvider = ({ children, publicRoutes }: Props) => {
     return <>{children}</>;
   }
 
-  if (alias && activeCourse && activeCourse.alias !== alias) {
+  const noAccess = alias && activeCourse && activeCourse.alias !== alias && !isMentorInvited && !mentorLoading;
+
+  if (noAccess) {
     return (
       <Row justify="center">
         <Col md={12} xs={18} style={{ marginTop: '60px' }}>
@@ -96,7 +124,7 @@ export const ActiveCourseProvider = ({ children, publicRoutes }: Props) => {
     return <ActiveCourseContext.Provider value={value}>{children}</ActiveCourseContext.Provider>;
   }
 
-  return <LoadingScreen show={loading} />;
+  return <LoadingScreen show={loading || mentorLoading} />;
 };
 
 async function resolveCourse(
