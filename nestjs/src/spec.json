@@ -214,6 +214,21 @@
         "tags": ["courses"]
       }
     },
+    "/courses/{courseAlias}": {
+      "get": {
+        "operationId": "getCourseByAlias",
+        "parameters": [{ "name": "courseAlias", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CourseDto" } } }
+          },
+          "403": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["courses"]
+      }
+    },
     "/courses/{courseId}": {
       "get": {
         "operationId": "getCourse",
@@ -235,21 +250,6 @@
           "required": true,
           "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateCourseDto" } } }
         },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CourseDto" } } }
-          },
-          "403": { "description": "" }
-        },
-        "summary": "",
-        "tags": ["courses"]
-      }
-    },
-    "/courses/{courseAlias}": {
-      "get": {
-        "operationId": "getCourseByAlias",
-        "parameters": [{ "name": "courseAlias", "required": true, "in": "path", "schema": { "type": "string" } }],
         "responses": {
           "200": {
             "description": "",
@@ -3803,7 +3803,7 @@
           "studentsStats": { "$ref": "#/components/schemas/CourseStatsDto" },
           "mentorsCountries": { "$ref": "#/components/schemas/CountriesStatsDto" },
           "mentorsStats": { "$ref": "#/components/schemas/CourseMentorsStatsDto" },
-          "courseTasks": { "type": "array", "items": { "type": "string" } },
+          "courseTasks": { "type": "array", "items": { "$ref": "#/components/schemas/CourseTaskDto" } },
           "studentsCertificatesCountries": { "$ref": "#/components/schemas/CountriesStatsDto" }
         },
         "required": [

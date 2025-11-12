@@ -993,10 +993,10 @@ export interface CourseAggregateStatsDto {
     'mentorsStats': CourseMentorsStatsDto;
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array<CourseTaskDto>}
      * @memberof CourseAggregateStatsDto
      */
-    'courseTasks': Array<string>;
+    'courseTasks': Array<CourseTaskDto>;
     /**
      * 
      * @type {CountriesStatsDto}
