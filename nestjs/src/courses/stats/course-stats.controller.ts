@@ -41,13 +41,13 @@ export class CourseStatsController {
     name: 'ids',
     required: true,
     type: [Number],
-    description: 'List of course IDs'
+    description: 'List of course IDs',
   })
   @ApiQuery({
     name: 'year',
     required: true,
     type: Number,
-    description: 'Year for which stats are fetched'
+    description: 'Year for which stats are fetched',
   })
   @ApiOkResponse({ type: CourseAggregateStatsDto })
   public async getCoursesStats(
