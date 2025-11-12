@@ -788,9 +788,16 @@
             "name": "ids",
             "required": true,
             "in": "query",
-            "schema": { "type": "array", "items": { "type": "string" } }
+            "description": "List of course IDs",
+            "schema": { "type": "array", "items": { "type": "number" } }
           },
-          { "name": "year", "required": true, "in": "query", "schema": { "type": "number" } }
+          {
+            "name": "year",
+            "required": true,
+            "in": "query",
+            "description": "Year for which stats are fetched",
+            "schema": { "type": "number" }
+          }
         ],
         "responses": {
           "200": {

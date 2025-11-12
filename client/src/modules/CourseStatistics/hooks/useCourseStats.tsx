@@ -5,7 +5,7 @@ import { useRequest } from 'ahooks';
 const courseStatsApi = new CourseStatsApi();
 
 type CourseStatsParams = {
-  ids?: string[];
+  ids?: number[];
   year?: number;
 };
 

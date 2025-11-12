@@ -10242,12 +10242,12 @@ export const CourseStatsApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
-         * @param {Array<string>} ids 
-         * @param {number} year 
+         * @param {Array<number>} ids List of course IDs
+         * @param {number} year Year for which stats are fetched
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCoursesStats: async (ids: Array<string>, year: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getCoursesStats: async (ids: Array<number>, year: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'ids' is not null or undefined
             assertParamExists('getCoursesStats', 'ids', ids)
             // verify required parameter 'year' is not null or undefined
@@ -10382,12 +10382,12 @@ export const CourseStatsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {Array<string>} ids 
-         * @param {number} year 
+         * @param {Array<number>} ids List of course IDs
+         * @param {number} year Year for which stats are fetched
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getCoursesStats(ids: Array<string>, year: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseAggregateStatsDto>> {
+        async getCoursesStats(ids: Array<number>, year: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseAggregateStatsDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getCoursesStats(ids, year, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -10459,12 +10459,12 @@ export const CourseStatsApiFactory = function (configuration?: Configuration, ba
         },
         /**
          * 
-         * @param {Array<string>} ids 
-         * @param {number} year 
+         * @param {Array<number>} ids List of course IDs
+         * @param {number} year Year for which stats are fetched
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCoursesStats(ids: Array<string>, year: number, options?: any): AxiosPromise<CourseAggregateStatsDto> {
+        getCoursesStats(ids: Array<number>, year: number, options?: any): AxiosPromise<CourseAggregateStatsDto> {
             return localVarFp.getCoursesStats(ids, year, options).then((request) => request(axios, basePath));
         },
         /**
@@ -10544,13 +10544,13 @@ export class CourseStatsApi extends BaseAPI {
 
     /**
      * 
-     * @param {Array<string>} ids 
-     * @param {number} year 
+     * @param {Array<number>} ids List of course IDs
+     * @param {number} year Year for which stats are fetched
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CourseStatsApi
      */
-    public getCoursesStats(ids: Array<string>, year: number, options?: AxiosRequestConfig) {
+    public getCoursesStats(ids: Array<number>, year: number, options?: AxiosRequestConfig) {
         return CourseStatsApiFp(this.configuration).getCoursesStats(ids, year, options).then((request) => request(this.axios, this.basePath));
     }
 
