@@ -12,15 +12,19 @@ export async function getCheckersWithMaxScore(taskId: number) {
     .select('t.name', 'taskName')
     .addSelect('"checkerUser"."githubId"', 'checkerGithubId')
     .addSelect('"studentUser"."githubId"', 'studentGithubId')
+
+    // Get students whose work has been checked by at least 3 checkers and
+    // calculate the average score using the leave-one-out strategy.
+
     .addSelect(
       `
       CASE
-        WHEN "studentScoreSumCnt"."cnt" > 2
+        WHEN "studentScoreSumCnt"."cnt" >= 3
         THEN ROUND(("studentScoreSumCnt"."sum" - ts."score") / ("studentScoreSumCnt"."cnt" - 1), 1)
         ELSE NULL
       END
     `,
-      'avg_excl_checker',
+      'studentAverageScoreExcludeChecker',
     )
     .addSelect('ts.score', 'checkerScore')
     .innerJoin(
@@ -43,6 +47,10 @@ export async function getCheckersWithMaxScore(taskId: number) {
     .innerJoin(Student, 'student', 'ts."studentId" = student.id ')
     .innerJoin(User, 'studentUser', 'student."userId" = "studentUser".id')
     .where('ts."courseTaskId" = :taskId', { taskId })
+
+    // Get students whose work has been checked by at least 3 checkers and
+    // verify that the score given by the checker does not exceed +/- 10% of the average score.
+
     .andWhere(
       `
       "studentScoreSumCnt"."cnt" >= 3
@@ -58,7 +66,7 @@ export async function getCheckersWithMaxScore(taskId: number) {
   return data.map(e => {
     return {
       ...e,
-      studentAvgScore: Number(e.avg_excl_checker),
+      studentAvgScore: Number(e.studentAverageScoreExcludeChecker),
       key: `${e.checkerGithubId}.${e.studentGithubId}.${e.taskName}`,
     };
   });
