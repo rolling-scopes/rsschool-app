@@ -3,7 +3,6 @@ import { CourseTask, Student, Task, TaskSolutionResult, User } from '../models';
 
 const LOW_ERROR_RATE = 0.9;
 const HIGH_ERROR_RATE = 1.1;
-const TASK_REVIEW_COUNT = 4;
 const MIN_LENGTH_MESSAGE = 70;
 
 /* Get checkers who passed max score for everyone and maybe didn't review task*/
@@ -13,19 +12,29 @@ export async function getCheckersWithMaxScore(taskId: number) {
     .select('t.name', 'taskName')
     .addSelect('"checkerUser"."githubId"', 'checkerGithubId')
     .addSelect('"studentUser"."githubId"', 'studentGithubId')
-    .addSelect('round("studentAvg"."avg", 1)', 'studentAvgScore')
+    .addSelect(
+      `
+      CASE
+        WHEN "studentScoreSumCnt"."cnt" > 2
+        THEN ROUND(("studentScoreSumCnt"."sum" - ts."score") / ("studentScoreSumCnt"."cnt" - 1), 1)
+        ELSE NULL
+      END
+    `,
+      'avg_excl_checker',
+    )
     .addSelect('ts.score', 'checkerScore')
     .innerJoin(
       qb =>
         qb
           .subQuery()
           .select('tsr."studentId"')
-          .addSelect('AVG(tsr.score)', 'avg')
+          .addSelect('SUM(tsr.score)', 'sum')
+          .addSelect('COUNT(*)', 'cnt')
           .from(TaskSolutionResult, 'tsr')
           .where('tsr."courseTaskId" = :taskId', { taskId })
           .groupBy('tsr."studentId"'),
-      'studentAvg',
-      'ts."studentId" = "studentAvg"."studentId"',
+      'studentScoreSumCnt',
+      'ts."studentId" = "studentScoreSumCnt"."studentId"',
     )
     .innerJoin(CourseTask, 'ct', 'ts."courseTaskId" = ct.id')
     .innerJoin(Task, 't', 'ct."taskId" = t.id')
@@ -33,30 +42,23 @@ export async function getCheckersWithMaxScore(taskId: number) {
     .innerJoin(User, 'checkerUser', 'checker."userId" = "checkerUser".id')
     .innerJoin(Student, 'student', 'ts."studentId" = student.id ')
     .innerJoin(User, 'studentUser', 'student."userId" = "studentUser".id')
-    .where(qb => {
-      const subQuery = qb
-        .subQuery()
-        .select('ts."checkerId"')
-        .from(TaskSolutionResult, 'ts')
-        .where('ts."courseTaskId" = :taskId', { taskId })
-        .groupBy('ts."checkerId"')
-        .addGroupBy('ts."score"')
-        .having('COUNT(score) = :count', { count: TASK_REVIEW_COUNT })
-        .getQuery();
-      return `ts."checkerId" IN ${subQuery}`;
-    })
-    .andWhere('ts."score" NOT BETWEEN "studentAvg"."avg" * :low AND "studentAvg"."avg" * :high', {
-      low: LOW_ERROR_RATE,
-      high: HIGH_ERROR_RATE,
-    })
-    .andWhere('ts."courseTaskId" = :taskId', { taskId })
+    .where('ts."courseTaskId" = :taskId', { taskId })
+    .andWhere(
+      `
+      "studentScoreSumCnt"."cnt" >= 3
+      AND ts."score" NOT BETWEEN
+        (("studentScoreSumCnt"."sum" - ts."score")::numeric / ("studentScoreSumCnt"."cnt" - 1)) * (:low)::numeric
+        AND (("studentScoreSumCnt"."sum" - ts."score")::numeric / ("studentScoreSumCnt"."cnt" - 1)) * (:high)::numeric
+    `,
+      { low: LOW_ERROR_RATE, high: HIGH_ERROR_RATE },
+    )
     .orderBy('"checkerUser"."githubId"')
     .getRawMany();
 
   return data.map(e => {
     return {
       ...e,
-      studentAvgScore: Number(e.studentAvgScore),
+      studentAvgScore: Number(e.avg_excl_checker),
       key: `${e.checkerGithubId}.${e.studentGithubId}.${e.taskName}`,
     };
   });
