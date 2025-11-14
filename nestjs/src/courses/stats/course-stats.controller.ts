@@ -52,8 +52,8 @@ export class CourseStatsController {
   @ApiOkResponse({ type: CourseAggregateStatsDto })
   public async getCoursesStats(
     @Req() req: CurrentRequest,
-    @Query('ids', new ParseArrayPipe({ items: Number, optional: true })) ids: number[],
-    @Query('year', new ParseIntPipe({ optional: true })) year: number,
+    @Query('ids', new ParseArrayPipe({ items: Number })) ids: number[],
+    @Query('year', ParseIntPipe) year: number,
   ) {
     const allowedCourseIds = await this.courseAccessService.getUserAllowedCourseIds(req.user, ids, year);
     const data = await this.courseStatsService.getCoursesStats(allowedCourseIds);
