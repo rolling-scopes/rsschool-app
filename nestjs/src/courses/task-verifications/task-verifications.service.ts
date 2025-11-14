@@ -87,7 +87,7 @@ export class TaskVerificationsService {
               questionImage: taskQuestion.questionImage,
             });
           })
-          .filter(Boolean);
+          .filter((question): question is SelfEducationQuestionSelectedAnswersDto => question !== null);
 
         return new TaskVerificationAttemptDto(verification, questionsWithIncorrectAnswers);
       });
