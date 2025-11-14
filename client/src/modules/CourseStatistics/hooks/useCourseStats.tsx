@@ -1,5 +1,5 @@
 import { useMessage } from '@client/hooks';
-import { CoursesStatsDto, CourseStatsApi } from '@client/api';
+import { CourseAggregateStatsDto, CourseStatsApi } from '@client/api';
 import { useRequest } from 'ahooks';
 
 const courseStatsApi = new CourseStatsApi();
@@ -9,30 +9,25 @@ type CourseStatsParams = {
   year?: number;
 };
 
-async function fetchCourseStats({ ids = [], year = 0 }: CourseStatsParams): Promise<CoursesStatsDto | undefined> {
+async function fetchCourseStats({ ids = [], year = 0 }: CourseStatsParams): Promise<CourseAggregateStatsDto> {
   try {
     const { data } = await courseStatsApi.getCoursesStats(ids, year);
     return data;
-  } catch {
-    console.error("Couldn't get course(s) stats");
+  } catch (err) {
+    console.error("Couldn't get course(s) stats", err);
+    throw err;
   }
 }
 
 export function useCoursesStats({ ids, year }: CourseStatsParams) {
   const { message } = useMessage();
 
-  const service = async () => {
-    if (!ids?.length && !year) {
-      return;
-    }
-    return fetchCourseStats({ ids, year });
-  };
-
-  const { data, loading } = useRequest(service, {
+  const { data, loading } = useRequest(() => fetchCourseStats({ ids, year }), {
+    ready: Boolean((ids && ids.length) || year),
     refreshDeps: [ids, year],
     retryCount: 3,
     onError: () => {
-      message.error("Can't load courses data. Please try latter.");
+      message.error("Can't load courses data. Please try later.");
     },
   });
 
