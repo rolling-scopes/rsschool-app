@@ -11,7 +11,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
-import { ApiBadRequestResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CourseGuard, CurrentRequest, DefaultGuard } from '../../auth';
 import { ONE_HOUR_CACHE_TTL } from '../../constants';
 import { CourseAccessService } from '../course-access.service';
@@ -37,11 +37,23 @@ export class CourseStatsController {
   @CacheTTL(ONE_HOUR_CACHE_TTL)
   @UseInterceptors(CacheInterceptor)
   @ApiOperation({ operationId: 'getCoursesStats' })
+  @ApiQuery({
+    name: 'ids',
+    required: true,
+    type: [Number],
+    description: 'List of course IDs',
+  })
+  @ApiQuery({
+    name: 'year',
+    required: true,
+    type: Number,
+    description: 'Year for which stats are fetched',
+  })
   @ApiOkResponse({ type: CourseAggregateStatsDto })
   public async getCoursesStats(
     @Req() req: CurrentRequest,
-    @Query('ids', new ParseArrayPipe({ items: Number, optional: true })) ids: number[],
-    @Query('year', new ParseIntPipe({ optional: true })) year: number,
+    @Query('ids', new ParseArrayPipe({ items: Number })) ids: number[],
+    @Query('year', ParseIntPipe) year: number,
   ) {
     const allowedCourseIds = await this.courseAccessService.getUserAllowedCourseIds(req.user, ids, year);
     const data = await this.courseStatsService.getCoursesStats(allowedCourseIds);
