@@ -17,14 +17,14 @@ function CourseStatistic() {
   const [statScope, setStatScope] = useState<StatScope>(params.get('course') ? StatScope.Current : StatScope.Timeline);
   const { course } = useActiveCourseContext();
   const { token } = theme.useToken();
-  const [ids, setIds] = useState<number[]>([course.id]);
+  const [ids, setIds] = useState<string[]>([String(course.id)]);
   const selectedYear = Number(params.get('year'));
   const { loading, coursesData } = useCoursesStats({ ids, year: selectedYear });
 
   const handleStatScope = (value: boolean) => {
     if (value) {
       setStatScope(StatScope.Current);
-      setIds([course.id]);
+      setIds([String(course.id)]);
       params.set('course', course.alias);
       params.delete('year');
     } else {

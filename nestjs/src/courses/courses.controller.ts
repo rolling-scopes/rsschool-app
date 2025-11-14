@@ -48,6 +48,16 @@ export class CoursesController {
     return new CourseDto(created);
   }
 
+  @Get('/:courseAlias')
+  @ApiOperation({ operationId: 'getCourseByAlias' })
+  @ApiForbiddenResponse()
+  @ApiOkResponse({ type: CourseDto })
+  @UseGuards(DefaultGuard)
+  public async getByAlias(@Req() _: CurrentRequest, @Param('courseAlias') courseAlias: string) {
+    const data = await this.courseService.getByAlias(courseAlias);
+    return new CourseDto(data);
+  }
+
   @Get('/:courseId')
   @ApiOperation({ operationId: 'getCourse' })
   @ApiForbiddenResponse()
