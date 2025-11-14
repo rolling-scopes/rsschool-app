@@ -22,7 +22,9 @@ class RsSchoolApp extends App {
         </Head>
         <ThemeProvider>
           <MessageProvider>
-            <ActiveCourseProvider publicRoutes={['/login', '/registry/mentor', '/registry/student']}>
+            <ActiveCourseProvider
+              publicRoutes={['/login', '/registry/mentor', '/registry/student', '/course/mentor/confirm']}
+            >
               <Component {...pageProps} />
             </ActiveCourseProvider>
           </MessageProvider>
