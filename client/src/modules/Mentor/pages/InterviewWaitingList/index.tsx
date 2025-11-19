@@ -1,5 +1,4 @@
 import { Button, Table } from 'antd';
-import { Rating } from 'components/Rating';
 import { PageLayout } from 'components/PageLayout';
 import {
   getColumnSearchProps,
@@ -23,6 +22,7 @@ import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts'
 import { useRequest } from 'ahooks';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
+import { Rating } from '@client/components/Rating';
 
 const api = new CoursesInterviewsApi();
 
