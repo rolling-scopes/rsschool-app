@@ -79,12 +79,12 @@ export const angularTemplate: InterviewTemplate = {
         { id: 3032, name: 'Can you provide examples of some built-in pipes (e.g., date, uppercase, lowercase)?' },
         { id: 3033, name: 'What is the difference between Pure and Impure pipes. How do they affect performance?' },
         { id: 3034, name: 'How do you use multiple pipes simultaneously?' },
-        { id: 3034, name: 'How do you pass parameters to a Pipe to change behavior or format data?' },
+        { id: 3035, name: 'How do you pass parameters to a Pipe to change behavior or format data?' },
         {
-          id: 3034,
+          id: 3036,
           name: 'What are the advantages of using Async pipes. How do you apply them with Observable or Promise?',
         },
-        { id: 3034, name: 'How does the process of registering a custom pipe in a module occur?' },
+        { id: 3037, name: 'How does the process of registering a custom pipe in a module occur?' },
       ],
     },
     {

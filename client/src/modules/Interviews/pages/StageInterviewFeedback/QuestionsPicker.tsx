@@ -1,5 +1,5 @@
 import { Checkbox, Form, Modal, Row } from 'antd';
-import { InterviewQuestion } from 'data/interviews/technical-screening';
+import { InterviewQuestion } from '@common/models';
 
 const { Item } = Form;
 

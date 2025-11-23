@@ -57,7 +57,7 @@ export const createInterview = (logger: ILogger) => async (ctx: Router.RouterCon
   const { courseId, courseTaskId, studentGithubId, githubId: interviewerGithubId } = ctx.params;
   const interviewService = new InterviewService(courseId, logger);
 
-  if (guard.isMentor(courseId)) {
+  if (guard.isMentor(courseId) && !guard.isPowerUser(courseId)) {
     const isStarted = await interviewService.isInterviewStarted(courseTaskId);
     if (!isStarted) {
       setResponse(ctx, StatusCodes.FORBIDDEN);

@@ -1,13 +1,6 @@
 import { InterviewFeedbackDto } from 'api';
-import {
-  Feedback,
-  FeedbackStep,
-  FeedbackStepId,
-  InterviewFeedbackStepData,
-  InterviewFeedbackValues,
-  InterviewQuestion,
-  feedbackTemplate,
-} from 'data/interviews/technical-screening';
+import { Feedback, FeedbackStep, FeedbackStepId, feedbackTemplate } from 'data/interviews/technical-screening';
+import { InterviewFeedbackStepData, InterviewFeedbackValues, InterviewQuestion } from '@common/models';
 
 type FeedbackData = {
   steps: Record<FeedbackStepId, InterviewFeedbackStepData>;

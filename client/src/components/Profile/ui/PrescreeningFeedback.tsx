@@ -1,14 +1,8 @@
-import { Typography, Table, Row, Space } from 'antd';
-import { Rating } from 'components/Rating';
+import { Row, Space, Table, Typography } from 'antd';
 import { StageInterviewDetailedFeedback } from '@common/models/profile';
-import {
-  CODING_LEVELS,
-  FeedbackStepId,
-  InterviewFeedbackStepData,
-  InterviewFeedbackValues,
-  InterviewQuestion,
-  SKILLS_LEVELS,
-} from 'data/interviews/technical-screening';
+import { CODING_LEVELS, FeedbackStepId, SKILLS_LEVELS } from 'data/interviews/technical-screening';
+import { InterviewFeedbackStepData, InterviewFeedbackValues, InterviewQuestion } from '@common/models';
+import { Rating } from '@client/components/Rating';
 
 const { Text, Title } = Typography;
 
@@ -100,7 +94,7 @@ function SkillTable({ skills, tooltips }: { skills: InterviewQuestion[]; tooltip
     <Table
       dataSource={skills}
       size="small"
-      rowKey="key"
+      rowKey="id"
       pagination={false}
       columns={[
         {

@@ -1,4 +1,4 @@
-import { Alert, Typography } from 'antd';
+import { Alert, theme, Typography } from 'antd';
 import InfoCircleTwoTone from '@ant-design/icons/InfoCircleTwoTone';
 import Link from 'next/link';
 import { getInterviewWaitList } from 'domain/interview';
@@ -12,6 +12,7 @@ export function WaitListAlert({
   interviewId: number;
   startDate: string;
 }) {
+  const { token } = theme.useToken();
   const [isDismissed, setDismissed] = useAlert(`waitlist-alert-${interviewId}`);
 
   if (isDismissed) return null;
@@ -28,7 +29,12 @@ export function WaitListAlert({
           <>
             <Typography.Text onClick={e => e?.stopPropagation()}>
               Excellent candidates are waiting for their mentor. Please check the{' '}
-              <Link href={getInterviewWaitList(courseAlias, interviewId)}>students' waitlist.</Link>
+              <Link
+                style={{ fontWeight: 'bold', color: token.blue7, letterSpacing: '0.1ch' }}
+                href={getInterviewWaitList(courseAlias, interviewId)}
+              >
+                students' waitlist.
+              </Link>
             </Typography.Text>
             <div className="icon-group" />
           </>
