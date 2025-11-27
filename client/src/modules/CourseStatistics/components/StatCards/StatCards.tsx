@@ -84,7 +84,7 @@ export function StatCards({ coursesData }: StatCardsProps) {
         title: 'taskPerformanceCard',
         component: (
           <TaskPerformanceCard
-            tasks={courseTasks.filter((task: CourseTaskDto) => coursesData.courseTasks?.includes(task.name))}
+            tasks={courseTasks.filter((task: CourseTaskDto) => coursesData.courseTasks?.some(ct => ct.id === task.id))}
           />
         ),
       },

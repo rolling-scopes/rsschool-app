@@ -14,7 +14,7 @@ async function fetchCourseStats({
   year = 0,
 }: CourseStatsParams): Promise<CourseAggregateStatsDto | undefined> {
   try {
-    const { data } = await courseStatsApi.getCoursesStats(ids.map(String), year);
+    const { data } = await courseStatsApi.getCoursesStats(ids, year);
     return data;
   } catch (err) {
     console.error("Couldn't get course(s) stats", err);
