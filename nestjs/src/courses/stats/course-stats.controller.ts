@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 import { ApiBadRequestResponse, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { CourseGuard, CurrentRequest, DefaultGuard } from '../../auth';
+import { CourseGuard, CurrentRequest, DefaultGuard, RequiredRoles, RoleGuard } from '../../auth';
 import { ONE_HOUR_CACHE_TTL } from '../../constants';
 import { CourseAccessService } from '../course-access.service';
 import { CourseStatsService } from './course-stats.service';
@@ -25,7 +25,7 @@ import {
   CourseAggregateStatsDto,
 } from './dto';
 import { ExpelledStatsService } from '../expelled-stats.service';
-import { CourseRole } from '@entities/session';
+import { CourseRole, Role } from '../../auth/auth-user.model';
 
 @Controller('courses')
 @ApiTags('course stats')

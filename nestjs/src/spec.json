@@ -765,6 +765,35 @@
         "tags": ["courses tasks"]
       }
     },
+    "/courses/stats/expelled": {
+      "get": {
+        "operationId": "getExpelledStats",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/CourseStatsDto" } }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": ["course stats"]
+      }
+    },
+    "/courses/stats/expelled/{id}": {
+      "delete": {
+        "operationId": "deleteExpelledStat",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "type": "string" } } } }
+        },
+        "summary": "",
+        "tags": ["course stats"]
+      }
+    },
     "/courses/aggregate/stats": {
       "get": {
         "operationId": "getCoursesStats",
@@ -3758,16 +3787,6 @@
         "properties": { "deadlineInHours": { "type": "number" } },
         "required": ["deadlineInHours"]
       },
-      "CountryStatDto": {
-        "type": "object",
-        "properties": { "countryName": { "type": "string" }, "count": { "type": "number" } },
-        "required": ["countryName", "count"]
-      },
-      "CountriesStatsDto": {
-        "type": "object",
-        "properties": { "countries": { "type": "array", "items": { "$ref": "#/components/schemas/CountryStatDto" } } },
-        "required": ["countries"]
-      },
       "CourseStatsDto": {
         "type": "object",
         "properties": {
@@ -3784,6 +3803,16 @@
           "certifiedStudentsCount",
           "eligibleForCertificationCount"
         ]
+      },
+      "CountryStatDto": {
+        "type": "object",
+        "properties": { "countryName": { "type": "string" }, "count": { "type": "number" } },
+        "required": ["countryName", "count"]
+      },
+      "CountriesStatsDto": {
+        "type": "object",
+        "properties": { "countries": { "type": "array", "items": { "$ref": "#/components/schemas/CountryStatDto" } } },
+        "required": ["countries"]
       },
       "CourseMentorsStatsDto": {
         "type": "object",
