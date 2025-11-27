@@ -87,7 +87,8 @@ export class TaskVerificationsService {
               questionImage: taskQuestion.questionImage,
             });
           })
-          .filter((q): q is SelfEducationQuestionSelectedAnswersDto => q !== null);
+          .filter((question): question is SelfEducationQuestionSelectedAnswersDto => question !== null);
+
         return new TaskVerificationAttemptDto(verification, questionsWithIncorrectAnswers);
       });
     } else {

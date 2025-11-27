@@ -1,7 +1,8 @@
 import { Form, Space, Typography, Button } from 'antd';
-import { FeedbackStep, InterviewFeedbackValues, StepFormItem } from 'data/interviews/technical-screening';
+import { FeedbackStep, StepFormItem } from 'data/interviews/technical-screening';
 import { FormItem } from './FormItem';
 import { InputType } from 'data/interviews';
+import { InterviewFeedbackValues } from '@common/models';
 
 const { Title, Text } = Typography;
 

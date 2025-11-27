@@ -773,9 +773,16 @@
             "name": "ids",
             "required": true,
             "in": "query",
-            "schema": { "type": "array", "items": { "type": "string" } }
+            "description": "List of course IDs",
+            "schema": { "type": "array", "items": { "type": "number" } }
           },
-          { "name": "year", "required": true, "in": "query", "schema": { "type": "number" } }
+          {
+            "name": "year",
+            "required": true,
+            "in": "query",
+            "description": "Year for which stats are fetched",
+            "schema": { "type": "number" }
+          }
         ],
         "responses": {
           "200": {
@@ -3794,7 +3801,7 @@
           "studentsStats": { "$ref": "#/components/schemas/CourseStatsDto" },
           "mentorsCountries": { "$ref": "#/components/schemas/CountriesStatsDto" },
           "mentorsStats": { "$ref": "#/components/schemas/CourseMentorsStatsDto" },
-          "courseTasks": { "type": "array", "items": { "type": "string" } },
+          "courseTasks": { "type": "array", "items": { "$ref": "#/components/schemas/CourseTaskDto" } },
           "studentsCertificatesCountries": { "$ref": "#/components/schemas/CountriesStatsDto" }
         },
         "required": [
