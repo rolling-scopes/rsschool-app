@@ -53,7 +53,7 @@ function Page() {
 
   const expelStudent = async (githubId: string, comment: string) =>
     githubId === userGithubId
-      ? await coursesApi.leaveCourse(courseId, { comment })
+      ? await coursesApi.leaveCourse(courseId, { otherComment: comment })
       : await courseService.expelStudent(githubId, comment);
 
   const unassignStudent = async (githubId: string, comment: string) => {

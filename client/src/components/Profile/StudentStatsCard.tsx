@@ -1,9 +1,11 @@
 import * as React from 'react';
 import isEqual from 'lodash/isEqual';
 import { Typography, List, Button, Progress } from 'antd';
+import axios from 'axios';
 import CommonCard from './CommonCard';
 import StudentStatsModal from './StudentStatsModal';
 import { StudentStats } from '@common/models/profile';
+import { CourseLeaveReason } from '@client/data/course-leave-reasons';
 import { BookOutlined, LogoutOutlined, ReloadOutlined, SafetyCertificateTwoTone } from '@ant-design/icons';
 import { CoursesApi } from 'api';
 import StudentLeaveCourse from '@client/components/Profile/StudentLeaveCourse';
@@ -24,9 +26,63 @@ type State = {
   isStudentStatsModalVisible: boolean;
   isExpelConfirmationModalVisible: boolean;
   courseId?: number;
+  isLoading: boolean;
 };
 
 const coursesService = new CoursesApi();
+
+const reasonsOptions = [
+  {
+    value: CourseLeaveReason.TooDifficult,
+    labelEn: 'Course was too difficult',
+    labelRu: 'Курс был слишком сложным',
+  },
+  {
+    value: CourseLeaveReason.NotUseful,
+    labelEn: 'Course was not useful',
+    labelRu: 'Курс был бесполезным',
+  },
+  {
+    value: CourseLeaveReason.LackOfTime,
+    labelEn: 'Lack of time',
+    labelRu: 'Нехватка времени',
+  },
+  {
+    value: CourseLeaveReason.Other,
+    labelEn: 'Other',
+    labelRu: 'Другое',
+  },
+  {
+    value: CourseLeaveReason.NoInterest,
+    labelEn: 'Lost interest in the subject',
+    labelRu: 'Потерял интерес к предмету',
+  },
+  {
+    value: CourseLeaveReason.PoorQuality,
+    labelEn: 'Course quality was poor',
+    labelRu: 'Низкое качество курса',
+  },
+  {
+    value: CourseLeaveReason.FoundAlternative,
+    labelEn: 'Found an alternative course/opportunity',
+    labelRu: 'Нашел альтернативный курс/возможность',
+  },
+  {
+    value: CourseLeaveReason.PersonalReasons,
+    labelEn: 'Personal reasons',
+    labelRu: 'Личные причины',
+  },
+  {
+    value: CourseLeaveReason.GotJob,
+    labelEn: 'Got a job',
+    labelRu: 'Устроился на работу',
+  },
+  {
+    value: CourseLeaveReason.GotInternship,
+    labelEn: 'Got an internship',
+    labelRu: 'Устроился на стажировку',
+  },
+];
 
 class StudentStatsCard extends React.Component<Props, State> {
   state = {
@@ -36,11 +92,13 @@ class StudentStatsCard extends React.Component<Props, State> {
     isStudentStatsModalVisible: false,
     isExpelConfirmationModalVisible: false,
     courseId: undefined,
+    isLoading: false,
   };
 
   shouldComponentUpdate = (_nextProps: Props, nextState: State) =>
     !isEqual(nextState.isStudentStatsModalVisible, this.state.isStudentStatsModalVisible) ||
     !isEqual(nextState.isExpelConfirmationModalVisible, this.state.isExpelConfirmationModalVisible) ||
+    !isEqual(nextState.isLoading, this.state.isLoading) ||
     !isEqual(nextState.coursesProgress, this.state.coursesProgress);
 
   private showStudentStatsModal = (courseIndex: number) => {
@@ -65,12 +123,19 @@ class StudentStatsCard extends React.Component<Props, State> {
     });
   };
 
-  private selfExpelStudent = async (courseId?: number) => {
+  private selfExpelStudent = async (courseId: number | undefined, surveyData: any) => {
     if (!courseId) return;
-    await coursesService.leaveCourse(courseId);
-    window.location.reload();
-  };
 
+    this.setState({ isLoading: true });
+
+    try {
+      await axios.post(`/api/v2/courses/${courseId}/leave`, surveyData);
+
+      window.location.reload();
+    } finally {
+      this.setState({ isLoading: false });
+    }
+  };
   private rejoinAsStudent = async (courseId: number) => {
     await coursesService.rejoinCourse(courseId);
     window.location.reload();
@@ -102,8 +167,10 @@ class StudentStatsCard extends React.Component<Props, State> {
         ) : null}
         <StudentLeaveCourse
           isOpen={this.state.isExpelConfirmationModalVisible}
-          onOk={this.selfExpelStudent.bind(this, this.state.courseId)}
+          onOk={surveyData => this.selfExpelStudent(this.state.courseId, surveyData)}
           onCancel={this.hideExpelConfirmationModal}
+          confirmLoading={this.state.isLoading}
+          reasonsOptions={reasonsOptions}
         />
         <CommonCard
           title="Student Statistics"
@@ -167,7 +234,7 @@ class StudentStatsCard extends React.Component<Props, State> {
                             size="small"
                             onClick={() => this.showExpelConfirmationModal(courseId)}
                           >
-                            Leave course
+                            Leave Course
                           </Button>
                         ) : isSelfExpelled ? (
                           <Button

@@ -1,9 +1,10 @@
-import { Course } from '@entities/course';
-import { Student } from '@entities/student';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, FindOptionsWhere, In, Repository } from 'typeorm';
 import { AuthUser, CourseRole, Role } from '../auth';
+import { ExpelledStatsService } from './expelled-stats.service';
+import { LeaveCourseRequestDto } from './dto';
+import { Course, Student } from '../../../server/src/models';
 
 // use this as a mark for identifying self-expelled students.
 const SELF_EXPELLED_MARK = 'Self expelled from the course';
@@ -15,6 +16,7 @@ export class CourseAccessService {
     readonly studentRepository: Repository<Student>,
     @InjectRepository(Course)
     readonly courseRepository: Repository<Course>,
+    private readonly expelledStatsService: ExpelledStatsService,
   ) {}
 
   public async canAccessCourse(user: AuthUser, courseId: number): Promise<boolean> {
@@ -59,7 +61,11 @@ export class CourseAccessService {
     return user.courses[courseId]?.roles.includes(CourseRole.Manager) || user.isAdmin;
   }
 
-  public async leaveAsStudent(courseId: number, studentId: number, comment?: string): Promise<void> {
+  public async leaveAsStudent(
+    courseId: number,
+    studentId: number,
+    leaveCourseDto: LeaveCourseRequestDto,
+  ): Promise<void> {
     const [student, course] = await Promise.all([
       this.studentRepository.findOneByOrFail({ id: studentId }),
       this.courseRepository.findOneByOrFail({ id: courseId }),
@@ -71,9 +77,16 @@ export class CourseAccessService {
     await this.studentRepository.update(student.id, {
       mentorId: null,
       isExpelled: true,
-      expellingReason: `${SELF_EXPELLED_MARK}. ${comment || ''}`,
+      expellingReason: `${SELF_EXPELLED_MARK}. ${leaveCourseDto.otherComment || ''}`,
       endDate: new Date(),
     });
+
+    await this.expelledStatsService.submitLeaveSurvey(
+      student.userId,
+      courseId,
+      leaveCourseDto.reasonForLeaving,
+      leaveCourseDto.otherComment,
+    );
   }
 
   public async rejoinAsStudent(courseId: number, studentId: number): Promise<void> {

@@ -1,45 +1,96 @@
 import { WarningOutlined } from '@ant-design/icons';
-import { Divider, Modal, theme, Typography } from 'antd';
+import { Divider, Modal, theme, Typography, Checkbox, Space, Form, Input } from 'antd';
 
 const { Title, Paragraph } = Typography;
 
+type SurveyResponses = {
+  reasonForLeaving?: string[];
+  otherComment?: string;
+};
+
+type ReasonOption = {
+  value: string;
+  labelEn: string;
+  labelRu: string;
+};
+
 type StudentLeaveCourseProps = {
   isOpen: boolean;
-  onOk: () => void;
+  onOk: (surveyData: SurveyResponses) => void;
   onCancel: () => void;
+  confirmLoading?: boolean;
+  reasonsOptions: ReasonOption[];
 };
 
 const messages = ['Are you sure you want to leave the course?', 'Your learning will be stopped.'];
 
-const messagesRu = ['Вы уверены, что хотите покинуть курс?', 'Ваше обучение будет прекращено.'];
-
-export default function StudentLeaveCourse({ isOpen, onOk, onCancel }: StudentLeaveCourseProps) {
+export default function StudentLeaveCourse({
+  isOpen,
+  onOk,
+  onCancel,
+  confirmLoading,
+  reasonsOptions,
+}: StudentLeaveCourseProps) {
   const {
     token: { colorError },
   } = theme.useToken();
+  const [form] = Form.useForm();
+
+  const handleOkClick = () => {
+    form
+      .validateFields()
+      .then(values => {
+        onOk(values);
+      })
+      .catch(info => {
+        console.log('Validate Failed:', info);
+      });
+  };
+
   return (
     <Modal
       title={
-        <Title level={4}>
-          <WarningOutlined style={{ color: colorError }} /> Leaving Course ?
+        <Title level={4} style={{ color: colorError, margin: 0 }}>
+          <WarningOutlined style={{ marginRight: 8 }} />
+          Confirm Leaving Course
         </Title>
       }
       open={isOpen}
-      onOk={onOk}
+      onOk={handleOkClick}
       okText="Leave Course"
-      okButtonProps={{ danger: true }}
+      okButtonProps={{ danger: true, loading: confirmLoading }}
       onCancel={onCancel}
       cancelText="Continue studying"
     >
       <>
-        <Divider />
         {messages.map((text, i) => (
           <Paragraph key={i}>{text}</Paragraph>
         ))}
+
         <Divider />
-        {messagesRu.map((text, i) => (
-          <Paragraph key={i}>{text}</Paragraph>
-        ))}
+        <Form form={form} layout="vertical" name="survey_form">
+          <Form.Item
+            name="reasonForLeaving"
+            label="Why are you leaving the course?"
+            rules={[{ required: true, message: 'Please select at least one reason.' }]}
+          >
+            <Checkbox.Group>
+              <Space direction="vertical">
+                {reasonsOptions.map(option => (
+                  <Checkbox key={option.value} value={option.value}>
+                    {option.labelEn}
+                    <br />
+                    {option.labelRu}
+                  </Checkbox>
+                ))}
+              </Space>
+            </Checkbox.Group>
+          </Form.Item>
+
+          <Form.Item name="otherComment" label="Any other comments or suggestions?">
+            <Input.TextArea rows={4} placeholder="Enter your feedback here..." />
+          </Form.Item>
+        </Form>
       </>
     </Modal>
   );

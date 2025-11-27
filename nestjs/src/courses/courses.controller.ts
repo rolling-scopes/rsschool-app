@@ -84,11 +84,11 @@ export class CoursesController {
   public async leaveCourse(
     @Req() req: CurrentRequest,
     @Param('courseId', ParseIntPipe) courseId: number,
-    @Body('comment') comment?: string,
+    @Body() leaveCourseDto: LeaveCourseRequestDto,
   ) {
     const studentId = req.user.courses[courseId]?.studentId;
     if (studentId) {
-      await this.courseAccessService.leaveAsStudent(courseId, studentId, comment);
+      await this.courseAccessService.leaveAsStudent(courseId, studentId, leaveCourseDto);
     }
   }
 

@@ -1,4 +1,4 @@
-import { CourseAggregateStatsDto } from '@client/api';
+import { CourseAggregateStatsDto, CoursesTasksApi, CourseTaskDto } from '@client/api';
 import { StudentsCountriesCard } from '@client/modules/CourseStatistics/components/StudentsCountriesCard';
 import { StudentsStatsCard } from '@client/modules/CourseStatistics/components/StudentsStatsCard';
 import { MentorsCountriesCard } from '@client/modules/CourseStatistics/components/MentorsCountriesCard/MentorsCountriesCard';
@@ -10,6 +10,8 @@ import { TaskPerformanceCard } from '@client/modules/CourseStatistics/components
 import { StudentsCertificatesCountriesCard } from '@client/modules/CourseStatistics/components/StudentsCertificatesCountriesCard';
 import Masonry from 'react-masonry-css';
 import css from 'styled-jsx/css';
+import { useAsync } from 'react-use';
+import { useActiveCourseContext } from '@client/modules/Course/contexts';
 
 type StatCardsProps = {
   coursesData?: CourseAggregateStatsDto;
@@ -24,7 +26,18 @@ const masonryBreakPoints = {
   500: 1,
 };
 
+const coursesTasksApi = new CoursesTasksApi();
+
 export function StatCards({ coursesData }: StatCardsProps) {
+  const { course } = useActiveCourseContext();
+  const { value: courseTasks } = useAsync(async () => {
+    if (course?.id) {
+      const { data } = await coursesTasksApi.getCourseTasks(course.id);
+
+      return data;
+    }
+  }, [course]);
+
   const cards = [
     coursesData?.studentsCountries && {
       title: 'studentsCountriesCard',
@@ -66,10 +79,15 @@ export function StatCards({ coursesData }: StatCardsProps) {
         title: 'StudentsEligibleForCertificationCard',
         component: <StudentsEligibleForCertificationCard studentsStats={coursesData.studentsStats} />,
       },
-    coursesData?.courseTasks && {
-      title: 'taskPerformanceCard',
-      component: <TaskPerformanceCard tasks={coursesData.courseTasks} />,
-    },
+    coursesData?.courseTasks &&
+      courseTasks && {
+        title: 'taskPerformanceCard',
+        component: (
+          <TaskPerformanceCard
+            tasks={courseTasks.filter((task: CourseTaskDto) => coursesData.courseTasks?.some(ct => ct.id === task.id))}
+          />
+        ),
+      },
     coursesData?.studentsCertificatesCountries &&
       coursesData.studentsStats.certifiedStudentsCount && {
         title: 'studentsCertificatesCountriesCard',
