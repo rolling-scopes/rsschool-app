@@ -15640,7 +15640,7 @@ export const MentorsApiAxiosParamCreator = function (configuration?: Configurati
             assertParamExists('getCourseStudentsCount', 'mentorId', mentorId)
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('getCourseStudentsCount', 'courseId', courseId)
-            const localVarPath = `/mentors/{mentorId}/course/{courseId}/students`
+            const localVarPath = `/mentors/{mentorId}/course/{courseId}/students-count`
                 .replace(`{${"mentorId"}}`, encodeURIComponent(String(mentorId)))
                 .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -15742,14 +15742,18 @@ export const MentorsApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @param {number} mentorId 
+         * @param {number} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMentorStudents: async (mentorId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getMentorStudents: async (mentorId: number, courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'mentorId' is not null or undefined
             assertParamExists('getMentorStudents', 'mentorId', mentorId)
-            const localVarPath = `/mentors/{mentorId}/students`
-                .replace(`{${"mentorId"}}`, encodeURIComponent(String(mentorId)));
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getMentorStudents', 'courseId', courseId)
+            const localVarPath = `/mentors/{mentorId}/course/{courseId}/students`
+                .replace(`{${"mentorId"}}`, encodeURIComponent(String(mentorId)))
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -15855,11 +15859,12 @@ export const MentorsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} mentorId 
+         * @param {number} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getMentorStudents(mentorId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MentorStudentDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getMentorStudents(mentorId, options);
+        async getMentorStudents(mentorId: number, courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MentorStudentDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMentorStudents(mentorId, courseId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -15916,11 +15921,12 @@ export const MentorsApiFactory = function (configuration?: Configuration, basePa
         /**
          * 
          * @param {number} mentorId 
+         * @param {number} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getMentorStudents(mentorId: number, options?: any): AxiosPromise<Array<MentorStudentDto>> {
-            return localVarFp.getMentorStudents(mentorId, options).then((request) => request(axios, basePath));
+        getMentorStudents(mentorId: number, courseId: number, options?: any): AxiosPromise<Array<MentorStudentDto>> {
+            return localVarFp.getMentorStudents(mentorId, courseId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -15981,12 +15987,13 @@ export class MentorsApi extends BaseAPI {
     /**
      * 
      * @param {number} mentorId 
+     * @param {number} courseId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MentorsApi
      */
-    public getMentorStudents(mentorId: number, options?: AxiosRequestConfig) {
-        return MentorsApiFp(this.configuration).getMentorStudents(mentorId, options).then((request) => request(this.axios, this.basePath));
+    public getMentorStudents(mentorId: number, courseId: number, options?: AxiosRequestConfig) {
+        return MentorsApiFp(this.configuration).getMentorStudents(mentorId, courseId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

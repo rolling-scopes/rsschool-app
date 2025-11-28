@@ -84,12 +84,13 @@ export class MentorsService {
     });
   }
 
-  public getStudents(mentorId: number, userId: number) {
+  public getStudents(mentorId: number, userId: number, courseId: number) {
     return this.studentRepository
       .createQueryBuilder('student')
       .leftJoinAndSelect('student.user', 'user')
       .leftJoinAndSelect('student.feedbacks', 'feedback', 'feedback.auhtorId = :userId', { userId })
       .where('student.mentorId = :mentorId', { mentorId })
+      .andWhere('student.courseId = :courseId', { courseId })
       .getMany();
   }
 

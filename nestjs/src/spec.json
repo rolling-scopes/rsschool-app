@@ -343,10 +343,13 @@
         "tags": ["mentors"]
       }
     },
-    "/mentors/{mentorId}/students": {
+    "/mentors/{mentorId}/course/{courseId}/students": {
       "get": {
         "operationId": "getMentorStudents",
-        "parameters": [{ "name": "mentorId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "parameters": [
+          { "name": "mentorId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -362,7 +365,7 @@
         "tags": ["mentors"]
       }
     },
-    "/mentors/{mentorId}/course/{courseId}/students": {
+    "/mentors/{mentorId}/course/{courseId}/students-count": {
       "get": {
         "operationId": "getCourseStudentsCount",
         "parameters": [

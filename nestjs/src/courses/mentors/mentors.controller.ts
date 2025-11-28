@@ -53,17 +53,21 @@ export class MentorsController {
     return new MentorOptionsDto(mentor);
   }
 
-  @Get('/:mentorId/students')
+  @Get('/:mentorId/course/:courseId/students')
   @ApiOperation({ operationId: 'getMentorStudents' })
   @ApiOkResponse({ type: [MentorStudentDto] })
   @ApiBadRequestResponse()
   @RequiredRoles([CourseRole.Mentor, CourseRole.Supervisor, CourseRole.Manager])
-  public async getMentorStudents(@Param('mentorId', ParseIntPipe) mentorId: number, @Req() req: CurrentRequest) {
-    const items = await this.mentorsService.getStudents(mentorId, req.user.id);
+  public async getMentorStudents(
+    @Param('mentorId', ParseIntPipe) mentorId: number,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Req() req: CurrentRequest,
+  ) {
+    const items = await this.mentorsService.getStudents(mentorId, req.user.id, courseId);
     return items.map(item => new MentorStudentDto(item));
   }
 
-  @Get('/:mentorId/course/:courseId/students')
+  @Get('/:mentorId/course/:courseId/students-count')
   @ApiOperation({ operationId: 'getCourseStudentsCount' })
   @ApiOkResponse({ type: Number })
   @ApiBadRequestResponse()

@@ -5,6 +5,7 @@ import {
   StarOutlined,
   LockFilled,
   TrophyOutlined,
+  ReloadOutlined,
 } from '@ant-design/icons';
 import { Button, Card, Col, Empty, Row, Statistic, Typography } from 'antd';
 import { GithubUserLink } from 'components/GithubUserLink';
@@ -22,10 +23,17 @@ export function Students() {
   const { id: courseId, alias, completed } = course;
   const mentorId = getMentorId(session, courseId);
 
-  const { students, loading } = useMentorStudents(mentorId);
+  const { students, loading, reload } = useMentorStudents(mentorId, courseId);
 
   return (
     <PageLayoutSimple title="Your students" loading={loading}>
+      <Row justify="end" style={{ marginBottom: 16 }}>
+        <Col>
+          <Button icon={<ReloadOutlined />} onClick={reload}>
+            Refresh
+          </Button>
+        </Col>
+      </Row>
       {students?.length ? (
         students.map(student => {
           const [feedback] = student.feedbacks;
