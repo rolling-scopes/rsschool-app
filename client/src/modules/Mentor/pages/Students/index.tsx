@@ -26,7 +26,6 @@ export function Students() {
 
   return (
     <PageLayoutSimple title="Your students" loading={loading}>
-
       {students?.length ? (
         students.map(student => {
           const [feedback] = student.feedbacks;
