@@ -34,7 +34,7 @@ function Page() {
       if (!mentorId) {
         return null;
       }
-      const students = await new MentorsApi().getMentorStudents(mentorId);
+      const students = await new MentorsApi().getMentorStudents(mentorId, courseId);
       const activeStudents = students.data.filter(student => student.active);
       setStudents(activeStudents);
     } else {

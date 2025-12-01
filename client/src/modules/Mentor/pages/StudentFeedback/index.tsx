@@ -20,7 +20,7 @@ export function StudentFeedback() {
   const router = useRouter();
   const studentId = router.query['studentId'] ? Number(router.query['studentId']) : null;
 
-  const { students, loading, reload } = useMentorStudents(mentorId);
+  const { students, loading, reload } = useMentorStudents(mentorId, courseId);
 
   const handleMentorSubmit = async (
     studentId: number,
