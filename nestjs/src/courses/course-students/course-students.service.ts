@@ -8,6 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Mentor as MentorWithContacts } from './dto/mentor-student-summary.dto';
 import { MentorBasic, StageInterviewFeedbackJson } from '@common/models';
+import { ExpelStatusDto } from './dto/studen-status.dto';
 
 @Injectable()
 export class CourseStudentsService {
@@ -115,6 +116,53 @@ export class CourseStudentsService {
       contactsPhone: null,
     };
     return mentorWithContacts;
+  }
+
+  public async expelStudents({ courseId, expelStatusDto }: { courseId: number; expelStatusDto: ExpelStatusDto }) {
+    const { criteria, options, expellingReason } = expelStatusDto;
+
+    // duplicate updateStatuses query from the /server/src/routes/course/students.ts
+    let query = this.studentRepository.createQueryBuilder('student').select(['student.id']);
+
+    if (criteria.courseTaskIds && criteria.courseTaskIds.length > 0) {
+      query = query.leftJoin(
+        'student.taskResults',
+        'tr',
+        'tr.studentId = student.id AND tr.score > 0 AND tr.courseTaskId IN (:...requiredCourseTaskIds)',
+        {
+          requiredCourseTaskIds: criteria.courseTaskIds,
+        },
+      );
+    }
+
+    query = query.where('student.courseId = :courseId', { courseId }).andWhere('student.isExpelled = false');
+
+    if (options.keepWithMentor) {
+      query = query.andWhere('student.mentorId IS NULL');
+    }
+
+    if (criteria.minScore != null) {
+      query = query.andWhere('student.totalScore < :minScore', { minScore: criteria.minScore });
+    }
+
+    if (criteria.courseTaskIds && criteria.courseTaskIds.length > 0) {
+      query = query.andWhere('tr.id IS NULL');
+    }
+
+    const students = await query.getMany();
+
+    await this.studentRepository.save(
+      students.map(({ id, mentorId }) => ({
+        id,
+        isExpelled: true,
+        endDate: new Date(),
+        expellingReason,
+        // key difference with the original query - remove mentor by default
+        mentorId: options.keepWithMentor ? mentorId : null,
+      })),
+    );
+
+    return students;
   }
 }
 
