@@ -3347,6 +3347,69 @@ export type EventDtoTypeEnum = typeof EventDtoTypeEnum[keyof typeof EventDtoType
 /**
  * 
  * @export
+ * @interface ExpelCriteriaDto
+ */
+export interface ExpelCriteriaDto {
+    /**
+     * Array of course task IDs
+     * @type {Array<number>}
+     * @memberof ExpelCriteriaDto
+     */
+    'courseTaskIds'?: Array<number>;
+    /**
+     * Minimum score threshold
+     * @type {number}
+     * @memberof ExpelCriteriaDto
+     */
+    'minScore'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface ExpelOptionsDto
+ */
+export interface ExpelOptionsDto {
+    /**
+     * Whether to keep the student with their mentor
+     * @type {boolean}
+     * @memberof ExpelOptionsDto
+     */
+    'keepWithMentor'?: boolean;
+    /**
+     * Save assigning to the mentor (default: false)
+     * @type {boolean}
+     * @memberof ExpelOptionsDto
+     */
+    'saveAssigningToMentor'?: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface ExpelStatusDto
+ */
+export interface ExpelStatusDto {
+    /**
+     * Criteria for expelling students
+     * @type {ExpelCriteriaDto}
+     * @memberof ExpelStatusDto
+     */
+    'criteria': ExpelCriteriaDto;
+    /**
+     * Additional options for expelling
+     * @type {ExpelOptionsDto}
+     * @memberof ExpelStatusDto
+     */
+    'options': ExpelOptionsDto;
+    /**
+     * Reason for expelling the student
+     * @type {string}
+     * @memberof ExpelStatusDto
+     */
+    'expellingReason': string;
+}
+/**
+ * 
+ * @export
  * @interface FeedbackCourseDto
  */
 export interface FeedbackCourseDto {
@@ -18337,6 +18400,45 @@ export const StudentsApiAxiosParamCreator = function (configuration?: Configurat
     return {
         /**
          * 
+         * @param {number} courseId 
+         * @param {ExpelStatusDto} expelStatusDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        expelStudents: async (courseId: number, expelStatusDto: ExpelStatusDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('expelStudents', 'courseId', courseId)
+            // verify required parameter 'expelStatusDto' is not null or undefined
+            assertParamExists('expelStudents', 'expelStatusDto', expelStatusDto)
+            const localVarPath = `/courses/{courseId}/students/expel`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(expelStatusDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {number} studentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -18485,6 +18587,17 @@ export const StudentsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {number} courseId 
+         * @param {ExpelStatusDto} expelStatusDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async expelStudents(courseId: number, expelStatusDto: ExpelStatusDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.expelStudents(courseId, expelStatusDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {number} studentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -18532,6 +18645,16 @@ export const StudentsApiFactory = function (configuration?: Configuration, baseP
     return {
         /**
          * 
+         * @param {number} courseId 
+         * @param {ExpelStatusDto} expelStatusDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        expelStudents(courseId: number, expelStatusDto: ExpelStatusDto, options?: any): AxiosPromise<void> {
+            return localVarFp.expelStudents(courseId, expelStatusDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {number} studentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -18574,6 +18697,18 @@ export const StudentsApiFactory = function (configuration?: Configuration, baseP
  * @extends {BaseAPI}
  */
 export class StudentsApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {ExpelStatusDto} expelStatusDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StudentsApi
+     */
+    public expelStudents(courseId: number, expelStatusDto: ExpelStatusDto, options?: AxiosRequestConfig) {
+        return StudentsApiFp(this.configuration).expelStudents(courseId, expelStatusDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {number} studentId 
