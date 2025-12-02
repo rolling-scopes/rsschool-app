@@ -57,7 +57,7 @@ exports[`MentorStatsCard should render correctly 1`] = `
             style="font-size: 18px;"
           >
             <strong>
-              2
+              1
             </strong>
           </span>
         </p>
