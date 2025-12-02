@@ -105,8 +105,7 @@ export function MentorStatsCard(props: Props) {
                                     marginBottom: 5,
                                   }}
                                 >
-                                  <a href={`/profile?githubId=${githubId}`}>{name}</a>{' '}
-                                  <Tag color="green">active</Tag>
+                                  <a href={`/profile?githubId=${githubId}`}>{name}</a> <Tag color="green">active</Tag>
                                 </p>
                                 <p style={{ fontSize: 12, marginBottom: 0 }}>
                                   Score: <Text mark>{totalScore}</Text>
