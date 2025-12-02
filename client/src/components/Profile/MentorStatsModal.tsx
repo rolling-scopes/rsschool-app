@@ -19,7 +19,7 @@ const MentorStatsModal = ({ stats, isVisible, onHide }: Props) => {
   return (
     <Modal title={`${courseName} statistics`} open={isVisible} onCancel={onHide} footer={null} width={'80%'}>
       <Row gutter={[16, 16]}>
-        {students?.map(({ name, githubId, isExpelled, totalScore, repoUrl }) => {
+        {students?.map(({ name, githubId, totalScore, repoUrl }) => {
           const profile = `/profile?githubId=${githubId}`;
           const guithubLink = `https://github.com/${githubId}`;
 
@@ -40,7 +40,7 @@ const MentorStatsModal = ({ stats, isVisible, onHide }: Props) => {
                     </Text>
                   </div>
                   <p style={{ marginBottom: 5 }}>
-                    {isExpelled ? <Tag color="red">expelled</Tag> : <Tag color="green">active</Tag>}
+                    <Tag color="green">active</Tag>
                   </p>
                   <p style={{ marginBottom: 5 }}>
                     Score: <Text mark>{totalScore}</Text>

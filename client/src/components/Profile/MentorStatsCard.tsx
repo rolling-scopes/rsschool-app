@@ -28,10 +28,15 @@ export function MentorStatsCard(props: Props) {
     setIsMentorStatsModalVisible(false);
   };
 
-  const stats = props.data;
+  const stats = useMemo(() => {
+    return props.data.map(stat => ({
+      ...stat,
+      students: stat.students?.filter(student => !student.isExpelled),
+    }));
+  }, [props.data]);
   const count = useMemo(
-    () => props.data.reduce<Student[]>((acc, cur) => acc.concat(cur.students ?? []), []).length,
-    [],
+    () => stats.reduce<Student[]>((acc, cur) => acc.concat(cur.students ?? []), []).length,
+    [stats],
   );
 
   return (
@@ -89,7 +94,7 @@ export function MentorStatsCard(props: Props) {
                         <List
                           itemLayout="horizontal"
                           dataSource={students}
-                          renderItem={({ githubId, name, isExpelled, totalScore }) => (
+                          renderItem={({ githubId, name, totalScore }) => (
                             <List.Item style={{ display: 'flex', justifyContent: 'space-between' }}>
                               <div key={`mentor-students-${githubId} ${courseName}`} style={{ width: '100%' }}>
                                 <p
@@ -101,7 +106,7 @@ export function MentorStatsCard(props: Props) {
                                   }}
                                 >
                                   <a href={`/profile?githubId=${githubId}`}>{name}</a>{' '}
-                                  {isExpelled ? <Tag color="red">expelled</Tag> : <Tag color="green">active</Tag>}
+                                  <Tag color="green">active</Tag>
                                 </p>
                                 <p style={{ fontSize: 12, marginBottom: 0 }}>
                                   Score: <Text mark>{totalScore}</Text>
