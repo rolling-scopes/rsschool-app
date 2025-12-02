@@ -168,6 +168,7 @@ export class InterviewsService {
         'si.isCompleted',
         'si.isCanceled',
         'si.score',
+        'si.decision',
         'sif.json',
         'sif.updatedDate',
         'sif.version',
@@ -192,7 +193,7 @@ export class InterviewsService {
         return (
           !s.stageInterviews ||
           s.stageInterviews.length === 0 ||
-          s.stageInterviews.every(i => i.isCompleted || i.isCanceled)
+          s.stageInterviews.every(i => (i.isCompleted && i.decision !== 'draft') || i.isCanceled)
         );
       })
       .map(student => {
