@@ -17,14 +17,14 @@ type Props = {
 export function MentorStatsCard(props: Props) {
   const [courseIndex, setCourseIndex] = useState(0);
   const [isMentorStatsModalVisible, setIsMentorStatsModalVisible] = useState(false);
-  const [isEndorsmentModalVisible, setIsEndorsmentModalVisible] = useState(false);
+  const [isEndorsementModalVisible, setIsEndorsementModalVisible] = useState(false);
 
   const showMentorStatsModal = (courseIndex: number) => {
     setCourseIndex(courseIndex);
     setIsMentorStatsModalVisible(true);
   };
 
-  const hideMentortStatsModal = () => {
+  const hideMentorStatsModal = () => {
     setIsMentorStatsModalVisible(false);
   };
 
@@ -40,12 +40,12 @@ export function MentorStatsCard(props: Props) {
         <MentorStatsModal
           stats={stats[courseIndex]}
           isVisible={isMentorStatsModalVisible}
-          onHide={hideMentortStatsModal}
+          onHide={hideMentorStatsModal}
         />
       ) : null}
       <MentorEndorsement
-        onClose={() => setIsEndorsmentModalVisible(false)}
-        open={isEndorsmentModalVisible}
+        onClose={() => setIsEndorsementModalVisible(false)}
+        open={isEndorsementModalVisible}
         githubId={props.githubId}
       />
       <CommonCard
@@ -68,8 +68,8 @@ export function MentorStatsCard(props: Props) {
               </p>
             </div>
             {props.isAdmin ? (
-              <Button onClick={() => setIsEndorsmentModalVisible(true)} icon={<FileTextOutlined />} type="primary">
-                Get Endorsment
+              <Button onClick={() => setIsEndorsementModalVisible(true)} icon={<FileTextOutlined />} type="primary">
+                Get Endorsement
               </Button>
             ) : null}
             <List
