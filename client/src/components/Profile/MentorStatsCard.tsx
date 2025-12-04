@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react';
-import { List, Typography, Button, Tag } from 'antd';
+import { Button, List, Typography } from 'antd';
 import CommonCard from './CommonCard';
 import MentorStatsModal from './MentorStatsModal';
 import { MentorStats, Student } from '@common/models/profile';
-import { TeamOutlined, FullscreenOutlined, FileTextOutlined } from '@ant-design/icons';
+import { FileTextOutlined, FullscreenOutlined, TeamOutlined } from '@ant-design/icons';
 import { MentorEndorsement } from 'modules/Profile/components/MentorEndorsement';
 
 const { Text } = Typography;
@@ -89,7 +89,7 @@ export function MentorStatsCard(props: Props) {
                         <List
                           itemLayout="horizontal"
                           dataSource={students}
-                          renderItem={({ githubId, name, isExpelled, totalScore }) => (
+                          renderItem={({ githubId, name, totalScore }) => (
                             <List.Item style={{ display: 'flex', justifyContent: 'space-between' }}>
                               <div key={`mentor-students-${githubId} ${courseName}`} style={{ width: '100%' }}>
                                 <p
@@ -101,7 +101,6 @@ export function MentorStatsCard(props: Props) {
                                   }}
                                 >
                                   <a href={`/profile?githubId=${githubId}`}>{name}</a>{' '}
-                                  {isExpelled ? <Tag color="red">expelled</Tag> : <Tag color="green">active</Tag>}
                                 </p>
                                 <p style={{ fontSize: 12, marginBottom: 0 }}>
                                   Score: <Text mark>{totalScore}</Text>

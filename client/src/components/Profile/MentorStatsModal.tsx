@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { MentorStats } from '@common/models/profile';
-import { Modal, Typography, Tag, Row, Col } from 'antd';
+import { Col, Modal, Row, Typography } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
+import { GithubOutlined, LockFilled } from '@ant-design/icons';
 
 const { Text } = Typography;
-
-import { GithubOutlined, LockFilled } from '@ant-design/icons';
 
 type Props = {
   stats: MentorStats;
@@ -19,9 +18,9 @@ const MentorStatsModal = ({ stats, isVisible, onHide }: Props) => {
   return (
     <Modal title={`${courseName} statistics`} open={isVisible} onCancel={onHide} footer={null} width={'80%'}>
       <Row gutter={[16, 16]}>
-        {students?.map(({ name, githubId, isExpelled, totalScore, repoUrl }) => {
+        {students?.map(({ name, githubId, totalScore, repoUrl }) => {
           const profile = `/profile?githubId=${githubId}`;
-          const guithubLink = `https://github.com/${githubId}`;
+          const githubLink = `https://github.com/${githubId}`;
 
           return (
             <Col
@@ -40,14 +39,11 @@ const MentorStatsModal = ({ stats, isVisible, onHide }: Props) => {
                     </Text>
                   </div>
                   <p style={{ marginBottom: 5 }}>
-                    {isExpelled ? <Tag color="red">expelled</Tag> : <Tag color="green">active</Tag>}
-                  </p>
-                  <p style={{ marginBottom: 5 }}>
                     Score: <Text mark>{totalScore}</Text>
                   </p>
                   <p style={{ marginBottom: 5 }}>
                     <GithubOutlined />{' '}
-                    <a href={guithubLink} target="_blank">
+                    <a href={githubLink} target="_blank">
                       {githubId}
                     </a>
                   </p>
