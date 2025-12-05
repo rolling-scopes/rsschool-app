@@ -101,7 +101,9 @@ export function MentorStatsCard(props: Props) {
                             </List.Item>
                           )}
                         />
-                      ) : <Text>Students number: {students.length}</Text>
+                      ) : (
+                        <Text>Students number: {students.length}</Text>
+                      )
                     ) : (
                       <Text>Does not have students at this course yet</Text>
                     )

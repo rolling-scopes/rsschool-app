@@ -16,13 +16,13 @@ const MentorStatsModal = ({ stats, isVisible, onHide }: Props) => {
 
   return (
     <Modal title={`${courseName} statistics`} open={isVisible} onCancel={onHide} footer={null} width={'80%'}>
-      <Flex gap={16} wrap='wrap' justify='center'>
+      <Flex gap={16} wrap="wrap" justify="center">
         {students?.map(({ name, githubId, totalScore, repoUrl }) => {
           const profile = `/profile?githubId=${githubId}`;
           const githubLink = `https://github.com/${githubId}`;
 
           return (
-            <Card key={`mentor-stats-modal-student-${githubId}`} type="inner" size='small' style={{width: '45%'}}>
+            <Card key={`mentor-stats-modal-student-${githubId}`} type="inner" size="small" style={{ width: '45%' }}>
               <Card.Meta
                 avatar={<GithubAvatar githubId={githubId} size={48} />}
                 title={<a href={profile}>{name}</a>}
