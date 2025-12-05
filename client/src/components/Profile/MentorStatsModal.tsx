@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { MentorStats } from '@common/models/profile';
-import { Col, Modal, Row, Typography } from 'antd';
+import { Card, Flex, Modal, Space } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';
 import { GithubOutlined, LockFilled } from '@ant-design/icons';
-
-const { Text } = Typography;
+import { ScoreWidget } from '@client/components/Profile/ui';
 
 type Props = {
   stats: MentorStats;
@@ -17,48 +16,38 @@ const MentorStatsModal = ({ stats, isVisible, onHide }: Props) => {
 
   return (
     <Modal title={`${courseName} statistics`} open={isVisible} onCancel={onHide} footer={null} width={'80%'}>
-      <Row gutter={[16, 16]}>
+      <Flex gap={16} wrap='wrap' justify='center'>
         {students?.map(({ name, githubId, totalScore, repoUrl }) => {
           const profile = `/profile?githubId=${githubId}`;
           const githubLink = `https://github.com/${githubId}`;
 
           return (
-            <Col
-              key={`mentor-stats-modal-student-${githubId}`}
-              xs={{ span: 24 }}
-              sm={{ span: 12 }}
-              md={{ span: 8 }}
-              lg={{ span: 6 }}
-            >
-              <Row style={{ marginBottom: 24 }} justify="space-between">
-                <Col>
-                  <div style={{ fontSize: 16, marginBottom: 16 }}>
-                    <GithubAvatar githubId={githubId} size={48} style={{ marginRight: 24 }} />
-                    <Text strong>
-                      <a href={profile}>{name}</a>
-                    </Text>
-                  </div>
-                  <p style={{ marginBottom: 5 }}>
-                    Score: <Text mark>{totalScore}</Text>
-                  </p>
-                  <p style={{ marginBottom: 5 }}>
-                    <GithubOutlined />{' '}
-                    <a href={githubLink} target="_blank">
-                      {githubId}
-                    </a>
-                  </p>
-                  <p style={{ marginBottom: 5 }}>
-                    <LockFilled />{' '}
-                    <a href={repoUrl} target="_blank">
-                      {repoUrl?.split('/').pop()}
-                    </a>
-                  </p>
-                </Col>
-              </Row>
-            </Col>
+            <Card key={`mentor-stats-modal-student-${githubId}`} type="inner" size='small' style={{width: '45%'}}>
+              <Card.Meta
+                avatar={<GithubAvatar githubId={githubId} size={48} />}
+                title={<a href={profile}>{name}</a>}
+                description={
+                  <Flex vertical gap={8}>
+                    <ScoreWidget score={totalScore} />
+                    <Space>
+                      <GithubOutlined />
+                      <a href={githubLink} target="_blank">
+                        {githubId}
+                      </a>
+                    </Space>
+                    <Space>
+                      <LockFilled />
+                      <a href={repoUrl} target="_blank">
+                        {repoUrl?.split('/').pop()}
+                      </a>
+                    </Space>
+                  </Flex>
+                }
+              />
+            </Card>
           );
         })}
-      </Row>
+      </Flex>
     </Modal>
   );
 };
