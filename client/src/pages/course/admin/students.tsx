@@ -104,7 +104,7 @@ function Page() {
 
   const updateMentor = withLoading(async (mentorGithuId: string | null = null) => {
     const githubId = details?.githubId;
-    if (details != null && githubId != null && details.isActive) {
+    if (details != null && githubId != null) {
       const student = await courseService.updateStudent(githubId, { mentorGithuId });
       setDetails({ ...details, mentor: student.mentor });
     }
