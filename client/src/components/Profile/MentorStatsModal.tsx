@@ -22,7 +22,7 @@ const MentorStatsModal = ({ stats, isVisible, onHide }: Props) => {
           const githubLink = `https://github.com/${githubId}`;
 
           return (
-            <Card key={`mentor-stats-modal-student-${githubId}`} type="inner" size="small" style={{ width: '45%' }}>
+            <Card key={`mentor-stats-modal-student-${githubId}`} type="inner" size="small" style={{ width: '20rem' }}>
               <Card.Meta
                 avatar={<GithubAvatar githubId={githubId} size={48} />}
                 title={<a href={profile}>{name}</a>}
