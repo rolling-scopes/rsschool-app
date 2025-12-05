@@ -78,6 +78,7 @@ export function MentorStatsCard(props: Props) {
             ) : null}
             {stats.map(({ courseName, courseLocationName, students }, idx) => (
               <Card
+                key={courseName}
                 type="inner"
                 size="small"
                 title={courseName}
