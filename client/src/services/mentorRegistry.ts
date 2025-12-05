@@ -92,7 +92,7 @@ export class MentorRegistryService {
       return response.data.data;
     } catch (e) {
       if (e instanceof AxiosError && e.response?.status === 404) {
-        console.info("Mentor is not found in the mentor registry.");
+        console.info('Mentor is not found in the mentor registry.');
         return null;
       }
       throw e;
