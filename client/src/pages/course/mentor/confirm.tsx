@@ -42,12 +42,16 @@ function Page() {
     return new CourseService(course.id);
   }, [course]);
 
-  const mapMentorData = (mentor: MentorResponse, course: Course | null): MentorResponse => {
-    const courseMinStudentsPerMentorValue = course?.minStudentsPerMentor;
-    if (courseMinStudentsPerMentorValue && courseMinStudentsPerMentorValue > Number(mentor?.maxStudentsLimit)) {
-      mentor.maxStudentsLimit = courseMinStudentsPerMentorValue;
+  const mapMentorData = (mentor: MentorResponse | null, course: Course | null): MentorResponse => {
+    const courseMinStudentsPerMentorValue = course?.minStudentsPerMentor || 0;
+    const preferCourseValue = courseMinStudentsPerMentorValue > Number(mentor?.maxStudentsLimit || 0);
+    if (mentor) {
+      mentor.maxStudentsLimit = preferCourseValue ? courseMinStudentsPerMentorValue : mentor.maxStudentsLimit;
+      return mentor;
     }
-    return mentor;
+    return {
+      maxStudentsLimit: courseMinStudentsPerMentorValue,
+    } as MentorResponse;
   };
 
   useAsync(async () => {
@@ -63,8 +67,8 @@ function Page() {
       setCourse(course);
       const mentor = await mentorRegistry.getMentor();
       const mappedMentorData = mapMentorData(mentor, course);
-      const preferredCourse = course?.id ? mappedMentorData.preferredCourses?.includes(course?.id) : null;
-      const preselectedCourses = course?.id ? mappedMentorData.preselectedCourses?.includes(course?.id) : null;
+      const preferredCourse = course?.id ? mappedMentorData?.preferredCourses?.includes(course?.id) : null;
+      const preselectedCourses = course?.id ? mappedMentorData?.preselectedCourses?.includes(course?.id) : null;
       setIsPreferredCourse(preferredCourse);
       if (preselectedCourses === false) {
         setNoAccess(true);
