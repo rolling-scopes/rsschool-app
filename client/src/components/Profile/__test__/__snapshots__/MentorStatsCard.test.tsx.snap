@@ -48,91 +48,126 @@ exports[`MentorStatsCard should render correctly 1`] = `
     <div
       class="ant-card-body"
     >
-      <div>
-        <p>
-          Mentored Students:
-           
-          <span
-            class="ant-typography css-dev-only-do-not-override-1v2lwm6"
-            style="font-size: 18px;"
-          >
-            <strong>
-              2
-            </strong>
-          </span>
-        </p>
-        <p>
-          Courses as Mentor:
-           
-          <span
-            class="ant-typography css-dev-only-do-not-override-1v2lwm6"
-            style="font-size: 18px;"
-          >
-            <strong>
-              2
-            </strong>
-          </span>
-        </p>
-      </div>
       <div
-        class="ant-list ant-list-split css-dev-only-do-not-override-1v2lwm6"
+        class="ant-flex css-dev-only-do-not-override-1v2lwm6 ant-flex-align-stretch ant-flex-vertical"
+        style="gap: 8px;"
       >
         <div
-          class="ant-spin-nested-loading css-dev-only-do-not-override-1v2lwm6"
+          class="ant-space css-dev-only-do-not-override-1v2lwm6 ant-space-horizontal ant-space-align-center ant-space-gap-row-small ant-space-gap-col-small"
         >
           <div
-            class="ant-spin-container"
+            class="ant-space-item"
           >
-            <ul
-              class="ant-list-items"
+            <span
+              class="ant-typography css-dev-only-do-not-override-1v2lwm6"
             >
-              <li
-                class="ant-list-item"
-                style="display: flex; justify-content: space-between;"
+              Mentored Students:
+            </span>
+          </div>
+          <div
+            class="ant-space-item"
+          >
+            <span
+              class="ant-typography css-dev-only-do-not-override-1v2lwm6"
+              style="font-size: 18px;"
+            >
+              <strong>
+                2
+              </strong>
+            </span>
+          </div>
+        </div>
+        <div
+          class="ant-space css-dev-only-do-not-override-1v2lwm6 ant-space-horizontal ant-space-align-center ant-space-gap-row-small ant-space-gap-col-small"
+        >
+          <div
+            class="ant-space-item"
+          >
+            <span
+              class="ant-typography css-dev-only-do-not-override-1v2lwm6"
+            >
+              Courses as Mentor:
+            </span>
+          </div>
+          <div
+            class="ant-space-item"
+          >
+            <span
+              class="ant-typography css-dev-only-do-not-override-1v2lwm6"
+              style="font-size: 18px;"
+            >
+              <strong>
+                2
+              </strong>
+            </span>
+          </div>
+        </div>
+        <div
+          class="ant-card ant-card-bordered ant-card-small ant-card-type-inner css-dev-only-do-not-override-1v2lwm6"
+        >
+          <div
+            class="ant-card-head"
+          >
+            <div
+              class="ant-card-head-wrapper"
+            >
+              <div
+                class="ant-card-head-title"
+              >
+                rs-2020-q1
+              </div>
+            </div>
+          </div>
+          <div
+            class="ant-card-body"
+          >
+            <div
+              class="ant-card-meta"
+            >
+              <div
+                class="ant-card-meta-detail"
               >
                 <div
-                  style="flex-grow: 2;"
+                  class="ant-card-meta-title"
                 >
-                  <p
-                    style="font-size: 20px; margin-bottom: 5px;"
+                   / Minsk
+                </div>
+                <div
+                  class="ant-card-meta-description"
+                >
+                  <span
+                    class="ant-typography css-dev-only-do-not-override-1v2lwm6"
                   >
-                    <span
-                      class="ant-typography css-dev-only-do-not-override-1v2lwm6"
-                    >
-                      <strong>
-                        rs-2020-q1
-                         / Minsk
-                      </strong>
-                    </span>
-                  </p>
-                  <p>
                     Does not have students at this course yet
-                  </p>
+                  </span>
                 </div>
-              </li>
-              <li
-                class="ant-list-item"
-                style="display: flex; justify-content: space-between;"
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="ant-card ant-card-bordered ant-card-small ant-card-type-inner css-dev-only-do-not-override-1v2lwm6"
+        >
+          <div
+            class="ant-card-head"
+          >
+            <div
+              class="ant-card-head-wrapper"
+            >
+              <div
+                class="ant-card-head-title"
               >
-                <div
-                  style="flex-grow: 2;"
-                >
-                  <p
-                    style="margin-bottom: 5px;"
-                  >
-                    <span
-                      class="ant-typography css-dev-only-do-not-override-1v2lwm6"
-                    >
-                      <strong>
-                        rs-2018-q1
-                         / Minsk
-                      </strong>
-                    </span>
-                  </p>
-                </div>
+                rs-2018-q1
+              </div>
+              <div
+                class="ant-card-extra"
+              >
                 <button
+                  aria-label="Open details"
                   class="ant-btn css-dev-only-do-not-override-1v2lwm6 ant-btn-dashed"
-                  style="margin-left: 16px;"
+                  data-testid="expand-button"
+                  style="padding: 0.3em 0.5em;"
+                  title="Open details"
                   type="button"
                 >
                   <span
@@ -155,8 +190,35 @@ exports[`MentorStatsCard should render correctly 1`] = `
                     </svg>
                   </span>
                 </button>
-              </li>
-            </ul>
+              </div>
+            </div>
+          </div>
+          <div
+            class="ant-card-body"
+          >
+            <div
+              class="ant-card-meta"
+            >
+              <div
+                class="ant-card-meta-detail"
+              >
+                <div
+                  class="ant-card-meta-title"
+                >
+                   / Minsk
+                </div>
+                <div
+                  class="ant-card-meta-description"
+                >
+                  <span
+                    class="ant-typography css-dev-only-do-not-override-1v2lwm6"
+                  >
+                    Students number: 
+                    2
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
