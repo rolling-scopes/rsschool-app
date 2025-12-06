@@ -2,7 +2,7 @@ import { Button, Col, Form, message, Result, Row, Typography } from 'antd';
 import { AuthApi, CourseDto as Course, DiscordServersApi } from 'api';
 import { PageLayout, PageLayoutSimple } from 'components/PageLayout';
 import { useRouter } from 'next/router';
-import { useMemo, useState, useContext } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { CoursesService } from 'services/courses';
@@ -12,6 +12,7 @@ import { MentorOptions } from 'components/MentorOptions';
 import { SessionContext, SessionProvider } from 'modules/Course/contexts';
 import { LoadingScreen } from '@client/components/LoadingScreen';
 import { useAsyncEffect } from 'ahooks';
+import { PreferredStudentsLocation } from '@common/enums/mentor';
 
 const { Link } = Typography;
 
@@ -44,14 +45,19 @@ function Page() {
 
   const mapMentorData = (mentor: MentorResponse | null, course: Course | null): MentorResponse => {
     const courseMinStudentsPerMentorValue = course?.minStudentsPerMentor || 0;
-    const preferCourseValue = courseMinStudentsPerMentorValue > Number(mentor?.maxStudentsLimit || 0);
+    const shouldUseCourseMinimum = courseMinStudentsPerMentorValue > Number(mentor?.maxStudentsLimit || 0);
     if (mentor) {
-      mentor.maxStudentsLimit = preferCourseValue ? courseMinStudentsPerMentorValue : mentor.maxStudentsLimit;
-      return mentor;
+      return {
+        ...mentor,
+        maxStudentsLimit: shouldUseCourseMinimum ? courseMinStudentsPerMentorValue : mentor.maxStudentsLimit,
+      };
     }
     return {
       maxStudentsLimit: courseMinStudentsPerMentorValue,
-    } as MentorResponse;
+      preferredCourses: [],
+      preselectedCourses: [],
+      preferedStudentsLocation: PreferredStudentsLocation.ANY,
+    };
   };
 
   useAsync(async () => {
