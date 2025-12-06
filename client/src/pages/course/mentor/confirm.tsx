@@ -12,7 +12,6 @@ import { MentorOptions } from 'components/MentorOptions';
 import { SessionContext, SessionProvider } from 'modules/Course/contexts';
 import { LoadingScreen } from '@client/components/LoadingScreen';
 import { useAsyncEffect } from 'ahooks';
-import { PreferredStudentsLocation } from '@common/enums/mentor';
 
 const { Link } = Typography;
 
@@ -43,7 +42,10 @@ function Page() {
     return new CourseService(course.id);
   }, [course]);
 
-  const mapMentorData = (mentor: MentorResponse | null, course: Course | null): MentorResponse => {
+  const mapMentorData = (
+    mentor: MentorResponse | null,
+    course: Course | null,
+  ): Omit<MentorResponse, 'preferedStudentsLocation'> => {
     const courseMinStudentsPerMentorValue = course?.minStudentsPerMentor || 0;
     const shouldUseCourseMinimum = courseMinStudentsPerMentorValue > Number(mentor?.maxStudentsLimit || 0);
     if (mentor) {
@@ -56,7 +58,6 @@ function Page() {
       maxStudentsLimit: courseMinStudentsPerMentorValue,
       preferredCourses: [],
       preselectedCourses: [],
-      preferedStudentsLocation: PreferredStudentsLocation.ANY,
     };
   };
 
