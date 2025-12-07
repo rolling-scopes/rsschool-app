@@ -2,7 +2,7 @@ import { Button, Col, Form, message, Result, Row, Typography } from 'antd';
 import { AuthApi, CourseDto as Course, DiscordServersApi } from 'api';
 import { PageLayout, PageLayoutSimple } from 'components/PageLayout';
 import { useRouter } from 'next/router';
-import { useMemo, useState, useContext } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { CoursesService } from 'services/courses';
@@ -42,12 +42,23 @@ function Page() {
     return new CourseService(course.id);
   }, [course]);
 
-  const mapMentorData = (mentor: MentorResponse, course: Course | null): MentorResponse => {
-    const courseMinStudentsPerMentorValue = course?.minStudentsPerMentor;
-    if (courseMinStudentsPerMentorValue && courseMinStudentsPerMentorValue > Number(mentor?.maxStudentsLimit)) {
-      mentor.maxStudentsLimit = courseMinStudentsPerMentorValue;
+  const mapMentorData = (
+    mentor: MentorResponse | null,
+    course: Course | null,
+  ): Omit<MentorResponse, 'preferedStudentsLocation'> => {
+    const courseMinStudentsPerMentorValue = course?.minStudentsPerMentor || 0;
+    const shouldUseCourseMinimum = courseMinStudentsPerMentorValue > Number(mentor?.maxStudentsLimit || 0);
+    if (mentor) {
+      return {
+        ...mentor,
+        maxStudentsLimit: shouldUseCourseMinimum ? courseMinStudentsPerMentorValue : mentor.maxStudentsLimit,
+      };
     }
-    return mentor;
+    return {
+      maxStudentsLimit: courseMinStudentsPerMentorValue,
+      preferredCourses: [],
+      preselectedCourses: [],
+    };
   };
 
   useAsync(async () => {
@@ -63,8 +74,8 @@ function Page() {
       setCourse(course);
       const mentor = await mentorRegistry.getMentor();
       const mappedMentorData = mapMentorData(mentor, course);
-      const preferredCourse = course?.id ? mappedMentorData.preferredCourses?.includes(course?.id) : null;
-      const preselectedCourses = course?.id ? mappedMentorData.preselectedCourses?.includes(course?.id) : null;
+      const preferredCourse = course?.id ? mappedMentorData?.preferredCourses?.includes(course?.id) : null;
+      const preselectedCourses = course?.id ? mappedMentorData?.preselectedCourses?.includes(course?.id) : null;
       setIsPreferredCourse(preferredCourse);
       if (preselectedCourses === false) {
         setNoAccess(true);
