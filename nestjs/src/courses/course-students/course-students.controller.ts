@@ -3,7 +3,7 @@ import { ApiBadRequestResponse, ApiForbiddenResponse, ApiOkResponse, ApiOperatio
 import { DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
 import { StudentSummaryDto } from './dto/student-summary.dto';
 import { CourseStudentsService } from './course-students.service';
-import { ExpelStatusDto } from './dto/studen-status.dto';
+import { ExpelStatusDto } from './dto/student-status.dto';
 
 @Controller('courses/:courseId/students')
 @ApiTags('students')

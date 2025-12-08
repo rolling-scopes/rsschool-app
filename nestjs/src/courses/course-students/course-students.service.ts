@@ -8,7 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Mentor as MentorWithContacts } from './dto/mentor-student-summary.dto';
 import { MentorBasic, StageInterviewFeedbackJson } from '@common/models';
-import { ExpelStatusDto } from './dto/studen-status.dto';
+import { ExpelStatusDto } from './dto/student-status.dto';
 
 @Injectable()
 export class CourseStudentsService {
