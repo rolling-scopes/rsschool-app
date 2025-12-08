@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { MentorRegistryDto, RegistryApi, InviteMentorsDto } from 'api';
 import { PreferredStudentsLocation } from '@common/enums/mentor';
 import { MentorRegistryTabsMode } from 'modules/MentorRegistry/constants';
@@ -87,8 +87,16 @@ export class MentorRegistryService {
   }
 
   public async getMentor() {
-    const response = await this.axios.get<AxiosResponse<MentorResponse>>(`/mentor`);
-    return response.data.data;
+    try {
+      const response = await this.axios.get<AxiosResponse<MentorResponse>>(`/mentor`);
+      return response.data.data;
+    } catch (e) {
+      if (e instanceof AxiosError && e.response?.status === 404) {
+        console.info('Mentor is not found in the mentor registry.');
+        return null;
+      }
+      throw e;
+    }
   }
 
   public async inviteMentors(data: InviteMentorsDto) {
