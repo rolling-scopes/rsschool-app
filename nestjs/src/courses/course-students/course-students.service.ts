@@ -122,7 +122,7 @@ export class CourseStudentsService {
     const { criteria, options, expellingReason } = expelStatusDto;
 
     // duplicate updateStatuses query from the /server/src/routes/course/students.ts
-    let query = this.studentRepository.createQueryBuilder('student').select(['student.id']);
+    let query = this.studentRepository.createQueryBuilder('student').select(['student.id', 'student.mentorId']);
 
     if (criteria.courseTaskIds && criteria.courseTaskIds.length > 0) {
       query = query.leftJoin(
