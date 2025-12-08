@@ -158,7 +158,7 @@ export class CourseStudentsService {
         endDate: new Date(),
         expellingReason,
         // key difference with the original query - remove mentor by default
-        mentorId: options.keepWithMentor ? mentorId : null,
+        mentorId: options.saveAssigningToMentor ? mentorId : null,
       })),
     );
 
