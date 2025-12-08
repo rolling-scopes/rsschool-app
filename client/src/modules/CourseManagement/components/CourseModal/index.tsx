@@ -245,7 +245,7 @@ export function CourseModal(props: CourseModalProps) {
                     value: icon.id,
                     label: (
                       <Flex gap="small" align="center">
-                        <PublicSvgIcon src={icon.active} alt={icon.label} size={'2.5ch'} />
+                        <PublicSvgIcon src={icon.active} alt={icon.label} size={'1.5em'} />
                         <span>{icon.label}</span>
                       </Flex>
                     ),
