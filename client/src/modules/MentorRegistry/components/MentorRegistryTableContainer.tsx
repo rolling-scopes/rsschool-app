@@ -7,7 +7,7 @@ import { Course } from 'services/models';
 import CopyToClipboardButton from 'components/CopyToClipboardButton';
 import { MentorsRegistryColumnKey, MentorsRegistryColumnName, TABS, MentorRegistryTabsMode } from '../constants';
 import { FilterValue } from 'antd/lib/table/interface';
-import { Button, Dropdown, Tooltip, message, theme, Space } from 'antd';
+import { Button, Dropdown, Tooltip, message, theme } from 'antd';
 import { MoreOutlined, MessageTwoTone } from '@ant-design/icons';
 import { ColumnType } from 'antd/lib/table';
 import { DisciplineDto, MentorRegistryDto } from 'api';
@@ -79,11 +79,7 @@ export const MentorRegistryTableContainer = ({
           alias: courses.find(course => course.id === value)?.alias ?? '',
           color: record.courses.includes(value) ? '#87d068' : undefined,
         }))
-        .map(v => (
-          <Space key={`${v.value}-${v.alias || 'na'}`}>
-            {v.color ? colorTagRenderer(v.value, v.color) : renderTagWithCopyButton(v.value, v.alias)}
-          </Space>
-        ));
+        .map(v => (v.color ? colorTagRenderer(v.value, v.color) : renderTagWithCopyButton(v.value, v.alias)));
     };
   };
 
