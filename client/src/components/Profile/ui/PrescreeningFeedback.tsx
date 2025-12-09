@@ -16,10 +16,10 @@ export function PrescreeningFeedback({ feedback }: { feedback: StageInterviewDet
     return (
       <Space direction="vertical">
         {intro.values?.comment && (
-          <Space>
+          <Row>
             <Text strong>Comment: </Text>
             <Text>{intro.values?.comment as string} </Text>
-          </Space>
+          </Row>
         )}
       </Space>
     );
@@ -29,16 +29,16 @@ export function PrescreeningFeedback({ feedback }: { feedback: StageInterviewDet
     <>
       <Space direction="vertical">
         {decision.values?.redFlags && (
-          <Space>
+          <Row>
             <Text strong>Red flags: </Text>
             <Text>{decision.values?.redFlags as string} </Text>
-          </Space>
+          </Row>
         )}
         {decision.values?.comment && (
-          <Space>
+          <Row>
             <Text strong>Comment: </Text>
             <Text>{decision.values?.comment as string} </Text>
-          </Space>
+          </Row>
         )}
         {english.values && (
           <>
@@ -53,10 +53,10 @@ export function PrescreeningFeedback({ feedback }: { feedback: StageInterviewDet
           </>
         )}
         {english.values?.comment && (
-          <Space>
+          <Row>
             <Text strong>Where did the student learn English: </Text>
             <Text>{english.values?.comment as string} </Text>
-          </Space>
+          </Row>
         )}
         <SkillSection skills={theory.values} title="Theory" tooltips={SKILLS_LEVELS} />
         <SkillSection skills={practice.values} title="Practice" tooltips={CODING_LEVELS} />
