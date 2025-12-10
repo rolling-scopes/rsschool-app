@@ -88,7 +88,7 @@ function StudentInterviewPage() {
 
   const hasInterview = (id: number) => registeredInterviews.includes(id.toString());
 
-  const getInterviewItem = (interviewName: string) => data.find(d => d.name === interviewName) ?? null;
+  const getInterviewItems = (interviewName: string) => data.filter(d => d.name === interviewName);
 
   return (
     <PageLayout loading={loading} title="Interviews" showCourseName>
@@ -100,17 +100,32 @@ function StudentInterviewPage() {
           <Row gutter={[12, 12]} justify="start">
             {interviews.map(interview => {
               const { name, id } = interview;
-              const item = getInterviewItem(name);
-              const registered = hasInterview(id);
-              return (
-                <InterviewCard
-                  key={id}
-                  interview={interview}
-                  item={item}
-                  isRegistered={registered}
-                  onRegister={handleRegister}
-                />
-              );
+              const items = getInterviewItems(name);
+
+              if (items.length > 0) {
+                return items.map(item => {
+                  return (
+                    <InterviewCard
+                      key={id + item.id}
+                      interview={interview}
+                      item={item}
+                      isRegistered={true}
+                      onRegister={handleRegister}
+                    />
+                  );
+                });
+              } else {
+                const registered = hasInterview(id);
+                return (
+                  <InterviewCard
+                    key={id}
+                    interview={interview}
+                    item={null}
+                    isRegistered={registered}
+                    onRegister={handleRegister}
+                  />
+                );
+              }
             })}
           </Row>
         )}

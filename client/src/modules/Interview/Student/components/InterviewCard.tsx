@@ -30,6 +30,8 @@ export const InterviewCard = ({
   const { id, descriptionUrl, name, startDate, endDate, studentRegistrationStartDate: registrationStart } = interview;
   const interviewPassed = item?.status === InterviewStatus.Completed;
   const interviewResult = getInterviewCardResult(item?.result as Decision);
+  const hasInterviewPair = !!item;
+
   const registrationNotStarted = isRegistrationNotStarted(registrationStart);
   const { cardMessage, backgroundImage } = getInterviewCardDetails({
     interviewResult,
@@ -37,6 +39,7 @@ export const InterviewCard = ({
     isRegistered,
     registrationNotStarted,
     registrationStart,
+    hasInterviewPair,
   });
 
   return (
