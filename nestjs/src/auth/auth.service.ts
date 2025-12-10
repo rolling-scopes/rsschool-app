@@ -70,7 +70,7 @@ export class AuthService {
       (provider ? await this.userService.getUserByProvider(provider, providerUserId) : undefined) ??
       (await this.userService.getByGithubId(username!));
 
-    this.logger.log('profile', { id: profile.id, emails: profile.emails });
+    this.logger.log({ message: 'profile', profileId: profile.id, emails: profile.emails });
 
     if (result != null && (result.githubId !== username || !result.provider)) {
       await this.userService.saveUser({
