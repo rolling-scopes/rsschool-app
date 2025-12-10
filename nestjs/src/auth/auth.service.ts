@@ -1,7 +1,7 @@
 import { LoginData, LoginState } from '@entities/loginState';
 import { User } from '@entities/user';
 import { HttpService } from '@nestjs/axios';
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { Request } from 'express';
 import { customAlphabet } from 'nanoid/async';
@@ -44,6 +44,8 @@ export class AuthService {
   private readonly admins: string[] = [];
   private readonly hirers: string[] = [];
 
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private readonly jwtService: JwtService,
     readonly courseTaskService: CourseTasksService,
@@ -67,6 +69,8 @@ export class AuthService {
     const result =
       (provider ? await this.userService.getUserByProvider(provider, providerUserId) : undefined) ??
       (await this.userService.getByGithubId(username!));
+
+    this.logger.log('profile', { id: profile.id, emails: profile.emails });
 
     if (result != null && (result.githubId !== username || !result.provider)) {
       await this.userService.saveUser({
