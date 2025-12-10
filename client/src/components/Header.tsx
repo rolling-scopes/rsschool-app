@@ -58,7 +58,8 @@ export function Header({ title, showCourseName }: Props) {
 
   const session = useContext(SessionContext);
   const { course } = useActiveCourseContext();
-  const courseLinks = useMemo(() => getNavigationItems(session, course ?? null), [course]);
+  const courseNotEmpty = course.id ? course : null;
+  const courseLinks = useMemo(() => getNavigationItems(session, courseNotEmpty ?? null), [session, course.id]);
 
   const menuItems = useMemo((): MenuProps['items'] => {
     const items = MENU_ITEMS.map(({ title, link, target, icon }) => {
