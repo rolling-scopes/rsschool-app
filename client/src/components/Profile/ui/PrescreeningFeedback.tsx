@@ -1,4 +1,4 @@
-import { Row, Space, Table, Typography } from 'antd';
+import { Col, Row, Space, Table, Typography } from 'antd';
 import { StageInterviewDetailedFeedback } from '@common/models/profile';
 import { CODING_LEVELS, FeedbackStepId, SKILLS_LEVELS } from 'data/interviews/technical-screening';
 import { InterviewFeedbackStepData, InterviewFeedbackValues, InterviewQuestion } from '@common/models';
@@ -16,9 +16,13 @@ export function PrescreeningFeedback({ feedback }: { feedback: StageInterviewDet
     return (
       <Space direction="vertical">
         {intro.values?.comment && (
-          <Row>
-            <Text strong>Comment: </Text>
-            <Text>{intro.values?.comment as string} </Text>
+          <Row gutter={8}>
+            <Col>
+              <Text strong>Comment: </Text>
+            </Col>
+            <Col>
+              <Text>{intro.values?.comment as string} </Text>
+            </Col>
           </Row>
         )}
       </Space>
@@ -29,15 +33,23 @@ export function PrescreeningFeedback({ feedback }: { feedback: StageInterviewDet
     <>
       <Space direction="vertical">
         {decision.values?.redFlags && (
-          <Row>
-            <Text strong>Red flags: </Text>
-            <Text>{decision.values?.redFlags as string} </Text>
+          <Row gutter={8}>
+            <Col>
+              <Text strong>Red flags: </Text>
+            </Col>
+            <Col>
+              <Text>{decision.values?.redFlags as string} </Text>
+            </Col>
           </Row>
         )}
         {decision.values?.comment && (
-          <Row>
-            <Text strong>Comment: </Text>
-            <Text>{decision.values?.comment as string} </Text>
+          <Row gutter={8}>
+            <Col>
+              <Text strong>Comment: </Text>
+            </Col>
+            <Col>
+              <Text>{decision.values?.comment as string} </Text>
+            </Col>
           </Row>
         )}
         {english.values && (
@@ -53,9 +65,13 @@ export function PrescreeningFeedback({ feedback }: { feedback: StageInterviewDet
           </>
         )}
         {english.values?.comment && (
-          <Row>
-            <Text strong>Where did the student learn English: </Text>
-            <Text>{english.values?.comment as string} </Text>
+          <Row gutter={8}>
+            <Col>
+              <Text strong>Where did the student learn English: </Text>
+            </Col>
+            <Col>
+              <Text>{english.values?.comment as string} </Text>
+            </Col>
           </Row>
         )}
         <SkillSection skills={theory.values} title="Theory" tooltips={SKILLS_LEVELS} />
@@ -81,8 +97,13 @@ function SkillSection({
       <Title level={4}>{title}</Title>
       <SkillTable skills={skills.questions as InterviewQuestion[]} tooltips={tooltips} />
       {skills.comment && (
-        <Row>
-          <Text strong>Comment: </Text>&nbsp;{skills.comment as string}
+        <Row gutter={8}>
+          <Col>
+            <Text strong>Comment: </Text>
+          </Col>
+          <Col>
+            <Text>{skills.comment as string}</Text>
+          </Col>
         </Row>
       )}
     </Space>
