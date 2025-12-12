@@ -1,4 +1,4 @@
-import { Col, Row, Space, Table, Typography } from 'antd';
+import { Row, Space, Table, Typography } from 'antd';
 import { StageInterviewDetailedFeedback } from '@common/models/profile';
 import { CODING_LEVELS, FeedbackStepId, SKILLS_LEVELS } from 'data/interviews/technical-screening';
 import { InterviewFeedbackStepData, InterviewFeedbackValues, InterviewQuestion } from '@common/models';
@@ -14,16 +14,12 @@ export function PrescreeningFeedback({ feedback }: { feedback: StageInterviewDet
 
   if (isRejected) {
     return (
-      <Space direction="vertical">
+      <Space direction="vertical" style={{ marginBottom: 20, width: '80%' }}>
         {intro.values?.comment && (
-          <Row gutter={8}>
-            <Col>
-              <Text strong>Comment: </Text>
-            </Col>
-            <Col>
-              <Text>{intro.values?.comment as string} </Text>
-            </Col>
-          </Row>
+          <Space direction="vertical">
+            <Text strong>Comment: </Text>
+            <Text>{intro.values?.comment as string} </Text>
+          </Space>
         )}
       </Space>
     );
@@ -31,48 +27,36 @@ export function PrescreeningFeedback({ feedback }: { feedback: StageInterviewDet
 
   return (
     <>
-      <Space direction="vertical">
+      <Space direction="vertical" style={{ marginBottom: 20, width: '100%' }}>
         {decision.values?.redFlags && (
-          <Row gutter={8}>
-            <Col>
-              <Text strong>Red flags: </Text>
-            </Col>
-            <Col>
-              <Text>{decision.values?.redFlags as string} </Text>
-            </Col>
-          </Row>
+          <Space direction="vertical"style={{  width: '80%' }}>
+            <Text strong>Red flags: </Text>
+            <Text>{decision.values?.redFlags as string} </Text>
+          </Space>
         )}
         {decision.values?.comment && (
-          <Row gutter={8}>
-            <Col>
-              <Text strong>Comment: </Text>
-            </Col>
-            <Col>
-              <Text>{decision.values?.comment as string} </Text>
-            </Col>
-          </Row>
+          <Space direction="vertical" style={{marginBottom: 20, width: '80%' }}>
+            <Text strong>Comment: </Text>
+            <Text>{decision.values?.comment as string} </Text>
+          </Space>
         )}
         {english.values && (
           <>
-            <Space>
+            <Space direction="vertical" style={{ marginBottom: 20, width: '80%' }}>
               <Text strong>Certified level of English: </Text>
               <Text>{english.values?.englishCertificate as string} </Text>
             </Space>
-            <Space>
+            <Space direction="vertical"style={{ marginBottom: 20, width: '80%' }}>
               <Text strong>English level by interviewers opinion:</Text>
               <Text>{english.values?.selfAssessment as string} </Text>
             </Space>
           </>
         )}
         {english.values?.comment && (
-          <Row gutter={8}>
-            <Col>
-              <Text strong>Where did the student learn English: </Text>
-            </Col>
-            <Col>
-              <Text>{english.values?.comment as string} </Text>
-            </Col>
-          </Row>
+          <Space direction="vertical" style={{ marginBottom: 20, width: '80%' }}>
+            <Text strong>Where did the student learn English: </Text>
+            <Text>{english.values?.comment as string} </Text>
+          </Space>
         )}
         <SkillSection skills={theory.values} title="Theory" tooltips={SKILLS_LEVELS} />
         <SkillSection skills={practice.values} title="Practice" tooltips={CODING_LEVELS} />
@@ -97,14 +81,10 @@ function SkillSection({
       <Title level={4}>{title}</Title>
       <SkillTable skills={skills.questions as InterviewQuestion[]} tooltips={tooltips} />
       {skills.comment && (
-        <Row gutter={8}>
-          <Col>
-            <Text strong>Comment: </Text>
-          </Col>
-          <Col>
-            <Text>{skills.comment as string}</Text>
-          </Col>
-        </Row>
+        <Space direction="vertical" style={{  width: '60%' }}>
+          <Text strong>Comment: </Text>
+          <Text>{skills.comment as string}</Text>
+        </Space>
       )}
     </Space>
   );
