@@ -14,7 +14,7 @@ export function PrescreeningFeedback({ feedback }: { feedback: StageInterviewDet
 
   if (isRejected) {
     return (
-      <Space direction="vertical" style={{ marginBottom: 20, width: '80%' }}>
+      <Space direction="vertical" style={{ width: '80%' }}>
         {intro.values?.comment && (
           <Space direction="vertical">
             <Text strong>Comment: </Text>
@@ -26,42 +26,40 @@ export function PrescreeningFeedback({ feedback }: { feedback: StageInterviewDet
   }
 
   return (
-    <>
-      <Space direction="vertical" style={{ marginBottom: 20, width: '100%' }}>
-        {decision.values?.redFlags && (
-          <Space direction="vertical"style={{  width: '80%' }}>
-            <Text strong>Red flags: </Text>
-            <Text>{decision.values?.redFlags as string} </Text>
+    <Space direction="vertical" size={20}>
+      {decision.values?.redFlags && (
+        <Space direction="vertical" style={{ width: '80%' }}>
+          <Text strong>Red flags: </Text>
+          <Text>{decision.values?.redFlags as string} </Text>
+        </Space>
+      )}
+      {decision.values?.comment && (
+        <Space direction="vertical" style={{ width: '80%' }}>
+          <Text strong>Comment: </Text>
+          <Text>{decision.values?.comment as string} </Text>
+        </Space>
+      )}
+      {english.values && (
+        <>
+          <Space direction="vertical" style={{ width: '80%' }}>
+            <Text strong>Certified level of English: </Text>
+            <Text>{english.values?.englishCertificate as string} </Text>
           </Space>
-        )}
-        {decision.values?.comment && (
-          <Space direction="vertical" style={{marginBottom: 20, width: '80%' }}>
-            <Text strong>Comment: </Text>
-            <Text>{decision.values?.comment as string} </Text>
+          <Space direction="vertical" style={{ width: '80%' }}>
+            <Text strong>English level by interviewers opinion:</Text>
+            <Text>{english.values?.selfAssessment as string} </Text>
           </Space>
-        )}
-        {english.values && (
-          <>
-            <Space direction="vertical" style={{ marginBottom: 20, width: '80%' }}>
-              <Text strong>Certified level of English: </Text>
-              <Text>{english.values?.englishCertificate as string} </Text>
-            </Space>
-            <Space direction="vertical"style={{ marginBottom: 20, width: '80%' }}>
-              <Text strong>English level by interviewers opinion:</Text>
-              <Text>{english.values?.selfAssessment as string} </Text>
-            </Space>
-          </>
-        )}
-        {english.values?.comment && (
-          <Space direction="vertical" style={{ marginBottom: 20, width: '80%' }}>
-            <Text strong>Where did the student learn English: </Text>
-            <Text>{english.values?.comment as string} </Text>
-          </Space>
-        )}
-        <SkillSection skills={theory.values} title="Theory" tooltips={SKILLS_LEVELS} />
-        <SkillSection skills={practice.values} title="Practice" tooltips={CODING_LEVELS} />
-      </Space>
-    </>
+        </>
+      )}
+      {english.values?.comment && (
+        <Space direction="vertical" style={{ width: '80%' }}>
+          <Text strong>Where did the student learn English: </Text>
+          <Text>{english.values?.comment as string} </Text>
+        </Space>
+      )}
+      <SkillSection skills={theory.values} title="Theory" tooltips={SKILLS_LEVELS} />
+      <SkillSection skills={practice.values} title="Practice" tooltips={CODING_LEVELS} />
+    </Space>
   );
 }
 
@@ -77,11 +75,11 @@ function SkillSection({
   if (!skills) return null;
 
   return (
-    <Space direction="vertical" style={{ marginBottom: 20, width: '100%' }}>
+    <Space direction="vertical">
       <Title level={4}>{title}</Title>
       <SkillTable skills={skills.questions as InterviewQuestion[]} tooltips={tooltips} />
       {skills.comment && (
-        <Space direction="vertical" style={{  width: '60%' }}>
+        <Space direction="vertical" style={{ width: '60%' }}>
           <Text strong>Comment: </Text>
           <Text>{skills.comment as string}</Text>
         </Space>
