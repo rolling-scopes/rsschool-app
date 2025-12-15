@@ -57,7 +57,15 @@ const FEEDBACK_CONFIG = [
   },
 ];
 
-const FeedbackItem = ({ label, value, width = STYLES.feedbackItemWidth }: { label: string; value: unknown; width?: string }) => {
+const FeedbackItem = ({
+  label,
+  value,
+  width = STYLES.feedbackItemWidth,
+}: {
+  label: string;
+  value: unknown;
+  width?: string;
+}) => {
   if (typeof value === 'string' && value) {
     return (
       <Space direction="vertical" style={{ width }}>
