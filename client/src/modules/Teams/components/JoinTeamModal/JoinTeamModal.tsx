@@ -22,9 +22,8 @@ export default function JoinTeamModal({ onCancel, onSubmit }: Props) {
 
     if (!password || !Number(id)) {
       return;
-    } else {
-      await onSubmit(Number(id), { password });
     }
+    await onSubmit(Number(id), { password });
   };
 
   return (

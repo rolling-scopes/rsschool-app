@@ -95,30 +95,29 @@ export class RegistryController {
         total: data.length,
         mentors: data.map(el => new MentorRegistryDto(el)),
       };
-    } else {
-      const data = await this.registryService.filterMentorRegistries({
-        page: currentPage || DEFAULT_PAGE_NUMBER,
-        limit: pageSize || DEFAULT_PAGE_SIZE,
-        githubId,
-        cityName,
-        preferedCourses,
-        preselectedCourses,
-        technicalMentoring,
-        coursesIds: req.user.isAdmin
-          ? undefined
-          : Object.entries(req.user.courses)
-              .filter(
-                ([_, value]) => value.roles.includes(CourseRole.Manager) || value.roles.includes(CourseRole.Supervisor),
-              )
-              .map(([key]) => Number(key)),
-        disciplineNames: req.user.isAdmin ? undefined : await this.getDisciplineNamesByCourseIds(req.user.courses),
-        status,
-      });
-      return {
-        total: data.total,
-        mentors: data.mentors.map(el => new MentorRegistryDto(el)),
-      };
     }
+    const data = await this.registryService.filterMentorRegistries({
+      page: currentPage || DEFAULT_PAGE_NUMBER,
+      limit: pageSize || DEFAULT_PAGE_SIZE,
+      githubId,
+      cityName,
+      preferedCourses,
+      preselectedCourses,
+      technicalMentoring,
+      coursesIds: req.user.isAdmin
+        ? undefined
+        : Object.entries(req.user.courses)
+            .filter(
+              ([_, value]) => value.roles.includes(CourseRole.Manager) || value.roles.includes(CourseRole.Supervisor),
+            )
+            .map(([key]) => Number(key)),
+      disciplineNames: req.user.isAdmin ? undefined : await this.getDisciplineNamesByCourseIds(req.user.courses),
+      status,
+    });
+    return {
+      total: data.total,
+      mentors: data.mentors.map(el => new MentorRegistryDto(el)),
+    };
   }
 
   private async getDisciplineNamesByCourseIds(userCourses: Record<number, CourseInfo>): Promise<string[]> {
