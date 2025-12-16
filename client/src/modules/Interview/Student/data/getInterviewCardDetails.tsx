@@ -43,7 +43,7 @@ export const getInterviewCardDetails = ({
       ? 'Contact your interviewer to schedule the interview as soon as possible!'
       : 'You’re all set! Prepare for your upcoming interview.';
     const image = hasInterviewPair
-      ? 'url(https://cdn.rs.school/sloths/stickers/interview-with-mentor/image.svg'
+      ? 'url(https://cdn.rs.school/sloths/stickers/interview-with-mentor/image.svg)'
       : 'url(https://cdn.rs.school/sloths/cleaned/its-a-good-job.svg)';
     return {
       cardMessage: message,
