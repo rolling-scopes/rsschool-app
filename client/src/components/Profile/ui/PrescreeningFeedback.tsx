@@ -17,42 +17,36 @@ const FEEDBACK_CONFIG = [
     id: 'decision_redFlags',
     label: 'Red flags',
     getValue: (steps: Record<FeedbackStepId, InterviewFeedbackStepData>) => steps.decision.values?.redFlags,
-    width: STYLES.feedbackItemWidth,
     isRejectedItem: false,
   },
   {
     id: 'decision_comment',
     label: 'Comment',
     getValue: (steps: Record<FeedbackStepId, InterviewFeedbackStepData>) => steps.decision.values?.comment,
-    width: STYLES.feedbackItemWidth,
     isRejectedItem: false,
   },
   {
     id: 'english_certificate',
     label: 'Certified level of English',
     getValue: (steps: Record<FeedbackStepId, InterviewFeedbackStepData>) => steps.english.values?.englishCertificate,
-    width: STYLES.feedbackItemWidth,
     isRejectedItem: false,
   },
   {
     id: 'english_selfAssessment',
     label: 'English level by interviewers opinion',
     getValue: (steps: Record<FeedbackStepId, InterviewFeedbackStepData>) => steps.english.values?.selfAssessment,
-    width: STYLES.feedbackItemWidth,
     isRejectedItem: false,
   },
   {
     id: 'english_comment',
     label: 'Where did the student learn English',
     getValue: (steps: Record<FeedbackStepId, InterviewFeedbackStepData>) => steps.english.values?.comment,
-    width: STYLES.feedbackItemWidth,
     isRejectedItem: false,
   },
   {
     id: 'intro_comment',
     label: 'Comment',
     getValue: (steps: Record<FeedbackStepId, InterviewFeedbackStepData>) => steps.intro.values?.comment,
-    width: STYLES.feedbackItemWidth,
     isRejectedItem: true,
   },
 ];
@@ -85,19 +79,19 @@ export function PrescreeningFeedback({ feedback }: { feedback: StageInterviewDet
 
   const displayItems = React.useMemo(
     () =>
-      FEEDBACK_CONFIG.filter(item => item.isRejectedItem === isRejected).map(item => ({
-        id: item.id,
-        label: item.label,
-        value: item.getValue(steps),
-        width: item.width,
+      FEEDBACK_CONFIG.filter(item => item.isRejectedItem === isRejected).map(({ id, label, getValue }) => ({
+        id,
+        label,
+        value: getValue(steps),
       })),
+
     [steps, isRejected],
   );
 
   return (
     <Space direction="vertical" size={20}>
       {displayItems.map(item => (
-        <FeedbackItem key={item.id} label={item.label} value={item.value} width={item.width} />
+        <FeedbackItem key={item.id} label={item.label} value={item.value} />
       ))}
       {!isRejected && (
         <>
