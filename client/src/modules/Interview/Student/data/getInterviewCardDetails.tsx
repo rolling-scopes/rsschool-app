@@ -7,6 +7,7 @@ interface StudentInterviewDetails {
   interviewPassed: boolean;
   registrationStart: string;
   interviewResult: InterviewResult;
+  hasInterviewPair: boolean;
 }
 
 export const getInterviewCardDetails = ({
@@ -15,6 +16,7 @@ export const getInterviewCardDetails = ({
   isRegistered,
   registrationNotStarted,
   registrationStart,
+  hasInterviewPair,
 }: StudentInterviewDetails) => {
   if (interviewPassed) {
     switch (interviewResult) {
@@ -37,9 +39,15 @@ export const getInterviewCardDetails = ({
   }
 
   if (isRegistered) {
+    const message = hasInterviewPair
+      ? 'Contact your interviewer to schedule the interview as soon as possible!'
+      : 'You’re all set! Prepare for your upcoming interview.';
+    const image = hasInterviewPair
+      ? 'url(https://cdn.rs.school/sloths/stickers/interview-with-mentor/image.svg'
+      : 'url(https://cdn.rs.school/sloths/cleaned/its-a-good-job.svg)';
     return {
-      cardMessage: 'You’re all set! Prepare for your upcoming interview.',
-      backgroundImage: 'url(https://cdn.rs.school/sloths/cleaned/its-a-good-job.svg)',
+      cardMessage: message,
+      backgroundImage: image,
     };
   }
 

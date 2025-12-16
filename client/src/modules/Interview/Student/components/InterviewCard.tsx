@@ -17,11 +17,13 @@ import { Decision } from 'data/interviews/technical-screening';
 const { Meta } = Card;
 
 export const InterviewCard = ({
+  comment,
   interview,
   item,
   isRegistered,
   onRegister,
 }: {
+  comment?: string | null;
   interview: InterviewDto;
   item: InterviewDetails | null;
   isRegistered: boolean;
@@ -30,6 +32,8 @@ export const InterviewCard = ({
   const { id, descriptionUrl, name, startDate, endDate, studentRegistrationStartDate: registrationStart } = interview;
   const interviewPassed = item?.status === InterviewStatus.Completed;
   const interviewResult = getInterviewCardResult(item?.result as Decision);
+  const hasInterviewPair = !!item;
+
   const registrationNotStarted = isRegistrationNotStarted(registrationStart);
   const { cardMessage, backgroundImage } = getInterviewCardDetails({
     interviewResult,
@@ -37,6 +41,7 @@ export const InterviewCard = ({
     isRegistered,
     registrationNotStarted,
     registrationStart,
+    hasInterviewPair,
   });
 
   return (
@@ -66,6 +71,17 @@ export const InterviewCard = ({
             )
           }
         />
+        {comment && (
+          <Alert
+            message={
+              comment +
+              'ffffffffffffffff ffffffffffff ffffffffffffffffffffffffffff ffffffffffffffffffffff ffffffffffffffffffffffffffffff ffffffffffffffffffffffffffffffffffff ffffffffffffffffffffff fffffffffffffffffffffffffffff fffffffffffffffff ffffffffffffffffffffffffffffffffffffffffff ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
+            }
+            icon={<InfoCircleTwoTone />}
+            showIcon
+            type="success"
+          />
+        )}
         <Alert
           message={<div style={{ minHeight: 50 }}>{cardMessage}</div>}
           icon={<InfoCircleTwoTone />}
