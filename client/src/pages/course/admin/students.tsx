@@ -256,9 +256,8 @@ function Page() {
           }
           if (value.every(e => e.isCompleted)) {
             return <CheckCircleTwoTone title="Completed" twoToneColor="#52c41a" />;
-          } else {
-            return <ClockCircleTwoTone title="Assigned" />;
           }
+          return <ClockCircleTwoTone title="Assigned" />;
         },
       },
       {
