@@ -103,29 +103,27 @@ function StudentInterviewPage() {
               const items = getStudentInterviewItems(name);
 
               if (items.length > 0) {
-                return items.map(item => {
-                  return (
-                    <InterviewCard
-                      key={id + item.id}
-                      interview={interview}
-                      item={item}
-                      isRegistered={true}
-                      onRegister={handleRegister}
-                    />
-                  );
-                });
-              } else {
-                const registered = hasInterview(id);
-                return (
+                return items.map((item, index) => (
                   <InterviewCard
-                    key={id}
+                    key={item.id + index}
                     interview={interview}
-                    item={null}
-                    isRegistered={registered}
+                    item={item}
+                    isRegistered={true}
                     onRegister={handleRegister}
                   />
-                );
+                ));
               }
+
+              const registered = hasInterview(id);
+              return (
+                <InterviewCard
+                  key={id}
+                  interview={interview}
+                  item={null}
+                  isRegistered={registered}
+                  onRegister={handleRegister}
+                />
+              );
             })}
           </Row>
         )}
