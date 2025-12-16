@@ -14,7 +14,7 @@ function StudentInterviewPage() {
   const session = useContext(SessionContext);
   const { course } = useActiveCourseContext();
   const courseService = useMemo(() => new CourseService(course.id), [course.id]);
-  const [data, setData] = useState<InterviewDetails[]>([]);
+  const [studentInterviews, setStudentInterviews] = useState<InterviewDetails[]>([]);
   const [interviews, setInterviews] = useState<InterviewDto[]>([]);
   const [registeredInterviews, setRegisteredInterviews] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -23,7 +23,7 @@ function StudentInterviewPage() {
   useAsync(async () => {
     try {
       setLoading(true);
-      const [data, { data: interviews }] = await Promise.all([
+      const [studentInterviews, { data: interviews }] = await Promise.all([
         courseService.getStudentInterviews(session.githubId),
         coursesInterviewApi.getInterviews(course.id, false, [
           TaskDtoTypeEnum.Interview,
@@ -32,7 +32,7 @@ function StudentInterviewPage() {
       ] as const);
       const registeredInterviews = await getRegisteredInterviews(interviews);
 
-      setData(data);
+      setStudentInterviews(studentInterviews);
       setInterviews(interviews);
       setRegisteredInterviews(registeredInterviews);
     } catch {
@@ -88,7 +88,7 @@ function StudentInterviewPage() {
 
   const hasInterview = (id: number) => registeredInterviews.includes(id.toString());
 
-  const getInterviewItems = (interviewName: string) => data.filter(d => d.name === interviewName);
+  const getStudentInterviewItems = (interviewName: string) => studentInterviews.filter(i => i.name === interviewName);
 
   return (
     <PageLayout loading={loading} title="Interviews" showCourseName>
@@ -100,7 +100,7 @@ function StudentInterviewPage() {
           <Row gutter={[12, 12]} justify="start">
             {interviews.map(interview => {
               const { name, id } = interview;
-              const items = getInterviewItems(name);
+              const items = getStudentInterviewItems(name);
 
               if (items.length > 0) {
                 return items.map(item => {
