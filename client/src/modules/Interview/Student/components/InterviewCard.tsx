@@ -1,5 +1,5 @@
 import { Col, Card, Button, Alert } from 'antd';
-import { InfoCircleTwoTone } from '@ant-design/icons';
+import { CommentOutlined, InfoCircleTwoTone } from '@ant-design/icons';
 import { InterviewDto } from 'api';
 import {
   getInterviewCardResult,
@@ -71,17 +71,6 @@ export const InterviewCard = ({
             )
           }
         />
-        {comment && (
-          <Alert
-            message={
-              comment +
-              'ffffffffffffffff ffffffffffff ffffffffffffffffffffffffffff ffffffffffffffffffffff ffffffffffffffffffffffffffffff ffffffffffffffffffffffffffffffffffff ffffffffffffffffffffff fffffffffffffffffffffffffffff fffffffffffffffff ffffffffffffffffffffffffffffffffffffffffff ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
-            }
-            icon={<InfoCircleTwoTone />}
-            showIcon
-            type="success"
-          />
-        )}
         <Alert
           message={<div style={{ minHeight: 50 }}>{cardMessage}</div>}
           icon={<InfoCircleTwoTone />}
@@ -90,6 +79,7 @@ export const InterviewCard = ({
           description={<AlertDescription backgroundImage={backgroundImage} />}
           style={{ minHeight: 275 }}
         />
+        {comment && <Alert message={comment} icon={<CommentOutlined />} showIcon type="success" />}
       </Card>
     </Col>
   );

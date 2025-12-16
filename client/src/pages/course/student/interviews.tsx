@@ -51,7 +51,7 @@ function StudentInterviewPage() {
       setLoading(false);
     }
   }, [course.id]);
-  console.log('commentsToStudent', commentsToStudent);
+
   const handleRegister = async (interviewId: string) => {
     modal.confirm({
       title: 'Are you ready to participate in the interview?',
