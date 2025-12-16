@@ -57,19 +57,18 @@ export class MentorRegistryService {
     if (!options) {
       const response = await this.registryApi.getMentorRegistries();
       return response.data;
-    } else {
-      const response = await this.registryApi.getMentorRegistries(
-        options.status,
-        options.pageSize,
-        options.currentPage,
-        options.githubId,
-        options.cityName,
-        options.preferedCourses,
-        options.preselectedCourses,
-        options.technicalMentoring,
-      );
-      return response.data;
     }
+    const response = await this.registryApi.getMentorRegistries(
+      options.status,
+      options.pageSize,
+      options.currentPage,
+      options.githubId,
+      options.cityName,
+      options.preferedCourses,
+      options.preselectedCourses,
+      options.technicalMentoring,
+    );
+    return response.data;
   }
 
   public async updateMentor(githubId: string, data: { preselectedCourses: string[] }) {

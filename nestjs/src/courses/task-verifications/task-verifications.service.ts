@@ -91,9 +91,8 @@ export class TaskVerificationsService {
 
         return new TaskVerificationAttemptDto(verification, questionsWithIncorrectAnswers);
       });
-    } else {
-      throw new BadRequestException('The answers cannot be checked if there were no attempts.');
     }
+    throw new BadRequestException('The answers cannot be checked if there were no attempts.');
   }
 
   public async createTaskVerification(
