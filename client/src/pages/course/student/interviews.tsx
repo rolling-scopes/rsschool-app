@@ -98,7 +98,7 @@ function StudentInterviewPage() {
 
   const hasInterview = (id: number) => registeredInterviews.includes(id.toString());
 
-  const getInterviewItems = (interviewName: string) => studentInterviews.filter(i => i.name === interviewName);
+  const getStudentInterviewItems = (interviewName: string) => studentInterviews.filter(i => i.name === interviewName);
 
   return (
     <PageLayout loading={loading} title="Interviews" showCourseName>
@@ -110,15 +110,14 @@ function StudentInterviewPage() {
           <Row gutter={[12, 12]} justify="start">
             {interviews.map(interview => {
               const { name, id } = interview;
-              const items = getInterviewItems(name);
-              // console.log(items);
+              const items = getStudentInterviewItems(name);
 
               if (items.length > 0) {
-                return items.map(item => {
+                return items.map((item, index) => {
                   const iterviewComment = commentsToStudent.find(comment => comment.id === item.id);
                   return (
                     <InterviewCard
-                      key={id + item.id}
+                      key={item.id + index}
                       interview={interview}
                       comment={iterviewComment?.commentToStudent}
                       item={item}
@@ -127,18 +126,18 @@ function StudentInterviewPage() {
                     />
                   );
                 });
-              } else {
-                const registered = hasInterview(id);
-                return (
-                  <InterviewCard
-                    key={id}
-                    interview={interview}
-                    item={null}
-                    isRegistered={registered}
-                    onRegister={handleRegister}
-                  />
-                );
               }
+
+              const registered = hasInterview(id);
+              return (
+                <InterviewCard
+                  key={id}
+                  interview={interview}
+                  item={null}
+                  isRegistered={registered}
+                  onRegister={handleRegister}
+                />
+              );
             })}
           </Row>
         )}
