@@ -1,4 +1,4 @@
-import { Col, Card, Button, Alert, Typography } from 'antd';
+import { Col, Card, Button, Alert, Typography, Flex } from 'antd';
 import { CommentOutlined, InfoCircleTwoTone } from '@ant-design/icons';
 import { InterviewDto } from 'api';
 import {
@@ -71,26 +71,28 @@ export const InterviewCard = ({
             )
           }
         />
-        <Alert
-          message={<div style={{ minHeight: 50 }}>{cardMessage}</div>}
-          icon={<InfoCircleTwoTone />}
-          showIcon
-          type="info"
-          description={<AlertDescription backgroundImage={backgroundImage} />}
-          style={{ minHeight: 275 }}
-        />
-        {comment && (
+        <Flex vertical gap="small">
           <Alert
-            message={
-              <Typography.Paragraph ellipsis={{ rows: 1, tooltip: true }} style={{ marginBottom: 0 }}>
-                {comment}
-              </Typography.Paragraph>
-            }
-            icon={<CommentOutlined />}
+            message={<div style={{ minHeight: 50 }}>{cardMessage}</div>}
+            icon={<InfoCircleTwoTone />}
             showIcon
-            type="success"
+            type="info"
+            description={<AlertDescription backgroundImage={backgroundImage} />}
+            style={{ minHeight: 275 }}
           />
-        )}
+          {comment && (
+            <Alert
+              message={
+                <Typography.Paragraph ellipsis={{ rows: 1, tooltip: true }} style={{ marginBottom: 0 }}>
+                  {comment}
+                </Typography.Paragraph>
+              }
+              icon={<CommentOutlined />}
+              showIcon
+              type="success"
+            />
+          )}
+        </Flex>
       </Card>
     </Col>
   );
