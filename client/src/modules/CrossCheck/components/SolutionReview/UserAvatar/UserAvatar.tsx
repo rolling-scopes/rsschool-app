@@ -24,17 +24,15 @@ function createAvatarPath(props: UserAvatarProps): string {
     case CrossCheckMessageDtoRoleEnum.Reviewer:
       if (author && areContactsVisible) {
         return `${CDN_AVATARS_URL}/${author.githubId}.png?size=${size * 2}`;
-      } else {
-        return AVATAR_ICON_PATH.expert;
       }
+      return AVATAR_ICON_PATH.expert;
 
     case CrossCheckMessageDtoRoleEnum.Student:
     default:
       if (author && areContactsVisible) {
         return `${CDN_AVATARS_URL}/${author.githubId}.png?size=${size * 2}`;
-      } else {
-        return AVATAR_ICON_PATH.thanks;
       }
+      return AVATAR_ICON_PATH.thanks;
   }
 }
 

@@ -34,6 +34,7 @@ export default tsEslint.config(
           ignoreRestSiblings: true,
         },
       ],
+      'no-else-return': ['error'],
     },
   }
 );
