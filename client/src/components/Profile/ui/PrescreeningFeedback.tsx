@@ -3,65 +3,103 @@ import { StageInterviewDetailedFeedback } from '@common/models/profile';
 import { CODING_LEVELS, FeedbackStepId, SKILLS_LEVELS } from 'data/interviews/technical-screening';
 import { InterviewFeedbackStepData, InterviewFeedbackValues, InterviewQuestion } from '@common/models';
 import { Rating } from '@client/components/Rating';
+import { useMemo } from 'react';
 
 const { Text, Title } = Typography;
 
-export function PrescreeningFeedback({ feedback }: { feedback: StageInterviewDetailedFeedback['feedback'] }) {
-  const { steps } = feedback as { steps: Record<FeedbackStepId, InterviewFeedbackStepData> };
+const STYLES = {
+  feedbackItemWidth: '80%',
+  skillCommentWidth: '60%',
+};
 
-  const { theory, practice, english, decision, intro } = steps;
-  const isRejected = intro.values?.interviewResult === 'missed';
+const FEEDBACK_CONFIG = [
+  {
+    id: 'decision_redFlags',
+    label: 'Red flags',
+    getValue: (steps: Record<FeedbackStepId, InterviewFeedbackStepData>) => steps.decision.values?.redFlags,
+    isRejectedInterviewItem: false,
+  },
+  {
+    id: 'decision_comment',
+    label: 'Comment',
+    getValue: (steps: Record<FeedbackStepId, InterviewFeedbackStepData>) => steps.decision.values?.comment,
+    isRejectedInterviewItem: false,
+  },
+  {
+    id: 'english_certificate',
+    label: 'Certified level of English',
+    getValue: (steps: Record<FeedbackStepId, InterviewFeedbackStepData>) => steps.english.values?.englishCertificate,
+    isRejectedInterviewItem: false,
+  },
+  {
+    id: 'english_selfAssessment',
+    label: 'English level by interviewers opinion',
+    getValue: (steps: Record<FeedbackStepId, InterviewFeedbackStepData>) => steps.english.values?.selfAssessment,
+    isRejectedInterviewItem: false,
+  },
+  {
+    id: 'english_comment',
+    label: 'Where did the student learn English',
+    getValue: (steps: Record<FeedbackStepId, InterviewFeedbackStepData>) => steps.english.values?.comment,
+    isRejectedInterviewItem: false,
+  },
+  {
+    id: 'intro_comment',
+    label: 'Comment',
+    getValue: (steps: Record<FeedbackStepId, InterviewFeedbackStepData>) => steps.intro.values?.comment,
+    isRejectedInterviewItem: true,
+  },
+];
 
-  if (isRejected) {
+const FeedbackItem = ({
+  label,
+  value,
+  width = STYLES.feedbackItemWidth,
+}: {
+  label: string;
+  value: unknown;
+  width?: string;
+}) => {
+  if (typeof value === 'string' && value) {
     return (
-      <Space direction="vertical">
-        {intro.values?.comment && (
-          <Space>
-            <Text strong>Comment: </Text>
-            <Text>{intro.values?.comment as string} </Text>
-          </Space>
-        )}
+      <Space direction="vertical" style={{ width }}>
+        <Text strong>{label}: </Text>
+        <Text>{value}</Text>
       </Space>
     );
   }
+  return null;
+};
+
+export function PrescreeningFeedback({ feedback }: { feedback: StageInterviewDetailedFeedback['feedback'] }) {
+  const { steps } = feedback as { steps: Record<FeedbackStepId, InterviewFeedbackStepData> };
+  const { theory, practice } = steps;
+
+  const isRejected = steps.intro.values?.interviewResult === 'missed';
+
+  const displayItems = useMemo(
+    () =>
+      FEEDBACK_CONFIG.filter(item => item.isRejectedInterviewItem === isRejected).map(({ id, label, getValue }) => ({
+        id,
+        label,
+        value: getValue(steps),
+      })),
+
+    [steps, isRejected],
+  );
 
   return (
-    <>
-      <Space direction="vertical">
-        {decision.values?.redFlags && (
-          <Space>
-            <Text strong>Red flags: </Text>
-            <Text>{decision.values?.redFlags as string} </Text>
-          </Space>
-        )}
-        {decision.values?.comment && (
-          <Space>
-            <Text strong>Comment: </Text>
-            <Text>{decision.values?.comment as string} </Text>
-          </Space>
-        )}
-        {english.values && (
-          <>
-            <Space>
-              <Text strong>Certified level of English: </Text>
-              <Text>{english.values?.englishCertificate as string} </Text>
-            </Space>
-            <Space>
-              <Text strong>English level by interviewers opinion:</Text>
-              <Text>{english.values?.selfAssessment as string} </Text>
-            </Space>
-          </>
-        )}
-        {english.values?.comment && (
-          <Space>
-            <Text strong>Where did the student learn English: </Text>
-            <Text>{english.values?.comment as string} </Text>
-          </Space>
-        )}
-        <SkillSection skills={theory.values} title="Theory" tooltips={SKILLS_LEVELS} />
-        <SkillSection skills={practice.values} title="Practice" tooltips={CODING_LEVELS} />
-      </Space>
-    </>
+    <Space direction="vertical" size={20}>
+      {displayItems.map(item => (
+        <FeedbackItem key={item.id} label={item.label} value={item.value} />
+      ))}
+      {!isRejected && (
+        <>
+          <SkillSection skills={theory.values} title="Theory" tooltips={SKILLS_LEVELS} />
+          <SkillSection skills={practice.values} title="Practice" tooltips={CODING_LEVELS} />
+        </>
+      )}
+    </Space>
   );
 }
 
@@ -77,14 +115,10 @@ function SkillSection({
   if (!skills) return null;
 
   return (
-    <Space direction="vertical" style={{ marginBottom: 20, width: '100%' }}>
+    <Space direction="vertical">
       <Title level={4}>{title}</Title>
       <SkillTable skills={skills.questions as InterviewQuestion[]} tooltips={tooltips} />
-      {skills.comment && (
-        <Row>
-          <Text strong>Comment: </Text>&nbsp;{skills.comment as string}
-        </Row>
-      )}
+      <FeedbackItem label="Comment" value={skills?.comment} width={STYLES.skillCommentWidth} />
     </Space>
   );
 }
