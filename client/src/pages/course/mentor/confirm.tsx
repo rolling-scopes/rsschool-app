@@ -80,11 +80,10 @@ function Page() {
       if (preselectedCourses === false) {
         setNoAccess(true);
         return;
-      } else {
-        setNoAccess(false);
-        setMentorData(mentor);
-        form.setFieldsValue(mentor);
       }
+      setNoAccess(false);
+      setMentorData(mentor);
+      form.setFieldsValue(mentor);
     } catch {
       setNoAccess(null);
     } finally {

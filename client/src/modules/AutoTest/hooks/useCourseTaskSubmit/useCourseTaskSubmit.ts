@@ -95,14 +95,13 @@ export function useCourseTaskSubmit(courseId: number, courseTask: CourseTaskVeri
       case 403: {
         if (isExpelledStudent(session, courseId)) {
           return 'This task can only be submitted by active students.';
-        } else {
-          const { oneAttemptPerNumberOfHours, maxAttemptsNumber = 0 } = (courseTask?.publicAttributes ??
-            {}) as SelfEducationPublicAttributes;
-          const timeLimitedAttempts = oneAttemptPerNumberOfHours
-            ? `You can submit this task not more than one time per ${oneAttemptPerNumberOfHours} hours.`
-            : '';
-          return `You can submit this task only ${maxAttemptsNumber} times. ${timeLimitedAttempts} For now your attempts limit is over!`;
         }
+        const { oneAttemptPerNumberOfHours, maxAttemptsNumber = 0 } = (courseTask?.publicAttributes ??
+          {}) as SelfEducationPublicAttributes;
+        const timeLimitedAttempts = oneAttemptPerNumberOfHours
+          ? `You can submit this task not more than one time per ${oneAttemptPerNumberOfHours} hours.`
+          : '';
+        return `You can submit this task only ${maxAttemptsNumber} times. ${timeLimitedAttempts} For now your attempts limit is over!`;
       }
 
       default:
