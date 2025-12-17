@@ -17,37 +17,37 @@ const FEEDBACK_CONFIG = [
     id: 'decision_redFlags',
     label: 'Red flags',
     getValue: (steps: Record<FeedbackStepId, InterviewFeedbackStepData>) => steps.decision.values?.redFlags,
-    isRejectedItem: false,
+    isRejectedInterviewItem: false,
   },
   {
     id: 'decision_comment',
     label: 'Comment',
     getValue: (steps: Record<FeedbackStepId, InterviewFeedbackStepData>) => steps.decision.values?.comment,
-    isRejectedItem: false,
+    isRejectedInterviewItem: false,
   },
   {
     id: 'english_certificate',
     label: 'Certified level of English',
     getValue: (steps: Record<FeedbackStepId, InterviewFeedbackStepData>) => steps.english.values?.englishCertificate,
-    isRejectedItem: false,
+    isRejectedInterviewItem: false,
   },
   {
     id: 'english_selfAssessment',
     label: 'English level by interviewers opinion',
     getValue: (steps: Record<FeedbackStepId, InterviewFeedbackStepData>) => steps.english.values?.selfAssessment,
-    isRejectedItem: false,
+    isRejectedInterviewItem: false,
   },
   {
     id: 'english_comment',
     label: 'Where did the student learn English',
     getValue: (steps: Record<FeedbackStepId, InterviewFeedbackStepData>) => steps.english.values?.comment,
-    isRejectedItem: false,
+    isRejectedInterviewItem: false,
   },
   {
     id: 'intro_comment',
     label: 'Comment',
     getValue: (steps: Record<FeedbackStepId, InterviewFeedbackStepData>) => steps.intro.values?.comment,
-    isRejectedItem: true,
+    isRejectedInterviewItem: true,
   },
 ];
 
@@ -79,7 +79,7 @@ export function PrescreeningFeedback({ feedback }: { feedback: StageInterviewDet
 
   const displayItems = React.useMemo(
     () =>
-      FEEDBACK_CONFIG.filter(item => item.isRejectedItem === isRejected).map(({ id, label, getValue }) => ({
+      FEEDBACK_CONFIG.filter(item => item.isRejectedInterviewItem === isRejected).map(({ id, label, getValue }) => ({
         id,
         label,
         value: getValue(steps),
