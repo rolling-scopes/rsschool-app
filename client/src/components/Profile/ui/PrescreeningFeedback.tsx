@@ -3,7 +3,7 @@ import { StageInterviewDetailedFeedback } from '@common/models/profile';
 import { CODING_LEVELS, FeedbackStepId, SKILLS_LEVELS } from 'data/interviews/technical-screening';
 import { InterviewFeedbackStepData, InterviewFeedbackValues, InterviewQuestion } from '@common/models';
 import { Rating } from '@client/components/Rating';
-import React from 'react';
+import { useMemo } from 'react';
 
 const { Text, Title } = Typography;
 
@@ -77,7 +77,7 @@ export function PrescreeningFeedback({ feedback }: { feedback: StageInterviewDet
 
   const isRejected = steps.intro.values?.interviewResult === 'missed';
 
-  const displayItems = React.useMemo(
+  const displayItems = useMemo(
     () =>
       FEEDBACK_CONFIG.filter(item => item.isRejectedInterviewItem === isRejected).map(({ id, label, getValue }) => ({
         id,
