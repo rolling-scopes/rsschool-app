@@ -1,4 +1,4 @@
-import { Col, Card, Button, Alert } from 'antd';
+import { Col, Card, Button, Alert, Typography } from 'antd';
 import { CommentOutlined, InfoCircleTwoTone } from '@ant-design/icons';
 import { InterviewDto } from 'api';
 import {
@@ -79,7 +79,18 @@ export const InterviewCard = ({
           description={<AlertDescription backgroundImage={backgroundImage} />}
           style={{ minHeight: 275 }}
         />
-        {comment && <Alert message={comment} icon={<CommentOutlined />} showIcon type="success" />}
+        {comment && (
+          <Alert
+            message={
+              <Typography.Paragraph ellipsis={{ rows: 1, tooltip: true }} style={{ marginBottom: 0 }}>
+                {comment}
+              </Typography.Paragraph>
+            }
+            icon={<CommentOutlined />}
+            showIcon
+            type="success"
+          />
+        )}
       </Card>
     </Col>
   );

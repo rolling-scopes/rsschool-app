@@ -37,9 +37,9 @@ function StudentInterviewPage() {
       setInterviews(interviews);
       setRegisteredInterviews(registeredInterviews);
 
-      const satgeInterview = interviews.find(i => i.type === TaskDtoTypeEnum.StageInterview);
+      const stageInterview = interviews.find(i => i.type === TaskDtoTypeEnum.StageInterview);
 
-      if (satgeInterview) {
+      if (stageInterview) {
         const { data: stageInterviewsCommentToStudent } = await coursesInterviewApi.getStageInterviewsCommentToStudent(
           course.id,
         );
@@ -114,12 +114,12 @@ function StudentInterviewPage() {
 
               if (items.length > 0) {
                 return items.map((item, index) => {
-                  const iterviewComment = commentsToStudent.find(comment => comment.id === item.id);
+                  const interviewComment = commentsToStudent.find(comment => comment.id === item.id);
                   return (
                     <InterviewCard
                       key={item.id + index}
                       interview={interview}
-                      comment={iterviewComment?.commentToStudent}
+                      comment={interviewComment?.commentToStudent}
                       item={item}
                       isRegistered={true}
                       onRegister={handleRegister}
