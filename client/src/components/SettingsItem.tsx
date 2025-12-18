@@ -1,6 +1,5 @@
-import { ForwardRefExoticComponent, PropsWithChildren, ReactNode, RefAttributes } from 'react';
+import { PropsWithChildren, ReactNode, CSSProperties, ComponentType } from 'react';
 import { Collapse, Divider, Flex, theme, Typography } from 'antd';
-import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon';
 
 const { Text } = Typography;
 const { Panel } = Collapse;
@@ -8,7 +7,7 @@ const { Panel } = Collapse;
 type SettingsItemProps = PropsWithChildren & {
   header: string;
   /** Any antd icon */
-  IconComponent: ForwardRefExoticComponent<Omit<AntdIconProps, 'ref'> & RefAttributes<HTMLSpanElement>>;
+  IconComponent: ComponentType<{ style?: CSSProperties }>;
   actions?: ReactNode[];
 };
 
