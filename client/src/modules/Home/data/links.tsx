@@ -151,6 +151,8 @@ export function getCourseLinks(session: Session, activeCourse: Course | null): L
 }
 
 export function getNavigationItems(session: Session, activeCourse: Course | null): MenuProps['items'] {
+  if (!activeCourse || !activeCourse.id) return [];
+
   return activeCourse
     ? links
         .filter(
