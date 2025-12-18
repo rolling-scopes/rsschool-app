@@ -21,11 +21,11 @@ const SettingsItem = ({ children, header, IconComponent, actions }: SettingsItem
     >
       <Panel header={<Text strong>{header}</Text>} key={header}>
         <Flex vertical>
-          <Flex vertical style={{ maxHeight: '70cqh', overflow: 'auto' }}>
+          <Flex vertical style={{ maxHeight: 'calc(100cqh - 11rem)', overflow: 'auto' }}>
             {children}
           </Flex>
           {actions && <Divider />}
-          <Flex justify="space-evenly">{actions?.map(action => action)}</Flex>
+          <Flex>{actions?.map(action => action)}</Flex>
         </Flex>
       </Panel>
     </Collapse>
