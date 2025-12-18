@@ -4,6 +4,17 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { StageInterview, StageInterviewFeedback } from '@entities/index';
 import { StudentsService } from '../students';
 import { PutInterviewFeedbackDto } from './dto/put-interview-feedback.dto';
+import { InterviewCommentDto } from './dto/interview-comment.dto';
+
+interface InterviewDecisionCommentFeedback {
+  steps: {
+    decision: {
+      values: {
+        comment?: string;
+      };
+    };
+  };
+}
 
 @Injectable()
 export class InterviewFeedbackService {
@@ -14,6 +25,28 @@ export class InterviewFeedbackService {
     readonly stageInterviewFeedbackRepository: Repository<StageInterviewFeedback>,
     readonly studentsService: StudentsService,
   ) {}
+
+  public async getCourseStageInterviewsComment(courseId: number, studentId: number) {
+    const records = await this.stageInterviewFeedbackRepository
+      .createQueryBuilder('sif')
+      .leftJoinAndSelect('sif.stageInterview', 'si')
+      .where('si.courseId = :courseId', { courseId })
+      .andWhere('si.studentId = :studentId', { studentId })
+      .select(['si.id', 'sif.json'])
+      .getRawMany();
+
+    const iterviewComments = records.map<InterviewCommentDto>(interviewFeedback => {
+      const feedback = JSON.parse(interviewFeedback.sif_json) as InterviewDecisionCommentFeedback;
+      const commentToStudent = feedback.steps.decision.values.comment ?? null;
+
+      return {
+        id: Number(interviewFeedback.si_id),
+        commentToStudent,
+      };
+    });
+
+    return iterviewComments;
+  }
 
   public async getStageInterviewFeedback(interviewId: number, interviewerGithubId: string) {
     const interview = await this.stageInterviewRepository.findOne({
