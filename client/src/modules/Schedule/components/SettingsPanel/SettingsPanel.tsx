@@ -1,10 +1,10 @@
 import { Button, Col, Row } from 'antd';
 import {
-  PlusOutlined,
   CalendarOutlined,
   CloudDownloadOutlined,
-  FileExcelOutlined,
   CopyOutlined,
+  FileExcelOutlined,
+  PlusOutlined,
 } from '@ant-design/icons';
 import { CourseScheduleItemDtoTagEnum } from 'api';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
@@ -61,7 +61,7 @@ export function SettingsPanel({
   );
 
   return (
-    <Row justify="end" gutter={[16, 16]} style={{ marginBottom: 12 }}>
+    <Row justify="end" gutter={16}>
       {isCourseManager && !mobileView ? (
         <Col>
           <Button type="primary" icon={<PlusOutlined />} onClick={onCreateCourseEvent}>
@@ -76,9 +76,6 @@ export function SettingsPanel({
           </Button>
         </Col>
       ) : null}
-      <Col>
-        <SettingsDrawer tags={tags} settings={settings} />
-      </Col>
       {additionalMenuItems?.length !== 0 && (
         <Col>
           <AdditionalActions
@@ -91,6 +88,9 @@ export function SettingsPanel({
           />
         </Col>
       )}
+      <Col>
+        <SettingsDrawer tags={tags} settings={settings} />
+      </Col>
     </Row>
   );
 }
