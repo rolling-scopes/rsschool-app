@@ -45,7 +45,7 @@ const getStudentStatsWithPosition = async (githubId: string, permissions: Permis
     .addSelect('ARRAY_AGG ("taskResult"."githubPrUrl") AS "taskGithubPrUris"').addSelect(`ARRAY_AGG (COALESCE(
       "taskResult"."score",
       "taskInterview"."score",
-      ("stageInterviewFeedback"."json"::json -> 'resume' ->> 'score')::int
+      ("stageInterviewFeedback"."json"::json -> 'steps' -> 'decision' -> 'values' ->> 'finalScore')::int
     )) AS "taskScores"`);
 
   query.addSelect('"student"."expellingReason" AS "expellingReason"');

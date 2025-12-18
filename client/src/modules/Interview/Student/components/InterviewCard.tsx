@@ -1,5 +1,5 @@
-import { Col, Card, Button, Alert } from 'antd';
-import { InfoCircleTwoTone } from '@ant-design/icons';
+import { Col, Card, Button, Alert, Typography, Flex } from 'antd';
+import { CommentOutlined, InfoCircleTwoTone } from '@ant-design/icons';
 import { InterviewDto } from 'api';
 import {
   getInterviewCardResult,
@@ -17,11 +17,13 @@ import { Decision } from 'data/interviews/technical-screening';
 const { Meta } = Card;
 
 export const InterviewCard = ({
+  comment,
   interview,
   item,
   isRegistered,
   onRegister,
 }: {
+  comment?: string | null;
   interview: InterviewDto;
   item: InterviewDetails | null;
   isRegistered: boolean;
@@ -30,6 +32,8 @@ export const InterviewCard = ({
   const { id, descriptionUrl, name, startDate, endDate, studentRegistrationStartDate: registrationStart } = interview;
   const interviewPassed = item?.status === InterviewStatus.Completed;
   const interviewResult = getInterviewCardResult(item?.result as Decision);
+  const hasInterviewPair = !!item;
+
   const registrationNotStarted = isRegistrationNotStarted(registrationStart);
   const { cardMessage, backgroundImage } = getInterviewCardDetails({
     interviewResult,
@@ -37,6 +41,7 @@ export const InterviewCard = ({
     isRegistered,
     registrationNotStarted,
     registrationStart,
+    hasInterviewPair,
   });
 
   return (
@@ -66,14 +71,28 @@ export const InterviewCard = ({
             )
           }
         />
-        <Alert
-          message={<div style={{ minHeight: 50 }}>{cardMessage}</div>}
-          icon={<InfoCircleTwoTone />}
-          showIcon
-          type="info"
-          description={<AlertDescription backgroundImage={backgroundImage} />}
-          style={{ minHeight: 275 }}
-        />
+        <Flex vertical gap="small">
+          <Alert
+            message={<div style={{ minHeight: 50 }}>{cardMessage}</div>}
+            icon={<InfoCircleTwoTone />}
+            showIcon
+            type="info"
+            description={<AlertDescription backgroundImage={backgroundImage} />}
+            style={{ minHeight: 275 }}
+          />
+          {comment && (
+            <Alert
+              message={
+                <Typography.Paragraph ellipsis={{ rows: 1, tooltip: true }} style={{ marginBottom: 0 }}>
+                  {comment}
+                </Typography.Paragraph>
+              }
+              icon={<CommentOutlined />}
+              showIcon
+              type="success"
+            />
+          )}
+        </Flex>
       </Card>
     </Col>
   );
