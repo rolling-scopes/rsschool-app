@@ -25,7 +25,7 @@ export function SettingsDrawer({ settings, tags }: SettingsDrawerProps) {
       <Tooltip title="Table settings" placement="left">
         <Button
           title="Settings"
-          shape='circle'
+          shape="circle"
           type="text"
           icon={<SettingOutlined style={{ fontSize: '2.5ch' }} />}
           onClick={openDrawer}
