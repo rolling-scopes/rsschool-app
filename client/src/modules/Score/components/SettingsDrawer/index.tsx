@@ -46,32 +46,42 @@ export function SettingsDrawer(props: Props) {
     form.setFieldsValue(newValues);
   };
 
-  const actions = [
-    <Button
-      type="text"
-      title="Select all"
-      onClick={() => fillAllFields(true)}
-      icon={<CheckSquareOutlined style={{ color: token.colorInfo }} />}
-    />,
-    <Button
-      type="text"
-      title="Deselect all"
-      onClick={() => fillAllFields(false)}
-      icon={<CloseSquareOutlined style={{ color: token.colorWarning }} />}
-    />,
-    <Button
-      type="text"
-      title="Cancel"
-      onClick={onCancel}
-      icon={<CloseCircleOutlined style={{ color: token.colorError }} />}
-    />,
-    <Button
-      type="text"
-      title="Save"
-      onClick={onOkHandle}
-      icon={<SaveOutlined style={{ color: token.colorSuccess }} />}
-    />,
-  ];
+  const actionConfigs = [
+    {
+      key: 'all',
+      title: 'Select all',
+      label: 'All',
+      onClick: () => fillAllFields(true),
+      icon: <CheckSquareOutlined style={{ color: token.colorInfo }} />,
+    },
+    {
+      key: 'none',
+      title: 'Deselect all',
+      label: 'None',
+      onClick: () => fillAllFields(false),
+      icon: <CloseSquareOutlined style={{ color: token.colorWarning }} />,
+    },
+    {
+      key: 'cancel',
+      title: 'Cancel',
+      label: 'Cancel',
+      onClick: onCancel,
+      icon: <CloseCircleOutlined style={{ color: token.colorError }} />,
+    },
+    {
+      key: 'save',
+      title: 'Save',
+      label: 'Save',
+      onClick: onOkHandle,
+      icon: <SaveOutlined style={{ color: token.colorSuccess }} />,
+    },
+  ] as const;
+
+  const actions = actionConfigs.map(({ key, title, label, onClick, icon }) => (
+    <Button key={key} type="text" title={title} size="small" onClick={onClick} icon={icon}>
+      {label}
+    </Button>
+  ));
 
   return (
     <Drawer title="Score settings" open={isVisible} onClose={onCancel} styles={{ body: { containerType: 'size' } }}>
