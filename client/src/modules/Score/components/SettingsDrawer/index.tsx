@@ -1,6 +1,14 @@
-import { Button, Checkbox, Drawer, Form, Space } from 'antd';
+import { Button, Checkbox, Drawer, Form, Space, theme } from 'antd';
 import { Store } from 'antd/lib/form/interface';
 import type { CourseTaskDto } from 'api';
+import SettingsItem from '@client/components/SettingsItem';
+import {
+  CheckSquareOutlined,
+  CloseCircleOutlined,
+  CloseSquareOutlined,
+  SaveOutlined,
+  TableOutlined,
+} from '@ant-design/icons';
 
 type Props = {
   courseTasks: (CourseTaskDto & { isVisible?: boolean })[];
@@ -12,6 +20,7 @@ type Props = {
 export function SettingsDrawer(props: Props) {
   const { onCancel, onOk, courseTasks, isVisible } = props;
   const [form] = Form.useForm();
+  const { token } = theme.useToken();
 
   const onOkHandle = async () => {
     const values = await form.validateFields().catch(() => null);
@@ -37,37 +46,51 @@ export function SettingsDrawer(props: Props) {
     form.setFieldsValue(newValues);
   };
 
+  const actions = [
+    <Button
+      type="text"
+      title="Select all"
+      onClick={() => fillAllFields(true)}
+      icon={<CheckSquareOutlined style={{ color: token.colorInfo }} />}
+    />,
+    <Button
+      type="text"
+      title="Deselect all"
+      onClick={() => fillAllFields(false)}
+      icon={<CloseSquareOutlined style={{ color: token.colorWarning }} />}
+    />,
+    <Button
+      type="text"
+      title="Cancel"
+      onClick={onCancel}
+      icon={<CloseCircleOutlined style={{ color: token.colorError }} />}
+    />,
+    <Button
+      type="text"
+      title="Save"
+      onClick={onOkHandle}
+      icon={<SaveOutlined style={{ color: token.colorSuccess }} />}
+    />,
+  ];
+
   return (
-    <Drawer
-      title="Columns visibility"
-      open={isVisible}
-      onClose={onCancel}
-      footer={
-        <Space>
-          <Button key="Select all" onClick={() => fillAllFields(true)} type="text">
-            Select all
-          </Button>
-          <Button key="Deselect all" onClick={() => fillAllFields(false)} type="text">
-            Deselect all
-          </Button>
-          <Button key="Cancel" onClick={onCancel}>
-            Cancel
-          </Button>
-          <Button key="Save" type="primary" onClick={onOkHandle}>
-            Save
-          </Button>
-        </Space>
-      }
-    >
-      <Form form={form} initialValues={initialValues} layout="vertical">
-        <Space style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-          {courseTasks.map(courseTask => (
-            <Form.Item key={courseTask.id} name={courseTask.id} valuePropName="checked" style={{ marginBottom: 4 }}>
-              <Checkbox>{courseTask.name}</Checkbox>
-            </Form.Item>
-          ))}
-        </Space>
-      </Form>
+    <Drawer title="Score settings" open={isVisible} onClose={onCancel} styles={{ body: { containerType: 'size' } }}>
+      <SettingsItem header="Columns visibility" IconComponent={TableOutlined} actions={actions}>
+        <Form form={form} initialValues={initialValues} layout="vertical">
+          <Space style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+            {courseTasks.map(courseTask => (
+              <Form.Item
+                key={courseTask.id}
+                name={courseTask.id}
+                valuePropName="checked"
+                style={{ marginBottom: 4, width: 200 }}
+              >
+                <Checkbox>{courseTask.name}</Checkbox>
+              </Form.Item>
+            ))}
+          </Space>
+        </Form>
+      </SettingsItem>
     </Drawer>
   );
 }
