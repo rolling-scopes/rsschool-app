@@ -5,7 +5,7 @@ import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { InterviewDetails } from 'domain/interview';
 import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
-import { CoursesInterviewsApi, CourseTaskDtoTypeEnum, InterviewDto, TaskDtoTypeEnum } from 'api';
+import { CoursesInterviewsApi, CourseTaskDtoTypeEnum, InterviewCommentDto, InterviewDto, TaskDtoTypeEnum } from 'api';
 import { InterviewCard, NoInterviewsAlert } from 'modules/Interview/Student';
 
 const coursesInterviewApi = new CoursesInterviewsApi();
@@ -15,6 +15,7 @@ function StudentInterviewPage() {
   const { course } = useActiveCourseContext();
   const courseService = useMemo(() => new CourseService(course.id), [course.id]);
   const [studentInterviews, setStudentInterviews] = useState<InterviewDetails[]>([]);
+  const [commentsToStudent, setCommentsToStudent] = useState<InterviewCommentDto[]>([]);
   const [interviews, setInterviews] = useState<InterviewDto[]>([]);
   const [registeredInterviews, setRegisteredInterviews] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -35,6 +36,15 @@ function StudentInterviewPage() {
       setStudentInterviews(studentInterviews);
       setInterviews(interviews);
       setRegisteredInterviews(registeredInterviews);
+
+      const stageInterview = interviews.find(i => i.type === TaskDtoTypeEnum.StageInterview);
+
+      if (stageInterview) {
+        const { data: stageInterviewsCommentToStudent } = await coursesInterviewApi.getStageInterviewsCommentToStudent(
+          course.id,
+        );
+        setCommentsToStudent(stageInterviewsCommentToStudent);
+      }
     } catch {
       message.error('An error occurred. Please try later.');
     } finally {
@@ -103,15 +113,19 @@ function StudentInterviewPage() {
               const items = getStudentInterviewItems(name);
 
               if (items.length > 0) {
-                return items.map((item, index) => (
-                  <InterviewCard
-                    key={item.id + index}
-                    interview={interview}
-                    item={item}
-                    isRegistered={true}
-                    onRegister={handleRegister}
-                  />
-                ));
+                return items.map((item, index) => {
+                  const interviewComment = commentsToStudent.find(comment => comment.id === item.id);
+                  return (
+                    <InterviewCard
+                      key={item.id + index}
+                      interview={interview}
+                      comment={interviewComment?.commentToStudent}
+                      item={item}
+                      isRegistered={true}
+                      onRegister={handleRegister}
+                    />
+                  );
+                });
               }
 
               const registered = hasInterview(id);

@@ -35,6 +35,7 @@ import { InterviewFeedbackDto } from './dto/get-interview-feedback.dto';
 import { PutInterviewFeedbackDto } from './dto/put-interview-feedback.dto';
 import { RegistrationInterviewDto } from './dto/registration-interview.dto';
 import { InterviewPairDto } from './dto/interview-pair.dto';
+import { InterviewCommentDto } from './dto/interview-comment.dto';
 
 @Controller('courses/:courseId/interviews')
 @ApiTags('courses interviews')
@@ -64,6 +65,30 @@ export class InterviewsController {
       types: types as TaskType[],
     });
     return data.map(item => new InterviewDto(item));
+  }
+
+  @Get('/comments')
+  @ApiOkResponse({ type: [InterviewCommentDto] })
+  @ApiForbiddenResponse()
+  @ApiOperation({ operationId: 'getStageInterviewsCommentToStudent' })
+  @RequiredRoles([CourseRole.Student, Role.Admin])
+  public async getStageInterviewsCommentToStudent(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Req() req: CurrentRequest,
+  ) {
+    const { user } = req;
+    const studentId = user.courses[courseId]?.studentId;
+
+    if (!studentId) {
+      if (!user.isAdmin) {
+        throw new ForbiddenException(`You are not a student of course ${courseId}`);
+      }
+
+      return [];
+    }
+
+    const commentsToStudent = await this.interviewFeedbackService.getCourseStageInterviewsComment(courseId, studentId);
+    return commentsToStudent;
   }
 
   @Get('/:interviewId')
