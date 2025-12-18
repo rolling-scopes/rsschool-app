@@ -31,8 +31,8 @@ export class UsersService {
     return this.userRepository.save(user);
   }
 
-  public updateUser(id: number, user: Partial<Omit<User, 'id' | 'githubId'>>) {
-    return this.userRepository.update(id, user);
+  public async updateUser(id: number, user: Partial<Omit<User, 'id' | 'githubId'>>) {
+    await this.userRepository.update(id, user);
   }
 
   public getUserByUserId(userId: number) {
