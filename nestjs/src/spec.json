@@ -640,6 +640,25 @@
         "tags": ["courses interviews"]
       }
     },
+    "/courses/{courseId}/interviews/comments": {
+      "get": {
+        "operationId": "getStageInterviewsCommentToStudent",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/InterviewCommentDto" } }
+              }
+            }
+          },
+          "403": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["courses interviews"]
+      }
+    },
     "/courses/{courseId}/interviews/{interviewId}": {
       "get": {
         "operationId": "getInterview",
@@ -3718,6 +3737,11 @@
           "attributes",
           "studentRegistrationStartDate"
         ]
+      },
+      "InterviewCommentDto": {
+        "type": "object",
+        "properties": { "id": { "type": "number" }, "commentToStudent": { "type": "string", "nullable": true } },
+        "required": ["id", "commentToStudent"]
       },
       "InterviewStatus": { "type": "number", "enum": [1, 0] },
       "InterviewPairDto": {

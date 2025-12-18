@@ -1,7 +1,7 @@
 import { LoginData, LoginState } from '@entities/loginState';
 import { User } from '@entities/user';
 import { HttpService } from '@nestjs/axios';
-import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { Request } from 'express';
 import { customAlphabet } from 'nanoid/async';
@@ -44,8 +44,6 @@ export class AuthService {
   private readonly admins: string[] = [];
   private readonly hirers: string[] = [];
 
-  private readonly logger = new Logger(AuthService.name);
-
   constructor(
     private readonly jwtService: JwtService,
     readonly courseTaskService: CourseTasksService,
@@ -70,8 +68,6 @@ export class AuthService {
       (provider ? await this.userService.getUserByProvider(provider, providerUserId) : undefined) ??
       (await this.userService.getByGithubId(username!));
 
-    this.logger.log({ message: 'profile', profileId: profile.id, emails: profile.emails });
-
     if (result != null && (result.githubId !== username || !result.provider)) {
       await this.userService.saveUser({
         id: result.id,
@@ -81,16 +77,18 @@ export class AuthService {
       });
     }
 
-    if (result == null) {
-      // Github has "primary" field
-      const emails: (NonNullable<Profile['emails']>[number] & { primary?: boolean })[] = profile.emails ?? [];
-      const [email] = emails.filter(email => !!email.primary) ?? [];
+    const email = this.extractEmailFromProfile(profile);
 
+    if (result != null && !result.primaryEmail && email) {
+      await this.userService.updateUser(result.id, { primaryEmail: email });
+    }
+
+    if (result == null) {
       const user: Partial<User> = {
         githubId: username,
         providerUserId,
         provider,
-        primaryEmail: email ? email.value : undefined,
+        primaryEmail: email,
         firstName: profile.name ? profile.name.givenName : '',
         lastName: profile.name ? profile.name.familyName : '',
         lastActivityTime: Date.now(),
@@ -100,6 +98,10 @@ export class AuthService {
 
     const authUser = await this.getAuthUser(username!, admin);
     return authUser;
+  }
+
+  private extractEmailFromProfile(profile: Profile): string | undefined {
+    return profile.emails?.slice(0, 1)?.[0]?.value || undefined;
   }
 
   public async getAuthUser(username: string, admin = false) {
