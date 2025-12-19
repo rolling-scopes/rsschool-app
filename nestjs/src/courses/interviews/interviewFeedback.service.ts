@@ -9,7 +9,7 @@ import { InterviewCommentDto } from './dto/interview-comment.dto';
 interface InterviewDecisionCommentFeedback {
   steps: {
     decision: {
-      values: {
+      values?: {
         comment?: string;
       };
     };
@@ -37,7 +37,7 @@ export class InterviewFeedbackService {
 
     const iterviewComments = records.map<InterviewCommentDto>(interviewFeedback => {
       const feedback = JSON.parse(interviewFeedback.sif_json) as InterviewDecisionCommentFeedback;
-      const commentToStudent = feedback.steps.decision.values.comment ?? null;
+      const commentToStudent = feedback.steps.decision.values?.comment ?? null;
 
       return {
         id: Number(interviewFeedback.si_id),
