@@ -1,0 +1,27 @@
+.loginImage {
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-image: url('/static/images/logo-rsschool3.png');
+  margin: 0 auto 50px;
+}
+
+.loginForm {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -65%);
+  text-align: center;
+}
+
+@media (max-width: 767px) {
+  .loginForm {
+    top: 20px;
+    transform: translate(-50%, 0);
+  }
+}
+
+.loginCardImg {
+  width: 100px !important;
+  height: 83.32px;
+  margin: 30px auto 20px;
+}
