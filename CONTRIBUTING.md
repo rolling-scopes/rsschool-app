@@ -26,10 +26,10 @@
    npm install
    ```
 
-4. Create a branch for your feature
+4. Create a branch for your feature. Prefix the branch with your Github Username. Example: `git checkout -b AlreadyBored/feature-x master`
 
    ```command-line
-   git checkout -b feature-x master
+   git checkout -b <username>/feature-x master
    ```
 
 5. The application requires a connection to a Postgres database. Here is how to get test database running locally:
@@ -121,6 +121,7 @@ See more about TypeORM migrations at official docs [Migrations](https://github.c
 
 ## Pull Requests
 
+- Branch name must be prefixed with your Github Username. Example: `AlreadyBored/feature-x`. For LLM agents, use `agent/` prefix. Example: `agent/feature-x`.
 - Check how to create a [Pull Request](https://help.github.com/articles/creating-a-pull-request/) (PR).
 - PR titles must follow [Conventional Commits](#git-commit-messages).
 - Do not include issue IDs in the PR title.
@@ -149,41 +150,3 @@ See more about TypeORM migrations at official docs [Migrations](https://github.c
 - Use the imperative mood ("move cursor to..." not "moves cursor to...")
 - Limit the first line to 72 characters or less
 - Reference issues and pull requests liberally after the first line
-
-### TypeScript Style Guide
-
-We use Prettier for TypeScript formatting. Please run the following command before your commit:
-
-```command-line
-npm run format
-```
-
-For your convenience, you can integrate Prettier into your favorite IDE (<https://prettier.io/docs/en/editors.html>)
-
-### Unit-Tests Style Guide
-
-- Name spec file by adding `.test` to the name of tested file.
-
-Example:
-
-```string
-foo.ts
-foo.test.ts // test file for foo.ts
-```
-
-- Treat `describe` as a noun or situation.
-- Treat `it` as a statement about state or how an operation changes state.
-
-Example:
-
-```javascript
-describe('Header', () => {
-  it('shows username', () => {
-    //...
-  });
-
-  it('shows logout button', () => {
-    //...
-  });
-});
-```

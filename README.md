@@ -31,6 +31,8 @@ https://status.rs.school/
 
 ## Getting Started
 
+Repository is organized into 3 workspaces: `server`, `nestjs`, `client`. Each workspace has its own package.json and npm scripts. We use [Turbo](https://turbo.build/) to run scripts across workspaces.
+
 ### Prerequisites
 
 Please install the following software before starting development:
