@@ -15,7 +15,7 @@ import { PersonDto } from 'src/core/dto';
 import { MentorDashboardDto, SolutionItemStatus } from './dto/mentor-dashboard.dto';
 import * as dayjs from 'dayjs';
 import { TaskChecker, User } from '../../../../server/src/models';
-import { PreferredStudentsLocation } from '@common/enums/mentor';
+import { PreferredStudentsLocation } from '@entities/mentorRegistry';
 
 export interface SolutionItem {
   maxScore: number;

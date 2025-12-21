@@ -1,8 +1,7 @@
 import globalAxios, { AxiosInstance } from 'axios';
 import { UserBasic, MentorBasic, StudentBasic, InterviewDetails, InterviewPair } from '@common/models';
 import { ScoreOrder, ScoreTableFilters } from 'modules/Score/hooks/types';
-import { IPaginationInfo } from '@common/types/pagination';
-import { PreferredStudentsLocation } from '@common/enums/mentor';
+import { IPaginationInfo } from '@client/utils/pagination';
 
 import {
   CoursesTasksApi,
@@ -20,6 +19,7 @@ import {
   StudentSummaryDto,
   CertificateApi,
   CoursesInterviewsApi,
+  MentorDetailsDtoStudentsPreferenceEnum,
 } from 'api';
 import { optionalQueryString } from 'utils/optionalQueryString';
 import { Decision } from 'data/interviews/technical-screening';
@@ -527,7 +527,11 @@ export class CourseService {
 
   async createMentor(
     githubId: string,
-    data: { students: string[]; maxStudentsLimit: number; preferedStudentsLocation: PreferredStudentsLocation },
+    data: {
+      students: string[];
+      maxStudentsLimit: number;
+      preferedStudentsLocation: MentorDetailsDtoStudentsPreferenceEnum;
+    },
   ) {
     const result = await this.axios.post(`/mentor/${githubId}`, data);
     return result.data.data;

@@ -15,7 +15,7 @@ import { Feedback } from './feedback';
 import { History } from './history';
 import { LoginState } from './loginState';
 import { Mentor } from './mentor';
-import { MentorRegistry } from './mentorRegistry';
+import { MentorRegistry, PreferredStudentsLocation } from './mentorRegistry';
 import { Notification } from './notification';
 import { NotificationChannel } from './notificationChannel';
 import { NotificationChannelSettings } from './notificationChannelSettings';
@@ -63,11 +63,12 @@ export {
   Discipline,
   DiscordServer,
   Event,
-  ExternalAccount,
+  type ExternalAccount,
   Feedback,
   LoginState,
   Mentor,
   MentorRegistry,
+  PreferredStudentsLocation,
   Notification,
   NotificationChannel,
   NotificationChannelSettings,

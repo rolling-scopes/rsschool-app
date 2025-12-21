@@ -1,11 +1,10 @@
+import { CourseStatsApi, ExpelledStatsDto } from '@client/api';
 import { useRequest } from 'ahooks';
 import { useState } from 'react';
-import { CourseStatsApi } from 'api';
-import { DetailedExpelledStat } from '@common/models';
 
 const courseStatsApi = new CourseStatsApi();
 
-const fetchExpelledStats = async (courseId: number): Promise<DetailedExpelledStat[]> => {
+const fetchExpelledStats = async (courseId: number): Promise<ExpelledStatsDto[]> => {
   const response = await courseStatsApi.getCourseExpelledStats(courseId);
   return response.data;
 };

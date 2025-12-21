@@ -1,10 +1,10 @@
 import { Button, Form, FormInstance, Select } from 'antd';
-import { PreferredStudentsLocation } from '@common/enums/mentor';
 import { StudentSearch } from './StudentSearch';
+import { MentorDetailsDtoStudentsPreferenceEnum } from '@client/api/api';
 
 export type Options = {
   maxStudentsLimit: number;
-  preferedStudentsLocation: PreferredStudentsLocation;
+  preferedStudentsLocation: MentorDetailsDtoStudentsPreferenceEnum;
   students?: { value: number }[];
   preselectedStudents?: { id: number; githubId: string; name: string }[];
 };
