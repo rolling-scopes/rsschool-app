@@ -75,7 +75,7 @@ const AdditionalActions = ({
 
   return (
     <Dropdown menu={{ items: menuItems, onClick: handleMenuItemClick }} trigger={['click']} placement="bottomRight">
-      <Button>
+      <Button data-testid={SettingsButtons.More}>
         <Space>
           {SettingsButtons.More}
           <DownOutlined />

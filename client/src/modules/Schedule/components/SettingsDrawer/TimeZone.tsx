@@ -1,8 +1,8 @@
 import React from 'react';
 import { Typography, Select } from 'antd';
 import { FieldTimeOutlined } from '@ant-design/icons';
-import SettingsItem from './SettingsItem';
 import { ALL_TIMEZONES } from 'configs/timezones';
+import SettingsItem from '@client/components/SettingsItem';
 
 const { Paragraph, Title } = Typography;
 const { Option } = Select;

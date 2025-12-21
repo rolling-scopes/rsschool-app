@@ -3,7 +3,7 @@ import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { useCallback } from 'react';
 import { FilterOutlined } from '@ant-design/icons';
 import { COLUMNS, CONFIGURABLE_COLUMNS } from '../../constants';
-import SettingsItem from './SettingsItem';
+import SettingsItem from '@client/components/SettingsItem';
 
 const { Text } = Typography;
 
