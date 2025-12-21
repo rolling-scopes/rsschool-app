@@ -1,0 +1,12 @@
+.container {
+  margin-bottom: 16px;
+  cursor: default;
+}
+
+.container:last-child {
+  margin-bottom: 0;
+}
+
+.link {
+  padding-left: 0;
+}

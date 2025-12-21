@@ -3,6 +3,7 @@ import { ResumeDto } from 'api';
 import { ViewCV } from 'modules/Opportunities/components/ViewCv';
 import Head from 'next/head';
 import { PropsWithChildren } from 'react';
+import styles from './index.module.css';
 
 const { Content } = Layout;
 
@@ -28,12 +29,7 @@ export function PublicPage({ data }: PropsWithChildren<Props>) {
           <ViewCV publicMode initialData={data} />
         </Content>
       </Layout>
-      <style jsx global>{`
-        html,
-        body {
-          font-family: 'Ubuntu', sans-serif;
-        }
-      `}</style>
+      <div className={styles.fontOverride} />
     </>
   );
 }

@@ -3,6 +3,7 @@ import { NotificationDto, NotificationType } from 'api';
 import { ModalForm } from 'components/Forms';
 import React from 'react';
 import { NotificationTemlate } from '../services/notifications';
+import styles from './NotificationSettingsModal.module.css';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
@@ -42,7 +43,7 @@ export function NotificationSettingsModal(props: Props) {
 
   return (
     <ModalForm title="Notification Settings" data={initialValue} submit={handleSubmit} cancel={onCancel}>
-      <div className="tabs">
+      <div className={styles.tabs}>
         <Tabs>
           <TabPane tab="Settings" forceRender destroyInactiveTabPane={false} key="sd">
             <Form.Item name="id" label="Id" rules={[{ required: true, message: 'Please enter id' }]}>
@@ -93,11 +94,6 @@ export function NotificationSettingsModal(props: Props) {
           ))}
         </Tabs>
       </div>
-      <style jsx>{`
-        .tabs :global(.ant-tabs-tab-btn) {
-          text-transform: capitalize;
-        }
-      `}</style>
     </ModalForm>
   );
 
