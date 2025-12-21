@@ -1,5 +1,5 @@
 import { SettingOutlined } from '@ant-design/icons';
-import { Button, Drawer } from 'antd';
+import { Button, Drawer, Tooltip } from 'antd';
 import React, { useState } from 'react';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import ChangeTagColors from './ChangeTagColors';
@@ -22,9 +22,16 @@ export function SettingsDrawer({ settings, tags }: SettingsDrawerProps) {
 
   return (
     <>
-      <Button icon={<SettingOutlined />} onClick={openDrawer}>
-        Settings
-      </Button>
+      <Tooltip title="Table settings" placement="left">
+        <Button
+          data-testid="Settings"
+          title="Settings"
+          shape="circle"
+          type="text"
+          icon={<SettingOutlined style={{ fontSize: '2.5ch' }} />}
+          onClick={openDrawer}
+        />
+      </Tooltip>
       <Drawer title={TITLE} placement="right" closable onClose={closeDrawer} open={opened}>
         <TimeZone timezone={settings.timezone} setTimezone={settings.setTimezone} />
         <ShowTableColumns columnsHidden={settings.columnsHidden} setColumnsHidden={settings.setColumnsHidden} />
