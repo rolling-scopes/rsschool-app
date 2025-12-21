@@ -64,14 +64,24 @@ export function SettingsPanel({
     <Row justify="end" gutter={16}>
       {isCourseManager && !mobileView ? (
         <Col>
-          <Button type="primary" icon={<PlusOutlined />} onClick={onCreateCourseEvent}>
+          <Button
+            data-testid={SettingsButtons.Event}
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={onCreateCourseEvent}
+          >
             {SettingsButtons.Event}
           </Button>
         </Col>
       ) : null}
       {isCourseManager && !mobileView ? (
         <Col>
-          <Button type="primary" icon={<PlusOutlined />} onClick={onCreateCourseTask}>
+          <Button
+            data-testid={SettingsButtons.Task}
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={onCreateCourseTask}
+          >
             {SettingsButtons.Task}
           </Button>
         </Col>

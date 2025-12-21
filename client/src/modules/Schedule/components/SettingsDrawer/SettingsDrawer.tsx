@@ -24,6 +24,7 @@ export function SettingsDrawer({ settings, tags }: SettingsDrawerProps) {
     <>
       <Tooltip title="Table settings" placement="left">
         <Button
+          data-testid="Settings"
           title="Settings"
           shape="circle"
           type="text"

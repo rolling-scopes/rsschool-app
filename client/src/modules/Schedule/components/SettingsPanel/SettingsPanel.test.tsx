@@ -26,7 +26,7 @@ describe('SettingsPanel', () => {
   `('should render "$button" button', ({ button }: { button: string }) => {
     render(<SettingsPanel {...PROPS_MOCK} />);
 
-    const settingsBtn = button === 'Settings' ? screen.getByTitle(button) : screen.getByText(button);
+    const settingsBtn = screen.getByTestId(button);
 
     expect(settingsBtn).toBeInTheDocument();
   });
