@@ -1,12 +1,11 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
-import { MentorRegistryDto, RegistryApi, InviteMentorsDto } from 'api';
-import { PreferredStudentsLocation } from '@common/enums/mentor';
+import { MentorRegistryDto, RegistryApi, InviteMentorsDto, MentorDetailsDtoStudentsPreferenceEnum } from 'api';
 import { MentorRegistryTabsMode } from 'modules/MentorRegistry/constants';
 
 export type MentorResponse = {
   preselectedCourses: number[];
   maxStudentsLimit: number;
-  preferedStudentsLocation: PreferredStudentsLocation;
+  preferedStudentsLocation: MentorDetailsDtoStudentsPreferenceEnum;
   preferredCourses: number[];
 };
 

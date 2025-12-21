@@ -1,7 +1,7 @@
-import { PreferredStudentsLocation } from '@common/enums/mentor';
 import { InterviewStatistics, MentorDetails } from '@common/models';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { UserDto } from '../../../user-groups/dto';
+import { UserDto } from '../../../users/dto';
+import { PreferredStudentsLocation } from '@entities/mentorRegistry';
 
 class StudentId {
   @ApiProperty()

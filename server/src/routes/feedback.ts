@@ -1,8 +1,7 @@
 import Router from '@koa/router';
 import { StatusCodes } from 'http-status-codes';
 import { getCustomRepository } from 'typeorm';
-import { IGratitudeGetRequest } from '../../../common/interfaces/gratitude';
-import { FeedbackRepository } from '../repositories/feedback.repository';
+import { FeedbackRepository, GetGratitudeQuery } from '../repositories/feedback.repository';
 import { ILogger } from '../logger';
 import { guard } from './guards';
 import { setResponse } from './utils';
@@ -17,7 +16,7 @@ export function feedbackRoute(_: ILogger) {
 
 const getGratitudeFeedback = () => {
   return async (ctx: Router.RouterContext) => {
-    const data: IGratitudeGetRequest = ctx.query;
+    const data: GetGratitudeQuery = ctx.query;
     const feedbackRepository = getCustomRepository(FeedbackRepository);
     const result = await feedbackRepository.getGratitude(data);
     setResponse(ctx, OK, result);

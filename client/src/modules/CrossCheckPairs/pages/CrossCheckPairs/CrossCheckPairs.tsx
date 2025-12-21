@@ -1,7 +1,7 @@
 import { Collapse, Modal, Space, TablePaginationConfig } from 'antd';
 import { Comment } from '@ant-design/compatible';
 import { FilterValue } from 'antd/lib/table/interface';
-import { IPaginationInfo } from '@common/types/pagination';
+import { IPaginationInfo } from '@client/utils/pagination';
 import { AdminPageLayout } from 'components/PageLayout';
 import { dateTimeRenderer } from 'components/Table';
 import { useCallback, useEffect, useMemo, useState } from 'react';

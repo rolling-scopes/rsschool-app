@@ -1,7 +1,7 @@
 import Router from '@koa/router';
 import { BAD_REQUEST, NOT_FOUND, OK, StatusCodes } from 'http-status-codes';
 import { getCustomRepository, getRepository } from 'typeorm';
-import { PreferredStudentsLocation } from '../../../../common/enums/mentor';
+import { PreferredStudentsLocation } from '../../models/mentorRegistry';
 import { ILogger } from '../../logger';
 import { Mentor, MentorRegistry, Student } from '../../models';
 import { StudentRepository } from '../../repositories/student.repository';

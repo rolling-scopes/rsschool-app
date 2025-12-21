@@ -1,16 +1,11 @@
+import { InterviewFeedbackValues } from '@common/models/interview';
 import {
   getFeedbackFromTemplate,
   getDefaultStep,
   isInterviewCanceled,
   getUpdatedFeedback,
 } from './feedbackTemplateHandler';
-import {
-  Decision,
-  Feedback,
-  FeedbackStepId,
-  InterviewFeedbackValues,
-  feedbackTemplate,
-} from 'data/interviews/technical-screening';
+import { Decision, Feedback, FeedbackStepId, feedbackTemplate } from 'data/interviews/technical-screening';
 
 describe('getFeedbackFromTemplate', () => {
   test('should return default template when no feedback exists', () => {
