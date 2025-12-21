@@ -793,7 +793,7 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/CourseStatsDto" } }
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/ExpelledStatsDto" } }
               }
             }
           }
@@ -3811,6 +3811,33 @@
         "properties": { "deadlineInHours": { "type": "number" } },
         "required": ["deadlineInHours"]
       },
+      "UserDto": {
+        "type": "object",
+        "properties": { "id": { "type": "number" }, "name": { "type": "string" }, "githubId": { "type": "string" } },
+        "required": ["id", "name", "githubId"]
+      },
+      "ExpelledStatsDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "course": { "$ref": "#/components/schemas/CourseDto" },
+          "user": { "$ref": "#/components/schemas/UserDto" },
+          "reasonForLeaving": { "type": "array", "items": { "type": "string" } },
+          "otherComment": { "type": "string" },
+          "submittedAt": { "format": "date-time", "type": "string" }
+        },
+        "required": ["id", "course", "user", "reasonForLeaving", "otherComment", "submittedAt"]
+      },
+      "CountryStatDto": {
+        "type": "object",
+        "properties": { "countryName": { "type": "string" }, "count": { "type": "number" } },
+        "required": ["countryName", "count"]
+      },
+      "CountriesStatsDto": {
+        "type": "object",
+        "properties": { "countries": { "type": "array", "items": { "$ref": "#/components/schemas/CountryStatDto" } } },
+        "required": ["countries"]
+      },
       "CourseStatsDto": {
         "type": "object",
         "properties": {
@@ -3827,16 +3854,6 @@
           "certifiedStudentsCount",
           "eligibleForCertificationCount"
         ]
-      },
-      "CountryStatDto": {
-        "type": "object",
-        "properties": { "countryName": { "type": "string" }, "count": { "type": "number" } },
-        "required": ["countryName", "count"]
-      },
-      "CountriesStatsDto": {
-        "type": "object",
-        "properties": { "countries": { "type": "array", "items": { "$ref": "#/components/schemas/CountryStatDto" } } },
-        "required": ["countries"]
       },
       "CourseMentorsStatsDto": {
         "type": "object",
@@ -5276,11 +5293,6 @@
           }
         },
         "required": ["name", "users", "roles"]
-      },
-      "UserDto": {
-        "type": "object",
-        "properties": { "id": { "type": "number" }, "name": { "type": "string" }, "githubId": { "type": "string" } },
-        "required": ["id", "name", "githubId"]
       },
       "UserGroupDto": {
         "type": "object",

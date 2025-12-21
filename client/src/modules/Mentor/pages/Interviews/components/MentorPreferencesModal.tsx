@@ -3,10 +3,9 @@ import { MentorOptions, Options } from 'components/MentorOptions';
 import React, { createContext, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
-import { MentorsApi } from 'api';
+import { MentorDetailsDtoStudentsPreferenceEnum, MentorsApi } from 'api';
 import { getMentorId } from 'domain/user';
 import { Session } from 'components/withSession';
-import { PreferredStudentsLocation } from '@common/enums/mentor';
 
 type Props = {
   course: { id: number; name: string };
@@ -46,7 +45,7 @@ function MentorOptionsModal({ course, close, session }: Props & { close: () => v
     const { students, maxStudentsLimit, preferedStudentsLocation } = mentor;
     setOptions({
       maxStudentsLimit,
-      preferedStudentsLocation: preferedStudentsLocation as PreferredStudentsLocation,
+      preferedStudentsLocation: preferedStudentsLocation as MentorDetailsDtoStudentsPreferenceEnum,
       students: students.map(s => ({ value: s.id })),
       preselectedStudents: students,
     });

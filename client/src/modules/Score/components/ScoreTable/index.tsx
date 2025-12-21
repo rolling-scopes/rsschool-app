@@ -14,7 +14,7 @@ import { useScorePaging } from 'modules/Score/hooks/useScorePaging';
 import { SettingsDrawer } from 'modules/Score/components/SettingsDrawer';
 import { CourseService } from 'services/course';
 import { CoursePageProps } from 'services/models';
-import { IPaginationInfo } from '@common/types/pagination';
+import { IPaginationInfo } from '@client/utils/pagination';
 import { ScoreOrder, ScoreTableFilters } from 'modules/Score/hooks/types';
 import useWindowDimensions from 'utils/useWindowDimensions';
 import { Summary } from './Summary';

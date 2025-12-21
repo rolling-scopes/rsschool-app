@@ -1,10 +1,17 @@
 import { AbstractRepository, EntityRepository, getManager } from 'typeorm';
 import { Feedback, User } from '../models';
-import { IGratitudeGetRequest } from '../../../common/interfaces/gratitude';
+
+export type GetGratitudeQuery = {
+  name?: string;
+  githubId?: string;
+  courseId?: number;
+  pageSize?: number;
+  current?: number;
+};
 
 @EntityRepository(Feedback)
 export class FeedbackRepository extends AbstractRepository<Feedback> {
-  public async getGratitude({ courseId, githubId, name, pageSize = 20, current = 1 }: IGratitudeGetRequest) {
+  public async getGratitude({ courseId, githubId, name, pageSize = 20, current = 1 }: GetGratitudeQuery) {
     const queryCount = getManager()
       .createQueryBuilder()
       .select('COUNT(*)')
