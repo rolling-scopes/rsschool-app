@@ -11,7 +11,7 @@ import { CommentModal } from 'components/CommentModal';
 import { MentorSearch } from 'components/MentorSearch';
 import { useState } from 'react';
 import { StudentDetails } from 'services/course';
-import css from 'styled-jsx/css';
+import styles from './DashboardDetails.module.css';
 
 type Props = {
   details: StudentDetails | null;
@@ -46,7 +46,7 @@ export function DashboardDetails(props: Props) {
         onClose={props.onClose}
         open={!!details}
       >
-        <div className="student-details-actions">
+        <div className={styles.studentDetailsActions}>
           {props.courseManagerOrSupervisor && (
             <>
               <Button
@@ -114,13 +114,6 @@ export function DashboardDetails(props: Props) {
           setExpelMode(false);
         }}
       />
-      <style jsx>{styles}</style>
     </>
   );
 }
-
-const styles = css`
-  .student-details-actions :global(.ant-btn) {
-    margin: 0 8px 8px 0;
-  }
-`;

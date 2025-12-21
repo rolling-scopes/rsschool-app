@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Spin, theme } from 'antd';
+import styles from './LoadingScreen.module.css';
 
 type Props = React.PropsWithChildren<{ show: boolean }>;
 
@@ -11,7 +12,7 @@ export const LoadingScreen = (props: Props) => {
   return (
     <div
       data-testid="loading-screen"
-      className="loading-screen"
+      className={styles.loadingScreen}
       style={{
         justifyContent: 'center',
         alignItems: 'center',
@@ -25,13 +26,6 @@ export const LoadingScreen = (props: Props) => {
       <Spin tip="Loading..." size="default">
         <div style={{ padding: '50px' }} />
       </Spin>
-      <style jsx>{`
-        .loading-screen {
-          z-index: 1;
-          top: 0;
-          left: 0;
-        }
-      `}</style>
     </div>
   );
 };

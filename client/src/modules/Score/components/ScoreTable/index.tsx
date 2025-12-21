@@ -6,8 +6,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocalStorage } from 'react-use';
 import isUndefined from 'lodash/isUndefined';
 import { useRouter } from 'next/router';
-import css from 'styled-jsx/css';
 import { CoursesTasksApi, CourseTaskDto, ScoreStudentDto } from 'api';
+import styles from './index.module.css';
 import { getColumns } from 'modules/Score/data/getColumns';
 import { getTaskColumns } from 'modules/Score/data/getTaskColumns';
 import { useScorePaging } from 'modules/Score/hooks/useScorePaging';
@@ -214,7 +214,7 @@ export function ScoreTable(props: Props) {
   return (
     <>
       <Table<ScoreStudentDto>
-        className="table-score"
+        className={styles.tableScore}
         showHeader
         scroll={{ x: getTableWidth(visibleColumns.length), y: 'calc(95vh - 320px)' }}
         pagination={{ ...students.pagination, showTotal: total => `Total ${total} students` }}
@@ -253,7 +253,6 @@ export function ScoreTable(props: Props) {
         onOk={handleModalOk}
         onCancel={handleModalCancel}
       />
-      <style jsx>{styles}</style>
     </>
   );
 }
@@ -264,22 +263,3 @@ export function getTableWidth(columnsCount: number) {
   const tableWidth = columnsCount * columnWidth;
   return tableWidth;
 }
-
-const styles = css`
-  :global(.rs-table-row-disabled) {
-    opacity: 0.25;
-  }
-  :global(.table-score td, .table-score th) {
-    padding: 0 5px !important;
-    font-size: 11px;
-  }
-  :global(.table-score td a) {
-    line-height: 24px;
-  }
-  :global(.table-score .ant-table-body) {
-    min-height: 200px;
-  }
-  :global(.table-score) {
-    margin: 1.5rem 0 0;
-  }
-`;

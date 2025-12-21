@@ -1,0 +1,7 @@
+.table :global(.ant-table-thead) {
+  display: none;
+}
+
+.table :global(tr:last-child > td) {
+  border-bottom: none;
+}

@@ -1,0 +1,14 @@
+.container :global(.ant-comment-inner) {
+  padding: 0 !important;
+}
+
+.container :global(.ant-comment-avatar) {
+  position: sticky !important;
+  top: 16px;
+  align-self: start;
+}
+
+.container :global(.ant-comment-avatar img) {
+  width: 100% !important;
+  height: 100% !important;
+}

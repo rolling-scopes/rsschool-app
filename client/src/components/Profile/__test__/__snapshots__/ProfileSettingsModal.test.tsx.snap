@@ -4,7 +4,7 @@ exports[`ProfileSettingsModal should render correctly 1`] = `
 <div
   aria-labelledby="test-id"
   aria-modal="true"
-  class="ant-modal css-dev-only-do-not-override-1v2lwm6 ant-zoom-appear ant-zoom-appear-prepare ant-zoom"
+  class="ant-modal css-dev-only-do-not-override-1v2lwm6 modal ant-zoom-appear ant-zoom-appear-prepare ant-zoom"
   role="dialog"
   style="width: 520px;"
 >

@@ -1,6 +1,6 @@
 import { Typography, Form, Row, Checkbox, Radio, Col, Space } from 'antd';
 import { SelfEducationQuestionSelectedAnswersDto } from 'api';
-import css from 'styled-jsx/css';
+import styles from './Question.module.css';
 
 const { Title } = Typography;
 
@@ -13,7 +13,7 @@ function Question({ question: selfEducationQuestion }: QuestionProps): JSX.Eleme
   const Element = multiple ? Checkbox : Radio;
 
   return (
-    <div className="question">
+    <div className={styles.question}>
       <Form.Item
         label={
           <Row>
@@ -61,16 +61,8 @@ function Question({ question: selfEducationQuestion }: QuestionProps): JSX.Eleme
           })}
         </Space>
       </Form.Item>
-      <style jsx>{styles}</style>
     </div>
   );
 }
-
-const styles = css`
-  .question :global(.ant-radio) {
-    align-self: flex-start !important;
-    margin-top: 3px !important;
-  }
-`;
 
 export default Question;
