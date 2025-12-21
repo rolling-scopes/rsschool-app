@@ -1,0 +1,21 @@
+:global(.rs-table-row-disabled) {
+  opacity: 0.25;
+}
+
+.tableScore :global(td),
+.tableScore :global(th) {
+  padding: 0 5px !important;
+  font-size: 11px;
+}
+
+.tableScore :global(td a) {
+  line-height: 24px;
+}
+
+.tableScore :global(.ant-table-body) {
+  min-height: 200px;
+}
+
+.tableScore {
+  margin: 1.5rem 0 0;
+}

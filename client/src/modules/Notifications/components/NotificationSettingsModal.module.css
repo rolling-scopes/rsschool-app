@@ -1,0 +1,3 @@
+.tabs :global(.ant-tabs-tab-btn) {
+  text-transform: capitalize;
+}

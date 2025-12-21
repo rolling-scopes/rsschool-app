@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
-import css from 'styled-jsx/css';
 import { Table } from 'antd';
+
+import styles from './NotificationsUserSettingsTable.module.css';
 import { ColumnType } from 'antd/lib/table';
 import { buildCheckBoxRenderer } from 'components/Table';
 import { NotificationChannel, UserNotificationSettings } from '../services/notifications';
@@ -17,36 +18,16 @@ export function NotificationsTable({
   const columns = useMemo(() => buildColumns(onCheck, disabledChannels), [onCheck, disabledChannels]);
 
   return (
-    <>
-      <Table
-        size="small"
-        style={{ marginTop: 8 }}
-        dataSource={notifications}
-        rowKey="name"
-        columns={columns}
-        pagination={false}
-      />
-      {columnStyles}
-      {disabledStyles}
-    </>
+    <Table
+      size="small"
+      style={{ marginTop: 8 }}
+      dataSource={notifications}
+      rowKey="name"
+      columns={columns}
+      pagination={false}
+    />
   );
 }
-
-const { className: columnClassName, styles: columnStyles } = css.resolve`
-  & {
-    text-transform: capitalize;
-  }
-`;
-
-const { className: disabledClassName, styles: disabledStyles } = css.resolve`
-  td {
-    cursor: no-drop;
-  }
-  td > :global(*) {
-    opacity: 0.2;
-    pointer-events: none;
-  }
-`;
 
 function buildColumns(
   onCheck: (dataIndex: string[], record: UserNotificationSettings, checked: boolean) => void,
@@ -66,8 +47,8 @@ function buildColumns(
         const dataIndex = ['settings', channel];
         return {
           align: 'center',
-          className: `${columnClassName} ${
-            disabledChannels.includes(channel as NotificationChannel) ? disabledClassName : ''
+          className: `${styles.column} ${
+            disabledChannels.includes(channel as NotificationChannel) ? styles.disabled : ''
           }`,
           title: channel,
           dataIndex,

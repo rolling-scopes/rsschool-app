@@ -14,8 +14,8 @@ import { SolidarityUkraine } from './SolidarityUkraine';
 import { SessionContext } from 'modules/Course/contexts';
 import { getNavigationItems } from 'modules/Home/data/links';
 import { useActiveCourseContext } from 'modules/Course/contexts/ActiveCourseContext';
-import css from 'styled-jsx/css';
 import ThemeSwitch from '@client/components/ThemeSwitch';
+import styles from './Header.module.css';
 
 type Props = {
   showCourseName?: boolean;
@@ -113,7 +113,7 @@ export function Header({ title, showCourseName }: Props) {
           </Link>
           <SolidarityUkraine />
         </Space>
-        <div className="title">
+        <div className={styles.title}>
           <b>{title}</b> {showCourseName ? course?.name : null}
         </div>
         <Flex align="center">
@@ -126,20 +126,8 @@ export function Header({ title, showCourseName }: Props) {
             </Dropdown>
           )}
         </Flex>
-        <style jsx>{styles}</style>
       </nav>
       <Menu selectedKeys={[currentRoute]} mode="horizontal" items={courseLinks} />
     </Space>
   );
 }
-
-const styles = css`
-  @media all and (max-width: 768px) {
-    .title {
-      width: 100%;
-      order: 3;
-      text-align: center;
-      margin-top: 16px;
-    }
-  }
-`;

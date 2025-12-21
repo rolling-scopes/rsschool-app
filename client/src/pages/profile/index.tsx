@@ -22,6 +22,7 @@ import { useAsync } from 'react-use';
 import { checkIsProfileOwner, getStudentCoreJSInterviews } from 'utils/profilePageUtils';
 import { useMessage } from 'hooks';
 import InterviewCard from '@client/components/Profile/InterviewCard';
+import styles from './index.module.css';
 
 type ConnectionValue = {
   value: string;
@@ -195,8 +196,8 @@ const Profile = () => {
                 700: 2,
                 500: 1,
               }}
-              className="masonry"
-              columnClassName="masonry-column"
+              className={styles.masonry as string}
+              columnClassName={styles.masonryColumn}
             >
               {cards.map((card, idx) => (
                 <div style={{ marginBottom: 16 }} key={`card-${idx}`}>
@@ -204,19 +205,6 @@ const Profile = () => {
                 </div>
               ))}
             </Masonry>
-            <style jsx global>{`
-              .masonry {
-                display: flex;
-                margin-left: -16px;
-                width: auto;
-              }
-            `}</style>
-            <style jsx global>{`
-              .masonry-column {
-                padding-left: 16px;
-                background-clip: padding-box;
-              }
-            `}</style>
           </div>
         ) : (
           <Result status={'403'} title="No access or user does not exist" />

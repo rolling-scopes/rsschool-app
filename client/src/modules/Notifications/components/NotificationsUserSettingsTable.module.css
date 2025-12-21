@@ -1,0 +1,12 @@
+.column {
+  text-transform: capitalize;
+}
+
+.disabled {
+  cursor: no-drop;
+}
+
+.disabled > :global(*) {
+  opacity: 0.2;
+  pointer-events: none;
+}

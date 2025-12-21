@@ -6,7 +6,8 @@ import {
   fields,
   getCrossCheckPairsColumns,
 } from 'modules/CrossCheckPairs/data/getCrossCheckPairsColumns';
-import css from 'styled-jsx/css';
+
+import styles from './CrossCheckPairsTable.module.css';
 
 export type Filters = Omit<typeof fields, 'score' | 'submittedDate' | 'reviewedDate'>;
 
@@ -42,25 +43,17 @@ export const CrossCheckPairsTable = ({
   return (
     <>
       <Table<CrossCheckPairDto>
-        className="table-score"
+        className={styles.tableScore}
         showHeader
         scroll={{ x: tableWidth, y: 'calc(100vh - 250px)' }}
         pagination={pagination}
         dataSource={crossCheckPairs}
         size="small"
-        rowClassName={'cross-check-table-row'}
+        rowClassName={styles.tableRow}
         onChange={onChange}
         key="id"
         columns={getCrossCheckPairsColumns(viewComment)}
       />
-      <style jsx>{styles}</style>
     </>
   );
 };
-
-const styles = css`
-  :global(.cross-check-table-row, .table-score td, .table-score th) {
-    padding: 0 5px !important;
-    font-size: 11px;
-  }
-`;

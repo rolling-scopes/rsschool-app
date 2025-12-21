@@ -9,6 +9,7 @@ import { LoadingScreen } from 'components/LoadingScreen';
 import { useLoading } from 'components/useLoading';
 import { SessionContext } from 'modules/Course/contexts';
 import { EditViewCv } from 'modules/Opportunities/components/EditViewCv';
+import styles from './index.module.css';
 
 const { Content } = Layout;
 const { Text, Paragraph } = Typography;
@@ -105,12 +106,7 @@ export function EditPage() {
           />
         </Content>
       </LoadingScreen>
-      <style jsx global>{`
-        html,
-        body {
-          font-family: 'Ubuntu', sans-serif;
-        }
-      `}</style>
+      <div className={styles.fontOverride} />
     </>
   );
 }
