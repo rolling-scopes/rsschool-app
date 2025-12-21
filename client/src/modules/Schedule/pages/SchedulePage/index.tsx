@@ -21,6 +21,7 @@ import { useScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings'
 import { useContext, useMemo, useState } from 'react';
 import { useAsyncRetry, useLocalStorage, useMedia } from 'react-use';
 import { ALL_TAB_KEY, LocalStorageKeys } from 'modules/Schedule/constants';
+import styles from './index.module.css';
 
 const courseScheduleApi = new CoursesScheduleApi();
 const coursesScheduleIcalApi = new CoursesScheduleIcalApi();
@@ -132,16 +133,7 @@ export function SchedulePage() {
           />
         </CoursesListModal>
       </PageLayout>
-      {!mobileView && (
-        <style jsx>
-          {`
-            :global(.ant-layout-content) {
-              margin: 16px 0 0 !important;
-              padding: 0 24px 24px;
-            }
-          `}
-        </style>
-      )}
+      {!mobileView && <div className={styles.layoutContentOverride} />}
     </>
   );
 }

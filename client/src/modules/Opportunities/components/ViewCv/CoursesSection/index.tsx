@@ -1,8 +1,9 @@
 import { StarOutlined, TrophyOutlined } from '@ant-design/icons';
 import { Col, List, Row, Typography } from 'antd';
-import css from 'styled-jsx/css';
 import { ResumeCourseDto, ResumeDto } from 'api';
 import { BaseSection } from '../BaseSection';
+
+import styles from './CoursesSection.module.css';
 import { StudentStatus } from 'modules/Opportunities/components/StudentStatus';
 import { DataTextValue } from 'modules/Opportunities/components/ViewCv/DataTextValue';
 
@@ -40,7 +41,7 @@ function renderItem(record: ResumeCourseDto) {
         <Row justify="space-between" style={{ marginTop: 8, width: '100%' }}>
           <Col flex={1}>
             <Row>
-              <span className="course-data-key">
+              <span className={styles.courseDataKey}>
                 Status: <StudentStatus certificateId={certificateId} isCourseCompleted={completed} />
               </span>
             </Row>
@@ -71,17 +72,6 @@ function renderItem(record: ResumeCourseDto) {
           </Col>
         </Row>
       </Col>
-      <style jsx>{styles}</style>
     </Item>
   );
 }
-
-const styles = css`
-  .course-data-key {
-    font-size: 14px;
-    padding-right: 8px;
-    white-space: nowrap;
-    width: 80px;
-    display: inline-block;
-  }
-`;

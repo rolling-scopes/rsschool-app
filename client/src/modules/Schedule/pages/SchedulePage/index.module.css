@@ -1,0 +1,7 @@
+.layoutContentOverride {
+}
+
+.layoutContentOverride :global(.ant-layout-content) {
+  margin: 16px 0 0 !important;
+  padding: 0 24px 24px;
+}

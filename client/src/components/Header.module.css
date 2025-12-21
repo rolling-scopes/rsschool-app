@@ -1,0 +1,8 @@
+@media all and (max-width: 768px) {
+  .title {
+    width: 100%;
+    order: 3;
+    text-align: center;
+    margin-top: 16px;
+  }
+}
