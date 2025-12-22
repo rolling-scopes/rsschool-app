@@ -1,6 +1,6 @@
 import { Body, Controller, Get, NotFoundException, Param, Post, UseGuards } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
+import { CourseRole, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
 import { StudentSummaryDto } from './dto/student-summary.dto';
 import { CourseStudentsService } from './course-students.service';
 import { ExpelStatusDto } from './dto/student-status.dto';
@@ -42,7 +42,7 @@ export class CourseStudentsController {
   @Post('expel')
   @ApiOperation({ operationId: 'expelStudents' })
   @UseGuards(RoleGuard)
-  @RequiredRoles([Role.Admin])
+  @RequiredRoles([Role.Admin, CourseRole.Manager])
   public async expelStudents(@Param('courseId') courseId: number, @Body() expelStatusDto: ExpelStatusDto) {
     return this.courseStudentService.expelStudents({
       courseId,
