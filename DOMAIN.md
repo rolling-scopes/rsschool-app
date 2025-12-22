@@ -63,7 +63,7 @@ Used when `CourseTask.checker = crossCheck`.
 
 ## Feedback, reputation, and certificates
 
-- `Feedback` is a public gratitude/badge from one user to another (optionally course-scoped).
+- `Feedback` is a public gratitude/badge from one user to another (course-scoped).
 - `PrivateFeedback` is internal feedback not visible publicly.
 - `StudentFeedback` is mentor feedback with structured soft-skill ratings and recommendations.
 - `Certificate` is an issued course certificate linked to a student.
