@@ -23,11 +23,31 @@ textarea::-webkit-scrollbar {
 :root::-webkit-scrollbar-thumb,
 textarea::-webkit-scrollbar-thumb {
   border-radius: calc(var(--scroll-size) / 2);
+  background: var(--scroll-color);
 }
 
 :root::-webkit-scrollbar-track,
 textarea::-webkit-scrollbar-track {
   margin: calc(var(--scroll-size) / 2);
+}
+
+.ant-table .ant-table-container .ant-table-body,
+.ant-table .ant-table-container .ant-table-content {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-color) transparent;
+  scrollbar-gutter: stable;
+}
+
+.ant-modal-content {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-color) transparent;
+  scrollbar-gutter: stable;
+}
+
+.ant-drawer-body {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-color) transparent;
+  scrollbar-gutter: stable;
 }
 
 textarea::-webkit-resizer {

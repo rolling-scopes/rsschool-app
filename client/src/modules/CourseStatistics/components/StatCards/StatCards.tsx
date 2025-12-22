@@ -102,11 +102,7 @@ export function StatCards({ coursesData }: StatCardsProps) {
 
   return (
     <>
-      <Masonry
-        breakpointCols={masonryBreakPoints}
-        className={styles.masonry as string}
-        columnClassName={styles.masonryColumn as string}
-      >
+      <Masonry breakpointCols={masonryBreakPoints} className={styles.masonry!} columnClassName={styles.masonryColumn!}>
         {cards.map(({ title, component }) => (
           <div style={{ marginBottom: gapSize }} key={title}>
             {component}

@@ -65,8 +65,8 @@ function Page() {
       <>
         <Masonry
           breakpointCols={{ default: 3, 1180: 2, 800: 1 }}
-          className={styles.masonry as string}
-          columnClassName={styles.masonryColumn}
+          className={styles.masonry!}
+          columnClassName={styles.masonryColumn!}
         >
           {cards.map((card, idx) => (
             <div style={{ marginBottom: gapSize }} key={`card-${idx}`}>
