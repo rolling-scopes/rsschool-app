@@ -1,6 +1,5 @@
 import { createContext, ReactNode, useEffect, useState } from 'react';
 import { ConfigProvider, theme } from 'antd';
-import styles from './ThemeProvider.module.css';
 
 enum AppTheme {
   Light = 'light',
@@ -131,7 +130,7 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
           algorithm: appTheme === AppTheme.Dark ? theme.darkAlgorithm : theme.defaultAlgorithm,
         }}
       >
-        <div className={styles.themeProvider}>{children}</div>
+        {children}
       </ConfigProvider>
     </ThemeContext.Provider>
   );
