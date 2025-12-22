@@ -3,7 +3,7 @@
 exports[`ProfilePage Should render correctly if full profile info is in the state 1`] = `
 <div>
   <div
-    class="jsx-785735b688e37766 loading-screen"
+    class="loadingScreen"
     data-testid="loading-screen"
     style="justify-content: center; align-items: center; display: flex; width: 100vw; position: fixed; height: 100vh; background: rgb(255, 255, 255);"
   >
@@ -43,7 +43,6 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
         class="ant-spin-container ant-spin-blur"
       >
         <div
-          class="jsx-785735b688e37766"
           style="padding: 50px;"
         />
       </div>

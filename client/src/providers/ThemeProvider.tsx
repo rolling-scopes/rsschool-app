@@ -130,35 +130,6 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
           algorithm: appTheme === AppTheme.Dark ? theme.darkAlgorithm : theme.defaultAlgorithm,
         }}
       >
-        <style jsx global>{`
-          :root::-webkit-scrollbar-thumb,
-          textarea::-webkit-scrollbar-thumb {
-            background: var(--scroll-color);
-          }
-
-          :global(.ant-table) {
-            :global(.ant-table-container) {
-              :global(.ant-table-body),
-              :global(.ant-table-content) {
-                scrollbar-width: thin;
-                scrollbar-color: var(--scroll-color) transparent;
-                scrollbar-gutter: stable;
-              }
-            }
-          }
-
-          :global(.ant-modal-content) {
-            scrollbar-width: thin;
-            scrollbar-color: var(--scroll-color) transparent;
-            scrollbar-gutter: stable;
-          }
-
-          :global(.ant-drawer-body) {
-            scrollbar-width: thin;
-            scrollbar-color: var(--scroll-color) transparent;
-            scrollbar-gutter: stable;
-          }
-        `}</style>
         {children}
       </ConfigProvider>
     </ThemeContext.Provider>

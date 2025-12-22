@@ -1,0 +1,10 @@
+:global(.custom-mentor-registry-tabs .ant-tabs-tab) {
+  min-width: 100px;
+}
+
+@media (min-width: 575px) {
+  .tabs {
+    padding: 12px 24px 0;
+    height: 64px;
+  }
+}

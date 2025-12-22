@@ -6,7 +6,8 @@ import dayjs from 'dayjs';
 import Link from 'next/link';
 import React from 'react';
 import { CourseEvent } from 'services/course';
-import css from 'styled-jsx/css';
+
+import styles from './EventDetails.module.css';
 
 const { Title, Text } = Typography;
 
@@ -23,7 +24,7 @@ export function EventDetails({ eventData, alias, isAdmin, isPreview, onEdit }: E
 
   return (
     <>
-      <div className="container">
+      <div className={styles.container}>
         <Row justify="center" align="middle" gutter={[40, 8]}>
           <Col>
             <Title>{event.name}</Title>
@@ -91,13 +92,13 @@ export function EventDetails({ eventData, alias, isAdmin, isPreview, onEdit }: E
         )}
 
         {isAdmin && (
-          <div className="button__edit">
+          <div className={styles.buttonEdit}>
             <Button icon={<EditOutlined />} onClick={() => onEdit && onEdit(false)} />
           </div>
         )}
 
         {!isPreview && (
-          <div className="button__close">
+          <div className={styles.buttonClose}>
             <Link prefetch={false} href={`/course/schedule?course=${alias}`} legacyBehavior>
               <a>
                 <Button icon={<CloseOutlined />} />
@@ -106,27 +107,6 @@ export function EventDetails({ eventData, alias, isAdmin, isPreview, onEdit }: E
           </div>
         )}
       </div>
-
-      <style jsx>{styles}</style>
     </>
   );
 }
-
-const styles = css`
-  .container {
-    position: relative;
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px 10px;
-  }
-  .button__close {
-    position: absolute;
-    right: 10px;
-    top: 0;
-  }
-  .button__edit {
-    position: absolute;
-    left: 10px;
-    top: 0;
-  }
-`;

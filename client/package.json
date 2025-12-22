@@ -42,7 +42,6 @@
     "react-use": "17.4.0",
     "remark-gfm": "3.0.1",
     "serverless-http": "3.2.0",
-    "styled-jsx": "5.1.2",
     "use-places-autocomplete": "4.0.1"
   },
   "devDependencies": {

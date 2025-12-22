@@ -1,0 +1,9 @@
+.iconMentor {
+  background-image: url('https://cdn.rs.school/sloths/cleaned/mentor-new.svg');
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 129px;
+  height: 170px;
+  margin: 10px auto;
+}
