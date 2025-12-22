@@ -3347,6 +3347,49 @@ export type EventDtoTypeEnum = typeof EventDtoTypeEnum[keyof typeof EventDtoType
 /**
  * 
  * @export
+ * @interface ExpelledStatsDto
+ */
+export interface ExpelledStatsDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof ExpelledStatsDto
+     */
+    'id': string;
+    /**
+     * 
+     * @type {CourseDto}
+     * @memberof ExpelledStatsDto
+     */
+    'course': CourseDto;
+    /**
+     * 
+     * @type {UserDto}
+     * @memberof ExpelledStatsDto
+     */
+    'user': UserDto;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof ExpelledStatsDto
+     */
+    'reasonForLeaving': Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExpelledStatsDto
+     */
+    'otherComment': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExpelledStatsDto
+     */
+    'submittedAt': string;
+}
+/**
+ * 
+ * @export
  * @interface FeedbackCourseDto
  */
 export interface FeedbackCourseDto {
@@ -10493,7 +10536,7 @@ export const CourseStatsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getExpelledStats(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CourseStatsDto>>> {
+        async getExpelledStats(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ExpelledStatsDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getExpelledStats(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -10587,7 +10630,7 @@ export const CourseStatsApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getExpelledStats(options?: any): AxiosPromise<Array<CourseStatsDto>> {
+        getExpelledStats(options?: any): AxiosPromise<Array<ExpelledStatsDto>> {
             return localVarFp.getExpelledStats(options).then((request) => request(axios, basePath));
         },
         /**

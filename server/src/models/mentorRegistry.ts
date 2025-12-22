@@ -31,7 +31,7 @@ export class MentorRegistry {
   languagesMentoring: string[];
 
   @Column('varchar')
-  preferedStudentsLocation: string;
+  preferedStudentsLocation: PreferredStudentsLocation;
 
   @CreateDateColumn()
   createdDate: Date;
@@ -50,4 +50,10 @@ export class MentorRegistry {
 
   @Column({ nullable: true })
   sendDate: Date;
+}
+
+export enum PreferredStudentsLocation {
+  ANY = 'any',
+  COUNTRY = 'country',
+  CITY = 'city',
 }

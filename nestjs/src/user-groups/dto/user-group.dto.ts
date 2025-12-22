@@ -2,26 +2,7 @@ import { CourseRole } from '@entities/session';
 import { UserGroup } from '@entities/userGroup';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsNumber, IsString } from 'class-validator';
-
-export class UserDto {
-  constructor(user: UserDto) {
-    this.id = user.id;
-    this.name = user.name;
-    this.githubId = user.githubId;
-  }
-
-  @ApiProperty()
-  @IsNumber()
-  public id: number;
-
-  @ApiProperty()
-  @IsString()
-  public name: string;
-
-  @ApiProperty()
-  @IsString()
-  public githubId: string;
-}
+import { UserDto } from 'src/users/dto';
 
 export class UserGroupDto {
   constructor(userGroup: Omit<UserGroup, 'createdDate' | 'updatedDate' | 'users'> & { users: UserDto[] }) {

@@ -3,7 +3,7 @@ import { ParsedUrlQuery } from 'querystring';
 import { useCallback } from 'react';
 import { CourseService } from 'services/course';
 import { getQueryParams } from 'utils/queryParams-utils';
-import { IPaginationInfo } from '@common/types/pagination';
+import { IPaginationInfo } from '@client/utils/pagination';
 import { ScoreOrder, ScoreTableFilters } from './types';
 
 export function useScorePaging(router: NextRouter, courseService: CourseService, activeOnly: boolean) {

@@ -26,6 +26,7 @@ import {
 } from './dto';
 import { ExpelledStatsService } from '../expelled-stats.service';
 import { CourseRole, Role } from '../../auth/auth-user.model';
+import { ExpelledStatsDto } from './dto/expelled-stats.dto';
 
 @Controller('courses')
 @ApiTags('course stats')
@@ -41,9 +42,10 @@ export class CourseStatsController {
   @UseGuards(DefaultGuard, RoleGuard)
   @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor])
   @ApiOperation({ operationId: 'getExpelledStats' })
-  @ApiOkResponse({ type: [CourseStatsDto] })
+  @ApiOkResponse({ type: [ExpelledStatsDto] })
   public async getExpelledStats() {
-    return this.expelledStatsService.findAll();
+    const data = await this.expelledStatsService.findAll();
+    return data.map(item => new ExpelledStatsDto(item));
   }
 
   @Delete('/stats/expelled/:id')
