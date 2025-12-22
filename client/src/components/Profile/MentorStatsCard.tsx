@@ -82,7 +82,7 @@ export function MentorStatsCard(props: Props) {
                 type="inner"
                 size="small"
                 title={courseName}
-                extra={students && <ExpandButtonWidget onClick={showMentorStatsModal.bind(null, idx)} />}
+                extra={students && <ExpandButtonWidget onClick={() => showMentorStatsModal(idx)} />}
               >
                 <Card.Meta
                   title={courseLocationName && ` / ${courseLocationName}`}
