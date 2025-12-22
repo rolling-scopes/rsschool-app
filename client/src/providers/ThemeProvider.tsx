@@ -1,6 +1,5 @@
 import { createContext, ReactNode, useEffect, useState } from 'react';
 import { ConfigProvider, theme } from 'antd';
-import styles from './ThemeProvider.module.css';
 
 enum AppTheme {
   Light = 'light',
@@ -24,7 +23,6 @@ const ThemeContext = createContext<ThemeProviderType>({
 const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [appTheme, setAppTheme] = useState<AppTheme>(AppTheme.Light);
   const [auto, setAuto] = useState<boolean>(false);
-  const [mounted, setMounted] = useState(false);
   const DARK_MODE_MEDIA_QUERY = '(prefers-color-scheme: dark)';
 
   function getSystemTheme(): AppTheme {
@@ -73,8 +71,6 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
   }, [auto]);
 
   useEffect(() => {
-    setMounted(true);
-
     const storedTheme = localStorage.getItem('app-theme') as AppTheme;
     const isValidTheme = Object.values(AppTheme).includes(storedTheme);
 
@@ -134,7 +130,7 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
           algorithm: appTheme === AppTheme.Dark ? theme.darkAlgorithm : theme.defaultAlgorithm,
         }}
       >
-        {mounted ? <div className={styles.themeProvider}>{children}</div> : null}
+        {children}
       </ConfigProvider>
     </ThemeContext.Provider>
   );
