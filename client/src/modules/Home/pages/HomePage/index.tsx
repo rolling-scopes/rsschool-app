@@ -1,23 +1,23 @@
-import { Alert, Button, Col, Layout, List, Row, theme } from 'antd';
+import { Alert, Button, Col, Layout, Row, theme } from 'antd';
 import { AlertDto, AlertsApi } from 'api';
 import { AdminSider } from 'components/Sider/AdminSider';
 import { FooterLayout } from 'components/Footer';
 import { Header } from 'components/Header';
 import { isAdmin, isAnyCourseDementor, isAnyCoursePowerUser, isAnyMentor } from 'domain/user';
-import { HomeSummary } from 'modules/Home/components/HomeSummary';
+import HomeSummary from 'modules/Home/components/HomeSummary';
 import { NoCourse } from 'modules/Home/components/NoCourse';
 import { CourseSelector } from 'modules/Home/components/CourseSelector';
 import { RegistryBanner } from 'modules/Home/components/RegistryBanner';
 import { SystemAlerts } from 'modules/Home/components/SystemAlerts';
 import { getCourseLinks } from 'modules/Home/data/links';
 import { useStudentSummary } from 'modules/Home/hooks/useStudentSummary';
-import Link from 'next/link';
 import { useContext, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CoursesService } from 'services/courses';
 import { MentorRegistryService } from 'services/mentorRegistry';
 import { Course } from 'services/models';
 import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
+import CourseLinks from '@client/modules/Home/components/CourseLinks';
 
 const { Content } = Layout;
 
@@ -103,23 +103,10 @@ export function HomePage() {
 
           <Row gutter={24}>
             <Col xs={24} sm={12} md={10} lg={8} style={{ marginBottom: 16 }}>
-              {courseLinks.length ? (
-                <List
-                  size="small"
-                  bordered
-                  dataSource={courseLinks}
-                  renderItem={linkInfo => (
-                    <List.Item key={linkInfo.url}>
-                      <Link prefetch={false} href={linkInfo.url}>
-                        {linkInfo.icon} {linkInfo.name}
-                      </Link>
-                    </List.Item>
-                  )}
-                />
-              ) : null}
+              <CourseLinks courseLinks={courseLinks} />
             </Col>
             <Col xs={24} sm={12} md={12} lg={16}>
-              {studentSummary && <HomeSummary courseTasks={courseTasks} summary={studentSummary} />}
+              <HomeSummary courseTasks={courseTasks} summary={studentSummary} />
             </Col>
           </Row>
         </Content>
