@@ -1,10 +1,10 @@
 import { FileExcelOutlined } from '@ant-design/icons';
 import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
-import { onlyDefined } from '@client/utils/onlyDefined';
-import { IPaginationInfo } from '@client/utils/pagination';
+import { onlyDefined } from '@client/shared/utils/onlyDefined';
+import { IPaginationInfo } from '@client/shared/utils/pagination';
 import type { TimeRangePickerProps } from 'antd';
 import { Button, Checkbox, DatePicker, Form, Row, Select, Space, TableProps } from 'antd';
-import { CountryDto, GratitudesApi, HeroesRadarDto, HeroRadarDto } from 'api';
+import { CountryDto, GratitudesApi, HeroesRadarDto, HeroRadarDto } from '@client/api';
 import dayjs from 'dayjs';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import HeroesRadarTable from './HeroesRadarTable';

@@ -1,6 +1,6 @@
 import { useRequest } from 'ahooks';
 import { message } from 'antd';
-import { TeamDistributionApi } from 'api';
+import { TeamDistributionApi } from '@client/api';
 
 const teamDistributionApi = new TeamDistributionApi();
 

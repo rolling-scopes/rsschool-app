@@ -7,7 +7,7 @@ import StudentStatsModal from './StudentStatsModal';
 import { StudentStats } from '@common/models/profile';
 import { CourseLeaveReason } from '@client/data/course-leave-reasons';
 import { BookOutlined, LogoutOutlined, ReloadOutlined, SafetyCertificateTwoTone } from '@ant-design/icons';
-import { CoursesApi } from 'api';
+import { CoursesApi } from '@client/api';
 import StudentLeaveCourse from '@client/components/Profile/StudentLeaveCourse';
 import { ExpandButtonWidget } from '@client/components/Profile/ui/ExpandButtonWidget';
 

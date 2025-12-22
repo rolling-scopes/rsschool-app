@@ -1,6 +1,6 @@
 import { Button, Card, Col, Divider, Row, Typography, Switch } from 'antd';
 import { TaskCardColumn } from '..';
-import { BasicAutoTestTaskDto } from 'api';
+import { BasicAutoTestTaskDto } from '@client/api';
 import Link from 'next/link';
 
 const { Paragraph } = Typography;

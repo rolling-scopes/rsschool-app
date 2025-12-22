@@ -1,5 +1,5 @@
 import { GetServerSidePropsContext } from 'next';
-import { OpportunitiesApi } from 'api';
+import { OpportunitiesApi } from '@client/api';
 import { getApiConfiguration } from 'utils/axios';
 
 const opportunitiesApi = new OpportunitiesApi(getApiConfiguration());

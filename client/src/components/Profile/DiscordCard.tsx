@@ -2,7 +2,7 @@ import { Typography } from 'antd';
 import { WarningTwoTone } from '@ant-design/icons';
 import { Discord } from '@common/models/profile';
 import discordIntegration from '../../configs/discord-integration';
-import { DiscordOutlined } from 'components/Icons/DiscordOutlined';
+import { DiscordOutlined } from '@client/shared/components/Icons/DiscordOutlined';
 import CommonCard from './CommonCard';
 import { StudentDiscord } from 'components/StudentDiscord';
 

@@ -1,5 +1,5 @@
 import { renderHook, waitFor } from '@testing-library/react';
-import { OpportunitiesApi, ResumeDto } from 'api';
+import { OpportunitiesApi, ResumeDto } from '@client/api';
 import { useResumeData } from './useResumeData';
 import { AxiosResponse } from 'axios';
 

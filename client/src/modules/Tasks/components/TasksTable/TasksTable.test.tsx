@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 import { fireEvent, render, screen, within } from '@testing-library/react';
-import { TaskDto } from 'api';
+import { TaskDto } from '@client/api';
 import { TasksTable } from './TasksTable';
 import { ColumnName } from 'modules/Tasks/types';
 import { TASK_TYPES } from 'data/taskTypes';

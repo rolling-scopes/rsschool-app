@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { ResumeDtoEnglishLevelEnum, ResumeDtoMilitaryServiceEnum } from 'api';
+import { ResumeDtoEnglishLevelEnum, ResumeDtoMilitaryServiceEnum } from '@client/api';
 import { GeneralInfoForm } from './index';
 
 const mockUserData = {

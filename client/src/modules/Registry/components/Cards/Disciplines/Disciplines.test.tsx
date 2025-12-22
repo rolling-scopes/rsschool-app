@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { Form } from 'antd';
-import { DisciplineDto } from 'api';
+import { DisciplineDto } from '@client/api';
 import { LABELS } from 'modules/Registry/constants';
 import { Disciplines } from './Disciplines';
 

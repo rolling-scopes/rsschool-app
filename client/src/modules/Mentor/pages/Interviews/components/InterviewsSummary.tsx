@@ -2,7 +2,7 @@ import { Button, Row, Space, Typography } from 'antd';
 import { UserSwitchOutlined, UserAddOutlined } from '@ant-design/icons';
 import { useMemo, useState } from 'react';
 import { MentorInterview } from 'services/course';
-import { InterviewDto } from 'api';
+import { InterviewDto } from '@client/api';
 import { getInterviewWaitList, isTechnicalScreening } from 'domain/interview';
 import { SelectMentorModal } from './SelectMentorModal';
 import { useAsyncFn } from 'react-use';

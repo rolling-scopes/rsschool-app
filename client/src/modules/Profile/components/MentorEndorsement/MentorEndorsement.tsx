@@ -1,6 +1,6 @@
 import { Alert, Input, Modal, Spin, Typography } from 'antd';
 import { useMemo } from 'react';
-import { ProfileApi } from 'api';
+import { ProfileApi } from '@client/api';
 import { useAsync } from 'react-use';
 import isNull from 'lodash/isNull';
 import isObject from 'lodash/isObject';

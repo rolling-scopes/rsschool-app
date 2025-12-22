@@ -1,5 +1,5 @@
 import { Layout } from 'antd';
-import { ResumeDto } from 'api';
+import { ResumeDto } from '@client/api';
 import { ViewCV } from 'modules/Opportunities/components/ViewCv';
 import Head from 'next/head';
 import { PropsWithChildren } from 'react';

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { MentorInterview } from 'services/course';
 import { StudentInterview } from './StudentInterview';
 import { InterviewsSummary } from './InterviewsSummary';
-import { InterviewDto, TaskDtoTypeEnum } from 'api';
+import { InterviewDto, TaskDtoTypeEnum } from '@client/api';
 import { Course } from 'services/models';
 import { useLoading } from 'components/useLoading';
 import { useAsyncFn } from 'react-use';

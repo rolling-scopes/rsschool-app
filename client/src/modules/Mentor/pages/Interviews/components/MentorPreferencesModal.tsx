@@ -3,7 +3,7 @@ import { MentorOptions, Options } from 'components/MentorOptions';
 import React, { createContext, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
-import { MentorDetailsDtoStudentsPreferenceEnum, MentorsApi } from 'api';
+import { MentorDetailsDtoStudentsPreferenceEnum, MentorsApi } from '@client/api';
 import { getMentorId } from 'domain/user';
 import { Session } from 'components/withSession';
 

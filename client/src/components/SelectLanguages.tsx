@@ -1,5 +1,5 @@
 import { Select, SelectProps } from 'antd';
-import { UpdateUserDtoLanguagesEnum } from 'api';
+import { UpdateUserDtoLanguagesEnum } from '@client/api';
 
 const languages = Object.values(UpdateUserDtoLanguagesEnum).sort(languagesSorter);
 

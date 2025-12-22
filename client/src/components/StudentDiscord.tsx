@@ -1,6 +1,6 @@
 import { Typography } from 'antd';
-import { Discord } from 'api';
-import CopyToClipboardButton from 'components/CopyToClipboardButton';
+import { Discord } from '@client/api';
+import CopyToClipboardButton from '@client/shared/components/CopyToClipboardButton';
 
 type Props = {
   discord: Discord | null;

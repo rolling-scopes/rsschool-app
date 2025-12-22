@@ -1,4 +1,4 @@
-import { CoursesTasksApi } from 'api';
+import { CoursesTasksApi } from '@client/api';
 import { CourseService } from 'services/course';
 
 export async function loadHomeData(courseId: number, githubId: string) {

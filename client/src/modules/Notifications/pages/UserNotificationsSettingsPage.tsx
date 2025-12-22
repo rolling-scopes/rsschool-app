@@ -8,10 +8,10 @@ import {
 import set from 'lodash/set';
 import { useLoading } from 'components/useLoading';
 import { useAsync } from 'react-use';
-import { PageLayout } from 'components/PageLayout';
+import { PageLayout } from '@client/shared/components/PageLayout';
 import { NotificationsTable } from '../components/NotificationsUserSettingsTable';
 import { Consents, Connection } from '../components/Consents';
-import { UpdateNotificationUserSettingsDto } from 'api';
+import { UpdateNotificationUserSettingsDto } from '@client/api';
 import { useMessage } from 'hooks';
 
 export function UserNotificationsPage() {

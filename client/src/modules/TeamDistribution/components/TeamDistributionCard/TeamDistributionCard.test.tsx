@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { TeamDistributionDto } from 'api';
+import { TeamDistributionDto } from '@client/api';
 import TeamDistributionCard from './TeamDistributionCard';
 
 const distribution = {

@@ -7,7 +7,7 @@ import {
   CourseScheduleItemDtoStatusEnum as StatusEnum,
   CourseScheduleItemDtoTagEnum as TagsEnum,
   CourseScheduleItemDtoTypeEnum,
-} from 'api';
+} from '@client/api';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 
 const PROPS_SETTINGS_MOCK: ScheduleSettings = {

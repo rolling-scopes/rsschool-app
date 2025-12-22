@@ -2,7 +2,7 @@ import { Layout, Spin } from 'antd';
 import { mapsApiKey } from 'configs/gcp';
 import Head from 'next/head';
 import { ReactNode } from 'react';
-import { Header } from './Header';
+import { Header } from '@client/shared/components/Header';
 
 const { Content } = Layout;
 

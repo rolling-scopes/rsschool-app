@@ -9,7 +9,7 @@ import {
   CoursesTasksApi,
   CourseStatsApi,
   StudentsApi,
-} from 'api';
+} from '@client/api';
 import { TaskStat } from 'modules/StudentDashboard/components';
 import { UserService } from 'services/user';
 

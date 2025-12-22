@@ -1,9 +1,9 @@
 import { Col, Input, Row, Space, Table, TablePaginationConfig, TableProps, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 
-import { TeamApi, TeamDistributionDetailedDto, TeamDto } from 'api';
+import { TeamApi, TeamDistributionDetailedDto, TeamDto } from '@client/api';
 import { useAsync } from 'react-use';
-import { IPaginationInfo } from '@client/utils/pagination';
+import { IPaginationInfo } from '@client/shared/utils/pagination';
 import { getColumns, expandedRowRender } from './renderers';
 import { useLoading } from 'components/useLoading';
 import { TeamsTableColumnKey } from 'modules/Teams/constants';

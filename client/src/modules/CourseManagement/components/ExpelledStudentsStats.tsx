@@ -1,9 +1,9 @@
 import { Table, Typography, Tag, Button, Row } from 'antd';
 import { ColumnsType, ColumnType } from 'antd/es/table';
 import React from 'react';
-import { PublicSvgIcon } from '@client/components/Icons';
+import { PublicSvgIcon } from '@client/shared/components/Icons';
 import { DEFAULT_COURSE_ICONS } from '@client/configs/course-icons';
-import { dateUtcRenderer } from '@client/components/Table';
+import { dateUtcRenderer } from '@client/shared/components/Table';
 import { useExpelledStats } from '@client/modules/CourseManagement/hooks/useExpelledStats';
 import { ExpelledStatsDto } from '@client/api';
 

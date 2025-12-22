@@ -1,5 +1,5 @@
 import { Form, FormItemProps, Select } from 'antd';
-import { CoursesTasksApi } from 'api';
+import { CoursesTasksApi } from '@client/api';
 import { useAsync } from 'react-use';
 
 type Props = FormItemProps & {

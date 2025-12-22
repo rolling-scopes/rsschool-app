@@ -1,8 +1,8 @@
 import { Alert, Button, Form, Input, Select } from 'antd';
-import { BadgeDto, BadgeEnum, GratitudesApi } from 'api';
+import { BadgeDto, BadgeEnum, GratitudesApi } from '@client/api';
 import { AxiosError } from 'axios';
-import { PageLayoutSimple } from 'components/PageLayout';
-import { UserSearch } from 'components/UserSearch';
+import { PageLayoutSimple } from '@client/shared/components/PageLayout';
+import { UserSearch } from '@client/shared/components/UserSearch';
 import { useMessage } from 'hooks';
 import { SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { useState } from 'react';

@@ -6,8 +6,8 @@ import {
   CoursesScheduleIcalApi,
   CoursesTasksApi,
   CreateCourseTaskDto,
-} from 'api';
-import { PageLayout } from 'components/PageLayout';
+} from '@client/api';
+import { PageLayout } from '@client/shared/components/PageLayout';
 import { isCourseManager } from 'domain/user';
 import uniq from 'lodash/uniq';
 import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';

@@ -1,5 +1,5 @@
 import { theme, Typography } from 'antd';
-import { CrossCheckCriteriaDataDto } from 'api';
+import { CrossCheckCriteriaDataDto } from '@client/api';
 import { getCriteriaStatusColor } from 'modules/CrossCheck';
 import { TaskType } from '../../constants';
 

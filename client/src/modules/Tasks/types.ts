@@ -1,4 +1,4 @@
-import { TaskDto, TaskDtoTypeEnum } from 'api';
+import { TaskDto, TaskDtoTypeEnum } from '@client/api';
 
 // discipline on form is the discipline id(number), on TaskDto it's an object(id, name);
 type FormValues = Partial<Omit<TaskDto, 'discipline' | 'attributes'> & { discipline: number; attributes: string }>;

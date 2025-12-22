@@ -1,10 +1,10 @@
 import { Table, TableProps, Tag } from 'antd';
 import { ColumnType } from 'antd/lib/table';
-import { HeroRadarDto, HeroesRadarBadgeDto, HeroesRadarDto } from 'api';
-import { GithubAvatar } from 'components/GithubAvatar';
+import { HeroRadarDto, HeroesRadarBadgeDto, HeroesRadarDto } from '@client/api';
+import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 import Link from 'next/link';
 import HeroesCountBadge from './HeroesCountBadge';
-import useWindowDimensions from 'utils/useWindowDimensions';
+import useWindowDimensions from '@client/shared/hooks/useWindowDimensions';
 import { useState, useEffect } from 'react';
 import type { LayoutType } from './HeroesRadarTab';
 import { getTableWidth } from 'modules/Score/components/ScoreTable';

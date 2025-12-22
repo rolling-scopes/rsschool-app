@@ -1,5 +1,5 @@
 import { Tabs } from 'antd';
-import { AdminPageLayout } from 'components/PageLayout';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import { AdminNotificationsPage } from './AdminNotificationsSettingsPage';
 import { useActiveCourseContext } from 'modules/Course/contexts';
 

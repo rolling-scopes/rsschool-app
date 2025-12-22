@@ -1,8 +1,8 @@
 import { Flex, Space, Tag, Tooltip } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
-import { CourseDto, UserStudentCourseDto, UserStudentDto } from 'api';
-import { GithubUserLink } from 'components/GithubUserLink';
-import { getColumnSearchProps } from 'components/Table';
+import { CourseDto, UserStudentCourseDto, UserStudentDto } from '@client/api';
+import { GithubUserLink } from '@client/shared/components/GithubUserLink';
+import { getColumnSearchProps } from '@client/shared/components/Table';
 
 export enum ColumnKey {
   Student = 'student',

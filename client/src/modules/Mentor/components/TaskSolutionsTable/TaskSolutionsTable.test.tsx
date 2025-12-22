@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { TaskSolutionsTable, TaskSolutionsTableProps } from '.';
-import { MentorDashboardDto } from '../../../../api';
+import { MentorDashboardDto } from '@client/api';
 import { SolutionItemStatus, TaskSolutionsTableColumnName } from '../../constants';
 
 jest.mock('modules/Mentor/hooks/useMentorDashboard');

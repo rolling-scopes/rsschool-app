@@ -5,7 +5,7 @@ import {
   UpdateNotificationDto,
   UpdateNotificationUserSettingsDto,
   UsersNotificationsApi,
-} from 'api';
+} from '@client/api';
 import axiosFactory from 'axios';
 import { getApiConfiguration, getServerAxiosProps } from 'utils/axios';
 

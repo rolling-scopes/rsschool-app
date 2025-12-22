@@ -1,5 +1,5 @@
-import { DisciplineDto, DisciplinesApi } from 'api';
-import { AdminPageLayout } from 'components/PageLayout';
+import { DisciplineDto, DisciplinesApi } from '@client/api';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import { DisciplineModal } from '../components/DisciplineModal';
 import { useCallback, useState } from 'react';
 import { Button, Layout, message } from 'antd';

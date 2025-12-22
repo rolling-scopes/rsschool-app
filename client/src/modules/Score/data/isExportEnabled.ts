@@ -1,4 +1,4 @@
-import { ProfileCourseDto } from 'api';
+import { ProfileCourseDto } from '@client/api';
 import { Session } from 'components/withSession';
 import { isCourseManager } from 'domain/user';
 import { CourseRole } from 'services/models';

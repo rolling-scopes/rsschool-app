@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { Discord } from 'api';
+import { Discord } from '@client/api';
 import { StudentDiscord } from 'components/StudentDiscord';
 
 describe('StudentDiscord', () => {

@@ -1,5 +1,5 @@
 import { Button, Form, FormInstance, Select } from 'antd';
-import { StudentSearch } from './StudentSearch';
+import { StudentSearch } from '@client/shared/components/StudentSearch';
 import { MentorDetailsDtoStudentsPreferenceEnum } from '@client/api/api';
 
 export type Options = {

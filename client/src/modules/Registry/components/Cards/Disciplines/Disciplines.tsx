@@ -1,5 +1,5 @@
 import { Form, Checkbox, Row, Empty, Typography, Col } from 'antd';
-import { DisciplineDto } from 'api';
+import { DisciplineDto } from '@client/api';
 import { CARD_TITLES, LABELS, VALIDATION_RULES, WIDE_FORM_ITEM_LAYOUT } from 'modules/Registry/constants';
 import { FormCard } from 'modules/Registry/components';
 

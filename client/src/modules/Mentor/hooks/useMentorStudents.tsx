@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { MentorsApi, MentorStudentDto } from 'api';
+import { MentorsApi, MentorStudentDto } from '@client/api';
 import { useMemo, useState, useEffect, useCallback } from 'react';
 
 export function useMentorStudents(mentorId: number | null) {

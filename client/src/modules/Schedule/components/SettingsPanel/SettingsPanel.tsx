@@ -6,7 +6,7 @@ import {
   FileExcelOutlined,
   PlusOutlined,
 } from '@ant-design/icons';
-import { CourseScheduleItemDtoTagEnum } from 'api';
+import { CourseScheduleItemDtoTagEnum } from '@client/api';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import React, { useMemo } from 'react';
 import { SettingsDrawer } from '../SettingsDrawer';

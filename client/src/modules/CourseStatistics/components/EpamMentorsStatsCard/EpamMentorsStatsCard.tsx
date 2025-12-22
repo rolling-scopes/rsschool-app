@@ -1,5 +1,5 @@
 import { Card, Typography } from 'antd';
-import { CourseMentorsStatsDto } from 'api';
+import { CourseMentorsStatsDto } from '@client/api';
 import { Colors } from '../../data';
 import { dynamicWithSkeleton } from '@client/utils/dynamicWithSkeleton';
 

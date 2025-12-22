@@ -1,13 +1,13 @@
 import { Collapse, Modal, Space, TablePaginationConfig } from 'antd';
 import { Comment } from '@ant-design/compatible';
 import { FilterValue } from 'antd/lib/table/interface';
-import { IPaginationInfo } from '@client/utils/pagination';
-import { AdminPageLayout } from 'components/PageLayout';
-import { dateTimeRenderer } from 'components/Table';
+import { IPaginationInfo } from '@client/shared/utils/pagination';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
+import { dateTimeRenderer } from '@client/shared/components/Table';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CourseService, CourseTaskDetails } from 'services/course';
-import { CoursesTasksApi, CrossCheckMessageDtoRoleEnum, CrossCheckPairDto } from 'api';
-import PreparedComment from 'components/Forms/PreparedComment';
+import { CoursesTasksApi, CrossCheckMessageDtoRoleEnum, CrossCheckPairDto } from '@client/api';
+import PreparedComment from '@client/shared/components/Forms/PreparedComment';
 import { Message } from 'modules/CrossCheck/components/SolutionReview/Message';
 import { CrossCheckCriteria } from 'modules/CrossCheck/components/criteria/CrossCheckCriteria';
 import { BadReviewControllers } from 'modules/CrossCheckPairs/components/BadReview/BadReviewControllers';

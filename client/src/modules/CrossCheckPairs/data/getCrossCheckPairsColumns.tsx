@@ -1,9 +1,9 @@
-import { CrossCheckPairDto } from 'api';
+import { CrossCheckPairDto } from '@client/api';
 import { GithubFilled } from '@ant-design/icons';
 import { ColumnType } from 'antd/lib/table/interface';
 import { omit } from 'lodash';
-import { dateTimeRenderer, getColumnSearchProps } from 'components/Table';
-import { GithubAvatar } from 'components/GithubAvatar';
+import { dateTimeRenderer, getColumnSearchProps } from '@client/shared/components/Table';
+import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 import { Button, Flex } from 'antd';
 
 export const fields = {

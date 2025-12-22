@@ -1,4 +1,4 @@
-import { StudentSummaryDto } from 'api';
+import { StudentSummaryDto } from '@client/api';
 import { Session } from 'components/withSession';
 import { isStudent } from 'domain/user';
 import { loadHomeData } from 'modules/Home/data/loadHomeData';

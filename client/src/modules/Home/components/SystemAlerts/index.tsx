@@ -1,5 +1,5 @@
 import { Alert } from 'antd';
-import type { AlertDto } from 'api';
+import type { AlertDto } from '@client/api';
 import React from 'react';
 
 type Props = {

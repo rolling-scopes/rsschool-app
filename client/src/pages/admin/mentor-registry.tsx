@@ -3,11 +3,11 @@ import { Alert, Button, Col, Form, message, notification, Row, Select, Space, Ta
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 
-import { DisciplineDto, DisciplinesApi, MentorRegistryDto } from 'api';
+import { DisciplineDto, DisciplinesApi, MentorRegistryDto } from '@client/api';
 
-import { CommentModal } from 'components/CommentModal';
-import { ModalForm } from 'components/Forms';
-import { AdminPageLayout } from 'components/PageLayout';
+import { CommentModal } from '@client/shared/components/CommentModal';
+import { ModalForm } from '@client/shared/components/Forms';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import { tabRenderer } from 'components/TabsWithCounter/renderers';
 import { useLoading } from 'components/useLoading';
 import { SessionContext, SessionProvider } from 'modules/Course/contexts';

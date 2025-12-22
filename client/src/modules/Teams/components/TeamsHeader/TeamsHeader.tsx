@@ -1,7 +1,7 @@
 import { Col, Row, Space, Tabs, Tag, Typography } from 'antd';
 import { ArrowLeftOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import Link from 'next/link';
-import { TeamDistributionDetailedDto } from 'api';
+import { TeamDistributionDetailedDto } from '@client/api';
 import { tabRenderer } from 'components/TabsWithCounter/renderers';
 import { Dispatch, SetStateAction, useMemo } from 'react';
 import { ActionCard } from './ActionCard';

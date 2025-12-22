@@ -1,6 +1,6 @@
 import { Button, Checkbox, Drawer, Form, Space, theme } from 'antd';
 import { Store } from 'antd/lib/form/interface';
-import type { CourseTaskDto } from 'api';
+import type { CourseTaskDto } from '@client/api';
 import SettingsItem from '@client/components/SettingsItem';
 import {
   CheckSquareOutlined,

@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { InterviewDto } from 'api';
+import { InterviewDto } from '@client/api';
 import { RegistrationNoticeAlert } from './RegistrationNoticeAlert';
 
 describe('RegistrationNoticeAlert', () => {

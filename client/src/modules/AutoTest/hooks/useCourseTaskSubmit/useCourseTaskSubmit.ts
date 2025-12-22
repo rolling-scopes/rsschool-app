@@ -1,5 +1,5 @@
 import { Form } from 'antd';
-import { CourseTaskDetailedDtoTypeEnum, CourseTaskVerificationsApi } from 'api';
+import { CourseTaskDetailedDtoTypeEnum, CourseTaskVerificationsApi } from '@client/api';
 import snakeCase from 'lodash/snakeCase';
 import { useContext, useMemo, useState } from 'react';
 import { FilesService } from 'services/files';

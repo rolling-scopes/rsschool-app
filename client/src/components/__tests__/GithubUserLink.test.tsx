@@ -1,5 +1,5 @@
 import { act, render, screen } from '@testing-library/react';
-import { GithubUserLink } from '@client/components/GithubUserLink';
+import { GithubUserLink } from '@client/shared/components/GithubUserLink';
 import { useMessage } from 'hooks';
 import { useCopyToClipboard } from 'react-use';
 

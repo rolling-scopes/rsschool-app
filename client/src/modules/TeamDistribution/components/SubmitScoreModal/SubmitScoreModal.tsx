@@ -1,7 +1,7 @@
 import { useAsync } from 'react-use';
 import { Card, Form, Modal, Select, Space, Spin, Typography, message } from 'antd';
 
-import { CoursesTasksApi, TeamDistributionDto } from 'api';
+import { CoursesTasksApi, TeamDistributionDto } from '@client/api';
 import { useActiveCourseContext } from 'modules/Course/contexts';
 import { useSubmitTeamScore } from 'modules/TeamDistribution/hooks/useSubmitTeamScore';
 

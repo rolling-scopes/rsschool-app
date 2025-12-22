@@ -1,4 +1,4 @@
-import { ResumeDto } from 'api';
+import { ResumeDto } from '@client/api';
 import { transformInitialCvData } from '../../transformers/transformInitialCvData';
 import { EditCV } from '../EditCv';
 import { ViewCV } from '../ViewCv';

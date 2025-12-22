@@ -1,19 +1,19 @@
 import { Alert, Button, Col, Divider, Form, notification, Row, Spin, Typography } from 'antd';
 import { Comment } from '@ant-design/compatible';
-import PreparedComment, { markdownLabel } from 'components/Forms/PreparedComment';
-import { ScoreIcon } from 'components/Icons/ScoreIcon';
+import PreparedComment, { markdownLabel } from '@client/shared/components/Forms/PreparedComment';
+import { ScoreIcon } from '@client/shared/components/Icons/ScoreIcon';
 import { SolutionReviewSettings } from 'modules/CrossCheck/constants';
 import { useEffect, useMemo, useState } from 'react';
 import { CourseService } from 'services/course';
 import { formatDateTime } from 'services/formatter';
 import { CrossCheckCriteriaModal } from '../criteria/CrossCheckCriteriaModal';
-import { StudentDiscord } from '../../../../components/StudentDiscord';
+import { StudentDiscord } from '@client/components/StudentDiscord';
 import { getAmountUnreadMessages, getHowManyUnreadMessagesText } from './helpers';
 import { Message } from './Message';
 import { MessageSendingPanel } from './MessageSendingPanel';
 import { UserAvatar } from './UserAvatar';
 import { Username } from './Username';
-import { CrossCheckCriteriaDataDto, CrossCheckMessageDtoRoleEnum, CrossCheckSolutionReviewDto } from 'api';
+import { CrossCheckCriteriaDataDto, CrossCheckMessageDtoRoleEnum, CrossCheckSolutionReviewDto } from '@client/api';
 import { useMessage } from 'hooks';
 import styles from './SolutionReview.module.css';
 

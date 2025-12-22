@@ -1,13 +1,13 @@
 import { Button, Checkbox, Form, Input, Space, Typography } from 'antd';
 import { AxiosError } from 'axios';
-import { CommentInput } from 'components/Forms';
-import { GithubAvatar } from 'components/GithubAvatar';
-import { PageLayoutSimple } from 'components/PageLayout';
+import { CommentInput } from '@client/shared/components/Forms';
+import { GithubAvatar } from '@client/shared/components/GithubAvatar';
+import { PageLayoutSimple } from '@client/shared/components/PageLayout';
 import { InputType, templates } from 'data/interviews';
 import { Fragment, useMemo, useState } from 'react';
 import { CourseService } from 'services/course';
 import { FeedbackProps } from '../../data/getInterviewData';
-import { ScoreSelector } from 'components/ScoreSelector';
+import { ScoreSelector } from '@client/shared/components/ScoreSelector';
 import { useRouter } from 'next/router';
 import { useMessage } from 'hooks';
 

@@ -1,4 +1,4 @@
-import { FeedbackDto, GratitudeDto, ResumeCourseDto, ResumeDto } from 'api';
+import { FeedbackDto, GratitudeDto, ResumeCourseDto, ResumeDto } from '@client/api';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
 import { Contacts, UserData } from '../models';

@@ -1,4 +1,4 @@
-import { InterviewFeedbackDto } from 'api';
+import { InterviewFeedbackDto } from '@client/api';
 import { Feedback, FeedbackStep, FeedbackStepId, feedbackTemplate } from 'data/interviews/technical-screening';
 import { InterviewFeedbackStepData, InterviewFeedbackValues, InterviewQuestion } from '@common/models';
 

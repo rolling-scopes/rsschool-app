@@ -1,5 +1,5 @@
 import { Card, Typography } from 'antd';
-import { CourseStatsDto } from 'api';
+import { CourseStatsDto } from '@client/api';
 import { dynamicWithSkeleton } from '@client/utils/dynamicWithSkeleton';
 
 type Props = {

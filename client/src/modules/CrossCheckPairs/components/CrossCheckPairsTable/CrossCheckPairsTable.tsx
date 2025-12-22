@@ -1,5 +1,5 @@
 import { Table, TablePaginationConfig } from 'antd';
-import { CrossCheckPairDto } from 'api';
+import { CrossCheckPairDto } from '@client/api';
 import { FilterValue, SorterResult } from 'antd/lib/table/interface';
 import {
   CustomColumnType,

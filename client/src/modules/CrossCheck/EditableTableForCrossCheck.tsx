@@ -5,7 +5,7 @@ import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { EditableCellForCrossCheck } from './EditableCellForCrossCheck';
-import { CriteriaDto, CriteriaDtoTypeEnum } from 'api';
+import { CriteriaDto, CriteriaDtoTypeEnum } from '@client/api';
 import { CriteriaActions } from './CriteriaActions';
 import { EditableTableColumnsDataIndex } from './constants';
 import { DragSortTable } from './components/DragSortTable';

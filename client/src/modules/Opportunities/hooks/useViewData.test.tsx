@@ -1,5 +1,5 @@
 import { renderHook, waitFor } from '@testing-library/react';
-import { ResumeDtoEnglishLevelEnum, ResumeDto, ResumeDtoMilitaryServiceEnum } from 'api';
+import { ResumeDtoEnglishLevelEnum, ResumeDto, ResumeDtoMilitaryServiceEnum } from '@client/api';
 import { useViewData } from './useViewData';
 
 const mockResume = {

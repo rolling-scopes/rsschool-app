@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { TaskCard } from '..';
-import { CheckerEnum } from 'api';
+import { CheckerEnum } from '@client/api';
 import { Course } from 'services/models';
 import { CourseTaskState, CourseTaskVerifications } from 'modules/AutoTest/types';
 

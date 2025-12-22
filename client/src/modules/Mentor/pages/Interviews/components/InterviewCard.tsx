@@ -2,7 +2,7 @@ import { Button, Card } from 'antd';
 import { InterviewPeriod } from 'domain/interview';
 import styles from './InterviewCard.module.css';
 import { InterviewDetails } from './InterviewDetails';
-import { InterviewDto } from 'api';
+import { InterviewDto } from '@client/api';
 import { Course } from 'services/models';
 import { MentorInterview } from 'services/course';
 

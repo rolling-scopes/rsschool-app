@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react';
 import { message } from 'antd';
-import { TeamDistributionApi, TeamDistributionDetailedDto } from 'api';
+import { TeamDistributionApi, TeamDistributionDetailedDto } from '@client/api';
 import { useDistribution } from './useDistribution';
 import { AxiosResponse } from 'axios';
 

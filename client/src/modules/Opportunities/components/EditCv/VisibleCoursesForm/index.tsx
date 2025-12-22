@@ -1,7 +1,7 @@
 import { ForwardedRef, forwardRef } from 'react';
 import { Card, Checkbox, Form, FormInstance, Typography, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { ResumeCourseDto } from 'api';
+import { ResumeCourseDto } from '@client/api';
 
 const { Item } = Form;
 const { Text } = Typography;

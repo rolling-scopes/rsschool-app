@@ -2,9 +2,14 @@ import { useRequest } from 'ahooks';
 import { Alert, Button, Checkbox, Col, Form, Input, Modal, Result, Row } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { Rule } from 'antd/lib/form';
-import { CoursesTasksApi, CrossCheckFeedbackDto, CrossCheckMessageDtoRoleEnum, CrossCheckStatusEnum } from 'api';
-import { CourseTaskSelect, ScoreInput } from 'components/Forms';
-import { PageLayout } from 'components/PageLayout';
+import {
+  CoursesTasksApi,
+  CrossCheckFeedbackDto,
+  CrossCheckMessageDtoRoleEnum,
+  CrossCheckStatusEnum,
+} from '@client/api';
+import { CourseTaskSelect, ScoreInput } from '@client/shared/components/Forms';
+import { PageLayout } from '@client/shared/components/PageLayout';
 import { NoSubmissionAvailable } from 'modules/Course/components/NoSubmissionAvailable';
 import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
 import { CriteriaForm } from 'modules/CrossCheck/components/CriteriaForm';
@@ -16,7 +21,7 @@ import { useRouter } from 'next/router';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { CourseService, CrossCheckComment, CrossCheckCriteria, CrossCheckReview, TaskSolution } from 'services/course';
 import { githubPrUrl, privateRsRepoPattern, urlWithIpPattern } from 'services/validators';
-import { getQueryString } from 'utils/queryParams-utils';
+import { getQueryString } from '@client/shared/utils/queryParams-utils';
 import { useMessage } from 'hooks';
 
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };

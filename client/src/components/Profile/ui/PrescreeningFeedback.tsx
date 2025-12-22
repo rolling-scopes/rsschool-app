@@ -2,7 +2,7 @@ import { Row, Space, Table, Typography } from 'antd';
 import { StageInterviewDetailedFeedback } from '@common/models/profile';
 import { CODING_LEVELS, FeedbackStepId, SKILLS_LEVELS } from 'data/interviews/technical-screening';
 import { InterviewFeedbackStepData, InterviewFeedbackValues, InterviewQuestion } from '@common/models';
-import { Rating } from '@client/components/Rating';
+import { Rating } from '@client/shared/components/Rating';
 import { useMemo } from 'react';
 
 const { Text, Title } = Typography;
