@@ -84,7 +84,7 @@ modules/<Feature>/
 ### Naming & Tests
 
 - Consistent folder naming within modules.
-- Tests live next to the source file and have the same name with the source file but with the `.test.ts(x)` extension.
+- Tests live next to the source file and have the same name as the source file but with the `.test.ts(x)` extension.
 
 ### Imports
 
