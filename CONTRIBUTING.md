@@ -87,7 +87,7 @@
 14. Push your branch to GitHub:
 
     ```command-line
-    git push origin feature-x
+    git push origin <username>/feature-x
     ```
 
 15. Create a pull request. We support "feature branch" deployments. If you want to deploy your pull request, please add `deploy` label during creation.

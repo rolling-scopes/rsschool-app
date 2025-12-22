@@ -66,7 +66,7 @@ modules/<Feature>/
 
 ### Components
 
-- Single file components should be placed in to a file with the same name as the component but with the `.tsx` extension.
+- Single file components should be placed into a file with the same name as the component but with the `.tsx` extension.
 - If the component is complex and requires multiple files (many internal only components), it should be placed in a folder with the same name as the component. The folder should contain an `index.ts` file that exports the final component.
 
 ### API Usage

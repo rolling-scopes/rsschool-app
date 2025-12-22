@@ -14,7 +14,7 @@ Use the following writing style for documentation, comments and README files.
 
 Audience: Software Engineers. Expect half to be native speakers and half non-native speakers.
 
-- Keep the reading level at or below 9th grade (Fleisch-Kincaid)
+- Keep the reading level at or below 9th grade (Flesch-Kincaid)
 - Write in clear, concise, active voice; don't assume passive voice reads well
 - Keep noun phrases short and avoid stacked modifiers
 - Limit embedded clauses to one level
