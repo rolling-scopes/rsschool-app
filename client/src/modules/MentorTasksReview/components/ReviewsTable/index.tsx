@@ -1,5 +1,5 @@
 import { Table, TablePaginationConfig, TableProps } from 'antd';
-import { CourseTaskDto, MentorReviewDto } from 'api';
+import { CourseTaskDto, MentorReviewDto } from '@client/api';
 import { getColumns } from './renderers';
 import AssignReviewerModal from '../AssignReviewerModal';
 import { useState } from 'react';

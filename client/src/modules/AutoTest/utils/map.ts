@@ -1,4 +1,4 @@
-import { CourseTaskDetailedDto } from 'api';
+import { CourseTaskDetailedDto } from '@client/api';
 import dayjs from 'dayjs';
 import { SelfEducationPublicAttributes, Verification } from 'services/course';
 import { CourseTaskState, CourseTaskStatus, CourseTaskVerifications } from '../types';

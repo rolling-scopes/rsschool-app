@@ -1,5 +1,5 @@
 import { Col, Row, Typography } from 'antd';
-import { GitHubLogoIcon, RSLogoIcon } from 'components/Icons';
+import { GitHubLogoIcon, RSLogoIcon } from '@client/shared/components/Icons';
 
 const { Text } = Typography;
 const copyrights = `Copyright © The Rolling Scopes ${new Date().getFullYear()}`;

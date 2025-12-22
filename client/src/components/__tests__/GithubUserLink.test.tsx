@@ -1,5 +1,5 @@
 import { act, render, screen } from '@testing-library/react';
-import { GithubUserLink } from '@client/components/GithubUserLink';
+import { GithubUserLink } from '@client/shared/components/GithubUserLink';
 import { useCopyToClipboard } from 'react-use';
 
 jest.mock('hooks', () => ({

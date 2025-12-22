@@ -1,5 +1,5 @@
 import { Form, Input, Typography, Modal } from 'antd';
-import { JoinTeamDto } from 'api';
+import { JoinTeamDto } from '@client/api';
 import { passwordPattern } from 'services/validators';
 
 type Props = {

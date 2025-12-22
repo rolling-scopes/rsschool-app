@@ -1,6 +1,6 @@
 import { Space, Typography } from 'antd';
-import { CourseTaskDetailedDtoTypeEnum } from 'api';
-import CopyToClipboardButton from 'components/CopyToClipboardButton';
+import { CourseTaskDetailedDtoTypeEnum } from '@client/api';
+import CopyToClipboardButton from '@client/shared/components/CopyToClipboardButton';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
 import { useAsync } from 'react-use';
 import { useState } from 'react';

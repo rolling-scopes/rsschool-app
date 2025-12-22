@@ -5,7 +5,7 @@ import {
   UpdateNotificationDto,
   UpdateNotificationUserSettingsDto,
   UsersNotificationsApi,
-} from 'api';
+} from '@client/api';
 
 export class NotificationsService {
   constructor(

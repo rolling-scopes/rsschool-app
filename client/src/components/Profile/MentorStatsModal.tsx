@@ -1,6 +1,6 @@
 import { MentorStats } from '@common/models/profile';
 import { Card, Flex, Modal, Space } from 'antd';
-import { GithubAvatar } from 'components/GithubAvatar';
+import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 import { GithubOutlined, LockFilled } from '@ant-design/icons';
 import { ScoreWidget } from '@client/components/Profile/ui';
 

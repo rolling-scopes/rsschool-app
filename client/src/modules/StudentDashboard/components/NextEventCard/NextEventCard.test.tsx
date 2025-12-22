@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { CourseScheduleItemDto, CourseScheduleItemDtoTagEnum, CourseScheduleItemDtoTypeEnum } from 'api';
+import { CourseScheduleItemDto, CourseScheduleItemDtoTagEnum, CourseScheduleItemDtoTypeEnum } from '@client/api';
 import { NextEventCard } from '.';
 
 const NEXT_EVENTS = generateAvailableTasks();

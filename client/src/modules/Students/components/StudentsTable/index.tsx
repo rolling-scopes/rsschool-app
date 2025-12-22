@@ -1,5 +1,5 @@
 import { Table, TablePaginationConfig, TableProps } from 'antd';
-import { CourseDto, UserStudentDto } from 'api';
+import { CourseDto, UserStudentDto } from '@client/api';
 import { getColumns } from './renderers';
 
 type Props = {

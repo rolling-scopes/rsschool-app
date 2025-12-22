@@ -1,7 +1,7 @@
 import { Button, Col, Form, Input, message, Result, Row, Typography } from 'antd';
 import axios from 'axios';
-import { PageLayout } from 'components/PageLayout';
-import { GdprCheckbox, LocationSelect } from 'components/Forms';
+import { PageLayout } from '@client/shared/components/PageLayout';
+import { GdprCheckbox, LocationSelect } from '@client/shared/components/Forms';
 import { withGoogleMaps } from 'components/withGoogleMaps';
 import { useState, useEffect } from 'react';
 import { useAsync, useUpdate } from 'react-use';

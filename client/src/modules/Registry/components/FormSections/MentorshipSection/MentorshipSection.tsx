@@ -1,4 +1,4 @@
-import { DisciplineDto } from 'api';
+import { DisciplineDto } from '@client/api';
 import { Course } from 'services/models';
 import { Preferences, Disciplines, AdditionalInfo } from 'modules/Registry/components';
 import { Col, Row } from 'antd';

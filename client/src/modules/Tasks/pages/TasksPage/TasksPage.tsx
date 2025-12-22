@@ -1,8 +1,16 @@
 import { Button, Layout, message } from 'antd';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
-import { CreateTaskDto, CriteriaDto, DisciplineDto, DisciplinesApi, TaskDto, TasksApi, TasksCriteriaApi } from 'api';
-import { AdminPageLayout } from 'components/PageLayout';
+import {
+  CreateTaskDto,
+  CriteriaDto,
+  DisciplineDto,
+  DisciplinesApi,
+  TaskDto,
+  TasksApi,
+  TasksCriteriaApi,
+} from '@client/api';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import { useModalForm } from 'hooks';
 import { useActiveCourseContext } from 'modules/Course/contexts';
 import { TasksTable, TaskModal } from 'modules/Tasks/components';

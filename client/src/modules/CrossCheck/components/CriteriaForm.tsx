@@ -2,7 +2,7 @@ import { Col, Row, Typography, Rate, Input, Avatar, Card } from 'antd';
 import { Comment } from 'components/Comment';
 import { useCallback } from 'react';
 import { FrownTwoTone, MehTwoTone, SmileTwoTone } from '@ant-design/icons';
-import { GithubAvatar } from 'components/GithubAvatar';
+import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 
 import { CrossCheckCriteria, CrossCheckComment } from 'services/course';
 

@@ -1,6 +1,6 @@
 import { Col, Row } from 'antd';
 import { ColProps } from 'antd/lib/grid';
-import { PageLayout } from 'components/PageLayout';
+import { PageLayout } from '@client/shared/components/PageLayout';
 import { StatusTabs, TaskCard } from 'modules/AutoTest/components';
 import { useCourseTaskVerifications } from 'modules/AutoTest/hooks';
 import { CourseTaskStatus } from 'modules/AutoTest/types';

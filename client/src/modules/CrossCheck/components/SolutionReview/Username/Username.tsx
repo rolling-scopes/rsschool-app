@@ -1,7 +1,7 @@
 import { Typography } from 'antd';
 import { CrossCheckMessageAuthor } from 'services/course';
-import { GithubUserLink } from 'components/GithubUserLink';
-import { CrossCheckMessageDtoRoleEnum } from 'api';
+import { GithubUserLink } from '@client/shared/components/GithubUserLink';
+import { CrossCheckMessageDtoRoleEnum } from '@client/api';
 
 const { Text } = Typography;
 

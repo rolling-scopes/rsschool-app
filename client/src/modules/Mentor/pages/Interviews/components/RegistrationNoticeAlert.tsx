@@ -2,7 +2,7 @@ import { Alert, Typography } from 'antd';
 import InfoCircleTwoTone from '@ant-design/icons/InfoCircleTwoTone';
 import dayjs from 'dayjs';
 import { useContext } from 'react';
-import { InterviewDto, TaskDtoTypeEnum } from 'api';
+import { InterviewDto, TaskDtoTypeEnum } from '@client/api';
 import { MentorOptionsContext } from './MentorPreferencesModal';
 import { useAlert } from '../hooks/useAlert';
 import styles from './RegistrationNoticeAlert.module.css';

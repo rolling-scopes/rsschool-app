@@ -1,7 +1,7 @@
 import { Col, Row, Typography } from 'antd';
 import GithubFilled from '@ant-design/icons/GithubFilled';
-import { GithubAvatar } from 'components/GithubAvatar';
-import { StudentDto } from 'api';
+import { GithubAvatar } from '@client/shared/components/GithubAvatar';
+import { StudentDto } from '@client/api';
 
 type Props = {
   student: StudentDto;

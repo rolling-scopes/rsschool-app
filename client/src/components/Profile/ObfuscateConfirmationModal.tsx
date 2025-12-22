@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Modal, Input, Typography, Space } from 'antd';
-import { ProfileApi } from 'api';
+import { ProfileApi } from '@client/api';
 
 const { Text, Paragraph } = Typography;
 

@@ -1,6 +1,6 @@
 import { Divider, Layout } from 'antd';
 import dynamic from 'next/dynamic';
-import { Header } from 'components/Header';
+import { Header } from '@client/shared/components/Header';
 
 import { Steps } from './Steps';
 import { StudentInfo } from './StudentInfo';

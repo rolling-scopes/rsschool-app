@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { AvailableReviewStatsDto } from 'api';
+import { AvailableReviewStatsDto } from '@client/api';
 import { AvailableReviewCard } from './AvailableReviewCard';
 
 const availableReviews: AvailableReviewStatsDto[] = [

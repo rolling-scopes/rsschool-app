@@ -1,7 +1,7 @@
 import { Col, DatePicker, Form, Input, Row, Select, Typography } from 'antd';
-import { DisciplinesApi, EventsApi } from 'api';
-import { ModalForm } from 'components/Forms';
-import { UserSearch } from 'components/UserSearch';
+import { DisciplinesApi, EventsApi } from '@client/api';
+import { ModalForm } from '@client/shared/components/Forms';
+import { UserSearch } from '@client/shared/components/UserSearch';
 import { TIMEZONES } from 'configs/timezones';
 import { EVENT_TYPES } from 'data/eventTypes';
 import { SPECIAL_ENTITY_TAGS } from 'modules/Schedule/constants';

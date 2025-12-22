@@ -1,7 +1,7 @@
 import { Button, Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload';
-import { CriteriaDto } from 'api';
+import { CriteriaDto } from '@client/api';
 import { CrossCheckCriteriaType } from 'services/course';
 import { TaskType } from './constants';
 import { useMessage } from 'hooks';

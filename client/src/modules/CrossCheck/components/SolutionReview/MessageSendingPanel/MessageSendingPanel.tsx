@@ -6,7 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { CrossCheckMessageAuthor } from 'services/course';
 import { UserAvatar } from '../UserAvatar';
-import { CrossCheckMessageDtoRoleEnum } from 'api';
+import { CrossCheckMessageDtoRoleEnum } from '@client/api';
 
 const { Text } = Typography;
 

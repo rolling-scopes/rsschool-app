@@ -1,6 +1,6 @@
 import { Space, Tag, Typography, Button } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
-import { TeamDistributionStudentDto } from 'api';
+import { TeamDistributionStudentDto } from '@client/api';
 import { StudentsTableColumnKey, StudentsTableColumnName } from 'modules/Teams/constants';
 import { TeamOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Breakpoint } from 'antd/lib';

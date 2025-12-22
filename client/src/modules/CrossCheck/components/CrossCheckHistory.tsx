@@ -2,10 +2,10 @@ import { Dispatch, SetStateAction } from 'react';
 import { ClockCircleOutlined, EditFilled, EditOutlined } from '@ant-design/icons';
 import { Button, Col, Row, Spin, Tag, Timeline, Typography } from 'antd';
 import { useSolutionReviewSettings } from 'modules/CrossCheck/hooks';
-import { markdownLabel } from 'components/Forms/PreparedComment';
+import { markdownLabel } from '@client/shared/components/Forms/PreparedComment';
 import { SolutionReview } from 'modules/CrossCheck/components/SolutionReview';
 import { SolutionReviewSettingsPanel } from 'modules/CrossCheck/components/SolutionReviewSettingsPanel';
-import { CrossCheckMessageDtoRoleEnum, CrossCheckSolutionReviewDto } from 'api';
+import { CrossCheckMessageDtoRoleEnum, CrossCheckSolutionReviewDto } from '@client/api';
 import { useMessage } from 'hooks';
 
 type CrossCheckHistoryState = {

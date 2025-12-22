@@ -1,6 +1,6 @@
 import { Alert, Layout } from 'antd';
 import { FooterLayout } from 'components/Footer';
-import { PageLayout } from 'components/PageLayout';
+import { PageLayout } from '@client/shared/components/PageLayout';
 import Link from 'next/link';
 import { useState } from 'react';
 

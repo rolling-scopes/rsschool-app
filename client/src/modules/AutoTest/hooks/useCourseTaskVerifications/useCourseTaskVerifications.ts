@@ -1,6 +1,6 @@
 import { useRequest } from 'ahooks';
 import { message } from 'antd';
-import { CheckerEnum, CoursesTasksApi, CourseTaskDtoTypeEnum } from 'api';
+import { CheckerEnum, CoursesTasksApi, CourseTaskDtoTypeEnum } from '@client/api';
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import { mapTo } from 'modules/AutoTest/utils/map';

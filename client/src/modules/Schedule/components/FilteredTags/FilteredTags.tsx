@@ -1,7 +1,7 @@
 import { Button, Col, Row, Tag, theme } from 'antd';
 import { FilterFilled } from '@ant-design/icons';
 import { TAG_NAME_MAP } from 'modules/Schedule/constants';
-import { CourseScheduleItemDto } from 'api';
+import { CourseScheduleItemDto } from '@client/api';
 
 type FilteredTagsProps = {
   tagFilters: string[];

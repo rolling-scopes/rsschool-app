@@ -5,7 +5,7 @@ import { useLoading } from 'components/useLoading';
 import { useAsync } from 'react-use';
 import { NotificationSettingsTable } from 'modules/Notifications/components/NotificationSettingsTable';
 import { NotificationSettingsModal } from 'modules/Notifications/components/NotificationSettingsModal';
-import { NotificationDto } from 'api';
+import { NotificationDto } from '@client/api';
 import { useMessage } from 'hooks';
 
 export function AdminNotificationsPage() {

@@ -1,4 +1,4 @@
-import { InterviewDto } from 'api';
+import { InterviewDto } from '@client/api';
 import { isInterviewRegistrationInProgress, isInterviewStarted } from 'domain/interview';
 import { MentorInterview } from 'services/course';
 import { Course } from 'services/models';

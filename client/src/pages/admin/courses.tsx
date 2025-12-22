@@ -1,8 +1,8 @@
 import { useRequest } from 'ahooks';
 import { Button, Layout, Table } from 'antd';
-import { CoursesApi, DisciplinesApi, DiscordServersApi } from 'api';
-import { AdminPageLayout } from 'components/PageLayout';
-import { boolIconRenderer, dateUtcRenderer, stringSorter, stringTrimRenderer } from 'components/Table';
+import { CoursesApi, DisciplinesApi, DiscordServersApi } from '@client/api';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
+import { boolIconRenderer, dateUtcRenderer, stringSorter, stringTrimRenderer } from '@client/shared/components/Table';
 import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -11,7 +11,7 @@ import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules
 import { CourseModal } from 'modules/CourseManagement/components/CourseModal';
 import { useContext, useState } from 'react';
 import { Course, CourseRole } from 'services/models';
-import { PublicSvgIcon } from '@client/components/Icons';
+import { PublicSvgIcon } from '@client/shared/components/Icons';
 
 dayjs.extend(utc);
 

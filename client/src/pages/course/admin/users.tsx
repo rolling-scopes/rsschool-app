@@ -1,15 +1,15 @@
 import { Button, Checkbox, Col, Form, Row, Table, Tag, Modal, message } from 'antd';
-import { GithubAvatar } from 'components/GithubAvatar';
-import { ModalForm } from 'components/Forms';
-import { boolIconRenderer, PersonCell, getColumnSearchProps } from 'components/Table';
-import { UserSearch } from 'components/UserSearch';
+import { GithubAvatar } from '@client/shared/components/GithubAvatar';
+import { ModalForm } from '@client/shared/components/Forms';
+import { boolIconRenderer, PersonCell, getColumnSearchProps } from '@client/shared/components/Table';
+import { UserSearch } from '@client/shared/components/UserSearch';
 import { useCallback, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
-import { CourseUserDto, CourseUsersApi } from 'api';
+import { CourseUserDto, CourseUsersApi } from '@client/api';
 import { CourseRole } from 'services/models';
 import { UserService } from 'services/user';
-import { UserGroupApi, UserGroupDto } from 'api';
-import { AdminPageLayout } from 'components/PageLayout';
+import { UserGroupApi, UserGroupDto } from '@client/api';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 
 const userGroupService = new UserGroupApi();

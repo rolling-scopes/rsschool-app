@@ -7,8 +7,8 @@ import {
   TrophyOutlined,
 } from '@ant-design/icons';
 import { Button, Card, Col, Empty, Row, Statistic, Typography } from 'antd';
-import { GithubUserLink } from 'components/GithubUserLink';
-import { PageLayoutSimple } from 'components/PageLayout';
+import { GithubUserLink } from '@client/shared/components/GithubUserLink';
+import { PageLayoutSimple } from '@client/shared/components/PageLayout';
 import { getMentorId } from 'domain/user';
 import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
 import { useMentorStudents } from 'modules/Mentor/hooks/useMentorStudents';

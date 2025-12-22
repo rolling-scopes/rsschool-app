@@ -1,8 +1,8 @@
 import { Col, Row, Space, Typography } from 'antd';
 import GithubFilled from '@ant-design/icons/GithubFilled';
 import EnvironmentFilled from '@ant-design/icons/EnvironmentFilled';
-import { GithubAvatar } from 'components/GithubAvatar';
-import { MentorStudentSummaryDto } from 'api';
+import { GithubAvatar } from '@client/shared/components/GithubAvatar';
+import { MentorStudentSummaryDto } from '@client/api';
 
 const { Text, Link } = Typography;
 

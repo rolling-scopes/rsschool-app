@@ -1,5 +1,5 @@
-import { ProfileCourseDto } from 'api';
-import { LoadingScreen } from 'components/LoadingScreen';
+import { ProfileCourseDto } from '@client/api';
+import { LoadingScreen } from '@client/shared/components/LoadingScreen';
 import { useRouter } from 'next/router';
 import React, { useCallback, useContext, useMemo, useState } from 'react';
 import { useLocalStorage } from 'react-use';

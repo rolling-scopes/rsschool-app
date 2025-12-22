@@ -1,7 +1,13 @@
 import { Button, Row, Table, Checkbox, Popconfirm } from 'antd';
-import { AdminPageLayout } from 'components/PageLayout';
-import { StudentMentorModal } from 'components/StudentMentorModal';
-import { boolIconRenderer, getColumnSearchProps, numberSorter, stringSorter, PersonCell } from 'components/Table';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
+import { StudentMentorModal } from '@client/shared/components/StudentMentorModal';
+import {
+  boolIconRenderer,
+  getColumnSearchProps,
+  numberSorter,
+  stringSorter,
+  PersonCell,
+} from '@client/shared/components/Table';
 import { useLoading } from 'components/useLoading';
 import { useMemo, useState, useContext } from 'react';
 import { CourseService } from 'services/course';

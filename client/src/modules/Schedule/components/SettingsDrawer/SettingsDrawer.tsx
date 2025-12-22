@@ -5,7 +5,7 @@ import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import ChangeTagColors from './ChangeTagColors';
 import ShowTableColumns from './ShowTableColumns';
 import TimeZone from './TimeZone';
-import { CourseScheduleItemDtoTagEnum } from 'api';
+import { CourseScheduleItemDtoTagEnum } from '@client/api';
 
 interface SettingsDrawerProps {
   settings: ScheduleSettings;

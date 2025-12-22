@@ -1,4 +1,4 @@
-import { CourseScheduleItemDto, CourseScheduleItemDtoStatusEnum, CourseScheduleItemDtoTagEnum } from 'api';
+import { CourseScheduleItemDto, CourseScheduleItemDtoStatusEnum, CourseScheduleItemDtoTagEnum } from '@client/api';
 
 export enum ColumnName {
   Status = 'Status',

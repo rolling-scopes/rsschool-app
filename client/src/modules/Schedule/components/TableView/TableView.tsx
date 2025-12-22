@@ -1,7 +1,7 @@
 import { Col, Form, Row, Table, message } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
-import { CourseScheduleItemDto } from 'api';
-import { GithubUserLink } from 'components/GithubUserLink';
+import { CourseScheduleItemDto } from '@client/api';
+import { GithubUserLink } from '@client/shared/components/GithubUserLink';
 import {
   coloredDateRenderer,
   dateSorter,
@@ -9,7 +9,7 @@ import {
   renderTask,
   scoreRenderer,
   weightRenderer,
-} from 'components/Table';
+} from '@client/shared/components/Table';
 import FilteredTags from 'modules/Schedule/components/FilteredTags';
 import {
   ALL_TAB_KEY,

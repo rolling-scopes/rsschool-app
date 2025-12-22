@@ -8,7 +8,7 @@ import CommonCard from './CommonCard';
 import PublicFeedbackModal from './PublicFeedbackModal';
 import heroesBadges from '../../configs/heroes-badges';
 import { PublicFeedback } from '@common/models/profile';
-import { GithubAvatar } from 'components/GithubAvatar';
+import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 import dayjs from 'dayjs';
 import relative from 'dayjs/plugin/relativeTime';
 import HeroesCountBadge from 'components/Heroes/HeroesCountBadge';

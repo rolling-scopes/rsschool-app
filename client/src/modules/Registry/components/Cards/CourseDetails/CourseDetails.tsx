@@ -1,5 +1,5 @@
 import { Form, Select, Typography } from 'antd';
-import { CourseDto } from 'api';
+import { CourseDto } from '@client/api';
 import { CourseLabel, FormCard, LanguagesMentoring } from 'modules/Registry/components';
 import { CARD_TITLES, LABELS, PLACEHOLDERS } from 'modules/Registry/constants';
 

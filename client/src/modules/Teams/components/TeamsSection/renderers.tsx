@@ -1,7 +1,7 @@
 import { Button, Space, Typography } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { Breakpoint } from 'antd/lib';
-import { TeamDistributionDetailedDto, TeamDto } from 'api';
+import { TeamDistributionDetailedDto, TeamDto } from '@client/api';
 import { StudentsTableColumnKey, TeamsTableColumnKey, TeamsTableColumnName } from 'modules/Teams/constants';
 import StudentsTable from '../StudentsTable/StudentsTable';
 

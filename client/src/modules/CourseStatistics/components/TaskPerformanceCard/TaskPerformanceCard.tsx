@@ -1,5 +1,5 @@
 import { Card, Flex, Form, Image, Select, Typography } from 'antd';
-import { CourseStatsApi, CourseTaskDto, TaskPerformanceStatsDto } from 'api';
+import { CourseStatsApi, CourseTaskDto, TaskPerformanceStatsDto } from '@client/api';
 import { useActiveCourseContext } from 'modules/Course/contexts';
 import { useState } from 'react';
 import { useAsync } from 'react-use';

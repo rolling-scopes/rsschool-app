@@ -1,4 +1,4 @@
-import { CourseDto as Course, CoursesApi, CreateCourseDto } from 'api';
+import { CourseDto as Course, CoursesApi, CreateCourseDto } from '@client/api';
 
 export type CoursesResponse = { data: Course[] };
 

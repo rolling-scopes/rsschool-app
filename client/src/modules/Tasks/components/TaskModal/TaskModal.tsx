@@ -1,9 +1,9 @@
 import { Row, Col, Form, Input, Select, Card, Space, Tag, Empty, Typography } from 'antd';
 import { Dispatch, SetStateAction, useMemo } from 'react';
 import union from 'lodash/union';
-import { TaskDto, CriteriaDto, DisciplineDto } from 'api';
-import { ModalForm } from 'components/Forms';
-import { stringSorter } from 'components/Table';
+import { TaskDto, CriteriaDto, DisciplineDto } from '@client/api';
+import { ModalForm } from '@client/shared/components/Forms';
+import { stringSorter } from '@client/shared/components/Table';
 import { SKILLS } from 'data/skills';
 import { TASK_TYPES } from 'data/taskTypes';
 import { ModalFormMode } from 'hooks';

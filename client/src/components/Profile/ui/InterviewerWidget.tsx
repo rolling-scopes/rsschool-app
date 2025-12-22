@@ -1,5 +1,5 @@
 import { Flex, Space, theme, Typography } from 'antd';
-import { GithubAvatar } from '@client/components/GithubAvatar';
+import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 
 const { Text } = Typography;
 
