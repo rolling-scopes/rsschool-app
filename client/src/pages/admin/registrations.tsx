@@ -192,7 +192,7 @@ function Page() {
                 render: (_: any, record: Registration) => <a href={record.user.profileUrl}>{record.user.name}</a>,
               },
               {
-                title: 'Github',
+                title: 'GitHub',
                 dataIndex: 'githubId',
                 key: 'githubId',
                 width: 100,

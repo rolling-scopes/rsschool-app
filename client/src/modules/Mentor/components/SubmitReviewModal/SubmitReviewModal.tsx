@@ -75,7 +75,7 @@ function SubmitReviewModal({ data, courseId, onClose, onSubmit }: SubmitReviewMo
               {taskName}
             </Link>
           </Form.Item>
-          <Form.Item label="Github Pull Request" name="prUrl">
+          <Form.Item label="GitHub Pull Request" name="prUrl">
             <Link href={solutionUrl} target="_blank">
               {solutionUrl}
             </Link>

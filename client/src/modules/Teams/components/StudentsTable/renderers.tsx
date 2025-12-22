@@ -123,8 +123,8 @@ export const getColumns = (
     responsive: DISPLAY_TABLE_BREAKPOINTS,
   },
   {
-    key: StudentsTableColumnKey.Github,
-    title: StudentsTableColumnName.Github,
+    key: StudentsTableColumnKey.GitHub,
+    title: StudentsTableColumnName.GitHub,
     dataIndex: 'github',
     width: '10%',
     render: renderGithub,

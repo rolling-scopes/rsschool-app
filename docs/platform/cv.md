@@ -49,7 +49,7 @@ There are 3 types of data presented in the CV:
     - `Skype id` - skype id
     - `Telegram public name` - Telegram public name (contained in the link to Telegram after `t.me/`)
     - `LinkedIn` - link to the user's profile in LinkedIn
-    - `Github username `- the github id of the account that user wants to show to the employer (it may differ from the one used for authentication in RS School App)
+    - `GitHub username `- the github id of the account that user wants to show to the employer (it may differ from the one used for authentication in RS School App)
     - `Website` - a link to a website (with a portfolio, some profile etc.)
   - `Visible courses` - the courses user wants to show in his CV and on the Employer page (he can only select courses for which he has registered). User can explicitly choose which courses to show, all courses are shown if no `visible courses` were selected.
 

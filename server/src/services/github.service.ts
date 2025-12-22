@@ -8,7 +8,7 @@ export class GithubService {
   public static async initGithub(): Promise<Octokit> {
     const { installationId } = config.github;
     if (!app) {
-      throw new Error('Github App is not configured');
+      throw new Error('GitHub App is not configured');
     }
     const octokit = await app.getInstallationOctokit(Number(installationId));
     return octokit;

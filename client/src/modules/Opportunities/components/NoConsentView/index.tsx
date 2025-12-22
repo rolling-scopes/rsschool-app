@@ -15,7 +15,7 @@ export const confirmationModalInfo = {
     header: 'Attention! The following information will be public:',
     availableDataList: [
       'Personal information (Name, Desired Position, English level, Military Service, Avatar, Link to a presentation, Self-Description, etc.)',
-      'Contact details (Phone, Email, Skype, Telegram, LinkedIn, Location, Github username, Website Link)',
+      'Contact details (Phone, Email, Skype, Telegram, LinkedIn, Location, GitHub username, Website Link)',
       'Information about passed school courses (Courses Info, Mentor, Course Status, Score, Position);',
       'Public feedback information (Gratitudes)',
     ],
@@ -24,7 +24,7 @@ export const confirmationModalInfo = {
     header: 'Внимание! Следующая информация будет публичной:',
     availableDataList: [
       'Личная информация (имя, желаемая позиция, уровень английского, отношение к военной службе, аватар, ссылка на самопрезентацию, краткое самоописание и т.д.)',
-      'Контактные данные (телефон, электронная почта, Skype, Telegram, LinkedIn, локация, в которой хотите работать, Github, ссылка на веб-сайт)',
+      'Контактные данные (телефон, электронная почта, Skype, Telegram, LinkedIn, локация, в которой хотите работать, GitHub, ссылка на веб-сайт)',
       'Информация о пройденных в школе курсах (в каких курсах принято участие, статус курса для участника, скор, место в скоре)',
       'Информация о публичной обратной связи (отзывы в RS School App)',
     ],

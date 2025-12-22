@@ -30,7 +30,7 @@ You can sign up for the upcoming courses by following <span style="color:green_a
 ### How to understand that I have enrolled in the course successfully??
 
 Go to <span style="color:green_apple">[RS School App](https://app.rs.school/)</span> and check that the course is displayed in the course list. Then, open the score tab.
-In the header of the table after the inscription Github, click on the magnifying glass icon, enter your nickname on Github and press 'Enter'
+In the header of the table after the inscription GitHub, click on the magnifying glass icon, enter your nickname on GitHub and press 'Enter'
 If the nickname is found in the list of students, then you have successfully registered for the course. Congrats!
 
 ### How do I know if it is possible to register for a course that has already started?

@@ -27,9 +27,11 @@ https://status.rs.school/
 
 - Cloud: [AWS EC2](https://aws.amazon.com/ec2/), [AWS RDS](https://aws.amazon.com/rds/postgresql/), [AWS S3](https://aws.amazon.com/s3/), [AWS CloudWatch](https://aws.amazon.com/cloudwatch/)
 - Monitoring: [Sentry](https://rs-school.sentry.io/), [Checkly](https://app.checklyhq.com/)
-- CI/CD: [Github Actions](https://github.com/rolling-scopes/rsschool-app/tree/master/.github/workflows)
+- CI/CD: [GitHub Actions](https://github.com/rolling-scopes/rsschool-app/tree/master/.github/workflows)
 
 ## Getting Started
+
+Repository is organized into 3 workspaces: `server`, `nestjs`, `client`. Each workspace has its own package.json and npm scripts. We use [Turbo](https://turbo.build/) to run scripts across workspaces.
 
 ### Prerequisites
 

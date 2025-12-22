@@ -236,10 +236,10 @@ export function CourseTaskModal(props: Props) {
             <Input.TextArea placeholder="Free form text to display on submit form" />
           </Form.Item>
           <Form.Item name={['validations', 'githubIdInUrl']} valuePropName="checked">
-            <Checkbox>Require Github Username in URL</Checkbox>
+            <Checkbox>Require GitHub Username in URL</Checkbox>
           </Form.Item>
           <Form.Item name={['validations', 'githubPrInUrl']} valuePropName="checked">
-            <Checkbox>Require Github Pull Request in URL</Checkbox>
+            <Checkbox>Require GitHub Pull Request in URL</Checkbox>
           </Form.Item>
         </>
       ) : null}

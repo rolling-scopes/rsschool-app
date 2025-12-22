@@ -101,7 +101,7 @@ export const GUESS_SLOTHS = [
   { caption: 'Codewars', img: './img/guess/painted/13.svg' },
   { caption: 'Finished Work', img: './img/guess/painted/14.svg' },
   { caption: 'Git Problem', img: './img/guess/painted/15.svg' },
-  { caption: 'Github Friends', img: './img/guess/painted/16.svg' },
+  { caption: 'GitHub Friends', img: './img/guess/painted/16.svg' },
   { caption: 'Helper', img: './img/guess/painted/17.svg' },
   { caption: 'Hero', img: './img/guess/painted/18.svg' },
   { caption: 'One Hour Before Deadline', img: './img/guess/painted/19.svg' },

@@ -106,7 +106,7 @@ const contactRendererMap: AllowedContacts = {
   },
   githubUsername: {
     icon: <GithubOutlined />,
-    render: contact => <Link title="Github" url={`https://github.com/${contact}`} text={contact} />,
+    render: contact => <Link title="GitHub" url={`https://github.com/${contact}`} text={contact} />,
   },
   website: {
     icon: <IdcardOutlined />,

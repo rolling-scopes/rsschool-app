@@ -32,7 +32,7 @@ export function getColumns(props: Props): ColumnType<ScoreStudentDto>[] {
       render: (value: number) => (value >= 999999 ? 'New' : value),
     },
     {
-      title: 'Github',
+      title: 'GitHub',
       fixed: 'left',
       key: 'githubId',
       dataIndex: 'githubId',
