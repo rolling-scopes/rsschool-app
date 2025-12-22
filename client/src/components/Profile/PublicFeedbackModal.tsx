@@ -4,7 +4,7 @@ import relative from 'dayjs/plugin/relativeTime';
 import { PublicFeedback } from '@common/models/profile';
 import { Typography, Tooltip, Modal, Row, Col } from 'antd';
 import { Comment } from '@ant-design/compatible';
-import { GithubAvatar } from 'components/GithubAvatar';
+import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 import heroesBadges from '../../configs/heroes-badges';
 
 dayjs.extend(relative);

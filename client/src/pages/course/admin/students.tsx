@@ -1,7 +1,7 @@
 import { BranchesOutlined, CheckCircleTwoTone, ClockCircleTwoTone, MinusCircleOutlined } from '@ant-design/icons';
 import { Button, Row, Space, Statistic, Switch, Table, Typography } from 'antd';
 import { ColumnProps } from 'antd/lib/table/Column';
-import { AdminPageLayout } from 'components/PageLayout';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import { DashboardDetails } from 'components/Student';
 import {
   boolIconRenderer,
@@ -10,7 +10,7 @@ import {
   numberSorter,
   PersonCell,
   stringSorter,
-} from 'components/Table';
+} from '@client/shared/components/Table';
 import { useLoading } from 'components/useLoading';
 import { isAdmin, isCourseManager, isCourseSupervisor } from 'domain/user';
 import { useMessage } from 'hooks';

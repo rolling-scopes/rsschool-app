@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { Form } from 'antd';
-import { CourseDto } from 'api';
+import { CourseDto } from '@client/api';
 import { CARD_TITLES } from 'modules/Registry/constants';
 import { GeneralSection } from './GeneralSection';
 import usePlacesAutocomplete from 'use-places-autocomplete';

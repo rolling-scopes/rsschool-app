@@ -7,7 +7,7 @@ import {
   CloseCircleTwoTone,
   ClockCircleOutlined,
 } from '@ant-design/icons';
-import { OpportunitiesApi } from 'api';
+import { OpportunitiesApi } from '@client/api';
 import { ExpirationState } from 'modules/Opportunities/constants';
 import { useMessage } from 'hooks';
 

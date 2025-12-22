@@ -1,7 +1,7 @@
 import useRequest from 'ahooks/lib/useRequest';
 import { Button, Result } from 'antd';
-import { type ProfileCourseDto, SessionApi } from 'api';
-import { LoadingScreen } from 'components/LoadingScreen';
+import { type ProfileCourseDto, SessionApi } from '@client/api';
+import { LoadingScreen } from '@client/shared/components/LoadingScreen';
 import type { Session } from 'components/withSession';
 import { hasRoleInAnyCourse } from 'domain/user';
 import Router from 'next/router';

@@ -1,6 +1,6 @@
 import { Form, Input, InputNumber, message, Modal } from 'antd';
 import { useEffect } from 'react';
-import { PromptDto, PromptsApi } from 'api';
+import { PromptDto, PromptsApi } from '@client/api';
 
 type Props = {
   open: boolean;

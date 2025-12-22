@@ -1,6 +1,6 @@
 import { Col, Card, Button, Alert, Typography, Flex } from 'antd';
 import { CommentOutlined, InfoCircleTwoTone } from '@ant-design/icons';
-import { InterviewDto } from 'api';
+import { InterviewDto } from '@client/api';
 import {
   getInterviewCardResult,
   InterviewDetails,

@@ -3,10 +3,10 @@ import { Badge, Col, Row, Tag, Tooltip, Typography } from 'antd';
 import { Comment } from '@ant-design/compatible';
 import { formatDateTime } from 'services/formatter';
 import { ROLE_TAG_COLOR, SolutionReviewSettings } from 'modules/CrossCheck/constants';
-import PreparedComment from 'components/Forms/PreparedComment';
+import PreparedComment from '@client/shared/components/Forms/PreparedComment';
 import { UserAvatar } from '../UserAvatar';
 import { Username } from '../Username';
-import { CrossCheckMessageDto, CrossCheckMessageDtoRoleEnum } from 'api';
+import { CrossCheckMessageDto, CrossCheckMessageDtoRoleEnum } from '@client/api';
 
 const { Text } = Typography;
 

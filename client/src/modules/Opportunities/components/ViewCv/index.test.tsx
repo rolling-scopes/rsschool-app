@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { ResumeDto } from 'api';
+import { ResumeDto } from '@client/api';
 import { ExpirationState } from 'modules/Opportunities/constants';
 import { useViewData, useExpiration } from 'modules/Opportunities/hooks';
 import { ViewCV } from './index';

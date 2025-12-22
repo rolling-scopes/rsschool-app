@@ -1,5 +1,5 @@
-import { CourseDto } from 'api';
-import { CourseIcon } from 'components/Icons';
+import { CourseDto } from '@client/api';
+import { CourseIcon } from '@client/shared/components/Icons';
 import { formatMonthFriendly } from 'services/formatter';
 import { LABELS } from 'modules/Registry/constants';
 

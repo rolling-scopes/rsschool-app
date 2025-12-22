@@ -9,7 +9,7 @@ import { Location } from '@common/models';
 import { Form, Modal, theme, Typography } from 'antd';
 import { useRouter } from 'next/router';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { DisciplinesApi, ProfileApi } from 'api';
+import { DisciplinesApi, ProfileApi } from '@client/api';
 import { TYPES } from 'configs/registry';
 import { ERROR_MESSAGES } from 'modules/Registry/constants';
 import { useMessage } from 'hooks';

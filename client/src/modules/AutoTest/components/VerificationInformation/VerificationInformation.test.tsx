@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { CourseTaskDetailedDtoTypeEnum, CheckerEnum } from 'api';
+import { CourseTaskDetailedDtoTypeEnum, CheckerEnum } from '@client/api';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
 import VerificationInformation, { VerificationInformationProps } from './VerificationInformation';
 

@@ -1,5 +1,5 @@
 import { Button, Col, Form, Row, Space, theme, Typography } from 'antd';
-import { TaskVerificationAttemptDto } from 'api';
+import { TaskVerificationAttemptDto } from '@client/api';
 import { Question } from 'modules/AutoTest/components';
 import dayjs from 'dayjs';
 import { Fragment } from 'react';

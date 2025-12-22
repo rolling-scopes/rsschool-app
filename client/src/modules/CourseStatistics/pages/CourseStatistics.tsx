@@ -1,4 +1,4 @@
-import { PageLayout } from 'components/PageLayout';
+import { PageLayout } from '@client/shared/components/PageLayout';
 import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
 import { DatePickerProps, Empty, theme } from 'antd';
 import { useContext, useState } from 'react';

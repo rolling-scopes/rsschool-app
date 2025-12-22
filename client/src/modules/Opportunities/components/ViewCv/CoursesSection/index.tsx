@@ -1,6 +1,6 @@
 import { StarOutlined, TrophyOutlined } from '@ant-design/icons';
 import { Col, List, Row, Typography } from 'antd';
-import { ResumeCourseDto, ResumeDto } from 'api';
+import { ResumeCourseDto, ResumeDto } from '@client/api';
 import { BaseSection } from '../BaseSection';
 
 import styles from './CoursesSection.module.css';

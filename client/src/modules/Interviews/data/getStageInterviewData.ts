@@ -6,7 +6,7 @@ import {
   StudentDto,
   StudentsApi,
   TaskDtoTypeEnum,
-} from 'api';
+} from '@client/api';
 import { getTasksTotalScore } from 'domain/course';
 import { ParsedUrlQuery } from 'querystring';
 import type { CourseOnlyPageProps } from 'services/models';

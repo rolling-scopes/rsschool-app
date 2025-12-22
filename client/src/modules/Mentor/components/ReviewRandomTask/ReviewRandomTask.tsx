@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, message } from 'antd';
 import { useLoading } from 'components/useLoading';
-import { MentorsApi } from 'api';
+import { MentorsApi } from '@client/api';
 import { AxiosError } from 'axios';
 import { EyeOutlined } from '@ant-design/icons';
 

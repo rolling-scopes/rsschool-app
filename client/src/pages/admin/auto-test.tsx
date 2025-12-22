@@ -1,6 +1,6 @@
 import { Col, ColProps, Row, message } from 'antd';
-import { AutoTestsApi, BasicAutoTestTaskDto } from 'api';
-import { AdminPageLayout } from 'components/PageLayout';
+import { AutoTestsApi, BasicAutoTestTaskDto } from '@client/api';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import AutoTestTaskCard from 'modules/AutoTest/components/AutoTestTaskCard/AutoTestTaskCard';
 import { SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { useState } from 'react';

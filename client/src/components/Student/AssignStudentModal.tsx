@@ -1,5 +1,5 @@
 import { Modal, Typography } from 'antd';
-import { StudentSearch } from 'components/StudentSearch';
+import { StudentSearch } from '@client/shared/components/StudentSearch';
 import { useCallback, useState } from 'react';
 import { CourseService } from 'services/course';
 import { useMessage } from 'hooks';

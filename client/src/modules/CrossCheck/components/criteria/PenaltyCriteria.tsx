@@ -1,6 +1,6 @@
 import React from 'react';
 import { Radio, RadioChangeEvent, theme, Typography } from 'antd';
-import { CrossCheckCriteriaDataDto } from 'api';
+import { CrossCheckCriteriaDataDto } from '@client/api';
 
 const { Text } = Typography;
 const { Group } = Radio;

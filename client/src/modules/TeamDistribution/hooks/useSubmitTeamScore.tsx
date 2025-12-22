@@ -1,4 +1,4 @@
-import { TeamDistributionApi } from 'api';
+import { TeamDistributionApi } from '@client/api';
 import { useState } from 'react';
 import { useMessage } from 'hooks';
 

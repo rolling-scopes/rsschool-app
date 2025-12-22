@@ -1,8 +1,8 @@
 import { Drawer, TablePaginationConfig, message } from 'antd';
 import { FilterValue } from 'antd/es/table/interface';
-import { StudentsApi, UserStudentDto } from 'api';
-import { IPaginationInfo } from '@client/utils/pagination';
-import { AdminPageLayout } from 'components/PageLayout';
+import { StudentsApi, UserStudentDto } from '@client/api';
+import { IPaginationInfo } from '@client/shared/utils/pagination';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import { useLoading } from 'components/useLoading';
 import { useState } from 'react';
 import { useAsync } from 'react-use';

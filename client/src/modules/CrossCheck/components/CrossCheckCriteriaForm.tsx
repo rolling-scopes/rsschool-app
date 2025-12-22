@@ -5,7 +5,7 @@ import { isEqual } from 'lodash';
 import { SubtaskCriteria } from './criteria/SubtaskCriteria';
 import { TitleCriteria } from './criteria/TitleCriteria';
 import { PenaltyCriteria } from './criteria/PenaltyCriteria';
-import { CrossCheckCriteriaDataDto, CrossCheckSolutionReviewDto } from 'api';
+import { CrossCheckCriteriaDataDto, CrossCheckSolutionReviewDto } from '@client/api';
 import { TaskType } from '../constants';
 import styles from './CrossCheckCriteriaForm.module.css';
 

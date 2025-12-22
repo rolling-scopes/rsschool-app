@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { ResumeCourseDto } from 'api';
+import { ResumeCourseDto } from '@client/api';
 import { VisibleCoursesForm } from './index';
 
 const mockCourses = [

@@ -1,7 +1,7 @@
 import { Col, Divider, Flex, Row, theme } from 'antd';
 import { useEffect, useState } from 'react';
-import { ResumeDto } from 'api';
-import { LoadingScreen } from 'components/LoadingScreen';
+import { ResumeDto } from '@client/api';
+import { LoadingScreen } from '@client/shared/components/LoadingScreen';
 import { useExpiration, useViewData } from 'modules/Opportunities/hooks';
 import { ExpirationTooltip } from 'modules/Opportunities/components/ExpirationTooltip';
 import { ExpirationState } from 'modules/Opportunities/constants';

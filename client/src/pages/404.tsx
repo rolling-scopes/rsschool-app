@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { PageLayout } from 'components/PageLayout';
+import { PageLayout } from '@client/shared/components/PageLayout';
 import { Row } from 'antd';
 import { SessionProvider } from 'modules/Course/contexts';
 

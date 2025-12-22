@@ -1,5 +1,5 @@
 import { Divider, Flex, Form } from 'antd';
-import { CriteriaDto } from 'api';
+import { CriteriaDto } from '@client/api';
 import {
   addKeyAndIndex,
   UploadCriteriaJSON,

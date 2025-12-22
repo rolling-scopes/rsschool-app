@@ -1,4 +1,4 @@
-export { useModalForm } from './useModal/useModalForm';
-export type { ModalFormMode } from './useModal/useModalForm';
-export { useMessage } from './useMessage';
-export { useTheme } from './useTheme';
+export { useModalForm } from '@client/shared/hooks/useModal/useModalForm';
+export type { ModalFormMode } from '@client/shared/hooks/useModal/useModalForm';
+export { useMessage } from '@client/shared/hooks/useMessage';
+export { useTheme } from '@client/shared/hooks/useTheme';

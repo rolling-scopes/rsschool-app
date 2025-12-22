@@ -1,5 +1,5 @@
 import { useSubmitTeamScore } from './useSubmitTeamScore';
-import { TeamDistributionApi } from 'api';
+import { TeamDistributionApi } from '@client/api';
 import { renderHook } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 

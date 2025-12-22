@@ -1,11 +1,17 @@
 import { message, Row, Spin, Modal } from 'antd';
-import { PageLayout } from 'components/PageLayout';
+import { PageLayout } from '@client/shared/components/PageLayout';
 import { useMemo, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
 import { InterviewDetails } from 'domain/interview';
 import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
-import { CoursesInterviewsApi, CourseTaskDtoTypeEnum, InterviewCommentDto, InterviewDto, TaskDtoTypeEnum } from 'api';
+import {
+  CoursesInterviewsApi,
+  CourseTaskDtoTypeEnum,
+  InterviewCommentDto,
+  InterviewDto,
+  TaskDtoTypeEnum,
+} from '@client/api';
 import { InterviewCard, NoInterviewsAlert } from 'modules/Interview/Student';
 
 const coursesInterviewApi = new CoursesInterviewsApi();

@@ -1,10 +1,10 @@
 import { useContext, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Result, Spin, theme } from 'antd';
-import { ProfileApi, UpdateProfileInfoDto, UpdateUserDtoLanguagesEnum } from 'api';
 import { dynamicWithSkeleton } from '@client/utils/dynamicWithSkeleton';
-import { Header } from 'components/Header';
-import { LoadingScreen } from 'components/LoadingScreen';
+import { ProfileApi, UpdateProfileInfoDto, UpdateUserDtoLanguagesEnum } from '@client/api';
+import { Header } from '@client/shared/components/Header';
+import { LoadingScreen } from '@client/shared/components/LoadingScreen';
 import { withGoogleMaps } from 'components/withGoogleMaps';
 import { NotificationChannel, NotificationsService } from 'modules/Notifications/services/notifications';
 import { ProfileInfo, ProfileMainCardData, UserService } from 'services/user';

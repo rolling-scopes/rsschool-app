@@ -1,8 +1,8 @@
 import { ColumnsType, ColumnType } from 'antd/lib/table';
 import { TaskSolutionsTableColumnKey, TaskSolutionsTableColumnName } from 'modules/Mentor/constants';
-import { dateSorter, dateWithTimeZoneRenderer, getColumnSearchProps } from 'components/Table';
+import { dateSorter, dateWithTimeZoneRenderer, getColumnSearchProps } from '@client/shared/components/Table';
 import { Button, Space, Typography } from 'antd';
-import { MentorDashboardDto } from 'api';
+import { MentorDashboardDto } from '@client/api';
 import dayjs from 'dayjs';
 
 const { Text, Link } = Typography;

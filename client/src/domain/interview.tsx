@@ -1,5 +1,5 @@
 import { Tag, Typography } from 'antd';
-import { TaskDtoTypeEnum } from 'api';
+import { TaskDtoTypeEnum } from '@client/api';
 import { StageInterviewFeedbackVerdict, InterviewDetails as CommonInterviewDetails } from '@common/models';
 import { Decision } from 'data/interviews/technical-screening';
 import dayjs from 'dayjs';

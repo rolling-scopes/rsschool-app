@@ -1,5 +1,5 @@
-import { CoursesInterviewsApi, InterviewDto, TaskDtoTypeEnum } from 'api';
-import { PageLayout } from 'components/PageLayout';
+import { CoursesInterviewsApi, InterviewDto, TaskDtoTypeEnum } from '@client/api';
+import { PageLayout } from '@client/shared/components/PageLayout';
 import { useLoading } from 'components/useLoading';
 import { useCallback, useState, useContext } from 'react';
 import { useAsync } from 'react-use';

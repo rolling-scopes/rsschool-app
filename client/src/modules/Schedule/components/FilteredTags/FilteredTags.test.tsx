@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { FilteredTags } from './FilteredTags';
-import { CourseScheduleItemDto, CourseScheduleItemDtoTagEnum as TagsEnum } from 'api';
+import { CourseScheduleItemDto, CourseScheduleItemDtoTagEnum as TagsEnum } from '@client/api';
 import { TAG_NAME_MAP } from 'modules/Schedule/constants';
 
 describe('FilteredTags', () => {

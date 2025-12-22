@@ -1,5 +1,5 @@
 import { DatePicker, Form, Input, InputNumber, message, Select, Typography, Modal } from 'antd';
-import { CreateTeamDistributionDto, TeamDistributionApi, TeamDistributionDto } from 'api';
+import { CreateTeamDistributionDto, TeamDistributionApi, TeamDistributionDto } from '@client/api';
 import { TIMEZONES } from 'configs/timezones';
 import dayjs, { Dayjs } from 'dayjs';
 import { formatTimezoneToUTC } from 'services/formatter';

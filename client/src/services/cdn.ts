@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CoursesApi } from 'api';
+import { CoursesApi } from '@client/api';
 import type { CoursesResponse } from './courses';
 
 const baseURL = process.env.CDN_HOST || '';

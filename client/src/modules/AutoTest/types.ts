@@ -1,4 +1,4 @@
-import { CourseTaskDetailedDto } from 'api';
+import { CourseTaskDetailedDto } from '@client/api';
 import { SelfEducationPublicAttributes, Verification } from 'services/course';
 
 export enum CourseTaskStatus {

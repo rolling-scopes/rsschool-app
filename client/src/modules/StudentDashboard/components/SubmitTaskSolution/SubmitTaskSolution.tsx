@@ -1,7 +1,7 @@
 import { Button, Form, Input } from 'antd';
 import React from 'react';
-import { CourseTaskSelect } from 'components/Forms';
-import { ModalSubmitForm } from 'components/Forms/ModalSubmitForm';
+import { CourseTaskSelect } from '@client/shared/components/Forms';
+import { ModalSubmitForm } from '@client/shared/components/Forms';
 import { urlPattern } from 'services/validators';
 import { useSubmitTaskSolution } from 'modules/StudentDashboard/hooks/useSubmitTaskSolution';
 

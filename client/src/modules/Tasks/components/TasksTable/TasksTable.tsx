@@ -1,13 +1,13 @@
 import { Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import { TaskDto } from 'api';
+import { TaskDto } from '@client/api';
 import {
   stringSorter,
   getColumnSearchProps,
   tagsRenderer,
   tagsCoursesRendererWithRemainingNumber,
   boolIconRenderer,
-} from 'components/Table';
+} from '@client/shared/components/Table';
 import { TASK_TYPES } from 'data/taskTypes';
 import { uniqBy } from 'lodash';
 import { ColumnName } from 'modules/Tasks/types';

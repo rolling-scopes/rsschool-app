@@ -1,6 +1,6 @@
 import { message } from 'antd';
 import { useState } from 'react';
-import { CourseTaskVerificationsApi, TaskVerificationAttemptDto } from 'api';
+import { CourseTaskVerificationsApi, TaskVerificationAttemptDto } from '@client/api';
 import { AxiosError } from 'axios';
 import { useLoading } from 'components/useLoading';
 

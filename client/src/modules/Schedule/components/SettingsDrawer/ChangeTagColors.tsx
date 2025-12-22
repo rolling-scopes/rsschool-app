@@ -1,6 +1,6 @@
 import { BgColorsOutlined } from '@ant-design/icons';
 import { ColorPicker, Space, Tag } from 'antd';
-import { CourseScheduleItemDtoTagEnum } from 'api';
+import { CourseScheduleItemDtoTagEnum } from '@client/api';
 import { TAG_NAME_MAP } from 'modules/Schedule/constants';
 import { getTagStyle } from 'modules/Schedule/utils';
 import React from 'react';
