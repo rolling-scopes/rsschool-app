@@ -1,6 +1,6 @@
 import { Form, Input, message, Modal } from 'antd';
 import { useEffect } from 'react';
-import { DisciplineDto, DisciplinesApi } from 'api';
+import { DisciplineDto, DisciplinesApi } from '@client/api';
 
 interface IDisciplineModal {
   isModalVisible: boolean;

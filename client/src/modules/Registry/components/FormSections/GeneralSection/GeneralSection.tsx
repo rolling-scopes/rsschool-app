@@ -2,7 +2,7 @@ import { Col, Row } from 'antd';
 import { Dispatch, SetStateAction } from 'react';
 import { Location } from '@common/models';
 import { PersonalInfo, ContactInfo, CourseDetails } from 'modules/Registry/components';
-import { CourseDto } from 'api';
+import { CourseDto } from '@client/api';
 
 type Props = {
   location: Location | null;

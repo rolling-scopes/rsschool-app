@@ -1,5 +1,5 @@
 import { Card } from 'antd';
-import { CountriesStatsDto } from 'api';
+import { CountriesStatsDto } from '@client/api';
 import { Colors } from '../../data';
 import { dynamicWithSkeleton } from '@client/utils/dynamicWithSkeleton';
 

@@ -1,7 +1,7 @@
 import globalAxios, { AxiosInstance } from 'axios';
 import { UserBasic, MentorBasic, StudentBasic, InterviewDetails, InterviewPair } from '@common/models';
 import { ScoreOrder, ScoreTableFilters } from 'modules/Score/hooks/types';
-import { IPaginationInfo } from '@client/utils/pagination';
+import { IPaginationInfo } from '@client/shared/utils/pagination';
 
 import {
   CoursesTasksApi,
@@ -19,7 +19,7 @@ import {
   StudentSummaryDto,
   CertificateApi,
   MentorDetailsDtoStudentsPreferenceEnum,
-} from 'api';
+} from '@client/api';
 import { optionalQueryString } from 'utils/optionalQueryString';
 import { Decision } from 'data/interviews/technical-screening';
 import { InterviewStatus } from 'domain/interview';

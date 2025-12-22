@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { List, theme, Typography } from 'antd';
 import ContactsOutlined from '@ant-design/icons/ContactsOutlined';
 import isEqual from 'lodash/isEqual';
-import { UpdateProfileInfoDto } from 'api';
+import { UpdateProfileInfoDto } from '@client/api';
 import { Contacts } from '@common/models/profile';
 import { NotificationChannel } from 'modules/Notifications/services/notifications';
 import { EmailConfirmation } from './EmailConfirmation';

@@ -1,6 +1,6 @@
 import { message, Modal, Row, Typography } from 'antd';
 import { useMemo, useState, useContext } from 'react';
-import { PageLayout } from 'components/PageLayout';
+import { PageLayout } from '@client/shared/components/PageLayout';
 import {
   JoinTeamModal,
   MyTeamSection,
@@ -11,7 +11,7 @@ import {
 } from '../components';
 import { isActiveStudent, isCourseManager } from 'domain/user';
 import { useCopyToClipboard } from 'react-use';
-import { CreateTeamDto, TeamApi, TeamDto, JoinTeamDto, TeamDistributionApi } from 'api';
+import { CreateTeamDto, TeamApi, TeamDto, JoinTeamDto, TeamDistributionApi } from '@client/api';
 import { useLoading } from 'components/useLoading';
 import { useDistribution } from '../hooks';
 import { useMessage, useModalForm } from 'hooks';

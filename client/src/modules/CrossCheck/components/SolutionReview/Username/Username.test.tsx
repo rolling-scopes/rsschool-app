@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { CrossCheckMessageAuthor } from 'services/course';
 import { Username } from '.';
-import { CrossCheckMessageDtoRoleEnum } from 'api';
+import { CrossCheckMessageDtoRoleEnum } from '@client/api';
 
 const mockAuthor: CrossCheckMessageAuthor = {
   id: 2345,

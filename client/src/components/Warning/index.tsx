@@ -1,6 +1,6 @@
 import { Row } from 'antd';
 import Image from 'next/image';
-import { PageLayout } from 'components/PageLayout';
+import { PageLayout } from '@client/shared/components/PageLayout';
 
 const defaultMessage = 'Something went wrong, please try reloading the page later';
 const defaultImageName = 'Image error';

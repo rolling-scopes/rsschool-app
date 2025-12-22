@@ -1,7 +1,7 @@
 import { Button, Divider, Form, Input, InputNumber, Radio, Rate, Space, Typography } from 'antd';
 import { AxiosError } from 'axios';
-import { GithubAvatar } from 'components/GithubAvatar';
-import { PageLayoutSimple } from 'components/PageLayout';
+import { GithubAvatar } from '@client/shared/components/GithubAvatar';
+import { PageLayoutSimple } from '@client/shared/components/PageLayout';
 import { useLoading } from 'components/useLoading';
 import { useMessage } from 'hooks';
 import get from 'lodash/get';

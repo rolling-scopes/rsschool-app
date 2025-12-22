@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Badge, Card, Col, Row, Space, Typography } from 'antd';
 import { INSTRUCTIONS_TEXT, renderDescription, renderSocialLinks } from '.';
-import { DiscordServersApi } from 'api';
+import { DiscordServersApi } from '@client/api';
 import { useAsyncEffect } from 'ahooks';
 
 interface InstructionsProps {

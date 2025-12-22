@@ -1,5 +1,5 @@
 import { Col, Row, Table } from 'antd';
-import { MentorDashboardDto } from 'api';
+import { MentorDashboardDto } from '@client/api';
 import { useMemo, useState } from 'react';
 import { getColumns } from './renderers';
 import { SolutionItemStatus } from '../../constants';

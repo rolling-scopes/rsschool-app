@@ -1,0 +1,1 @@
+export { UserGroupsAdminPage } from './UserGroupsAdminPage';

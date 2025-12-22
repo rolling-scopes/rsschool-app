@@ -2,7 +2,7 @@ import { CDN_AVATARS_URL } from 'configs/cdn';
 import { Avatar } from 'antd';
 import { CrossCheckMessageAuthor } from 'services/course';
 import { AVATAR_ICON_PATH } from 'modules/CrossCheck/constants';
-import { CrossCheckMessageDtoRoleEnum } from 'api';
+import { CrossCheckMessageDtoRoleEnum } from '@client/api';
 
 export type UserAvatarProps = {
   author: CrossCheckMessageAuthor | null;

@@ -1,7 +1,7 @@
 import { ColumnType } from 'antd/es/table';
-import { ScoreStudentDto } from 'api';
-import { GithubAvatar } from 'components/GithubAvatar';
-import { dateRenderer, getColumnSearchProps } from 'components/Table';
+import { ScoreStudentDto } from '@client/api';
+import { GithubAvatar } from '@client/shared/components/GithubAvatar';
+import { dateRenderer, getColumnSearchProps } from '@client/shared/components/Table';
 import isArray from 'lodash/isArray';
 import Link from 'next/link';
 

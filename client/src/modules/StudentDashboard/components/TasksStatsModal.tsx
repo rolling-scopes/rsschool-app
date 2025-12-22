@@ -1,5 +1,5 @@
 import { Modal, Table, Typography } from 'antd';
-import { dateTimeRenderer, dateRenderer } from 'components/Table';
+import { dateTimeRenderer, dateRenderer } from '@client/shared/components/Table';
 import { TaskStat } from './TasksStatsCard';
 
 const { Text } = Typography;

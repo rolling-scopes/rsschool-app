@@ -1,4 +1,4 @@
-import { CourseEventDtoTypeEnum } from 'api';
+import { CourseEventDtoTypeEnum } from '@client/api';
 
 export const EVENT_TYPES: { id: CourseEventDtoTypeEnum; name: string }[] = [
   { name: 'Online Lecture', id: CourseEventDtoTypeEnum.LectureOnline },

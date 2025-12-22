@@ -7,7 +7,7 @@ import {
   DisciplinesApi,
   MentorOptionsDtoPreferedStudentsLocationEnum,
   ProfileApi,
-} from 'api';
+} from '@client/api';
 import { Location } from '@common/models';
 import { CdnService } from 'services/cdn';
 import { Course } from 'services/models';

@@ -1,8 +1,8 @@
 import { ColumnType } from 'antd/lib/table';
 import { Popover } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import { CourseTaskDto, ScoreStudentDto } from 'api';
-import { dateTimeRenderer } from 'components/Table';
+import { CourseTaskDto, ScoreStudentDto } from '@client/api';
+import { dateTimeRenderer } from '@client/shared/components/Table';
 
 export function getTaskColumns(courseTasks: CourseTaskDto[]) {
   const columns = courseTasks.map(courseTask => {

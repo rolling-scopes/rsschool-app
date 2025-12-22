@@ -2,16 +2,16 @@ import { MoreOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Table } from 'antd';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
 import { ColumnsType } from 'antd/lib/table';
-import { CoursesTasksApi, CourseTaskDto, CrossCheckStatusEnum } from 'api';
-import { GithubUserLink } from 'components/GithubUserLink';
-import { AdminPageLayout } from 'components/PageLayout';
+import { CoursesTasksApi, CourseTaskDto, CrossCheckStatusEnum } from '@client/api';
+import { GithubUserLink } from '@client/shared/components/GithubUserLink';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import {
   crossCheckDateRenderer,
   crossCheckStatusRenderer,
   dateRenderer,
   getColumnSearchProps,
   stringSorter,
-} from 'components/Table';
+} from '@client/shared/components/Table';
 import { SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { CourseTaskModal } from 'modules/CourseManagement/components/CourseTaskModal';
 import { useCallback, useMemo, useState } from 'react';

@@ -1,8 +1,8 @@
 import { Alert, Button, Col, Layout, List, Row, theme } from 'antd';
-import { AlertDto, AlertsApi } from 'api';
-import { AdminSider } from 'components/Sider/AdminSider';
+import { AlertDto, AlertsApi } from '@client/api';
+import { AdminSider } from '@client/shared/components/Sider/AdminSider';
 import { FooterLayout } from 'components/Footer';
-import { Header } from 'components/Header';
+import { Header } from '@client/shared/components/Header';
 import { isAdmin, isAnyCourseDementor, isAnyCoursePowerUser, isAnyMentor } from 'domain/user';
 import { HomeSummary } from 'modules/Home/components/HomeSummary';
 import { NoCourse } from 'modules/Home/components/NoCourse';

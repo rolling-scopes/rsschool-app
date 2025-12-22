@@ -1,6 +1,6 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Space, Table } from 'antd';
-import { PromptDto } from 'api';
+import { PromptDto } from '@client/api';
 
 const { Column } = Table;
 

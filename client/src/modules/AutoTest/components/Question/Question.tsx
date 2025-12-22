@@ -1,5 +1,5 @@
 import { Typography, Form, Row, Checkbox, Radio, Col, Space } from 'antd';
-import { SelfEducationQuestionSelectedAnswersDto } from 'api';
+import { SelfEducationQuestionSelectedAnswersDto } from '@client/api';
 import styles from './Question.module.css';
 
 const { Title } = Typography;

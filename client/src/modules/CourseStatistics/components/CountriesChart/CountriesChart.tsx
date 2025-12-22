@@ -1,6 +1,6 @@
 import { Bar, BarConfig } from '@ant-design/plots';
 import { Flex, Image, Typography } from 'antd';
-import { CountryStatDto } from 'api';
+import { CountryStatDto } from '@client/api';
 import { useCallback, useMemo } from 'react';
 import { Colors } from '../../data';
 

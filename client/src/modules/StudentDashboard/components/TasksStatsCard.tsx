@@ -1,8 +1,8 @@
-import { CourseScheduleItemDto, CourseScheduleItemDtoStatusEnum } from 'api';
+import { CourseScheduleItemDto, CourseScheduleItemDtoStatusEnum } from '@client/api';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { getQueryString } from 'utils/queryParams-utils';
+import { getQueryString } from '@client/shared/utils/queryParams-utils';
 import CommonCard from './CommonDashboardCard';
 import { TasksStatsModal } from './TasksStatsModal';
 

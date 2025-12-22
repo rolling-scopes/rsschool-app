@@ -1,7 +1,7 @@
 import TranslationOutlined from '@ant-design/icons/TranslationOutlined';
 import { Form, Space, Tag, Typography } from 'antd';
 import { useState } from 'react';
-import { UpdateProfileInfoDto, UpdateUserDtoLanguagesEnum } from 'api';
+import { UpdateProfileInfoDto, UpdateUserDtoLanguagesEnum } from '@client/api';
 import { getLanguageName, SelectLanguages } from 'components/SelectLanguages';
 import CommonCardWithSettingsModal from './CommonCardWithSettingsModal';
 

@@ -2,7 +2,7 @@ import { Form, Input, InputNumber } from 'antd';
 import { FC } from 'react';
 import { CriteriaTypeSelect } from './CriteriaTypeSelect';
 import { EditableTableColumnsDataIndex, TaskType } from './constants';
-import { CriteriaDtoTypeEnum } from 'api';
+import { CriteriaDtoTypeEnum } from '@client/api';
 
 interface EditableCriteriaInputProps {
   type?: CriteriaDtoTypeEnum;

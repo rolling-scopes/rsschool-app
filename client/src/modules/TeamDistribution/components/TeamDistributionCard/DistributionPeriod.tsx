@@ -1,6 +1,6 @@
 import { CalendarOutlined, SwapRightOutlined } from '@ant-design/icons';
 import { Typography } from 'antd';
-import { dateRenderer } from 'components/Table';
+import { dateRenderer } from '@client/shared/components/Table';
 
 type Props = {
   startDate: string;

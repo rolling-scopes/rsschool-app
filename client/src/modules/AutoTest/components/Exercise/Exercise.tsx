@@ -1,10 +1,10 @@
 import { Coding, JupyterNotebook, SelfEducation } from 'modules/AutoTest/components';
-import { CourseTaskDetailedDtoTypeEnum } from 'api';
+import { CourseTaskDetailedDtoTypeEnum } from '@client/api';
 import { Col, ColProps, Form, Row, theme } from 'antd';
 import { useCourseTaskSubmit } from 'modules/AutoTest/hooks';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
 import { useEffect, useState } from 'react';
-import { TooltipedButton } from 'components/TooltipedButton';
+import { TooltipedButton } from '@client/shared/components/TooltipedButton';
 
 type ExerciseProps = {
   githubId: string;

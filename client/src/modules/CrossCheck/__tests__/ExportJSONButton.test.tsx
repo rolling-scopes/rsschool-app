@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { CriteriaDto, CriteriaDtoTypeEnum } from 'api';
+import { CriteriaDto, CriteriaDtoTypeEnum } from '@client/api';
 import { ExportJSONButton } from '../ExportJSONButton';
 
 const dataCriteria = [

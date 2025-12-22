@@ -1,6 +1,6 @@
 import { UserData } from '../models';
 import capitalize from 'lodash/capitalize';
-import { ResumeDtoMilitaryServiceEnum } from 'api';
+import { ResumeDtoMilitaryServiceEnum } from '@client/api';
 
 export function getPersonalToRender(user: UserData) {
   const { selfIntroLink } = user;

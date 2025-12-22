@@ -1,7 +1,7 @@
 import { useMemo, useState, useContext } from 'react';
-import { PageLayout } from 'components/PageLayout';
+import { PageLayout } from '@client/shared/components/PageLayout';
 import { isCourseManager, isDementor } from 'domain/user';
-import { TeamDistributionApi, TeamDistributionDto } from 'api';
+import { TeamDistributionApi, TeamDistributionDto } from '@client/api';
 import { TeamDistributionModal } from 'modules/TeamDistribution/components/TeamDistributionModal/';
 import { useAsync } from 'react-use';
 import { TeamDistributionCard } from 'modules/TeamDistribution/components/TeamDistributionCard';

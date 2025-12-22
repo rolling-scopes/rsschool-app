@@ -1,4 +1,4 @@
-import { CourseTaskDto } from 'api';
+import { CourseTaskDto } from '@client/api';
 import { getTasksTotalScore } from './course';
 
 describe('getTasksTotalScore', () => {

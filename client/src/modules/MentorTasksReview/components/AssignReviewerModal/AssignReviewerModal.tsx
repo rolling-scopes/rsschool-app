@@ -1,9 +1,9 @@
 import { Col, Form, message, Row, Typography } from 'antd';
 import React, { useState } from 'react';
-import { ModalSubmitForm } from 'components/Forms/ModalSubmitForm';
-import { MentorReviewDto, MentorReviewsApi } from 'api';
+import { ModalSubmitForm } from '@client/shared/components/Forms';
+import { MentorReviewDto, MentorReviewsApi } from '@client/api';
 import isEmpty from 'lodash/isEmpty';
-import { MentorSearch } from 'components/MentorSearch';
+import { MentorSearch } from '@client/shared/components/MentorSearch';
 import { useActiveCourseContext } from 'modules/Course/contexts';
 import useRequest from 'ahooks/lib/useRequest';
 

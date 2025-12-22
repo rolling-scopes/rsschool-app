@@ -2,7 +2,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { forwardRef } from 'react';
 import { AxiosResponse } from 'axios';
 import { Contacts, UserData } from 'modules/Opportunities/models';
-import { OpportunitiesApi } from 'api';
+import { OpportunitiesApi } from '@client/api';
 import { EditCV } from './index';
 
 const mockSuccessNotification = jest.fn();

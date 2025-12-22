@@ -1,6 +1,6 @@
 import { Button, Col, Form, message, Result, Row, Typography } from 'antd';
-import { AuthApi, CourseDto as Course, DiscordServersApi } from 'api';
-import { PageLayout, PageLayoutSimple } from 'components/PageLayout';
+import { AuthApi, CourseDto as Course, DiscordServersApi } from '@client/api';
+import { PageLayout, PageLayoutSimple } from '@client/shared/components/PageLayout';
 import { useRouter } from 'next/router';
 import { useContext, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
@@ -10,7 +10,7 @@ import { MentorRegistryService, MentorResponse } from 'services/mentorRegistry';
 import { Warning } from 'components/Warning';
 import { MentorOptions } from 'components/MentorOptions';
 import { SessionContext, SessionProvider } from 'modules/Course/contexts';
-import { LoadingScreen } from '@client/components/LoadingScreen';
+import { LoadingScreen } from '@client/shared/components/LoadingScreen';
 import { useAsyncEffect } from 'ahooks';
 
 const { Link } = Typography;

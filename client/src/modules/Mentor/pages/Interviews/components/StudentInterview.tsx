@@ -1,12 +1,12 @@
 import { Col, Row, Button, Typography, Space, Popconfirm } from 'antd';
-import { GithubAvatar } from 'components/GithubAvatar';
+import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 import GithubFilled from '@ant-design/icons/GithubFilled';
 import { DecisionTag, getInterviewFeedbackUrl, InterviewStatus } from 'domain/interview';
 import { CourseService, MentorInterview } from 'services/course';
 import { useState } from 'react';
 import styles from './StudentInterview.module.css';
 import { CloseCircleOutlined } from '@ant-design/icons';
-import { TaskDtoTypeEnum } from 'api';
+import { TaskDtoTypeEnum } from '@client/api';
 import { useMessage } from 'hooks';
 
 export function StudentInterview(props: {

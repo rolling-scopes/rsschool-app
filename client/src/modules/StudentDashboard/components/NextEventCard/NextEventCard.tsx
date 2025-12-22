@@ -2,7 +2,7 @@ import * as React from 'react';
 import CommonCard from '../CommonDashboardCard';
 import { Typography, Table } from 'antd';
 import { getAvailableTasksColumns } from './renderers';
-import { CourseScheduleItemDto } from 'api';
+import { CourseScheduleItemDto } from '@client/api';
 
 import styles from './NextEventCard.module.css';
 

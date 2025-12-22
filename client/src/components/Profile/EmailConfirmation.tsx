@@ -1,5 +1,5 @@
 import { Alert } from 'antd';
-import { Timer } from 'components/Timer';
+import { Timer } from '@client/shared/components/Timer';
 import dayjs from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
 

@@ -1,5 +1,5 @@
 import { act, render, screen } from '@testing-library/react';
-import CopyToClipboardButton from '@client/components/CopyToClipboardButton';
+import CopyToClipboardButton from '@client/shared/components/CopyToClipboardButton';
 import { useMessage } from 'hooks';
 import { useCopyToClipboard } from 'react-use';
 

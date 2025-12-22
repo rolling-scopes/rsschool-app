@@ -1,4 +1,4 @@
-import { IPaginationInfo } from '@client/utils/pagination';
+import { IPaginationInfo } from '@client/shared/utils/pagination';
 import axios from 'axios';
 
 export type HeroesFormData = {

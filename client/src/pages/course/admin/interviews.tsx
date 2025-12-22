@@ -1,7 +1,13 @@
 import { Button, Row, Select, Table, Popconfirm } from 'antd';
-import { StudentMentorModal } from 'components/StudentMentorModal';
-import { AdminPageLayout } from 'components/PageLayout';
-import { getColumnSearchProps, stringSorter, boolIconRenderer, PersonCell, numberSorter } from 'components/Table';
+import { StudentMentorModal } from '@client/shared/components/StudentMentorModal';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
+import {
+  getColumnSearchProps,
+  stringSorter,
+  boolIconRenderer,
+  PersonCell,
+  numberSorter,
+} from '@client/shared/components/Table';
 import { useLoading } from 'components/useLoading';
 import { useMemo, useState, useContext } from 'react';
 import { CourseService } from 'services/course';
@@ -9,7 +15,7 @@ import { CourseRole } from 'services/models';
 import { useAsync } from 'react-use';
 import { isCourseManager } from 'domain/user';
 import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
-import { CoursesInterviewsApi, InterviewDto, InterviewPairDto } from 'api';
+import { CoursesInterviewsApi, InterviewDto, InterviewPairDto } from '@client/api';
 
 const coursesInterviewsApi = new CoursesInterviewsApi();
 

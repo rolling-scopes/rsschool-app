@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { FeedbackDto, FeedbackSoftSkillIdEnum, FeedbackSoftSkillValueEnum } from 'api';
+import { FeedbackDto, FeedbackSoftSkillIdEnum, FeedbackSoftSkillValueEnum } from '@client/api';
 import { FeedbackSection } from './index';
 
 const mockFeedback = {

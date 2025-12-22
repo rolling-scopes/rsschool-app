@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
-import { ProfileCourseDto } from 'api';
+import { ProfileCourseDto } from '@client/api';
 import { useActiveCourse } from './useActiveCourse';
 import * as ReactUse from 'react-use';
 

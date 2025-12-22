@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { CreateCourseEventDto, CreateEventDto, EventDto, EventsApi } from 'api';
+import { CreateCourseEventDto, CreateEventDto, EventDto, EventsApi } from '@client/api';
 import { EVENT_TYPES } from 'data/eventTypes';
 import omit from 'lodash/omit';
 import { CourseEvent, CourseService } from 'services/course';

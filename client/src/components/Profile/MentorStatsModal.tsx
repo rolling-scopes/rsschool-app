@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { MentorStats } from '@common/models/profile';
 import { Modal, Typography, Tag, Row, Col } from 'antd';
-import { GithubAvatar } from 'components/GithubAvatar';
+import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 
 const { Text } = Typography;
 

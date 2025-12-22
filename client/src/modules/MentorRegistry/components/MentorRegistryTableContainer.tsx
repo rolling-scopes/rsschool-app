@@ -1,18 +1,24 @@
 import { Dispatch, SetStateAction } from 'react';
-import { GithubUserLink } from 'components/GithubUserLink';
+import { GithubUserLink } from '@client/shared/components/GithubUserLink';
 import { SafetyCertificateTwoTone } from '@ant-design/icons';
-import { colorTagRenderer, getColumnSearchProps, stringSorter, tagsRenderer, dateSorter } from 'components/Table';
+import {
+  colorTagRenderer,
+  getColumnSearchProps,
+  stringSorter,
+  tagsRenderer,
+  dateSorter,
+} from '@client/shared/components/Table';
 import { formatDate } from 'services/formatter';
 import { Course } from 'services/models';
-import CopyToClipboardButton from 'components/CopyToClipboardButton';
+import CopyToClipboardButton from '@client/shared/components/CopyToClipboardButton';
 import { MentorsRegistryColumnKey, MentorsRegistryColumnName, TABS, MentorRegistryTabsMode } from '../constants';
 import { FilterValue } from 'antd/lib/table/interface';
 import { Button, Dropdown, Tooltip, message, theme } from 'antd';
 import { MoreOutlined, MessageTwoTone } from '@ant-design/icons';
 import { ColumnType } from 'antd/lib/table';
-import { DisciplineDto, MentorRegistryDto } from 'api';
+import { DisciplineDto, MentorRegistryDto } from '@client/api';
 import { ModalDataMode } from 'pages/admin/mentor-registry';
-import { PublicSvgIcon } from '@client/components/Icons';
+import { PublicSvgIcon } from '@client/shared/components/Icons';
 import styles from './MentorRegistryTableContainer.module.css';
 
 interface ChildrenProp {

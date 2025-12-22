@@ -1,4 +1,4 @@
-import { CourseScheduleItemDtoStatusEnum } from 'api';
+import { CourseScheduleItemDtoStatusEnum } from '@client/api';
 import { DEFAULT_COLOR } from 'modules/Schedule/constants';
 import { CSSProperties } from 'react';
 

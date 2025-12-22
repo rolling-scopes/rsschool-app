@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { Rating } from '@client/components/Rating';
+import { Rating } from '@client/shared/components/Rating';
 
 describe('Rating', () => {
   it('renders tooltip label based on rounded integer value when tooltips provided', () => {

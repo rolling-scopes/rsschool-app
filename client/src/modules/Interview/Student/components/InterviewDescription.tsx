@@ -1,6 +1,6 @@
 import { Descriptions } from 'antd';
 import { InterviewDetails, getInterviewResult } from 'domain/interview';
-import { GithubUserLink } from 'components/GithubUserLink';
+import { GithubUserLink } from '@client/shared/components/GithubUserLink';
 import { Decision } from 'data/interviews/technical-screening';
 import { StatusLabel } from './StatusLabel';
 

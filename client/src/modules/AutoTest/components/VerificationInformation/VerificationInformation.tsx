@@ -3,7 +3,7 @@ import { VerificationsTable } from 'modules/AutoTest/components';
 import { useAttemptsMessage } from 'modules/AutoTest/hooks';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
 import ReloadOutlined from '@ant-design/icons/ReloadOutlined';
-import { CourseTaskDetailedDtoTypeEnum } from 'api';
+import { CourseTaskDetailedDtoTypeEnum } from '@client/api';
 
 export type VerificationInformationProps = {
   courseTask: CourseTaskVerifications;

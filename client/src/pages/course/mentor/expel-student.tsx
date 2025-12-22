@@ -1,7 +1,7 @@
 import { Button, Form, Input, Radio, Typography } from 'antd';
-import { CoursesApi, MentorsApi, MentorStudentDto } from 'api';
-import { PageLayoutSimple } from 'components/PageLayout';
-import { UserSearch } from 'components/UserSearch';
+import { CoursesApi, MentorsApi, MentorStudentDto } from '@client/api';
+import { PageLayoutSimple } from '@client/shared/components/PageLayout';
+import { UserSearch } from '@client/shared/components/UserSearch';
 import { getMentorId, isMentor } from 'domain/user';
 import { useMessage } from 'hooks';
 import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';

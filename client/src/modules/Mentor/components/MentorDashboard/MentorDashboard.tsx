@@ -1,4 +1,4 @@
-import { PageLayout } from 'components/PageLayout';
+import { PageLayout } from '@client/shared/components/PageLayout';
 import { Instructions, Notification, TaskSolutionsTable } from '..';
 import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
 import { useContext } from 'react';

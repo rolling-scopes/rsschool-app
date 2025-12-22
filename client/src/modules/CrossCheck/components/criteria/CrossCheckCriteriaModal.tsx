@@ -1,6 +1,6 @@
 import { Modal } from 'antd';
 import { CrossCheckCriteria } from './CrossCheckCriteria';
-import { CrossCheckCriteriaDataDto } from 'api';
+import { CrossCheckCriteriaDataDto } from '@client/api';
 
 type Props = {
   modalInfo: CrossCheckCriteriaDataDto[] | null;

@@ -1,4 +1,4 @@
-import { PageLayout } from 'components/PageLayout';
+import { PageLayout } from '@client/shared/components/PageLayout';
 import { useContext, useMemo } from 'react';
 import Masonry from 'react-masonry-css';
 

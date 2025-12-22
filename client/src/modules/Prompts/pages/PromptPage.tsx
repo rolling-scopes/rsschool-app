@@ -1,6 +1,6 @@
 import { Button, Layout, message } from 'antd';
-import { PromptDto, PromptsApi } from 'api';
-import { AdminPageLayout } from 'components/PageLayout';
+import { PromptDto, PromptsApi } from '@client/api';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import { useModalForm } from 'hooks';
 import { useActiveCourseContext } from 'modules/Course/contexts';
 import { useCallback, useState } from 'react';

@@ -5,8 +5,8 @@ import {
   MentorStudentDto,
   CreateStudentFeedbackDtoRecommendationEnum as RecommendationEnum,
   SoftSkillEntryIdEnum,
-} from 'api';
-import { UserSearch } from 'components/UserSearch';
+} from '@client/api';
+import { UserSearch } from '@client/shared/components/UserSearch';
 import { useEffect } from 'react';
 import { convertSoftSkillValueToEnum, softSkills, softSkillValues } from '../data/softSkills';
 import { useRouter } from 'next/router';

@@ -1,9 +1,9 @@
 import { DownOutlined, FileExcelOutlined, SyncOutlined } from '@ant-design/icons';
 import { Button, Divider, Dropdown, MenuProps, Modal, Row, Space, Statistic, Table, message } from 'antd';
-import { CourseMentorsApi, CourseStatsApi, MentorDetailsDto } from 'api';
-import { AdminPageLayout } from 'components/PageLayout';
+import { CourseMentorsApi, CourseStatsApi, MentorDetailsDto } from '@client/api';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import { AssignStudentModal } from 'components/Student';
-import { PersonCell, getColumnSearchProps, numberSorter, stringSorter } from 'components/Table';
+import { PersonCell, getColumnSearchProps, numberSorter, stringSorter } from '@client/shared/components/Table';
 import { Session } from 'components/withSession';
 import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
 import { useContext, useMemo, useState } from 'react';

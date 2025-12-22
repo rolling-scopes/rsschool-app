@@ -11,11 +11,23 @@ The refactoring aims to:
 - Make pages thin wrappers (no business logic)
 - Eliminate cross-module imports
 
+**Progress (as of Dec 22, 2025):**
+
+- ✅ Created `shared/` folder structure
+- ✅ Moved reusable components to `shared/components/`
+- ✅ Moved reusable hooks to `shared/hooks/`
+- ✅ Moved reusable utilities to `shared/utils/`
+- ✅ Created DiscordAdmin, EventsAdmin, UserGroupsAdmin, UsersAdmin modules
+- ✅ Moved FilteredTags to `shared/components/`
+- ⚠️ Many import path fixes needed after component moves
+- ⏳ 27 pages with significant business logic need refactoring
+- ⏳ Remaining cross-module import violations
+
 **Current State:**
 
-- 27 pages with significant business logic need refactoring
-- 12 cross-module import violations between modules
-- 60+ files importing from modules outside of proper boundaries
+- 15 pages still need refactoring (profile, mentor-registry, course pages, etc.)
+- Import path fixes needed for moved components
+- 11 cross-module import violations between modules
 
 ---
 
@@ -23,28 +35,31 @@ The refactoring aims to:
 
 ### Setup & Structure
 
-- [ ] **Create `shared/` folder structure**
+- [x] **Create `shared/` folder structure**
 
   - Add `shared/components/`
   - Add `shared/hooks/`
   - Add `shared/services/`
   - Add `shared/utils/`
 
-- [ ] **Move reusable components to `shared/components/`**
+- [x] **Move reusable components to `shared/components/`**
 
-  - Move `components/Table/` (used by 10+ modules)
-  - Move `components/Icons/` (used globally)
-  - Move `components/LoadingScreen.tsx`
-  - Move `components/Timer.tsx`
-  - Move `components/Forms/` (used by 10+ pages)
-  - Move `components/PageLayout/` (used by all admin pages)
+  - Move `components/Table/` (used by 10+ modules) - doesn't exist
+  - Move `components/Icons/` (used globally) - doesn't exist
+  - Move `components/LoadingScreen.tsx` - doesn't exist
+  - Move `components/Timer.tsx` - doesn't exist
+  - Move `components/Forms/` (used by 10+ pages) - doesn't exist
+  - Move `components/PageLayout/` (used by all admin pages) - moved `PageLayout.tsx`
+  - Moved: `PageLayout.tsx`, `ThemeSwitch.tsx`, `Rating.tsx`, `CopyToClipboardButton.tsx`, `PersonSelect.tsx`, `ScoreSelector.tsx`, `ScoreCard.tsx`, `GithubUserLink.tsx`, `UserSearch.tsx`, `StudentSearch.tsx`, `MentorSearch.tsx`, `GithubAvatar.tsx`, `NonTouchTooltip.tsx`, `StudentMentorModal.tsx`, `TooltipedButton.tsx`, `CommentModal.tsx`
 
-- [ ] **Move reusable hooks to `shared/hooks/`**
+- [x] **Move reusable hooks to `shared/hooks/`**
 
   - Move `hooks/useTheme.tsx`
+  - Move `hooks/useMessage.tsx`
+  - Move `hooks/useModal`
   - Move `utils/useWindowDimensions.ts`
 
-- [ ] **Move reusable utilities to `shared/utils/`**
+- [x] **Move reusable utilities to `shared/utils/`**
   - Move `utils/text-utils.ts`
   - Move `utils/queryParams-utils.ts`
   - Move `utils/onlyDefined.ts`
@@ -52,36 +67,36 @@ The refactoring aims to:
 
 ### Thin Page Wrappers (Extract Business Logic)
 
-- [ ] **Refactor `pages/admin/discord-telegram.tsx`**
+- [x] **Refactor `pages/admin/discord-telegram.tsx`**
 
-  - Create `DiscordAdmin` module
-  - Extract CRUD operations to module service
-  - Extract modal and table components
-  - Move page to wrapper pattern
+  - Created `DiscordAdmin` module
+  - Extracted CRUD operations to `useDiscordServers` hook
+  - Extracted modal and table components
+  - Moved page to wrapper pattern
 
-- [ ] **Refactor `pages/admin/events.tsx`**
+- [x] **Refactor `pages/admin/events.tsx`**
 
-  - Create `EventsAdmin` module
-  - Extract events management logic
-  - Move page to wrapper pattern
+  - Created `EventsAdmin` module
+  - Extracted events management logic to `useEvents` hook
+  - Moved page to wrapper pattern
 
-- [ ] **Refactor `pages/admin/user-group.tsx`**
+- [x] **Refactor `pages/admin/user-group.tsx`**
 
-  - Create `UserGroups` module
-  - Extract user group management
-  - Move page to wrapper pattern
+  - Created `UserGroupsAdmin` module
+  - Extracted user group management to `useUserGroups` hook
+  - Moved page to wrapper pattern
 
-- [ ] **Refactor `pages/admin/users.tsx`**
+- [x] **Refactor `pages/admin/users.tsx`**
 
-  - Create `Users` module
-  - Extract user search and management
-  - Move page to wrapper pattern
+  - Created `UsersAdmin` module
+  - Extracted user search logic to `useUsersSearch` hook
+  - Moved page to wrapper pattern
 
-- [ ] **Refactor `pages/applicants/index.tsx`**
+- [x] **Refactor `pages/applicants/index.tsx`**
 
-  - Create `Applicants` module or integrate with existing module
-  - Extract opportunities logic
-  - Move page to wrapper pattern
+  - Created `Applicants` module
+  - Extracted opportunities logic
+  - Moved page to wrapper pattern
 
 - [ ] **Refactor `pages/registry/epamlearningjs.tsx`**
 
@@ -89,11 +104,11 @@ The refactoring aims to:
   - Extract form handling
   - Move page to wrapper pattern
 
-- [ ] **Refactor `pages/gratitude.tsx`**
+- [x] **Refactor `pages/gratitude.tsx`**
 
-  - Create `Gratitude` module
-  - Extract badge and gratitude submission logic
-  - Move page to wrapper pattern
+  - Created `Gratitude` module
+  - Extracted badge and gratitude submission logic
+  - Moved page to wrapper pattern
 
 - [ ] **Refactor `pages/profile/index.tsx`** (high priority - 226 lines)
 
@@ -170,10 +185,11 @@ The refactoring aims to:
     - `CourseTaskModal`
     - `CoursesListModal`
 
-- [ ] **Fix `modules/MentorRegistry` → `Schedule` import**
+- [x] **Fix `modules/MentorRegistry` → `Schedule` import**
 
   - `modules/MentorRegistry/components/MentorRegistryTable.tsx` imports `FilteredTags` from `Schedule`
-  - Move `FilteredTags` to `shared/components/`
+  - Moved `FilteredTags` to `shared/components/`
+  - Updated MentorRegistry to import from shared
 
 - [ ] **Fix `modules/StudentDashboard` → `Schedule` import**
 

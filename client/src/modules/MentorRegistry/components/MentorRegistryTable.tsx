@@ -1,8 +1,8 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { Form, Table, TablePaginationConfig } from 'antd';
-import FilteredTags from 'modules/Schedule/components/FilteredTags';
+import { FilteredTags } from '@client/shared/components/FilteredTags';
 import { FilterValue } from 'antd/lib/table/interface';
-import { MentorRegistryDto } from 'api';
+import { MentorRegistryDto } from '@client/api';
 import { MentorRegistryTabsMode, MentorsRegistryColumnKey, PAGINATION } from '../constants';
 import { ColumnType } from 'antd/lib/table';
 

@@ -1,4 +1,4 @@
-import { CoursesInterviewsApi, InterviewFeedbackDto, ProfileCourseDto } from 'api';
+import { CoursesInterviewsApi, InterviewFeedbackDto, ProfileCourseDto } from '@client/api';
 import { FeedbackStep, Feedback } from 'data/interviews/technical-screening';
 import { createContext, PropsWithChildren, useCallback, useMemo, useState } from 'react';
 import { useLoading } from 'components/useLoading';

@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { CoursePageProps } from 'services/models';
-import { CourseTaskDetailedDto } from 'api';
-import { PageLayout } from 'components/PageLayout';
+import { CourseTaskDetailedDto } from '@client/api';
+import { PageLayout } from '@client/shared/components/PageLayout';
 import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
 import { AttemptsAnswers, Exercise, TaskDescription, VerificationInformation } from 'modules/AutoTest/components';
 import { useCourseTaskVerifications, useVerificationsAnswers } from 'modules/AutoTest/hooks';

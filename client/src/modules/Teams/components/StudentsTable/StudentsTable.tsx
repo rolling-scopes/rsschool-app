@@ -1,5 +1,5 @@
 import { Table, TablePaginationConfig, TableProps } from 'antd';
-import { TeamDistributionStudentDto } from 'api';
+import { TeamDistributionStudentDto } from '@client/api';
 import { StudentsTableColumnKey } from 'modules/Teams/constants';
 import { useMemo } from 'react';
 import { getColumns } from './renderers';

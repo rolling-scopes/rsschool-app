@@ -1,8 +1,13 @@
 import Button from 'antd/lib/button';
 import { ColumnsType } from 'antd/lib/table';
-import { CourseTaskDto, MentorReviewDto } from 'api';
-import { GithubUserLink } from 'components/GithubUserLink';
-import { dateTimeRenderer, getColumnSearchProps, renderTask, stringTrimRenderer } from 'components/Table';
+import { CourseTaskDto, MentorReviewDto } from '@client/api';
+import { GithubUserLink } from '@client/shared/components/GithubUserLink';
+import {
+  dateTimeRenderer,
+  getColumnSearchProps,
+  renderTask,
+  stringTrimRenderer,
+} from '@client/shared/components/Table';
 
 const getSearchProps = (key: string) => ({
   ...getColumnSearchProps(key),

@@ -1,6 +1,6 @@
 import { Collapse, CollapseProps, Space, Typography } from 'antd';
 import { CollapsibleType } from 'antd/es/collapse/CollapsePanel';
-import { CriteriaDto, TaskDtoTypeEnum } from 'api';
+import { CriteriaDto, TaskDtoTypeEnum } from '@client/api';
 
 import { CrossCheckTaskCriteriaPanel, GitHubPanel, JsonAttributesPanel } from 'modules/Tasks/components';
 import { TASK_SETTINGS_HEADERS } from 'modules/Tasks/constants';
