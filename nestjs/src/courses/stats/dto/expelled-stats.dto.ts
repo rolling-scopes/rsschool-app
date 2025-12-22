@@ -1,5 +1,6 @@
-import { IsArray, IsDateString, IsNumber, IsString } from 'class-validator';
+import { IsArray, IsDateString, IsString, ValidateNested } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import { CourseLeaveSurveyResponse } from 'src/entities/course-leave-survey-response.entity';
 import { CourseDto } from 'src/courses/dto';
 import { UserDto } from 'src/users/dto';
@@ -14,6 +15,9 @@ export class ExpelledStatsDto {
       githubId: data.user.githubId,
       name: UsersService.getFullName(data.user),
     });
+    this.reasonForLeaving = data.reasonForLeaving;
+    this.otherComment = data.otherComment;
+    this.submittedAt = data.submittedAt;
   }
 
   @ApiProperty()
@@ -21,7 +25,8 @@ export class ExpelledStatsDto {
   id: string;
 
   @ApiProperty()
-  @IsNumber()
+  @ValidateNested()
+  @Type(() => CourseDto)
   course: CourseDto;
 
   @ApiProperty()
