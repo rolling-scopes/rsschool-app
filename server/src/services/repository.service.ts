@@ -170,7 +170,7 @@ export class RepositoryService {
   private async enablePageSite(github: Octokit, owner: string, repo: string) {
     const ownerRepo = `${owner}/${repo}`;
     try {
-      this.logger?.info(`[${ownerRepo}] enabling Github Pages`);
+      this.logger?.info(`[${ownerRepo}] enabling GitHub Pages`);
       const pages = await github.rest.repos.getPages({ owner, repo }).catch(() => null);
       if (pages?.data.source?.branch === 'gh-pages') {
         this.logger?.info(`[${ownerRepo}] pages already enabled`);
@@ -191,9 +191,9 @@ export class RepositoryService {
             throw response;
           }
         });
-      this.logger?.info(`[${ownerRepo}] enabled Github Pages`);
+      this.logger?.info(`[${ownerRepo}] enabled GitHub Pages`);
     } catch (err) {
-      this.logger?.info(`[${ownerRepo}] failed to enable Github Pages`, err);
+      this.logger?.info(`[${ownerRepo}] failed to enable GitHub Pages`, err);
     }
   }
 

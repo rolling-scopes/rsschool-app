@@ -57,7 +57,7 @@ export class CourseListener {
   }
 
   /**
-   * Trigger site update via Github Actions
+   * Trigger site update via GitHub Actions
    */
   private triggerSiteUpdate() {
     if (!this.configService.auth.github.integrationSiteToken) {

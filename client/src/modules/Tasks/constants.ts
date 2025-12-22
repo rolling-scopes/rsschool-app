@@ -16,7 +16,7 @@ const LABELS = {
 
 const TASK_SETTINGS_HEADERS = {
   crossCheckCriteria: 'Criteria For Cross-Check Task',
-  github: 'Github',
+  github: 'GitHub',
   jsonAttributes: 'JSON Attributes',
 };
 

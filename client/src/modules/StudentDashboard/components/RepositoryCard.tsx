@@ -38,7 +38,7 @@ export function RepositoryCard(props: Props) {
             <ul>
               <li>Go to your email box</li>
               <li>
-                Find the <b>invitation email</b> from Github
+                Find the <b>invitation email</b> from GitHub
               </li>
               <li>Accept invitation</li>
             </ul>

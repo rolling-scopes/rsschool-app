@@ -61,7 +61,7 @@ describe('ContactsList', () => {
     const [emailIcon, githubIcon, linkedinIcon, phoneIcon, skypeIcon, telegramIcon, websiteIcon] = links;
 
     expect(emailIcon).toHaveAttribute('title', 'E-mail');
-    expect(githubIcon).toHaveAttribute('title', 'Github');
+    expect(githubIcon).toHaveAttribute('title', 'GitHub');
     expect(linkedinIcon).toHaveAttribute('title', 'LinkedIn');
     expect(phoneIcon).toHaveAttribute('title', 'Phone');
     expect(skypeIcon).toHaveAttribute('title', 'Skype');

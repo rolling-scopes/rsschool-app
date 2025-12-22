@@ -15,7 +15,7 @@ describe('ContactsForm', () => {
   test.each`
     value                              | placeholder                 | labelText
     ${mockContactsList.email}          | ${'Email'}                  | ${'Email'}
-    ${mockContactsList.githubUsername} | ${'Github username'}        | ${'Github'}
+    ${mockContactsList.githubUsername} | ${'GitHub username'}        | ${'GitHub'}
     ${mockContactsList.linkedin}       | ${'LinkedIn username'}      | ${'LinkedIn'}
     ${mockContactsList.phone}          | ${'+12025550111'}           | ${'Phone'}
     ${mockContactsList.skype}          | ${'Skype id'}               | ${'Skype'}

@@ -26,7 +26,7 @@
    npm install
    ```
 
-4. Create a branch for your feature. Prefix the branch with your Github Username. Example: `git checkout -b AlreadyBored/feature-x master`
+4. Create a branch for your feature. Prefix the branch with your GitHub Username. Example: `git checkout -b AlreadyBored/feature-x master`
 
    ```command-line
    git checkout -b <username>/feature-x master
@@ -121,7 +121,7 @@ See more about TypeORM migrations at official docs [Migrations](https://github.c
 
 ## Pull Requests
 
-- Branch name must be prefixed with your Github Username. Example: `AlreadyBored/feature-x`. For LLM agents, use `agent/` prefix. Example: `agent/feature-x`.
+- Branch name must be prefixed with your GitHub Username. Example: `AlreadyBored/feature-x`. For LLM agents, use `agent/` prefix. Example: `agent/feature-x`.
 - Check how to create a [Pull Request](https://help.github.com/articles/creating-a-pull-request/) (PR).
 - PR titles must follow [Conventional Commits](#git-commit-messages).
 - Do not include issue IDs in the PR title.
