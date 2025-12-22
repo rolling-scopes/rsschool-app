@@ -75,7 +75,7 @@ export default [
         'error',
         {
           selector: "JSXAttribute[name.name='jsx']",
-          message: 'styled-jsx is deprecated. Use CSS modules instead.',
+          message: "The 'jsx' attribute from styled-jsx is deprecated. Use CSS modules instead.",
         },
       ],
     },
