@@ -11,16 +11,9 @@ export function Analytics() {
 
   return (
     <>
-      <Script
-        defer
-        strategy="afterInteractive"
-        src="https://www.googletagmanager.com/gtag/js?id=G-WJLHZ9CCXJ"
-      />
+      <Script defer strategy="afterInteractive" src="https://www.googletagmanager.com/gtag/js?id=G-WJLHZ9CCXJ" />
 
-      <Script
-        id="google-analytics"
-        strategy="afterInteractive"
-      >
+      <Script id="google-analytics" strategy="afterInteractive">
         {`
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
