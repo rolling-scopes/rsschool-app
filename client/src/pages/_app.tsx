@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { ActiveCourseProvider } from 'modules/Course/contexts';
 import 'antd/dist/reset.css';
 import { initializeFeatures } from 'services/features';
-import { Analytics } from '../components/Analytics';
+// import { Analytics } from '../components/Analytics';
 import '../styles/main.css';
 import { MessageProvider, ThemeProvider } from '@client/providers';
 
@@ -15,7 +15,7 @@ class RsSchoolApp extends App {
 
     return (
       <>
-        <Analytics />
+        {/*<Analytics />*/}
         <Head>
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
           <title>App / The Rolling Scopes School</title>
