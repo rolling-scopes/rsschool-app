@@ -16,7 +16,7 @@ export function Analytics() {
       <Script id="google-analytics" strategy="afterInteractive">
         {`
         try {
-            if (window !== undefined) {
+            if (typeof window !== 'undefined') {
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
