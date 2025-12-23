@@ -57,7 +57,7 @@ function Page() {
   const [isExpelModalOpen, toggleExpelModal] = useToggle(false);
   const [isCertificateModalOpen, toggleCertificateModal] = useToggle(false);
 
-  useAsync(withLoading(loadStudents), [activeOnly]);
+  useAsync(withLoading(loadStudents), [activeOnly, details]);
 
   const issueCertificate = withLoading(async () => {
     const githubId = details?.githubId;
@@ -89,6 +89,7 @@ function Page() {
     if (githubId != null) {
       await courseService.expelStudent(githubId, text);
       message.info('Student has been expelled');
+      setDetails(null);
     }
   });
 
@@ -97,6 +98,7 @@ function Page() {
     if (githubId != null) {
       await courseService.restoreStudent(githubId);
       message.info('Student has been restored');
+      setDetails(null);
     }
   });
 

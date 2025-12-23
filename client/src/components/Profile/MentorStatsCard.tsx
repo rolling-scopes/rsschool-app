@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react';
-import { List, Typography, Button, Tag } from 'antd';
+import { Button, Card, Flex, List, Space, Typography } from 'antd';
 import CommonCard from './CommonCard';
 import MentorStatsModal from './MentorStatsModal';
 import { MentorStats, Student } from '@common/models/profile';
-import { TeamOutlined, FullscreenOutlined, FileTextOutlined } from '@ant-design/icons';
+import { FileTextOutlined, TeamOutlined } from '@ant-design/icons';
 import { MentorEndorsement } from 'modules/Profile/components/MentorEndorsement';
+import { ExpandButtonWidget, ScoreWidget } from '@client/components/Profile/ui';
 
 const { Text } = Typography;
 
@@ -17,14 +18,14 @@ type Props = {
 export function MentorStatsCard(props: Props) {
   const [courseIndex, setCourseIndex] = useState(0);
   const [isMentorStatsModalVisible, setIsMentorStatsModalVisible] = useState(false);
-  const [isEndorsmentModalVisible, setIsEndorsmentModalVisible] = useState(false);
+  const [isEndorsementModalVisible, setIsEndorsementModalVisible] = useState(false);
 
   const showMentorStatsModal = (courseIndex: number) => {
     setCourseIndex(courseIndex);
     setIsMentorStatsModalVisible(true);
   };
 
-  const hideMentortStatsModal = () => {
+  const hideMentorStatsModal = () => {
     setIsMentorStatsModalVisible(false);
   };
 
@@ -40,90 +41,77 @@ export function MentorStatsCard(props: Props) {
         <MentorStatsModal
           stats={stats[courseIndex]}
           isVisible={isMentorStatsModalVisible}
-          onHide={hideMentortStatsModal}
+          onHide={hideMentorStatsModal}
         />
       ) : null}
       <MentorEndorsement
-        onClose={() => setIsEndorsmentModalVisible(false)}
-        open={isEndorsmentModalVisible}
+        onClose={() => setIsEndorsementModalVisible(false)}
+        open={isEndorsementModalVisible}
         githubId={props.githubId}
       />
       <CommonCard
         title="Mentor Statistics"
         icon={<TeamOutlined />}
         content={
-          <>
-            <div>
-              <p>
-                Mentored Students:{' '}
-                <Text style={{ fontSize: 18 }} strong>
-                  {count}
-                </Text>
-              </p>
-              <p>
-                Courses as Mentor:{' '}
-                <Text style={{ fontSize: 18 }} strong>
-                  {stats.length}
-                </Text>
-              </p>
-            </div>
+          <Flex vertical gap={8}>
+            <Space>
+              <Text>Mentored Students:</Text>
+              <Text style={{ fontSize: 18 }} strong>
+                {count}
+              </Text>
+            </Space>
+            <Space>
+              <Text>Courses as Mentor:</Text>
+              <Text style={{ fontSize: 18 }} strong>
+                {stats.length}
+              </Text>
+            </Space>
             {props.isAdmin ? (
-              <Button onClick={() => setIsEndorsmentModalVisible(true)} icon={<FileTextOutlined />} type="primary">
-                Get Endorsment
+              <Button
+                style={{ marginBlock: 8 }}
+                onClick={() => setIsEndorsementModalVisible(true)}
+                icon={<FileTextOutlined />}
+                type="primary"
+              >
+                Get Endorsement
               </Button>
             ) : null}
-            <List
-              itemLayout="horizontal"
-              dataSource={stats}
-              renderItem={({ courseName, courseLocationName, students }, idx) => (
-                <List.Item style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <div style={{ flexGrow: 2 }}>
-                    <p style={{ fontSize: idx === 0 ? 20 : undefined, marginBottom: 5 }}>
-                      <Text strong>
-                        {courseName}
-                        {courseLocationName && ` / ${courseLocationName}`}
-                      </Text>
-                    </p>
-                    {students ? (
-                      idx === 0 && (
+            {stats.map(({ courseName, courseLocationName, students }, idx) => (
+              <Card
+                key={courseName}
+                type="inner"
+                size="small"
+                title={courseName}
+                extra={students && <ExpandButtonWidget onClick={() => showMentorStatsModal(idx)} />}
+              >
+                <Card.Meta
+                  title={courseLocationName && ` / ${courseLocationName}`}
+                  description={
+                    students ? (
+                      idx === 0 ? (
                         <List
                           itemLayout="horizontal"
                           dataSource={students}
-                          renderItem={({ githubId, name, isExpelled, totalScore }) => (
-                            <List.Item style={{ display: 'flex', justifyContent: 'space-between' }}>
-                              <div key={`mentor-students-${githubId} ${courseName}`} style={{ width: '100%' }}>
-                                <p
-                                  style={{
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    fontSize: 12,
-                                    marginBottom: 5,
-                                  }}
-                                >
-                                  <a href={`/profile?githubId=${githubId}`}>{name}</a>{' '}
-                                  {isExpelled ? <Tag color="red">expelled</Tag> : <Tag color="green">active</Tag>}
-                                </p>
-                                <p style={{ fontSize: 12, marginBottom: 0 }}>
-                                  Score: <Text mark>{totalScore}</Text>
-                                </p>
-                              </div>
+                          split={false}
+                          renderItem={({ githubId, name, totalScore }) => (
+                            <List.Item key={`mentor-students-${githubId} ${courseName}`}>
+                              <Flex vertical gap={8}>
+                                <a href={`/profile?githubId=${githubId}`}>{name}</a> <ScoreWidget score={totalScore} />
+                              </Flex>
                             </List.Item>
                           )}
                         />
+                      ) : (
+                        <Text>Students number: {students.length}</Text>
                       )
                     ) : (
-                      <p>Does not have students at this course yet</p>
-                    )}
-                  </div>
-                  {students && (
-                    <Button style={{ marginLeft: 16 }} type="dashed" onClick={showMentorStatsModal.bind(null, idx)}>
-                      <FullscreenOutlined />
-                    </Button>
-                  )}
-                </List.Item>
-              )}
-            />
-          </>
+                      <Text>Does not have students at this course yet</Text>
+                    )
+                  }
+                />
+              </Card>
+            ))}
+          </Flex>
         }
       />
     </>
