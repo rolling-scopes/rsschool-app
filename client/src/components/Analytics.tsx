@@ -22,10 +22,7 @@ export function Analytics() {
 
   return (
     <>
-      <Script
-        strategy="afterInteractive"
-        src="https://www.googletagmanager.com/gtag/js?id=G-WJLHZ9CCXJ"
-      />
+      <Script strategy="afterInteractive" src="https://www.googletagmanager.com/gtag/js?id=G-WJLHZ9CCXJ" />
 
       <Script id="google-analytics" strategy="afterInteractive">
         {`
