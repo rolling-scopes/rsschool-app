@@ -86,7 +86,7 @@ export function InterviewWaitingList() {
         rowKey="id"
         columns={[
           {
-            title: 'Github',
+            title: 'GitHub',
             dataIndex: 'githubId',
             sorter: stringSorter('githubId'),
             width: 180,

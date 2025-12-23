@@ -32,7 +32,7 @@ const initColumns: ColumnType<HeroRadarDto>[] = [
     render: (value: number) => (value >= 999999 ? 'New' : value),
   },
   {
-    title: 'Github',
+    title: 'GitHub',
     fixed: 'left',
     key: 'githubId',
     dataIndex: 'githubId',

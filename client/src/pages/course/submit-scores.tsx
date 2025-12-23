@@ -101,9 +101,9 @@ export function SubmitScorePage() {
           size="small"
           bordered
           dataSource={[
-            'CSV-file should contain columns "Score" and "Github".',
-            '"Github" fields could be links or plain names.',
-            'For duplicated "Github" fields the best score would be counted.',
+            'CSV-file should contain columns "Score" and "GitHub".',
+            '"GitHub" fields could be links or plain names.',
+            'For duplicated "GitHub" fields the best score would be counted.',
             'You should upload several files, if you need scoring the best result from two or more tests.',
             'Only students in the file would be scored. By the way, you can update just several scores.',
           ]}
@@ -189,18 +189,18 @@ async function parseFiles(incomingFiles: IncomingFiles): Promise<StudentScore[]>
 
   const parsedRecords = await Promise.all(filesContent.map(content => csv().fromString(content)));
   const scores = parsedRecords.flat().map(item => {
-    if (isUndefined(item.Github) || isUndefined(item.Score)) {
-      throw new Error('Incorrect data: CSV file should contain the headers named "Github" and "Score"!');
+    if (isUndefined(item.GitHub) || isUndefined(item.Score)) {
+      throw new Error('Incorrect data: CSV file should contain the headers named "GitHub" and "Score"!');
     }
 
     const parsedScore = parseInt(item.Score, 10);
     if (isNaN(parsedScore)) {
-      throw new Error(`Incorrect data: Cannot parse "Score" for Github ${item.Github}`);
+      throw new Error(`Incorrect data: Cannot parse "Score" for GitHub ${item.GitHub}`);
     }
 
     return {
       score: parsedScore,
-      github: filterLogin(item.Github).toLowerCase(),
+      github: filterLogin(item.GitHub).toLowerCase(),
     };
   });
 

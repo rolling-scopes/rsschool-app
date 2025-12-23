@@ -23,7 +23,7 @@ const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
 
 const createGithubInUrlRule = (githubId: string): Rule => {
   return {
-    message: 'Your Github Username should be in the URL',
+    message: 'Your GitHub Username should be in the URL',
     required: true,
     pattern: new RegExp(`${githubId}`, 'i'),
   };

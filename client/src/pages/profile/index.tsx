@@ -1,19 +1,10 @@
 import { useContext, useState } from 'react';
-import Masonry from 'react-masonry-css';
 import { useRouter } from 'next/router';
 import { Result, Spin, theme } from 'antd';
 import { ProfileApi, UpdateProfileInfoDto, UpdateUserDtoLanguagesEnum } from 'api';
+import { dynamicWithSkeleton } from '@client/utils/dynamicWithSkeleton';
 import { Header } from 'components/Header';
 import { LoadingScreen } from 'components/LoadingScreen';
-import MainCard from 'components/Profile/MainCard';
-import AboutCard from 'components/Profile/AboutCard';
-import DiscordCard from 'components/Profile/DiscordCard';
-import EducationCard from 'components/Profile/EducationCard';
-import ContactsCard from 'components/Profile/ContactsCard';
-import PublicFeedbackCard from 'components/Profile/PublicFeedbackCard';
-import StudentStatsCard from 'components/Profile/StudentStatsCard';
-import { MentorStatsCard } from 'components/Profile/MentorStatsCard';
-import LanguagesCard from 'components/Profile/LanguagesCard';
 import { withGoogleMaps } from 'components/withGoogleMaps';
 import { NotificationChannel, NotificationsService } from 'modules/Notifications/services/notifications';
 import { ProfileInfo, ProfileMainCardData, UserService } from 'services/user';
@@ -21,7 +12,20 @@ import { SessionContext, SessionProvider } from 'modules/Course/contexts';
 import { useAsync } from 'react-use';
 import { checkIsProfileOwner, getStudentCoreJSInterviews } from 'utils/profilePageUtils';
 import { useMessage } from 'hooks';
-import InterviewCard from '@client/components/Profile/InterviewCard';
+import Masonry from 'react-masonry-css';
+
+const MainCard = dynamicWithSkeleton(() => import('components/Profile/MainCard'));
+const AboutCard = dynamicWithSkeleton(() => import('components/Profile/AboutCard'));
+const DiscordCard = dynamicWithSkeleton(() => import('components/Profile/DiscordCard'));
+const EducationCard = dynamicWithSkeleton(() => import('components/Profile/EducationCard'));
+const ContactsCard = dynamicWithSkeleton(() => import('components/Profile/ContactsCard'));
+const PublicFeedbackCard = dynamicWithSkeleton(() => import('components/Profile/PublicFeedbackCard'));
+const StudentStatsCard = dynamicWithSkeleton(() => import('components/Profile/StudentStatsCard'));
+const MentorStatsCard = dynamicWithSkeleton(() =>
+  import('components/Profile/MentorStatsCard').then(m => m.MentorStatsCard),
+);
+const LanguagesCard = dynamicWithSkeleton(() => import('components/Profile/LanguagesCard'));
+const InterviewCard = dynamicWithSkeleton(() => import('@client/components/Profile/InterviewCard'));
 
 type ConnectionValue = {
   value: string;
@@ -131,51 +135,99 @@ const Profile = () => {
   const githubId = profile?.generalInfo?.githubId;
   const isAdmin = session.isAdmin;
 
+  const hasEducation = Array.isArray(profile?.generalInfo?.educationHistory);
+  const hasContacts = profile?.contacts !== undefined;
+  const hasDiscord = profile?.discord !== undefined;
+  const hasPublicFeedback = Array.isArray(profile?.publicFeedback) && profile.publicFeedback.length > 0;
+  const hasStudentStats = Array.isArray(profile?.studentStats) && profile.studentStats.length > 0;
+  const hasMentorStats = Array.isArray(profile?.mentorStats) && profile.mentorStats.length > 0 && !!githubId;
+
   const cards = [
-    profile?.generalInfo && (
-      <MainCard isAdmin={isAdmin} data={mainInfo} isEditingModeEnabled={isProfileOwner} updateProfile={updateProfile} />
-    ),
-    <AboutCard
-      key="about-card"
-      data={aboutMyself}
-      isEditingModeEnabled={isProfileOwner}
-      updateProfile={updateProfile}
-    />,
-    <LanguagesCard
-      key="languages-card"
-      data={languages as UpdateUserDtoLanguagesEnum[]}
-      isEditingModeEnabled={isProfileOwner}
-      updateProfile={updateProfile}
-    />,
-    profile?.generalInfo?.educationHistory !== undefined && (
-      <EducationCard
-        data={profile.generalInfo?.educationHistory || []}
-        isEditingModeEnabled={isProfileOwner}
-        updateProfile={updateProfile}
-      />
-    ),
-    profile?.contacts !== undefined && (
-      <ContactsCard
-        data={profile.contacts}
-        isEditingModeEnabled={isProfileOwner}
-        connections={connections}
-        sendConfirmationEmail={sendEmailConfirmationLink}
-        updateProfile={updateProfile}
-      />
-    ),
-    profile?.discord !== undefined && <DiscordCard data={profile.discord} isProfileOwner={isProfileOwner} />,
-    profile?.publicFeedback?.length && <PublicFeedbackCard data={profile.publicFeedback} />,
-    <InterviewCard
-      coreJsInterview={getStudentCoreJSInterviews(profile?.studentStats)}
-      prescreeningInterview={profile?.stageInterviewFeedback}
-    />,
-    profile?.studentStats?.length && (
-      <StudentStatsCard username={session.githubId} data={profile.studentStats} isProfileOwner={isProfileOwner} />
-    ),
-    profile?.mentorStats?.length && githubId && (
-      <MentorStatsCard isAdmin={isAdmin} githubId={githubId} data={profile.mentorStats} />
-    ),
-  ].filter(Boolean) as JSX.Element[];
+    profile?.generalInfo
+      ? {
+          key: 'main',
+          node: (
+            <MainCard
+              isAdmin={isAdmin}
+              data={mainInfo}
+              isEditingModeEnabled={isProfileOwner}
+              updateProfile={updateProfile}
+            />
+          ),
+        }
+      : null,
+    {
+      key: 'about',
+      node: <AboutCard data={aboutMyself} isEditingModeEnabled={isProfileOwner} updateProfile={updateProfile} />,
+    },
+    {
+      key: 'languages',
+      node: (
+        <LanguagesCard
+          data={languages as UpdateUserDtoLanguagesEnum[]}
+          isEditingModeEnabled={isProfileOwner}
+          updateProfile={updateProfile}
+        />
+      ),
+    },
+    hasEducation
+      ? {
+          key: 'education',
+          node: (
+            <EducationCard
+              data={profile!.generalInfo?.educationHistory || []}
+              isEditingModeEnabled={isProfileOwner}
+              updateProfile={updateProfile}
+            />
+          ),
+        }
+      : null,
+    hasContacts
+      ? {
+          key: 'contacts',
+          node: (
+            <ContactsCard
+              data={profile!.contacts!}
+              isEditingModeEnabled={isProfileOwner}
+              connections={connections}
+              sendConfirmationEmail={sendEmailConfirmationLink}
+              updateProfile={updateProfile}
+            />
+          ),
+        }
+      : null,
+    hasDiscord
+      ? { key: 'discord', node: <DiscordCard data={profile!.discord!} isProfileOwner={isProfileOwner} /> }
+      : null,
+    hasPublicFeedback ? { key: 'publicFeedback', node: <PublicFeedbackCard data={profile!.publicFeedback!} /> } : null,
+    {
+      key: 'interview',
+      node: (
+        <InterviewCard
+          coreJsInterview={getStudentCoreJSInterviews(profile?.studentStats)}
+          prescreeningInterview={profile?.stageInterviewFeedback}
+        />
+      ),
+    },
+    hasStudentStats
+      ? {
+          key: 'studentStats',
+          node: (
+            <StudentStatsCard
+              username={session.githubId}
+              data={profile!.studentStats!}
+              isProfileOwner={isProfileOwner}
+            />
+          ),
+        }
+      : null,
+    hasMentorStats
+      ? {
+          key: 'mentorStats',
+          node: <MentorStatsCard isAdmin={isAdmin} githubId={githubId!} data={profile!.mentorStats!} />,
+        }
+      : null,
+  ].filter(Boolean) as { key: string; node: JSX.Element }[];
 
   const preloadData = useAsync(async () => {
     await fetchData();
@@ -198,9 +250,9 @@ const Profile = () => {
               className="masonry"
               columnClassName="masonry-column"
             >
-              {cards.map((card, idx) => (
-                <div style={{ marginBottom: 16 }} key={`card-${idx}`}>
-                  {card}
+              {cards.map(({ key, node }) => (
+                <div style={{ marginBottom: 16 }} key={key}>
+                  {node}
                 </div>
               ))}
             </Masonry>

@@ -2,7 +2,7 @@
 
 Welcome to the [RS School App](https://app.rs.school) docs!
 
-You can read about `RS School App` features by clicking to links in menu below or at left side of the page. The search is also available at top left corner of the page. Enjoy!
+You can read about `RS School App` features by clicking the links in the menu below or on the left side of the page. Search is available in the top left corner of the page.
 
 ## Features
 

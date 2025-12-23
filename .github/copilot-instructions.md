@@ -1,0 +1,1 @@
+Use instructions from `AGENTS.md` to guide your work.

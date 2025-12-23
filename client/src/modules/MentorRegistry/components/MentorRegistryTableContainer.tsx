@@ -186,9 +186,9 @@ export const MentorRegistryTableContainer = ({
     const { preferredCourses, preselectedCourses, technicalMentoring, githubId, cityName } = combinedFilter;
     const allColumns = [
       {
-        key: MentorsRegistryColumnKey.Github,
-        title: MentorsRegistryColumnName.Github,
-        dataIndex: MentorsRegistryColumnKey.Github,
+        key: MentorsRegistryColumnKey.GitHub,
+        title: MentorsRegistryColumnName.GitHub,
+        dataIndex: MentorsRegistryColumnKey.GitHub,
         render: (value: string, { name }: { name: string }) => {
           return (
             <>

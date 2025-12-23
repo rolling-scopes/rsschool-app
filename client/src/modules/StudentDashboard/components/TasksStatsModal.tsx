@@ -94,7 +94,7 @@ export function TasksStatsModal(props: Props) {
             ellipsis: false,
           },
           {
-            title: 'Github PR Url',
+            title: 'GitHub PR Url',
             dataIndex: 'githubPrUri',
             render: (uri: string) => (uri ? <a href={uri}>PR</a> : uri),
             ellipsis: true,

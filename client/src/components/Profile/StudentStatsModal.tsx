@@ -96,7 +96,7 @@ class StudentStatsModal extends React.PureComponent<Props> {
               ellipsis: true,
             },
             {
-              title: 'Github PR Uri',
+              title: 'GitHub PR Uri',
               dataIndex: 'githubPrUri',
               render: (uri: string) => (uri ? <a href={uri}>PR</a> : uri),
               ellipsis: true,
