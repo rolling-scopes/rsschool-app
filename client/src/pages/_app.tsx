@@ -7,8 +7,13 @@ import { initializeFeatures } from 'services/features';
 import { Analytics } from '../components/Analytics';
 import '../styles/main.css';
 import { MessageProvider, ThemeProvider } from '@client/providers';
+import { ErrorInfo } from 'react';
 
 class RsSchoolApp extends App {
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error('Caught at top level:', error, errorInfo);
+  }
+
   render() {
     const { Component, pageProps, router } = this.props;
     initializeFeatures(router.query);
