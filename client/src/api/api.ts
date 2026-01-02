@@ -5042,6 +5042,25 @@ export interface Organizer {
 /**
  * 
  * @export
+ * @interface PaginatedTopMentorsDto
+ */
+export interface PaginatedTopMentorsDto {
+    /**
+     * List of top mentors
+     * @type {Array<TopMentorDto>}
+     * @memberof PaginatedTopMentorsDto
+     */
+    'items': Array<TopMentorDto>;
+    /**
+     * Pagination metadata
+     * @type {PaginationDto}
+     * @memberof PaginatedTopMentorsDto
+     */
+    'pagination': PaginationDto;
+}
+/**
+ * 
+ * @export
  * @interface PaginationDto
  */
 export interface PaginationDto {
@@ -6994,6 +7013,43 @@ export interface TeamsDto {
      * @memberof TeamsDto
      */
     'pagination': PaginationMetaDto;
+}
+/**
+ * 
+ * @export
+ * @interface TopMentorDto
+ */
+export interface TopMentorDto {
+    /**
+     * Position in the mentors ranking
+     * @type {number}
+     * @memberof TopMentorDto
+     */
+    'rank': number;
+    /**
+     * GitHub username
+     * @type {string}
+     * @memberof TopMentorDto
+     */
+    'githubId': string;
+    /**
+     * Full name of the mentor
+     * @type {string}
+     * @memberof TopMentorDto
+     */
+    'name': string;
+    /**
+     * Total number of certified students mentored
+     * @type {number}
+     * @memberof TopMentorDto
+     */
+    'totalStudents': number;
+    /**
+     * Student counts per course
+     * @type {Array<CourseStatsDto>}
+     * @memberof TopMentorDto
+     */
+    'courseStats': Array<CourseStatsDto>;
 }
 /**
  * 
@@ -16453,6 +16509,116 @@ export class MentorsApi extends BaseAPI {
      */
     public getRandomTask(mentorId: number, courseId: number, options?: AxiosRequestConfig) {
         return MentorsApiFp(this.configuration).getRandomTask(mentorId, courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * MentorsHallOfFameApi - axios parameter creator
+ * @export
+ */
+export const MentorsHallOfFameApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {number} [page] Page number (default: 1)
+         * @param {number} [limit] Items per page (default: 20)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTopMentors: async (page?: number, limit?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/mentors-hall-of-fame`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * MentorsHallOfFameApi - functional programming interface
+ * @export
+ */
+export const MentorsHallOfFameApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = MentorsHallOfFameApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {number} [page] Page number (default: 1)
+         * @param {number} [limit] Items per page (default: 20)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getTopMentors(page?: number, limit?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedTopMentorsDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getTopMentors(page, limit, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * MentorsHallOfFameApi - factory interface
+ * @export
+ */
+export const MentorsHallOfFameApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = MentorsHallOfFameApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {number} [page] Page number (default: 1)
+         * @param {number} [limit] Items per page (default: 20)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTopMentors(page?: number, limit?: number, options?: any): AxiosPromise<PaginatedTopMentorsDto> {
+            return localVarFp.getTopMentors(page, limit, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * MentorsHallOfFameApi - object-oriented interface
+ * @export
+ * @class MentorsHallOfFameApi
+ * @extends {BaseAPI}
+ */
+export class MentorsHallOfFameApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} [page] Page number (default: 1)
+     * @param {number} [limit] Items per page (default: 20)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MentorsHallOfFameApi
+     */
+    public getTopMentors(page?: number, limit?: number, options?: AxiosRequestConfig) {
+        return MentorsHallOfFameApiFp(this.configuration).getTopMentors(page, limit, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

@@ -2999,6 +2999,35 @@
         "tags": ["contributors"]
       }
     },
+    "/mentors-hall-of-fame": {
+      "get": {
+        "operationId": "getTopMentors",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number (default: 1)",
+            "schema": { "type": "number" }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Items per page (default: 20)",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PaginatedTopMentorsDto" } } }
+          }
+        },
+        "summary": "",
+        "tags": ["mentors-hall-of-fame"]
+      }
+    },
     "/session": {
       "get": {
         "operationId": "getSession",
@@ -5890,6 +5919,36 @@
       "UpdateContributorDto": {
         "type": "object",
         "properties": { "description": { "type": "string" }, "userId": { "type": "number" } }
+      },
+      "TopMentorDto": {
+        "type": "object",
+        "properties": {
+          "rank": { "type": "number", "description": "Position in the mentors ranking" },
+          "githubId": { "type": "string", "description": "GitHub username" },
+          "name": { "type": "string", "description": "Full name of the mentor" },
+          "totalStudents": { "type": "number", "description": "Total number of certified students mentored" },
+          "courseStats": {
+            "description": "Student counts per course",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/CourseStatsDto" }
+          }
+        },
+        "required": ["rank", "githubId", "name", "totalStudents", "courseStats"]
+      },
+      "PaginatedTopMentorsDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "description": "List of top mentors",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/TopMentorDto" }
+          },
+          "pagination": {
+            "description": "Pagination metadata",
+            "allOf": [{ "$ref": "#/components/schemas/PaginationDto" }]
+          }
+        },
+        "required": ["items", "pagination"]
       },
       "AuthUserDto": {
         "type": "object",
