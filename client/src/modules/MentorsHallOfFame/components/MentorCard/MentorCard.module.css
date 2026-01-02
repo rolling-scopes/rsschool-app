@@ -1,0 +1,103 @@
+.card {
+  height: 100%;
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.rank {
+  font-size: 1.5rem;
+  font-weight: bold;
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.rank.gold {
+  background: linear-gradient(135deg, #f5af19 0%, #f12711 100%);
+}
+
+.rank.silver {
+  background: linear-gradient(135deg, #bdc3c7 0%, #2c3e50 100%);
+}
+
+.rank.bronze {
+  background: linear-gradient(135deg, #cd7f32 0%, #8b4513 100%);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.mentorInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.mentorName {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.githubLink {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.totalStudents {
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 16px;
+  padding: 8px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+
+.courseStatsList {
+  margin-bottom: 16px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.courseStatsItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.courseStatsItem:last-child {
+  border-bottom: none;
+}
+
+.courseName {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: 8px;
+}
+
+.studentsCount {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.thankButton {
+  width: 100%;
+}
