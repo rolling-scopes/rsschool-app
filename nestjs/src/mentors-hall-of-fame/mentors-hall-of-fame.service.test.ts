@@ -24,11 +24,6 @@ const mockMentorData = [
   },
 ];
 
-const mockAllCountsData = [
-  { githubId: 'mentor1', totalStudents: '10' },
-  { githubId: 'mentor2', totalStudents: '5' },
-];
-
 const mockQueryBuilder = {
   innerJoin: jest.fn().mockReturnThis(),
   leftJoin: jest.fn().mockReturnThis(),
@@ -39,9 +34,6 @@ const mockQueryBuilder = {
   groupBy: jest.fn().mockReturnThis(),
   orderBy: jest.fn().mockReturnThis(),
   addOrderBy: jest.fn().mockReturnThis(),
-  offset: jest.fn().mockReturnThis(),
-  limit: jest.fn().mockReturnThis(),
-  getRawOne: jest.fn(),
   getRawMany: jest.fn(),
 };
 
@@ -69,41 +61,27 @@ describe('MentorsHallOfFameService', () => {
   });
 
   describe('getTopMentors', () => {
-    it('returns correct pagination metadata', async () => {
-      mockQueryBuilder.getRawOne.mockResolvedValueOnce({ count: '25' });
-      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mockMentorData).mockResolvedValueOnce(mockAllCountsData);
+    it('returns empty array when no mentors found', async () => {
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce([]);
 
-      const result = await service.getTopMentors(1, 20);
+      const result = await service.getTopMentors();
 
-      expect(result.pagination.current).toBe(1);
-      expect(result.pagination.pageSize).toBe(20);
-      expect(result.pagination.total).toBe(25);
-      expect(result.pagination.totalPages).toBe(2);
-    });
-
-    it('returns empty items when no mentors found', async () => {
-      mockQueryBuilder.getRawOne.mockResolvedValueOnce({ count: '0' });
-
-      const result = await service.getTopMentors(1, 20);
-
-      expect(result.items).toEqual([]);
-      expect(result.pagination.total).toBe(0);
+      expect(result).toEqual([]);
     });
 
     it('returns mentors sorted by total certified students count DESC', async () => {
-      mockQueryBuilder.getRawOne.mockResolvedValueOnce({ count: '2' });
-      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mockMentorData).mockResolvedValueOnce(mockAllCountsData);
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mockMentorData);
 
-      const result = await service.getTopMentors(1, 20);
+      const result = await service.getTopMentors();
 
-      expect(result.items.length).toBe(2);
-      expect(result.items[0]?.githubId).toBe('mentor1');
-      expect(result.items[0]?.totalStudents).toBe(10);
-      expect(result.items[1]?.githubId).toBe('mentor2');
-      expect(result.items[1]?.totalStudents).toBe(5);
+      expect(result.length).toBe(2);
+      expect(result[0]?.githubId).toBe('mentor1');
+      expect(result[0]?.totalStudents).toBe(10);
+      expect(result[1]?.githubId).toBe('mentor2');
+      expect(result[1]?.totalStudents).toBe(5);
     });
 
-    it('calculates ranks correctly with mentors sharing same count', async () => {
+    it('calculates dense ranks correctly with mentors sharing same count', async () => {
       const mentorsWithTies = [
         {
           odtGithubId: 'mentor1',
@@ -128,30 +106,78 @@ describe('MentorsHallOfFameService', () => {
         },
       ];
 
-      const allCountsWithTies = [
-        { githubId: 'mentor1', totalStudents: '10' },
-        { githubId: 'mentor2', totalStudents: '10' },
-        { githubId: 'mentor3', totalStudents: '5' },
-      ];
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mentorsWithTies);
 
-      mockQueryBuilder.getRawOne.mockResolvedValueOnce({ count: '3' });
-      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mentorsWithTies).mockResolvedValueOnce(allCountsWithTies);
+      const result = await service.getTopMentors();
 
-      const result = await service.getTopMentors(1, 20);
+      // Dense ranking: mentors with same count share rank 1, next mentor gets rank 2 (not 3)
+      expect(result[0]?.rank).toBe(1);
+      expect(result[1]?.rank).toBe(1);
+      expect(result[2]?.rank).toBe(2);
+    });
 
-      // Mentors with same count share rank 1, next mentor gets rank 3 (not 2)
-      expect(result.items[0]?.rank).toBe(1);
-      expect(result.items[1]?.rank).toBe(1);
-      expect(result.items[2]?.rank).toBe(3);
+    it('returns only top 10 positions including all mentors at each position', async () => {
+      const mentorsData = [];
+      for (let i = 1; i <= 15; i++) {
+        mentorsData.push({
+          odtGithubId: `mentor${i}`,
+          odtFirstName: `Name${i}`,
+          odtLastName: `Last${i}`,
+          totalStudents: String(20 - i),
+          courseStatsRaw: [],
+        });
+      }
+
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mentorsData);
+
+      const result = await service.getTopMentors();
+
+      // Should return only first 10 positions (ranks 1-10)
+      expect(result.length).toBe(10);
+      expect(result[0]?.rank).toBe(1);
+      expect(result[9]?.rank).toBe(10);
+    });
+
+    it('includes all mentors at position 10 even if there are multiple', async () => {
+      const mentorsData = [];
+      // Create 9 mentors with different counts (ranks 1-9)
+      for (let i = 1; i <= 9; i++) {
+        mentorsData.push({
+          odtGithubId: `mentor${i}`,
+          odtFirstName: `Name${i}`,
+          odtLastName: `Last${i}`,
+          totalStudents: String(20 - i),
+          courseStatsRaw: [],
+        });
+      }
+      // Create 3 mentors with same count at position 10
+      for (let i = 10; i <= 12; i++) {
+        mentorsData.push({
+          odtGithubId: `mentor${i}`,
+          odtFirstName: `Name${i}`,
+          odtLastName: `Last${i}`,
+          totalStudents: '10',
+          courseStatsRaw: [],
+        });
+      }
+
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mentorsData);
+
+      const result = await service.getTopMentors();
+
+      // Should include all 3 mentors at position 10
+      expect(result.length).toBe(12);
+      expect(result[9]?.rank).toBe(10);
+      expect(result[10]?.rank).toBe(10);
+      expect(result[11]?.rank).toBe(10);
     });
 
     it('aggregates course stats per mentor correctly', async () => {
-      mockQueryBuilder.getRawOne.mockResolvedValueOnce({ count: '2' });
-      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mockMentorData).mockResolvedValueOnce(mockAllCountsData);
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mockMentorData);
 
-      const result = await service.getTopMentors(1, 20);
+      const result = await service.getTopMentors();
 
-      const mentor1 = result.items[0];
+      const mentor1 = result[0];
       expect(mentor1?.courseStats.length).toBe(2);
 
       const jsCourse = mentor1?.courseStats.find(s => s.courseName === 'JS Course');
@@ -162,13 +188,12 @@ describe('MentorsHallOfFameService', () => {
     });
 
     it('formats mentor name from firstName and lastName', async () => {
-      mockQueryBuilder.getRawOne.mockResolvedValueOnce({ count: '2' });
-      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mockMentorData).mockResolvedValueOnce(mockAllCountsData);
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mockMentorData);
 
-      const result = await service.getTopMentors(1, 20);
+      const result = await service.getTopMentors();
 
-      expect(result.items[0]?.name).toBe('John Doe');
-      expect(result.items[1]?.name).toBe('Jane Smith');
+      expect(result[0]?.name).toBe('John Doe');
+      expect(result[1]?.name).toBe('Jane Smith');
     });
 
     it('uses githubId as name when firstName and lastName are empty', async () => {
@@ -182,14 +207,11 @@ describe('MentorsHallOfFameService', () => {
         },
       ];
 
-      const allCounts = [{ githubId: 'anonymousMentor', totalStudents: '5' }];
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mentorWithoutName);
 
-      mockQueryBuilder.getRawOne.mockResolvedValueOnce({ count: '1' });
-      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mentorWithoutName).mockResolvedValueOnce(allCounts);
+      const result = await service.getTopMentors();
 
-      const result = await service.getTopMentors(1, 20);
-
-      expect(result.items[0]?.name).toBe('anonymousMentor');
+      expect(result[0]?.name).toBe('anonymousMentor');
     });
   });
 });
