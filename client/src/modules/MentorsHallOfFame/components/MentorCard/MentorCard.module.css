@@ -48,9 +48,9 @@
   font-size: 1.1rem;
   font-weight: 600;
   margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .githubLink {
@@ -87,10 +87,9 @@
 
 .courseName {
   flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   margin-right: 8px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .studentsCount {

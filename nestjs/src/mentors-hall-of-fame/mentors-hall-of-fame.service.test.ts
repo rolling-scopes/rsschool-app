@@ -10,9 +10,9 @@ const mockMentorData = [
     odtLastName: 'Doe',
     totalStudents: '10',
     courseStatsRaw: [
-      { courseName: 'JS Course', count: 1 },
-      { courseName: 'JS Course', count: 1 },
-      { courseName: 'React Course', count: 1 },
+      { courseName: 'JS Course', studentId: 1 },
+      { courseName: 'JS Course', studentId: 2 },
+      { courseName: 'React Course', studentId: 3 },
     ],
   },
   {
@@ -20,7 +20,7 @@ const mockMentorData = [
     odtFirstName: 'Jane',
     odtLastName: 'Smith',
     totalStudents: '5',
-    courseStatsRaw: [{ courseName: 'JS Course', count: 1 }],
+    courseStatsRaw: [{ courseName: 'JS Course', studentId: 1 }],
   },
 ];
 
@@ -212,6 +212,33 @@ describe('MentorsHallOfFameService', () => {
       const result = await service.getTopMentors();
 
       expect(result[0]?.name).toBe('anonymousMentor');
+    });
+
+    it('handles duplicate student-course pairs correctly', async () => {
+      const mentorWithDuplicates = [
+        {
+          odtGithubId: 'mentor1',
+          odtFirstName: 'John',
+          odtLastName: 'Doe',
+          totalStudents: '3',
+          courseStatsRaw: [
+            { courseName: 'JS Course', studentId: 1 },
+            { courseName: 'JS Course', studentId: 1 },
+            { courseName: 'JS Course', studentId: 2 },
+            { courseName: 'React Course', studentId: 3 },
+          ],
+        },
+      ];
+
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mentorWithDuplicates);
+
+      const result = await service.getTopMentors();
+
+      expect(result[0]?.totalStudents).toBe(3);
+      const jsCourse = result[0]?.courseStats.find(s => s.courseName === 'JS Course');
+      expect(jsCourse?.studentsCount).toBe(2);
+      const reactCourse = result[0]?.courseStats.find(s => s.courseName === 'React Course');
+      expect(reactCourse?.studentsCount).toBe(1);
     });
   });
 });

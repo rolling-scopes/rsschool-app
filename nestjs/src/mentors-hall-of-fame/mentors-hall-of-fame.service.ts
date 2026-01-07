@@ -23,14 +23,12 @@ export class MentorsHallOfFameService {
       .innerJoin(Certificate, 'certificate', 'certificate.studentId = student.id')
       .innerJoin(Course, 'course', 'course.id = student.courseId')
       .where('certificate.issueDate >= :oneYearAgo', { oneYearAgo })
-      .select('user.githubId', 'odtGithubId')
+      .select('user.id', 'userId')
+      .addSelect('user.githubId', 'odtGithubId')
       .addSelect('user.firstName', 'odtFirstName')
       .addSelect('user.lastName', 'odtLastName')
       .addSelect('COUNT(DISTINCT student.id)', 'totalStudents')
-      .addSelect(
-        `JSON_AGG(JSON_BUILD_OBJECT('courseName', course.name, 'count', 1) ORDER BY course.name)`,
-        'courseStatsRaw',
-      )
+      .addSelect(`JSON_AGG(JSON_BUILD_OBJECT('courseName', course.name, 'studentId', student.id))`, 'courseStatsRaw')
       .groupBy('user.id')
       .orderBy('COUNT(DISTINCT student.id)', 'DESC')
       .addOrderBy('user.githubId', 'ASC')
@@ -72,16 +70,19 @@ export class MentorsHallOfFameService {
       const name = [firstName, lastName].filter(Boolean).join(' ') || githubId;
 
       // Aggregate course stats from raw JSON
-      const courseStatsRaw = (raw.courseStatsRaw as { courseName: string; count: number }[]) || [];
-      const courseStatsMap = new Map<string, number>();
+      const courseStatsRaw = (raw.courseStatsRaw as { courseName: string; studentId: number }[]) || [];
+      const courseStatsMap = new Map<string, Set<number>>();
 
       for (const item of courseStatsRaw) {
         const courseName = item.courseName;
-        courseStatsMap.set(courseName, (courseStatsMap.get(courseName) || 0) + 1);
+        if (!courseStatsMap.has(courseName)) {
+          courseStatsMap.set(courseName, new Set<number>());
+        }
+        courseStatsMap.get(courseName)!.add(item.studentId);
       }
 
       const courseStats: CourseStatsDto[] = Array.from(courseStatsMap.entries())
-        .map(([courseName, studentsCount]) => new CourseStatsDto(courseName, studentsCount))
+        .map(([courseName, studentIds]) => new CourseStatsDto(courseName, studentIds.size))
         .sort((a, b) => b.studentsCount - a.studentsCount);
 
       result.push(
