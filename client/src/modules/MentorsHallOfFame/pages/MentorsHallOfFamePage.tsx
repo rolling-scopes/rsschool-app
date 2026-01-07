@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Col, Empty, Row, Spin, Typography } from 'antd';
+import { Col, Empty, Flex, Row, Space, Spin, Typography } from 'antd';
 import { TrophyOutlined } from '@ant-design/icons';
 import { MentorCard } from '../components/MentorCard/MentorCard';
 import { MentorsHallOfFameService } from '../services/mentors-hall-of-fame.service';
@@ -30,30 +30,35 @@ export function MentorsHallOfFamePage() {
   }, [fetchMentors]);
 
   return (
-    <div style={{ padding: '24px', maxWidth: 1200, margin: '0 auto' }}>
-      <div style={{ textAlign: 'center', marginBottom: 32 }}>
-        <TrophyOutlined style={{ fontSize: 48, color: '#faad14', marginBottom: 16 }} />
-        <Title level={1}>Mentors Hall of Fame</Title>
-        <Paragraph type="secondary" style={{ fontSize: 16 }}>
-          Celebrating our top 10 mentors who guided the most students to receive certificates in the last year
-        </Paragraph>
-      </div>
+    <Flex justify="center" style={{ padding: 24 }}>
+      <Space direction="vertical" size="large" style={{ width: '100%', maxWidth: 1200 }}>
+        <Flex vertical align="center" gap="middle">
+          <TrophyOutlined style={{ fontSize: 48, color: '#faad14' }} />
+          <Title level={1} style={{ margin: 0 }}>
+            Mentors Hall of Fame
+          </Title>
+          <Paragraph type="secondary" style={{ fontSize: 16, margin: 0, textAlign: 'center' }}>
+            Celebrating our top 10 mentors who guided the most students to receive certificates in the last year
+          </Paragraph>
+        </Flex>
 
-      {loading ? (
-        <div style={{ textAlign: 'center', padding: 48 }}>
-          <Spin size="large" />
-        </div>
-      ) : mentors.length === 0 ? (
-        <Empty description="No mentors found" />
-      ) : (
-        <Row gutter={[24, 24]}>
-          {mentors.map(mentor => (
-            <Col key={mentor.githubId} xs={24} sm={12} lg={8} xl={6}>
-              <MentorCard mentor={mentor} />
-            </Col>
-          ))}
-        </Row>
-      )}
-    </div>
+        {loading ? (
+          <Flex vertical align="center" gap="middle" style={{ padding: 48 }}>
+            <Spin size="large" />
+            <Paragraph type="secondary">Loading top mentors...</Paragraph>
+          </Flex>
+        ) : mentors.length === 0 ? (
+          <Empty description="No mentors found" />
+        ) : (
+          <Row gutter={[24, 24]}>
+            {mentors.map(mentor => (
+              <Col key={mentor.githubId} xs={24} sm={12} lg={8} xl={6}>
+                <MentorCard mentor={mentor} />
+              </Col>
+            ))}
+          </Row>
+        )}
+      </Space>
+    </Flex>
   );
 }
