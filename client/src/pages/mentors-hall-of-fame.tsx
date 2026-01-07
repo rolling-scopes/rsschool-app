@@ -1,11 +1,14 @@
 import { MentorsHallOfFamePage } from 'modules/MentorsHallOfFame';
-import { PageLayout } from 'components/PageLayout';
+import Head from 'next/head';
 
 function Page() {
   return (
-    <PageLayout loading={false} title="Mentors Hall of Fame">
+    <>
+      <Head>
+        <title>Mentors Hall of Fame</title>
+      </Head>
       <MentorsHallOfFamePage />
-    </PageLayout>
+    </>
   );
 }
 
