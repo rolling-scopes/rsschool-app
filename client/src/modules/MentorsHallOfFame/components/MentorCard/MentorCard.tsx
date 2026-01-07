@@ -1,4 +1,4 @@
-import { Avatar, Badge, Button, Card, Divider, Flex, List, Space, Typography } from 'antd';
+import { Badge, Button, Card, Divider, Flex, List, Space, Typography } from 'antd';
 import { HeartOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import { GithubAvatar } from 'components/GithubAvatar';
@@ -37,12 +37,16 @@ export function MentorCard({ mentor }: MentorCardProps) {
           </Space>
         </Flex>
 
-        <div className={styles.totalStudents}>
-          <Text strong style={{ fontSize: '1.25rem' }}>
-            {totalStudents}
-          </Text>{' '}
-          <Text type="secondary">certified students</Text>
-        </div>
+        <Card size="small" className={styles.totalStudentsCard}>
+          <Space size="small">
+            <Text strong style={{ fontSize: '1.5rem' }}>
+              {totalStudents}
+            </Text>
+            <Text type="secondary" style={{ fontSize: '1rem' }}>
+              certified students
+            </Text>
+          </Space>
+        </Card>
 
         {courseStats.length > 0 && (
           <>

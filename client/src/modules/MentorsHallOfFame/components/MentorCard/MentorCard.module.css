@@ -11,11 +11,12 @@
   font-weight: bold;
 }
 
-.totalStudents {
+.totalStudentsCard {
   text-align: center;
+}
+
+.totalStudentsCard :global(.ant-card-body) {
   padding: 12px;
-  background-color: #f5f5f5;
-  border-radius: 8px;
 }
 
 .courseList {
