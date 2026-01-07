@@ -27,9 +27,7 @@ export function MentorCard({ mentor }: MentorCardProps) {
         <div className={`${styles.rank} ${getRankClass(rank)}`}>{rank}</div>
         <GithubAvatar githubId={githubId} size={48} />
         <div className={styles.mentorInfo}>
-          <h3 className={styles.mentorName} title={name}>
-            {name}
-          </h3>
+          <h3 className={styles.mentorName}>{name}</h3>
           <a
             href={`https://github.com/${githubId}`}
             target="_blank"
@@ -49,9 +47,7 @@ export function MentorCard({ mentor }: MentorCardProps) {
         <div className={styles.courseStatsList}>
           {courseStats.map(stat => (
             <div key={stat.courseName} className={styles.courseStatsItem}>
-              <span className={styles.courseName} title={stat.courseName}>
-                {stat.courseName}
-              </span>
+              <span className={styles.courseName}>{stat.courseName}</span>
               <span className={styles.studentsCount}>{stat.studentsCount}</span>
             </div>
           ))}
