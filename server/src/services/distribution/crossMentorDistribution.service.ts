@@ -61,7 +61,7 @@ export class CrossMentorDistributionService {
     this.logger?.info(`Mentors Count: ${mentors.length}`);
 
     if (registeredStudentsIds && randomStudents.length < maxStudentsTotal) {
-      this.logger?.info('Distribute students less then total')
+      this.logger?.info('Distribute students less then total');
       const filteredMentors = mentors.filter(m => (maxStudentsMap[m.id] ?? this.defaultMaxStudents) > 0);
       const maxStudentsPerMentor = max(filteredMentors.map(m => maxStudentsMap[m.id] ?? 0)) ?? 0;
       const mentorsQueue: number[] = [];
@@ -94,7 +94,7 @@ export class CrossMentorDistributionService {
         }
       });
     } else {
-      this.logger?.info('Distribute students above the total')
+      this.logger?.info('Distribute students above the total');
       for (const mentor of mentors) {
         const maxStudents = maxStudentsMap[mentor.id] ?? this.defaultMaxStudents;
         const mentorOriginalStudents = initialMentorStudentsMap[mentor.id] ?? [];
