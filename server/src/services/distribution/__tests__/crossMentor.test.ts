@@ -51,7 +51,7 @@ describe('cross mentor distribution', () => {
     let mentors: CrossMentor[] = [];
     beforeAll(() => {
       service = new CrossMentorDistributionService();
-      const result = service.distribute(tooManyMentors, [], [99, 98, 97, 96, 95, 94]);
+      const result = service.distribute(tooManyMentors, [], [199, 198, 197, 196, 195, 194]);
       mentors = result.mentors;
     });
 
