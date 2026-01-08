@@ -15,11 +15,6 @@ export class CrossMentorDistributionService {
     existingPairs: { studentId: number; mentorId: number }[],
     registeredStudentsIds?: number[],
   ) {
-    const initialMentorStudentsMap = mentors.reduce<Record<number, number[]>>((acc, m) => {
-      acc[m.id] = (m.students ?? []).map(s => s.id);
-      return acc;
-    }, {});
-
     let students = mentors
       .map(m => m.students ?? [])
       .reduce((acc, v) => acc.concat(v), [] as { id: number }[])
@@ -61,7 +56,6 @@ export class CrossMentorDistributionService {
     this.logger?.info(`Mentors Count: ${mentors.length}`);
 
     if (registeredStudentsIds && randomStudents.length < maxStudentsTotal) {
-      this.logger?.info('Distribute students less then total');
       const filteredMentors = mentors.filter(m => (maxStudentsMap[m.id] ?? this.defaultMaxStudents) > 0);
       const maxStudentsPerMentor = max(filteredMentors.map(m => maxStudentsMap[m.id] ?? 0)) ?? 0;
       const mentorsQueue: number[] = [];
@@ -80,31 +74,15 @@ export class CrossMentorDistributionService {
         mentor.students = [];
       }
       randomStudents.forEach(student => {
-        let mentorIdx = mentorsQueue.pop();
-        while (mentorIdx != null) {
-          const mentor = filteredMentors[mentorIdx];
-          const wasAssignedToThisMentor = initialMentorStudentsMap[mentor.id]?.includes(student.id);
-          if (!wasAssignedToThisMentor) {
-            mentor.students = mentor.students ? mentor.students.concat([student]) : [student];
-            break;
-          }
-          const nextMentorIdx = mentorsQueue.pop();
-          mentorsQueue.unshift(mentorIdx);
-          mentorIdx = nextMentorIdx;
-        }
+        const mentorIdx = mentorsQueue.pop();
+        if (mentorIdx == null) return;
+        const mentor = filteredMentors[mentorIdx];
+        mentor.students = mentor.students ? mentor.students.concat([student]) : [student];
       });
     } else {
-      this.logger?.info('Distribute students above the total');
       for (const mentor of mentors) {
         const maxStudents = maxStudentsMap[mentor.id] ?? this.defaultMaxStudents;
-        const mentorOriginalStudents = initialMentorStudentsMap[mentor.id] ?? [];
-        const students: { id: number }[] = [];
-        for (let i = 0; i < randomStudents.length && students.length < maxStudents; i++) {
-          if (!mentorOriginalStudents.includes(randomStudents[i].id)) {
-            students.push(randomStudents.splice(i, 1)[0]);
-            i--;
-          }
-        }
+        const students = randomStudents.splice(0, maxStudents);
         mentor.students = students;
       }
     }
