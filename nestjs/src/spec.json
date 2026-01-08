@@ -713,6 +713,35 @@
         "tags": ["courses interviews"]
       }
     },
+    "/courses/{courseId}/interviews/{courseTaskId}/auto-distribute": {
+      "post": {
+        "operationId": "distributeInterviewPairs",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InterviewDistributeDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/InterviewDistributeResponseDto" }
+                }
+              }
+            }
+          },
+          "403": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["courses interviews"]
+      }
+    },
     "/courses/{courseId}/interviews/{interviewId}/students/available": {
       "get": {
         "operationId": "getAvailableStudents",
@@ -3754,6 +3783,26 @@
           "student": { "$ref": "#/components/schemas/PersonDto" }
         },
         "required": ["id", "result", "status", "interviewer", "student"]
+      },
+      "InterviewDistributeDto": {
+        "type": "object",
+        "properties": {
+          "clean": { "type": "boolean", "default": false },
+          "registrationEnabled": { "type": "boolean", "default": true }
+        },
+        "required": ["clean", "registrationEnabled"]
+      },
+      "InterviewDistributeResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "courseTaskId": { "type": "number" },
+          "mentorId": { "type": "number" },
+          "studentId": { "type": "number" },
+          "createdDate": { "type": "string" },
+          "updatedDate": { "format": "date-time", "type": "string" }
+        },
+        "required": ["id", "courseTaskId", "mentorId", "studentId", "createdDate", "updatedDate"]
       },
       "AvailableStudentDto": {
         "type": "object",

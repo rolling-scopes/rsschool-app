@@ -19,6 +19,7 @@ import {
   StudentsApi,
   StudentSummaryDto,
   CertificateApi,
+  CoursesInterviewsApi,
 } from 'api';
 import { optionalQueryString } from 'utils/optionalQueryString';
 import { Decision } from 'data/interviews/technical-screening';
@@ -121,6 +122,7 @@ const courseEventsApi = new CoursesEventsApi();
 const studentsScoreApi = new StudentsScoreApi();
 const studentsApi = new StudentsApi();
 const certificateApi = new CertificateApi();
+const coursesInterviewsApi = new CoursesInterviewsApi();
 
 export class CourseService {
   private axios: AxiosInstance;
@@ -473,7 +475,10 @@ export class CourseService {
   }
 
   async createInterviewDistribution(courseTaskId: number) {
-    const result = await this.axios.post(`/interviews/${courseTaskId}`);
+    const result = await coursesInterviewsApi.distributeInterviewPairs(this.courseId, courseTaskId, {
+      clean: false,
+      registrationEnabled: true,
+    });
     return result.data;
   }
 
