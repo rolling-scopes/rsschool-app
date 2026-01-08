@@ -354,18 +354,6 @@ export class InterviewsService {
             const interviewerFirstName = !mentor.user.firstName ? '' : mentor.user.firstName.trim();
             const interviewerLastName = !mentor.user.lastName ? '' : mentor.user.lastName.trim();
             const interviewerFullName = `${interviewerFirstName}${interviewerFirstName ? ' ' : ''}${interviewerLastName}`;
-            console.log('QW_MESSAGE', {
-              userId: student.user.id,
-              userGh: student.user.githubId,
-              notificationId: 'interviewerAssigned',
-              data: {
-                interviewer: {
-                  id: mentor.id,
-                  githubId: mentor.user.githubId,
-                  name: interviewerFullName,
-                },
-              },
-            });
             await this.userNotificationsService.sendEventNotification({
               userId: student.user.id,
               notificationId: 'interviewerAssigned',
