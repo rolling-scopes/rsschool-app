@@ -18,6 +18,7 @@ import {
 import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 import {
   ApiBadRequestResponse,
+  ApiConflictResponse,
   ApiForbiddenResponse,
   ApiOkResponse,
   ApiOperation,
@@ -156,6 +157,8 @@ export class InterviewsController {
   @Post('/:courseTaskId/auto-distribute')
   @ApiOkResponse({ type: [InterviewDistributeResponseDto] })
   @ApiForbiddenResponse()
+  @ApiBadRequestResponse()
+  @ApiConflictResponse()
   @ApiOperation({ operationId: 'distributeInterviewPairs' })
   @RequiredRoles([CourseRole.Manager, Role.Admin])
   public async distribute(
