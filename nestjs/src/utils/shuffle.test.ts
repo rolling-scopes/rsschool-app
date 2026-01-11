@@ -17,33 +17,31 @@ describe('shuffle utils', () => {
   });
 
   describe('shuffleRec', () => {
-    test.each<number[][]>([
-      [[]],
-      [[1]],
-      [[1, 1, 1]],
-    ])('should return a copy of the array for %p when shuffle is not possible or result remains same', (input) => {
-      const result = shuffleRec(input);
-      expect(result).toEqual(input);
-      expect(result).not.toBe(input);
-    });
+    test.each<number[][]>([[[]], [[1]], [[1, 1, 1]]])(
+      'should return a copy of the array for %p when shuffle is not possible or result remains same',
+      input => {
+        const result = shuffleRec(input);
+        expect(result).toEqual(input);
+        expect(result).not.toBe(input);
+      },
+    );
 
-    test.each<unknown[][]>([
-      [[1, 2, 3]],
-      [[1, 2, 3, 4, 5]],
-      [['a', 'b', 'c', 'd']],
-    ])('should return a shuffled version of %p', (input) => {
-      const result = shuffleRec(input);
+    test.each<unknown[][]>([[[1, 2, 3]], [[1, 2, 3, 4, 5]], [['a', 'b', 'c', 'd']]])(
+      'should return a shuffled version of %p',
+      input => {
+        const result = shuffleRec(input);
 
-      expect(result).toHaveLength(input.length);
-      expect([...result].sort()).toEqual([...input].sort());
-      expect(isShuffledArrays(input, result)).toBe(true);
-    });
-
-    test('should respect maxAttempts', () => {
-        const input = [1, 2];
-        const result = shuffleRec(input, 0);
         expect(result).toHaveLength(input.length);
         expect([...result].sort()).toEqual([...input].sort());
+        expect(isShuffledArrays(input, result)).toBe(true);
+      },
+    );
+
+    test('should respect maxAttempts', () => {
+      const input = [1, 2];
+      const result = shuffleRec(input, 0);
+      expect(result).toHaveLength(input.length);
+      expect([...result].sort()).toEqual([...input].sort());
     });
   });
 });
