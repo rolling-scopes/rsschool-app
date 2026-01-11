@@ -18,15 +18,15 @@ class Generator {
 }
 
 export function isShuffledArrays<T>(a: T[], b: T[]): boolean {
-  const len = Math.min(a.length, b.length);
+  if (a.length !== b.length) return false;
 
-  for (let i = 0; i < len; i++) {
-    if (a[i] === b[i]) {
-      return false;
+  for (let i = 0; i < a.length; i++) {
+    if (a[i] !== b[i]) {
+      return true;
     }
   }
 
-  return true;
+  return false;
 }
 
 function shuffle<T>(arr: T[]): T[] {
