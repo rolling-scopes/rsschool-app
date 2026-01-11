@@ -47,7 +47,23 @@ function shuffle<T>(arr: T[]): T[] {
   return copy;
 }
 
-export function shuffleRec<T>(arr: T[]): T[] {
-  const res = shuffle(arr);
-  return isShuffledArrays(arr, res) ? res : shuffleRec(arr);
+export function shuffleRec<T>(arr: T[], maxAttempts: number | undefined = 1000): T[] {
+  if (arr.length <= 1) {
+    return [...arr];
+  }
+
+  const first = arr[0];
+  if (arr.every(el => el === first)) {
+    return [...arr];
+  }
+
+  let attempts = 0;
+  let res = shuffle(arr);
+
+  while (!isShuffledArrays(arr, res) && attempts < maxAttempts) {
+    res = shuffle(arr);
+    attempts++;
+  }
+
+  return res;
 }

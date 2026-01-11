@@ -40,7 +40,7 @@ export class CrossMentorDistributionService {
       );
     }
 
-    const randomStudents = students.length > 1 ? shuffleRec(students) : students;
+    const randomStudents = shuffleRec(students);
 
     // distribute students to mentors by round-robin
     const maxStudentsMap = maxStudentsPerMentor.reduce(
@@ -57,8 +57,7 @@ export class CrossMentorDistributionService {
       const mentorsQueue: number[] = [];
       for (let i = 0; i < maxStudentsPerMentorValue; i++) {
         filteredMentors.forEach((mentor, idx) => {
-          const student = mentor.students?.[i];
-          if (student) {
+          if ((maxStudentsMap[mentor.id] ?? 0) > i) {
             mentorsQueue.push(idx);
           }
         });
@@ -70,8 +69,12 @@ export class CrossMentorDistributionService {
         mentor.students = [];
       }
 
+      const unassignedStudents: { id: number }[] = [];
+
       randomStudents.forEach(student => {
         let mentorIdx = mentorsQueue.pop();
+        let assigned = false;
+
         while (mentorIdx != null) {
           const mentor = filteredMentors[mentorIdx];
           if (!mentor) {
@@ -81,30 +84,40 @@ export class CrossMentorDistributionService {
           const wasAssignedToThisMentor = initialMentorStudentsMap[mentor.id]?.includes(student.id);
           if (!wasAssignedToThisMentor) {
             mentor.students = mentor.students ? mentor.students.concat([student]) : [student];
+            assigned = true;
             break;
           }
           const nextMentorIdx = mentorsQueue.pop();
           mentorsQueue.unshift(mentorIdx);
           mentorIdx = nextMentorIdx;
         }
-      });
-    } else {
-      for (const mentor of mentors) {
-        const maxStudents = maxStudentsMap[mentor.id] ?? defaultMaxStudents;
-        const mentorOriginalStudents = initialMentorStudentsMap[mentor.id] ?? [];
-        const mentorStudents: { id: number }[] = [];
-        for (let i = 0; i < randomStudents.length && mentorStudents.length < maxStudents; i++) {
-          const student = randomStudents[i];
-          if (student && !mentorOriginalStudents.includes(student.id)) {
-            const spliced = randomStudents.splice(i, 1)[0];
-            if (spliced) {
-              mentorStudents.push(spliced);
-            }
-            i--;
-          }
+
+        if (!assigned) {
+          unassignedStudents.push(student);
         }
-        mentor.students = mentorStudents;
+      });
+
+      return {
+        mentors,
+        unassignedStudents,
+      };
+    }
+
+    for (const mentor of mentors) {
+      const maxStudents = maxStudentsMap[mentor.id] ?? defaultMaxStudents;
+      const mentorOriginalStudents = initialMentorStudentsMap[mentor.id] ?? [];
+      const mentorStudents: { id: number }[] = [];
+      for (let i = 0; i < randomStudents.length && mentorStudents.length < maxStudents; i++) {
+        const student = randomStudents[i];
+        if (student && !mentorOriginalStudents.includes(student.id)) {
+          const spliced = randomStudents.splice(i, 1)[0];
+          if (spliced) {
+            mentorStudents.push(spliced);
+          }
+          i--;
+        }
       }
+      mentor.students = mentorStudents;
     }
 
     return {
