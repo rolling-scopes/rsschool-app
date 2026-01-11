@@ -736,7 +736,9 @@
               }
             }
           },
-          "403": { "description": "" }
+          "400": { "description": "" },
+          "403": { "description": "" },
+          "409": { "description": "" }
         },
         "summary": "",
         "tags": ["courses interviews"]
@@ -3800,7 +3802,7 @@
           "mentorId": { "type": "number" },
           "studentId": { "type": "number" },
           "createdDate": { "type": "string" },
-          "updatedDate": { "format": "date-time", "type": "string" }
+          "updatedDate": { "type": "string" }
         },
         "required": ["id", "courseTaskId", "mentorId", "studentId", "createdDate", "updatedDate"]
       },
