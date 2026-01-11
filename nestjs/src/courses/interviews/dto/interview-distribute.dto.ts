@@ -18,7 +18,7 @@ export class InterviewDistributeResponseDto {
   createdDate: string;
 
   @ApiProperty()
-  updatedDate: Date;
+  updatedDate: string;
 }
 
 export class InterviewDistributeDto {
