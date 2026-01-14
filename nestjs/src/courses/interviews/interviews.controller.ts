@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Body,
+  ConflictException,
   Controller,
   ForbiddenException,
   Get,
@@ -17,6 +18,7 @@ import {
 import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 import {
   ApiBadRequestResponse,
+  ApiConflictResponse,
   ApiForbiddenResponse,
   ApiOkResponse,
   ApiOperation,
@@ -36,6 +38,8 @@ import { PutInterviewFeedbackDto } from './dto/put-interview-feedback.dto';
 import { RegistrationInterviewDto } from './dto/registration-interview.dto';
 import { InterviewPairDto } from './dto/interview-pair.dto';
 import { InterviewCommentDto } from './dto/interview-comment.dto';
+import { CourseTasksService } from '../course-tasks';
+import { InterviewDistributeDto, InterviewDistributeResponseDto } from './dto/interview-distribute.dto';
 
 @Controller('courses/:courseId/interviews')
 @ApiTags('courses interviews')
@@ -44,6 +48,7 @@ export class InterviewsController {
   constructor(
     private interviewsService: InterviewsService,
     private interviewFeedbackService: InterviewFeedbackService,
+    private courseTasksService: CourseTasksService,
   ) {}
 
   @Get()
@@ -147,6 +152,46 @@ export class InterviewsController {
         : await this.interviewsService.registerStudentToInterview(courseId, interviewId, user.githubId);
 
     return new RegistrationInterviewDto(taskInterviewStudent);
+  }
+
+  @Post('/:courseTaskId/auto-distribute')
+  @ApiOkResponse({ type: [InterviewDistributeResponseDto] })
+  @ApiForbiddenResponse()
+  @ApiBadRequestResponse()
+  @ApiConflictResponse()
+  @ApiOperation({ operationId: 'distributeInterviewPairs' })
+  @RequiredRoles([CourseRole.Manager, Role.Admin])
+  public async distribute(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+    @Body() dto: InterviewDistributeDto,
+  ) {
+    const courseTask = await this.courseTasksService.getById(courseTaskId);
+
+    if (!courseTask) {
+      throw new BadRequestException('Not valid course task');
+    }
+
+    if (courseTask.isCreatingInterviewPairs) {
+      throw new ConflictException('Course task is already being processed');
+    }
+
+    try {
+      await this.courseTasksService.changeCourseTaskProcessing(courseTaskId, true);
+
+      const result = await this.interviewsService.distributeInterviewPairs(courseId, courseTaskId, {
+        clean: dto.clean,
+        registrationEnabled: dto.registrationEnabled,
+      });
+
+      if (result === null || result.length === 0) {
+        throw new BadRequestException('No interview pairs were created');
+      }
+
+      return result;
+    } finally {
+      await this.courseTasksService.changeCourseTaskProcessing(courseTaskId, false);
+    }
   }
 
   @Get('/:interviewId/students/available')
