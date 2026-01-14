@@ -3889,6 +3889,68 @@ export interface InterviewCommentDto {
 /**
  * 
  * @export
+ * @interface InterviewDistributeDto
+ */
+export interface InterviewDistributeDto {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof InterviewDistributeDto
+     */
+    'clean': boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof InterviewDistributeDto
+     */
+    'registrationEnabled': boolean;
+}
+/**
+ * 
+ * @export
+ * @interface InterviewDistributeResponseDto
+ */
+export interface InterviewDistributeResponseDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof InterviewDistributeResponseDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof InterviewDistributeResponseDto
+     */
+    'courseTaskId': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof InterviewDistributeResponseDto
+     */
+    'mentorId': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof InterviewDistributeResponseDto
+     */
+    'studentId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof InterviewDistributeResponseDto
+     */
+    'createdDate': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InterviewDistributeResponseDto
+     */
+    'updatedDate': string;
+}
+/**
+ * 
+ * @export
  * @interface InterviewDto
  */
 export interface InterviewDto {
@@ -12028,6 +12090,49 @@ export const CoursesInterviewsApiAxiosParamCreator = function (configuration?: C
         /**
          * 
          * @param {number} courseId 
+         * @param {number} courseTaskId 
+         * @param {InterviewDistributeDto} interviewDistributeDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        distributeInterviewPairs: async (courseId: number, courseTaskId: number, interviewDistributeDto: InterviewDistributeDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('distributeInterviewPairs', 'courseId', courseId)
+            // verify required parameter 'courseTaskId' is not null or undefined
+            assertParamExists('distributeInterviewPairs', 'courseTaskId', courseTaskId)
+            // verify required parameter 'interviewDistributeDto' is not null or undefined
+            assertParamExists('distributeInterviewPairs', 'interviewDistributeDto', interviewDistributeDto)
+            const localVarPath = `/courses/{courseId}/interviews/{courseTaskId}/auto-distribute`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"courseTaskId"}}`, encodeURIComponent(String(courseTaskId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(interviewDistributeDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
          * @param {number} interviewId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -12316,6 +12421,18 @@ export const CoursesInterviewsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} courseId 
+         * @param {number} courseTaskId 
+         * @param {InterviewDistributeDto} interviewDistributeDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async distributeInterviewPairs(courseId: number, courseTaskId: number, interviewDistributeDto: InterviewDistributeDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<InterviewDistributeResponseDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.distributeInterviewPairs(courseId, courseTaskId, interviewDistributeDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
          * @param {number} interviewId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -12416,6 +12533,17 @@ export const CoursesInterviewsApiFactory = function (configuration?: Configurati
         /**
          * 
          * @param {number} courseId 
+         * @param {number} courseTaskId 
+         * @param {InterviewDistributeDto} interviewDistributeDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        distributeInterviewPairs(courseId: number, courseTaskId: number, interviewDistributeDto: InterviewDistributeDto, options?: any): AxiosPromise<Array<InterviewDistributeResponseDto>> {
+            return localVarFp.distributeInterviewPairs(courseId, courseTaskId, interviewDistributeDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
          * @param {number} interviewId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -12506,6 +12634,19 @@ export class CoursesInterviewsApi extends BaseAPI {
      */
     public createInterviewFeedback(courseId: number, interviewId: number, type: string, putInterviewFeedbackDto: PutInterviewFeedbackDto, options?: AxiosRequestConfig) {
         return CoursesInterviewsApiFp(this.configuration).createInterviewFeedback(courseId, interviewId, type, putInterviewFeedbackDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {number} courseTaskId 
+     * @param {InterviewDistributeDto} interviewDistributeDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesInterviewsApi
+     */
+    public distributeInterviewPairs(courseId: number, courseTaskId: number, interviewDistributeDto: InterviewDistributeDto, options?: AxiosRequestConfig) {
+        return CoursesInterviewsApiFp(this.configuration).distributeInterviewPairs(courseId, courseTaskId, interviewDistributeDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
