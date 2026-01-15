@@ -1653,6 +1653,19 @@
         "tags": ["students"]
       }
     },
+    "/courses/{courseId}/students/expel": {
+      "post": {
+        "operationId": "expelStudents",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ExpelStatusDto" } } }
+        },
+        "responses": { "201": { "description": "" } },
+        "summary": "",
+        "tags": ["students"]
+      }
+    },
     "/course/{courseId}/mentor-reviews": {
       "get": {
         "operationId": "getMentorReviews",
@@ -4575,6 +4588,52 @@
           "repository": { "type": "string", "nullable": true }
         },
         "required": ["totalScore", "results", "isActive", "mentor", "rank", "repository"]
+      },
+      "ExpelCriteriaDto": {
+        "type": "object",
+        "properties": {
+          "courseTaskIds": {
+            "example": [123, 456, 789],
+            "description": "Array of course task IDs",
+            "type": "array",
+            "items": { "type": "number" }
+          },
+          "minScore": { "type": "number", "example": 100, "description": "Minimum score threshold" }
+        }
+      },
+      "ExpelOptionsDto": {
+        "type": "object",
+        "properties": {
+          "keepWithMentor": {
+            "type": "boolean",
+            "example": true,
+            "description": "Whether to keep the student with their mentor"
+          },
+          "saveAssigningToMentor": {
+            "type": "boolean",
+            "example": true,
+            "description": "Save assigning to the mentor (default: false)"
+          }
+        }
+      },
+      "ExpelStatusDto": {
+        "type": "object",
+        "properties": {
+          "criteria": {
+            "description": "Criteria for expelling students",
+            "allOf": [{ "$ref": "#/components/schemas/ExpelCriteriaDto" }]
+          },
+          "options": {
+            "description": "Additional options for expelling",
+            "allOf": [{ "$ref": "#/components/schemas/ExpelOptionsDto" }]
+          },
+          "expellingReason": {
+            "type": "string",
+            "example": "Cheating",
+            "description": "Reason for expelling the student"
+          }
+        },
+        "required": ["criteria", "options", "expellingReason"]
       },
       "MentorReviewDto": {
         "type": "object",

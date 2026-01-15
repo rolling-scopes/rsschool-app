@@ -270,7 +270,11 @@ export class CourseService {
     options: { keepWithMentor?: boolean },
     expellingReason: string,
   ) {
-    await this.axios.post(`/students/status`, { criteria, options, expellingReason, status: 'expelled' });
+    await studentsApi.expelStudents(this.courseId, {
+      criteria,
+      options,
+      expellingReason,
+    });
   }
 
   async postCertificateStudents(criteria: { courseTaskIds?: number[]; minScore?: number; minTotalScore?: number }) {
