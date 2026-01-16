@@ -8,9 +8,12 @@ import { TaskInterviewStudent } from '@entities/taskInterviewStudent';
 import { TaskInterviewResult } from '@entities/taskInterviewResult';
 import { TaskChecker } from '@entities/taskChecker';
 import { UsersService } from 'src/users/users.service';
-import { StageInterviewStudent, Student } from '@entities/index';
+import { Mentor, StageInterviewStudent, Student } from '@entities/index';
 import { AvailableStudentDto } from './dto/available-student.dto';
 import { TaskType } from '@entities/task';
+import { CrossMentorDistributionService } from './cross-mentor-distribution.service';
+import { InterviewDistributeDto } from './dto/interview-distribute.dto';
+import { UserNotificationsService } from 'src/users-notifications';
 
 @Injectable()
 export class InterviewsService {
@@ -27,6 +30,12 @@ export class InterviewsService {
     readonly studentRepository: Repository<Student>,
     @InjectRepository(StageInterviewStudent)
     readonly stageInterviewStudentRepository: Repository<StageInterviewStudent>,
+    @InjectRepository(Mentor)
+    readonly mentorRepository: Repository<Mentor>,
+    @InjectRepository(TaskInterviewStudent)
+    readonly interviewRepository: Repository<TaskInterviewStudent>,
+    private crossMentorService: CrossMentorDistributionService,
+    private userNotificationsService: UserNotificationsService,
   ) {}
 
   public getAll(
@@ -279,5 +288,90 @@ export class InterviewsService {
       courseTaskId,
     });
     return taskInterviewStudent;
+  }
+
+  public async distributeInterviewPairs(
+    courseId: number,
+    courseTaskId: number,
+    { clean, registrationEnabled }: InterviewDistributeDto,
+  ) {
+    const courseTask = await this.courseTaskRepository.findOne({ where: { id: courseTaskId }, select: ['id'] });
+
+    if (!courseTask) {
+      return null;
+    }
+
+    const mentors = await this.mentorRepository
+      .createQueryBuilder('mentor')
+      .innerJoinAndSelect('mentor.user', 'user')
+      .leftJoinAndSelect('mentor.students', 'students')
+      .where('mentor.courseId = :courseId', { courseId })
+      .andWhere('mentor.isExpelled = false')
+      .andWhere('(students.isExpelled = false OR students IS NULL)')
+      .getMany();
+
+    if (mentors.length === 0) {
+      return [];
+    }
+
+    if (clean) {
+      await this.taskCheckerRepository.delete({ courseTaskId });
+    }
+
+    let registeredStudentsIds: number[] | undefined = undefined;
+
+    if (registrationEnabled) {
+      const students = await this.interviewRepository.find({
+        where: { courseId, courseTaskId },
+        select: ['studentId'],
+      });
+      registeredStudentsIds = students.map(s => s.studentId);
+    }
+
+    const existingPairs: TaskChecker[] = clean
+      ? []
+      : await this.taskCheckerRepository.find({ where: { courseTaskId } });
+
+    const { mentors: crossMentors } = this.crossMentorService.distribute(mentors, existingPairs, registeredStudentsIds);
+
+    const taskCheckPairs = crossMentors
+      .map(stm => stm.students?.map(s => ({ courseTaskId, mentorId: stm.id, studentId: s.id })) ?? [])
+      .reduce((acc, student) => acc.concat(student), []);
+
+    if (taskCheckPairs.length > 0) {
+      await this.taskCheckerRepository.save(taskCheckPairs);
+
+      await Promise.all(
+        taskCheckPairs.map(async pair => {
+          const student = await this.studentRepository.findOne({
+            where: { courseId, id: pair.studentId },
+            relations: ['user'],
+          });
+          const mentor = await this.mentorRepository.findOne({
+            where: { courseId, id: pair.mentorId },
+            relations: ['user'],
+            select: ['id', 'user'],
+          });
+          if (student && mentor) {
+            const interviewerFirstName = !mentor.user.firstName ? '' : mentor.user.firstName.trim();
+            const interviewerLastName = !mentor.user.lastName ? '' : mentor.user.lastName.trim();
+            const interviewerFullName = `${interviewerFirstName}${interviewerFirstName ? ' ' : ''}${interviewerLastName}`;
+            await this.userNotificationsService.sendEventNotification({
+              userId: student.user.id,
+              notificationId: 'interviewerAssigned',
+              data: {
+                interviewer: {
+                  id: mentor.id,
+                  githubId: mentor.user.githubId,
+                  name: interviewerFullName,
+                },
+              },
+            });
+          }
+        }),
+      );
+    }
+
+    return taskCheckPairs;
   }
 }

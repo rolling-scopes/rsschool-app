@@ -92,6 +92,7 @@ export function DashboardDetails(props: Props) {
             <Descriptions bordered layout="vertical" size="small" column={1}>
               <Descriptions.Item label="Mentor">
                 <MentorSearch
+                  disabled={!details.isActive}
                   style={{ width: '100%' }}
                   onChange={props.onUpdateMentor}
                   courseId={props.courseId}

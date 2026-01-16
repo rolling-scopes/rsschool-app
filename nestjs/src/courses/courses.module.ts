@@ -39,6 +39,7 @@ import { MentorsService, MentorsController } from './mentors';
 import { CourseAccessService } from './course-access.service';
 import { CourseTasksController, CourseTasksService } from './course-tasks';
 import { InterviewsController, InterviewsService, InterviewFeedbackService } from './interviews';
+import { CrossMentorDistributionService } from './interviews/cross-mentor-distribution.service';
 import { TasksController } from './tasks/tasks.controller';
 import { TasksService } from './tasks/tasks.service';
 import { CourseStatsController, CourseStatsService } from './stats';
@@ -142,6 +143,7 @@ import { CourseLeaveSurveyResponse } from './entities/course-leave-survey-respon
     CourseAccessService,
     InterviewsService,
     InterviewFeedbackService,
+    CrossMentorDistributionService,
     TasksService,
     CourseStatsService,
     CourseCrossCheckService,
