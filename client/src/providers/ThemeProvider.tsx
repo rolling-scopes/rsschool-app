@@ -23,6 +23,7 @@ const ThemeContext = createContext<ThemeProviderType>({
 const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [appTheme, setAppTheme] = useState<AppTheme>(AppTheme.Light);
   const [auto, setAuto] = useState<boolean>(false);
+  const [mounted, setMounted] = useState(false);
   const DARK_MODE_MEDIA_QUERY = '(prefers-color-scheme: dark)';
 
   function getSystemTheme(): AppTheme {
@@ -71,6 +72,8 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
   }, [auto]);
 
   useEffect(() => {
+    setMounted(true);
+
     const storedTheme = localStorage.getItem('app-theme') as AppTheme;
     const isValidTheme = Object.values(AppTheme).includes(storedTheme);
 
@@ -130,36 +133,40 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
           algorithm: appTheme === AppTheme.Dark ? theme.darkAlgorithm : theme.defaultAlgorithm,
         }}
       >
-        <style jsx global>{`
-          :root::-webkit-scrollbar-thumb,
-          textarea::-webkit-scrollbar-thumb {
-            background: var(--scroll-color);
-          }
+        {mounted && (
+          <>
+            <style jsx global>{`
+              :root::-webkit-scrollbar-thumb,
+              textarea::-webkit-scrollbar-thumb {
+                background: var(--scroll-color);
+              }
 
-          :global(.ant-table) {
-            :global(.ant-table-container) {
-              :global(.ant-table-body),
-              :global(.ant-table-content) {
+              :global(.ant-table) {
+                :global(.ant-table-container) {
+                  :global(.ant-table-body),
+                  :global(.ant-table-content) {
+                    scrollbar-width: thin;
+                    scrollbar-color: var(--scroll-color) transparent;
+                    scrollbar-gutter: stable;
+                  }
+                }
+              }
+
+              :global(.ant-modal-content) {
                 scrollbar-width: thin;
                 scrollbar-color: var(--scroll-color) transparent;
                 scrollbar-gutter: stable;
               }
-            }
-          }
 
-          :global(.ant-modal-content) {
-            scrollbar-width: thin;
-            scrollbar-color: var(--scroll-color) transparent;
-            scrollbar-gutter: stable;
-          }
-
-          :global(.ant-drawer-body) {
-            scrollbar-width: thin;
-            scrollbar-color: var(--scroll-color) transparent;
-            scrollbar-gutter: stable;
-          }
-        `}</style>
-        {children}
+              :global(.ant-drawer-body) {
+                scrollbar-width: thin;
+                scrollbar-color: var(--scroll-color) transparent;
+                scrollbar-gutter: stable;
+              }
+            `}</style>
+            {children}
+          </>
+        )}
       </ConfigProvider>
     </ThemeContext.Provider>
   );
