@@ -179,6 +179,12 @@ export class CourseTasksService {
     });
   }
 
+  public changeCourseTaskProcessing(id: number, isProcessing: boolean) {
+    return this.courseTaskRepository.update(id, {
+      isCreatingInterviewPairs: isProcessing,
+    });
+  }
+
   public getAvailableCrossChecks(courseId: number) {
     return this.courseTaskRepository.find({
       where: { courseId, checker: Checker.CrossCheck, crossCheckStatus: CrossCheckStatus.Distributed, disabled: false },

@@ -5,7 +5,7 @@ import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import * as dayjs from 'dayjs';
-import { WriteScoreService } from '../score';
+import { WriteScoreService } from '../score/write-score.service';
 import { SelfEducationAnswers } from './dto';
 import { SelfEducationAttributes, SelfEducationService } from './self-education.service';
 
