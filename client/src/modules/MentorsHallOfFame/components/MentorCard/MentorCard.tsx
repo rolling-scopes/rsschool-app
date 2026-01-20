@@ -21,6 +21,8 @@ function getRankBadgeColor(rank: number): string {
 export function MentorCard({ mentor }: MentorCardProps) {
   const { rank, githubId, name, totalStudents, courseStats } = mentor;
 
+  const gratitudeUrl = `/gratitude?githubId=${githubId}`;
+
   return (
     <Card hoverable className={styles.card}>
       <Space direction="vertical" size="middle" style={{ width: '100%' }}>
@@ -67,7 +69,7 @@ export function MentorCard({ mentor }: MentorCardProps) {
           </>
         )}
 
-        <Link href="/gratitude" passHref legacyBehavior>
+        <Link href={gratitudeUrl} passHref legacyBehavior>
           <Button type="primary" icon={<HeartOutlined />} block>
             Say Thank you!
           </Button>
