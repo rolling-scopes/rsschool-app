@@ -70,7 +70,7 @@ export function MentorCard({ mentor }: MentorCardProps) {
         )}
 
         <Link href={gratitudeUrl} passHref legacyBehavior>
-          <Button type="primary" icon={<HeartOutlined />} block>
+          <Button type="default" icon={<HeartOutlined />} block>
             Say Thank you!
           </Button>
         </Link>
