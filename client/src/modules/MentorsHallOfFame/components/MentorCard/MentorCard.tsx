@@ -24,7 +24,17 @@ export function MentorCard({ mentor }: MentorCardProps) {
   const gratitudeUrl = `/gratitude?githubId=${githubId}`;
 
   return (
-    <Card hoverable className={styles.card}>
+    <Card
+      hoverable
+      className={styles.card}
+      actions={[
+        <Link href={gratitudeUrl} passHref legacyBehavior key="thank">
+          <Button type="text" icon={<HeartOutlined />}>
+            Say Thank you!
+          </Button>
+        </Link>,
+      ]}
+    >
       <Space direction="vertical" size="middle" style={{ width: '100%' }}>
         <Flex align="center" gap="middle">
           <Badge count={rank} color={getRankBadgeColor(rank)} className={styles.rankBadge} />
@@ -74,12 +84,6 @@ export function MentorCard({ mentor }: MentorCardProps) {
             />
           </>
         )}
-
-        <Link href={gratitudeUrl} passHref legacyBehavior>
-          <Button type="default" icon={<HeartOutlined />} block>
-            Say Thank you!
-          </Button>
-        </Link>
       </Space>
     </Card>
   );
