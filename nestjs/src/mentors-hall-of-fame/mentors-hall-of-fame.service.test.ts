@@ -81,7 +81,7 @@ describe('MentorsHallOfFameService', () => {
       expect(result[1]?.totalStudents).toBe(5);
     });
 
-    it('calculates dense ranks correctly with mentors sharing same count', async () => {
+    it('assigns sequential ranks to mentors', async () => {
       const mentorsWithTies = [
         {
           odtGithubId: 'mentor1',
@@ -110,20 +110,20 @@ describe('MentorsHallOfFameService', () => {
 
       const result = await service.getTopMentors();
 
-      // Dense ranking: mentors with same count share rank 1, next mentor gets rank 2 (not 3)
+      // Sequential ranking: each mentor gets their position as rank
       expect(result[0]?.rank).toBe(1);
-      expect(result[1]?.rank).toBe(1);
-      expect(result[2]?.rank).toBe(2);
+      expect(result[1]?.rank).toBe(2);
+      expect(result[2]?.rank).toBe(3);
     });
 
-    it('returns only top 10 positions including all mentors at each position', async () => {
+    it('returns only top 100 mentors when there are more', async () => {
       const mentorsData = [];
-      for (let i = 1; i <= 15; i++) {
+      for (let i = 1; i <= 150; i++) {
         mentorsData.push({
           odtGithubId: `mentor${i}`,
           odtFirstName: `Name${i}`,
           odtLastName: `Last${i}`,
-          totalStudents: String(20 - i),
+          totalStudents: String(200 - i),
           courseStatsRaw: [],
         });
       }
@@ -132,31 +132,31 @@ describe('MentorsHallOfFameService', () => {
 
       const result = await service.getTopMentors();
 
-      // Should return only first 10 positions (ranks 1-10)
-      expect(result.length).toBe(10);
+      // Should return only first 100 mentors
+      expect(result.length).toBe(100);
       expect(result[0]?.rank).toBe(1);
-      expect(result[9]?.rank).toBe(10);
+      expect(result[99]?.rank).toBe(100);
     });
 
-    it('includes all mentors at position 10 even if there are multiple', async () => {
+    it('includes all mentors with same count at position 100 boundary', async () => {
       const mentorsData = [];
-      // Create 9 mentors with different counts (ranks 1-9)
-      for (let i = 1; i <= 9; i++) {
+      // Create 99 mentors with different counts (positions 1-99)
+      for (let i = 1; i <= 99; i++) {
         mentorsData.push({
           odtGithubId: `mentor${i}`,
           odtFirstName: `Name${i}`,
           odtLastName: `Last${i}`,
-          totalStudents: String(20 - i),
+          totalStudents: String(200 - i),
           courseStatsRaw: [],
         });
       }
-      // Create 3 mentors with same count at position 10
-      for (let i = 10; i <= 12; i++) {
+      // Create 5 mentors with same count at position 100 boundary
+      for (let i = 100; i <= 104; i++) {
         mentorsData.push({
           odtGithubId: `mentor${i}`,
           odtFirstName: `Name${i}`,
           odtLastName: `Last${i}`,
-          totalStudents: '10',
+          totalStudents: '50',
           courseStatsRaw: [],
         });
       }
@@ -165,11 +165,10 @@ describe('MentorsHallOfFameService', () => {
 
       const result = await service.getTopMentors();
 
-      // Should include all 3 mentors at position 10
-      expect(result.length).toBe(12);
-      expect(result[9]?.rank).toBe(10);
-      expect(result[10]?.rank).toBe(10);
-      expect(result[11]?.rank).toBe(10);
+      // Should include all 5 mentors with count=50 at the boundary
+      expect(result.length).toBe(104);
+      expect(result[99]?.totalStudents).toBe(50);
+      expect(result[103]?.totalStudents).toBe(50);
     });
 
     it('aggregates course stats per mentor correctly', async () => {
