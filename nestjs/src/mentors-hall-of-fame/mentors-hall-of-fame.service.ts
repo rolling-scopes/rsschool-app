@@ -38,32 +38,31 @@ export class MentorsHallOfFameService {
       return [];
     }
 
-    // Calculate dense ranks and filter to top 10 positions
-    const mentorsWithRanks = this.calculateDenseRanksAndFilterTop10(allMentors);
-
-    return mentorsWithRanks;
+    // Filter to top 100 mentors, including all ties at the boundary
+    return this.filterTop100Mentors(allMentors);
   }
 
-  private calculateDenseRanksAndFilterTop10(rawMentors: Record<string, unknown>[]): TopMentorDto[] {
-    const result: TopMentorDto[] = [];
-    let currentRank = 1;
-    let prevCount = -1;
+  private filterTop100Mentors(rawMentors: Record<string, unknown>[]): TopMentorDto[] {
+    const TOP_MENTORS_COUNT = 100;
 
-    for (const raw of rawMentors) {
+    if (rawMentors.length <= TOP_MENTORS_COUNT) {
+      return this.mapToTopMentorDtos(rawMentors);
+    }
+
+    // Find boundary student count (at position 100)
+    const boundaryCount = Number(rawMentors[TOP_MENTORS_COUNT - 1]!.totalStudents);
+
+    // Include all mentors until student count drops below boundary
+    const filteredMentors = rawMentors.filter((mentor, index) => {
+      return index < TOP_MENTORS_COUNT || Number(mentor.totalStudents) === boundaryCount;
+    });
+
+    return this.mapToTopMentorDtos(filteredMentors);
+  }
+
+  private mapToTopMentorDtos(rawMentors: Record<string, unknown>[]): TopMentorDto[] {
+    return rawMentors.map((raw, index) => {
       const totalStudents = Number(raw.totalStudents);
-
-      // Use dense ranking: increment rank only when count changes
-      if (totalStudents !== prevCount && prevCount !== -1) {
-        currentRank++;
-      }
-
-      // Stop if we've passed top 10 positions
-      if (currentRank > 10) {
-        break;
-      }
-
-      prevCount = totalStudents;
-
       const firstName = raw.odtFirstName as string | null;
       const lastName = raw.odtLastName as string | null;
       const githubId = raw.odtGithubId as string;
@@ -85,17 +84,13 @@ export class MentorsHallOfFameService {
         .map(([courseName, studentIds]) => new CourseStatsDto(courseName, studentIds.size))
         .sort((a, b) => b.studentsCount - a.studentsCount);
 
-      result.push(
-        new TopMentorDto({
-          rank: currentRank,
-          githubId,
-          name,
-          totalStudents,
-          courseStats,
-        }),
-      );
-    }
-
-    return result;
+      return new TopMentorDto({
+        rank: index + 1,
+        githubId,
+        name,
+        totalStudents,
+        courseStats,
+      });
+    });
   }
 }
