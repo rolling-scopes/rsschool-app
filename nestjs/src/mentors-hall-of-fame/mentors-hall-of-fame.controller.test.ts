@@ -9,6 +9,7 @@ const mockTopMentors = [
     githubId: 'mentor1',
     name: 'John Doe',
     totalStudents: 10,
+    totalGratitudes: 5,
     courseStats: [new MentorCourseStatsDto('JS Course', 5), new MentorCourseStatsDto('React Course', 5)],
   }),
   new TopMentorDto({
@@ -16,6 +17,7 @@ const mockTopMentors = [
     githubId: 'mentor2',
     name: 'Jane Smith',
     totalStudents: 8,
+    totalGratitudes: 3,
     courseStats: [new MentorCourseStatsDto('JS Course', 8)],
   }),
 ];

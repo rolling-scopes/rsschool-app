@@ -9,6 +9,7 @@ const mockMentor: TopMentorDto = {
   githubId: 'testmentor',
   name: 'Test Mentor',
   totalStudents: 25,
+  totalGratitudes: 12,
   courseStats: [
     { courseName: 'JS Course', studentsCount: 15 },
     { courseName: 'React Course', studentsCount: 10 },
@@ -36,6 +37,13 @@ describe('MentorCard', () => {
 
     expect(screen.getByText('25')).toBeInTheDocument();
     expect(screen.getByText(/certified students/i)).toBeInTheDocument();
+  });
+
+  it('displays total gratitudes count with heart emoji', () => {
+    render(<MentorCard mentor={mockMentor} />);
+
+    expect(screen.getByText('12')).toBeInTheDocument();
+    expect(screen.getByText('❤️')).toBeInTheDocument();
   });
 
   it('renders course stats list', () => {
