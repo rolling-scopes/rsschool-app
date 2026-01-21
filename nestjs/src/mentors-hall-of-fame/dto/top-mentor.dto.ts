@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CourseStatsDto } from './course-stats.dto';
+import { MentorCourseStatsDto } from './course-stats.dto';
 
 export class TopMentorDto {
   constructor(data: {
@@ -7,7 +7,7 @@ export class TopMentorDto {
     githubId: string;
     name: string;
     totalStudents: number;
-    courseStats: CourseStatsDto[];
+    courseStats: MentorCourseStatsDto[];
   }) {
     this.rank = data.rank;
     this.githubId = data.githubId;
@@ -28,6 +28,6 @@ export class TopMentorDto {
   @ApiProperty({ description: 'Total number of certified students mentored' })
   public totalStudents: number;
 
-  @ApiProperty({ type: [CourseStatsDto], description: 'Student counts per course' })
-  public courseStats: CourseStatsDto[];
+  @ApiProperty({ type: [MentorCourseStatsDto], description: 'Student counts per course' })
+  public courseStats: MentorCourseStatsDto[];
 }

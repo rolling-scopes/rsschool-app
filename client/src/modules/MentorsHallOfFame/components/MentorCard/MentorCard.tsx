@@ -1,14 +1,14 @@
 import { Badge, Button, Card, Divider, Flex, List, Space, Typography } from 'antd';
 import { HeartOutlined } from '@ant-design/icons';
 import Link from 'next/link';
+import { TopMentorDto } from 'api';
 import { GithubAvatar } from 'components/GithubAvatar';
-import { TopMentor } from '../../types';
 import styles from './MentorCard.module.css';
 
 const { Title, Link: AntLink, Text } = Typography;
 
 interface MentorCardProps {
-  mentor: TopMentor;
+  mentor: TopMentorDto;
 }
 
 function getRankBadgeColor(rank: number): string {

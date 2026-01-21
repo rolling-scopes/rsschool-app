@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Mentor, Student, Certificate, Course, User } from '@entities/index';
-import { CourseStatsDto, TopMentorDto } from './dto';
+import { MentorCourseStatsDto, TopMentorDto } from './dto';
 
 @Injectable()
 export class MentorsHallOfFameService {
@@ -11,18 +11,22 @@ export class MentorsHallOfFameService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  public async getTopMentors(): Promise<TopMentorDto[]> {
-    const oneYearAgo = new Date();
-    oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
-
+  public async getTopMentors(allTime = false): Promise<TopMentorDto[]> {
     // Get all mentors with their certified students count
-    const allMentors = await this.userRepository
+    const queryBuilder = this.userRepository
       .createQueryBuilder('user')
       .innerJoin(Mentor, 'mentor', 'mentor.userId = user.id')
       .innerJoin(Student, 'student', 'student.mentorId = mentor.id')
       .innerJoin(Certificate, 'certificate', 'certificate.studentId = student.id')
-      .innerJoin(Course, 'course', 'course.id = student.courseId')
-      .where('certificate.issueDate >= :oneYearAgo', { oneYearAgo })
+      .innerJoin(Course, 'course', 'course.id = student.courseId');
+
+    if (!allTime) {
+      const oneYearAgo = new Date();
+      oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+      queryBuilder.where('certificate.issueDate >= :oneYearAgo', { oneYearAgo });
+    }
+
+    const allMentors = await queryBuilder
       .select('user.id', 'userId')
       .addSelect('user.githubId', 'odtGithubId')
       .addSelect('user.firstName', 'odtFirstName')
@@ -80,8 +84,8 @@ export class MentorsHallOfFameService {
         courseStatsMap.get(courseName)!.add(item.studentId);
       }
 
-      const courseStats: CourseStatsDto[] = Array.from(courseStatsMap.entries())
-        .map(([courseName, studentIds]) => new CourseStatsDto(courseName, studentIds.size))
+      const courseStats: MentorCourseStatsDto[] = Array.from(courseStatsMap.entries())
+        .map(([courseName, studentIds]) => new MentorCourseStatsDto(courseName, studentIds.size))
         .sort((a, b) => b.studentsCount - a.studentsCount);
 
       return new TopMentorDto({

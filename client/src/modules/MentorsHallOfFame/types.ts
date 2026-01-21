@@ -1,24 +1,4 @@
-export interface CourseStats {
-  courseName: string;
-  studentsCount: number;
-}
+export type { TopMentorDto, MentorCourseStatsDto } from 'api';
 
-export interface TopMentor {
-  rank: number;
-  githubId: string;
-  name: string;
-  totalStudents: number;
-  courseStats: CourseStats[];
-}
-
-export interface Pagination {
-  pageSize: number;
-  current: number;
-  total: number;
-  totalPages: number;
-}
-
-export interface PaginatedTopMentors {
-  items: TopMentor[];
-  pagination: Pagination;
-}
+export type TopMentor = import('api').TopMentorDto;
+export type CourseStats = import('api').MentorCourseStatsDto;

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CourseStatsDto {
+export class MentorCourseStatsDto {
   constructor(courseName: string, studentsCount: number) {
     this.courseName = courseName;
     this.studentsCount = studentsCount;
