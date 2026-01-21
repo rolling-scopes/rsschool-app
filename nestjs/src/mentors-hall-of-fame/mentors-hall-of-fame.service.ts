@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Mentor, Student, Certificate, Course, User } from '@entities/index';
+import { Feedback, Mentor, Student, Certificate, Course, User } from '@entities/index';
 import { MentorCourseStatsDto, TopMentorDto } from './dto';
 
 @Injectable()
@@ -26,12 +26,22 @@ export class MentorsHallOfFameService {
       queryBuilder.where('certificate.issueDate >= :oneYearAgo', { oneYearAgo });
     }
 
+    const gratitudesSubquery = this.userRepository.manager
+      .createQueryBuilder()
+      .select('feedback.toUserId', 'toUserId')
+      // TODO: Check if we need to count distinct feedback.id or not on real data
+      .addSelect('COUNT(DISTINCT feedback.id)', 'gratitudesCount')
+      .from(Feedback, 'feedback')
+      .groupBy('feedback.toUserId');
+
     const allMentors = await queryBuilder
+      .leftJoin(`(${gratitudesSubquery.getQuery()})`, 'gratitudes', 'gratitudes."toUserId" = user.id')
       .select('user.id', 'userId')
       .addSelect('user.githubId', 'odtGithubId')
       .addSelect('user.firstName', 'odtFirstName')
       .addSelect('user.lastName', 'odtLastName')
       .addSelect('COUNT(DISTINCT student.id)', 'totalStudents')
+      .addSelect('COALESCE(MAX(gratitudes."gratitudesCount"), 0)', 'totalGratitudes')
       .addSelect(`JSON_AGG(JSON_BUILD_OBJECT('courseName', course.name, 'studentId', student.id))`, 'courseStatsRaw')
       .groupBy('user.id')
       .orderBy('COUNT(DISTINCT student.id)', 'DESC')
@@ -67,6 +77,7 @@ export class MentorsHallOfFameService {
   private mapToTopMentorDtos(rawMentors: Record<string, unknown>[]): TopMentorDto[] {
     return rawMentors.map((raw, index) => {
       const totalStudents = Number(raw.totalStudents);
+      const totalGratitudes = Number(raw.totalGratitudes);
       const firstName = raw.odtFirstName as string | null;
       const lastName = raw.odtLastName as string | null;
       const githubId = raw.odtGithubId as string;
@@ -93,6 +104,7 @@ export class MentorsHallOfFameService {
         githubId,
         name,
         totalStudents,
+        totalGratitudes,
         courseStats,
       });
     });

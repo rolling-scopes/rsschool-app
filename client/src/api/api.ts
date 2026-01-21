@@ -7045,6 +7045,12 @@ export interface TopMentorDto {
      */
     'totalStudents': number;
     /**
+     * Total number of gratitudes received
+     * @type {number}
+     * @memberof TopMentorDto
+     */
+    'totalGratitudes': number;
+    /**
      * Student counts per course
      * @type {Array<MentorCourseStatsDto>}
      * @memberof TopMentorDto

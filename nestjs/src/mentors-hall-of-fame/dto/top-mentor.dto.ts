@@ -7,12 +7,14 @@ export class TopMentorDto {
     githubId: string;
     name: string;
     totalStudents: number;
+    totalGratitudes: number;
     courseStats: MentorCourseStatsDto[];
   }) {
     this.rank = data.rank;
     this.githubId = data.githubId;
     this.name = data.name;
     this.totalStudents = data.totalStudents;
+    this.totalGratitudes = data.totalGratitudes;
     this.courseStats = data.courseStats;
   }
 
@@ -27,6 +29,9 @@ export class TopMentorDto {
 
   @ApiProperty({ description: 'Total number of certified students mentored' })
   public totalStudents: number;
+
+  @ApiProperty({ description: 'Total number of gratitudes received' })
+  public totalGratitudes: number;
 
   @ApiProperty({ type: [MentorCourseStatsDto], description: 'Student counts per course' })
   public courseStats: MentorCourseStatsDto[];

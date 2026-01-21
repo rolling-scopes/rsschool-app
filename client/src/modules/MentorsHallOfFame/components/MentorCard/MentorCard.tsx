@@ -19,7 +19,7 @@ function getRankBadgeColor(rank: number): string {
 }
 
 export function MentorCard({ mentor }: MentorCardProps) {
-  const { rank, githubId, name, totalStudents, courseStats } = mentor;
+  const { rank, githubId, name, totalStudents, totalGratitudes, courseStats } = mentor;
 
   const gratitudeUrl = `/gratitude?githubId=${githubId}`;
 
@@ -40,14 +40,20 @@ export function MentorCard({ mentor }: MentorCardProps) {
         </Flex>
 
         <Card size="small" className={styles.totalStudentsCard}>
-          <Space size="small">
-            <Text strong style={{ fontSize: '1.5rem' }}>
+          <Flex justify="space-between" align="center" gap="small" wrap="nowrap">
+            <Text strong style={{ fontSize: '1.5rem', flexShrink: 0 }}>
               {totalStudents}
             </Text>
-            <Text type="secondary" style={{ fontSize: '1rem' }}>
+            <Text type="secondary" className={styles.certifiedText}>
               certified students
             </Text>
-          </Space>
+            <Flex align="center" gap={4} style={{ flexShrink: 0 }}>
+              <Text strong style={{ fontSize: '1.5rem' }}>
+                {totalGratitudes}
+              </Text>
+              <Text style={{ fontSize: '1.25rem' }}>❤️</Text>
+            </Flex>
+          </Flex>
         </Card>
 
         {courseStats.length > 0 && (

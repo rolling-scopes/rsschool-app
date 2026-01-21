@@ -9,6 +9,7 @@ const mockMentorData = [
     odtFirstName: 'John',
     odtLastName: 'Doe',
     totalStudents: '10',
+    totalGratitudes: '5',
     courseStatsRaw: [
       { courseName: 'JS Course', studentId: 1 },
       { courseName: 'JS Course', studentId: 2 },
@@ -20,9 +21,18 @@ const mockMentorData = [
     odtFirstName: 'Jane',
     odtLastName: 'Smith',
     totalStudents: '5',
+    totalGratitudes: '3',
     courseStatsRaw: [{ courseName: 'JS Course', studentId: 1 }],
   },
 ];
+
+const mockGratitudesQueryBuilder = {
+  select: jest.fn().mockReturnThis(),
+  addSelect: jest.fn().mockReturnThis(),
+  from: jest.fn().mockReturnThis(),
+  groupBy: jest.fn().mockReturnThis(),
+  getQuery: jest.fn().mockReturnValue('gratitudes_subquery'),
+};
 
 const mockQueryBuilder = {
   innerJoin: jest.fn().mockReturnThis(),
@@ -39,6 +49,9 @@ const mockQueryBuilder = {
 
 const mockUserRepository = {
   createQueryBuilder: jest.fn(() => mockQueryBuilder),
+  manager: {
+    createQueryBuilder: jest.fn(() => mockGratitudesQueryBuilder),
+  },
 };
 
 describe('MentorsHallOfFameService', () => {
@@ -88,6 +101,7 @@ describe('MentorsHallOfFameService', () => {
           odtFirstName: 'John',
           odtLastName: 'Doe',
           totalStudents: '10',
+          totalGratitudes: '5',
           courseStatsRaw: [],
         },
         {
@@ -95,6 +109,7 @@ describe('MentorsHallOfFameService', () => {
           odtFirstName: 'Jane',
           odtLastName: 'Smith',
           totalStudents: '10',
+          totalGratitudes: '3',
           courseStatsRaw: [],
         },
         {
@@ -102,6 +117,7 @@ describe('MentorsHallOfFameService', () => {
           odtFirstName: 'Bob',
           odtLastName: 'Johnson',
           totalStudents: '5',
+          totalGratitudes: '2',
           courseStatsRaw: [],
         },
       ];
@@ -124,6 +140,7 @@ describe('MentorsHallOfFameService', () => {
           odtFirstName: `Name${i}`,
           odtLastName: `Last${i}`,
           totalStudents: String(200 - i),
+          totalGratitudes: String(i),
           courseStatsRaw: [],
         });
       }
@@ -147,6 +164,7 @@ describe('MentorsHallOfFameService', () => {
           odtFirstName: `Name${i}`,
           odtLastName: `Last${i}`,
           totalStudents: String(200 - i),
+          totalGratitudes: String(i),
           courseStatsRaw: [],
         });
       }
@@ -157,6 +175,7 @@ describe('MentorsHallOfFameService', () => {
           odtFirstName: `Name${i}`,
           odtLastName: `Last${i}`,
           totalStudents: '50',
+          totalGratitudes: String(i),
           courseStatsRaw: [],
         });
       }
@@ -202,6 +221,7 @@ describe('MentorsHallOfFameService', () => {
           odtFirstName: null,
           odtLastName: null,
           totalStudents: '5',
+          totalGratitudes: '2',
           courseStatsRaw: [],
         },
       ];
@@ -220,6 +240,7 @@ describe('MentorsHallOfFameService', () => {
           odtFirstName: 'John',
           odtLastName: 'Doe',
           totalStudents: '3',
+          totalGratitudes: '4',
           courseStatsRaw: [
             { courseName: 'JS Course', studentId: 1 },
             { courseName: 'JS Course', studentId: 1 },

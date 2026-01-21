@@ -19,6 +19,13 @@
   padding: 12px;
 }
 
+.certifiedText {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  font-size: 0.875rem;
+}
+
 .courseList {
   max-height: 150px;
   overflow-y: auto;

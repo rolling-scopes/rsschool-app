@@ -5924,13 +5924,14 @@
           "githubId": { "type": "string", "description": "GitHub username" },
           "name": { "type": "string", "description": "Full name of the mentor" },
           "totalStudents": { "type": "number", "description": "Total number of certified students mentored" },
+          "totalGratitudes": { "type": "number", "description": "Total number of gratitudes received" },
           "courseStats": {
             "description": "Student counts per course",
             "type": "array",
             "items": { "$ref": "#/components/schemas/MentorCourseStatsDto" }
           }
         },
-        "required": ["rank", "githubId", "name", "totalStudents", "courseStats"]
+        "required": ["rank", "githubId", "name", "totalStudents", "totalGratitudes", "courseStats"]
       },
       "AuthUserDto": {
         "type": "object",
