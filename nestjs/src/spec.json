@@ -3002,26 +3002,15 @@
     "/mentors-hall-of-fame": {
       "get": {
         "operationId": "getTopMentors",
-        "parameters": [
-          {
-            "name": "page",
-            "required": false,
-            "in": "query",
-            "description": "Page number (default: 1)",
-            "schema": { "type": "number" }
-          },
-          {
-            "name": "limit",
-            "required": false,
-            "in": "query",
-            "description": "Items per page (default: 20)",
-            "schema": { "type": "number" }
-          }
-        ],
+        "parameters": [{ "name": "allTime", "required": false, "in": "query", "schema": { "type": "boolean" } }],
         "responses": {
           "200": {
             "description": "",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PaginatedTopMentorsDto" } } }
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/TopMentorDto" } }
+              }
+            }
           }
         },
         "summary": "",
@@ -5920,6 +5909,14 @@
         "type": "object",
         "properties": { "description": { "type": "string" }, "userId": { "type": "number" } }
       },
+      "MentorCourseStatsDto": {
+        "type": "object",
+        "properties": {
+          "courseName": { "type": "string", "description": "Name of the course" },
+          "studentsCount": { "type": "number", "description": "Number of certified students mentored in this course" }
+        },
+        "required": ["courseName", "studentsCount"]
+      },
       "TopMentorDto": {
         "type": "object",
         "properties": {
@@ -5930,25 +5927,10 @@
           "courseStats": {
             "description": "Student counts per course",
             "type": "array",
-            "items": { "$ref": "#/components/schemas/CourseStatsDto" }
+            "items": { "$ref": "#/components/schemas/MentorCourseStatsDto" }
           }
         },
         "required": ["rank", "githubId", "name", "totalStudents", "courseStats"]
-      },
-      "PaginatedTopMentorsDto": {
-        "type": "object",
-        "properties": {
-          "items": {
-            "description": "List of top mentors",
-            "type": "array",
-            "items": { "$ref": "#/components/schemas/TopMentorDto" }
-          },
-          "pagination": {
-            "description": "Pagination metadata",
-            "allOf": [{ "$ref": "#/components/schemas/PaginationDto" }]
-          }
-        },
-        "required": ["items", "pagination"]
       },
       "AuthUserDto": {
         "type": "object",

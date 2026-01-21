@@ -1,33 +1,42 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Col, Empty, Flex, Row, Space, Spin, Typography } from 'antd';
+import { Col, Empty, Flex, Row, Segmented, Space, Spin, Typography } from 'antd';
 import { TrophyOutlined } from '@ant-design/icons';
+import { TopMentorDto } from 'api';
 import { MentorCard } from '../components/MentorCard/MentorCard';
 import { MentorsHallOfFameService } from '../services/mentors-hall-of-fame.service';
-import { TopMentor } from '../types';
 
 const { Title, Paragraph } = Typography;
 
 const service = new MentorsHallOfFameService();
 
+type TimePeriod = 'lastYear' | 'allTime';
+
 export function MentorsHallOfFamePage() {
-  const [mentors, setMentors] = useState<TopMentor[]>([]);
+  const [mentors, setMentors] = useState<TopMentorDto[]>([]);
   const [loading, setLoading] = useState(true);
+  const [timePeriod, setTimePeriod] = useState<TimePeriod>('lastYear');
+
+  const allTime = timePeriod === 'allTime';
 
   const fetchMentors = useCallback(async () => {
     setLoading(true);
     try {
-      const data: TopMentor[] = await service.getTopMentors();
+      const data = await service.getTopMentors(allTime);
       setMentors(data);
     } catch (error) {
       console.error('Failed to fetch top mentors:', error);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [allTime]);
 
   useEffect(() => {
     fetchMentors();
   }, [fetchMentors]);
+
+  const description = allTime
+    ? 'Celebrating our top mentors who guided the most students to receive certificates'
+    : 'Celebrating our top mentors who guided the most students to receive certificates in the last year';
 
   return (
     <Flex justify="center" style={{ padding: 24 }}>
@@ -38,8 +47,16 @@ export function MentorsHallOfFamePage() {
             Mentors Hall of Fame
           </Title>
           <Paragraph type="secondary" style={{ fontSize: 16, margin: 0, textAlign: 'center' }}>
-            Celebrating our top 10 mentors who guided the most students to receive certificates in the last year
+            {description}
           </Paragraph>
+          <Segmented
+            options={[
+              { label: 'Last Year', value: 'lastYear' },
+              { label: 'All Time', value: 'allTime' },
+            ]}
+            value={timePeriod}
+            onChange={value => setTimePeriod(value as TimePeriod)}
+          />
         </Flex>
 
         {loading ? (

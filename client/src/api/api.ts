@@ -4256,6 +4256,25 @@ export interface LeaveCourseRequestDto {
 /**
  * 
  * @export
+ * @interface MentorCourseStatsDto
+ */
+export interface MentorCourseStatsDto {
+    /**
+     * Name of the course
+     * @type {string}
+     * @memberof MentorCourseStatsDto
+     */
+    'courseName': string;
+    /**
+     * Number of certified students mentored in this course
+     * @type {number}
+     * @memberof MentorCourseStatsDto
+     */
+    'studentsCount': number;
+}
+/**
+ * 
+ * @export
  * @interface MentorDashboardDto
  */
 export interface MentorDashboardDto {
@@ -5038,25 +5057,6 @@ export interface Organizer {
      * @memberof Organizer
      */
     'id': number;
-}
-/**
- * 
- * @export
- * @interface PaginatedTopMentorsDto
- */
-export interface PaginatedTopMentorsDto {
-    /**
-     * List of top mentors
-     * @type {Array<TopMentorDto>}
-     * @memberof PaginatedTopMentorsDto
-     */
-    'items': Array<TopMentorDto>;
-    /**
-     * Pagination metadata
-     * @type {PaginationDto}
-     * @memberof PaginatedTopMentorsDto
-     */
-    'pagination': PaginationDto;
 }
 /**
  * 
@@ -7046,10 +7046,10 @@ export interface TopMentorDto {
     'totalStudents': number;
     /**
      * Student counts per course
-     * @type {Array<CourseStatsDto>}
+     * @type {Array<MentorCourseStatsDto>}
      * @memberof TopMentorDto
      */
-    'courseStats': Array<CourseStatsDto>;
+    'courseStats': Array<MentorCourseStatsDto>;
 }
 /**
  * 
@@ -16521,12 +16521,11 @@ export const MentorsHallOfFameApiAxiosParamCreator = function (configuration?: C
     return {
         /**
          * 
-         * @param {number} [page] Page number (default: 1)
-         * @param {number} [limit] Items per page (default: 20)
+         * @param {boolean} [allTime] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTopMentors: async (page?: number, limit?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getTopMentors: async (allTime?: boolean, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/mentors-hall-of-fame`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -16539,12 +16538,8 @@ export const MentorsHallOfFameApiAxiosParamCreator = function (configuration?: C
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            if (page !== undefined) {
-                localVarQueryParameter['page'] = page;
-            }
-
-            if (limit !== undefined) {
-                localVarQueryParameter['limit'] = limit;
+            if (allTime !== undefined) {
+                localVarQueryParameter['allTime'] = allTime;
             }
 
 
@@ -16570,13 +16565,12 @@ export const MentorsHallOfFameApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {number} [page] Page number (default: 1)
-         * @param {number} [limit] Items per page (default: 20)
+         * @param {boolean} [allTime] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTopMentors(page?: number, limit?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedTopMentorsDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getTopMentors(page, limit, options);
+        async getTopMentors(allTime?: boolean, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TopMentorDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getTopMentors(allTime, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -16591,13 +16585,12 @@ export const MentorsHallOfFameApiFactory = function (configuration?: Configurati
     return {
         /**
          * 
-         * @param {number} [page] Page number (default: 1)
-         * @param {number} [limit] Items per page (default: 20)
+         * @param {boolean} [allTime] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTopMentors(page?: number, limit?: number, options?: any): AxiosPromise<PaginatedTopMentorsDto> {
-            return localVarFp.getTopMentors(page, limit, options).then((request) => request(axios, basePath));
+        getTopMentors(allTime?: boolean, options?: any): AxiosPromise<Array<TopMentorDto>> {
+            return localVarFp.getTopMentors(allTime, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -16611,14 +16604,13 @@ export const MentorsHallOfFameApiFactory = function (configuration?: Configurati
 export class MentorsHallOfFameApi extends BaseAPI {
     /**
      * 
-     * @param {number} [page] Page number (default: 1)
-     * @param {number} [limit] Items per page (default: 20)
+     * @param {boolean} [allTime] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MentorsHallOfFameApi
      */
-    public getTopMentors(page?: number, limit?: number, options?: AxiosRequestConfig) {
-        return MentorsHallOfFameApiFp(this.configuration).getTopMentors(page, limit, options).then((request) => request(this.axios, this.basePath));
+    public getTopMentors(allTime?: boolean, options?: AxiosRequestConfig) {
+        return MentorsHallOfFameApiFp(this.configuration).getTopMentors(allTime, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

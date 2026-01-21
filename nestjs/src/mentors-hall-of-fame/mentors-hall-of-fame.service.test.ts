@@ -239,5 +239,29 @@ describe('MentorsHallOfFameService', () => {
       const reactCourse = result[0]?.courseStats.find(s => s.courseName === 'React Course');
       expect(reactCourse?.studentsCount).toBe(1);
     });
+
+    it('applies date filter when allTime is false (default)', async () => {
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mockMentorData);
+
+      await service.getTopMentors();
+
+      expect(mockQueryBuilder.where).toHaveBeenCalledWith('certificate.issueDate >= :oneYearAgo', expect.any(Object));
+    });
+
+    it('applies date filter when allTime is explicitly false', async () => {
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mockMentorData);
+
+      await service.getTopMentors(false);
+
+      expect(mockQueryBuilder.where).toHaveBeenCalledWith('certificate.issueDate >= :oneYearAgo', expect.any(Object));
+    });
+
+    it('does not apply date filter when allTime is true', async () => {
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mockMentorData);
+
+      await service.getTopMentors(true);
+
+      expect(mockQueryBuilder.where).not.toHaveBeenCalled();
+    });
   });
 });

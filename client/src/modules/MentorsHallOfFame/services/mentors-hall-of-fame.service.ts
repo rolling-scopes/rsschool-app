@@ -1,9 +1,10 @@
-import axios from 'axios';
-import { TopMentor } from '../types';
+import { MentorsHallOfFameApi, TopMentorDto } from 'api';
+
+const mentorsHallOfFameApi = new MentorsHallOfFameApi();
 
 export class MentorsHallOfFameService {
-  async getTopMentors(): Promise<TopMentor[]> {
-    const response = await axios.get<TopMentor[]>('/api/v2/mentors-hall-of-fame');
-    return response.data;
+  async getTopMentors(allTime = false): Promise<TopMentorDto[]> {
+    const { data } = await mentorsHallOfFameApi.getTopMentors(allTime);
+    return data;
   }
 }

@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
+import { TopMentorDto } from 'api';
 import { MentorCard } from './MentorCard';
-import { TopMentor } from '../../types';
 
 jest.mock('next/config', () => () => ({}));
 
-const mockMentor: TopMentor = {
+const mockMentor: TopMentorDto = {
   rank: 1,
   githubId: 'testmentor',
   name: 'Test Mentor',
@@ -56,7 +56,7 @@ describe('MentorCard', () => {
   });
 
   it('handles empty course stats gracefully', () => {
-    const mentorWithoutCourseStats: TopMentor = {
+    const mentorWithoutCourseStats: TopMentorDto = {
       ...mockMentor,
       courseStats: [],
     };
