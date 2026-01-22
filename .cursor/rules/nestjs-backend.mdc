@@ -1,0 +1,128 @@
+---
+description: NestJS backend patterns for RS School App API
+globs: nestjs/**/*.ts
+alwaysApply: false
+---
+
+# RS App NestJS Backend Patterns
+
+## Module Structure
+
+```
+nestjs/src/<domain>/
+  <domain>.module.ts       # Module definition
+  <domain>.controller.ts   # HTTP endpoints
+  <domain>.service.ts      # Business logic
+  dto/
+    index.ts               # Barrel exports
+    <entity>.dto.ts        # Response DTO
+    create-<entity>.dto.ts # Input DTO with validation
+    update-<entity>.dto.ts # Partial input (extends create)
+```
+
+## Do's
+
+### Controllers
+- Add `@ApiTags('domain')` to controller class
+- Add `@ApiOperation({ operationId: 'verbNoun' })` to every endpoint
+- Add `@ApiOkResponse({ type: DtoClass })` for type safety
+- Use `ParseIntPipe` for numeric params: `@Param('id', ParseIntPipe)`
+- Transform entities to DTOs before returning
+- Keep controllers thin - delegate business logic to services
+
+### Guards & Roles
+- `@UseGuards(DefaultGuard)` - authenticated users
+- `@UseGuards(DefaultGuard, RoleGuard)` + `@RequiredRoles([...])` - role-based
+- Use `Role.Admin`, `CourseRole.Manager` enums, not strings
+
+### Services
+- Inject repositories: `@InjectRepository(Entity)`
+- Use `findOneOrFail` / `findOneByOrFail` when entity must exist
+- Keep services focused on single domain
+- Reuse services across controllers via module exports
+
+### DTOs
+- Response DTO: constructor takes entity, maps to properties
+- Input DTO: validation decorators (`@IsNotEmpty`, `@IsString`, etc.)
+- Update DTO: `extends PartialType(CreateDto)`
+- All properties need `@ApiProperty()` for OpenAPI
+
+### Validation Decorators
+- Required: `@IsNotEmpty()` + type decorator
+- Optional: `@IsOptional()` + type decorator
+- Arrays: `@IsArray()` + `@IsNumber({}, { each: true })`
+- Enums: `@IsEnum(EnumType)`
+
+### Error Handling
+- `NotFoundException` - entity not found
+- `ForbiddenException` - no permission
+- `BadRequestException` - invalid input
+- Include context in error messages: `Entity with id ${id} not found`
+
+### Logging
+- Use NestJS Logger for structured logging
+- Include relevant context (userId, courseId) in log messages, avoid logging sensitive data
+
+## Don'ts
+
+```typescript
+// ❌ Return raw entities (exposes internal structure)
+@Get('/')
+async getAll() {
+  return this.repository.find();
+}
+// ✅ Transform to DTOs
+@Get('/')
+async getAll() {
+  const items = await this.repository.find();
+  return items.map(i => new ItemDto(i));
+}
+
+// ❌ Business logic in controller
+@Post('/')
+async create(@Body() dto: CreateDto) {
+  const exists = await this.repo.findOneBy({ name: dto.name });
+  if (exists) throw new BadRequestException();
+  // ... more logic
+}
+// ✅ Delegate to service
+@Post('/')
+async create(@Body() dto: CreateDto) {
+  return new ItemDto(await this.service.create(dto));
+}
+
+// ❌ Missing operationId (breaks client generation)
+@ApiOperation({ summary: 'Get items' })
+// ✅ Always include operationId
+@ApiOperation({ operationId: 'getItems' })
+
+// ❌ String literals for roles
+@RequiredRoles(['admin', 'manager'])
+// ✅ Enum values
+@RequiredRoles([Role.Admin, CourseRole.Manager])
+
+// ❌ DTO without validation
+export class CreateDto {
+  name: string;
+}
+// ✅ Add validation + ApiProperty
+export class CreateDto {
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty()
+  name: string;
+}
+
+// ❌ Generic error messages
+throw new NotFoundException('Not found');
+// ✅ Include context
+throw new NotFoundException(`Course with id ${id} not found`);
+
+// ❌ Import entities directly from server/
+import { Course } from '../../../server/src/models/course';
+// ✅ Use alias
+import { Course } from '@entities/course';
+
+// ❌ Write new endpoints in server/ (deprecated)
+// ✅ All new API code goes in nestjs/
+```

@@ -1,0 +1,106 @@
+---
+description: Project-wide TypeScript conventions and patterns for RS School App
+globs: **/*.ts, **/*.tsx
+alwaysApply: false
+---
+
+# RS App General Conventions
+
+## Project Structure
+
+- `client/` - Next.js frontend (active)
+- `nestjs/` - NestJS backend (active)
+- `server/` - TypeORM entities only (backend code deprecated)
+- `tmp/` - temporary files during development (gitignored)
+
+## Path Aliases
+
+| Alias | Resolves To | Used In |
+|-------|-------------|---------|
+| `@entities/*` | `server/src/models/*` | nestjs |
+| `@client/*` | `client/src/*` | client |
+| `@common/*` | `common/*` | deprecated |
+
+## File Naming
+
+| Type | Pattern | Example |
+|------|---------|---------|
+| Component | PascalCase.tsx | `CourseCard.tsx` |
+| Hook | camelCase.tsx | `useActiveCourse.tsx` |
+| Service | kebab-case.ts | `courses.service.ts` |
+| DTO | kebab-case.dto.ts | `create-course.dto.ts` |
+| Test | *.test.ts(x) | `auth.service.test.ts` |
+| Module | kebab-case.module.ts | `courses.module.ts` |
+| Entity | camelCase.ts | `course.ts` |
+| CSS Module | *.module.css | `Card.module.css` |
+
+## Do's
+
+### TypeScript
+- Prefer `unknown` over `any` for truly unknown types
+- Use utility types (`Pick`, `Omit`, `Partial`) instead of manual type construction
+- Specify return types for public functions explicitly
+- Use `readonly` modifier for data that should not be mutated
+- Treat function arguments as immutable - avoid mutations
+- Use `const` by default, `let` only when reassignment is needed
+- Handle `noUncheckedIndexedAccess`: always check `array[0]` for undefined
+- Prefix unused variables with underscore: `_unused`
+
+### Code Style
+- Keep functions small and focused on single responsibility
+- Return early to reduce nesting depth
+- Avoid obvious comments - explain why, not what
+- Use `async/await` over `.then()` chains
+- Use `Promise.all()` for parallel async operations
+
+### Imports
+- Order: external packages → internal aliases → relative imports
+- Use barrel exports via `index.ts`
+- Use path aliases for cross-directory imports
+
+### Error Handling
+- Use try-catch in async functions instead of `.catch()`
+- Create domain-specific error classes when appropriate
+- Include context in error messages
+
+## Don'ts
+
+```typescript
+// ❌ Use any
+function bad(data: any) { }
+// ✅ Use unknown or specific type
+function good(data: string) { }
+
+// ❌ Mutate arguments
+function bad(arr: number[]) { arr.push(1); }
+// ✅ Return new value
+function good(arr: number[]) { return [...arr, 1]; }
+
+// ❌ Manual type construction
+type Bad = { id: number; name: string; }
+// ✅ Use utility types when extending
+type Good = Pick<User, 'id' | 'name'>;
+
+// ❌ Deep relative imports
+import { X } from '../../../server/src/models/x';
+// ✅ Use aliases
+import { X } from '@entities/x';
+
+// ❌ else after return
+if (cond) { return a; } else { return b; }
+// ✅ Early return
+if (cond) { return a; }
+return b;
+
+// ❌ Use unneeded let
+let y = 2; // never reassigned
+// ✅ Use const
+const x = 1;
+const y = 2;
+
+// ❌ Import from common/ (deprecated)
+import { x } from '@common/types';
+
+// ❌ Write new backend code in server/
+// ✅ Use nestjs/ for all new API endpoints
+```

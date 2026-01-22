@@ -1,0 +1,157 @@
+---
+description: AWS CDK infrastructure patterns for RS School App deployment
+globs: setup/cdk/**/*.ts
+alwaysApply: false
+---
+
+# RS App AWS CDK Patterns
+
+## Project Structure
+
+CDK infrastructure lives in `setup/cdk/`:
+- `App.ts` - CDK app entry point
+- `Stack.ts` - Main stack definition
+- `*Construct.ts` - Reusable constructs
+
+## Do's
+
+### Environment Configuration
+
+- Use `process.env` with defaults for optional values
+- Fail fast for required env vars (throw Error if missing)
+- Never hardcode AWS account IDs or regions, as well as credentials
+
+### Construct Design
+
+- Extend `Construct` for reusable components
+- Extend `cdk.StackProps` with custom properties for stacks
+- Use `type` instead of `interface` for props
+
+### Resource Naming
+
+- Use descriptive construct IDs: `NextjsHandler`, `ApiGateway`
+- Prefix stack names with feature/environment: `rsschool-${feature}`
+
+### Lambda Functions
+
+- Always set explicit `timeout` (default 3s is often too short)
+- Always set `memorySize` based on workload requirements
+- Use Docker-based Lambda for Next.js and NestJS apps
+- Reference ECR repositories by name with `Repository.fromRepositoryName()`
+
+### Logging
+
+- Always configure `LogRetention` (default is never expire)
+- Use `logs.RetentionDays.TWO_WEEKS` for non-production
+- Use longer retention for production audit logs
+
+### IAM
+
+- Follow least privilege principle
+- Scope resource ARNs when possible (avoid `*`)
+- Use specific actions, not wildcard `*`
+
+### CloudFront
+
+- Configure cache policies explicitly
+- Use separate behaviors for API routes (`/api/*`, `/api/v2/*`)
+- Import existing certificates with `Certificate.fromCertificateArn()`
+
+### Outputs
+
+- Use `CfnOutput` for important URLs and IDs
+- Use `exportName` for cross-stack references
+
+## Don'ts
+
+### Environment
+
+```typescript
+// ❌ Hardcoded values
+env: { account: '123456789', region: 'us-east-1' }
+
+// ✅ Environment variables
+env: {
+  account: process.env.CDK_DEFAULT_ACCOUNT,
+  region: process.env.CDK_DEFAULT_REGION,
+}
+```
+
+### IAM Permissions
+
+```typescript
+// ❌ Overly permissive
+actions: ['*'],
+resources: ['*'],
+
+// ✅ Least privilege
+actions: ['lambda:UpdateFunctionCode'],
+resources: [fn.functionArn],
+```
+
+### Logging
+
+```typescript
+// ❌ No log retention (never expires, high cost)
+new lambda.Function(this, 'Fn', { ... });
+
+// ✅ Explicit retention
+new logs.LogRetention(this, 'LogRetention', {
+  logGroupName: fn.logGroup.logGroupName,
+  retention: logs.RetentionDays.TWO_WEEKS,
+});
+```
+
+### Construct IDs
+
+```typescript
+// ❌ Generic IDs
+new lambda.Function(this, 'Function1', { ... });
+new lambda.Function(this, 'Function2', { ... });
+
+// ✅ Descriptive IDs
+new lambda.Function(this, 'NextjsHandler', { ... });
+new lambda.Function(this, 'ApiHandler', { ... });
+```
+
+### Importing Resources
+
+```typescript
+// ❌ Creating new resources when they exist
+new ecr.Repository(this, 'Repo', { repositoryName: 'existing-repo' });
+
+// ✅ Import existing
+Repository.fromRepositoryName(this, 'Repo', 'existing-repo');
+```
+
+### Props
+
+```typescript
+// ❌ Using interface with optional chaining everywhere
+interface Props { feature?: string }
+
+// ✅ Use type with required fields, optional where appropriate
+type Props = cdk.StackProps & {
+  feature: string;
+  deployId: string;
+  memorySize?: number;  // Optional with sensible default
+};
+```
+
+## Key Patterns
+
+### HTTP API with Lambda Integration
+
+- Use `HttpApi` (v2) not REST API
+
+### CloudFront Distribution
+
+- Default behavior for frontend (Next.js)
+- Additional behaviors for API paths
+- Use `OriginProtocolPolicy.HTTPS_ONLY`
+
+### Custom Resources for Updates
+
+- Use `AwsCustomResource` for operations not supported by CloudFormation
+- Set `physicalResourceId` to trigger updates on deploy
+- Add explicit dependencies with `node.addDependency()`
