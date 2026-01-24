@@ -1,7 +1,8 @@
 import { DataSourceOptions } from 'typeorm';
 import * as path from 'path';
-import { models } from '@entities/index';
+import { models as baseModels } from '@entities/index';
 import { migrations } from './migrations';
+import { models as nestModels } from './models';
 
 const config: DataSourceOptions = {
   type: 'postgres',
@@ -15,9 +16,9 @@ const config: DataSourceOptions = {
   username: process.env.RSSHCOOL_PG_USERNAME,
   password: process.env.RSSHCOOL_PG_PASSWORD,
   database: process.env.RSSHCOOL_PG_DATABASE,
-  entities: models,
+  entities: [...baseModels, ...nestModels],
   migrations,
-  synchronize: false,
+  synchronize: process.env.NODE_ENV !== 'production',
   migrationsRun: false,
   subscribers: [path.resolve(__dirname, '**/*.subscriber.*')],
   logging: ['migration', 'error', 'warn'],
