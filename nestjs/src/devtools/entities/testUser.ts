@@ -3,20 +3,26 @@ import { BeforeInsert, BeforeUpdate, Column, Entity, Index, PrimaryGeneratedColu
 @Entity()
 @Unique(['github'])
 export class TestUser {
-  @PrimaryGeneratedColumn() id: number;
+  @PrimaryGeneratedColumn('uuid') id: string;
+
+  @Column({ default: 'testUser' })
+  provider: string;
 
   @Column({ name: 'github', unique: true })
   @Index({ unique: true })
   github: string;
 
-  @Column()
-  email: string;
+  @Column({ nullable: true })
+  email?: string;
 
-  @Column()
-  firstName: string;
+  @Column({ nullable: true })
+  firstName?: string;
 
-  @Column()
-  lastName: string;
+  @Column({ nullable: true })
+  lastName?: string;
+
+  @Column({ default: false })
+  isAdmin: boolean;
 
   @BeforeInsert()
   beforeInsert?() {
