@@ -1,6 +1,7 @@
 import { DataSourceOptions } from 'typeorm';
 import * as path from 'path';
 import { models } from '@entities/index';
+import { CourseLeaveSurveyResponse } from './entities/course-leave-survey-response.entity';
 import { migrations } from './migrations';
 
 const config: DataSourceOptions = {
@@ -15,7 +16,7 @@ const config: DataSourceOptions = {
   username: process.env.RSSHCOOL_PG_USERNAME,
   password: process.env.RSSHCOOL_PG_PASSWORD,
   database: process.env.RSSHCOOL_PG_DATABASE,
-  entities: models,
+  entities: [...models, CourseLeaveSurveyResponse],
   migrations,
   synchronize: false,
   migrationsRun: false,

@@ -72,7 +72,7 @@ import { CourseStudentsService } from './course-students/course-students.service
 import { MentorReviewsController, MentorReviewsService } from './mentor-reviews';
 import { ConfigModule } from '../config';
 import { ExpelledStatsService } from './expelled-stats.service';
-import { CourseLeaveSurveyResponse } from './entities/course-leave-survey-response.entity';
+import { CourseLeaveSurveyResponse } from '../entities/course-leave-survey-response.entity';
 
 @Module({
   imports: [

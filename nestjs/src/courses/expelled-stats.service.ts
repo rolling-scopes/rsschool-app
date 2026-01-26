@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CourseLeaveSurveyResponse } from './entities/course-leave-survey-response.entity';
+import { CourseLeaveSurveyResponse } from '../entities/course-leave-survey-response.entity';
 
 @Injectable()
 export class ExpelledStatsService {
