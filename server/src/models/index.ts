@@ -1,3 +1,4 @@
+import { CourseLeaveSurveyResponse } from './course-leave-survey-response.entity';
 import { Alert, AlertType } from './alert';
 import { Certificate } from './certificate';
 import { Contributor } from './contributor';
@@ -58,6 +59,7 @@ export {
   CourseManager,
   CourseTask,
   CourseUser,
+  CourseLeaveSurveyResponse,
   Discipline,
   DiscordServer,
   Event,
@@ -108,6 +110,7 @@ export const models = [
   CourseManager,
   CourseTask,
   CourseUser,
+  CourseLeaveSurveyResponse,
   Discipline,
   DiscordServer,
   Event,
