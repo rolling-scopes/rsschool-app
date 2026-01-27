@@ -127,5 +127,5 @@ export const migrations = [
   CoursePersonalMentoringDates1738250779923,
   CourseTaskInterviewCreatingPairs1747380525126,
   Course1746467689328,
-  AddCourseLeaveSurveyResponse1769437695838
+  AddCourseLeaveSurveyResponse1769437695838,
 ];
