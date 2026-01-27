@@ -63,8 +63,6 @@ import { CourseTaskInterviewCreatingPairs1747380525126 } from './1747380525126-C
 import { Course1746467689328 } from './1746467689328-Course';
 import { AddCourseLeaveSurveyResponse1760699701354 } from './1760699701354-AddCourseLeaveSurveyResponse';
 
-
-
 export const migrations = [
   UserMigration1630340371992,
   TaskResult1630341383942,
