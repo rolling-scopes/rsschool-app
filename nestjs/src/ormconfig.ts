@@ -17,7 +17,7 @@ const config: DataSourceOptions = {
   database: process.env.RSSHCOOL_PG_DATABASE,
   entities: models,
   migrations,
-  synchronize: process.env.NODE_ENV !== 'production',
+  synchronize: false,
   migrationsRun: false,
   subscribers: [path.resolve(__dirname, '**/*.subscriber.*')],
   logging: ['migration', 'error', 'warn'],
