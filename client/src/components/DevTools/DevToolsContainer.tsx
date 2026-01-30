@@ -2,8 +2,7 @@ import { Button, Card, FloatButton } from 'antd';
 import { CSSProperties, ReactNode, useState } from 'react';
 import { BugOutlined, CloseOutlined } from '@ant-design/icons';
 import DevToolsUsers from '@client/components/DevTools/DevToolsUsers';
-import DevToolsCurrentUser
-  from '@client/components/DevTools/DevToolsCurrentUser';
+import DevToolsCurrentUser from '@client/components/DevTools/DevToolsCurrentUser';
 
 const STYLE: CSSProperties = {
   position: 'fixed',
@@ -43,24 +42,14 @@ export function DevToolsContainer({ children }: { children?: ReactNode }) {
     <>
       {children}
       {!visible ? (
-        <FloatButton
-          shape="circle"
-          type="primary"
-          icon={<BugOutlined />}
-          onClick={toggleVisible}
-          style={STYLE}
-        />
+        <FloatButton shape="circle" type="primary" icon={<BugOutlined />} onClick={toggleVisible} style={STYLE} />
       ) : (
         <Card
           title="Dev tools"
           tabList={TABS}
           activeTabKey={activeTab}
           onTabChange={onTabChange}
-          extra={<Button
-            type="link"
-            icon={<CloseOutlined />}
-            onClick={toggleVisible}
-          />}
+          extra={<Button type="link" icon={<CloseOutlined />} onClick={toggleVisible} />}
           style={{
             ...STYLE,
             minWidth: '30rem',
