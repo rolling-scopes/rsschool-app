@@ -21,11 +21,10 @@ export class DevtoolsController {
     return this.devtoolsService.getUserById({ id });
   }
 
-  @Get('user/:id/login')
+  @Get('user/:githubId/login')
   @ApiOperation({ operationId: 'getDevUserLogin' })
   @ApiOkResponse()
-  async getDevUserLogin(@Param('id') id: number) {
-    console.log('LOGIN WITH GITHUB', id);
-    return null;
+  async getDevUserLogin(@Param('githubId') githubId: string) {
+    return this.devtoolsService.getDevUserLogin({ githubId });
   }
 }

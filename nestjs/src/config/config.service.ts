@@ -115,4 +115,8 @@ export class ConfigService {
 
     this.env = conf.get('RS_ENV') === 'staging' ? 'staging' : this.isDev ? 'local' : 'prod';
   }
+
+  authWithDevUser(username: string) {
+    this.auth.dev.username = username;
+  }
 }
