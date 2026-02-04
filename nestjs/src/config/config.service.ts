@@ -117,6 +117,9 @@ export class ConfigService {
   }
 
   authWithDevUser(username: string) {
+    if (!this.isDev) {
+      return;
+    }
     this.auth.dev.username = username;
   }
 }
