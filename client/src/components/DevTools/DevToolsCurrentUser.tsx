@@ -1,10 +1,17 @@
-import { Flex, Typography } from 'antd';
+import { Flex } from 'antd';
+import { useContext } from 'react';
+import { SessionContext } from '@client/modules/Course/contexts';
 
 export default function DevToolsCurrentUser() {
-  const userId = 123456789;
+  const session = useContext(SessionContext);
   return (
-    <Flex>
-      <Typography.Text>Current user: {userId}</Typography.Text>
+    <Flex vertical>
+      <ul>
+        <li>User ID: {session.id}</li>
+        <li>GitHub ID: {session.githubId}</li>
+        <li>Admin: {session.isAdmin ? 'true' : 'false'}</li>
+        <li>Courses: {Object.keys(session.courses).toString()}</li>
+      </ul>
     </Flex>
   );
 }
