@@ -74,24 +74,48 @@ describe('MentorsHallOfFameService', () => {
   });
 
   describe('getTopMentors', () => {
+    it('returns empty array when cache is empty', () => {
+      const result = service.getTopMentors();
+
+      expect(result).toEqual([]);
+    });
+  });
+
+  describe('refreshCache', () => {
     it('returns empty array when no mentors found', async () => {
-      mockQueryBuilder.getRawMany.mockResolvedValueOnce([]);
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce([]).mockResolvedValueOnce([]);
 
-      const result = await service.getTopMentors();
+      await service.refreshCache();
 
+      const result = service.getTopMentors();
       expect(result).toEqual([]);
     });
 
     it('returns mentors sorted by total certified students count DESC', async () => {
-      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mockMentorData);
+      const allTimeMentors = [
+        {
+          odtGithubId: 'mentor3',
+          odtFirstName: 'Alex',
+          odtLastName: 'Brown',
+          totalStudents: '12',
+          totalGratitudes: '7',
+          courseStatsRaw: [],
+        },
+      ];
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mockMentorData).mockResolvedValueOnce(allTimeMentors);
 
-      const result = await service.getTopMentors();
+      await service.refreshCache();
+
+      const result = service.getTopMentors();
+      const allTimeResult = service.getTopMentors(true);
 
       expect(result.length).toBe(2);
       expect(result[0]?.githubId).toBe('mentor1');
       expect(result[0]?.totalStudents).toBe(10);
       expect(result[1]?.githubId).toBe('mentor2');
       expect(result[1]?.totalStudents).toBe(5);
+      expect(allTimeResult.length).toBe(1);
+      expect(allTimeResult[0]?.githubId).toBe('mentor3');
     });
 
     it('assigns sequential ranks to mentors', async () => {
@@ -122,9 +146,11 @@ describe('MentorsHallOfFameService', () => {
         },
       ];
 
-      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mentorsWithTies);
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mentorsWithTies).mockResolvedValueOnce([]);
 
-      const result = await service.getTopMentors();
+      await service.refreshCache();
+
+      const result = service.getTopMentors();
 
       // Sequential ranking: each mentor gets their position as rank
       expect(result[0]?.rank).toBe(1);
@@ -145,9 +171,11 @@ describe('MentorsHallOfFameService', () => {
         });
       }
 
-      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mentorsData);
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mentorsData).mockResolvedValueOnce([]);
 
-      const result = await service.getTopMentors();
+      await service.refreshCache();
+
+      const result = service.getTopMentors();
 
       // Should return only first 100 mentors
       expect(result.length).toBe(100);
@@ -180,9 +208,11 @@ describe('MentorsHallOfFameService', () => {
         });
       }
 
-      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mentorsData);
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mentorsData).mockResolvedValueOnce([]);
 
-      const result = await service.getTopMentors();
+      await service.refreshCache();
+
+      const result = service.getTopMentors();
 
       // Should include all 5 mentors with count=50 at the boundary
       expect(result.length).toBe(104);
@@ -191,9 +221,11 @@ describe('MentorsHallOfFameService', () => {
     });
 
     it('aggregates course stats per mentor correctly', async () => {
-      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mockMentorData);
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mockMentorData).mockResolvedValueOnce([]);
 
-      const result = await service.getTopMentors();
+      await service.refreshCache();
+
+      const result = service.getTopMentors();
 
       const mentor1 = result[0];
       expect(mentor1?.courseStats.length).toBe(2);
@@ -206,9 +238,11 @@ describe('MentorsHallOfFameService', () => {
     });
 
     it('formats mentor name from firstName and lastName', async () => {
-      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mockMentorData);
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mockMentorData).mockResolvedValueOnce([]);
 
-      const result = await service.getTopMentors();
+      await service.refreshCache();
+
+      const result = service.getTopMentors();
 
       expect(result[0]?.name).toBe('John Doe');
       expect(result[1]?.name).toBe('Jane Smith');
@@ -226,9 +260,11 @@ describe('MentorsHallOfFameService', () => {
         },
       ];
 
-      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mentorWithoutName);
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mentorWithoutName).mockResolvedValueOnce([]);
 
-      const result = await service.getTopMentors();
+      await service.refreshCache();
+
+      const result = service.getTopMentors();
 
       expect(result[0]?.name).toBe('anonymousMentor');
     });
@@ -250,9 +286,11 @@ describe('MentorsHallOfFameService', () => {
         },
       ];
 
-      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mentorWithDuplicates);
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mentorWithDuplicates).mockResolvedValueOnce([]);
 
-      const result = await service.getTopMentors();
+      await service.refreshCache();
+
+      const result = service.getTopMentors();
 
       expect(result[0]?.totalStudents).toBe(3);
       const jsCourse = result[0]?.courseStats.find(s => s.courseName === 'JS Course');
@@ -262,27 +300,25 @@ describe('MentorsHallOfFameService', () => {
     });
 
     it('applies date filter when allTime is false (default)', async () => {
-      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mockMentorData);
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mockMentorData).mockResolvedValueOnce(mockMentorData);
 
-      await service.getTopMentors();
-
-      expect(mockQueryBuilder.where).toHaveBeenCalledWith('certificate.issueDate >= :oneYearAgo', expect.any(Object));
-    });
-
-    it('applies date filter when allTime is explicitly false', async () => {
-      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mockMentorData);
-
-      await service.getTopMentors(false);
+      await service.refreshCache();
 
       expect(mockQueryBuilder.where).toHaveBeenCalledWith('certificate.issueDate >= :oneYearAgo', expect.any(Object));
+      expect(mockQueryBuilder.where).toHaveBeenCalledTimes(1);
     });
 
-    it('does not apply date filter when allTime is true', async () => {
-      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mockMentorData);
+    it('logs and keeps cache unchanged when refresh fails', async () => {
+      const loggerErrorSpy = jest.spyOn(
+        (service as unknown as { logger: { error: (message: string, error: unknown) => void } }).logger,
+        'error',
+      );
+      mockQueryBuilder.getRawMany.mockRejectedValueOnce(new Error('db failed'));
 
-      await service.getTopMentors(true);
+      await service.refreshCache();
 
-      expect(mockQueryBuilder.where).not.toHaveBeenCalled();
+      expect(loggerErrorSpy).toHaveBeenCalledWith('Failed to refresh cache', expect.any(Error));
+      expect(service.getTopMentors()).toEqual([]);
     });
   });
 });

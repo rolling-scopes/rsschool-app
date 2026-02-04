@@ -1,17 +1,51 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Cron } from '@nestjs/schedule';
 import { Repository } from 'typeorm';
 import { Feedback, Mentor, Student, Certificate, Course, User } from '@entities/index';
 import { MentorCourseStatsDto, TopMentorDto } from './dto';
 
+const ONCE_A_DAY_AT_01_00 = '0 1 * * *';
+
 @Injectable()
-export class MentorsHallOfFameService {
+export class MentorsHallOfFameService implements OnModuleInit {
+  private readonly logger = new Logger(MentorsHallOfFameService.name);
+
+  private readonly cache = new Map<boolean, TopMentorDto[]>();
+
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
 
-  public async getTopMentors(allTime = false): Promise<TopMentorDto[]> {
+  public async onModuleInit(): Promise<void> {
+    await this.refreshCache();
+  }
+
+  @Cron(ONCE_A_DAY_AT_01_00, { timeZone: 'UTC' })
+  public async refreshCache(): Promise<void> {
+    this.logger.log('Refreshing mentors hall of fame cache...');
+
+    try {
+      const [lastYear, allTime] = await Promise.all([
+        this.fetchTopMentorsFromDb(false),
+        this.fetchTopMentorsFromDb(true),
+      ]);
+
+      this.cache.set(false, lastYear);
+      this.cache.set(true, allTime);
+
+      this.logger.log(`Cache refreshed: ${lastYear.length} mentors (last year), ${allTime.length} mentors (all time)`);
+    } catch (error) {
+      this.logger.error('Failed to refresh cache', error);
+    }
+  }
+
+  public getTopMentors(allTime = false): TopMentorDto[] {
+    return this.cache.get(allTime) ?? [];
+  }
+
+  private async fetchTopMentorsFromDb(allTime = false): Promise<TopMentorDto[]> {
     // Get all mentors with their certified students count
     const queryBuilder = this.userRepository
       .createQueryBuilder('user')
