@@ -1,6 +1,7 @@
 import { Button, Flex, Table, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { DevtoolsApi, DevtoolsUserDto } from '@client/api';
+import { useRouter } from 'next/navigation';
 
 const { Text } = Typography;
 
@@ -8,9 +9,11 @@ const devToolsApi = new DevtoolsApi();
 
 export default function DevToolsUsers() {
   const [users, setUsers] = useState<DevtoolsUserDto[]>([]);
+  const router = useRouter()
 
   async function loginWithUser(user: DevtoolsUserDto) {
-    await devToolsApi.getDevUserLogin(user.id);
+    await devToolsApi.getDevUserLogin(user.githubId);
+    router.push('/api/v2/auth/github/login');
   }
 
   const tableColumns = [

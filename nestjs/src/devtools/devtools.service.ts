@@ -2,12 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '@entities/user';
+import { ConfigService } from '../config';
 
 @Injectable()
 export class DevtoolsService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private configService: ConfigService,
   ) {
   }
 
@@ -25,15 +27,19 @@ export class DevtoolsService {
       },
       relations: ['students', 'mentors'],
     });
-    return users.map(({id, githubId, students, mentors}) => ({
+    return users.map(({ id, githubId, students, mentors }) => ({
       id,
       githubId,
-      mentor: mentors?.map(({courseId}) => courseId) || [],
-      student: students?.map(({courseId}) => courseId) || [],
-    }))
+      mentor: mentors?.map(({ courseId }) => courseId) || [],
+      student: students?.map(({ courseId }) => courseId) || [],
+    }));
   }
 
   async getUserById({ id }: { id: number }) {
     return this.userRepository.findBy({ id });
+  }
+
+  async getDevUserLogin({ githubId }: { githubId: string }) {
+    this.configService.authWithDevUser(githubId);
   }
 }
