@@ -66,13 +66,16 @@ export class ConfigService {
         clientSecret: conf.get('RSSHCOOL_AUTH_GITHUB_CLIENT_SECRET') ?? '',
         callbackUrl: conf.get('RSSHCOOL_AUTH_GITHUB_CALLBACK') ?? '',
         scope: ['user:email'],
-        activityWebhookSecret: conf.get('RSSHCOOL_AUTH_GITHUB_WEBHOOK_ACTIVITY_SECRET', 'activity-webhook'),
+        activityWebhookSecret: conf.get(
+          'RSSHCOOL_AUTH_GITHUB_WEBHOOK_ACTIVITY_SECRET', 'activity-webhook'),
         // token for rolling-scopes/site integration
-        integrationSiteToken: conf.get('RSSHCOOL_AUTH_GITHUB_INTEGRATION_SITE_TOKEN', ''),
+        integrationSiteToken: conf.get(
+          'RSSHCOOL_AUTH_GITHUB_INTEGRATION_SITE_TOKEN', ''),
       },
       dev: {
         username: conf.get('RSSCHOOL_AUTH_DEV_USERNAME') ?? '',
-        admin: conf.get<string>('RSSCHOOL_AUTH_DEV_ADMIN')?.toLowerCase() === 'true',
+        admin: conf.get<string>('RSSCHOOL_AUTH_DEV_ADMIN')?.toLowerCase() ===
+          'true',
       },
       jwt: {
         secretKey: conf.get('RSSHCOOL_AUTH_JWT_SECRET_KEY') ?? 'secret',
@@ -113,10 +116,15 @@ export class ConfigService {
 
     this.buckets = { cdn: 'cdn.rs.school' };
 
-    this.env = conf.get('RS_ENV') === 'staging' ? 'staging' : this.isDev ? 'local' : 'prod';
+    this.env = conf.get('RS_ENV') === 'staging' ?
+      'staging' :
+      this.isDev ? 'local' : 'prod';
   }
 
   authWithDevUser(username: string) {
+    if (this.env === 'prod') {
+      return;
+    }
     this.auth.dev.username = username;
   }
 }
