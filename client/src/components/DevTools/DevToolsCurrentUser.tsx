@@ -7,10 +7,7 @@ const { Text } = Typography;
 const sessionApi = new SessionApi();
 
 export default function DevToolsCurrentUser() {
-  const {
-    data,
-    error,
-  } = useRequest(
+  const { data, error } = useRequest(
     async () => {
       const response = await sessionApi.getSession();
       return response.data;
