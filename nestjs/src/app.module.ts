@@ -75,7 +75,7 @@ import { DevtoolsModule } from './devtools/devtools.module';
     ContributorsModule,
     ListenersModule,
     SessionModule,
-    DevtoolsModule,
+    DevtoolsModule.forRoot(),
   ],
   controllers: [],
   providers: [Logger, ConfigService],
