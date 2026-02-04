@@ -46,6 +46,15 @@ export class CourseStatsController {
     return this.expelledStatsService.findAll();
   }
 
+  @Get('/:courseId/stats/expelled')
+  @UseGuards(DefaultGuard, CourseGuard, RoleGuard)
+  @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor], true)
+  @ApiOperation({ operationId: 'getCourseExpelledStats' })
+  @ApiOkResponse({ type: [CourseStatsDto] })
+  public async getCourseExpelledStats(@Param('courseId', ParseIntPipe) courseId: number) {
+    return this.expelledStatsService.findByCourseId(courseId);
+  }
+
   @Delete('/stats/expelled/:id')
   @UseGuards(DefaultGuard, RoleGuard)
   @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor])
