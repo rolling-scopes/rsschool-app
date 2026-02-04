@@ -9,7 +9,7 @@ const devToolsApi = new DevtoolsApi();
 
 export default function DevToolsUsers() {
   const [users, setUsers] = useState<DevtoolsUserDto[]>([]);
-  const router = useRouter()
+  const router = useRouter();
 
   async function loginWithUser(user: DevtoolsUserDto) {
     await devToolsApi.getDevUserLogin(user.githubId);
@@ -44,10 +44,7 @@ export default function DevToolsUsers() {
       dataIndex: 'action',
       key: 'action',
       render: (_value: unknown, record: DevtoolsUserDto) => (
-        <Button
-          type="link"
-          onClick={() => loginWithUser(record)}
-        >
+        <Button type="link" onClick={() => loginWithUser(record)}>
           Login
         </Button>
       ),
