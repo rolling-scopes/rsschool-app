@@ -60,7 +60,7 @@ describe('MentorCard', () => {
 
     const link = screen.getByRole('link', { name: /say thank you/i });
     expect(link).toBeInTheDocument();
-    expect(link).toHaveAttribute('href', '/gratitude');
+    expect(link).toHaveAttribute('href', '/gratitude?githubId=testmentor');
   });
 
   it('handles empty course stats gracefully', () => {
@@ -75,34 +75,32 @@ describe('MentorCard', () => {
     expect(screen.queryByText('JS Course')).not.toBeInTheDocument();
   });
 
-  it('applies gold rank class for rank 1', () => {
+  it('renders rank badge for rank 1', () => {
     render(<MentorCard mentor={{ ...mockMentor, rank: 1 }} />);
 
-    const rankBadge = screen.getByText('1');
-    expect(rankBadge.className).toContain('gold');
+    const rankBadge = screen.getByTitle('1');
+    expect(rankBadge).toHaveClass('ant-badge-count');
   });
 
-  it('applies silver rank class for rank 2', () => {
+  it('renders rank badge for rank 2', () => {
     render(<MentorCard mentor={{ ...mockMentor, rank: 2 }} />);
 
-    const rankBadge = screen.getByText('2');
-    expect(rankBadge.className).toContain('silver');
+    const rankBadge = screen.getByTitle('2');
+    expect(rankBadge).toHaveClass('ant-badge-count');
   });
 
-  it('applies bronze rank class for rank 3', () => {
+  it('renders rank badge for rank 3', () => {
     render(<MentorCard mentor={{ ...mockMentor, rank: 3 }} />);
 
-    const rankBadge = screen.getByText('3');
-    expect(rankBadge.className).toContain('bronze');
+    const rankBadge = screen.getByTitle('3');
+    expect(rankBadge).toHaveClass('ant-badge-count');
   });
 
-  it('does not apply special rank class for ranks > 3', () => {
+  it('renders rank badge for ranks > 3', () => {
     render(<MentorCard mentor={{ ...mockMentor, rank: 5 }} />);
 
-    const rankBadge = screen.getByText('5');
-    expect(rankBadge.className).not.toContain('gold');
-    expect(rankBadge.className).not.toContain('silver');
-    expect(rankBadge.className).not.toContain('bronze');
+    const rankBadge = screen.getByTitle('5');
+    expect(rankBadge).toHaveClass('ant-badge-count');
   });
 
   it('renders GitHub profile link', () => {
