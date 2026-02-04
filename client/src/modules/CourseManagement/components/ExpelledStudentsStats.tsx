@@ -9,8 +9,12 @@ import { DetailedExpelledStat } from '@common/models';
 
 const { Title, Text } = Typography;
 
-const ExpelledStudentsStats: React.FC = () => {
-  const { data, error, loading, isDeleting, handleDelete } = useExpelledStats();
+type Props = {
+  courseId?: number;
+};
+
+const ExpelledStudentsStats: React.FC<Props> = ({ courseId }) => {
+  const { data, error, loading, isDeleting, handleDelete } = useExpelledStats(courseId);
   const [csvUrl, setCsvUrl] = React.useState<string | null>(null);
   const downloadRef = React.useRef<HTMLAnchorElement>(null);
   const columns: ColumnsType<DetailedExpelledStat> = [

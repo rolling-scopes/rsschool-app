@@ -2,16 +2,19 @@ import { useRequest } from 'ahooks';
 import { useState } from 'react';
 import { DetailedExpelledStat } from '@common/models';
 
-const fetchExpelledStats = async (): Promise<DetailedExpelledStat[]> => {
-  const response = await fetch('/api/v2/courses/stats/expelled');
+const fetchExpelledStats = async (courseId: number): Promise<DetailedExpelledStat[]> => {
+  const response = await fetch(`/api/v2/courses/${courseId}/stats/expelled`);
   if (!response.ok) {
     throw new Error('Failed to fetch stats');
   }
   return response.json() as Promise<DetailedExpelledStat[]>;
 };
 
-export const useExpelledStats = () => {
-  const { data, error, loading, refresh } = useRequest(fetchExpelledStats);
+export const useExpelledStats = (courseId?: number) => {
+  const { data, error, loading, refresh } = useRequest(() => fetchExpelledStats(courseId ?? 0), {
+    ready: typeof courseId === 'number',
+    refreshDeps: [courseId],
+  });
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async (id: string) => {
