@@ -1,18 +1,18 @@
 import { useRequest } from 'ahooks';
 import { useState } from 'react';
+import { CourseStatsApi } from 'api';
 import { DetailedExpelledStat } from '@common/models';
 
+const courseStatsApi = new CourseStatsApi();
+
 const fetchExpelledStats = async (courseId: number): Promise<DetailedExpelledStat[]> => {
-  const response = await fetch(`/api/v2/courses/${courseId}/stats/expelled`);
-  if (!response.ok) {
-    throw new Error('Failed to fetch stats');
-  }
-  return response.json() as Promise<DetailedExpelledStat[]>;
+  const response = await courseStatsApi.getCourseExpelledStats(courseId);
+  return response.data;
 };
 
 export const useExpelledStats = (courseId?: number) => {
-  const { data, error, loading, refresh } = useRequest(() => fetchExpelledStats(courseId ?? 0), {
-    ready: typeof courseId === 'number',
+  const { data, error, loading, refresh } = useRequest(() => fetchExpelledStats(courseId as number), {
+    ready: !!courseId,
     refreshDeps: [courseId],
   });
   const [isDeleting, setIsDeleting] = useState(false);
@@ -20,12 +20,7 @@ export const useExpelledStats = (courseId?: number) => {
   const handleDelete = async (id: string) => {
     setIsDeleting(true);
     try {
-      const response = await fetch(`/api/v2/courses/stats/expelled/${id}`, {
-        method: 'DELETE',
-      });
-      if (!response.ok) {
-        throw new Error('Failed to delete stat');
-      }
+      await courseStatsApi.deleteExpelledStat(id);
       if (typeof refresh === 'function') {
         refresh();
       }
