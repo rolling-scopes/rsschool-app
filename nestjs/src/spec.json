@@ -3012,6 +3012,47 @@
         "summary": "",
         "tags": ["session"]
       }
+    },
+    "/devtools/user": {
+      "get": {
+        "operationId": "getDevUsers",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/DevtoolsUserDto" } }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": ["Devtools"]
+      }
+    },
+    "/devtools/user/{id}": {
+      "get": {
+        "operationId": "getDevUserById",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/DevtoolsUserDto" } } }
+          }
+        },
+        "summary": "",
+        "tags": ["Devtools"]
+      }
+    },
+    "/devtools/user/{id}/login": {
+      "get": {
+        "operationId": "getDevUserLogin",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": { "200": { "description": "" } },
+        "summary": "",
+        "tags": ["Devtools"]
+      }
     }
   },
   "info": { "title": "", "description": "", "version": "1.0.0", "contact": {} },
@@ -5918,6 +5959,17 @@
           }
         },
         "required": ["id", "githubId", "roles", "isAdmin", "isHirer", "appRoles", "courses"]
+      },
+      "DevtoolsUserDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "name": { "type": "string" },
+          "githubId": { "type": "string" },
+          "mentor": { "type": "array", "items": { "type": "number" } },
+          "student": { "type": "array", "items": { "type": "number" } }
+        },
+        "required": ["id", "name", "githubId", "mentor", "student"]
       }
     }
   }
