@@ -56,12 +56,14 @@ export default function DevToolsUsers() {
       setUsers(res.data);
     });
   }, []);
+
   return (
     <Flex>
       <Table
         style={{ width: '100%' }}
         size="small"
         bordered={false}
+        rowKey="id"
         dataSource={users}
         columns={tableColumns}
         pagination={{

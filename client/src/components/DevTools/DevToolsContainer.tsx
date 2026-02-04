@@ -17,7 +17,7 @@ const TABS = [
   },
   {
     key: 'currentUser',
-    tab: 'Current user',
+    tab: 'Current user session',
   },
 ];
 
@@ -52,10 +52,8 @@ export function DevToolsContainer({ children }: { children?: ReactNode }) {
           extra={<Button type="link" icon={<CloseOutlined />} onClick={toggleVisible} />}
           style={{
             ...STYLE,
-            minWidth: '30rem',
-            maxWidth: '80vw',
-            minHeight: '15rem',
-            maxHeight: '30vh',
+            width: '40rem',
+            height: '26rem',
           }}
         >
           {TAB_CONTENT[activeTab]}
