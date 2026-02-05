@@ -10,8 +10,7 @@ export class DevtoolsService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
     private configService: ConfigService,
-  ) {
-  }
+  ) {}
 
   async getUsers() {
     const users = await this.userRepository.find({
