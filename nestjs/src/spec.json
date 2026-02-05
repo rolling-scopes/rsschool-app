@@ -824,7 +824,25 @@
             "description": "",
             "content": {
               "application/json": {
-                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/CourseStatsDto" } }
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/ExpelledStatsDto" } }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": ["course stats"]
+      }
+    },
+    "/courses/{courseId}/stats/expelled": {
+      "get": {
+        "operationId": "getCourseExpelledStats",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/ExpelledStatsDto" } }
               }
             }
           }
@@ -3902,6 +3920,45 @@
         "properties": { "deadlineInHours": { "type": "number" } },
         "required": ["deadlineInHours"]
       },
+      "ExpelledCourseDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "name": { "type": "string" },
+          "fullName": { "type": "string" },
+          "alias": { "type": "string" },
+          "description": { "type": "string" },
+          "logo": { "type": "string" }
+        },
+        "required": ["id", "name", "fullName", "alias", "description", "logo"]
+      },
+      "ExpelledUserDto": {
+        "type": "object",
+        "properties": { "id": { "type": "number" }, "githubId": { "type": "string" } },
+        "required": ["id", "githubId"]
+      },
+      "ExpelledStatsDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "course": { "$ref": "#/components/schemas/ExpelledCourseDto" },
+          "user": { "$ref": "#/components/schemas/ExpelledUserDto" },
+          "reasonForLeaving": { "type": "array", "items": { "type": "string" } },
+          "otherComment": { "type": "string" },
+          "submittedAt": { "type": "string", "format": "date-time" }
+        },
+        "required": ["id", "course", "user", "otherComment", "submittedAt"]
+      },
+      "CountryStatDto": {
+        "type": "object",
+        "properties": { "countryName": { "type": "string" }, "count": { "type": "number" } },
+        "required": ["countryName", "count"]
+      },
+      "CountriesStatsDto": {
+        "type": "object",
+        "properties": { "countries": { "type": "array", "items": { "$ref": "#/components/schemas/CountryStatDto" } } },
+        "required": ["countries"]
+      },
       "CourseStatsDto": {
         "type": "object",
         "properties": {
@@ -3918,16 +3975,6 @@
           "certifiedStudentsCount",
           "eligibleForCertificationCount"
         ]
-      },
-      "CountryStatDto": {
-        "type": "object",
-        "properties": { "countryName": { "type": "string" }, "count": { "type": "number" } },
-        "required": ["countryName", "count"]
-      },
-      "CountriesStatsDto": {
-        "type": "object",
-        "properties": { "countries": { "type": "array", "items": { "$ref": "#/components/schemas/CountryStatDto" } } },
-        "required": ["countries"]
       },
       "CourseMentorsStatsDto": {
         "type": "object",

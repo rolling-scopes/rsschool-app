@@ -24,6 +24,7 @@ import {
   TaskPerformanceStatsDto,
   CourseAggregateStatsDto,
 } from './dto';
+import { ExpelledStatsDto } from './dto/expelled-stats.dto';
 import { ExpelledStatsService } from '../expelled-stats.service';
 import { CourseRole, Role } from '../../auth/auth-user.model';
 
@@ -41,9 +42,18 @@ export class CourseStatsController {
   @UseGuards(DefaultGuard, RoleGuard)
   @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor])
   @ApiOperation({ operationId: 'getExpelledStats' })
-  @ApiOkResponse({ type: [CourseStatsDto] })
+  @ApiOkResponse({ type: [ExpelledStatsDto] })
   public async getExpelledStats() {
     return this.expelledStatsService.findAll();
+  }
+
+  @Get('/:courseId/stats/expelled')
+  @UseGuards(DefaultGuard, CourseGuard, RoleGuard)
+  @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor], true)
+  @ApiOperation({ operationId: 'getCourseExpelledStats' })
+  @ApiOkResponse({ type: [ExpelledStatsDto] })
+  public async getCourseExpelledStats(@Param('courseId', ParseIntPipe) courseId: number) {
+    return this.expelledStatsService.findByCourseId(courseId);
   }
 
   @Delete('/stats/expelled/:id')

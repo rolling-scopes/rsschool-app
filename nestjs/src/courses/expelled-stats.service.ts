@@ -16,6 +16,13 @@ export class ExpelledStatsService {
     });
   }
 
+  async findByCourseId(courseId: number): Promise<CourseLeaveSurveyResponse[]> {
+    return this.surveyRepository.find({
+      where: { courseId },
+      relations: ['user', 'course'],
+    });
+  }
+
   async remove(id: string): Promise<void> {
     const result = await this.surveyRepository.delete(id);
     if (result.affected === 0) {
