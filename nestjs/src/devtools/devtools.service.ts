@@ -10,7 +10,8 @@ export class DevtoolsService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
     private configService: ConfigService,
-  ) {}
+  ) {
+  }
 
   async getUsers() {
     const users = await this.userRepository.find({
@@ -32,10 +33,6 @@ export class DevtoolsService {
       mentor: mentors?.map(({ courseId }) => courseId) || [],
       student: students?.map(({ courseId }) => courseId) || [],
     }));
-  }
-
-  async getUserById({ id }: { id: number }) {
-    return this.userRepository.findBy({ id });
   }
 
   async getDevUserLogin({ githubId }: { githubId: string }) {

@@ -8,15 +8,13 @@ export class DevtoolsUserDto {
 
   @ApiProperty()
   @IsString()
-  name: string;
-
-  @ApiProperty()
-  @IsString()
   githubId: string;
 
   @ApiProperty({ type: Number, isArray: true })
+  @IsNumber({}, { each: true })
   mentor: number[];
 
   @ApiProperty({ type: Number, isArray: true })
+  @IsNumber({}, { each: true })
   student: number[];
 }

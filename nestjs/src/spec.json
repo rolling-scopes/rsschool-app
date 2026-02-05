@@ -2995,7 +2995,7 @@
         "tags": ["session"]
       }
     },
-    "/devtools/user": {
+    "/devtools/users": {
       "get": {
         "operationId": "getDevUsers",
         "parameters": [],
@@ -3010,21 +3010,7 @@
           }
         },
         "summary": "",
-        "tags": ["Devtools"]
-      }
-    },
-    "/devtools/user/{id}": {
-      "get": {
-        "operationId": "getDevUserById",
-        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/DevtoolsUserDto" } } }
-          }
-        },
-        "summary": "",
-        "tags": ["Devtools"]
+        "tags": ["devtools"]
       }
     },
     "/devtools/user/{githubId}/login": {
@@ -3033,7 +3019,7 @@
         "parameters": [{ "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }],
         "responses": { "200": { "description": "" } },
         "summary": "",
-        "tags": ["Devtools"]
+        "tags": ["devtools"]
       }
     }
   },
@@ -5917,12 +5903,11 @@
         "type": "object",
         "properties": {
           "id": { "type": "number" },
-          "name": { "type": "string" },
           "githubId": { "type": "string" },
           "mentor": { "type": "array", "items": { "type": "number" } },
           "student": { "type": "array", "items": { "type": "number" } }
         },
-        "required": ["id", "name", "githubId", "mentor", "student"]
+        "required": ["id", "githubId", "mentor", "student"]
       }
     }
   }
