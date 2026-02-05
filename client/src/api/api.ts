@@ -3410,6 +3410,111 @@ export interface ExpelStatusDto {
 /**
  * 
  * @export
+ * @interface ExpelledCourseDto
+ */
+export interface ExpelledCourseDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof ExpelledCourseDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExpelledCourseDto
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExpelledCourseDto
+     */
+    'fullName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExpelledCourseDto
+     */
+    'alias': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExpelledCourseDto
+     */
+    'description': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExpelledCourseDto
+     */
+    'logo': string;
+}
+/**
+ * 
+ * @export
+ * @interface ExpelledStatsDto
+ */
+export interface ExpelledStatsDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof ExpelledStatsDto
+     */
+    'id': string;
+    /**
+     * 
+     * @type {ExpelledCourseDto}
+     * @memberof ExpelledStatsDto
+     */
+    'course': ExpelledCourseDto;
+    /**
+     * 
+     * @type {ExpelledUserDto}
+     * @memberof ExpelledStatsDto
+     */
+    'user': ExpelledUserDto;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof ExpelledStatsDto
+     */
+    'reasonForLeaving'?: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExpelledStatsDto
+     */
+    'otherComment': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExpelledStatsDto
+     */
+    'submittedAt': string;
+}
+/**
+ * 
+ * @export
+ * @interface ExpelledUserDto
+ */
+export interface ExpelledUserDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof ExpelledUserDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ExpelledUserDto
+     */
+    'githubId': string;
+}
+/**
+ * 
+ * @export
  * @interface FeedbackCourseDto
  */
 export interface FeedbackCourseDto {
@@ -10264,6 +10369,39 @@ export const CourseStatsApiAxiosParamCreator = function (configuration?: Configu
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        getCourseExpelledStats: async (courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getCourseExpelledStats', 'courseId', courseId)
+            const localVarPath = `/courses/{courseId}/stats/expelled`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         getCourseMentorCountries: async (courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('getCourseMentorCountries', 'courseId', courseId)
@@ -10558,6 +10696,16 @@ export const CourseStatsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        async getCourseExpelledStats(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ExpelledStatsDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCourseExpelledStats(courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         async getCourseMentorCountries(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CountriesStatsDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getCourseMentorCountries(courseId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
@@ -10618,7 +10766,7 @@ export const CourseStatsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getExpelledStats(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CourseStatsDto>>> {
+        async getExpelledStats(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ExpelledStatsDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getExpelledStats(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -10651,6 +10799,15 @@ export const CourseStatsApiFactory = function (configuration?: Configuration, ba
          */
         deleteExpelledStat(id: string, options?: any): AxiosPromise<string> {
             return localVarFp.deleteExpelledStat(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCourseExpelledStats(courseId: number, options?: any): AxiosPromise<Array<ExpelledStatsDto>> {
+            return localVarFp.getCourseExpelledStats(courseId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -10712,7 +10869,7 @@ export const CourseStatsApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getExpelledStats(options?: any): AxiosPromise<Array<CourseStatsDto>> {
+        getExpelledStats(options?: any): AxiosPromise<Array<ExpelledStatsDto>> {
             return localVarFp.getExpelledStats(options).then((request) => request(axios, basePath));
         },
         /**
@@ -10744,6 +10901,17 @@ export class CourseStatsApi extends BaseAPI {
      */
     public deleteExpelledStat(id: string, options?: AxiosRequestConfig) {
         return CourseStatsApiFp(this.configuration).deleteExpelledStat(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CourseStatsApi
+     */
+    public getCourseExpelledStats(courseId: number, options?: AxiosRequestConfig) {
+        return CourseStatsApiFp(this.configuration).getCourseExpelledStats(courseId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

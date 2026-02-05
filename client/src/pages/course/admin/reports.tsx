@@ -4,11 +4,11 @@ import { CourseRole } from 'services/models';
 import ExpelledStudentsStats from '@client/modules/CourseManagement/components/ExpelledStudentsStats';
 
 function Page() {
-  const { courses } = useActiveCourseContext();
+  const { courses, course } = useActiveCourseContext();
 
   return (
     <AdminPageLayout loading={false} showCourseName courses={courses}>
-      <ExpelledStudentsStats />
+      <ExpelledStudentsStats courseId={course?.id} />
     </AdminPageLayout>
   );
 }

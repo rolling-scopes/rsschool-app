@@ -1,6 +1,6 @@
 import { Table, Typography, Tag, Button, Row } from 'antd';
 import { ColumnsType, ColumnType } from 'antd/es/table';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { PublicSvgIcon } from '@client/components/Icons';
 import { DEFAULT_COURSE_ICONS } from '@client/configs/course-icons';
 import { dateUtcRenderer } from '@client/components/Table';
@@ -9,65 +9,70 @@ import { DetailedExpelledStat } from '@common/models';
 
 const { Title, Text } = Typography;
 
-const ExpelledStudentsStats: React.FC = () => {
-  const { data, error, loading, isDeleting, handleDelete } = useExpelledStats();
+type Props = {
+  courseId?: number;
+};
+
+const getColumns = (handleDelete: (id: string) => void, isDeleting: boolean): ColumnsType<DetailedExpelledStat> => [
+  {
+    title: 'Course',
+    dataIndex: ['course', 'name'],
+    key: 'courseName',
+    render: (_text, record) => (
+      <div>
+        <PublicSvgIcon size="25px" src={DEFAULT_COURSE_ICONS[record.course.logo]?.active} />
+        <Text strong style={{ marginLeft: 15 }}>
+          {record.course.alias}
+        </Text>
+        <br />
+        <Text type="secondary">{record.course.fullName || record.course.name}</Text>
+      </div>
+    ),
+  },
+  {
+    title: 'Student GitHub',
+    dataIndex: ['user', 'githubId'],
+    key: 'githubId',
+    render: githubId => (
+      <a href={`https://github.com/${githubId}`} target="_blank" rel="noopener noreferrer">
+        {githubId}
+      </a>
+    ),
+  },
+  {
+    title: 'Reasons for Leaving',
+    dataIndex: 'reasonForLeaving',
+    key: 'reasons',
+    render: (reasons?: string[]) => <>{reasons?.map(reason => <Tag key={reason}>{reason.replace(/_/g, ' ')}</Tag>)}</>,
+  },
+  {
+    title: 'Other Comments',
+    dataIndex: 'otherComment',
+    key: 'otherComment',
+  },
+  {
+    title: 'Date',
+    dataIndex: 'submittedAt',
+    key: 'date',
+    render: dateUtcRenderer,
+  },
+  {
+    title: 'Action',
+    key: 'action',
+    render: (_text, record) => (
+      <Button danger onClick={() => handleDelete(record.id)} loading={isDeleting}>
+        Delete
+      </Button>
+    ),
+  },
+];
+
+const ExpelledStudentsStats: React.FC<Props> = ({ courseId }) => {
+  const { data, error, loading, isDeleting, handleDelete } = useExpelledStats(courseId);
   const [csvUrl, setCsvUrl] = React.useState<string | null>(null);
   const downloadRef = React.useRef<HTMLAnchorElement>(null);
-  const columns: ColumnsType<DetailedExpelledStat> = [
-    {
-      title: 'Course',
-      dataIndex: ['course', 'name'],
-      key: 'courseName',
-      render: (_text, record) => (
-        <div>
-          <PublicSvgIcon size="25px" src={DEFAULT_COURSE_ICONS[record.course.logo]?.active} />
-          <Text strong style={{ marginLeft: 15 }}>
-            {record.course.alias}
-          </Text>
-          <br />
-          <Text type="secondary">{record.course.fullName || record.course.name}</Text>
-        </div>
-      ),
-    },
-    {
-      title: 'Student GitHub',
-      dataIndex: ['user', 'githubId'],
-      key: 'githubId',
-      render: githubId => (
-        <a href={`https://github.com/${githubId}`} target="_blank" rel="noopener noreferrer">
-          {githubId}
-        </a>
-      ),
-    },
-    {
-      title: 'Reasons for Leaving',
-      dataIndex: 'reasonForLeaving',
-      key: 'reasons',
-      render: (reasons?: string[]) => (
-        <>{reasons?.map(reason => <Tag key={reason}>{reason.replace(/_/g, ' ')}</Tag>)}</>
-      ),
-    },
-    {
-      title: 'Other Comments',
-      dataIndex: 'otherComment',
-      key: 'otherComment',
-    },
-    {
-      title: 'Date',
-      dataIndex: 'submittedAt',
-      key: 'date',
-      render: dateUtcRenderer,
-    },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (_text, record) => (
-        <Button danger onClick={() => handleDelete(record.id)} loading={isDeleting}>
-          Delete
-        </Button>
-      ),
-    },
-  ];
+
+  const columns = useMemo(() => getColumns(handleDelete, isDeleting), [handleDelete, isDeleting]);
 
   if (error) {
     return <Typography.Paragraph>Failed to load statistics.</Typography.Paragraph>;

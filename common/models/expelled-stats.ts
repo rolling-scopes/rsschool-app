@@ -14,5 +14,5 @@ export interface DetailedExpelledStat {
   };
   reasonForLeaving?: string[];
   otherComment: string;
-  submittedAt: Date;
+  submittedAt: string;
 }
