@@ -21,11 +21,6 @@ const TABS = [
   },
 ];
 
-const TAB_CONTENT: Record<string, ReactNode> = {
-  users: <DevToolsUsers />,
-  currentUser: <DevToolsCurrentUser />,
-};
-
 export function DevToolsContainer({ children }: { children?: ReactNode }) {
   const [visible, setVisible] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>('users');
@@ -37,6 +32,11 @@ export function DevToolsContainer({ children }: { children?: ReactNode }) {
   function onTabChange(key: string) {
     setActiveTab(key);
   }
+
+  const tabContent: Record<string, ReactNode> = {
+    users: <DevToolsUsers />,
+    currentUser: <DevToolsCurrentUser />,
+  };
 
   return (
     <>
@@ -56,7 +56,7 @@ export function DevToolsContainer({ children }: { children?: ReactNode }) {
             height: '26rem',
           }}
         >
-          {TAB_CONTENT[activeTab]}
+          {tabContent[activeTab]}
         </Card>
       )}
     </>
