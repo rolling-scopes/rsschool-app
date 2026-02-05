@@ -9,11 +9,14 @@ import { ConfigModule } from '../config';
 export class DevtoolsModule {
   static forRoot(): DynamicModule {
     const isDev = process.env.NODE_ENV !== 'production';
+    const staging = process.env.RS_ENV === 'staging';
+    const devToolsAllowed = !staging && isDev;
+    console.log('Devtools allowed:', devToolsAllowed);
     return {
       module: DevtoolsModule,
       imports: [TypeOrmModule.forFeature([User]), ConfigModule],
-      providers: isDev ? [DevtoolsService] : [],
-      controllers: isDev ? [DevtoolsController] : [],
+      providers: devToolsAllowed ? [DevtoolsService] : [],
+      controllers: devToolsAllowed ? [DevtoolsController] : [],
     };
   }
 }
