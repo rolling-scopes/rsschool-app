@@ -117,7 +117,7 @@ export class ConfigService {
   }
 
   authWithDevUser(username: string) {
-    if (!this.isDev) {
+    if (this.env === 'prod') {
       return;
     }
     this.auth.dev.username = username;
