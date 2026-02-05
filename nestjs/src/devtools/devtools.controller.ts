@@ -27,6 +27,7 @@ export class DevtoolsController {
     return {
       status: 'ok',
       env: process.env.NODE_ENV,
+      rs_env: process.env.RS_ENV,
     };
   }
 }
