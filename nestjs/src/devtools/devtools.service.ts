@@ -19,18 +19,26 @@ export class DevtoolsService {
         githubId: true,
         students: {
           courseId: true,
+          course: {
+            alias: true,
+          },
         },
         mentors: {
           courseId: true,
+          course: {
+            alias: true,
+          },
         },
       },
-      relations: ['students', 'mentors'],
+      relations: ['students.course', 'mentors.course'],
     });
+    console.log(users);
     return users.map(({ id, githubId, students, mentors }) => ({
       id,
       githubId,
-      mentor: mentors?.map(({ courseId }) => courseId) || [],
-      student: students?.map(({ courseId }) => courseId) || [],
+      mentor: mentors?.map(({ course }) => course?.alias) || [],
+      student: students?.map(({ course }) => course?.alias) || [],
+      students,
     }));
   }
 

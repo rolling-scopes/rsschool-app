@@ -53,7 +53,7 @@ export function DevToolsContainer({ children }: { children?: ReactNode }) {
           style={{
             ...STYLE,
             width: '40rem',
-            height: '26rem',
+            height: '27rem',
           }}
         >
           {tabContent[activeTab]}
