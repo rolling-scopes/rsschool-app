@@ -12,8 +12,12 @@ export default function DevToolsUsers() {
   const router = useRouter();
 
   async function loginWithUser(user: DevtoolsUserDto) {
-    await devToolsApi.getDevUserLogin(user.githubId);
-    router.push('/api/v2/auth/github/login');
+    try {
+      await devToolsApi.getDevUserLogin(user.githubId);
+      router.push('/api/v2/auth/github/login');
+    } catch {
+      console.error('Failed to login user');
+    }
   }
 
   const tableColumns = [
@@ -44,7 +48,10 @@ export default function DevToolsUsers() {
       dataIndex: 'action',
       key: 'action',
       render: (_value: unknown, record: DevtoolsUserDto) => (
-        <Button type="link" onClick={() => loginWithUser(record)}>
+        <Button
+          type="link"
+          onClick={() => loginWithUser(record)}
+        >
           Login
         </Button>
       ),
@@ -54,7 +61,7 @@ export default function DevToolsUsers() {
   useEffect(() => {
     devToolsApi.getDevUsers().then(res => {
       setUsers(res.data);
-    });
+    }).catch(console.error);
   }, []);
 
   return (
