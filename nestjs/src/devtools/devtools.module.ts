@@ -11,7 +11,6 @@ export class DevtoolsModule {
     const isDev = process.env.NODE_ENV !== 'production';
     const staging = process.env.RS_ENV === 'staging';
     const devToolsAllowed = !staging && isDev;
-    console.log('Devtools allowed:', devToolsAllowed);
     return {
       module: DevtoolsModule,
       imports: [TypeOrmModule.forFeature([User]), ConfigModule],
