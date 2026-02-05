@@ -21,13 +21,4 @@ export class DevtoolsController {
   async getDevUserLogin(@Param('githubId') githubId: string) {
     return this.devtoolsService.getDevUserLogin({ githubId });
   }
-
-  @Get('health')
-  appHealth() {
-    return {
-      status: 'ok',
-      env: process.env.NODE_ENV,
-      rs_env: process.env.RS_ENV,
-    };
-  }
 }
