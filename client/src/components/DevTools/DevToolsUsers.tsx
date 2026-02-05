@@ -48,10 +48,7 @@ export default function DevToolsUsers() {
       dataIndex: 'action',
       key: 'action',
       render: (_value: unknown, record: DevtoolsUserDto) => (
-        <Button
-          type="link"
-          onClick={() => loginWithUser(record)}
-        >
+        <Button type="link" onClick={() => loginWithUser(record)}>
           Login
         </Button>
       ),
@@ -59,9 +56,12 @@ export default function DevToolsUsers() {
   ];
 
   useEffect(() => {
-    devToolsApi.getDevUsers().then(res => {
-      setUsers(res.data);
-    }).catch(console.error);
+    devToolsApi
+      .getDevUsers()
+      .then(res => {
+        setUsers(res.data);
+      })
+      .catch(console.error);
   }, []);
 
   return (

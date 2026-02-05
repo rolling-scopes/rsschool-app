@@ -6,8 +6,7 @@ import { DevtoolsUserDto } from './dto/devtools.users-dto';
 @Controller('devtools')
 @ApiTags('devtools')
 export class DevtoolsController {
-  constructor(private readonly devtoolsService: DevtoolsService) {
-  }
+  constructor(private readonly devtoolsService: DevtoolsService) {}
 
   @Get('users')
   @ApiOperation({ operationId: 'getDevUsers' })
@@ -27,7 +26,7 @@ export class DevtoolsController {
   appHealth() {
     return {
       status: 'ok',
-      env: process.env.NODE_ENV
-    }
+      env: process.env.NODE_ENV,
+    };
   }
 }
