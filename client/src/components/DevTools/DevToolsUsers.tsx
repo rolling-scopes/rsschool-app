@@ -35,13 +35,21 @@ export default function DevToolsUsers() {
       title: 'student',
       dataIndex: 'student',
       key: 'student',
-      render: (ids: number[]) => <Text>{ids.join(', ')}</Text>,
+      render: (title: string[]) => (
+        <Text ellipsis={{ tooltip: true }} style={{ width: '12ch' }}>
+          {title.join(', ')}
+        </Text>
+      ),
     },
     {
       title: 'mentor',
       dataIndex: 'mentor',
       key: 'mentor',
-      render: (ids: number[]) => <Text>{ids.join(', ')}</Text>,
+      render: (title: string[]) => (
+        <Text ellipsis={{ tooltip: true }} style={{ width: '12ch' }}>
+          {title.join(', ')}
+        </Text>
+      ),
     },
     {
       title: 'action',
