@@ -3083,12 +3083,6 @@ export interface DevtoolsUserDto {
      * @type {string}
      * @memberof DevtoolsUserDto
      */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DevtoolsUserDto
-     */
     'githubId': string;
     /**
      * 
@@ -14361,39 +14355,6 @@ export const DevtoolsApiAxiosParamCreator = function (configuration?: Configurat
     return {
         /**
          * 
-         * @param {number} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getDevUserById: async (id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('getDevUserById', 'id', id)
-            const localVarPath = `/devtools/user/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @param {string} githubId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14431,7 +14392,7 @@ export const DevtoolsApiAxiosParamCreator = function (configuration?: Configurat
          * @throws {RequiredError}
          */
         getDevUsers: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/devtools/user`;
+            const localVarPath = `/devtools/users`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -14466,16 +14427,6 @@ export const DevtoolsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {number} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getDevUserById(id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DevtoolsUserDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getDevUserById(id, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
          * @param {string} githubId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14505,15 +14456,6 @@ export const DevtoolsApiFactory = function (configuration?: Configuration, baseP
     return {
         /**
          * 
-         * @param {number} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getDevUserById(id: number, options?: any): AxiosPromise<DevtoolsUserDto> {
-            return localVarFp.getDevUserById(id, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @param {string} githubId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14539,17 +14481,6 @@ export const DevtoolsApiFactory = function (configuration?: Configuration, baseP
  * @extends {BaseAPI}
  */
 export class DevtoolsApi extends BaseAPI {
-    /**
-     * 
-     * @param {number} id 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DevtoolsApi
-     */
-    public getDevUserById(id: number, options?: AxiosRequestConfig) {
-        return DevtoolsApiFp(this.configuration).getDevUserById(id, options).then((request) => request(this.axios, this.basePath));
-    }
-
     /**
      * 
      * @param {string} githubId 
