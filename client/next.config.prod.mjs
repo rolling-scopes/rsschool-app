@@ -10,6 +10,7 @@ const nextConfig = {
     APP_VERSION: process.env.APP_VERSION,
     RSSHCOOL_UI_GCP_MAPS_API_KEY: process.env.RSSHCOOL_UI_GCP_MAPS_API_KEY,
     CDN_HOST: process.env.CDN_HOST || '',
+    RSSCHOOL_DEV_TOOLS: process.env.RSSCHOOL_DEV_TOOLS || 'false',
   },
 };
 

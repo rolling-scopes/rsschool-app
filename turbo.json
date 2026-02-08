@@ -51,7 +51,8 @@
         "RSSHCOOL_USERS_ADMINS",
         "RSSHCOOL_USERS_HIRERS",
         "SENTRY_DSN",
-        "SERVER_HOST"
+        "SERVER_HOST",
+        "RSSCHOOL_DEV_TOOLS"
       ]
     },
     "lint": {},

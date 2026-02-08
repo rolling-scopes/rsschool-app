@@ -8,14 +8,12 @@ import { ConfigModule } from '../config';
 @Module({})
 export class DevtoolsModule {
   static forRoot(): DynamicModule {
-    const isDev = process.env.NODE_ENV !== 'production';
-    const staging = process.env.RS_ENV === 'staging';
-    const devToolsAllowed = !staging && isDev;
+    const devToolsToggle = process.env.RSSCHOOL_DEV_TOOLS;
     return {
       module: DevtoolsModule,
       imports: [TypeOrmModule.forFeature([User]), ConfigModule],
-      providers: devToolsAllowed ? [DevtoolsService] : [],
-      controllers: devToolsAllowed ? [DevtoolsController] : [],
+      providers: devToolsToggle ? [DevtoolsService] : [],
+      controllers: devToolsToggle ? [DevtoolsController] : [],
     };
   }
 }

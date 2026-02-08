@@ -6,7 +6,7 @@ import { DevToolsProvider } from './DevToolsProvider';
 type Props = { children: ReactNode };
 type Provider = (props: Props) => ReactNode;
 
-const isDev = process.env.NODE_ENV === 'development';
+const devToolsToggle = process.env.RSSCHOOL_DEV_TOOLS === 'true';
 
 function composeProviders(...providers: Provider[]): Provider {
   return providers.reduceRight<Provider>(
@@ -20,4 +20,8 @@ function composeProviders(...providers: Provider[]): Provider {
   );
 }
 
-export const Providers = composeProviders(ThemeProvider, MessageProvider, ...(isDev ? [DevToolsProvider] : []));
+export const Providers = composeProviders(
+  ThemeProvider,
+  MessageProvider,
+  ...(devToolsToggle ? [DevToolsProvider] : []),
+);
