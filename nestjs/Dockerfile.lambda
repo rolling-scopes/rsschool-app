@@ -19,6 +19,7 @@ ENV NODE_ENV production
 ENV TZ utc
 ENV AWS_LAMBDA true
 ENV RS_ENV staging
+ENV RSSCHOOL_DEV_TOOLS true
 
 COPY --from=builder /container_out /var/task/
 
