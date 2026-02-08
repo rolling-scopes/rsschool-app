@@ -8,7 +8,7 @@ import { ConfigModule } from '../config';
 @Module({})
 export class DevtoolsModule {
   static forRoot(): DynamicModule {
-    const devToolsToggle = process.env.RSSCHOOL_DEV_TOOLS;
+    const devToolsToggle = process.env.RSSCHOOL_DEV_TOOLS === 'true';
     return {
       module: DevtoolsModule,
       imports: [TypeOrmModule.forFeature([User]), ConfigModule],
