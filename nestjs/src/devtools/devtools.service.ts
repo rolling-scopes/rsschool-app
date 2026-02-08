@@ -32,7 +32,6 @@ export class DevtoolsService {
       },
       relations: ['students.course', 'mentors.course'],
     });
-    console.log(users);
     return users.map(({ id, githubId, students, mentors }) => ({
       id,
       githubId,
