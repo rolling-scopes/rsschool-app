@@ -1,6 +1,6 @@
 import { Layout, Spin } from 'antd';
 import { mapsApiKey } from 'configs/gcp';
-import Head from 'next/head';
+import Script from 'next/script';
 import { ReactNode } from 'react';
 import { Header } from './Header';
 
@@ -13,11 +13,7 @@ const url = `https://maps.googleapis.com/maps/api/js?key=${mapsApiKey}&libraries
 export function RegistrationPageLayout(props: Props) {
   return (
     <>
-      {mapsApiKey && (
-        <Head>
-          <script async src={url}></script>
-        </Head>
-      )}
+      {mapsApiKey ? <Script id="google-maps-api" src={url} strategy="beforeInteractive" /> : null}
       <Layout style={{ minHeight: '100vh' }}>
         <Header />
         <Content style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>

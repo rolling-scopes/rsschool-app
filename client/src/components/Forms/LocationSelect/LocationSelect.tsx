@@ -1,7 +1,7 @@
 import React from 'react';
-import { Select, Spin } from 'antd';
-import usePlacesAutocomplete from 'use-places-autocomplete';
+import { Alert, Select, Spin } from 'antd';
 import { Location } from '@common/models/profile';
+import { useGoogleMapsPlaces } from './useGoogleMapsPlaces';
 
 type Props = {
   onChange: (arg: Location | null) => void;
@@ -10,21 +10,9 @@ type Props = {
 };
 
 export function LocationSelect(props: Props) {
-  const {
-    value,
-    suggestions: { data, loading },
-    setValue,
-  } = usePlacesAutocomplete({
-    defaultValue: fromLocation(props.location),
-    requestOptions: {
-      types: ['(cities)'],
-      debounce: 300,
-    },
-  });
+  const { value, data, loading, setValue, initialized, error } = useGoogleMapsPlaces(props.location);
 
-  const handleInput = (value: string) => {
-    setValue(value);
-  };
+  const handleInput = (value: string) => setValue(value);
 
   const handleSelect = (value: string) => {
     setValue(value, false);
@@ -37,6 +25,14 @@ export function LocationSelect(props: Props) {
     }
   };
 
+  if (error) {
+    return <Alert message={error.message} type="error" showIcon />;
+  }
+
+  if (!initialized) {
+    return <Spin size="small" />;
+  }
+
   return (
     <Select
       filterOption={false}
@@ -46,7 +42,7 @@ export function LocationSelect(props: Props) {
       onBlur={handleBlur}
       notFoundContent={loading ? <Spin size="small" /> : null}
       value={value}
-      placeholder="Select users"
+      placeholder="Select city"
       options={data.map(({ description }) => ({ value: description }))}
       style={props.style}
     />
