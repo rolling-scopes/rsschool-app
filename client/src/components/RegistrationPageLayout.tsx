@@ -13,7 +13,7 @@ const url = `https://maps.googleapis.com/maps/api/js?key=${mapsApiKey}&libraries
 export function RegistrationPageLayout(props: Props) {
   return (
     <>
-      {mapsApiKey ? <Script src={url} /> : null}
+      {mapsApiKey ? <Script id="google-maps-api" src={url} strategy="beforeInteractive" /> : null}
       <Layout style={{ minHeight: '100vh' }}>
         <Header />
         <Content style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
