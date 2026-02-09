@@ -112,8 +112,8 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
           700: 2,
           500: 1,
         }}
-        className={styles.masonry!}
-        columnClassName={styles.masonryColumn!}
+        className={styles.masonry as string}
+        columnClassName={styles.masonryColumn as string}
       >
         {heroesData.map(feedback => (
           <div

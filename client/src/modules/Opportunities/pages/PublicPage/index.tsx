@@ -3,7 +3,6 @@ import { ResumeDto } from 'api';
 import { ViewCV } from 'modules/Opportunities/components/ViewCv';
 import Head from 'next/head';
 import { PropsWithChildren } from 'react';
-import styles from './index.module.css';
 
 const { Content } = Layout;
 
@@ -25,11 +24,10 @@ export function PublicPage({ data }: PropsWithChildren<Props>) {
         <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700&display=swap" rel="stylesheet" />
       </Head>
       <Layout>
-        <Content className="print-no-padding" style={{ maxWidth: 960, margin: 'auto' }}>
+        <Content className="print-no-padding ubuntu-font" style={{ maxWidth: 960, margin: 'auto' }}>
           <ViewCV publicMode initialData={data} />
         </Content>
       </Layout>
-      <div className={styles.fontOverride} />
     </>
   );
 }

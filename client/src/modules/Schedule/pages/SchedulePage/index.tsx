@@ -21,7 +21,6 @@ import { useScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings'
 import { useContext, useMemo, useState } from 'react';
 import { useAsyncRetry, useLocalStorage, useMedia } from 'react-use';
 import { ALL_TAB_KEY, LocalStorageKeys } from 'modules/Schedule/constants';
-import styles from './index.module.css';
 
 const courseScheduleApi = new CoursesScheduleApi();
 const coursesScheduleIcalApi = new CoursesScheduleIcalApi();
@@ -88,26 +87,35 @@ export function SchedulePage() {
 
   return (
     <>
-      <PageLayout loading={loading} error={error} title="Schedule" showCourseName background={token.colorBgLayout}>
-        <StatusTabs activeTab={selectedTab} statuses={statuses} onTabChange={setSelectedTab} mobileView={mobileView}>
-          {!mobileView && (
-            <SettingsPanel
-              onCreateCourseTask={handleCreateCourseTask}
-              onCreateCourseEvent={handleCreateCourseEvent}
-              onCopyFromCourse={() => setCopyModal({})}
-              isCourseManager={isManager}
-              courseId={course.id}
-              courseAlias={course.alias}
-              settings={settings}
-              calendarToken={cipher}
-              tags={eventTags}
-              refreshData={refreshData}
-              mobileView={mobileView}
-            />
-          )}
-        </StatusTabs>
+      <PageLayout
+        loading={loading}
+        error={error}
+        title="Schedule"
+        showCourseName
+        background={token.colorBgLayout}
+        withMargin={false}
+      >
+        <div style={!mobileView ? { margin: '16px 0 0', padding: '0 24px 24px' } : { margin: 0 }}>
+          <StatusTabs activeTab={selectedTab} statuses={statuses} onTabChange={setSelectedTab} mobileView={mobileView}>
+            {!mobileView && (
+              <SettingsPanel
+                onCreateCourseTask={handleCreateCourseTask}
+                onCreateCourseEvent={handleCreateCourseEvent}
+                onCopyFromCourse={() => setCopyModal({})}
+                isCourseManager={isManager}
+                courseId={course.id}
+                courseAlias={course.alias}
+                settings={settings}
+                calendarToken={cipher}
+                tags={eventTags}
+                refreshData={refreshData}
+                mobileView={mobileView}
+              />
+            )}
+          </StatusTabs>
 
-        <TableView settings={settings} data={data} statusFilter={selectedTab} mobileView={mobileView} />
+          <TableView settings={settings} data={data} statusFilter={selectedTab} mobileView={mobileView} />
+        </div>
 
         {courseTask ? (
           <CourseTaskModal data={courseTask} onSubmit={handleSubmit} onCancel={() => setCourseTask(null)} />
@@ -133,7 +141,6 @@ export function SchedulePage() {
           />
         </CoursesListModal>
       </PageLayout>
-      {!mobileView && <div className={styles.layoutContentOverride} />}
     </>
   );
 }

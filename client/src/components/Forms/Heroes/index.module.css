@@ -9,21 +9,6 @@
   background-clip: padding-box;
 }
 
-.flexColumn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.textWrap {
-  text-align: center;
-  text-overflow: ellipsis;
-  width: 150px;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
 .flexCenter {
   display: flex;
   justify-content: center;

@@ -81,6 +81,10 @@ body,
   color: var(--text-primary-color);
 }
 
+.ubuntu-font {
+  font-family: 'Ubuntu', sans-serif;
+}
+
 .rs-link {
   color: #fff;
   display: inline-block;

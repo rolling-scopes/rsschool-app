@@ -248,8 +248,8 @@ const Profile = () => {
                 700: 2,
                 500: 1,
               }}
-              className={styles.masonry!}
-              columnClassName={styles.masonryColumn!}
+              className={styles.masonry as string}
+              columnClassName={styles.masonryColumn as string}
             >
               {cards.map(({ key, node }) => (
                 <div style={{ marginBottom: 16 }} key={key}>
