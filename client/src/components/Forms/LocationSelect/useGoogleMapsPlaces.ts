@@ -30,7 +30,7 @@ export function useGoogleMapsPlaces(location: Location | null) {
   });
 
   /**
-   * Poll until Google Maps API is loaded or 10 seconds have passed
+   * Poll until Google Maps API is loaded or 30 seconds have passed
    */
   const stopPolling = useInterval(() => {
     elapsedRef.current += POLLING_INTERVAL_MS;
