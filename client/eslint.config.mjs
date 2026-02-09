@@ -62,11 +62,11 @@ export default [
           paths: [
             {
               name: 'styled-jsx/css',
-              message: 'styled-jsx is deprecated. Use CSS modules instead.',
+              message: "The 'jsx' attribute from styled-jsx is deprecated. Use CSS modules instead.",
             },
             {
               name: 'styled-jsx',
-              message: 'styled-jsx is deprecated. Use CSS modules instead.',
+              message: "The 'jsx' attribute from styled-jsx is deprecated. Use CSS modules instead.",
             },
           ],
         },
