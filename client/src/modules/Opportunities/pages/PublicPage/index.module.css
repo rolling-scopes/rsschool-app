@@ -1,7 +1,0 @@
-.fontOverride {
-}
-
-:global(html),
-:global(body) {
-  font-family: 'Ubuntu', sans-serif;
-}
