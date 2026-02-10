@@ -34,6 +34,7 @@ import { ContributorsModule } from './contributors';
 import { ListenersModule } from './listeners';
 import { MentorsHallOfFameModule } from './mentors-hall-of-fame';
 import { SessionModule } from './session/session.module';
+import { DevtoolsModule } from './devtools/devtools.module';
 
 @Module({
   imports: [
@@ -76,6 +77,7 @@ import { SessionModule } from './session/session.module';
     ListenersModule,
     MentorsHallOfFameModule,
     SessionModule,
+    DevtoolsModule.forRoot(),
   ],
   controllers: [],
   providers: [Logger, ConfigService],

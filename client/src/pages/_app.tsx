@@ -6,7 +6,7 @@ import 'antd/dist/reset.css';
 import { initializeFeatures } from 'services/features';
 import { Analytics } from '../components/Analytics';
 import '../styles/main.css';
-import { MessageProvider, ThemeProvider } from '@client/providers';
+import { DevToolsProvider, MessageProvider, ThemeProvider } from '@client/providers';
 
 class RsSchoolApp extends App {
   render() {
@@ -22,6 +22,7 @@ class RsSchoolApp extends App {
         </Head>
         <ThemeProvider>
           <MessageProvider>
+            <DevToolsProvider>
             <ActiveCourseProvider
               publicRoutes={[
                 '/login',
@@ -31,8 +32,9 @@ class RsSchoolApp extends App {
                 '/mentors-hall-of-fame',
               ]}
             >
-              <Component {...pageProps} />
-            </ActiveCourseProvider>
+                <Component {...pageProps} />
+              </ActiveCourseProvider>
+            </DevToolsProvider>
           </MessageProvider>
         </ThemeProvider>
       </>

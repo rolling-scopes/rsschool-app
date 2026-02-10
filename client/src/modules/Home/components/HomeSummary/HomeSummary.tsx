@@ -9,11 +9,11 @@ type HomeSummaryProps = {
 };
 
 export default function HomeSummary({ summary, courseTasks }: HomeSummaryProps) {
+  const { token } = theme.useToken();
+
   if (!summary) {
     return null;
   }
-
-  const { token } = theme.useToken();
 
   const {
     name,

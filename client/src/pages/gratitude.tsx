@@ -8,7 +8,7 @@ import { SessionProvider, useActiveCourseContext } from 'modules/Course/contexts
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useAsync } from 'react-use';
-import { UserService } from 'services/user';
+import { type UserBasic, UserService } from 'services/user';
 
 interface IGratitude {
   userIds: number[];
@@ -26,9 +26,10 @@ function GratitudePage() {
   const [badges, setBadges] = useState<BadgeDto[]>([]);
   const [loading, setLoading] = useState(false);
   const [loadingUser, setLoadingUser] = useState(false);
-  const [preselectedUser, setPreselectedUser] = useState<any>(null);
+  const [preselectedUser, setPreselectedUser] = useState<UserBasic | null>(null);
   const [form] = Form.useForm();
   const router = useRouter();
+  const githubId = router.query.githubId;
 
   useAsync(async () => {
     const { data: badges } = await gratitudesApi.getBadges(course.id);
@@ -36,11 +37,10 @@ function GratitudePage() {
   }, []);
 
   useEffect(() => {
-    const { githubId } = router.query;
     if (githubId && typeof githubId === 'string') {
       loadUserByGithubId(githubId);
     }
-  }, [router.query]);
+  }, [githubId]);
 
   const loadUserByGithubId = async (githubId: string) => {
     try {
@@ -83,7 +83,6 @@ function GratitudePage() {
     setBadges(data);
   };
 
-  const { githubId } = router.query;
   const shouldWaitForUser = githubId && typeof githubId === 'string';
   const showForm = !shouldWaitForUser || (shouldWaitForUser && !loadingUser);
 

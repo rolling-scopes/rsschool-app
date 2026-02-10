@@ -3030,6 +3030,33 @@
         "summary": "",
         "tags": ["session"]
       }
+    },
+    "/devtools/users": {
+      "get": {
+        "operationId": "getDevUsers",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/DevtoolsUserDto" } }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": ["devtools"]
+      }
+    },
+    "/devtools/user/{githubId}/login": {
+      "get": {
+        "operationId": "getDevUserLogin",
+        "parameters": [{ "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "" } },
+        "summary": "",
+        "tags": ["devtools"]
+      }
     }
   },
   "info": { "title": "", "description": "", "version": "1.0.0", "contact": {} },
@@ -5960,6 +5987,16 @@
           }
         },
         "required": ["id", "githubId", "roles", "isAdmin", "isHirer", "appRoles", "courses"]
+      },
+      "DevtoolsUserDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "githubId": { "type": "string" },
+          "mentor": { "type": "array", "items": { "type": "number" } },
+          "student": { "type": "array", "items": { "type": "number" } }
+        },
+        "required": ["id", "githubId", "mentor", "student"]
       }
     }
   }

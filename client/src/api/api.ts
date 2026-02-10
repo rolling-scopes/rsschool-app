@@ -3069,6 +3069,37 @@ export type CrossCheckStatusEnum = typeof CrossCheckStatusEnum[keyof typeof Cros
 /**
  * 
  * @export
+ * @interface DevtoolsUserDto
+ */
+export interface DevtoolsUserDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof DevtoolsUserDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof DevtoolsUserDto
+     */
+    'githubId': string;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof DevtoolsUserDto
+     */
+    'mentor': Array<number>;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof DevtoolsUserDto
+     */
+    'student': Array<number>;
+}
+/**
+ * 
+ * @export
  * @interface DisciplineDto
  */
 export interface DisciplineDto {
@@ -14374,6 +14405,163 @@ export class CoursesTasksApi extends BaseAPI {
      */
     public updateCourseTask(courseId: number, courseTaskId: number, updateCourseTaskDto: UpdateCourseTaskDto, options?: AxiosRequestConfig) {
         return CoursesTasksApiFp(this.configuration).updateCourseTask(courseId, courseTaskId, updateCourseTaskDto, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * DevtoolsApi - axios parameter creator
+ * @export
+ */
+export const DevtoolsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} githubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDevUserLogin: async (githubId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'githubId' is not null or undefined
+            assertParamExists('getDevUserLogin', 'githubId', githubId)
+            const localVarPath = `/devtools/user/{githubId}/login`
+                .replace(`{${"githubId"}}`, encodeURIComponent(String(githubId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDevUsers: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/devtools/users`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * DevtoolsApi - functional programming interface
+ * @export
+ */
+export const DevtoolsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = DevtoolsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} githubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getDevUserLogin(githubId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getDevUserLogin(githubId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getDevUsers(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<DevtoolsUserDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getDevUsers(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * DevtoolsApi - factory interface
+ * @export
+ */
+export const DevtoolsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = DevtoolsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} githubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDevUserLogin(githubId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.getDevUserLogin(githubId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDevUsers(options?: any): AxiosPromise<Array<DevtoolsUserDto>> {
+            return localVarFp.getDevUsers(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * DevtoolsApi - object-oriented interface
+ * @export
+ * @class DevtoolsApi
+ * @extends {BaseAPI}
+ */
+export class DevtoolsApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} githubId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DevtoolsApi
+     */
+    public getDevUserLogin(githubId: string, options?: AxiosRequestConfig) {
+        return DevtoolsApiFp(this.configuration).getDevUserLogin(githubId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DevtoolsApi
+     */
+    public getDevUsers(options?: AxiosRequestConfig) {
+        return DevtoolsApiFp(this.configuration).getDevUsers(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
