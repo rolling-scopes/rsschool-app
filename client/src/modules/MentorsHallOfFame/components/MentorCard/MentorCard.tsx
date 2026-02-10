@@ -1,4 +1,4 @@
-import { Badge, Button, Card, Divider, Flex, List, Space, Typography } from 'antd';
+import { Button, Card, Divider, Flex, List, Space, Typography } from 'antd';
 import { HeartOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import { TopMentorDto } from 'api';
@@ -11,15 +11,8 @@ interface MentorCardProps {
   mentor: TopMentorDto;
 }
 
-function getRankBadgeColor(rank: number): string {
-  if (rank === 1) return 'gold';
-  if (rank === 2) return 'silver';
-  if (rank === 3) return '#cd7f32';
-  return 'purple';
-}
-
 export function MentorCard({ mentor }: MentorCardProps) {
-  const { rank, githubId, name, totalStudents, totalGratitudes, courseStats } = mentor;
+  const { githubId, name, totalStudents, totalGratitudes, courseStats } = mentor;
 
   const gratitudeUrl = `/gratitude?githubId=${githubId}`;
 
@@ -37,7 +30,6 @@ export function MentorCard({ mentor }: MentorCardProps) {
     >
       <Space direction="vertical" size="middle" style={{ width: '100%' }}>
         <Flex align="center" gap="middle">
-          <Badge count={rank} color={getRankBadgeColor(rank)} className={styles.rankBadge} />
           <GithubAvatar githubId={githubId} size={48} />
           <Space direction="vertical" size={0} style={{ flex: 1, minWidth: 0 }}>
             <Title level={5} style={{ margin: 0 }}>

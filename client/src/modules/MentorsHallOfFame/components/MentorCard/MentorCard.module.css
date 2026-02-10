@@ -10,15 +10,6 @@
   flex-direction: column;
 }
 
-.rankBadge :global(.ant-badge-count) {
-  min-width: 40px;
-  height: 40px;
-  line-height: 40px;
-  border-radius: 50%;
-  font-size: 1.2rem;
-  font-weight: bold;
-}
-
 .totalStudentsCard {
   text-align: center;
 }
@@ -28,10 +19,13 @@
 }
 
 .certifiedText {
-  flex: 1;
-  min-width: 0;
+  flex: 0 0 auto;
+  width: 72px;
   text-align: center;
   font-size: 0.875rem;
+  white-space: normal;
+  line-height: 1.25;
+  margin: 0 auto;
 }
 
 .courseList {

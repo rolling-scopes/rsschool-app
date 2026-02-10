@@ -26,10 +26,10 @@ describe('MentorCard', () => {
     expect(screen.getAllByRole('img').length).toBeGreaterThan(0);
   });
 
-  it('displays rank badge correctly', () => {
+  it('does not display rank badge', () => {
     render(<MentorCard mentor={mockMentor} />);
 
-    expect(screen.getByText('1')).toBeInTheDocument();
+    expect(screen.queryByTitle('1')).not.toBeInTheDocument();
   });
 
   it('displays total students count', () => {
@@ -73,34 +73,6 @@ describe('MentorCard', () => {
 
     expect(screen.getByText('Test Mentor')).toBeInTheDocument();
     expect(screen.queryByText('JS Course')).not.toBeInTheDocument();
-  });
-
-  it('renders rank badge for rank 1', () => {
-    render(<MentorCard mentor={{ ...mockMentor, rank: 1 }} />);
-
-    const rankBadge = screen.getByTitle('1');
-    expect(rankBadge).toHaveClass('ant-badge-count');
-  });
-
-  it('renders rank badge for rank 2', () => {
-    render(<MentorCard mentor={{ ...mockMentor, rank: 2 }} />);
-
-    const rankBadge = screen.getByTitle('2');
-    expect(rankBadge).toHaveClass('ant-badge-count');
-  });
-
-  it('renders rank badge for rank 3', () => {
-    render(<MentorCard mentor={{ ...mockMentor, rank: 3 }} />);
-
-    const rankBadge = screen.getByTitle('3');
-    expect(rankBadge).toHaveClass('ant-badge-count');
-  });
-
-  it('renders rank badge for ranks > 3', () => {
-    render(<MentorCard mentor={{ ...mockMentor, rank: 5 }} />);
-
-    const rankBadge = screen.getByTitle('5');
-    expect(rankBadge).toHaveClass('ant-badge-count');
   });
 
   it('renders GitHub profile link', () => {
