@@ -110,15 +110,17 @@ export class MentorsHallOfFameService implements OnModuleInit {
 
   private mapToTopMentorDtos(rawMentors: Record<string, unknown>[]): TopMentorDto[] {
     return rawMentors.map((raw, index) => {
-      const totalStudents = Number(raw.totalStudents);
-      const totalGratitudes = Number(raw.totalGratitudes);
+      const totalStudents = this.toNumberOrZero(raw.totalStudents);
+      const totalGratitudes = this.toNumberOrZero(raw.totalGratitudes);
       const firstName = raw.odtFirstName as string | null;
       const lastName = raw.odtLastName as string | null;
       const githubId = raw.odtGithubId as string;
       const name = [firstName, lastName].filter(Boolean).join(' ') || githubId;
 
       // Aggregate course stats from raw JSON
-      const courseStatsRaw = (raw.courseStatsRaw as { courseName: string; studentId: number }[]) || [];
+      const courseStatsRaw = Array.isArray(raw.courseStatsRaw)
+        ? (raw.courseStatsRaw as { courseName: string; studentId: number }[])
+        : [];
       const courseStatsMap = new Map<string, Set<number>>();
 
       for (const item of courseStatsRaw) {
@@ -142,5 +144,10 @@ export class MentorsHallOfFameService implements OnModuleInit {
         courseStats,
       });
     });
+  }
+
+  private toNumberOrZero(value: unknown): number {
+    const numberValue = Number(value);
+    return Number.isFinite(numberValue) ? numberValue : 0;
   }
 }

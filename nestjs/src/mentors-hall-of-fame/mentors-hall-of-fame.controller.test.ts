@@ -1,3 +1,4 @@
+import { BadRequestException, ParseBoolPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MentorsHallOfFameController } from './mentors-hall-of-fame.controller';
 import { MentorsHallOfFameService } from './mentors-hall-of-fame.service';
@@ -64,6 +65,26 @@ describe('MentorsHallOfFameController', () => {
 
       expect(mockGetTopMentors).toHaveBeenCalledWith(true);
       expect(mockGetTopMentors).toHaveBeenCalledTimes(1);
+    });
+
+    it('propagates service errors', async () => {
+      mockGetTopMentors.mockRejectedValueOnce(new Error('Service failed'));
+
+      await expect(controller.getTopMentors(false)).rejects.toThrow('Service failed');
+    });
+  });
+
+  describe('allTime query validation', () => {
+    it('throws for invalid allTime value', async () => {
+      const parseBoolPipe = new ParseBoolPipe();
+
+      await expect(
+        parseBoolPipe.transform('invalid', {
+          type: 'query',
+          data: 'allTime',
+          metatype: Boolean,
+        }),
+      ).rejects.toThrow(BadRequestException);
     });
   });
 });

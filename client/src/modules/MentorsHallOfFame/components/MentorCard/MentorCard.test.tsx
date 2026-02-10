@@ -82,4 +82,67 @@ describe('MentorCard', () => {
     expect(githubLink).toHaveAttribute('href', 'https://github.com/testmentor');
     expect(githubLink).toHaveAttribute('target', '_blank');
   });
+
+  it('renders zero students and gratitudes', () => {
+    const mentorWithZeroValues: TopMentorDto = {
+      ...mockMentor,
+      totalStudents: 0,
+      totalGratitudes: 0,
+    };
+
+    render(<MentorCard mentor={mentorWithZeroValues} />);
+
+    expect(screen.getAllByText('0')).toHaveLength(2);
+    expect(screen.getByText(/certified students/i)).toBeInTheDocument();
+  });
+
+  it('renders mentor when only firstName exists in name', () => {
+    const mentorWithFirstNameOnly: TopMentorDto = {
+      ...mockMentor,
+      name: 'John',
+    };
+
+    render(<MentorCard mentor={mentorWithFirstNameOnly} />);
+
+    expect(screen.getByText('John')).toBeInTheDocument();
+    expect(screen.queryByText('Test Mentor')).not.toBeInTheDocument();
+  });
+
+  it('renders mentor when only lastName exists in name', () => {
+    const mentorWithLastNameOnly: TopMentorDto = {
+      ...mockMentor,
+      name: 'Doe',
+    };
+
+    render(<MentorCard mentor={mentorWithLastNameOnly} />);
+
+    expect(screen.getByText('Doe')).toBeInTheDocument();
+    expect(screen.queryByText('Test Mentor')).not.toBeInTheDocument();
+  });
+
+  it('renders very long course names', () => {
+    const longCourseName =
+      'Very Long Course Name With Many Words For Overflow Testing Very Long Course Name With Many Words For Overflow Testing';
+    const mentorWithLongCourseName: TopMentorDto = {
+      ...mockMentor,
+      courseStats: [{ courseName: longCourseName, studentsCount: 7 }],
+    };
+
+    render(<MentorCard mentor={mentorWithLongCourseName} />);
+
+    expect(screen.getByText(longCourseName)).toBeInTheDocument();
+  });
+
+  it('renders very long mentor names', () => {
+    const longMentorName =
+      'Very Long Mentor Name With Many Words For Overflow Testing Very Long Mentor Name With Many Words For Overflow Testing';
+    const mentorWithLongName: TopMentorDto = {
+      ...mockMentor,
+      name: longMentorName,
+    };
+
+    render(<MentorCard mentor={mentorWithLongName} />);
+
+    expect(screen.getByText(longMentorName)).toBeInTheDocument();
+  });
 });

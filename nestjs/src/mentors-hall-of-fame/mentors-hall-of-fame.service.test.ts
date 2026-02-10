@@ -73,11 +73,47 @@ describe('MentorsHallOfFameService', () => {
     service = module.get<MentorsHallOfFameService>(MentorsHallOfFameService);
   });
 
+  describe('onModuleInit', () => {
+    it('calls refreshCache', async () => {
+      const refreshCacheSpy = jest.spyOn(service, 'refreshCache').mockResolvedValue();
+
+      await service.onModuleInit();
+
+      expect(refreshCacheSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe('getTopMentors', () => {
     it('returns empty array when cache is empty', () => {
       const result = service.getTopMentors();
 
       expect(result).toEqual([]);
+    });
+
+    it('returns allTime mentors from allTime cache key', async () => {
+      const allTimeMentors = [
+        {
+          odtGithubId: 'all-time-mentor',
+          odtFirstName: 'All',
+          odtLastName: 'Time',
+          totalStudents: '42',
+          totalGratitudes: '9',
+          courseStatsRaw: [],
+        },
+      ];
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce([]).mockResolvedValueOnce(allTimeMentors);
+
+      await service.refreshCache();
+
+      expect(service.getTopMentors()).toEqual([]);
+      expect(service.getTopMentors(true)).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            githubId: 'all-time-mentor',
+            totalStudents: 42,
+          }),
+        ]),
+      );
     });
   });
 
@@ -152,7 +188,6 @@ describe('MentorsHallOfFameService', () => {
 
       const result = service.getTopMentors();
 
-      // Sequential ranking: each mentor gets their position as rank
       expect(result[0]?.rank).toBe(1);
       expect(result[1]?.rank).toBe(2);
       expect(result[2]?.rank).toBe(3);
@@ -177,7 +212,6 @@ describe('MentorsHallOfFameService', () => {
 
       const result = service.getTopMentors();
 
-      // Should return only first 100 mentors
       expect(result.length).toBe(100);
       expect(result[0]?.rank).toBe(1);
       expect(result[99]?.rank).toBe(100);
@@ -185,7 +219,6 @@ describe('MentorsHallOfFameService', () => {
 
     it('includes all mentors with same count at position 100 boundary', async () => {
       const mentorsData = [];
-      // Create 99 mentors with different counts (positions 1-99)
       for (let i = 1; i <= 99; i++) {
         mentorsData.push({
           odtGithubId: `mentor${i}`,
@@ -196,7 +229,6 @@ describe('MentorsHallOfFameService', () => {
           courseStatsRaw: [],
         });
       }
-      // Create 5 mentors with same count at position 100 boundary
       for (let i = 100; i <= 104; i++) {
         mentorsData.push({
           odtGithubId: `mentor${i}`,
@@ -214,7 +246,6 @@ describe('MentorsHallOfFameService', () => {
 
       const result = service.getTopMentors();
 
-      // Should include all 5 mentors with count=50 at the boundary
       expect(result.length).toBe(104);
       expect(result[99]?.totalStudents).toBe(50);
       expect(result[103]?.totalStudents).toBe(50);
@@ -235,6 +266,33 @@ describe('MentorsHallOfFameService', () => {
 
       const reactCourse = mentor1?.courseStats.find(s => s.courseName === 'React Course');
       expect(reactCourse?.studentsCount).toBe(1);
+    });
+
+    it('sorts course stats by studentsCount in descending order', async () => {
+      const mentorWithUnsortedCourses = [
+        {
+          odtGithubId: 'mentor1',
+          odtFirstName: 'John',
+          odtLastName: 'Doe',
+          totalStudents: '6',
+          totalGratitudes: '1',
+          courseStatsRaw: [
+            { courseName: 'Course C', studentId: 1 },
+            { courseName: 'Course A', studentId: 2 },
+            { courseName: 'Course A', studentId: 3 },
+            { courseName: 'Course B', studentId: 4 },
+            { courseName: 'Course B', studentId: 5 },
+            { courseName: 'Course B', studentId: 6 },
+          ],
+        },
+      ];
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mentorWithUnsortedCourses).mockResolvedValueOnce([]);
+
+      await service.refreshCache();
+
+      const result = service.getTopMentors();
+      expect(result[0]?.courseStats.map(stat => stat.courseName)).toEqual(['Course B', 'Course A', 'Course C']);
+      expect(result[0]?.courseStats.map(stat => stat.studentsCount)).toEqual([3, 2, 1]);
     });
 
     it('formats mentor name from firstName and lastName', async () => {
@@ -267,6 +325,60 @@ describe('MentorsHallOfFameService', () => {
       const result = service.getTopMentors();
 
       expect(result[0]?.name).toBe('anonymousMentor');
+    });
+
+    it('handles null values in raw data', async () => {
+      const mentorWithNullValues = [
+        {
+          odtGithubId: 'mentor-null',
+          odtFirstName: null,
+          odtLastName: null,
+          totalStudents: '3',
+          totalGratitudes: null,
+          courseStatsRaw: null,
+        },
+      ];
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mentorWithNullValues).mockResolvedValueOnce([]);
+
+      await service.refreshCache();
+
+      const result = service.getTopMentors();
+      expect(result[0]).toEqual(
+        expect.objectContaining({
+          githubId: 'mentor-null',
+          name: 'mentor-null',
+          totalStudents: 3,
+          totalGratitudes: 0,
+          courseStats: [],
+        }),
+      );
+    });
+
+    it('handles undefined values in raw data', async () => {
+      const mentorWithUndefinedValues = [
+        {
+          odtGithubId: 'mentor-undefined',
+          odtFirstName: undefined,
+          odtLastName: undefined,
+          totalStudents: '4',
+          totalGratitudes: undefined,
+          courseStatsRaw: undefined,
+        },
+      ];
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mentorWithUndefinedValues).mockResolvedValueOnce([]);
+
+      await service.refreshCache();
+
+      const result = service.getTopMentors();
+      expect(result[0]).toEqual(
+        expect.objectContaining({
+          githubId: 'mentor-undefined',
+          name: 'mentor-undefined',
+          totalStudents: 4,
+          totalGratitudes: 0,
+          courseStats: [],
+        }),
+      );
     });
 
     it('handles duplicate student-course pairs correctly', async () => {
@@ -305,6 +417,14 @@ describe('MentorsHallOfFameService', () => {
       await service.refreshCache();
 
       expect(mockQueryBuilder.where).toHaveBeenCalledWith('certificate.issueDate >= :oneYearAgo', expect.any(Object));
+      expect(mockQueryBuilder.where).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not apply date filter when allTime is true', async () => {
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce([]).mockResolvedValueOnce(mockMentorData);
+
+      await service.refreshCache();
+
       expect(mockQueryBuilder.where).toHaveBeenCalledTimes(1);
     });
 
