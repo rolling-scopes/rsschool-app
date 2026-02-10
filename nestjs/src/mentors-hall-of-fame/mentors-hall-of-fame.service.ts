@@ -71,9 +71,9 @@ export class MentorsHallOfFameService implements OnModuleInit {
     const allMentors = await queryBuilder
       .leftJoin(`(${gratitudesSubquery.getQuery()})`, 'gratitudes', 'gratitudes."toUserId" = user.id')
       .select('user.id', 'userId')
-      .addSelect('user.githubId', 'odtGithubId')
-      .addSelect('user.firstName', 'odtFirstName')
-      .addSelect('user.lastName', 'odtLastName')
+      .addSelect('user.githubId', 'githubId')
+      .addSelect('user.firstName', 'firstName')
+      .addSelect('user.lastName', 'lastName')
       .addSelect('COUNT(DISTINCT student.id)', 'totalStudents')
       .addSelect('COALESCE(MAX(gratitudes."gratitudesCount"), 0)', 'totalGratitudes')
       .addSelect(`JSON_AGG(JSON_BUILD_OBJECT('courseName', course.name, 'studentId', student.id))`, 'courseStatsRaw')
@@ -112,9 +112,9 @@ export class MentorsHallOfFameService implements OnModuleInit {
     return rawMentors.map((raw, index) => {
       const totalStudents = this.toNumberOrZero(raw.totalStudents);
       const totalGratitudes = this.toNumberOrZero(raw.totalGratitudes);
-      const firstName = raw.odtFirstName as string | null;
-      const lastName = raw.odtLastName as string | null;
-      const githubId = raw.odtGithubId as string;
+      const firstName = raw.firstName as string | null;
+      const lastName = raw.lastName as string | null;
+      const githubId = raw.githubId as string;
       const name = [firstName, lastName].filter(Boolean).join(' ') || githubId;
 
       // Aggregate course stats from raw JSON

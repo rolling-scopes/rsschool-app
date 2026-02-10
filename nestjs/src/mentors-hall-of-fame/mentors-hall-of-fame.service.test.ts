@@ -5,9 +5,9 @@ import { MentorsHallOfFameService } from './mentors-hall-of-fame.service';
 
 const mockMentorData = [
   {
-    odtGithubId: 'mentor1',
-    odtFirstName: 'John',
-    odtLastName: 'Doe',
+    githubId: 'mentor1',
+    firstName: 'John',
+    lastName: 'Doe',
     totalStudents: '10',
     totalGratitudes: '5',
     courseStatsRaw: [
@@ -17,9 +17,9 @@ const mockMentorData = [
     ],
   },
   {
-    odtGithubId: 'mentor2',
-    odtFirstName: 'Jane',
-    odtLastName: 'Smith',
+    githubId: 'mentor2',
+    firstName: 'Jane',
+    lastName: 'Smith',
     totalStudents: '5',
     totalGratitudes: '3',
     courseStatsRaw: [{ courseName: 'JS Course', studentId: 1 }],
@@ -93,9 +93,9 @@ describe('MentorsHallOfFameService', () => {
     it('returns allTime mentors from allTime cache key', async () => {
       const allTimeMentors = [
         {
-          odtGithubId: 'all-time-mentor',
-          odtFirstName: 'All',
-          odtLastName: 'Time',
+          githubId: 'all-time-mentor',
+          firstName: 'All',
+          lastName: 'Time',
           totalStudents: '42',
           totalGratitudes: '9',
           courseStatsRaw: [],
@@ -130,9 +130,9 @@ describe('MentorsHallOfFameService', () => {
     it('returns mentors sorted by total certified students count DESC', async () => {
       const allTimeMentors = [
         {
-          odtGithubId: 'mentor3',
-          odtFirstName: 'Alex',
-          odtLastName: 'Brown',
+          githubId: 'mentor3',
+          firstName: 'Alex',
+          lastName: 'Brown',
           totalStudents: '12',
           totalGratitudes: '7',
           courseStatsRaw: [],
@@ -157,25 +157,25 @@ describe('MentorsHallOfFameService', () => {
     it('assigns sequential ranks to mentors', async () => {
       const mentorsWithTies = [
         {
-          odtGithubId: 'mentor1',
-          odtFirstName: 'John',
-          odtLastName: 'Doe',
+          githubId: 'mentor1',
+          firstName: 'John',
+          lastName: 'Doe',
           totalStudents: '10',
           totalGratitudes: '5',
           courseStatsRaw: [],
         },
         {
-          odtGithubId: 'mentor2',
-          odtFirstName: 'Jane',
-          odtLastName: 'Smith',
+          githubId: 'mentor2',
+          firstName: 'Jane',
+          lastName: 'Smith',
           totalStudents: '10',
           totalGratitudes: '3',
           courseStatsRaw: [],
         },
         {
-          odtGithubId: 'mentor3',
-          odtFirstName: 'Bob',
-          odtLastName: 'Johnson',
+          githubId: 'mentor3',
+          firstName: 'Bob',
+          lastName: 'Johnson',
           totalStudents: '5',
           totalGratitudes: '2',
           courseStatsRaw: [],
@@ -197,9 +197,9 @@ describe('MentorsHallOfFameService', () => {
       const mentorsData = [];
       for (let i = 1; i <= 150; i++) {
         mentorsData.push({
-          odtGithubId: `mentor${i}`,
-          odtFirstName: `Name${i}`,
-          odtLastName: `Last${i}`,
+          githubId: `mentor${i}`,
+          firstName: `Name${i}`,
+          lastName: `Last${i}`,
           totalStudents: String(200 - i),
           totalGratitudes: String(i),
           courseStatsRaw: [],
@@ -221,9 +221,9 @@ describe('MentorsHallOfFameService', () => {
       const mentorsData = [];
       for (let i = 1; i <= 99; i++) {
         mentorsData.push({
-          odtGithubId: `mentor${i}`,
-          odtFirstName: `Name${i}`,
-          odtLastName: `Last${i}`,
+          githubId: `mentor${i}`,
+          firstName: `Name${i}`,
+          lastName: `Last${i}`,
           totalStudents: String(200 - i),
           totalGratitudes: String(i),
           courseStatsRaw: [],
@@ -231,9 +231,9 @@ describe('MentorsHallOfFameService', () => {
       }
       for (let i = 100; i <= 104; i++) {
         mentorsData.push({
-          odtGithubId: `mentor${i}`,
-          odtFirstName: `Name${i}`,
-          odtLastName: `Last${i}`,
+          githubId: `mentor${i}`,
+          firstName: `Name${i}`,
+          lastName: `Last${i}`,
           totalStudents: '50',
           totalGratitudes: String(i),
           courseStatsRaw: [],
@@ -271,9 +271,9 @@ describe('MentorsHallOfFameService', () => {
     it('sorts course stats by studentsCount in descending order', async () => {
       const mentorWithUnsortedCourses = [
         {
-          odtGithubId: 'mentor1',
-          odtFirstName: 'John',
-          odtLastName: 'Doe',
+          githubId: 'mentor1',
+          firstName: 'John',
+          lastName: 'Doe',
           totalStudents: '6',
           totalGratitudes: '1',
           courseStatsRaw: [
@@ -309,9 +309,9 @@ describe('MentorsHallOfFameService', () => {
     it('uses githubId as name when firstName and lastName are empty', async () => {
       const mentorWithoutName = [
         {
-          odtGithubId: 'anonymousMentor',
-          odtFirstName: null,
-          odtLastName: null,
+          githubId: 'anonymousMentor',
+          firstName: null,
+          lastName: null,
           totalStudents: '5',
           totalGratitudes: '2',
           courseStatsRaw: [],
@@ -330,9 +330,9 @@ describe('MentorsHallOfFameService', () => {
     it('handles null values in raw data', async () => {
       const mentorWithNullValues = [
         {
-          odtGithubId: 'mentor-null',
-          odtFirstName: null,
-          odtLastName: null,
+          githubId: 'mentor-null',
+          firstName: null,
+          lastName: null,
           totalStudents: '3',
           totalGratitudes: null,
           courseStatsRaw: null,
@@ -357,9 +357,9 @@ describe('MentorsHallOfFameService', () => {
     it('handles undefined values in raw data', async () => {
       const mentorWithUndefinedValues = [
         {
-          odtGithubId: 'mentor-undefined',
-          odtFirstName: undefined,
-          odtLastName: undefined,
+          githubId: 'mentor-undefined',
+          firstName: undefined,
+          lastName: undefined,
           totalStudents: '4',
           totalGratitudes: undefined,
           courseStatsRaw: undefined,
@@ -384,9 +384,9 @@ describe('MentorsHallOfFameService', () => {
     it('handles duplicate student-course pairs correctly', async () => {
       const mentorWithDuplicates = [
         {
-          odtGithubId: 'mentor1',
-          odtFirstName: 'John',
-          odtLastName: 'Doe',
+          githubId: 'mentor1',
+          firstName: 'John',
+          lastName: 'Doe',
           totalStudents: '3',
           totalGratitudes: '4',
           courseStatsRaw: [
