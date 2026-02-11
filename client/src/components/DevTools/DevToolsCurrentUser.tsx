@@ -1,8 +1,9 @@
 import useRequest from 'ahooks/lib/useRequest';
-import { Flex, Typography } from 'antd';
+import { Descriptions, Typography } from 'antd';
 import { SessionApi } from 'api';
 
 const { Text } = Typography;
+const { Item } = Descriptions;
 
 const sessionApi = new SessionApi();
 
@@ -23,13 +24,16 @@ export default function DevToolsCurrentUser() {
   }
 
   return (
-    <Flex vertical>
-      <ul>
-        <li>User ID: {data.id}</li>
-        <li>GitHub ID: {data.githubId}</li>
-        <li>Admin: {data.isAdmin ? 'true' : 'false'}</li>
-        <li>Courses: {Object.keys(data.courses ?? {}).toString()}</li>
-      </ul>
-    </Flex>
+    <Descriptions
+      title="Active user session"
+      layout="vertical"
+      bordered={true}
+    >
+      <Item label="User ID">{data?.id}</Item>
+      <Item label="GitHub ID">{data?.githubId}</Item>
+      <Item label="Admin">{data?.isAdmin ? 'true' : 'false'}</Item>
+      <Item label="Course ids">{Object.keys(data?.courses ?? {}).
+        toString()}</Item>
+    </Descriptions>
   );
 }
