@@ -2,31 +2,31 @@
 
 ## Project Structure
 
-- `client/` - Next.js frontend (active)
-- `nestjs/` - NestJS backend (active)
-- `server/` - TypeORM entities only (backend code deprecated)
+- `client` - Next.js frontend (active)
+- `nestjs` - NestJS backend (active)
+- `server` - Old Koa.js backend. Still used for legacy endpoints and TypeORM entities
 
-New features should be implemented in `nestjs/`. If changes need to be made to functionality in `server/`, migrate it to `nestjs/` first (exception: small critical hotfixes).
+New features should be implemented in `nestjs`. If changes need to be made to functionality in `server/`, migrate it to `nestjs` first (exception: small critical hotfixes). Only allowed to modify TypeORM entities in `server`
 
 ### Path Aliases
 
-| Alias | Resolves To | Used In |
-|-------|-------------|---------|
-| `@entities/*` | `server/src/models/*` | nestjs |
-| `@client/*` | `client/src/*` | client |
+| Alias         | Resolves To           | Used In |
+| ------------- | --------------------- | ------- |
+| `@entities/*` | `server/src/models/*` | nestjs  |
+| `@client/*`   | `client/src/*`        | client  |
 
 ### File Naming
 
-| Type | Pattern | Example |
-|------|---------|---------|
-| Component | PascalCase.tsx | `CourseCard.tsx` |
-| Hook | camelCase.tsx | `useActiveCourse.tsx` |
-| Service | kebab-case.ts | `courses.service.ts` |
-| DTO | kebab-case.dto.ts | `create-course.dto.ts` |
-| Test | *.test.ts(x) | `auth.service.test.ts` |
-| Module | kebab-case.module.ts | `courses.module.ts` |
-| Entity | camelCase.ts | `course.ts` |
-| CSS Module | *.module.css | `Card.module.css` |
+| Type       | Pattern              | Example                |
+| ---------- | -------------------- | ---------------------- |
+| Component  | PascalCase.tsx       | `CourseCard.tsx`       |
+| Hook       | camelCase.ts         | `useExpelledStats.ts`  |
+| Service    | kebab-case.ts        | `courses.service.ts`   |
+| DTO        | kebab-case.dto.ts    | `create-course.dto.ts` |
+| Test       | \*.test.ts(x)        | `auth.service.test.ts` |
+| Module     | kebab-case.module.ts | `courses.module.ts`    |
+| Entity     | camelCase.ts         | `course.ts`            |
+| CSS Module | \*.module.css        | `Card.module.css`      |
 
 ## TypeScript Conventions
 
@@ -82,6 +82,7 @@ modules/<Feature>/
 ### Hooks
 
 - Use hooks from `react-use` or `ahooks` before writing custom
+- Use `useRequest` from `ahooks` for API calls
 - Keep custom hooks focused and simple
 
 ### Services
@@ -146,38 +147,16 @@ nestjs/src/<domain>/
 - Update DTO: `extends PartialType(CreateDto)`
 - All properties need `@ApiProperty()` for OpenAPI
 
-### Validation Decorators
-
-- Required: `@IsNotEmpty()` + type decorator
-- Optional: `@IsOptional()` + type decorator
-- Arrays: `@IsArray()` + `@IsNumber({}, { each: true })`
-- Enums: `@IsEnum(EnumType)`
-
 ### Error Handling
 
-- `NotFoundException` - entity not found
-- `ForbiddenException` - no permission
-- `BadRequestException` - invalid input
 - Include context in error messages: `Entity with id ${id} not found`
 
 ## TypeORM Entities
 
 All entities live in `server/src/models/`. NestJS imports via `@entities/*` alias.
 
-### Columns
-
-- Dates: `@Column({ type: 'timestamptz' })` with `Date` type
-- Nullable: `@Column({ nullable: true })` with `T | null` type
-- Defaults: `@Column({ default: false })` for booleans/numbers
-- JSON: `@Column({ type: 'json' })` with `Record<string, unknown>` type
-- Enums: `@Column({ type: 'varchar' })` with enum type
-- Use `@CreateDateColumn()` and `@UpdateDateColumn()` for timestamps
-
 ### Relations
 
-- Always add `@Index()` on foreign key columns
-- Use `@JoinColumn({ name: 'fieldId' })` to specify FK column name
-- Nullable relations: `{ nullable: true, onDelete: 'SET NULL' }`
 - Keep both relation property and `fieldId` column
 
 ### Migrations

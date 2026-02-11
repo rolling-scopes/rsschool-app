@@ -16,9 +16,7 @@ export const useExpelledStats = (courseId?: number) => {
 
   const { runAsync: handleDelete, loading: isDeleting } = useRequest(
     async (id: string) => courseStatsApi.deleteExpelledStat(id),
-    {
-      onSuccess: refresh,
-    },
+    { onSuccess: refresh },
   );
 
   return {
