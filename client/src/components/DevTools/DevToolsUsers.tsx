@@ -1,5 +1,5 @@
 import { Button, Flex, Table, Typography } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { DevtoolsApi, DevtoolsUserDto } from '@client/api';
 import { useRouter } from 'next/navigation';
 
@@ -20,48 +20,51 @@ export default function DevToolsUsers() {
     }
   }
 
-  const tableColumns = [
-    {
-      title: 'id',
-      dataIndex: 'id',
-      key: 'id',
-    },
-    {
-      title: 'githubId',
-      dataIndex: 'githubId',
-      key: 'githubId',
-    },
-    {
-      title: 'student',
-      dataIndex: 'student',
-      key: 'student',
-      render: (title: string[]) => (
-        <Text ellipsis={{ tooltip: true }} style={{ width: '12ch' }}>
-          {title.join(', ')}
-        </Text>
-      ),
-    },
-    {
-      title: 'mentor',
-      dataIndex: 'mentor',
-      key: 'mentor',
-      render: (title: string[]) => (
-        <Text ellipsis={{ tooltip: true }} style={{ width: '12ch' }}>
-          {title.join(', ')}
-        </Text>
-      ),
-    },
-    {
-      title: 'action',
-      dataIndex: 'action',
-      key: 'action',
-      render: (_value: unknown, record: DevtoolsUserDto) => (
-        <Button type="link" onClick={() => loginWithUser(record)}>
-          Login
-        </Button>
-      ),
-    },
-  ];
+  const tableColumns = useMemo(
+    () => [
+      {
+        title: 'id',
+        dataIndex: 'id',
+        key: 'id',
+      },
+      {
+        title: 'githubId',
+        dataIndex: 'githubId',
+        key: 'githubId',
+      },
+      {
+        title: 'student',
+        dataIndex: 'student',
+        key: 'student',
+        render: (title: string[]) => (
+          <Text ellipsis={{ tooltip: true }} style={{ width: '12ch' }}>
+            {title.join(', ')}
+          </Text>
+        ),
+      },
+      {
+        title: 'mentor',
+        dataIndex: 'mentor',
+        key: 'mentor',
+        render: (title: string[]) => (
+          <Text ellipsis={{ tooltip: true }} style={{ width: '12ch' }}>
+            {title.join(', ')}
+          </Text>
+        ),
+      },
+      {
+        title: 'action',
+        dataIndex: 'action',
+        key: 'action',
+        render: (_value: unknown, record: DevtoolsUserDto) => (
+          <Button type="link" onClick={() => loginWithUser(record)}>
+            Login
+          </Button>
+        ),
+      },
+    ],
+    [loginWithUser],
+  );
 
   useEffect(() => {
     devToolsApi
