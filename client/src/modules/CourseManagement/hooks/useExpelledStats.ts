@@ -1,6 +1,5 @@
 import { CourseStatsApi, ExpelledStatsDto } from '@client/api';
 import { useRequest } from 'ahooks';
-import { useState } from 'react';
 
 const courseStatsApi = new CourseStatsApi();
 
@@ -14,21 +13,13 @@ export const useExpelledStats = (courseId?: number) => {
     ready: !!courseId,
     refreshDeps: [courseId],
   });
-  const [isDeleting, setIsDeleting] = useState(false);
 
-  const handleDelete = async (id: string) => {
-    setIsDeleting(true);
-    try {
-      await courseStatsApi.deleteExpelledStat(id);
-      if (typeof refresh === 'function') {
-        refresh();
-      }
-    } catch (err) {
-      console.error('Error deleting stat:', err);
-    } finally {
-      setIsDeleting(false);
-    }
-  };
+  const { runAsync: handleDelete, loading: isDeleting } = useRequest(
+    async (id: string) => courseStatsApi.deleteExpelledStat(id),
+    {
+      onSuccess: refresh,
+    },
+  );
 
   return {
     data,
