@@ -22657,3 +22657,5 @@ export class UsersNotificationsApi extends BaseAPI {
         return UsersNotificationsApiFp(this.configuration).usersNotificationsControllerFindConnection(notificationConnectionExistsDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
+
+

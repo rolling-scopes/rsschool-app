@@ -71,6 +71,7 @@
       "cache": false,
       "persistent": true
     },
-    "compile": {}
+    "compile": {},
+    "openapi": {}
   }
 }

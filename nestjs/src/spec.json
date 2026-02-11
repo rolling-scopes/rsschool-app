@@ -3933,7 +3933,7 @@
           "user": { "$ref": "#/components/schemas/UserDto" },
           "reasonForLeaving": { "type": "array", "items": { "type": "string" } },
           "otherComment": { "type": "string" },
-          "submittedAt": { "format": "date-time", "type": "string" }
+          "submittedAt": { "type": "string", "format": "date-time" }
         },
         "required": ["id", "course", "user", "otherComment", "submittedAt"]
       },

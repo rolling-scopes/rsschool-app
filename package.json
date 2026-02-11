@@ -24,7 +24,8 @@
     "db:dump": "PGPASSWORD=12345678 pg_dump -h localhost --username rs_master rs_school --file ./setup/backup-local.sql",
     "db:dump:win": "pg_dump -h localhost --username rs_master rs_school > ./setup/backup-local.sql",
     "db:up": "podman compose -f ./setup/docker-compose.yml up  -d",
-    "db:down": "podman compose -f ./setup/docker-compose.yml down"
+    "db:down": "podman compose -f ./setup/docker-compose.yml down",
+    "openapi": "turbo run openapi"
   },
   "dependencies": {
     "axios": "1.8.4",
