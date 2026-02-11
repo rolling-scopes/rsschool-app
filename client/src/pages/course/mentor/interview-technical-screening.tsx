@@ -15,7 +15,6 @@ import { CourseRole, StudentBasic } from 'services/models';
 
 type FormValues = typeof defaultInitialValues;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type HandleChangeValue = (skillName: string) => (value: any) => void;
 
 const SKILLS_LEVELS = [
@@ -307,7 +306,6 @@ function Page() {
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const calculateResult = (result: any) => {
     const { skills, programmingTask } = result;
     const commonSkills = Object.values(skills.common).filter(Boolean) as number[];
@@ -399,7 +397,6 @@ function Page() {
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function serializeToJson(values: FormValues): any {
   return keys(values)
     .filter(v => v !== 'githubId')
@@ -408,12 +405,10 @@ function serializeToJson(values: FormValues): any {
     }, {});
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function deserializeFromJson(json: Record<string, unknown>): any {
   return keys(defaultInitialValues)
     .filter(key => key !== 'githubId')
     .reduce((acc, key) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (acc as any)[key] = get(json, key.split('-'));
       return acc;
     }, {} as FormValues);
