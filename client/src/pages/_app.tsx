@@ -6,11 +6,7 @@ import 'antd/dist/reset.css';
 import { initializeFeatures } from 'services/features';
 import { Analytics } from '../components/Analytics';
 import '../styles/main.css';
-import {
-  DevToolsProvider,
-  MessageProvider,
-  ThemeProvider,
-} from '@client/providers';
+import { DevToolsProvider, MessageProvider, ThemeProvider } from '@client/providers';
 
 class RsSchoolApp extends App {
   render() {
@@ -21,21 +17,14 @@ class RsSchoolApp extends App {
       <>
         <Analytics />
         <Head>
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-          />
+          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
           <title>App / The Rolling Scopes School</title>
         </Head>
         <ThemeProvider>
           <MessageProvider>
             <DevToolsProvider>
               <ActiveCourseProvider
-                publicRoutes={[
-                  '/login',
-                  '/registry/mentor',
-                  '/registry/student',
-                  '/course/mentor/confirm']}
+                publicRoutes={['/login', '/registry/mentor', '/registry/student', '/course/mentor/confirm']}
               >
                 <Component {...pageProps} />
               </ActiveCourseProvider>

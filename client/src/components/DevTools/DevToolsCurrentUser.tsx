@@ -24,16 +24,11 @@ export default function DevToolsCurrentUser() {
   }
 
   return (
-    <Descriptions
-      title="Active user session"
-      layout="vertical"
-      bordered={true}
-    >
+    <Descriptions title="Active user session" layout="vertical" bordered={true}>
       <Item label="User ID">{data?.id}</Item>
       <Item label="GitHub ID">{data?.githubId}</Item>
       <Item label="Admin">{data?.isAdmin ? 'true' : 'false'}</Item>
-      <Item label="Course ids">{Object.keys(data?.courses ?? {}).
-        toString()}</Item>
+      <Item label="Course ids">{Object.keys(data?.courses ?? {}).toString()}</Item>
     </Descriptions>
   );
 }
