@@ -209,7 +209,7 @@ export function ScoreTable(props: Props) {
   };
 
   const visibleColumns = getVisibleColumns(columns);
-  const isSummaryShown = students.content.length > 0 && studentScore;
+  const isSummaryShown = students.content.length > 1 && studentScore;
 
   return (
     <>
