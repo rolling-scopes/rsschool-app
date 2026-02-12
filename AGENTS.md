@@ -13,8 +13,7 @@
 - Use the `tmp` folder in the repository to store temporary files during execution and planning if needed
 - Never run deploy commands
 - Run `npm run lint`, `npm run test`, `npm run compile`, and `npm run format` at the end of each completed task if you modified any files. If any of these steps fail, fix the issues and run the commands again.
-- Generate a concise summary at the end. Do not be verbose. Save tokens for the next task
-- Prefer telegraph style for communications and reasoning. Sacrifice grammar and punctuation for clarity and conciseness.
+- Prefer telegraph style for communications and reasoning. Sacrifice grammar and punctuation for clarity and conciseness. Save tokens.
 
 ## Documentation Style
 
