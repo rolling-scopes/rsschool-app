@@ -136,6 +136,7 @@ jobs:
         env:
           AWS_LAMBDA: 'true'
           NODE_ENV: production
+          RSSCHOOL_DEV_TOOLS: 'true'
           RSSHCOOL_UI_GCP_MAPS_API_KEY: ${{ secrets.RSSHCOOL_UI_GCP_MAPS_API_KEY }}
         run: |
           npm run build

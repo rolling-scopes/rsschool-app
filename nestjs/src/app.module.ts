@@ -33,6 +33,7 @@ import { AutoTestModule } from './auto-test/auto-test.module';
 import { ContributorsModule } from './contributors';
 import { ListenersModule } from './listeners';
 import { SessionModule } from './session/session.module';
+import { DevtoolsModule } from './devtools/devtools.module';
 
 @Module({
   imports: [
@@ -74,6 +75,7 @@ import { SessionModule } from './session/session.module';
     ContributorsModule,
     ListenersModule,
     SessionModule,
+    DevtoolsModule.forRoot(),
   ],
   controllers: [],
   providers: [Logger, ConfigService],

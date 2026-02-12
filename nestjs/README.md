@@ -11,6 +11,7 @@ This workspace contains the active NestJS backend for RS School App.
 
 - Follow root `README.md` for database setup and running the full app
 - Copy `nestjs/.env.example` to `nestjs/.env`
+- Frontend DevTools module depends on the `.env` variable `RSSCHOOL_DEV_TOOLS` on the backend.
 
 ## OpenAPI client
 
