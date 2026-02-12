@@ -9,8 +9,8 @@ import { StudentsEligibleForCertificationCard } from '@client/modules/CourseStat
 import { TaskPerformanceCard } from '@client/modules/CourseStatistics/components/TaskPerformanceCard';
 import { StudentsCertificatesCountriesCard } from '@client/modules/CourseStatistics/components/StudentsCertificatesCountriesCard';
 import Masonry from 'react-masonry-css';
-import css from 'styled-jsx/css';
 import { useAsync } from 'react-use';
+import styles from './StatCards.module.css';
 import { useActiveCourseContext } from '@client/modules/Course/contexts';
 
 type StatCardsProps = {
@@ -104,8 +104,8 @@ export function StatCards({ coursesData }: StatCardsProps) {
     <>
       <Masonry
         breakpointCols={masonryBreakPoints}
-        className={masonryClassName}
-        columnClassName={masonryColumnClassName}
+        className={styles.masonry as string}
+        columnClassName={styles.masonryColumn as string}
       >
         {cards.map(({ title, component }) => (
           <div style={{ marginBottom: gapSize }} key={title}>
@@ -113,23 +113,6 @@ export function StatCards({ coursesData }: StatCardsProps) {
           </div>
         ))}
       </Masonry>
-      {masonryStyles}
-      {masonryColumnStyles}
     </>
   );
 }
-
-const { className: masonryClassName, styles: masonryStyles } = css.resolve`
-  div {
-    display: flex;
-    margin-left: -${gapSize}px;
-    width: auto;
-    min-height: 85vh;
-  }
-`;
-const { className: masonryColumnClassName, styles: masonryColumnStyles } = css.resolve`
-  div {
-    padding-left: ${gapSize}px;
-    background-clip: padding-box;
-  }
-`;

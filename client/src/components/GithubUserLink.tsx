@@ -3,6 +3,7 @@ import { CopyOutlined, GithubOutlined } from '@ant-design/icons';
 import { useMessage } from 'hooks';
 import { useCopyToClipboard } from 'react-use';
 import { theme } from 'antd';
+import styles from './GithubUserLink.module.css';
 
 type Props = {
   value: string;
@@ -22,11 +23,11 @@ export function GithubUserLink({ value, isUserIconHidden = false, fullName, copy
   };
 
   return (
-    <div className="link-user">
+    <div className={styles.linkUser} style={{ color: token.colorText }}>
       <a
         title="Open Rolling Scopes App profile page"
         target="_blank"
-        className="link-user-profile"
+        className={styles.linkUserProfile}
         href={`/profile?githubId=${value}`}
       >
         {!isUserIconHidden && <GithubAvatar githubId={value} size={24} />}
@@ -35,35 +36,16 @@ export function GithubUserLink({ value, isUserIconHidden = false, fullName, copy
       <a
         title="Open GitHub profile page"
         target="_blank"
-        className="link-user-action"
+        className={styles.linkUserAction}
         href={`https://github.com/${value}`}
       >
         <GithubOutlined style={{ color: token.colorTextBase }} />
       </a>
       {copyable && (
-        <span title="Copy GitHub name to clipboard" className="link-user-action" onClick={handleCopyToClipboard}>
+        <span title="Copy GitHub name to clipboard" className={styles.linkUserAction} onClick={handleCopyToClipboard}>
           <CopyOutlined style={{ color: token.colorInfo }} />
         </span>
       )}
-      <style jsx>{`
-        .link-user,
-        .link-user-profile {
-          white-space: nowrap;
-          display: flex;
-          align-items: center;
-          gap: 0.5ch;
-          color: ${token.colorText};
-        }
-        .link-user-action {
-          opacity: 0;
-          margin: 0.1ch;
-        }
-        .link-user:hover .link-user-action {
-          cursor: pointer;
-          opacity: 1;
-          transition: opacity 0.5s ease-in-out;
-        }
-      `}</style>
     </div>
   );
 }
