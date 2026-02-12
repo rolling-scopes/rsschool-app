@@ -1,4 +1,4 @@
-:global(.custom-mentor-registry-tabs .ant-tabs-tab) {
+.tabs :global(.custom-mentor-registry-tabs .ant-tabs-tab) {
   min-width: 100px;
 }
 

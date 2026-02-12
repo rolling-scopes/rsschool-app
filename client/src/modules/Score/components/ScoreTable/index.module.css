@@ -1,4 +1,4 @@
-:global(.rs-table-row-disabled) {
+.tableScore :global(.rs-table-row-disabled) {
   opacity: 0.25;
 }
 
