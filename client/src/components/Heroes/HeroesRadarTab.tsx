@@ -1,7 +1,7 @@
 import { FileExcelOutlined } from '@ant-design/icons';
 import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { onlyDefined } from '@client/utils/onlyDefined';
-import { IPaginationInfo } from '@common/types/pagination';
+import { IPaginationInfo } from '@client/utils/pagination';
 import type { TimeRangePickerProps } from 'antd';
 import { Button, Checkbox, DatePicker, Form, Row, Select, Space, TableProps } from 'antd';
 import { CountryDto, GratitudesApi, HeroesRadarDto, HeroRadarDto } from 'api';

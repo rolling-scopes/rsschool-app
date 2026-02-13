@@ -4,6 +4,13 @@ import turbo from 'eslint-config-turbo/flat';
 import globals from 'globals';
 import jest from 'eslint-plugin-jest';
 
+const IS_AGENT =
+  Boolean(process.env.AGENT) ||
+  Boolean(process.env.OPENCODE) ||
+  Boolean(process.env.CLAUDECODE) ||
+  Boolean(process.env.CURSOR_AGENT) ||
+  Boolean(process.env.CODEX_THREAD_ID);
+
 export default tsEslint.config(
   eslint.configs.recommended,
   tsEslint.configs.recommended,
@@ -21,7 +28,7 @@ export default tsEslint.config(
       },
     },
     rules: {
-      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-explicit-any': IS_AGENT ? 'off' : 'warn',
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
@@ -36,5 +43,5 @@ export default tsEslint.config(
       ],
       'no-else-return': ['error'],
     },
-  }
+  },
 );

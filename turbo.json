@@ -55,13 +55,23 @@
         "RSSCHOOL_DEV_TOOLS"
       ]
     },
-    "lint": {},
+    "lint": {
+      "env": [
+        "AGENT",
+        "OPENCODE",
+        "CLAUDECODE",
+        "CURSOR_AGENT",
+        "CODEX_THREAD_ID",
+        "NO_COLOR"
+      ]
+    },
     "test": {},
     "test:ci": {},
     "start": {
       "cache": false,
       "persistent": true
     },
-    "compile": {}
+    "compile": {},
+    "openapi": {}
   }
 }

@@ -3939,29 +3939,17 @@
         "properties": { "deadlineInHours": { "type": "number" } },
         "required": ["deadlineInHours"]
       },
-      "ExpelledCourseDto": {
+      "UserDto": {
         "type": "object",
-        "properties": {
-          "id": { "type": "number" },
-          "name": { "type": "string" },
-          "fullName": { "type": "string" },
-          "alias": { "type": "string" },
-          "description": { "type": "string" },
-          "logo": { "type": "string" }
-        },
-        "required": ["id", "name", "fullName", "alias", "description", "logo"]
-      },
-      "ExpelledUserDto": {
-        "type": "object",
-        "properties": { "id": { "type": "number" }, "githubId": { "type": "string" } },
-        "required": ["id", "githubId"]
+        "properties": { "id": { "type": "number" }, "name": { "type": "string" }, "githubId": { "type": "string" } },
+        "required": ["id", "name", "githubId"]
       },
       "ExpelledStatsDto": {
         "type": "object",
         "properties": {
           "id": { "type": "string" },
-          "course": { "$ref": "#/components/schemas/ExpelledCourseDto" },
-          "user": { "$ref": "#/components/schemas/ExpelledUserDto" },
+          "course": { "$ref": "#/components/schemas/CourseDto" },
+          "user": { "$ref": "#/components/schemas/UserDto" },
           "reasonForLeaving": { "type": "array", "items": { "type": "string" } },
           "otherComment": { "type": "string" },
           "submittedAt": { "type": "string", "format": "date-time" }
@@ -5479,11 +5467,6 @@
           }
         },
         "required": ["name", "users", "roles"]
-      },
-      "UserDto": {
-        "type": "object",
-        "properties": { "id": { "type": "number" }, "name": { "type": "string" }, "githubId": { "type": "string" } },
-        "required": ["id", "name", "githubId"]
       },
       "UserGroupDto": {
         "type": "object",

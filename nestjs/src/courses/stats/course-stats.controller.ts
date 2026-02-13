@@ -44,7 +44,8 @@ export class CourseStatsController {
   @ApiOperation({ operationId: 'getExpelledStats' })
   @ApiOkResponse({ type: [ExpelledStatsDto] })
   public async getExpelledStats() {
-    return this.expelledStatsService.findAll();
+    const data = await this.expelledStatsService.findAll();
+    return data.map(item => new ExpelledStatsDto(item));
   }
 
   @Get('/:courseId/stats/expelled')
@@ -53,7 +54,8 @@ export class CourseStatsController {
   @ApiOperation({ operationId: 'getCourseExpelledStats' })
   @ApiOkResponse({ type: [ExpelledStatsDto] })
   public async getCourseExpelledStats(@Param('courseId', ParseIntPipe) courseId: number) {
-    return this.expelledStatsService.findByCourseId(courseId);
+    const data = await this.expelledStatsService.findByCourseId(courseId);
+    return data.map(item => new ExpelledStatsDto(item));
   }
 
   @Delete('/stats/expelled/:id')
