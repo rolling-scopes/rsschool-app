@@ -4287,6 +4287,25 @@ export interface LeaveCourseRequestDto {
 /**
  * 
  * @export
+ * @interface MentorCourseStatsDto
+ */
+export interface MentorCourseStatsDto {
+    /**
+     * Name of the course
+     * @type {string}
+     * @memberof MentorCourseStatsDto
+     */
+    'courseName': string;
+    /**
+     * Number of certified students mentored in this course
+     * @type {number}
+     * @memberof MentorCourseStatsDto
+     */
+    'studentsCount': number;
+}
+/**
+ * 
+ * @export
  * @interface MentorDashboardDto
  */
 export interface MentorDashboardDto {
@@ -7025,6 +7044,49 @@ export interface TeamsDto {
      * @memberof TeamsDto
      */
     'pagination': PaginationMetaDto;
+}
+/**
+ * 
+ * @export
+ * @interface TopMentorDto
+ */
+export interface TopMentorDto {
+    /**
+     * Position in the mentors ranking
+     * @type {number}
+     * @memberof TopMentorDto
+     */
+    'rank': number;
+    /**
+     * GitHub username
+     * @type {string}
+     * @memberof TopMentorDto
+     */
+    'githubId': string;
+    /**
+     * Full name of the mentor
+     * @type {string}
+     * @memberof TopMentorDto
+     */
+    'name': string;
+    /**
+     * Total number of certified students mentored
+     * @type {number}
+     * @memberof TopMentorDto
+     */
+    'totalStudents': number;
+    /**
+     * Total number of gratitudes received
+     * @type {number}
+     * @memberof TopMentorDto
+     */
+    'totalGratitudes': number;
+    /**
+     * Student counts per course
+     * @type {Array<MentorCourseStatsDto>}
+     * @memberof TopMentorDto
+     */
+    'courseStats': Array<MentorCourseStatsDto>;
 }
 /**
  * 
@@ -16649,6 +16711,108 @@ export class MentorsApi extends BaseAPI {
      */
     public getRandomTask(mentorId: number, courseId: number, options?: AxiosRequestConfig) {
         return MentorsApiFp(this.configuration).getRandomTask(mentorId, courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * MentorsHallOfFameApi - axios parameter creator
+ * @export
+ */
+export const MentorsHallOfFameApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {boolean} [allTime] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTopMentors: async (allTime?: boolean, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/mentors-hall-of-fame`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (allTime !== undefined) {
+                localVarQueryParameter['allTime'] = allTime;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * MentorsHallOfFameApi - functional programming interface
+ * @export
+ */
+export const MentorsHallOfFameApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = MentorsHallOfFameApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {boolean} [allTime] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getTopMentors(allTime?: boolean, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TopMentorDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getTopMentors(allTime, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * MentorsHallOfFameApi - factory interface
+ * @export
+ */
+export const MentorsHallOfFameApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = MentorsHallOfFameApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {boolean} [allTime] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTopMentors(allTime?: boolean, options?: any): AxiosPromise<Array<TopMentorDto>> {
+            return localVarFp.getTopMentors(allTime, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * MentorsHallOfFameApi - object-oriented interface
+ * @export
+ * @class MentorsHallOfFameApi
+ * @extends {BaseAPI}
+ */
+export class MentorsHallOfFameApi extends BaseAPI {
+    /**
+     * 
+     * @param {boolean} [allTime] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MentorsHallOfFameApi
+     */
+    public getTopMentors(allTime?: boolean, options?: AxiosRequestConfig) {
+        return MentorsHallOfFameApiFp(this.configuration).getTopMentors(allTime, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

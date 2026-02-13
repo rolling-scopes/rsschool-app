@@ -32,6 +32,7 @@ import { PromptsModule } from './prompts/prompts.module';
 import { AutoTestModule } from './auto-test/auto-test.module';
 import { ContributorsModule } from './contributors';
 import { ListenersModule } from './listeners';
+import { MentorsHallOfFameModule } from './mentors-hall-of-fame';
 import { SessionModule } from './session/session.module';
 import { DevtoolsModule } from './devtools/devtools.module';
 
@@ -74,6 +75,7 @@ import { DevtoolsModule } from './devtools/devtools.module';
     AutoTestModule,
     ContributorsModule,
     ListenersModule,
+    MentorsHallOfFameModule,
     SessionModule,
     DevtoolsModule.forRoot(),
   ],
