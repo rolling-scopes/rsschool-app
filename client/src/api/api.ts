@@ -3441,49 +3441,6 @@ export interface ExpelStatusDto {
 /**
  * 
  * @export
- * @interface ExpelledCourseDto
- */
-export interface ExpelledCourseDto {
-    /**
-     * 
-     * @type {number}
-     * @memberof ExpelledCourseDto
-     */
-    'id': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof ExpelledCourseDto
-     */
-    'name': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ExpelledCourseDto
-     */
-    'fullName': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ExpelledCourseDto
-     */
-    'alias': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ExpelledCourseDto
-     */
-    'description': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ExpelledCourseDto
-     */
-    'logo': string;
-}
-/**
- * 
- * @export
  * @interface ExpelledStatsDto
  */
 export interface ExpelledStatsDto {
@@ -3495,16 +3452,16 @@ export interface ExpelledStatsDto {
     'id': string;
     /**
      * 
-     * @type {ExpelledCourseDto}
+     * @type {CourseDto}
      * @memberof ExpelledStatsDto
      */
-    'course': ExpelledCourseDto;
+    'course': CourseDto;
     /**
      * 
-     * @type {ExpelledUserDto}
+     * @type {UserDto}
      * @memberof ExpelledStatsDto
      */
-    'user': ExpelledUserDto;
+    'user': UserDto;
     /**
      * 
      * @type {Array<string>}
@@ -3523,25 +3480,6 @@ export interface ExpelledStatsDto {
      * @memberof ExpelledStatsDto
      */
     'submittedAt': string;
-}
-/**
- * 
- * @export
- * @interface ExpelledUserDto
- */
-export interface ExpelledUserDto {
-    /**
-     * 
-     * @type {number}
-     * @memberof ExpelledUserDto
-     */
-    'id': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof ExpelledUserDto
-     */
-    'githubId': string;
 }
 /**
  * 

@@ -5,7 +5,7 @@ import { PublicSvgIcon } from '@client/components/Icons';
 import { DEFAULT_COURSE_ICONS } from '@client/configs/course-icons';
 import { dateUtcRenderer } from '@client/components/Table';
 import { useExpelledStats } from '@client/modules/CourseManagement/hooks/useExpelledStats';
-import { DetailedExpelledStat } from '@common/models';
+import { ExpelledStatsDto } from '@client/api';
 
 const { Title, Text } = Typography;
 
@@ -13,7 +13,7 @@ type Props = {
   courseId?: number;
 };
 
-const getColumns = (handleDelete: (id: string) => void, isDeleting: boolean): ColumnsType<DetailedExpelledStat> => [
+const getColumns = (handleDelete: (id: string) => void, isDeleting: boolean): ColumnsType<ExpelledStatsDto> => [
   {
     title: 'Course',
     dataIndex: ['course', 'name'],
@@ -85,7 +85,7 @@ const ExpelledStudentsStats: React.FC<Props> = ({ courseId }) => {
     return value;
   };
 
-  const getValueFromDataIndex = (row: DetailedExpelledStat, dataIndex: unknown): string => {
+  const getValueFromDataIndex = (row: ExpelledStatsDto, dataIndex: unknown): string => {
     if (Array.isArray(dataIndex)) {
       let current: unknown = row;
 
@@ -98,14 +98,14 @@ const ExpelledStudentsStats: React.FC<Props> = ({ courseId }) => {
     }
 
     if (typeof dataIndex === 'string' || typeof dataIndex === 'number') {
-      const value = row[dataIndex as keyof DetailedExpelledStat];
+      const value = row[dataIndex as keyof ExpelledStatsDto];
       return value !== undefined && value !== null ? String(value) : '';
     }
 
     return '';
   };
 
-  const getSpecialColumnValue = (row: DetailedExpelledStat, columnKey: string): string => {
+  const getSpecialColumnValue = (row: ExpelledStatsDto, columnKey: string): string => {
     switch (columnKey) {
       case 'reasons':
         return row.reasonForLeaving ? row.reasonForLeaving.map(r => r.replace(/_/g, ' ')).join('; ') : '';
@@ -120,7 +120,7 @@ const ExpelledStudentsStats: React.FC<Props> = ({ courseId }) => {
     }
   };
 
-  const formatRowToCsv = (row: DetailedExpelledStat, exportableColumns: ColumnType<DetailedExpelledStat>[]): string => {
+  const formatRowToCsv = (row: ExpelledStatsDto, exportableColumns: ColumnType<ExpelledStatsDto>[]): string => {
     return exportableColumns
       .map(col => {
         let value = '';
@@ -142,7 +142,7 @@ const ExpelledStudentsStats: React.FC<Props> = ({ courseId }) => {
     }
 
     const exportableColumns = columns.filter(
-      (col): col is ColumnType<DetailedExpelledStat> => 'dataIndex' in col && col.dataIndex !== undefined,
+      (col): col is ColumnType<ExpelledStatsDto> => 'dataIndex' in col && col.dataIndex !== undefined,
     );
 
     const headers = exportableColumns
