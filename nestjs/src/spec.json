@@ -2999,6 +2999,24 @@
         "tags": ["contributors"]
       }
     },
+    "/mentors-hall-of-fame": {
+      "get": {
+        "operationId": "getTopMentors",
+        "parameters": [{ "name": "allTime", "required": false, "in": "query", "schema": { "type": "boolean" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/TopMentorDto" } }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": ["mentors-hall-of-fame"]
+      }
+    },
     "/session": {
       "get": {
         "operationId": "getSession",
@@ -5917,6 +5935,30 @@
       "UpdateContributorDto": {
         "type": "object",
         "properties": { "description": { "type": "string" }, "userId": { "type": "number" } }
+      },
+      "MentorCourseStatsDto": {
+        "type": "object",
+        "properties": {
+          "courseName": { "type": "string", "description": "Name of the course" },
+          "studentsCount": { "type": "number", "description": "Number of certified students mentored in this course" }
+        },
+        "required": ["courseName", "studentsCount"]
+      },
+      "TopMentorDto": {
+        "type": "object",
+        "properties": {
+          "rank": { "type": "number", "description": "Position in the mentors ranking" },
+          "githubId": { "type": "string", "description": "GitHub username" },
+          "name": { "type": "string", "description": "Full name of the mentor" },
+          "totalStudents": { "type": "number", "description": "Total number of certified students mentored" },
+          "totalGratitudes": { "type": "number", "description": "Total number of gratitudes received" },
+          "courseStats": {
+            "description": "Student counts per course",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/MentorCourseStatsDto" }
+          }
+        },
+        "required": ["rank", "githubId", "name", "totalStudents", "totalGratitudes", "courseStats"]
       },
       "AuthUserDto": {
         "type": "object",
