@@ -1692,6 +1692,7 @@
           { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "string" } },
           { "name": "tasks", "required": false, "in": "query", "schema": { "type": "string" } },
           { "name": "student", "required": false, "in": "query", "schema": { "type": "string" } },
+          { "name": "checker", "required": false, "in": "query", "schema": { "type": "string" } },
           { "name": "sortField", "required": false, "in": "query", "schema": { "type": "string" } },
           { "name": "sortOrder", "required": false, "in": "query", "schema": { "type": "string" } },
           { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }
@@ -4761,7 +4762,7 @@
           "mentorId": { "type": "number" },
           "studentId": { "type": "number" }
         },
-        "required": ["courseTaskId", "mentorId", "studentId"]
+        "required": ["courseTaskId", "studentId"]
       },
       "Map": { "type": "object", "properties": {} },
       "NotificationUserSettingsDto": {

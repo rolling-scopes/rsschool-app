@@ -23,6 +23,11 @@ export class MentorReviewsQueryDto {
   @ApiPropertyOptional()
   @IsString()
   @IsOptional()
+  public checker: string;
+
+  @ApiPropertyOptional()
+  @IsString()
+  @IsOptional()
   public sortField: string;
 
   @ApiPropertyOptional()

@@ -59,6 +59,7 @@ export const MentorTasksReview = () => {
           course.id,
           filters?.taskName?.toString(),
           filters?.student?.toString(),
+          filters?.checker?.toString(),
           ...sortValues,
         );
         setReviews({ ...reviews, ...data });

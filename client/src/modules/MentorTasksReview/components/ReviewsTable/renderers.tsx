@@ -78,6 +78,7 @@ export const getColumns = (
       dataIndex: ColumnKey.Checker,
       width: '12.5%',
       render: checker => (checker ? <GithubUserLink value={checker} /> : null),
+      ...getSearchProps(ColumnKey.Checker),
     },
     {
       key: ColumnKey.ReviewedDate,
