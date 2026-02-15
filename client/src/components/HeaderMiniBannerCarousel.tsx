@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
-import { theme } from 'antd';
+import { useMemo, useRef } from 'react';
+import { Carousel, theme } from 'antd';
+import type { CarouselRef } from 'antd/es/carousel';
 import styles from './HeaderMiniBannerCarousel.module.css';
 
 export type HeaderMiniBannerCarouselItem = {
@@ -18,67 +19,63 @@ const DEFAULT_INTERVAL_MS = 5000;
 
 export function HeaderMiniBannerCarousel({ items = [], intervalMs = DEFAULT_INTERVAL_MS, className }: Props) {
   const { token } = theme.useToken();
+  const carouselRef = useRef<CarouselRef>(null);
   const visibleItems = useMemo(() => items.filter(item => item.banner || item.title), [items]);
-  const [activeIndex, setActiveIndex] = useState(0);
   const hasControls = visibleItems.length > 1;
-
-  useEffect(() => {
-    setActiveIndex(0);
-  }, [visibleItems.length]);
-
-  useEffect(() => {
-    if (visibleItems.length < 2 || intervalMs <= 0) {
-      return;
-    }
-
-    const intervalId = window.setInterval(() => {
-      setActiveIndex(prevIndex => (prevIndex + 1) % visibleItems.length);
-    }, intervalMs);
-
-    return () => window.clearInterval(intervalId);
-  }, [intervalMs, visibleItems.length]);
 
   if (visibleItems.length === 0) {
     return null;
   }
 
   const goToPrevItem = () => {
-    setActiveIndex(prevIndex => (prevIndex - 1 + visibleItems.length) % visibleItems.length);
+    carouselRef.current?.prev();
   };
 
   const goToNextItem = () => {
-    setActiveIndex(prevIndex => (prevIndex + 1) % visibleItems.length);
+    carouselRef.current?.next();
   };
-
-  const item = visibleItems[activeIndex % visibleItems.length]!;
   const carouselClassName = [styles.carousel, className].filter(Boolean).join(' ');
-  const label = item.title ?? 'Header banner';
   const controlStyle = {
     backgroundColor: token.colorBgElevated,
     borderColor: token.colorBorderSecondary,
     color: token.colorText,
   };
-  const content = item.banner ? (
-    <img src={item.banner} alt={label} className={styles.banner} />
-  ) : (
-    <span className={styles.title} style={{ color: token.colorText }}>
-      {item.title}
-    </span>
-  );
 
   return (
     <div className={carouselClassName}>
-      <div key={`${activeIndex}-${label}`} className={styles.slideContent}>
-        {item.url ? (
-          <a href={item.url} className={styles.slide} title={label}>
-            {content}
-          </a>
-        ) : (
-          <span className={styles.slide} title={label}>
-            {content}
-          </span>
-        )}
-      </div>
+      <Carousel
+        ref={carouselRef}
+        className={styles.carouselInner}
+        autoplay={hasControls && intervalMs > 0}
+        autoplaySpeed={intervalMs}
+        dots={false}
+        infinite={hasControls}
+      >
+        {visibleItems.map(item => {
+          const label = item.title ?? 'Header banner';
+          const content = item.banner ? (
+            <img src={item.banner} alt={label} className={styles.banner} />
+          ) : (
+            <span className={styles.title} style={{ color: token.colorText }}>
+              {item.title}
+            </span>
+          );
+
+          return (
+            <div key={`${item.url ?? ''}-${item.banner ?? ''}-${item.title ?? label}`} className={styles.slideContent}>
+              {item.url ? (
+                <a href={item.url} className={styles.slide} title={label}>
+                  {content}
+                </a>
+              ) : (
+                <span className={styles.slide} title={label}>
+                  {content}
+                </span>
+              )}
+            </div>
+          );
+        })}
+      </Carousel>
       {hasControls ? (
         <>
           <button

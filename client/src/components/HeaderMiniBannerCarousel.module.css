@@ -6,10 +6,20 @@
   border-radius: 4px;
 }
 
+.carouselInner {
+  width: 100%;
+  height: 100%;
+}
+
+.carouselInner :global(.slick-list),
+.carouselInner :global(.slick-track),
+.carouselInner :global(.slick-slide),
+.carouselInner :global(.slick-slide > div) {
+  height: 100%;
+}
+
 .slideContent {
-  position: absolute;
-  inset: 0;
-  animation: slide-fade-in 260ms ease;
+  height: 100%;
 }
 
 .slide {
@@ -71,16 +81,4 @@
 
 .controlRight {
   right: 2px;
-}
-
-@keyframes slide-fade-in {
-  from {
-    opacity: 0;
-    transform: translateX(6px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
 }
