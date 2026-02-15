@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { theme } from 'antd';
 import styles from './HeaderMiniBannerCarousel.module.css';
 
 export type HeaderMiniBannerCarouselItem = {
@@ -16,8 +17,10 @@ type Props = {
 const DEFAULT_INTERVAL_MS = 5000;
 
 export function HeaderMiniBannerCarousel({ items = [], intervalMs = DEFAULT_INTERVAL_MS, className }: Props) {
+  const { token } = theme.useToken();
   const visibleItems = useMemo(() => items.filter(item => item.banner || item.title), [items]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const hasControls = visibleItems.length > 1;
 
   useEffect(() => {
     setActiveIndex(0);
@@ -39,30 +42,63 @@ export function HeaderMiniBannerCarousel({ items = [], intervalMs = DEFAULT_INTE
     return null;
   }
 
+  const goToPrevItem = () => {
+    setActiveIndex(prevIndex => (prevIndex - 1 + visibleItems.length) % visibleItems.length);
+  };
+
+  const goToNextItem = () => {
+    setActiveIndex(prevIndex => (prevIndex + 1) % visibleItems.length);
+  };
+
   const item = visibleItems[activeIndex % visibleItems.length]!;
   const carouselClassName = [styles.carousel, className].filter(Boolean).join(' ');
   const label = item.title ?? 'Header banner';
+  const controlStyle = {
+    backgroundColor: token.colorBgElevated,
+    borderColor: token.colorBorderSecondary,
+    color: token.colorText,
+  };
   const content = item.banner ? (
     <img src={item.banner} alt={label} className={styles.banner} />
   ) : (
-    <span className={styles.title}>{item.title}</span>
+    <span className={styles.title} style={{ color: token.colorText }}>
+      {item.title}
+    </span>
   );
-
-  if (item.url) {
-    return (
-      <div className={carouselClassName}>
-        <a href={item.url} className={styles.slide} title={label}>
-          {content}
-        </a>
-      </div>
-    );
-  }
 
   return (
     <div className={carouselClassName}>
-      <span className={styles.slide} title={label}>
-        {content}
-      </span>
+      {item.url ? (
+        <a href={item.url} className={styles.slide} title={label}>
+          {content}
+        </a>
+      ) : (
+        <span className={styles.slide} title={label}>
+          {content}
+        </span>
+      )}
+      {hasControls ? (
+        <>
+          <button
+            type="button"
+            aria-label="Previous banner"
+            className={styles.controlLeft}
+            style={controlStyle}
+            onClick={goToPrevItem}
+          >
+            {'<'}
+          </button>
+          <button
+            type="button"
+            aria-label="Next banner"
+            className={styles.controlRight}
+            style={controlStyle}
+            onClick={goToNextItem}
+          >
+            {'>'}
+          </button>
+        </>
+      ) : null}
     </div>
   );
 }

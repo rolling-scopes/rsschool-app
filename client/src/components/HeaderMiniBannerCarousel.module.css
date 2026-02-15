@@ -14,6 +14,7 @@
   justify-content: center;
   color: inherit;
   text-decoration: none;
+  padding: 0 22px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -38,4 +39,29 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.controlLeft,
+.controlRight {
+  position: absolute;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  margin-top: -9px;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.controlLeft {
+  left: 2px;
+}
+
+.controlRight {
+  right: 2px;
 }

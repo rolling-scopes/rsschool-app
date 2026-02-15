@@ -20,6 +20,7 @@ import ThemeSwitch from '@client/components/ThemeSwitch';
 
 type Props = {
   showCourseName?: boolean;
+  showCarousel?: boolean;
   title?: string;
 };
 
@@ -57,7 +58,7 @@ const MENU_ITEMS = [
 const CAROUSEL_ITEMS: ReadonlyArray<HeaderMiniBannerCarouselItem> = [];
 const CAROUSEL_INTERVAL_MS = 5000;
 
-export function Header({ title, showCourseName }: Props) {
+export function Header({ title, showCourseName, showCarousel = true }: Props) {
   const { asPath: currentRoute } = useRouter();
 
   const session = useContext(SessionContext);
@@ -111,16 +112,18 @@ export function Header({ title, showCourseName }: Props) {
             />
           </Link>
           <SolidarityUkraine />
+          {showCarousel && (
+            <HeaderMiniBannerCarousel
+              className={styles.carousel}
+              items={CAROUSEL_ITEMS}
+              intervalMs={CAROUSEL_INTERVAL_MS}
+            />
+          )}
         </Space>
         <div className={styles.center}>
           <div className={styles.title}>
             {title} {showCourseName ? course?.name : null}
           </div>
-          <HeaderMiniBannerCarousel
-            className={styles.carousel}
-            items={CAROUSEL_ITEMS}
-            intervalMs={CAROUSEL_INTERVAL_MS}
-          />
         </div>
         <Flex align="center">
           <ThemeSwitch />
