@@ -6,6 +6,12 @@
   border-radius: 4px;
 }
 
+.slideContent {
+  position: absolute;
+  inset: 0;
+  animation: slide-fade-in 260ms ease;
+}
+
 .slide {
   display: flex;
   width: 100%;
@@ -56,6 +62,7 @@
   cursor: pointer;
   font-size: 11px;
   line-height: 1;
+  z-index: 1;
 }
 
 .controlLeft {
@@ -64,4 +71,16 @@
 
 .controlRight {
   right: 2px;
+}
+
+@keyframes slide-fade-in {
+  from {
+    opacity: 0;
+    transform: translateX(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }

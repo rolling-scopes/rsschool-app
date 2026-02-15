@@ -68,15 +68,17 @@ export function HeaderMiniBannerCarousel({ items = [], intervalMs = DEFAULT_INTE
 
   return (
     <div className={carouselClassName}>
-      {item.url ? (
-        <a href={item.url} className={styles.slide} title={label}>
-          {content}
-        </a>
-      ) : (
-        <span className={styles.slide} title={label}>
-          {content}
-        </span>
-      )}
+      <div key={`${activeIndex}-${label}`} className={styles.slideContent}>
+        {item.url ? (
+          <a href={item.url} className={styles.slide} title={label}>
+            {content}
+          </a>
+        ) : (
+          <span className={styles.slide} title={label}>
+            {content}
+          </span>
+        )}
+      </div>
       {hasControls ? (
         <>
           <button
