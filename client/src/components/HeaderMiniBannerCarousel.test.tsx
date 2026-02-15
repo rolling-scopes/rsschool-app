@@ -9,11 +9,12 @@ describe('HeaderMiniBannerCarousel', () => {
   });
 
   it('should render banner image when banner is set', () => {
-    render(
-      <HeaderMiniBannerCarousel items={[{ banner: '/static/images/logo-rsschool3.png', title: 'Logo banner' }]} />,
-    );
+    const bannerPath = 'test-banner-xyz123.png';
+    render(<HeaderMiniBannerCarousel items={[{ banner: bannerPath, title: 'Logo banner' }]} />);
 
-    expect(screen.getByAltText('Logo banner')).toBeInTheDocument();
+    const bannerImage = screen.getByRole('img');
+    expect(bannerImage).toBeInTheDocument();
+    expect(bannerImage).toHaveAttribute('src', bannerPath);
   });
 
   it('should render link when item has url', () => {
