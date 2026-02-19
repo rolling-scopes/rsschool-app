@@ -21,6 +21,7 @@ function AutoTests() {
   const [activeTab, setActiveTab] = useState(CourseTaskStatus.Available);
   const statuses = useMemo(() => tasks?.map(t => t.status) || [], [tasks]);
   const filteredTasks = useMemo(() => tasks?.filter(t => t.status === activeTab) || [], [tasks, activeTab]);
+  const isAvailableTab = activeTab === CourseTaskStatus.Available ? false : true;
 
   return (
     <PageLayout loading={false} title="Auto-tests" withMargin={false} showCourseName>
@@ -32,7 +33,7 @@ function AutoTests() {
       <Row gutter={[24, 24]} style={{ padding: '0 16px', marginRight: 0 }}>
         {filteredTasks.map(courseTask => (
           <Col {...RESPONSIVE_COLUMNS} key={courseTask.id}>
-            <TaskCard courseTask={courseTask} course={course} />
+            <TaskCard courseTask={courseTask} course={course} isAvailableTab={isAvailableTab} />
           </Col>
         ))}
       </Row>
