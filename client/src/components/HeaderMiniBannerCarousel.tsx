@@ -42,7 +42,7 @@ export function HeaderMiniBannerCarousel({ items = [], intervalMs = DEFAULT_INTE
   };
 
   return (
-    <div className={carouselClassName}>
+    <div data-testid="carouselContainer" className={carouselClassName}>
       <Carousel
         ref={carouselRef}
         className={styles.carouselInner}

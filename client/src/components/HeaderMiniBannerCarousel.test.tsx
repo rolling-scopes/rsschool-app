@@ -36,4 +36,22 @@ describe('HeaderMiniBannerCarousel', () => {
     expect(screen.queryByRole('button', { name: 'Previous banner' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Next banner' })).not.toBeInTheDocument();
   });
+
+  it('should not render when items array is empty', () => {
+    render(<HeaderMiniBannerCarousel items={[]} />);
+
+    expect(screen.queryByTestId('carouselContainer')).not.toBeInTheDocument();
+  });
+
+  it('should not render when items have no banner or title', () => {
+    render(<HeaderMiniBannerCarousel items={[{ url: 'https://example.com' }]} />);
+
+    expect(screen.queryByTestId('carouselContainer')).not.toBeInTheDocument();
+  });
+
+  it('should not render when items are empty objects', () => {
+    render(<HeaderMiniBannerCarousel items={[{}]} />);
+
+    expect(screen.queryByTestId('carouselContainer')).not.toBeInTheDocument();
+  });
 });
