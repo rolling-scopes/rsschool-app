@@ -51,7 +51,7 @@ export function HeaderMiniBannerCarousel({ items = [], intervalMs = DEFAULT_INTE
         dots={false}
         infinite={hasControls}
       >
-        {visibleItems.map(item => {
+        {visibleItems.map((item, idx) => {
           const label = item.title ?? 'Header banner';
           const content = item.banner ? (
             <img src={item.banner} alt={label} className={styles.banner} />
@@ -62,7 +62,10 @@ export function HeaderMiniBannerCarousel({ items = [], intervalMs = DEFAULT_INTE
           );
 
           return (
-            <div key={`${item.url ?? ''}-${item.banner ?? ''}-${item.title ?? label}`} className={styles.slideContent}>
+            <div
+              key={`${item.url ?? ''}-${item.banner ?? ''}-${item.title ?? label}-${idx}`}
+              className={styles.slideContent}
+            >
               {item.url ? (
                 <a href={item.url} className={styles.slide} title={label}>
                   {content}
