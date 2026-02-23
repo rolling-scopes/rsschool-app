@@ -83,7 +83,7 @@ export class InterviewsService {
       .createQueryBuilder('is')
       .innerJoin('is.student', 'student')
       .innerJoin('student.user', 'user')
-      .leftJoin('student.taskChecker', 'taskChecker')
+      .leftJoin('student.taskChecker', 'taskChecker', 'taskChecker.courseTaskId = :courseTaskId', { courseTaskId })
       .addSelect([
         'student.id',
         'student.totalScore',
