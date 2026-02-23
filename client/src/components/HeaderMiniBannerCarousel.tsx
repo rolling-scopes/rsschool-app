@@ -1,6 +1,7 @@
 import { useMemo, useRef } from 'react';
 import { Carousel, theme } from 'antd';
 import type { CarouselRef } from 'antd/es/carousel';
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import styles from './HeaderMiniBannerCarousel.module.css';
 
 export type HeaderMiniBannerCarouselItem = {
@@ -88,7 +89,7 @@ export function HeaderMiniBannerCarousel({ items = [], intervalMs = DEFAULT_INTE
             style={controlStyle}
             onClick={goToPrevItem}
           >
-            {'<'}
+            <LeftOutlined />
           </button>
           <button
             type="button"
@@ -97,7 +98,7 @@ export function HeaderMiniBannerCarousel({ items = [], intervalMs = DEFAULT_INTE
             style={controlStyle}
             onClick={goToNextItem}
           >
-            {'>'}
+            <RightOutlined />
           </button>
         </>
       ) : null}
