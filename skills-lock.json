@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "skills": {
+    "ant-design": {
+      "source": "ant-design/antd-skill",
+      "sourceType": "github",
+      "computedHash": "73c4e9bc8a6a6e90980382d6f9b744e6a50350d72aa662512e870cdeadfbc449"
+    },
+    "nestjs-best-practices": {
+      "source": "kadajett/agent-nestjs-skills",
+      "sourceType": "github",
+      "computedHash": "1b6f82e889d19d305e38e35594de08eca0242321f353cafa4cf5e61dd3aa1a73"
+    },
+    "playwright-e2e-testing": {
+      "source": "bobmatnyc/claude-mpm-skills",
+      "sourceType": "github",
+      "computedHash": "ce264ac6f9cbeba1fd354d4b34eac7f3758d630aabaf4b59a836e3db980c8486"
+    },
+    "turborepo": {
+      "source": "vercel/turborepo",
+      "sourceType": "github",
+      "computedHash": "47e8b1424c901cd0f5530328cb7448c8828b19063997ea4a4b03164bbdc0fd39"
+    },
+    "typeorm": {
+      "source": "mindrally/skills",
+      "sourceType": "github",
+      "computedHash": "a78bf5815e02755d36eeda49e3e2e87b6e4e161cd90c6cbfb29dc447c4084b99"
+    },
+    "typescript-advanced-types": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "computedHash": "a03a83996ae9d2f4dd6d4db08899d61761c7d5351bce4c695d20a21197742a36"
+    }
+  }
+}
