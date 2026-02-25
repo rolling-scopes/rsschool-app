@@ -37,49 +37,51 @@ export function HeaderMiniBannerCarousel({ items = [], intervalMs = DEFAULT_INTE
   };
   const carouselClassName = [styles.carousel, className].filter(Boolean).join(' ');
   const controlStyle = {
-    backgroundColor: token.colorBgElevated,
-    borderColor: token.colorBorderSecondary,
+    backgroundColor: token.colorFillSecondary,
+    borderColor: token.colorBorder,
     color: token.colorText,
   };
 
   return (
     <div data-testid="carouselContainer" className={carouselClassName}>
-      <Carousel
-        ref={carouselRef}
-        className={styles.carouselInner}
-        autoplay={hasControls && intervalMs > 0}
-        autoplaySpeed={intervalMs}
-        dots={false}
-        infinite={hasControls}
-      >
-        {visibleItems.map((item, idx) => {
-          const label = item.title ?? 'Header banner';
-          const content = item.banner ? (
-            <img src={item.banner} alt={label} className={styles.banner} />
-          ) : (
-            <span className={styles.title} style={{ color: token.colorText }}>
-              {item.title}
-            </span>
-          );
+      <div className={styles.carouselViewport}>
+        <Carousel
+          ref={carouselRef}
+          className={styles.carouselInner}
+          autoplay={hasControls && intervalMs > 0}
+          autoplaySpeed={intervalMs}
+          dots={false}
+          infinite={hasControls}
+        >
+          {visibleItems.map((item, idx) => {
+            const label = item.title ?? 'Header banner';
+            const content = item.banner ? (
+              <img src={item.banner} alt={label} className={styles.banner} />
+            ) : (
+              <span className={styles.title} style={{ color: token.colorText }}>
+                {item.title}
+              </span>
+            );
 
-          return (
-            <div
-              key={`${item.url ?? ''}-${item.banner ?? ''}-${item.title ?? label}-${idx}`}
-              className={styles.slideContent}
-            >
-              {item.url ? (
-                <a href={item.url} className={styles.slide} title={label}>
-                  {content}
-                </a>
-              ) : (
-                <span className={styles.slide} title={label}>
-                  {content}
-                </span>
-              )}
-            </div>
-          );
-        })}
-      </Carousel>
+            return (
+              <div
+                key={`${item.url ?? ''}-${item.banner ?? ''}-${item.title ?? label}-${idx}`}
+                className={styles.slideContent}
+              >
+                {item.url ? (
+                  <a href={item.url} className={styles.slide} title={label}>
+                    {content}
+                  </a>
+                ) : (
+                  <span className={styles.slide} title={label}>
+                    {content}
+                  </span>
+                )}
+              </div>
+            );
+          })}
+        </Carousel>
+      </div>
       {hasControls ? (
         <>
           <button

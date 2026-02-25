@@ -56,7 +56,16 @@ const MENU_ITEMS = [
   },
 ];
 
-const CAROUSEL_ITEMS: ReadonlyArray<HeaderMiniBannerCarouselItem> = [];
+const CAROUSEL_ITEMS: ReadonlyArray<HeaderMiniBannerCarouselItem> = [
+  {
+    title: 'AlreadyBored',
+    url: 'https://alreadybored.com',
+  },
+  {
+    title: 'AlexeiTokarau',
+    url: 'https://github.com/AlexeiTokarau',
+  },
+];
 const CAROUSEL_INTERVAL_MS = 5000;
 
 export function Header({ title, showCourseName, showCarousel = true }: Props) {

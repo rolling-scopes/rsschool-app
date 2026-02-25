@@ -2,8 +2,14 @@
   position: relative;
   width: 240px;
   height: 30px;
-  overflow: hidden;
   border-radius: 4px;
+}
+
+.carouselViewport {
+  width: 100%;
+  height: 100%;
+  padding: 0 24px;
+  overflow: hidden;
 }
 
 .carouselInner {
@@ -30,7 +36,7 @@
   justify-content: center;
   color: inherit;
   text-decoration: none;
-  padding: 0 22px;
+  padding: 0 8px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -73,6 +79,9 @@ a.slide:hover {
   font-size: 11px;
   line-height: 1;
   z-index: 1;
+  transition:
+    filter 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .controlLeft {
@@ -81,4 +90,16 @@ a.slide:hover {
 
 .controlRight {
   right: 2px;
+}
+
+:global(.dark) .controlLeft:hover,
+:global(.dark) .controlRight:hover {
+  filter: brightness(1.35);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.38);
+}
+
+:global(.light) .controlLeft:hover,
+:global(.light) .controlRight:hover {
+  filter: brightness(0.72);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.28);
 }
