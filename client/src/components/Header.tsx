@@ -17,6 +17,7 @@ import { getNavigationItems } from 'modules/Home/data/links';
 import { useActiveCourseContext } from 'modules/Course/contexts/ActiveCourseContext';
 import styles from './Header.module.css';
 import ThemeSwitch from '@client/components/ThemeSwitch';
+import clsx from 'clsx';
 
 type Props = {
   showCourseName?: boolean;
@@ -104,9 +105,9 @@ export function Header({ title, showCourseName, showCarousel = true }: Props) {
         }}
       >
         <Space className={styles.icons}>
-          <Link href="/">
+          <Link href="/" className={styles.logoLink}>
             <img
-              className={styles.headerLogo}
+              className={clsx(styles.headerLogo, 'header-logo')}
               src="/static/images/logo-rsschool3.png"
               alt="Rolling Scopes School Logo"
             />
@@ -125,11 +126,11 @@ export function Header({ title, showCourseName, showCarousel = true }: Props) {
             {title} {showCourseName ? course?.name : null}
           </div>
         </div>
-        <Flex align="center">
+        <Flex align="center" className={styles.controls}>
           <ThemeSwitch />
           {session.githubId && (
             <Dropdown menu={{ items: menuItems }} trigger={['click']}>
-              <Button type="link" style={{ display: 'flex', alignItems: 'center' }}>
+              <Button type="link" className={styles.avatarButton}>
                 <GithubAvatar githubId={session?.githubId} size={32} />
               </Button>
             </Dropdown>

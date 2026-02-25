@@ -10,6 +10,10 @@
   align-items: center;
 }
 
+.logoLink {
+  display: inline-flex;
+}
+
 .headerLogo {
   height: 30px;
 }
@@ -30,6 +34,15 @@
 
 .carousel {
   flex-shrink: 0;
+}
+
+.controls {
+  gap: 8px;
+}
+
+.avatarButton {
+  display: flex;
+  align-items: center;
 }
 
 @media all and (max-width: 768px) {
