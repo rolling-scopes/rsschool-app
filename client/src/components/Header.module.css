@@ -1,0 +1,59 @@
+.nav {
+  padding: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.icons {
+  display: flex;
+  align-items: center;
+}
+
+.logoLink {
+  display: inline-flex;
+}
+
+.headerLogo {
+  height: 30px;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.title {
+  font-weight: 700;
+}
+
+.menuItemActive {
+  font-weight: 600;
+}
+
+.carousel {
+  flex-shrink: 0;
+}
+
+.controls {
+  gap: 8px;
+}
+
+.avatarButton {
+  display: flex;
+  align-items: center;
+}
+
+@media all and (max-width: 768px) {
+  .center {
+    width: 100%;
+    order: 3;
+    justify-content: center;
+    margin-top: 16px;
+  }
+
+  .carousel {
+    display: none;
+  }
+}
