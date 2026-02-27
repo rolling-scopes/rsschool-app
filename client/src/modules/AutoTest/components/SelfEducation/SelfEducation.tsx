@@ -3,7 +3,8 @@ import { useMemo } from 'react';
 import { SelfEducationQuestionWithIndex, SelfEducationQuestion } from 'services/course';
 import shuffle from 'lodash/shuffle';
 import { CourseTaskVerifications } from 'modules/AutoTest/types';
-import css from 'styled-jsx/css';
+
+import styles from './SelfEducation.module.css';
 
 type SelfEducationProps = {
   courseTask: CourseTaskVerifications;
@@ -25,7 +26,7 @@ function SelfEducation({ courseTask }: SelfEducationProps) {
   );
 
   return (
-    <div className="self-education">
+    <div className={styles.selfEducation}>
       <Paragraph>To submit the task answer the questions.</Paragraph>
       {randomQuestions?.map(
         ({ question, answers, multiple, questionImage, answersType, index: questionIndex }, idx) => {
@@ -110,16 +111,8 @@ function SelfEducation({ courseTask }: SelfEducationProps) {
           );
         },
       )}
-      <style jsx>{styles}</style>
     </div>
   );
 }
-
-const styles = css`
-  .self-education :global(.ant-radio) {
-    align-self: flex-start !important;
-    margin-top: 3px !important;
-  }
-`;
 
 export default SelfEducation;

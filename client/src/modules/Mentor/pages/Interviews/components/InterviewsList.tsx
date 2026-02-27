@@ -8,6 +8,7 @@ import { InterviewDto, TaskDtoTypeEnum } from 'api';
 import { Course } from 'services/models';
 import { useLoading } from 'components/useLoading';
 import { useAsyncFn } from 'react-use';
+import styles from './InterviewsList.module.css';
 
 type StudentsListProps = {
   interviews: MentorInterview[] | undefined;
@@ -37,7 +38,7 @@ export function InterviewsList(props: StudentsListProps) {
 
   return (
     <Spin spinning={loading}>
-      <div className="container">
+      <div className={styles.container}>
         <InterviewsSummary
           interviewTask={interviewTask}
           interviews={interviews}
@@ -60,11 +61,6 @@ export function InterviewsList(props: StudentsListProps) {
             ))}
           </div>
         )}
-        <style jsx>{`
-          .container {
-            margin: 15px 0;
-          }
-        `}</style>
       </div>
     </Spin>
   );

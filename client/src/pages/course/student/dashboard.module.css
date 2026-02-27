@@ -1,0 +1,11 @@
+.masonry {
+  display: flex;
+  margin-left: -24px;
+  width: auto;
+  min-height: 85vh;
+}
+
+.masonryColumn {
+  padding-left: 24px;
+  background-clip: padding-box;
+}

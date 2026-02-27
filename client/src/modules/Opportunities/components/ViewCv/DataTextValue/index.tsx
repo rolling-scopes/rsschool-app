@@ -1,21 +1,7 @@
 import { PropsWithChildren } from 'react';
-import css from 'styled-jsx/css';
+
+import styles from './DataTextValue.module.css';
 
 export const DataTextValue = ({ children }: PropsWithChildren<unknown>) => {
-  return (
-    <>
-      <span className="course-data-key">{children}</span>
-      <style jsx>{styles}</style>
-    </>
-  );
+  return <span className={styles.value}>{children}</span>;
 };
-
-const styles = css`
-  .course-data-key {
-    font-size: 14px;
-    padding-right: 8px;
-    white-space: nowrap;
-    width: 80px;
-    display: inline-block;
-  }
-`;

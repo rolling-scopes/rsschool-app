@@ -2,8 +2,8 @@ import { Avatar, Button, Card, Form, Grid, Input, Pagination, Row, Select, Space
 import { FormLayout } from 'antd/es/form/Form';
 import { useCallback, useEffect, useState } from 'react';
 import Masonry from 'react-masonry-css';
-import css from 'styled-jsx/css';
 import heroesBadges from 'configs/heroes-badges';
+import styles from './index.module.css';
 import { GratitudeService, HeroesFormData, IGratitudeGetRequest, IGratitudeGetResponse } from 'services/gratitude';
 import { onlyDefined } from 'utils/onlyDefined';
 import { getFullName } from 'domain/user';
@@ -112,17 +112,21 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
           700: 2,
           500: 1,
         }}
-        className={masonryClassName}
-        columnClassName={masonryColumnClassName}
+        className={styles.masonry as string}
+        columnClassName={styles.masonryColumn as string}
       >
         {heroesData.map(feedback => (
-          <div style={{ marginBottom: gapSize, overflow: 'hidden' }} key={`card-${feedback.id}`} className="card">
+          <div
+            style={{ marginBottom: gapSize, overflow: 'hidden' }}
+            key={`card-${feedback.id}`}
+            className={styles.card}
+          >
             <Card style={{ position: 'relative', background: 'none' }}>
               <div
-                className="badge-bg"
+                className={styles.badgeBg}
                 style={{ backgroundImage: `url(/static/svg/badges/${heroesBadges[feedback.badgeId]?.url})` }}
               />
-              <div className="badge-note" style={{ marginBottom: 48 }}>
+              <div className={styles.badgeNote} style={{ marginBottom: 48 }}>
                 <Paragraph style={{ margin: 0 }}>
                   <Text strong>From:</Text> {getFullName(feedback.from)} (
                   <Link href={`/profile?githubId=${feedback.from.githubId}`}>@{feedback.from.githubId}</Link>)
@@ -132,8 +136,8 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
                   <Link href={`/profile?githubId=${feedback.githubId}`}>@{feedback.githubId}</Link>)
                 </Paragraph>
               </div>
-              <div className="flex-center" style={{ marginBottom: 48 }}>
-                <div className="badge">
+              <div className={styles.flexCenter} style={{ marginBottom: 48 }}>
+                <div className={styles.badge}>
                   <Avatar
                     src={`/static/svg/badges/${heroesBadges[feedback.badgeId]?.url}`}
                     alt={`${feedback.badgeId} badge`}
@@ -141,15 +145,13 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
                   />
                 </div>
               </div>
-              <div className="badge-note">
+              <div className={styles.badgeNote}>
                 <Paragraph style={{ margin: 0 }}>{feedback.comment}</Paragraph>
               </div>
             </Card>
           </div>
         ))}
       </Masonry>
-      {masonryStyles}
-      {masonryColumnStyles}
       <Row style={{ marginTop: 16, marginBottom: 16, justifyContent: 'flex-end' }}>
         <Pagination
           current={currentPage}
@@ -158,73 +160,8 @@ export const HeroesForm = ({ setLoading }: { setLoading: (arg: boolean) => void 
           defaultPageSize={initialPageSize}
         />
       </Row>
-      <style jsx>{styles}</style>
     </>
   );
 };
 
 const gapSize = 16;
-const { className: masonryClassName, styles: masonryStyles } = css.resolve`
-  div {
-    display: flex;
-    margin-left: -${gapSize}px;
-    width: auto;
-  }
-`;
-const { className: masonryColumnClassName, styles: masonryColumnStyles } = css.resolve`
-  div {
-    padding-left: ${gapSize}px;
-    background-clip: padding-box;
-  }
-`;
-
-const styles = css`
-  .flex-column {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-  }
-  .text-wrap {
-    text-align: center;
-    text-overflow: ellipsis;
-    width: 150px;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  .flex-center {
-    display: flex;
-    justify-content: center;
-  }
-  .badge-bg {
-    position: absolute;
-    background-position: center;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    z-index: -1;
-    opacity: 0.1;
-    transform: scale(1.2);
-  }
-  .badge-note {
-    padding: 16px;
-    border: 2px rgba(24, 144, 255, 0.5) dashed;
-  }
-  .card .badge {
-    transform: scale(1);
-    transition: transform 1s ease;
-  }
-  .card:hover .badge {
-    transform: scale(1.5);
-    transition: transform 1s ease;
-  }
-  .card:hover .badge-bg {
-    transition: all 2s ease;
-    opacity: 0.8;
-  }
-  .card:hover .badge-note {
-    transition: all 1s ease;
-    border: 2px rgba(24, 144, 255, 1) dashed;
-  }
-`;

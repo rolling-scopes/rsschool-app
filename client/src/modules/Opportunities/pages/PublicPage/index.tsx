@@ -24,16 +24,10 @@ export function PublicPage({ data }: PropsWithChildren<Props>) {
         <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700&display=swap" rel="stylesheet" />
       </Head>
       <Layout>
-        <Content className="print-no-padding" style={{ maxWidth: 960, margin: 'auto' }}>
+        <Content className="print-no-padding ubuntu-font" style={{ maxWidth: 960, margin: 'auto' }}>
           <ViewCV publicMode initialData={data} />
         </Content>
       </Layout>
-      <style jsx global>{`
-        html,
-        body {
-          font-family: 'Ubuntu', sans-serif;
-        }
-      `}</style>
     </>
   );
 }

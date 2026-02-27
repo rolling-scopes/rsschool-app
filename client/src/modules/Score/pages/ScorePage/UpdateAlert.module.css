@@ -1,0 +1,78 @@
+.container {
+  position: relative;
+}
+
+.wrapper {
+  width: 55ch;
+  border-radius: 2.5ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: disappear 5s ease-in-out 5s forwards;
+}
+
+.icon {
+  opacity: 0;
+  animation:
+    appear 1.3s ease-in 8s forwards,
+    pulse 0.7s 10s ease-in 1;
+}
+
+@media (max-width: 820px) {
+  .wrapper {
+    visibility: hidden;
+  }
+
+  .icon {
+    opacity: 1;
+  }
+}
+
+@keyframes disappear {
+  0% {
+    width: 55ch;
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+    height: initial;
+  }
+  100% {
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    scale: 0;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    scale: 0.8;
+  }
+  60% {
+    scale: 1.2;
+  }
+  75% {
+    scale: 0.8;
+  }
+  100% {
+    scale: 1;
+  }
+}

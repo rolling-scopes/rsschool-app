@@ -1,0 +1,12 @@
+.container :global(div) {
+  border: 1px solid rgba(245, 245, 245, 1);
+  padding: 16px;
+}
+
+.container :global(div + div) {
+  border-top: none;
+}
+
+.container :global(div:first-child) {
+  margin-top: 15px;
+}

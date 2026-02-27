@@ -1,0 +1,7 @@
+.dragHandle {
+  cursor: grab;
+}
+
+.dragHandle:active {
+  cursor: grabbing;
+}

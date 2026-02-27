@@ -1,0 +1,52 @@
+.masonry {
+  display: flex;
+  margin-left: -16px;
+  width: auto;
+}
+
+.masonryColumn {
+  padding-left: 16px;
+  background-clip: padding-box;
+}
+
+.flexCenter {
+  display: flex;
+  justify-content: center;
+}
+
+.badgeBg {
+  position: absolute;
+  background-position: center;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+  opacity: 0.1;
+  transform: scale(1.2);
+}
+
+.badgeNote {
+  padding: 16px;
+  border: 2px rgba(24, 144, 255, 0.5) dashed;
+}
+
+.card .badge {
+  transform: scale(1);
+  transition: transform 1s ease;
+}
+
+.card:hover .badge {
+  transform: scale(1.5);
+  transition: transform 1s ease;
+}
+
+.card:hover .badgeBg {
+  transition: all 2s ease;
+  opacity: 0.8;
+}
+
+.card:hover .badgeNote {
+  transition: all 1s ease;
+  border: 2px rgba(24, 144, 255, 1) dashed;
+}
