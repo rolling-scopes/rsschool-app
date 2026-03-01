@@ -43,6 +43,7 @@
     "remark-gfm": "3.0.1",
     "serverless-http": "3.2.0",
     "styled-jsx": "5.1.2",
+    "clsx": "2.1.1",
     "use-places-autocomplete": "4.0.1"
   },
   "devDependencies": {
