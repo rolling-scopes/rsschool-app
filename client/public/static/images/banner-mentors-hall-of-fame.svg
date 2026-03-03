@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 56" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#07223b"/>
+      <stop offset="100%" stop-color="#0d3560"/>
+    </linearGradient>
+    <linearGradient id="goldText" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffe566"/>
+      <stop offset="100%" stop-color="#c8930a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- background -->
+  <rect width="240" height="56" rx="6" fill="url(#bg)"/>
+
+  <!-- left gold accent bar -->
+  <rect x="0" y="0" width="4" height="56" rx="3" fill="#FFDB20"/>
+
+  <!-- trophy cup body -->
+  <path d="M19 10 h14 v12 a7 7 0 0 1-7 7 a7 7 0 0 1-7-7 Z" fill="#FFDB20"/>
+  <!-- trophy handles -->
+  <path d="M19 13 h-3 a3 3 0 0 0 0 6 h3" fill="none" stroke="#FFDB20" stroke-width="1.8"/>
+  <path d="M33 13 h3 a3 3 0 0 1 0 6 h-3"  fill="none" stroke="#FFDB20" stroke-width="1.8"/>
+  <!-- trophy stem -->
+  <rect x="25" y="29" width="2" height="7" fill="#FFDB20"/>
+  <!-- trophy base -->
+  <rect x="20" y="36" width="12" height="2.5" rx="1.25" fill="#FFDB20"/>
+
+  <!-- decorative star dots top-right -->
+  <circle cx="200" cy="13" r="1.4" fill="#FFDB20" opacity="0.7"/>
+  <circle cx="213" cy="22" r="1.8" fill="#FFDB20" opacity="0.5"/>
+  <circle cx="224" cy="11" r="1.2" fill="#FFDB20" opacity="0.6"/>
+  <circle cx="232" cy="36" r="1.5" fill="#FFDB20" opacity="0.4"/>
+  <circle cx="207" cy="41" r="1.1" fill="#FFDB20" opacity="0.5"/>
+  <circle cx="236" cy="20" r="1"   fill="#ffe566" opacity="0.6"/>
+  <circle cx="220" cy="44" r="1.3" fill="#FFDB20" opacity="0.35"/>
+
+  <!-- main label -->
+  <text
+    x="46" y="28"
+    dominant-baseline="middle"
+    font-family="'Segoe UI', Arial, sans-serif"
+    font-size="15"
+    font-weight="700"
+    letter-spacing="0.3"
+    fill="url(#goldText)"
+  >Mentors Hall of Fame</text>
+
+  <!-- subtitle -->
+  <text
+    x="46" y="43"
+    dominant-baseline="middle"
+    font-family="'Segoe UI', Arial, sans-serif"
+    font-size="10"
+    font-weight="400"
+    letter-spacing="0.4"
+    fill="#7eb8f7"
+    opacity="0.8"
+  >Top mentors by certified students</text>
+</svg>

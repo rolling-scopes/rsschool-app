@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 56" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1a0933"/>
+      <stop offset="100%" stop-color="#2d0f52"/>
+    </linearGradient>
+    <linearGradient id="pinkText" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ff85c2"/>
+      <stop offset="100%" stop-color="#eb2f96"/>
+    </linearGradient>
+  </defs>
+
+  <!-- background -->
+  <rect width="240" height="56" rx="6" fill="url(#bg)"/>
+
+  <!-- left magenta accent bar -->
+  <rect x="0" y="0" width="4" height="56" rx="3" fill="#eb2f96"/>
+
+  <!-- heart icon -->
+  <path
+    d="M26 39 C26 39 12 30 12 21 a7 7 0 0 1 14 0 a7 7 0 0 1 14 0 C40 30 26 39 26 39 Z"
+    fill="#eb2f96"
+  />
+
+  <!-- sparkle dots top-right -->
+  <circle cx="200" cy="14" r="1.5" fill="#eb2f96" opacity="0.6"/>
+  <circle cx="214" cy="10" r="1.1" fill="#ff85c2" opacity="0.7"/>
+  <circle cx="225" cy="22" r="1.6" fill="#eb2f96" opacity="0.4"/>
+  <circle cx="234" cy="13" r="1.2" fill="#ff85c2" opacity="0.5"/>
+  <circle cx="207" cy="40" r="1.4" fill="#eb2f96" opacity="0.5"/>
+  <circle cx="230" cy="42" r="1"   fill="#ff85c2" opacity="0.4"/>
+  <circle cx="237" cy="30" r="1.5" fill="#eb2f96" opacity="0.3"/>
+  <circle cx="220" cy="46" r="1.1" fill="#ff85c2" opacity="0.35"/>
+
+  <!-- main label -->
+  <text
+    x="46" y="26"
+    dominant-baseline="middle"
+    font-family="'Segoe UI', Arial, sans-serif"
+    font-size="15"
+    font-weight="700"
+    letter-spacing="0.3"
+    fill="url(#pinkText)"
+  >#gratitude</text>
+
+  <!-- subtitle -->
+  <text
+    x="46" y="43"
+    dominant-baseline="middle"
+    font-family="'Segoe UI', Arial, sans-serif"
+    font-size="10"
+    font-weight="400"
+    letter-spacing="0.3"
+    fill="#c084fc"
+    opacity="0.85"
+  >Send a thank you to someone</text>
+</svg>
