@@ -1,14 +1,14 @@
 .carousel {
   position: relative;
-  width: 240px;
-  height: 30px;
-  border-radius: 4px;
+  width: 284px;
+  height: 56px;
+  border-radius: 6px;
 }
 
 .carouselViewport {
   width: 100%;
   height: 100%;
-  padding: 0 24px;
+  padding: 0 22px;
   overflow: hidden;
 }
 
@@ -24,8 +24,16 @@
   height: 100%;
 }
 
+/* text-only slide */
 .slideContent {
   height: 100%;
+}
+
+/* banner slide — needs position:relative so .bannerLink overlay works */
+.slideContentBanner {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
 }
 
 .slide {
@@ -36,7 +44,7 @@
   justify-content: center;
   color: inherit;
   text-decoration: none;
-  padding: 0 8px;
+  padding: 0 26px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -47,9 +55,16 @@ a.slide:hover {
 }
 
 .banner {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* transparent full-size link overlay on top of banner img */
+.bannerLink {
+  position: absolute;
+  inset: 0;
 }
 
 .title {

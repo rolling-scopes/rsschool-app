@@ -55,26 +55,29 @@ export function HeaderMiniBannerCarousel({ items = [], intervalMs = DEFAULT_INTE
         >
           {visibleItems.map((item, idx) => {
             const label = item.title ?? 'Header banner';
-            const content = item.banner ? (
-              <img src={item.banner} alt={label} className={styles.banner} />
-            ) : (
-              <span className={styles.title} style={{ color: token.colorText }}>
-                {item.title}
-              </span>
-            );
+            const hasBanner = Boolean(item.banner);
 
             return (
               <div
                 key={`${item.url ?? ''}-${item.banner ?? ''}-${item.title ?? label}-${idx}`}
-                className={styles.slideContent}
+                className={hasBanner ? styles.slideContentBanner : styles.slideContent}
               >
-                {item.url ? (
+                {hasBanner ? (
+                  <>
+                    <img src={item.banner} alt={label} className={styles.banner} />
+                    {item.url && <a href={item.url} className={styles.bannerLink} title={label} aria-label={label} />}
+                  </>
+                ) : item.url ? (
                   <a href={item.url} className={styles.slide} title={label}>
-                    {content}
+                    <span className={styles.title} style={{ color: token.colorText }}>
+                      {item.title}
+                    </span>
                   </a>
                 ) : (
                   <span className={styles.slide} title={label}>
-                    {content}
+                    <span className={styles.title} style={{ color: token.colorText }}>
+                      {item.title}
+                    </span>
                   </span>
                 )}
               </div>

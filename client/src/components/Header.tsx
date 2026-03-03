@@ -56,7 +56,18 @@ const MENU_ITEMS = [
   },
 ];
 
-const CAROUSEL_ITEMS: ReadonlyArray<HeaderMiniBannerCarouselItem> = [];
+const CAROUSEL_ITEMS: ReadonlyArray<HeaderMiniBannerCarouselItem> = [
+  {
+    banner: '/static/images/banner-mentors-hall-of-fame.svg',
+    url: '/mentors-hall-of-fame',
+    title: 'Mentors Hall of Fame',
+  },
+  {
+    banner: '/static/images/banner-gratitude.svg',
+    url: '/gratitude',
+    title: '#gratitude',
+  },
+];
 const CAROUSEL_INTERVAL_MS = 5000;
 
 export function Header({ title, showCourseName, showCarousel = true }: Props) {
