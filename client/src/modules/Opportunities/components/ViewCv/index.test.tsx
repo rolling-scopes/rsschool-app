@@ -67,24 +67,9 @@ jest.mock('modules/Opportunities/hooks');
     4.Loading = false + userData => Expiration
 */
 
-const mockOrigin = 'htps://example.com';
 const mockUuid = '13791ec3-83b9-44ce-95c5-f06837a71966';
 
 describe('ViewCV', () => {
-  let originalWindowLocation: string;
-
-  beforeAll(() => {
-    originalWindowLocation = window.location.href;
-    Object.defineProperty(window, 'location', {
-      writable: true,
-      value: { origin: mockOrigin },
-    });
-  });
-
-  afterAll(() => {
-    window.location.href = originalWindowLocation;
-  });
-
   test('should display loading screeen if loading is true', () => {
     (useViewData as jest.Mock).mockReturnValue({ loading: true });
     (useExpiration as jest.Mock).mockReturnValue({
@@ -108,7 +93,7 @@ describe('ViewCV', () => {
 
     render(<ViewCV initialData={{} as ResumeDto} publicMode={true} />);
 
-    const publicLink = screen.getByText(`PublicLink ${mockOrigin}/cv/${mockUuid}`);
+    const publicLink = screen.getByText(`PublicLink ${window.location.origin}/cv/${mockUuid}`);
     const actionButtons = screen.queryByText('ActionButtons');
 
     expect(publicLink).toBeInTheDocument();
@@ -124,7 +109,7 @@ describe('ViewCV', () => {
 
     render(<ViewCV initialData={{} as ResumeDto} publicMode={false} />);
 
-    const publicLink = screen.queryByText(`PublicLink ${mockOrigin}/cv/${mockUuid}`);
+    const publicLink = screen.queryByText(`PublicLink ${window.location.origin}/cv/${mockUuid}`);
     const actionButtons = screen.getByText('ActionButtons');
 
     expect(publicLink).not.toBeInTheDocument();
