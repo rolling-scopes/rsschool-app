@@ -7,7 +7,7 @@ import { useLoading } from 'components/useLoading';
 export function useVerificationsAnswers(courseId: number, courseTaskId: number) {
   const [answers, setAnswers] = useState<TaskVerificationAttemptDto[] | null>(null);
   const [loading, withLoading] = useLoading(false, e => {
-    const error = e as AxiosError<any>;
+    const error = e as AxiosError<Error>;
     message.error(error.response?.data?.message || error?.message);
   });
 

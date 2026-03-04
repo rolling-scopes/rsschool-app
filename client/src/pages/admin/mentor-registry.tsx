@@ -24,7 +24,7 @@ import dynamic from 'next/dynamic';
 import { CoursesService } from 'services/courses';
 import { MentorRegistryService } from 'services/mentorRegistry';
 import { Course, CourseRole } from 'services/models';
-import css from 'styled-jsx/css';
+import styles from './mentor-registry.module.css';
 
 const InviteMentorsModal = dynamic(() => import('modules/MentorRegistry/components/InviteMentorsModal'), {
   ssr: false,
@@ -250,7 +250,7 @@ function Page() {
 
   return (
     <AdminPageLayout title="Mentor Registry" loading={loading} courses={courses} styles={{ margin: 0, padding: 0 }}>
-      <Row justify="space-between" style={{ padding: '0 24px', minHeight: 64 }} align="bottom" className="tabs">
+      <Row justify="space-between" style={{ padding: '0 24px', minHeight: 64 }} align="bottom" className={styles.tabs}>
         <Tabs
           className="custom-mentor-registry-tabs"
           tabBarStyle={{ margin: '0' }}
@@ -268,7 +268,6 @@ function Page() {
             </Button>
           )}
         </Space>
-        <style jsx>{styles}</style>
       </Row>
       <Col style={{ padding: 24 }}>
         <Alert
@@ -340,15 +339,3 @@ export default function () {
     </SessionProvider>
   );
 }
-
-export const styles = css`
-  :global(.custom-mentor-registry-tabs .ant-tabs-tab) {
-    min-width: 100px;
-  }
-  @media (min-width: 575px) {
-    .tabs {
-      padding: '12px 24px 0';
-      height: 64px;
-    }
-  }
-`;

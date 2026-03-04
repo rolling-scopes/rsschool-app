@@ -81,7 +81,7 @@ export function useCourseTaskSubmit(courseId: number, courseTask: CourseTaskVeri
     }
   };
 
-  const getError = (error: AxiosError<any>): string => {
+  const getError = (error: AxiosError<Error>): string => {
     switch (error.response?.status) {
       case 401:
         return 'Your authorization token has expired. You need to re-login in the application.';
@@ -134,8 +134,8 @@ export function useCourseTaskSubmit(courseId: number, courseTask: CourseTaskVeri
       finishTask();
       setIsModified(false);
     } catch (e) {
-      const error = e as AxiosError<any>;
-      const message = getError(error as AxiosError<any>);
+      const error = e as AxiosError<Error>;
+      const message = getError(error);
 
       notification.error({
         message,

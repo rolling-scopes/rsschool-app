@@ -1,0 +1,4 @@
+.question :global(.ant-radio) {
+  align-self: flex-start !important;
+  margin-top: 3px !important;
+}
