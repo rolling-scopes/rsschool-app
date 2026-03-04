@@ -10,8 +10,8 @@ import {
   SolutionOutlined,
 } from '@ant-design/icons';
 import { GithubAvatar } from '@client/shared/components/GithubAvatar';
+import { HeaderMiniBannerCarousel, HeaderMiniBannerCarouselItem } from '@client/components/HeaderMiniBannerCarousel';
 import { SolidarityUkraine } from './SolidarityUkraine';
-import { HeaderMiniBannerCarousel, HeaderMiniBannerCarouselItem } from './HeaderMiniBannerCarousel';
 import { SessionContext } from 'modules/Course/contexts';
 import { getNavigationItems } from 'modules/Home/data/links';
 import { useActiveCourseContext } from 'modules/Course/contexts/ActiveCourseContext';
