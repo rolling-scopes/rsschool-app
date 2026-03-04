@@ -35,8 +35,8 @@ function Page() {
     setSelected(filtered[0]?.id.toString() ?? null);
   };
 
-  const deleteInterview = withLoading(async (record: any) => {
-    await courseService.cancelInterviewPair(selected!, record.id);
+  const deleteInterview = withLoading(async (record: InterviewPairDto) => {
+    await courseService.cancelInterviewPair(selected!, String(record.id));
     const filtered = data.filter(d => d.id !== record.id);
     setData(filtered);
   });
@@ -95,20 +95,20 @@ function Page() {
         pagination={{ defaultPageSize: 50 }}
         size="small"
         rowKey="id"
-        dataSource={data as any}
+        dataSource={data}
         columns={[
           {
             fixed: 'left',
             title: 'Interviewer',
             dataIndex: 'interviewer',
-            sorter: stringSorter('interviewer.githubId'),
+            sorter: stringSorter('interviewer.githubId' as keyof InterviewPairDto),
             render: value => <PersonCell value={value} />,
             ...getColumnSearchProps('interviewer.githubId'),
           },
           {
             title: 'Student',
             dataIndex: 'student',
-            sorter: stringSorter('student.githubId'),
+            sorter: stringSorter('student.githubId' as keyof InterviewPairDto),
             render: value => <PersonCell value={value} />,
             ...getColumnSearchProps('student.githubId'),
           },
