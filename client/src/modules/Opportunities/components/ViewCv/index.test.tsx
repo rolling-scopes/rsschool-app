@@ -70,7 +70,6 @@ jest.mock('modules/Opportunities/hooks');
 const mockUuid = '13791ec3-83b9-44ce-95c5-f06837a71966';
 
 describe('ViewCV', () => {
-
   test('should display loading screeen if loading is true', () => {
     (useViewData as jest.Mock).mockReturnValue({ loading: true });
     (useExpiration as jest.Mock).mockReturnValue({
