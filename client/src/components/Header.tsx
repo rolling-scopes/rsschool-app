@@ -132,7 +132,6 @@ export function Header({ title, showCourseName, showCarousel = true }: Props) {
             />
           )}
         </Space>
-<<<<<<< HEAD
         <div className={styles.center}>
           <div className={styles.title}>
             {title} {showCourseName ? course?.name : null}
