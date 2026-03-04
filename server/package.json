@@ -54,7 +54,7 @@
     "cross-env": "7.0.3",
     "jest-junit": "16.0.0",
     "pino-pretty": "7.5.1",
-    "ts-jest": "29.1.1",
+    "ts-jest": "29.4.6",
     "ts-node-dev": "2.0.0",
     "tsconfig-paths": "4.1.0"
   },
