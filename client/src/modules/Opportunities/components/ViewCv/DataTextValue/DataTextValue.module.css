@@ -1,0 +1,7 @@
+.value {
+  font-size: 14px;
+  padding-right: 8px;
+  white-space: nowrap;
+  width: 80px;
+  display: inline-block;
+}

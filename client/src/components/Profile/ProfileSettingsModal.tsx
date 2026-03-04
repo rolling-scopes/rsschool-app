@@ -1,5 +1,7 @@
 import { Modal } from 'antd';
 
+import styles from './ProfileSettingsModal.module.css';
+
 type Props = {
   isSettingsVisible: boolean;
   content: JSX.Element;
@@ -29,20 +31,9 @@ const ProfileSettingsModal = ({
       onCancel={onCancel}
       confirmLoading={isLoading}
       centered
+      className={styles.modal}
     >
       {content}
-      <style jsx>
-        {`
-          :global(.ant-modal-content) {
-            height: inherit !important;
-          }
-
-          :global(.ant-modal-body) {
-            max-height: calc(90vh - 80px);
-            overflow-y: auto;
-          }
-        `}
-      </style>
     </Modal>
   );
 };

@@ -1,0 +1,18 @@
+.container {
+  max-width: 100%;
+  display: flex;
+}
+
+.value {
+  word-break: break-all;
+}
+
+@media print {
+  .icon {
+    color: #000 !important;
+  }
+
+  .icon :global(.anticon svg) {
+    fill: #000 !important;
+  }
+}

@@ -1,5 +1,5 @@
 import Router from '@koa/router';
-import { AxiosError } from 'axios';
+import { AxiosError, isAxiosError } from 'axios';
 import pinoLogger from 'pino-multi-stream';
 import { ParsedUrlQuery } from 'querystring';
 import { config } from './config';
@@ -60,15 +60,15 @@ export const loggerMiddleware =
       await next();
       data.status = ctx.status;
     } catch (e) {
-      if ((e as AxiosError).isAxiosError) {
-        const error = e as AxiosError<any>;
+      if (isAxiosError(e)) {
+        const error = e as AxiosError<Error>;
         logger.error(error.message, {
           data: error.response?.data,
           status: error.response?.status,
         });
         await sendError({ message: error.message, data: error.response?.data, status: error.response?.status });
       } else {
-        logger.error(e as any);
+        logger.error(e as Error);
         await sendError(e);
       }
       data.status = (e as any).status;

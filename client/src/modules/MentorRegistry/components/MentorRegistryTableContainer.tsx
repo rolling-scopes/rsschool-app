@@ -12,8 +12,8 @@ import { MoreOutlined, MessageTwoTone } from '@ant-design/icons';
 import { ColumnType } from 'antd/lib/table';
 import { DisciplineDto, MentorRegistryDto } from 'api';
 import { ModalDataMode } from 'pages/admin/mentor-registry';
-import css from 'styled-jsx/css';
 import { PublicSvgIcon } from '@client/components/Icons';
+import styles from './MentorRegistryTableContainer.module.css';
 
 interface ChildrenProp {
   setCurrentPage: Dispatch<SetStateAction<number>>;
@@ -95,7 +95,7 @@ export const MentorRegistryTableContainer = ({
   const renderInfo = (_: any, record: MentorRegistryDto) => {
     const isMentor = record.courses.some(id => !record.preselectedCourses.includes(id));
     return (
-      <div className="info-icons">
+      <div className={styles.infoIcons}>
         {isMentor ? (
           <div title="Mentor in the past" style={{ color: token.colorTextSecondary }}>
             <PublicSvgIcon src="/static/svg/master-yoda.svg" size="1rem" />
@@ -109,11 +109,10 @@ export const MentorRegistryTableContainer = ({
         {record.hasCertificate ? (
           <SafetyCertificateTwoTone
             title="Completed with certificate"
-            className="icon-certificate"
+            className={styles.iconCertificate}
             twoToneColor="#52c41a"
           />
         ) : null}
-        <style jsx>{mentorRegistryStyles}</style>
       </div>
     );
   };
@@ -385,27 +384,3 @@ export const MentorRegistryTableContainer = ({
     activeTab,
   });
 };
-
-const mentorRegistryStyles = css`
-  .info-icons {
-    display: flex;
-    justify-content: center;
-  }
-
-  .info-icons > div {
-    margin-right: 8px;
-  }
-
-  :global(.icon-certificate svg) {
-    width: 16px;
-    height: 16px;
-  }
-
-  .icon-flag-uk {
-    background-image: url(/static/images/united-kingdom.png);
-    background-position: center;
-    background-size: contain;
-    width: 16px;
-    height: 16px;
-  }
-`;

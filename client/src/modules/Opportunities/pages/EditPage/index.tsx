@@ -92,7 +92,7 @@ export function EditPage() {
       </Head>
       <LoadingScreen show={loading}>
         <Header title="My CV" />
-        <Content className="print-no-padding" style={{ maxWidth: 960, margin: 'auto' }}>
+        <Content className="print-no-padding ubuntu-font" style={{ maxWidth: 960, margin: 'auto' }}>
           <EditViewCv
             githubId={githubId}
             consent={consent}
@@ -105,12 +105,6 @@ export function EditPage() {
           />
         </Content>
       </LoadingScreen>
-      <style jsx global>{`
-        html,
-        body {
-          font-family: 'Ubuntu', sans-serif;
-        }
-      `}</style>
     </>
   );
 }

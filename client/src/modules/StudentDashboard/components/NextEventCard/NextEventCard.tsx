@@ -4,6 +4,8 @@ import { Typography, Table } from 'antd';
 import { getAvailableTasksColumns } from './renderers';
 import { CourseScheduleItemDto } from 'api';
 
+import styles from './NextEventCard.module.css';
+
 const { Link } = Typography;
 
 type Props = {
@@ -32,18 +34,10 @@ function NextEventCard({ nextEvents, courseAlias }: Props) {
             rowKey="id"
             size="middle"
             columns={columns}
-            className="next-event-card-table"
+            className={styles.table}
           />
         }
       />
-      <style jsx>{`
-        :global(.next-event-card-table .ant-table-thead) {
-          display: none;
-        }
-        :global(.next-event-card-table tr:last-child > td) {
-          border-bottom: none;
-        }
-      `}</style>
     </>
   );
 }
