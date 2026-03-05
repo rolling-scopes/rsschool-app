@@ -212,7 +212,7 @@ jobs:
     needs: [pr_build]
     name: Deploy
     timeout-minutes: 60
-    runs-on: blacksmith-2vcpu-ubuntu-2404
+    runs-on: ubuntu-latest
     if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
     steps:
       - name: Setup Node.js environment
@@ -263,7 +263,7 @@ jobs:
     needs: [pr_deploy]
     name: End-to-End Tests
     timeout-minutes: 10
-    runs-on: blacksmith-2vcpu-ubuntu-2404
+    runs-on: ubuntu-latest
     if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
     steps:
       - name: Checkout

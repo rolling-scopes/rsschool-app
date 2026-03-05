@@ -13,7 +13,7 @@ concurrency:
 jobs:
   build_deploy:
     name: Build and Deploy
-    runs-on: blacksmith-4vcpu-ubuntu-2404
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./tools/sloths
