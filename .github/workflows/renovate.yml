@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 jobs:
   renovate:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - name: Checkout
         uses: actions/checkout@v4
