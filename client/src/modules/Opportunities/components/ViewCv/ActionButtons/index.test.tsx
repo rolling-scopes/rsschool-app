@@ -82,7 +82,9 @@ describe('ActionButtons', () => {
 
     fireEvent.click(deleteButton);
 
-    const modalTitle = await screen.findByText('Delete your CV');
+    const modalTitle = await screen
+      .findAllByText('Delete your CV')
+      .then(els => els.find(el => el.tagName !== 'title') ?? els[0]);
     const modalBodyFragment = await screen.findByText(/are you sure you want to delete your cv/i);
     const modalConfirmButton = await screen.findByRole('button', { name: /delete cv/i });
     const modalCancelButton = await screen.findByRole('button', { name: /cancel/i });

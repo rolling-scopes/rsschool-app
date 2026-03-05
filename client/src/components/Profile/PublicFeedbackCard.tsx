@@ -1,7 +1,7 @@
 import * as React from 'react';
 import isEqual from 'lodash/isEqual';
 import { Typography, Tooltip } from 'antd';
-import { Comment } from '@ant-design/compatible';
+import { Comment } from 'components/Comment';
 import FullscreenOutlined from '@ant-design/icons/FullscreenOutlined';
 import MessageOutlined from '@ant-design/icons/MessageOutlined';
 import CommonCard from './CommonCard';

@@ -43,7 +43,7 @@ describe('Disciplines', () => {
       </Form>,
     );
 
-    const noData = await screen.findByText('No data');
+    const noData = await screen.findAllByText('No data').then(els => els.find(el => el.tagName !== 'title') ?? els[0]);
     expect(noData).toBeInTheDocument();
   });
 });

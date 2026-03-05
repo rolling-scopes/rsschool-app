@@ -1,5 +1,5 @@
 import { Alert, Button, Col, Divider, Form, notification, Row, Spin, Typography } from 'antd';
-import { Comment } from '@ant-design/compatible';
+import { Comment } from 'components/Comment';
 import PreparedComment, { markdownLabel } from 'components/Forms/PreparedComment';
 import { ScoreIcon } from 'components/Icons/ScoreIcon';
 import { SolutionReviewSettings } from 'modules/CrossCheck/constants';

@@ -65,7 +65,7 @@ describe('FilteredTags', () => {
       />,
     );
     const interviewTag = screen.getByText(getTagLabel(TagsEnum.Interview));
-    const interviewCrossIcon = within(interviewTag).getByLabelText('close');
+    const interviewCrossIcon = within(interviewTag).getByRole('img', { name: 'Close' });
 
     fireEvent.click(interviewCrossIcon);
 

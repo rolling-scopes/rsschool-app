@@ -140,7 +140,7 @@ export function useCourseTaskSubmit(courseId: number, courseTask: CourseTaskVeri
       notification.error({
         message,
         // notification will never be closed automatically when status is 401
-        duration: error.response?.status === 401 ? null : undefined,
+        duration: error.response?.status === 401 ? false : undefined,
       });
     } finally {
       setLoading(false);

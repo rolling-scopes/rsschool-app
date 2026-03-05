@@ -1,5 +1,6 @@
 import { Pie, PieConfig } from '@ant-design/plots';
 import { getTaskStatusColor } from 'modules/Schedule';
+import { CourseScheduleItemDtoStatusEnum } from 'api';
 import React from 'react';
 import capitalize from 'lodash/capitalize';
 import { theme } from 'antd';
@@ -30,13 +31,13 @@ export function TasksChart({ data, onItemSelected }: Props) {
       },
       autoRotate: false,
     },
-    color: ({ status }) => getTaskStatusColor(status),
+    color: ({ status }: { status: string }) => getTaskStatusColor(status as CourseScheduleItemDtoStatusEnum),
     legend: {
       layout: 'vertical',
       position: 'right',
       itemMarginBottom: 20,
       itemName: {
-        formatter: (status, _, index) => {
+        formatter: (status: string, _: unknown, index: number) => {
           return `${capitalize(status)} ${data[index]?.value ?? ''}`;
         },
         style: {
@@ -56,9 +57,9 @@ export function TasksChart({ data, onItemSelected }: Props) {
     statistic: {
       title: {
         offsetY: -10,
-        formatter: datum => {
+        formatter: (datum: unknown) => {
           if (!datum) return 'Total tasks';
-          return capitalize(datum.status);
+          return capitalize((datum as { status: string }).status);
         },
         style: {
           color: theme.useToken().token.colorTextBase,

@@ -1,4 +1,3 @@
-import { Datum } from '@antv/g2plot';
 import { Card, Flex, Form, Image, Select, Typography } from 'antd';
 import { CourseStatsApi, CourseTaskDto, TaskPerformanceStatsDto } from 'api';
 import { useActiveCourseContext } from 'modules/Course/contexts';
@@ -82,7 +81,7 @@ function getPerformanceDescriptionByType(type: string) {
 function getChartConfig(): Partial<PieConfig> {
   return {
     tooltip: {
-      customContent: (_, items) => {
+      customContent: (_: string, items: { name: string; value: string | number }[]) => {
         return (
           <>
             {items.map(({ name, value }) => (
@@ -95,7 +94,7 @@ function getChartConfig(): Partial<PieConfig> {
       },
       showDelay: 32,
     },
-    color: ({ type }: Datum) => {
+    color: ({ type }: { type: string }) => {
       switch (type) {
         case StudentPerformanceType.Minimal:
           return Colors.Volcano;

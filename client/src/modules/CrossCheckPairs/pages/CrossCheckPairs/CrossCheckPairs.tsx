@@ -1,5 +1,5 @@
 import { Collapse, Modal, Space, TablePaginationConfig } from 'antd';
-import { Comment } from '@ant-design/compatible';
+import { Comment } from 'components/Comment';
 import { FilterValue } from 'antd/lib/table/interface';
 import { IPaginationInfo } from '@client/utils/pagination';
 import { AdminPageLayout } from 'components/PageLayout';

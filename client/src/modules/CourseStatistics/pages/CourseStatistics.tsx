@@ -36,8 +36,8 @@ function CourseStatistic() {
     router.push(`?${params.toString()}`);
   };
 
-  const handleYearSelection: DatePickerProps['onChange'] = date => {
-    if (!date) {
+  const handleYearSelection: DatePickerProps<import('dayjs').Dayjs>['onChange'] = date => {
+    if (!date || Array.isArray(date)) {
       return;
     }
     params.set('year', date.year().toString());

@@ -3,7 +3,7 @@
 exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = `
 <div>
   <div
-    class="ant-card ant-card-bordered css-dev-only-do-not-override-1v2lwm6"
+    class="ant-card ant-card-bordered css-dev-only-do-not-override-1enej14 css-var-root"
   >
     <div
       class="ant-card-head"
@@ -15,7 +15,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
           class="ant-card-head-title"
         >
           <h2
-            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-1v2lwm6"
+            class="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line css-dev-only-do-not-override-1enej14 css-var-root"
             style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
             <span>
@@ -49,22 +49,24 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
       class="ant-card-body"
     >
       <div
-        class="ant-list ant-list-split css-dev-only-do-not-override-1v2lwm6"
+        class="ant-list ant-list-split css-dev-only-do-not-override-1enej14 css-var-root"
       >
         <div
-          class="ant-spin-nested-loading css-dev-only-do-not-override-1v2lwm6"
+          aria-busy="false"
+          aria-live="polite"
+          class="ant-spin css-dev-only-do-not-override-1enej14 css-var-root"
         >
           <div
             class="ant-spin-container"
           >
             <ul
-              class="ant-list-items"
+              class="ant-list-items ant-list-container css-var-root"
             >
               <li
                 class="ant-list-item ant-list-item-no-flex"
               >
                 <span
-                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
+                  class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
                 >
                   <strong>
                     EPAM E-mail
@@ -78,7 +80,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                 class="ant-list-item ant-list-item-no-flex"
               >
                 <span
-                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
+                  class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
                 >
                   <strong>
                     E-mail
@@ -92,7 +94,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                 class="ant-list-item ant-list-item-no-flex"
               >
                 <span
-                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
+                  class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
                 >
                   <strong>
                     Telegram
@@ -106,7 +108,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                 class="ant-list-item ant-list-item-no-flex"
               >
                 <span
-                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
+                  class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
                 >
                   <strong>
                     Phone
@@ -120,7 +122,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                 class="ant-list-item ant-list-item-no-flex"
               >
                 <span
-                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
+                  class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
                 >
                   <strong>
                     Skype
@@ -134,7 +136,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                 class="ant-list-item ant-list-item-no-flex"
               >
                 <span
-                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
+                  class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
                 >
                   <strong>
                     WhatsApp
@@ -148,7 +150,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                 class="ant-list-item ant-list-item-no-flex"
               >
                 <span
-                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
+                  class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
                 >
                   <strong>
                     Notes
@@ -162,7 +164,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                 class="ant-list-item ant-list-item-no-flex"
               >
                 <span
-                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
+                  class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
                 >
                   <strong>
                     LinkedIn
@@ -171,7 +173,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
                 </span>
                  
                 <span
-                  class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-1v2lwm6"
+                  class="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line css-dev-only-do-not-override-1enej14 css-var-root"
                 >
                   <a
                     href="http://linkedin_test.com/vasya"
@@ -193,7 +195,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
 exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
 <div>
   <div
-    class="ant-card ant-card-bordered css-dev-only-do-not-override-1v2lwm6"
+    class="ant-card ant-card-bordered css-dev-only-do-not-override-1enej14 css-var-root"
   >
     <div
       class="ant-card-head"
@@ -205,7 +207,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
           class="ant-card-head-title"
         >
           <h2
-            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-1v2lwm6"
+            class="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line css-dev-only-do-not-override-1enej14 css-var-root"
             style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
             <span>
@@ -259,22 +261,24 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
       class="ant-card-body"
     >
       <div
-        class="ant-list ant-list-split css-dev-only-do-not-override-1v2lwm6"
+        class="ant-list ant-list-split css-dev-only-do-not-override-1enej14 css-var-root"
       >
         <div
-          class="ant-spin-nested-loading css-dev-only-do-not-override-1v2lwm6"
+          aria-busy="false"
+          aria-live="polite"
+          class="ant-spin css-dev-only-do-not-override-1enej14 css-var-root"
         >
           <div
             class="ant-spin-container"
           >
             <ul
-              class="ant-list-items"
+              class="ant-list-items ant-list-container css-var-root"
             >
               <li
                 class="ant-list-item ant-list-item-no-flex"
               >
                 <span
-                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
+                  class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
                 >
                   <strong>
                     EPAM E-mail
@@ -288,7 +292,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                 class="ant-list-item ant-list-item-no-flex"
               >
                 <span
-                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
+                  class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
                 >
                   <strong>
                     E-mail
@@ -298,15 +302,15 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                  
                 vasya@tut.by
                 <div
-                  class="ant-alert ant-alert-error ant-alert-no-icon css-dev-only-do-not-override-1v2lwm6"
+                  class="ant-alert ant-alert-error ant-alert-no-icon css-var-root css-dev-only-do-not-override-1enej14"
                   data-show="true"
                   role="alert"
                 >
                   <div
-                    class="ant-alert-content"
+                    class="ant-alert-section"
                   >
                     <div
-                      class="ant-alert-message"
+                      class="ant-alert-title"
                     >
                       <div>
                         Email is not verified.
@@ -325,7 +329,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                 class="ant-list-item ant-list-item-no-flex"
               >
                 <span
-                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
+                  class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
                 >
                   <strong>
                     Phone
@@ -339,7 +343,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                 class="ant-list-item ant-list-item-no-flex"
               >
                 <span
-                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
+                  class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
                 >
                   <strong>
                     Skype
@@ -353,7 +357,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
                 class="ant-list-item ant-list-item-no-flex"
               >
                 <span
-                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
+                  class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
                 >
                   <strong>
                     WhatsApp

@@ -8,11 +8,7 @@ export function AdminPage() {
 
   return (
     <AdminPageLayout title="Notifications" loading={false} courses={courses}>
-      <Tabs type="card">
-        <Tabs.TabPane tab="Settings" key="1">
-          <AdminNotificationsPage />
-        </Tabs.TabPane>
-      </Tabs>
+      <Tabs type="card" items={[{ key: '1', label: 'Settings', children: <AdminNotificationsPage /> }]} />
     </AdminPageLayout>
   );
 }
