@@ -8,6 +8,10 @@ concurrency:
   group: pr_${{ github.head_ref }}
   cancel-in-progress: true
 
+env:
+  DO_NOT_TRACK: '1'
+  NODE_OPTIONS: '--no-warnings'
+
 jobs:
   pr_checks:
     name: Lint, Format & Test
@@ -89,6 +93,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-${{ github.ref_name }}
 
+      - name: Restore Turborepo cache
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ hashFiles('package-lock.json', 'turbo.json') }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
       - name: Restore Docker layers
         uses: actions/cache@v4
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
@@ -142,11 +154,6 @@ jobs:
           AWS_DEFAULT_REGION: eu-central-1
         run: |
           aws s3 cp .next/static s3://cdn.rs.school/_next/static/ --recursive --cache-control "public,max-age=15552000,immutable"
-
-      - name: Build client lambda
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
-        working-directory: ./client
-        run: npm run build:lambda
 
       - name: Package Client
         uses: docker/build-push-action@v3

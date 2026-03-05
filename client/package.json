@@ -9,7 +9,6 @@
   "scripts": {
     "start": "next dev",
     "build": "next build",
-    "build:lambda": "tsc --esModuleInterop --skipLibCheck --module commonjs --target es2018 --outDir dist lambda/app.ts",
     "build:analyze": "ANALYZE=1 next build",
     "compile": "tsc -p tsconfig.json --noEmit",
     "prod": "next start -p 8080",
@@ -41,7 +40,6 @@
     "react-quill": "2.0.0",
     "react-use": "17.4.0",
     "remark-gfm": "3.0.1",
-    "serverless-http": "3.2.0",
     "clsx": "2.1.1",
     "use-places-autocomplete": "4.0.1"
   },

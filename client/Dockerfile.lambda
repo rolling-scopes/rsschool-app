@@ -12,18 +12,22 @@ COPY client/next.config.prod.mjs client/next.config.mjs
 
 RUN npm ci --production --no-optional
 
-# lambda entry handler (app.js)
-COPY client/dist client/
 # .next build folder
 COPY client/.next client/.next
 
-# Lambda Container
-FROM public.ecr.aws/lambda/nodejs:24
+# Lambda Container with AWS Lambda Web Adapter
+FROM node:24-bullseye-slim
 
 ENV NODE_ENV production
 ENV TZ utc
 ENV NEXT_RUNTIME nodejs
+ENV PORT 8080
+ENV AWS_LWA_PORT 8080
+
+WORKDIR /var/task
+
+COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:1.0.0-rc1 /lambda-adapter /opt/extensions/lambda-adapter
 
 COPY --from=builder /container_out /var/task/
 
-CMD [ "/var/task/client/app.handler" ]
+CMD [ "npm", "run", "prod", "--prefix", "/var/task/client" ]
