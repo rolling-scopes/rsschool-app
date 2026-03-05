@@ -11,7 +11,7 @@ concurrency:
 jobs:
   deploy_build_client:
     name: Build (Client)
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
@@ -97,7 +97,7 @@ jobs:
 
   deploy_build_server:
     name: Build (Server)
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
@@ -158,7 +158,7 @@ jobs:
 
   deploy_build_nestjs:
     name: Build (Nest.js)
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
@@ -219,7 +219,7 @@ jobs:
   deploy_aws:
     name: Deploy to AWS
     needs: [deploy_build_client, deploy_build_server, deploy_build_nestjs]
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     env:
       PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY  }}
       HOSTNAME: ${{ secrets.EC2_HOSTNAME  }}

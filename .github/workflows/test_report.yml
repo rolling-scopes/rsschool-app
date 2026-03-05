@@ -7,7 +7,7 @@ on:
 jobs:
   test_reports:
     name: Test Reports
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - name: Test Report (Client)
         uses: dorny/test-reporter@v1

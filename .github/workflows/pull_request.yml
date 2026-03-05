@@ -11,7 +11,7 @@ concurrency:
 jobs:
   pr_lint:
     name: Lint and Format
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-2vcpu-ubuntu-2404
     steps:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
@@ -31,7 +31,7 @@ jobs:
 
   pr_test:
     name: Test
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-2vcpu-ubuntu-2404
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -83,7 +83,7 @@ jobs:
 
   pr_build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-2vcpu-ubuntu-2404
     steps:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
@@ -113,11 +113,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-single-buildx
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
-        with:
-          platforms: linux/amd64
+      - name: Setup Blacksmith Builder
+        uses: useblacksmith/setup-docker-builder@v1
 
       - name: Login to ECR
         uses: docker/login-action@v1
@@ -164,7 +161,7 @@ jobs:
         run: npm run build:lambda
 
       - name: Package Client
-        uses: docker/build-push-action@v3
+        uses: useblacksmith/build-push-action@v2
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         with:
           platforms: linux/amd64
@@ -173,8 +170,6 @@ jobs:
           file: ./client/Dockerfile.lambda
           push: true
           tags: 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-ui:pr${{ github.event.pull_request.number }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new
 
       - name: Pull AWS SSM Params
         uses: deptno/action-aws-ssm-to-dotenv@v1.3.2
@@ -189,7 +184,7 @@ jobs:
           output: server/.env
 
       - name: Package Server
-        uses: docker/build-push-action@v3
+        uses: useblacksmith/build-push-action@v2
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         with:
           platforms: linux/amd64
@@ -198,8 +193,6 @@ jobs:
           file: ./server/Dockerfile.lambda
           push: true
           tags: 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-server:pr${{ github.event.pull_request.number }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new
 
       - name: Pull AWS SSM Params
         uses: deptno/action-aws-ssm-to-dotenv@v1.3.2
@@ -214,7 +207,7 @@ jobs:
           output: nestjs/.env
 
       - name: Package Nestjs
-        uses: docker/build-push-action@v3
+        uses: useblacksmith/build-push-action@v2
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         with:
           platforms: linux/amd64
@@ -223,8 +216,6 @@ jobs:
           file: ./nestjs/Dockerfile.lambda
           push: true
           tags: 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-nestjs:pr${{ github.event.pull_request.number }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new
 
       - name: Move cache
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
@@ -236,7 +227,7 @@ jobs:
     needs: [pr_build]
     name: Deploy
     timeout-minutes: 60
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-2vcpu-ubuntu-2404
     if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
     steps:
       - name: Setup Node.js environment
@@ -287,7 +278,7 @@ jobs:
     needs: [pr_deploy]
     name: End-to-End Tests
     timeout-minutes: 10
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-2vcpu-ubuntu-2404
     if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
     steps:
       - name: Checkout
