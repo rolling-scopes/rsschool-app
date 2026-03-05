@@ -3,17 +3,19 @@ import matchMediaPolyfill from 'mq-polyfill';
 
 matchMediaPolyfill(window);
 
-// antd v6 uses ResizeObserver internally
-if (typeof window.ResizeObserver === 'undefined') {
-  window.ResizeObserver = class ResizeObserver {
+// antd v6 uses ResizeObserver internally via @rc-component/resize-observer.
+// jsdom does not include ResizeObserver, so we stub it on global.
+if (typeof global.ResizeObserver === 'undefined') {
+  global.ResizeObserver = class ResizeObserver {
     observe() {}
     unobserve() {}
     disconnect() {}
   };
 }
 
-// @rc-component/form (used by antd v6) uses MessageChannel for batch updates
-if (typeof window.MessageChannel === 'undefined') {
+// antd v6 uses MessageChannel via @rc-component/form for batching form updates.
+// jsdom does not include MessageChannel, so we provide a minimal mock on global.
+if (typeof global.MessageChannel === 'undefined') {
   class MockMessagePort {
     onmessage: ((event: { data: unknown }) => void) | null = null;
     private _partner: MockMessagePort | null = null;
@@ -40,5 +42,5 @@ if (typeof window.MessageChannel === 'undefined') {
     }
   }
   // @ts-expect-error polyfill for jsdom
-  window.MessageChannel = MockMessageChannel;
+  global.MessageChannel = MockMessageChannel;
 }
