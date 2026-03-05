@@ -4,7 +4,7 @@ import matchMediaPolyfill from 'mq-polyfill';
 matchMediaPolyfill(window);
 
 // antd v6 uses ResizeObserver internally via @rc-component/resize-observer.
-// jsdom does not include ResizeObserver, so we stub it on global.
+// jsdom does not include ResizeObserver, so we provide a mock on global.
 if (typeof global.ResizeObserver === 'undefined') {
   global.ResizeObserver = class ResizeObserver {
     observe() {}
@@ -14,7 +14,7 @@ if (typeof global.ResizeObserver === 'undefined') {
 }
 
 // antd v6 uses MessageChannel via @rc-component/form for batching form updates.
-// jsdom does not include MessageChannel, so we provide a minimal mock on global.
+// jsdom does not include MessageChannel, so we provide a working mock implementation on global.
 if (typeof global.MessageChannel === 'undefined') {
   class MockMessagePort {
     onmessage: ((event: { data: unknown }) => void) | null = null;
