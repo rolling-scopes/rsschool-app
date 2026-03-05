@@ -1,4 +1,4 @@
-FROM node:24-bullseye-slim as builder
+FROM node:24-bullseye-slim AS builder
 
 WORKDIR /container_out
 
@@ -15,14 +15,14 @@ COPY server/dist server/dist
 # Lambda Container with AWS Lambda Web Adapter
 FROM node:24-bullseye-slim
 
-ENV NODE_ENV production
-ENV TZ utc
-ENV RS_ENV staging
-ENV NODE_PORT 8080
-ENV PORT 8080
-ENV AWS_LWA_PORT 8080
-ENV AWS_LWA_REMOVE_BASE_PATH /api
-ENV DOTENV_CONFIG_PATH /var/task/server/.env
+ENV NODE_ENV=production
+ENV TZ=utc
+ENV RS_ENV=staging
+ENV NODE_PORT=8080
+ENV PORT=8080
+ENV AWS_LWA_PORT=8080
+ENV AWS_LWA_REMOVE_BASE_PATH=/api
+ENV DOTENV_CONFIG_PATH=/var/task/server/.env
 
 WORKDIR /var/task
 

@@ -1,6 +1,6 @@
-FROM node:24-bullseye-slim as builder
+FROM node:24-bullseye-slim AS builder
 
-ENV NEXT_RUNTIME nodejs
+ENV NEXT_RUNTIME=nodejs
 
 WORKDIR /container_out
 
@@ -18,11 +18,11 @@ COPY client/.next client/.next
 # Lambda Container with AWS Lambda Web Adapter
 FROM node:24-bullseye-slim
 
-ENV NODE_ENV production
-ENV TZ utc
-ENV NEXT_RUNTIME nodejs
-ENV PORT 8080
-ENV AWS_LWA_PORT 8080
+ENV NODE_ENV=production
+ENV TZ=utc
+ENV NEXT_RUNTIME=nodejs
+ENV PORT=8080
+ENV AWS_LWA_PORT=8080
 
 WORKDIR /var/task
 
