@@ -9,8 +9,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  pr_lint:
-    name: Lint and Format
+  pr_checks:
+    name: Lint, Format & Test
     runs-on: blacksmith-2vcpu-ubuntu-2404
     steps:
       - name: Setup Node.js environment
@@ -24,30 +24,15 @@ jobs:
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
 
-      - name: Format & Lint (npm run lint && npm run ci:format)
-        run: |
-          npm run ci:format
-          npm run lint
+      - name: Format
+        run: npm run ci:format
 
-  pr_test:
-    name: Test
-    runs-on: blacksmith-2vcpu-ubuntu-2404
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install dependencies
-        uses: bahmutov/npm-install@v1
+      - name: Lint
+        run: npm run lint
 
       - name: Test (client)
         run: npm run test:ci
+        if: success() || failure()
         working-directory: client
 
       - name: Test (server)
