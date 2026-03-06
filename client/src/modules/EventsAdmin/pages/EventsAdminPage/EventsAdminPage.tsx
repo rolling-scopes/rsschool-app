@@ -52,7 +52,7 @@ export function EventsAdminPage() {
         setModalData(null);
       } catch (e) {
         console.error(e);
-        message.error('An error occurred. Can not save event.');
+        message.error('An error occurred. Cannot save event.');
       }
     },
     [modalAction, modalData, createEvent, updateEvent],
