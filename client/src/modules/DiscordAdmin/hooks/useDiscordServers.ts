@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { useAsync } from 'react-use';
 import { DiscordServersApi, UpdateDiscordServerDto, DiscordServerDto } from '@client/api';
 
+const discordServersService = new DiscordServersApi();
+
 export function useDiscordServers() {
   const [data, setData] = useState<DiscordServerDto[]>([]);
-  const discordServersService = new DiscordServersApi();
 
   const loadData = async () => {
     const { data } = await discordServersService.getDiscordServers();
