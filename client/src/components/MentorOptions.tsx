@@ -1,6 +1,6 @@
 import { Button, Form, FormInstance, Select } from 'antd';
 import { StudentSearch } from '@client/shared/components/StudentSearch';
-import { MentorDetailsDtoStudentsPreferenceEnum } from '@client/api/api';
+import { MentorDetailsDtoStudentsPreferenceEnum } from '@client/api';
 
 export type Options = {
   maxStudentsLimit: number;
