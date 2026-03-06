@@ -48,7 +48,7 @@ export function InterviewsList(props: StudentsListProps) {
           courseAlias={course.alias}
         />
         {isExpanded && (
-          <div>
+          <div className={styles.items}>
             {interviews.map(studentInterview => (
               <StudentInterview
                 key={studentInterview.student.githubId}
