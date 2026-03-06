@@ -9,7 +9,7 @@ type Props = {
   background?: GlobalToken;
 };
 
-function LiquidChart({ count, total, color: _color = Colors.Blue, background }: Props) {
+function LiquidChart({ count, total, color = Colors.Blue, background }: Props) {
   const { token } = theme.useToken();
   const percent = count / total;
   const config: LiquidConfig = {
@@ -17,6 +17,12 @@ function LiquidChart({ count, total, color: _color = Colors.Blue, background }: 
       background: background || token.colorBgContainer,
     },
     percent: percent,
+    style: {
+      fill: color,
+      outlineBorder: 4,
+      outlineDistance: 8,
+      waveLength: 128,
+    },
   };
   return <Liquid {...config} />;
 }

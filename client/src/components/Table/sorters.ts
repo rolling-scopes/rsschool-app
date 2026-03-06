@@ -2,7 +2,7 @@ import get from 'lodash/get';
 
 type SortOrder = 'descend' | 'ascend' | null;
 
-export function stringSorter<T>(field: keyof T) {
+export function stringSorter<T>(field: string) {
   return (a: T, b: T, order?: SortOrder) => {
     const valueOne = get(a, field, '');
     const valueTwo = get(b, field, '');
@@ -19,7 +19,7 @@ export function stringSorter<T>(field: keyof T) {
   };
 }
 
-export function numberSorter<T>(field: keyof T) {
+export function numberSorter<T>(field: string) {
   return (a: T, b: T) => {
     if (a == null && b == null) {
       return 0;
@@ -36,7 +36,7 @@ export function numberSorter<T>(field: keyof T) {
   };
 }
 
-export function boolSorter<T>(field: keyof T) {
+export function boolSorter<T>(field: string) {
   return (a: T, b: T) => {
     if (a == null && b == null) {
       return 0;
@@ -53,7 +53,7 @@ export function boolSorter<T>(field: keyof T) {
   };
 }
 
-export function dateSorter<T>(field: keyof T) {
+export function dateSorter<T>(field: string) {
   return (a: T, b: T) => {
     if (a == null && b == null) {
       return 0;

@@ -8,9 +8,13 @@ concurrency:
   group: pr_${{ github.head_ref }}
   cancel-in-progress: true
 
+env:
+  DO_NOT_TRACK: '1'
+  NODE_OPTIONS: '--no-warnings'
+
 jobs:
-  pr_lint:
-    name: Lint and Format
+  pr_checks:
+    name: Lint, Format, Test
     runs-on: ubuntu-latest
     steps:
       - name: Setup Node.js environment
@@ -24,30 +28,15 @@ jobs:
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
 
-      - name: Format & Lint (npm run lint && npm run ci:format)
-        run: |
-          npm run ci:format
-          npm run lint
+      - name: Format
+        run: npm run ci:format
 
-  pr_test:
-    name: Test
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install dependencies
-        uses: bahmutov/npm-install@v1
+      - name: Lint
+        run: npm run lint
 
       - name: Test (client)
         run: npm run test:ci
+        if: success() || failure()
         working-directory: client
 
       - name: Test (server)
@@ -104,23 +93,22 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-${{ github.ref_name }}
 
-      - name: Restore Docker layers
+      - name: Restore Turborepo cache
         uses: actions/cache@v4
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-single-buildx-${{ github.sha }}
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ hashFiles('package-lock.json', 'turbo.json') }}
           restore-keys: |
-            ${{ runner.os }}-single-buildx
+            ${{ runner.os }}-turbo-
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         with:
           platforms: linux/amd64
 
       - name: Login to ECR
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         with:
           registry: 511361162520.dkr.ecr.eu-central-1.amazonaws.com
@@ -141,13 +129,6 @@ jobs:
         run: |
           npm run build
 
-      - name: Prepare
-        working-directory: ./setup/cdk
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
-        run: |
-          mkdir -p /tmp/.buildx-cache
-          mkdir -p /tmp/.buildx-cache-new
-
       - name: Upload to CDN
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         working-directory: ./client
@@ -158,13 +139,8 @@ jobs:
         run: |
           aws s3 cp .next/static s3://cdn.rs.school/_next/static/ --recursive --cache-control "public,max-age=15552000,immutable"
 
-      - name: Build client lambda
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
-        working-directory: ./client
-        run: npm run build:lambda
-
       - name: Package Client
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v6
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         with:
           platforms: linux/amd64
@@ -173,8 +149,8 @@ jobs:
           file: ./client/Dockerfile.lambda
           push: true
           tags: 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-ui:pr${{ github.event.pull_request.number }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new
+          cache-from: type=gha,scope=rsschool-ui-lambda
+          cache-to: type=gha,mode=max,scope=rsschool-ui-lambda
 
       - name: Pull AWS SSM Params
         uses: deptno/action-aws-ssm-to-dotenv@v1.3.2
@@ -189,7 +165,7 @@ jobs:
           output: server/.env
 
       - name: Package Server
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v6
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         with:
           platforms: linux/amd64
@@ -198,8 +174,8 @@ jobs:
           file: ./server/Dockerfile.lambda
           push: true
           tags: 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-server:pr${{ github.event.pull_request.number }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new
+          cache-from: type=gha,scope=rsschool-server-lambda
+          cache-to: type=gha,mode=max,scope=rsschool-server-lambda
 
       - name: Pull AWS SSM Params
         uses: deptno/action-aws-ssm-to-dotenv@v1.3.2
@@ -214,7 +190,7 @@ jobs:
           output: nestjs/.env
 
       - name: Package Nestjs
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v6
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         with:
           platforms: linux/amd64
@@ -223,14 +199,8 @@ jobs:
           file: ./nestjs/Dockerfile.lambda
           push: true
           tags: 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-nestjs:pr${{ github.event.pull_request.number }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new
-
-      - name: Move cache
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+          cache-from: type=gha,scope=rsschool-nestjs-lambda
+          cache-to: type=gha,mode=max,scope=rsschool-nestjs-lambda
 
   pr_deploy:
     needs: [pr_build]

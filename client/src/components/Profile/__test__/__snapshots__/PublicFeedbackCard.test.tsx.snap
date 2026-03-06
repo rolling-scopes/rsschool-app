@@ -212,7 +212,7 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
               </a>
             </span>
             <span
-              style="color: rgba(0, 0, 0, 0.45); font-size: 12px;"
+              style="color: rgba(0, 0, 0, 0.65); font-size: 12px;"
             >
               <span>
                 a month ago

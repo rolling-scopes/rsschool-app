@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { theme } from 'antd';
 
 type CommentProps = {
   author?: ReactNode;
@@ -9,6 +10,7 @@ type CommentProps = {
 };
 
 export function Comment({ author, avatar, content, datetime, children }: CommentProps) {
+  const { token } = theme.useToken();
   return (
     <div style={{ display: 'flex', gap: 8 }}>
       {avatar && <div style={{ flexShrink: 0 }}>{avatar}</div>}
@@ -16,7 +18,7 @@ export function Comment({ author, avatar, content, datetime, children }: Comment
         {(author || datetime) && (
           <div style={{ marginBottom: 4 }}>
             {author && <span style={{ fontWeight: 500, marginRight: 8 }}>{author}</span>}
-            {datetime && <span style={{ color: 'rgba(0,0,0,0.45)', fontSize: 12 }}>{datetime}</span>}
+            {datetime && <span style={{ color: token.colorTextSecondary, fontSize: 12 }}>{datetime}</span>}
           </div>
         )}
         {content && <div>{content}</div>}

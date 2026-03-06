@@ -40,7 +40,7 @@ export class DockerFunction extends Construct {
       retention: logs.RetentionDays.TWO_WEEKS,
     });
     const integration = new HttpLambdaIntegration('LambdaIntegration', dockerImageFunction, {
-      payloadFormatVersion: apiv2.PayloadFormatVersion.VERSION_1_0,
+      payloadFormatVersion: apiv2.PayloadFormatVersion.VERSION_2_0,
     });
     httpApi.addRoutes({ path: basePath ?? this.defaultBasePath, integration });
     const [domainName] = httpApi.url?.replace('https://', '').split('/') ?? [];

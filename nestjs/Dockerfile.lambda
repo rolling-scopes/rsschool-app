@@ -1,4 +1,4 @@
-FROM node:24-bullseye-slim as builder
+FROM node:24-bullseye-slim AS builder
 
 WORKDIR /container_out
 
@@ -9,18 +9,26 @@ COPY nestjs/package.json nestjs/package.json
 
 RUN npm ci --production --no-optional
 
-COPY nestjs/lambda nestjs/
-COPY nestjs/dist nestjs/
+COPY nestjs/dist nestjs/dist
 
-# Lambda Container
-FROM public.ecr.aws/lambda/nodejs:24
+# Lambda Container with AWS Lambda Web Adapter
+FROM node:24-bullseye-slim
 
-ENV NODE_ENV production
-ENV TZ utc
-ENV AWS_LAMBDA true
-ENV RS_ENV staging
-ENV RSSCHOOL_DEV_TOOLS true
+ENV NODE_ENV=production
+ENV TZ=utc
+ENV AWS_LAMBDA=true
+ENV RS_ENV=staging
+ENV RSSCHOOL_DEV_TOOLS=true
+ENV NODE_PORT=8080
+ENV PORT=8080
+ENV AWS_LWA_PORT=8080
+ENV AWS_LWA_REMOVE_BASE_PATH=/api/v2
+ENV DOTENV_CONFIG_PATH=/var/task/nestjs/.env
+
+WORKDIR /var/task
+
+COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:1.0.0-rc1 /lambda-adapter /opt/extensions/lambda-adapter
 
 COPY --from=builder /container_out /var/task/
 
-CMD [ "/var/task/nestjs/app.handler" ]
+CMD [ "node", "-r", "dotenv/config", "/var/task/nestjs/dist/nestjs/src/main.js" ]
