@@ -18,6 +18,10 @@ export class RepositoriesService {
   ) {}
 
   public async createEvents(events: CreateRepositoryEventDto[]): Promise<void> {
+    if (events.length === 0) {
+      return;
+    }
+
     const uniqueGithubIds = [...new Set(events.map(e => e.githubId))];
     const users = await this.userRepository.find({
       select: ['id', 'githubId'],
@@ -29,11 +33,7 @@ export class RepositoriesService {
     await this.repositoryEventRepository.save(eventsToSave);
 
     const uniqueUrls = [...new Set(events.map(e => e.repositoryUrl))];
-    await Promise.all(uniqueUrls.map(url => this.updateRepositoryActivity(url)));
-  }
-
-  private async updateRepositoryActivity(repositoryUrl: string): Promise<void> {
-    await this.studentRepository.update({ repository: repositoryUrl }, { repositoryLastActivityDate: new Date() });
+    await this.studentRepository.update({ repository: In(uniqueUrls) }, { repositoryLastActivityDate: new Date() });
   }
 }
 
