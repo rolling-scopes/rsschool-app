@@ -1,5 +1,4 @@
 import { Badge, BadgeProps } from 'antd';
-import React from 'react';
 
 type PresetColors = BadgeProps['status'];
 

@@ -1,6 +1,5 @@
 import { Pie, PieConfig } from '@ant-design/plots';
 import { getTaskStatusColor } from 'modules/Schedule';
-import React from 'react';
 import capitalize from 'lodash/capitalize';
 import { theme } from 'antd';
 

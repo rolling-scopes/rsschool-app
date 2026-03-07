@@ -1,4 +1,3 @@
-import React from 'react';
 import { Typography, Select } from 'antd';
 import { FieldTimeOutlined } from '@ant-design/icons';
 import { ALL_TIMEZONES } from 'configs/timezones';

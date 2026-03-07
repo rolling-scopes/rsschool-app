@@ -8,7 +8,7 @@ import {
 } from '@ant-design/icons';
 import { CourseScheduleItemDtoTagEnum } from 'api';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { SettingsDrawer } from '../SettingsDrawer';
 import { AdditionalActions } from '../AdditionalActions';
 import { buildMenuItem } from './helpers';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Col, Modal, Spin, Typography } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 

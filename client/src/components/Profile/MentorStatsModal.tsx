@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { MentorStats } from '@common/models/profile';
 import { Card, Flex, Modal, Space } from 'antd';
 import { GithubAvatar } from 'components/GithubAvatar';

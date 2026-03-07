@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Alert, Button, AlertProps } from 'antd';
 
 export function RegistryBanner(props: Partial<AlertProps>) {

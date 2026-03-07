@@ -1,7 +1,6 @@
 import { Card, Col, Row, Statistic, theme, Typography } from 'antd';
 import { StudentSummaryDto } from 'api';
 import { GithubUserLink } from 'components/GithubUserLink';
-import * as React from 'react';
 
 type HomeSummaryProps = {
   summary: StudentSummaryDto | null;

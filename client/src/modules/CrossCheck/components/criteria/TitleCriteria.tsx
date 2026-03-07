@@ -1,6 +1,5 @@
 import { theme, Typography } from 'antd';
 import { CrossCheckCriteriaDataDto } from 'api';
-import React from 'react';
 
 interface TitleCriteriaProps {
   titleData: CrossCheckCriteriaDataDto;

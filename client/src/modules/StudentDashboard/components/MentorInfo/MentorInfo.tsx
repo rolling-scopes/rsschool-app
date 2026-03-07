@@ -1,5 +1,4 @@
 import { Col, Row, Space, Typography } from 'antd';
-import React from 'react';
 import GithubFilled from '@ant-design/icons/GithubFilled';
 import EnvironmentFilled from '@ant-design/icons/EnvironmentFilled';
 import { GithubAvatar } from 'components/GithubAvatar';

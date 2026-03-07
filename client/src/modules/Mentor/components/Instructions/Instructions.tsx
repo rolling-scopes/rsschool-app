@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Badge, Card, Col, Row, Space, Typography } from 'antd';
 import { INSTRUCTIONS_TEXT, renderDescription, renderSocialLinks } from '.';
 import { DiscordServersApi } from 'api';

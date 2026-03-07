@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Checkbox, Row, Typography, Form } from 'antd';
 
 export function GdprCheckbox() {

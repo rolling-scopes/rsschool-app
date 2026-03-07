@@ -1,5 +1,4 @@
 import { Alert } from 'antd';
-import React from 'react';
 import { formatDate } from 'services/formatter';
 import { TaskSolution } from 'services/course';
 

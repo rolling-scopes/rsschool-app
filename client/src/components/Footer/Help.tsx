@@ -1,4 +1,3 @@
-import React from 'react';
 import { Menu } from './Menu';
 import { BookOutlined, BugOutlined, HddOutlined } from '@ant-design/icons';
 
