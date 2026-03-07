@@ -4,7 +4,6 @@ import { GithubUserLink } from 'components/GithubUserLink';
 import { renderTag, tagsRenderer } from 'components/Table';
 import dayjs from 'dayjs';
 import Link from 'next/link';
-import React from 'react';
 import { CourseEvent } from 'services/course';
 
 import styles from './EventDetails.module.css';

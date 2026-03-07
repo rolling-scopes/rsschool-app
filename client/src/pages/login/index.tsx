@@ -1,6 +1,5 @@
 import { GithubOutlined } from '@ant-design/icons';
 import { Button, Card, Flex } from 'antd';
-import * as React from 'react';
 import ThemeSwitch from '@client/components/ThemeSwitch';
 import styles from './index.module.css';
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import { UploadCriteriaJSON } from '../UploadCriteriaJSON';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 

@@ -1,6 +1,5 @@
 import { message, Table, Typography } from 'antd';
 import { GithubUserLink } from 'components/GithubUserLink';
-import React from 'react';
 import { checkType, IBadReview } from './BadReviewControllers';
 
 interface IBadReviewTableProps {

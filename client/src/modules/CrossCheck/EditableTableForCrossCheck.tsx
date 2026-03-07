@@ -3,7 +3,7 @@ import type { DragEndEvent } from '@dnd-kit/core';
 import { DndContext } from '@dnd-kit/core';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { EditableCellForCrossCheck } from './EditableCellForCrossCheck';
 import { CriteriaDto, CriteriaDtoTypeEnum } from 'api';
 import { CriteriaActions } from './CriteriaActions';

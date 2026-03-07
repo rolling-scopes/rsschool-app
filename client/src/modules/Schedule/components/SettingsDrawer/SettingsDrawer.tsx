@@ -1,6 +1,6 @@
 import { SettingOutlined } from '@ant-design/icons';
 import { Button, Drawer, Tooltip } from 'antd';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
 import ChangeTagColors from './ChangeTagColors';
 import ShowTableColumns from './ShowTableColumns';

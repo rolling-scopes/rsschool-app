@@ -1,4 +1,3 @@
-import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import MentorStatsModal from '../MentorStatsModal';
 import { MentorStats } from '@common/models';

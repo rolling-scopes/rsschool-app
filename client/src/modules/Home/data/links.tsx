@@ -11,7 +11,6 @@ import {
   StopOutlined,
 } from '@ant-design/icons';
 import { Session } from 'components/withSession';
-import React from 'react';
 import { Course } from 'services/models';
 import { isStudent, isAdmin, isMentor, isCourseManager, isActiveStudent, isDementor } from 'domain/user';
 import { getAutoTestRoute } from 'services/routes';

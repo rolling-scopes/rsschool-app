@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { List, theme, Typography } from 'antd';
 import ContactsOutlined from '@ant-design/icons/ContactsOutlined';
 import isEqual from 'lodash/isEqual';

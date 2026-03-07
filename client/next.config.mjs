@@ -18,9 +18,6 @@ const nextConfig = {
           { source: '/api/v2/:path*', destination: `${nestjs}/:path*` },
           { source: '/api/:path*', destination: `${server}/:path*` },
         ],
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
 };
 
 export default nextConfig;

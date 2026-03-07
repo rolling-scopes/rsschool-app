@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button, message } from 'antd';
 import { useLoading } from 'components/useLoading';
 import { MentorsApi } from 'api';

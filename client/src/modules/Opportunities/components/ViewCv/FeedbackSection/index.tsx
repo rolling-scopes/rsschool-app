@@ -1,6 +1,5 @@
 import { Badge, Card, Col, List, Typography } from 'antd';
 import { FeedbackDto, FeedbackSoftSkillIdEnum } from 'api';
-import * as React from 'react';
 import { DataTextValue } from 'modules/Opportunities/components/ViewCv/DataTextValue';
 import { BaseSection } from '../BaseSection';
 
