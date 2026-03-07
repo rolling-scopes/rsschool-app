@@ -23,7 +23,9 @@ export function getColumnSearchProps<T = unknown>(
     }) => (
       <div style={{ padding: 8 }}>
         <Input
-          ref={node => (searchRef.current = node)}
+          ref={node => {
+            searchRef.current = node;
+          }}
           onKeyDown={e => (e.keyCode === 13 ? confirm() : undefined)}
           placeholder={`Search ${label || dataIndex}`}
           value={selectedKeys[0]}

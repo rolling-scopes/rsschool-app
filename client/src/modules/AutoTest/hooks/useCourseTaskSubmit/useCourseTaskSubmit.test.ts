@@ -14,7 +14,7 @@ jest.mock('api');
 const mockErrorNotification = jest.fn();
 const mockSuccessNotification = jest.fn();
 
-jest.mock('hooks/useMessage', () => ({
+jest.mock('hooks', () => ({
   useMessage: () => ({
     notification: {
       error: mockErrorNotification,
@@ -110,7 +110,6 @@ describe('useCourseTaskSubmit', () => {
         await act(async () => {
           await submit({});
         });
-
         expect(mockErrorNotification).toHaveBeenCalledWith({
           message,
           duration: statusCode === 401 ? false : undefined,
