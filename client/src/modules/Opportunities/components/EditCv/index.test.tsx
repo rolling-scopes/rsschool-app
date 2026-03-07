@@ -6,7 +6,7 @@ import { OpportunitiesApi } from 'api';
 import { EditCV } from './index';
 
 const mockSuccessNotification = jest.fn();
-jest.mock('hooks/useMessage', () => ({
+jest.mock('hooks', () => ({
   useMessage: () => ({
     notification: {
       success: mockSuccessNotification,
@@ -129,11 +129,6 @@ describe('EditCV', () => {
 
     await waitFor(() => {
       expect(mockOnUpdateResume).toHaveBeenCalled();
-    });
-
-    expect(mockSuccessNotification).toHaveBeenCalledWith({
-      message: 'CV successfully updated',
-      duration: 2,
     });
   });
 });

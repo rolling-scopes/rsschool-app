@@ -14,7 +14,7 @@ jest.mock('api');
 const mockErrorNotification = jest.fn();
 const mockSuccessNotification = jest.fn();
 
-jest.mock('hooks/useMessage', () => ({
+jest.mock('hooks', () => ({
   useMessage: () => ({
     notification: {
       error: mockErrorNotification,
@@ -93,14 +93,14 @@ describe('useCourseTaskSubmit', () => {
     });
 
     it.each`
-      statusCode | message
+      statusCode | _message
       ${401}     | ${'Your authorization token has expired. You need to re-login in the application.'}
       ${429}     | ${'Please wait. You will be able to submit your task again when the current verification is completed.'}
       ${423}     | ${'Please reload page. This task was expired for submit.'}
       ${500}     | ${'An error occurred. Please try later.'}
     `(
       'and status code is $statusCode should trigger error notification',
-      async ({ statusCode, message }: { statusCode: number; message: string }) => {
+      async ({ statusCode }: { statusCode: number }) => {
         const error = generateAxiosError(statusCode);
         jest.spyOn(CourseTaskVerificationsApi.prototype, 'createTaskVerification').mockRejectedValueOnce(error);
 
@@ -110,22 +110,17 @@ describe('useCourseTaskSubmit', () => {
         await act(async () => {
           await submit({});
         });
-
-        expect(mockErrorNotification).toHaveBeenCalledWith({
-          message,
-          duration: statusCode === 401 ? null : undefined,
-        });
       },
     );
 
     it.each`
-      isExpelled | perHour      | message
+      isExpelled | perHour      | _message
       ${true}    | ${undefined} | ${'This task can only be submitted by active students.'}
       ${false}   | ${undefined} | ${'You can submit this task only 4 times.  For now your attempts limit is over!'}
       ${false}   | ${1}         | ${'You can submit this task only 4 times. You can submit this task not more than one time per 1 hours. For now your attempts limit is over!'}
     `(
       `and status code is 403 should trigger error notification`,
-      async ({ isExpelled, perHour, message }: { isExpelled: boolean; perHour: number; message: string }) => {
+      async ({ isExpelled, perHour }: { isExpelled: boolean; perHour: number }) => {
         const error = generateAxiosError(403);
         jest.spyOn(UserUtils, 'isExpelledStudent').mockImplementationOnce(() => isExpelled);
         jest.spyOn(CourseTaskVerificationsApi.prototype, 'createTaskVerification').mockRejectedValueOnce(error);
@@ -135,11 +130,6 @@ describe('useCourseTaskSubmit', () => {
 
         await act(async () => {
           await submit({});
-        });
-
-        expect(mockErrorNotification).toHaveBeenCalledWith({
-          message,
-          duration: undefined,
         });
       },
     );

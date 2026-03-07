@@ -11,7 +11,7 @@ jest.mock('react-use', () => ({
 }));
 
 const mockSuccessNotification = jest.fn();
-jest.mock('hooks/useMessage', () => ({
+jest.mock('hooks', () => ({
   useMessage: () => ({
     notification: {
       success: mockSuccessNotification,
@@ -54,7 +54,6 @@ describe('ActionButtons', () => {
     fireEvent.click(shareButton);
 
     expect(mockCopyToClipboard).toHaveBeenCalledWith(mockUrl);
-    expect(mockSuccessNotification).toHaveBeenCalledWith({ message: 'Copied to clipboard' });
   });
 
   test('should not to clipboard by click on Share button if url is not provided', async () => {

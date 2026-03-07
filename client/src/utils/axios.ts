@@ -1,22 +1,19 @@
 import { AxiosRequestConfig } from 'axios';
-import getConfig from 'next/config';
 import { BASE_PATH } from 'api/base';
 import { Configuration } from 'api/configuration';
 
-const { serverRuntimeConfig = {} } = getConfig() ?? {};
+const rsHost = process.env.RS_HOST || process.env.NEXT_PUBLIC_RS_HOST || '';
 
 export function getServerAxiosProps(token?: string, baseUrl = ''): Partial<AxiosRequestConfig> {
-  const { rsHost } = serverRuntimeConfig;
   return {
-    baseURL: rsHost ? serverRuntimeConfig.rsHost + baseUrl : baseUrl,
+    baseURL: rsHost ? rsHost + baseUrl : baseUrl,
     headers: token ? { Authorization: `Bearer ${token}` } : undefined,
   };
 }
 
 function getNestJsServerAxiosProps(token?: string): Partial<AxiosRequestConfig> {
-  const { rsHost } = serverRuntimeConfig;
   return {
-    baseURL: rsHost ? serverRuntimeConfig.rsHost + BASE_PATH : undefined,
+    baseURL: rsHost ? rsHost + BASE_PATH : undefined,
     headers: token ? { Authorization: `Bearer ${token}` } : undefined,
   };
 }

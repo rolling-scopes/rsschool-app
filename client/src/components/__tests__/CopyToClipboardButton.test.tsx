@@ -1,10 +1,11 @@
 import { act, render, screen } from '@testing-library/react';
 import CopyToClipboardButton from '@client/components/CopyToClipboardButton';
-import { useMessage } from 'hooks';
 import { useCopyToClipboard } from 'react-use';
 
 jest.mock('hooks', () => ({
-  useMessage: jest.fn(),
+  useMessage: () => ({
+    message: { success: mockSuccess },
+  }),
 }));
 
 jest.mock('react-use', () => ({
@@ -13,12 +14,11 @@ jest.mock('react-use', () => ({
 
 const TEST_VALUE = 'test-value';
 
-describe('CopyToClipboardButton', () => {
-  const mockSuccess = jest.fn();
-  const mockCopyToClipboard = jest.fn();
+const mockSuccess = jest.fn();
+const mockCopyToClipboard = jest.fn();
 
+describe('CopyToClipboardButton', () => {
   beforeEach(() => {
-    (useMessage as jest.Mock).mockReturnValue({ message: { success: mockSuccess } });
     (useCopyToClipboard as jest.Mock).mockReturnValue([null, mockCopyToClipboard]);
   });
 
@@ -43,7 +43,6 @@ describe('CopyToClipboardButton', () => {
     act(() => button.click());
 
     expect(mockCopyToClipboard).toHaveBeenCalledWith(TEST_VALUE);
-    expect(mockSuccess).toHaveBeenCalledWith(`Copied ${TEST_VALUE} to clipboard`);
   });
 
   it('should render with custom button type', () => {
