@@ -13,20 +13,36 @@
     "allowJs": true,
     "declaration": false,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "target": "ES2015",
     "module": "CommonJS",
     "moduleResolution": "node",
     "noEmit": true,
     "skipLibCheck": true,
-    "lib": ["dom", "es2015", "es2016", "es2017"],
+    "lib": [
+      "dom",
+      "es2015",
+      "es2016",
+      "es2017"
+    ],
     "baseUrl": "src",
     "paths": {
-      "@common/*": ["../../common/*"],
-      "@client/*": ["./*"]
+      "@common/*": [
+        "../../common/*"
+      ],
+      "@client/*": [
+        "./*"
+      ]
     },
     "incremental": true
   },
-  "include": ["./next-env.d.ts", "./lambda/**/*.ts", "./src/**/*.ts", "./src/**/*.tsx"],
-  "exclude": ["./node_modules"]
+  "include": [
+    "./next-env.d.ts",
+    "./lambda/**/*.ts",
+    "./src/**/*.ts",
+    "./src/**/*.tsx"
+  ],
+  "exclude": [
+    "./node_modules"
+  ]
 }
