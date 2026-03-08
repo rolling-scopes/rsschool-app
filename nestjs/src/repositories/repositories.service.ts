@@ -36,4 +36,3 @@ export class RepositoriesService {
     await this.studentRepository.update({ repository: In(uniqueUrls) }, { repositoryLastActivityDate: new Date() });
   }
 }
-
