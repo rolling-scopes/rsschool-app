@@ -1,5 +1,7 @@
 client/.next/cache
-client/.next/static
+# Keep empty dir. Next.js scans it on startup even with CDN assets
+client/.next/static/**
+!client/.next/static/
 client/.turbo
 node_modules
 npm-debug.log
