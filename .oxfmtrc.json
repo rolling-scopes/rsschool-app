@@ -1,0 +1,19 @@
+{
+  "trailingComma": "all",
+  "tabWidth": 2,
+  "semi": true,
+  "singleQuote": true,
+  "printWidth": 120,
+  "arrowParens": "avoid",
+  "sortPackageJson": false,
+  "ignorePatterns": [
+    "client/src/.next",
+    "client/.next",
+    "client/dist",
+    "server/dist",
+    "nestjs/dist",
+    "client/src/api/",
+    "client/playwright-report/",
+    "package-lock.json"
+  ]
+}

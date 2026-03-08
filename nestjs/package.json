@@ -21,7 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "openapi": "npm run openapi:spec && npm run openapi:sdk && npm run openapi:format",
     "openapi:spec": "ts-node --project tsconfig.json ./src/openapi-spec.ts",
-    "openapi:format": "prettier --write src/spec.json",
+    "openapi:format": "oxfmt src/spec.json",
     "openapi:sdk": "npx openapi-generator-cli generate -i ./src/spec.json -g typescript-axios -o ../client/src/api --additional-properties=supportsES6=true"
   },
   "dependencies": {

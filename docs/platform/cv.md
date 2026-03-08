@@ -29,9 +29,7 @@ This is how CV `View` looks like:
 There are 3 types of data presented in the CV:
 
 - Information that the user can freely change directly
-
   - `General info`
-
     - `Name` - name
     - `Desired position` - prefered position
     - `Self introduction video` - link to a video with a short self-presentation

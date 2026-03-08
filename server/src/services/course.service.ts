@@ -52,7 +52,8 @@ export async function getCourseMentor(courseId: number, userId: number): Promise
 }
 
 export interface MentorWithContacts
-  extends MentorBasic,
+  extends
+    MentorBasic,
     Pick<
       User,
       'contactsEmail' | 'contactsPhone' | 'contactsSkype' | 'contactsTelegram' | 'contactsWhatsApp' | 'contactsNotes'
