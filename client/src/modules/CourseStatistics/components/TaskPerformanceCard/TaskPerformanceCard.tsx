@@ -81,36 +81,24 @@ function getPerformanceDescriptionByType(type: string) {
 function getChartConfig(): Partial<PieConfig> {
   return {
     tooltip: {
-      customContent: (_: string, items: { name: string; value: string | number }[]) => {
-        return (
-          <>
-            {items.map(({ name, value }) => (
-              <Text key={name}>
-                {getPerformanceDescriptionByType(name)}: <Text strong>{value}</Text>
-              </Text>
-            ))}
-          </>
-        );
-      },
-      showDelay: 32,
+      items: [
+        (d: Record<string, string | number>) => ({
+          name: getPerformanceDescriptionByType(d.type as string),
+          value: d.value,
+        }),
+      ],
     },
-    color: ({ type }: { type: string }) => {
-      switch (type) {
-        case StudentPerformanceType.Minimal:
-          return Colors.Volcano;
-        case StudentPerformanceType.Low:
-          return Colors.Orange;
-        case StudentPerformanceType.Moderate:
-          return Colors.Blue;
-        case StudentPerformanceType.High:
-          return Colors.Lime;
-        case StudentPerformanceType.Exceptional:
-          return Colors.Purple;
-        case StudentPerformanceType.Perfect:
-          return Colors.Magenta;
-        default:
-          return Colors.Gray;
-      }
+    scale: {
+      color: {
+        range: [
+          Colors.Volcano,
+          Colors.Orange,
+          Colors.Blue,
+          Colors.Lime,
+          Colors.Purple,
+          Colors.Magenta,
+        ],
+      },
     },
   };
 }

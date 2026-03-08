@@ -1,9 +1,8 @@
 import { Pie, PieConfig } from '@ant-design/plots';
 import { getTaskStatusColor } from 'modules/Schedule';
 import { CourseScheduleItemDtoStatusEnum } from 'api';
-import React from 'react';
+import React, { useMemo } from 'react';
 import capitalize from 'lodash/capitalize';
-import { theme } from 'antd';
 
 type Item = { status: string; value: number };
 
@@ -13,6 +12,11 @@ type Props = {
 };
 
 export function TasksChart({ data, onItemSelected }: Props) {
+  const statusColors = useMemo(
+    () => data.map(d => getTaskStatusColor(d.status as CourseScheduleItemDtoStatusEnum)),
+    [data],
+  );
+
   const config: PieConfig = {
     data,
     angleField: 'value',
@@ -21,63 +25,42 @@ export function TasksChart({ data, onItemSelected }: Props) {
     innerRadius: 0.78,
     autoFit: true,
     label: {
-      type: 'inner',
-      offset: '-50%',
-      content: '{value}',
+      text: 'value',
+      position: 'inside',
       style: {
         textAlign: 'center',
         fontSize: 12,
         fontWeight: 400,
       },
-      autoRotate: false,
     },
-    color: ({ status }: { status: string }) => getTaskStatusColor(status as CourseScheduleItemDtoStatusEnum),
+    scale: {
+      color: {
+        range: statusColors,
+      },
+    },
     legend: {
-      layout: 'vertical',
-      position: 'right',
-      itemMarginBottom: 20,
-      itemName: {
-        formatter: (status: string, _: unknown, index: number) => {
-          return `${capitalize(status)} ${data[index]?.value ?? ''}`;
+      color: {
+        position: 'right',
+        layout: { justifyContent: 'center' },
+        itemLabelText: (datum: Record<string, string>) => {
+          const item = data.find(d => d.status === datum.status);
+          return `${capitalize(datum.status)} ${item?.value ?? ''}`;
         },
-        style: {
-          fontSize: 14,
-          fontFamily: 'sans-serif',
-        },
+        itemLabelFontSize: 14,
+        itemLabelFontFamily: 'sans-serif',
+        rowPadding: 20,
       },
     },
-    interactions: [
-      {
-        type: 'element-active',
-      },
-      {
-        type: 'pie-statistic-active',
-      },
-    ],
-    statistic: {
-      title: {
-        offsetY: -10,
-        formatter: (datum: unknown) => {
-          if (!datum) return 'Total tasks';
-          return capitalize((datum as { status: string }).status);
-        },
-        style: {
-          color: theme.useToken().token.colorTextBase,
-          fontSize: '14px',
-        },
-      },
-      content: {
-        offsetY: 0,
-        style: {
-          color: theme.useToken().token.colorTextBase,
-          fontSize: '30px',
-        },
-      },
+    interaction: {
+      elementHighlight: true,
     },
-    onReady: plot => {
-      plot.chart.on('element:click', (evt: { data: { data: Item } }) => {
-        onItemSelected(evt.data.data);
-      });
+    onEvent: (_chart, event) => {
+      if (event.type === 'element:click') {
+        const clickedData = (event as unknown as { data: { data: Item } }).data?.data;
+        if (clickedData) {
+          onItemSelected(clickedData);
+        }
+      }
     },
   };
   return <Pie {...config} />;
