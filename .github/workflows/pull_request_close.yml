@@ -24,10 +24,9 @@ jobs:
           cache-name: cache-npm
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('setup/cdk/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
-            ${{ runner.os }}-
 
       - name: Install Dependencies
         working-directory: setup/cdk
