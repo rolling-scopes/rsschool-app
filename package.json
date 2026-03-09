@@ -34,22 +34,24 @@
     "typeorm": "0.3.20"
   },
   "devDependencies": {
+    "@eslint/js": "10.0.1",
     "@total-typescript/ts-reset": "0.6.1",
     "@types/jest": "30.0.0",
     "@types/lodash": "4.17.16",
     "@types/node": "22.15.3",
     "dotenv": "^16.5.0",
-    "eslint": "9.26.0",
+    "eslint": "10.0.2",
     "eslint-config-turbo": "2.8.13",
-    "eslint-plugin-boundaries": "5.3.1",
     "eslint-import-resolver-typescript": "4.4.4",
+    "eslint-plugin-boundaries": "5.4.0",
     "eslint-plugin-jest": "29.15.0",
+    "globals": "^17.4.0",
     "jest": "30.2.0",
     "oxfmt": "0.36.0",
     "ts-node": "10.9.2",
-    "turbo": "2.8.13",
+    "turbo": "2.8.12",
     "typescript": "5.8.3",
-    "typescript-eslint": "8.31.1"
+    "typescript-eslint": "8.56.1"
   },
   "packageManager": "npm@10.7.0"
 }
