@@ -26,8 +26,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Restore npm cache
+        uses: actions/cache@v4
+        env:
+          cache-name: cache-npm
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-
+
       - name: Install dependencies
-        uses: bahmutov/npm-install@v1
+        run: npm ci
 
       - name: Format
         run: npm run ci:format
@@ -122,10 +132,20 @@ jobs:
           username: ${{ secrets.AWS_ACCESS_KEY_ID }}
           password: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
+      - name: Restore npm cache
+        uses: actions/cache@v4
+        env:
+          cache-name: cache-npm
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-
+
       - name: Install dependencies
-        uses: bahmutov/npm-install@v1
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 'true'
+        run: npm ci
 
       - name: Build (npm run build)
         env:
