@@ -1,7 +1,7 @@
 name: 'Publish Test Reports'
 on:
   workflow_run:
-    workflows: ['Pull Request CI']
+    workflows: ['Pull Request']
     types:
       - completed
 jobs:

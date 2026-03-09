@@ -41,7 +41,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
 
-      - name: Generate a isolated subworkspace for Client
+      - name: Generate isolated subworkspace for Client
         run: npx turbo@2.8.12 prune --scope=client --docker
 
       - name: Add lockfile and package.json's and source of isolated subworkspace
@@ -86,7 +86,7 @@ jobs:
         run: docker build -t ghcr.io/rolling-scopes/rsschool-app-client:master -f client/Dockerfile ./app
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -117,7 +117,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
 
-      - name: Generate a isolated subworkspace for Client
+      - name: Generate isolated subworkspace for Server
         run: npx turbo@2.8.12 prune --scope=server --docker
 
       - name: Add lockfile and package.json's and source of isolated subworkspace
@@ -147,7 +147,7 @@ jobs:
         run: docker build -t ghcr.io/rolling-scopes/rsschool-app-server:master -f server/Dockerfile ./app
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -178,7 +178,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
 
-      - name: Generate a isolated subworkspace for Client
+      - name: Generate isolated subworkspace for Nest.js
         run: npx turbo@2.8.12 prune --scope=server --scope=nestjs --docker
 
       - name: Add lockfile and package.json's and source of isolated subworkspace
@@ -207,7 +207,7 @@ jobs:
         run: docker build -t ghcr.io/rolling-scopes/rsschool-app-nestjs:master -f nestjs/Dockerfile ./app
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
