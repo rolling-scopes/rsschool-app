@@ -47,36 +47,36 @@ jobs:
 
       - name: Test (client)
         run: npm run test:ci
-        if: always()
+        if: success() || failure()
         working-directory: client
 
       - name: Test (server)
         run: npm run test:ci
-        if: always()
+        if: success() || failure()
         working-directory: server
 
       - name: Test (nestjs)
         run: npm run test:ci
-        if: always()
+        if: success() || failure()
         working-directory: nestjs
 
       - name: Upload test report (client)
         uses: actions/upload-artifact@v4
-        if: always()
+        if: success() || failure()
         with:
           name: test-report-client
           path: reports/jest-junit-client.xml
 
       - name: Upload test report (server)
         uses: actions/upload-artifact@v4
-        if: always()
+        if: success() || failure()
         with:
           name: test-report-server
           path: reports/jest-junit-server.xml
 
       - name: Upload test report (nestjs)
         uses: actions/upload-artifact@v4
-        if: always()
+        if: success() || failure()
         with:
           name: test-report-nestjs
           path: reports/jest-junit-nestjs.xml
@@ -153,18 +153,16 @@ jobs:
           NODE_ENV: production
           RSSCHOOL_DEV_TOOLS: 'true'
           RSSHCOOL_UI_GCP_MAPS_API_KEY: ${{ secrets.RSSHCOOL_UI_GCP_MAPS_API_KEY }}
-        run: |
-          npm run build
+        run: npm run build
 
       - name: Upload to CDN
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
         working-directory: ./client
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID  }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY  }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: eu-central-1
-        run: |
-          aws s3 cp .next/static s3://cdn.rs.school/_next/static/ --recursive --cache-control "public,max-age=15552000,immutable"
+        run: aws s3 cp .next/static s3://cdn.rs.school/_next/static/ --recursive --cache-control "public,max-age=15552000,immutable"
 
       - name: Package Client
         uses: docker/build-push-action@v6
@@ -314,7 +312,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: '~/.cache/ms-playwright/'
-          key: ${{ runner.os }}-browsers
+          key: ${{ runner.os }}-browsers-${{ hashFiles('package-lock.json') }}
 
       - name: Install Dependencies
         working-directory: ./client

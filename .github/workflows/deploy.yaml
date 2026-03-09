@@ -4,6 +4,11 @@ on:
   push:
     branches: [master]
 
+env:
+  DO_NOT_TRACK: '1'
+  NODE_OPTIONS: '--no-warnings'
+  TURBO_VERSION: '2.8.12'
+
 jobs:
   deploy_build_client:
     name: Build (Client)
@@ -32,7 +37,7 @@ jobs:
             ${{ runner.os }}-${{ env.cache-name }}-
 
       - name: Generate isolated subworkspace for Client
-        run: npx turbo@2.8.12 prune --scope=client --docker
+        run: npx turbo@${{ env.TURBO_VERSION }} prune --scope=client --docker
 
       - name: Add lockfile and package.json's and source of isolated subworkspace
         run: |
@@ -57,18 +62,17 @@ jobs:
           RSSHCOOL_UI_GCP_MAPS_API_KEY: ${{ secrets.RSSHCOOL_UI_GCP_MAPS_API_KEY }}
           CDN_HOST: 'https://cdn.rs.school'
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          DO_NOT_TRACK: 1
         working-directory: ./app
         run: npm run build
 
       - name: Clean modules
         working-directory: ./app
-        run: npm prune --production
+        run: npm prune --omit=dev
 
       - name: Upload to CDN
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID  }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY  }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: eu-central-1
         run: aws s3 cp ./app/client/.next/static s3://cdn.rs.school/_next/static/ --recursive --cache-control "public,max-age=15552000,immutable"
 
@@ -112,7 +116,7 @@ jobs:
             ${{ runner.os }}-${{ env.cache-name }}-
 
       - name: Generate isolated subworkspace for Server
-        run: npx turbo@2.8.12 prune --scope=server --docker
+        run: npx turbo@${{ env.TURBO_VERSION }} prune --scope=server --docker
 
       - name: Add lockfile and package.json's and source of isolated subworkspace
         run: |
@@ -133,7 +137,6 @@ jobs:
       - name: Build (npm run build)
         env:
           NODE_ENV: production
-          DO_NOT_TRACK: 1
         run: npm run build
         working-directory: ./app
 
@@ -177,7 +180,7 @@ jobs:
             ${{ runner.os }}-${{ env.cache-name }}-
 
       - name: Generate isolated subworkspace for Nest.js
-        run: npx turbo@2.8.12 prune --scope=server --scope=nestjs --docker
+        run: npx turbo@${{ env.TURBO_VERSION }} prune --scope=server --scope=nestjs --docker
 
       - name: Add lockfile and package.json's and source of isolated subworkspace
         run: |
@@ -191,13 +194,9 @@ jobs:
         run: npm ci
         working-directory: ./app
 
-      # - name: Test (npm test)
-      #   run: npm test
-
       - name: Build (npm run build)
         env:
           NODE_ENV: production
-          DO_NOT_TRACK: 1
         run: npx turbo run build --filter=nestjs
         working-directory: ./app
 
@@ -223,9 +222,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY  }}
-      HOSTNAME: ${{ secrets.EC2_HOSTNAME  }}
-      USERNAME: ${{ secrets.EC2_USERNAME  }}
+      PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY }}
+      HOSTNAME: ${{ secrets.EC2_HOSTNAME }}
+      USERNAME: ${{ secrets.EC2_USERNAME }}
     environment:
       name: production
       url: https://app.rs.school
@@ -244,9 +243,11 @@ jobs:
           format: dotenv
           output: .env
 
+      - name: Setup SSH key
+        run: echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+
       - name: Pull the latest images
         run: |
-          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           scp -o StrictHostKeyChecking=no -i private_key ./.env ${USERNAME}@${HOSTNAME}:~/.env
           scp -o StrictHostKeyChecking=no -i private_key ./docker-compose.yml ${USERNAME}@${HOSTNAME}:~/docker-compose.yml
           scp -o StrictHostKeyChecking=no -i private_key ./setup/nginx/nginx.conf ${USERNAME}@${HOSTNAME}:~/nginx/nginx.conf
@@ -257,7 +258,6 @@ jobs:
 
       - name: Restart
         run: |
-          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} '
             docker-compose up -d
             docker-compose restart nginx
@@ -265,7 +265,7 @@ jobs:
 
       - name: Clean up
         run: |
-          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} '
             docker system prune -f
           '
+          rm -f private_key
