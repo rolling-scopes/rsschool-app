@@ -4,14 +4,14 @@ on:
   push:
     branches: [master]
 
-concurrency:
-  group: deploy
-  cancel-in-progress: true
-
 jobs:
   deploy_build_client:
     name: Build (Client)
+    concurrency:
+      group: deploy-build-client
+      cancel-in-progress: true
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
@@ -20,16 +20,6 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
-
-      # - name: Restore next cache
-      #   uses: actions/cache@v4
-      #   env:
-      #     cache-name: cache-next
-      #   with:
-      #     path: client/.next/cache/
-      #     key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-${{ env.cache-name }}-
 
       - name: Restore npm cache
         uses: actions/cache@v4
@@ -97,7 +87,11 @@ jobs:
 
   deploy_build_server:
     name: Build (Server)
+    concurrency:
+      group: deploy-build-server
+      cancel-in-progress: true
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
@@ -158,7 +152,11 @@ jobs:
 
   deploy_build_nestjs:
     name: Build (Nest.js)
+    concurrency:
+      group: deploy-build-nestjs
+      cancel-in-progress: true
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
@@ -218,8 +216,12 @@ jobs:
 
   deploy_aws:
     name: Deploy to AWS
+    concurrency:
+      group: deploy-aws
+      cancel-in-progress: false
     needs: [deploy_build_client, deploy_build_server, deploy_build_nestjs]
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     env:
       PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY  }}
       HOSTNAME: ${{ secrets.EC2_HOSTNAME  }}

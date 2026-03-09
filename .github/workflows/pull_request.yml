@@ -3,10 +3,7 @@ name: Pull Request
 on:
   pull_request:
     branches: [master]
-
-concurrency:
-  group: pr_${{ github.head_ref }}
-  cancel-in-progress: true
+    types: [opened, synchronize, reopened, labeled, unlabeled]
 
 env:
   DO_NOT_TRACK: '1'
@@ -15,7 +12,11 @@ env:
 jobs:
   pr_checks:
     name: Lint, Format, Test
+    concurrency:
+      group: pr-checks_${{ github.head_ref }}
+      cancel-in-progress: true
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
@@ -36,43 +37,47 @@ jobs:
 
       - name: Test (client)
         run: npm run test:ci
-        if: success() || failure()
+        if: always()
         working-directory: client
 
       - name: Test (server)
         run: npm run test:ci
-        if: success() || failure()
+        if: always()
         working-directory: server
 
       - name: Test (nestjs)
         run: npm run test:ci
-        if: success() || failure()
+        if: always()
         working-directory: nestjs
 
       - name: Upload test report (client)
         uses: actions/upload-artifact@v4
-        if: success() || failure()
+        if: always()
         with:
           name: test-report-client
           path: reports/jest-junit-client.xml
 
       - name: Upload test report (server)
         uses: actions/upload-artifact@v4
-        if: success() || failure()
+        if: always()
         with:
           name: test-report-server
           path: reports/jest-junit-server.xml
 
       - name: Upload test report (nestjs)
         uses: actions/upload-artifact@v4
-        if: success() || failure()
+        if: always()
         with:
           name: test-report-nestjs
           path: reports/jest-junit-nestjs.xml
 
   pr_build:
     name: Build
+    concurrency:
+      group: pr-build_${{ github.head_ref }}
+      cancel-in-progress: true
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
@@ -95,11 +100,13 @@ jobs:
 
       - name: Restore Turborepo cache
         uses: actions/cache@v4
+        env:
+          cache-name: cache-turbo
         with:
           path: .turbo
-          key: ${{ runner.os }}-turbo-${{ hashFiles('package-lock.json', 'turbo.json') }}
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json', 'turbo.json') }}
           restore-keys: |
-            ${{ runner.os }}-turbo-
+            ${{ runner.os }}-${{ env.cache-name }}-
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -205,7 +212,10 @@ jobs:
   pr_deploy:
     needs: [pr_build]
     name: Deploy
-    timeout-minutes: 60
+    concurrency:
+      group: pr-deploy_${{ github.head_ref }}
+      cancel-in-progress: false
+    timeout-minutes: 30
     runs-on: ubuntu-latest
     if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
     steps:
@@ -255,6 +265,9 @@ jobs:
   pr_e2e:
     needs: [pr_deploy]
     name: End-to-End Tests
+    concurrency:
+      group: pr-e2e_${{ github.head_ref }}
+      cancel-in-progress: true
     timeout-minutes: 10
     runs-on: ubuntu-latest
     if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
