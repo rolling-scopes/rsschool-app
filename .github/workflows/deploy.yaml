@@ -42,7 +42,7 @@ jobs:
             ${{ runner.os }}-${{ env.cache-name }}-
 
       - name: Generate a isolated subworkspace for Client
-        run: npx turbo@2.8.12 prune --scope=client --docker
+        run: npx turbo prune --scope=client --docker
 
       - name: Add lockfile and package.json's and source of isolated subworkspace
         run: |
@@ -118,7 +118,7 @@ jobs:
             ${{ runner.os }}-${{ env.cache-name }}-
 
       - name: Generate a isolated subworkspace for Client
-        run: npx turbo@2.8.12 prune --scope=server --docker
+        run: npx turbo prune --scope=server --docker
 
       - name: Add lockfile and package.json's and source of isolated subworkspace
         run: |
@@ -179,7 +179,7 @@ jobs:
             ${{ runner.os }}-${{ env.cache-name }}-
 
       - name: Generate a isolated subworkspace for Client
-        run: npx turbo@2.8.12 prune --scope=server --scope=nestjs --docker
+        run: npx turbo prune --scope=server --scope=nestjs --docker
 
       - name: Add lockfile and package.json's and source of isolated subworkspace
         run: |
