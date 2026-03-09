@@ -38,6 +38,7 @@ export const getProfileInfo = (_: ILogger) => async (ctx: Router.RouterContext) 
   let permissions: Permissions;
   let permissionsSettings: ConfigurableProfilePermissions | undefined;
   if (isProfileOwner) {
+    role = 'all';
     permissions = getPermissions({ isProfileOwner, isAdmin });
     permissionsSettings = getProfilePermissionsSettings(profilePermissions);
   } else {

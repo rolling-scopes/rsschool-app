@@ -119,7 +119,7 @@ function filterMentors(mentors: MentorDetails[], interviews: InterviewInfo[]): M
 
       let lowGrade = false;
       const capacity = m.maxStudentsLimit - studentsCount;
-      let maxCapacity: number;
+      let maxCapacity = 0;
 
       if (studentsCount + capacity < MIN_INTERVIEW_COUNT) {
         if (capacity === 0) {

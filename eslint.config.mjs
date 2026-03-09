@@ -1,8 +1,8 @@
 import eslint from '@eslint/js';
-import turbo from 'eslint-config-turbo/flat';
-import jest from 'eslint-plugin-jest';
-import globals from 'globals';
 import tsEslint from 'typescript-eslint';
+import turbo from 'eslint-config-turbo/flat';
+import globals from 'globals';
+import jest from 'eslint-plugin-jest';
 
 const IS_AGENT =
   Boolean(process.env.AGENT) ||

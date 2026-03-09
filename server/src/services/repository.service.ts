@@ -265,7 +265,7 @@ export class RepositoryService {
     const repo = RepositoryService.getRepoName(githubId, course);
     const ownerRepo = `${owner}/${repo}`;
     this.logger?.info(`[${ownerRepo}] creating`);
-    let repository: string | null;
+    let repository = null;
     try {
       const response = await github.rest.repos.createUsingTemplate({
         template_repo: 'template-repo',

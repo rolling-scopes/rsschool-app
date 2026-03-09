@@ -33,7 +33,7 @@ export const postCertificates = (_: ILogger) => async (ctx: Router.RouterContext
     return;
   }
 
-  let students: Student[];
+  let students: Student[] = [];
   const initialQuery = getRepository(Student)
     .createQueryBuilder('student')
     .innerJoin('student.course', 'course')

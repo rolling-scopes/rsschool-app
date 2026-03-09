@@ -28,17 +28,16 @@ export class DockerFunction extends Construct {
     const { feature, variables, httpApi, basePath, deployId, memorySize } = props;
 
     const tag = feature;
-    const logGroup = new logs.LogGroup(this, 'LogGroup', {
-      retention: logs.RetentionDays.TWO_WEEKS,
-      removalPolicy: cdk.RemovalPolicy.DESTROY,
-    });
     const dockerImageFunction = new lambda.DockerImageFunction(this, 'DockerImageFunction', {
       description: tag,
       code: lambda.DockerImageCode.fromEcr(props.repository, { tagOrDigest: tag }),
       memorySize: memorySize ?? 1024,
       timeout: cdk.Duration.seconds(30),
       environment: variables,
-      logGroup,
+    });
+    new logs.LogRetention(this, 'LogRetention', {
+      logGroupName: dockerImageFunction.logGroup.logGroupName,
+      retention: logs.RetentionDays.TWO_WEEKS,
     });
     const integration = new HttpLambdaIntegration('LambdaIntegration', dockerImageFunction, {
       payloadFormatVersion: apiv2.PayloadFormatVersion.VERSION_2_0,
