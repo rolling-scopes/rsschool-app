@@ -4,8 +4,6 @@ import { ViewCV } from 'modules/Opportunities/components/ViewCv';
 import Head from 'next/head';
 import { PropsWithChildren } from 'react';
 
-const { Content } = Layout;
-
 type Props = { data: ResumeDto };
 
 export function PublicPage({ data }: PropsWithChildren<Props>) {
@@ -24,9 +22,9 @@ export function PublicPage({ data }: PropsWithChildren<Props>) {
         <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700&display=swap" rel="stylesheet" />
       </Head>
       <Layout>
-        <Content className="print-no-padding ubuntu-font" style={{ maxWidth: 960, margin: 'auto' }}>
+        <Layout.Content className="print-no-padding ubuntu-font" style={{ maxWidth: 960, margin: 'auto' }}>
           <ViewCV publicMode initialData={data} />
-        </Content>
+        </Layout.Content>
       </Layout>
     </>
   );
