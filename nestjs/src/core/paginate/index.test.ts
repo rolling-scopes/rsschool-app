@@ -3,9 +3,9 @@ import { ObjectLiteral, SelectQueryBuilder } from 'typeorm';
 
 const createMockQueryBuilder = (items: ObjectLiteral[], total: number) => {
   const mockQueryBuilder = {
-    take: jest.fn().mockReturnThis(),
-    skip: jest.fn().mockReturnThis(),
-    getManyAndCount: jest.fn().mockResolvedValue([items, total]),
+    take: vi.fn().mockReturnThis(),
+    skip: vi.fn().mockReturnThis(),
+    getManyAndCount: vi.fn().mockResolvedValue([items, total]),
   } as unknown as SelectQueryBuilder<ObjectLiteral>;
 
   return mockQueryBuilder;

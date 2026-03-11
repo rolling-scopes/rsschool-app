@@ -13,12 +13,12 @@ const mockDiscipline = {
   deletedDate: '1684609892046',
 };
 
-const mockCreate = jest.fn(() => Promise.resolve(mockDiscipline));
-const mockGetAll = jest.fn(() => Promise.resolve([mockDiscipline, mockDiscipline]));
-const mockDelete = jest.fn(() => Promise.resolve());
-const mockUpdate = jest.fn(() => Promise.resolve(mockDiscipline));
+const mockCreate = vi.fn(() => Promise.resolve(mockDiscipline));
+const mockGetAll = vi.fn(() => Promise.resolve([mockDiscipline, mockDiscipline]));
+const mockDelete = vi.fn(() => Promise.resolve());
+const mockUpdate = vi.fn(() => Promise.resolve(mockDiscipline));
 
-const mockDisciplinesServiceFactory = jest.fn(() => ({
+const mockDisciplinesServiceFactory = vi.fn(() => ({
   create: mockCreate,
   getAll: mockGetAll,
   delete: mockDelete,

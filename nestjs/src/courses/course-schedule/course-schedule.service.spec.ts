@@ -140,11 +140,11 @@ describe('CourseScheduleService', () => {
 
   describe('transformCrossCheckTask', () => {
     afterAll(() => {
-      jest.restoreAllMocks();
+      vi.restoreAllMocks();
     });
     it('should create 2 items from task', () => {
       const mockStatus = CourseScheduleItemStatus.Available;
-      jest.spyOn(service, 'getCrossCheckItemStatus').mockReturnValue(mockStatus);
+      vi.spyOn(service, 'getCrossCheckItemStatus').mockReturnValue(mockStatus);
       const [submitItem, reviewItem] = service.transformCrossCheckTask(mockCrossCheckCourseTask, true, null, 12345);
 
       expect(submitItem).toEqual({
@@ -190,11 +190,11 @@ describe('CourseScheduleService', () => {
 
   describe('getCrossCheckItemStatus', () => {
     beforeAll(() => {
-      jest.useFakeTimers().setSystemTime(MOCK_CURRENT_TIME);
+      vi.useFakeTimers().setSystemTime(MOCK_CURRENT_TIME);
     });
 
     afterAll(() => {
-      jest.useRealTimers();
+      vi.useRealTimers();
     });
 
     const testCases = [

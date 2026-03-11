@@ -4,7 +4,7 @@ import { TaskVerification } from '@entities/taskVerification';
 import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { WriteScoreService } from '../score/write-score.service';
 import { SelfEducationAnswers } from './dto';
 import { SelfEducationAttributes, SelfEducationService } from './self-education.service';
@@ -190,8 +190,8 @@ describe('SelfEducationService', () => {
       });
 
       it('should NOT throw if last attempt was exactly required hours ago', () => {
-        const mockDiff = jest.fn().mockReturnValue(hoursRestriction);
-        jest.spyOn(dayjs.prototype, 'diff').mockImplementation(mockDiff);
+        const mockDiff = vi.fn().mockReturnValue(hoursRestriction);
+        vi.spyOn(dayjs.prototype, 'diff').mockImplementation(mockDiff);
         const lastAttemptTime = dayjs().subtract(hoursRestriction, 'hour').toISOString();
 
         expect(() =>
@@ -201,8 +201,8 @@ describe('SelfEducationService', () => {
       });
 
       it('should NOT throw if last attempt was more than required hours ago', () => {
-        const mockDiff = jest.fn().mockReturnValue(hoursRestriction + 1);
-        jest.spyOn(dayjs.prototype, 'diff').mockImplementation(mockDiff);
+        const mockDiff = vi.fn().mockReturnValue(hoursRestriction + 1);
+        vi.spyOn(dayjs.prototype, 'diff').mockImplementation(mockDiff);
         const lastAttemptTime = dayjs()
           .subtract(hoursRestriction + 1, 'hour')
           .toISOString();

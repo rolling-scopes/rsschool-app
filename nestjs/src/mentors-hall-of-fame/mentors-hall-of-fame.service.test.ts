@@ -27,30 +27,30 @@ const mockMentorData = [
 ];
 
 const mockGratitudesQueryBuilder = {
-  select: jest.fn().mockReturnThis(),
-  addSelect: jest.fn().mockReturnThis(),
-  from: jest.fn().mockReturnThis(),
-  groupBy: jest.fn().mockReturnThis(),
-  getQuery: jest.fn().mockReturnValue('gratitudes_subquery'),
+  select: vi.fn().mockReturnThis(),
+  addSelect: vi.fn().mockReturnThis(),
+  from: vi.fn().mockReturnThis(),
+  groupBy: vi.fn().mockReturnThis(),
+  getQuery: vi.fn().mockReturnValue('gratitudes_subquery'),
 };
 
 const mockQueryBuilder = {
-  innerJoin: jest.fn().mockReturnThis(),
-  leftJoin: jest.fn().mockReturnThis(),
-  where: jest.fn().mockReturnThis(),
-  andWhere: jest.fn().mockReturnThis(),
-  select: jest.fn().mockReturnThis(),
-  addSelect: jest.fn().mockReturnThis(),
-  groupBy: jest.fn().mockReturnThis(),
-  orderBy: jest.fn().mockReturnThis(),
-  addOrderBy: jest.fn().mockReturnThis(),
-  getRawMany: jest.fn(),
+  innerJoin: vi.fn().mockReturnThis(),
+  leftJoin: vi.fn().mockReturnThis(),
+  where: vi.fn().mockReturnThis(),
+  andWhere: vi.fn().mockReturnThis(),
+  select: vi.fn().mockReturnThis(),
+  addSelect: vi.fn().mockReturnThis(),
+  groupBy: vi.fn().mockReturnThis(),
+  orderBy: vi.fn().mockReturnThis(),
+  addOrderBy: vi.fn().mockReturnThis(),
+  getRawMany: vi.fn(),
 };
 
 const mockUserRepository = {
-  createQueryBuilder: jest.fn(() => mockQueryBuilder),
+  createQueryBuilder: vi.fn(() => mockQueryBuilder),
   manager: {
-    createQueryBuilder: jest.fn(() => mockGratitudesQueryBuilder),
+    createQueryBuilder: vi.fn(() => mockGratitudesQueryBuilder),
   },
 };
 
@@ -58,7 +58,7 @@ describe('MentorsHallOfFameService', () => {
   let service: MentorsHallOfFameService;
 
   beforeEach(async () => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -75,7 +75,7 @@ describe('MentorsHallOfFameService', () => {
 
   describe('onModuleInit', () => {
     it('calls refreshCache', async () => {
-      const refreshCacheSpy = jest.spyOn(service, 'refreshCache').mockResolvedValue();
+      const refreshCacheSpy = vi.spyOn(service, 'refreshCache').mockResolvedValue();
 
       await service.onModuleInit();
 
@@ -429,7 +429,7 @@ describe('MentorsHallOfFameService', () => {
     });
 
     it('logs and keeps cache unchanged when refresh fails', async () => {
-      const loggerErrorSpy = jest.spyOn(
+      const loggerErrorSpy = vi.spyOn(
         (service as unknown as { logger: { error: (message: string, error: unknown) => void } }).logger,
         'error',
       );

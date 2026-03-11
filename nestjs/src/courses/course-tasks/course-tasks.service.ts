@@ -12,7 +12,7 @@ import {
   FindOptionsWhere,
   In,
 } from 'typeorm';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { TaskResult } from '@entities/taskResult';
 import { TaskInterviewResult } from '@entities/taskInterviewResult';
 import { TaskSolution } from '@entities/taskSolution';
