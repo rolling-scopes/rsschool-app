@@ -15,7 +15,8 @@
     "target": "es2020",
     "outDir": "./dist",
     "skipLibCheck": true,
-    "lib": ["es2020", "dom", "esnext.asynciterable", "ES2019.Array", "ES2020"]
+    "lib": ["es2020", "dom", "esnext.asynciterable", "ES2019.Array", "ES2020"],
+    "types": ["vitest/globals"]
   },
   "include": ["./src/**/*.ts"],
   "exclude": ["./node_modules", "./dist"]
