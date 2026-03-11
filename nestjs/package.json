@@ -18,7 +18,6 @@
     "test:watch": "vitest watch",
     "test:cov": "vitest run --coverage",
     "test:debug": "vitest run --inspect-brk --no-file-parallelism",
-    "test:e2e": "vitest run --project e2e",
     "openapi": "npm run openapi:spec && npm run openapi:sdk && npm run openapi:format",
     "openapi:spec": "ts-node --project tsconfig.json ./src/openapi-spec.ts",
     "openapi:format": "oxfmt src/spec.json",
