@@ -13,7 +13,7 @@ import { UsersService } from '../users/users.service';
 import { AuthUser } from './auth-user.model';
 import { JwtService } from '../core/jwt/jwt.service';
 import { lastValueFrom } from 'rxjs';
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 import { NotificationUserConnection } from '@entities/notificationUserConnection';
 import { CourseUser } from '@entities/courseUser';
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';

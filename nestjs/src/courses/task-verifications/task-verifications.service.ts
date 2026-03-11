@@ -4,7 +4,7 @@ import { TaskType } from '@entities/task';
 import { TaskVerification } from '@entities/taskVerification';
 import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 import { CloudApiService } from 'src/cloud-api/cloud-api.service';
 import { MoreThan, Repository } from 'typeorm';
 import { SelfEducationAnswers, SelfEducationQuestionSelectedAnswersDto, TaskVerificationAttemptDto } from './dto';

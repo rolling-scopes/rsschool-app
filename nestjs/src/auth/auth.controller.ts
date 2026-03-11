@@ -20,7 +20,7 @@ import { AuthService, CurrentRequest } from './auth.service';
 import { JWT_COOKIE_NAME } from './constants';
 import { AuthConnectionDto } from './dto/auth-connection.dto';
 import { GithubStrategy } from './strategies/github.strategy';
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 
 const isDev = process.env.NODE_ENV !== 'production';
 const COOKIE_DOMAIN = isDev ? undefined : 'rs.school';

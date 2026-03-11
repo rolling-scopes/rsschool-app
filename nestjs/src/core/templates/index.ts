@@ -1,6 +1,6 @@
 import handlebars from 'handlebars';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
+import * as dayjs from 'dayjs';
+import * as utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
 
