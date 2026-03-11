@@ -21,7 +21,9 @@ function LiquidChart({ count, total, color = Colors.Blue, background }: Props) {
       fill: color,
       outlineBorder: 4,
       outlineDistance: 8,
+      outlineStroke: color,
       waveLength: 128,
+      contentText: `${(percent * 100).toFixed(2)}%`,
     },
   };
   return <Liquid {...config} />;

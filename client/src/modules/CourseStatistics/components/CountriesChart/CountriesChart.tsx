@@ -17,11 +17,11 @@ function CountriesChart({ data, activeCount, xAxisTitle, color = Colors.Blue }: 
   const config: BarConfig = useMemo(
     () => ({
       data,
-      yField: 'countryName',
-      xField: 'count',
+      xField: 'countryName',
+      yField: 'count',
       axis: {
-        y: { labelAutoRotate: false },
-        x: { title: xAxisTitle },
+        x: { labelAutoRotate: false },
+        y: { title: xAxisTitle },
       },
       tooltip: {
         items: [
@@ -32,7 +32,7 @@ function CountriesChart({ data, activeCount, xAxisTitle, color = Colors.Blue }: 
           },
         ],
       },
-      scrollbar: { y: {} },
+      scrollbar: { x: {} },
       style: { fill: color },
     }),
     [data, activeCount, xAxisTitle, color],
