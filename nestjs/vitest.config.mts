@@ -1,7 +1,7 @@
 import path from 'node:path';
 import swc from 'unplugin-swc';
 import { defineConfig, mergeConfig } from 'vitest/config';
-import shared from '../vitest.shared';
+import shared from '../vitest.shared.mjs';
 
 export default mergeConfig(
   shared,
@@ -13,8 +13,8 @@ export default mergeConfig(
     ],
     resolve: {
       alias: {
-        '@entities': path.resolve(__dirname, '../server/src/models'),
-        src: path.resolve(__dirname, 'src'),
+        '@entities': path.resolve(import.meta.dirname, '../server/src/models'),
+        src: path.resolve(import.meta.dirname, 'src'),
       },
     },
     test: {

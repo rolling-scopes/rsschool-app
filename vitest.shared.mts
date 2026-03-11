@@ -8,7 +8,7 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   resolve: {
     alias: {
-      '@common': path.resolve(__dirname, 'common'),
+      '@common': path.resolve(import.meta.dirname, 'common'),
     },
   },
   test: {

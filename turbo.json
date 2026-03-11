@@ -1,5 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "noUpdateNotifier": true,
   "globalDependencies": ["**/.env"],
   "tasks": {
     "build": {
