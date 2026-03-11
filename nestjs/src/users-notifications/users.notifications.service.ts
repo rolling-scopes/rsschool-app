@@ -10,7 +10,7 @@ import { NotificationConnectionExistsDto } from 'src/users-notifications/dto/not
 import { NotificationUserConnection } from '@entities/notificationUserConnection';
 import { UpsertNotificationConnectionDto } from 'src/users-notifications/dto/upsert-notification-connection.dto';
 import { SendUserNotificationDto } from './dto/send-user-notification.dto';
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 import { NotificationData, NotificationsService } from '../notifications/notifications.service';
 import { AuthService } from '../auth';
 import { UsersService } from '../users/users.service';

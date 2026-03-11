@@ -10,7 +10,7 @@ import { CourseUser } from '@entities/courseUser';
 import { History } from '@entities/history';
 import { CourseEvent } from '@entities/courseEvent';
 import { CourseTask } from '@entities/courseTask';
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 
 @Injectable()
 export class ScheduleService {

@@ -3,7 +3,7 @@ import { TeamDistribution } from '@entities/teamDistribution';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Brackets, FindOptionsRelations, In, Repository } from 'typeorm';
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 import { paginate } from 'src/core/paginate';
 
 @Injectable()
