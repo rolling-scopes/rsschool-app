@@ -90,14 +90,7 @@ function getChartConfig(): Partial<PieConfig> {
     },
     scale: {
       color: {
-        range: [
-          Colors.Volcano,
-          Colors.Orange,
-          Colors.Blue,
-          Colors.Lime,
-          Colors.Purple,
-          Colors.Magenta,
-        ],
+        range: [Colors.Volcano, Colors.Orange, Colors.Blue, Colors.Lime, Colors.Purple, Colors.Magenta],
       },
     },
   };
