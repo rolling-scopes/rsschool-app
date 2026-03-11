@@ -1,3 +1,4 @@
+import type { Mocked } from 'vitest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from '../users/users.service';
 import { CourseTasksService } from '../courses';
@@ -16,8 +17,8 @@ import { User } from '@entities/user';
 
 describe('AuthService', () => {
   let service: AuthService;
-  let usersService: jest.Mocked<UsersService>;
-  let courseTasksService: jest.Mocked<CourseTasksService>;
+  let usersService: Mocked<UsersService>;
+  let courseTasksService: Mocked<CourseTasksService>;
 
   const mockProfile: Profile = {
     provider: 'github',
@@ -54,16 +55,16 @@ describe('AuthService', () => {
         {
           provide: CourseTasksService,
           useValue: {
-            getByOwner: jest.fn(),
+            getByOwner: vi.fn(),
           },
         },
         {
           provide: UsersService,
           useValue: {
-            getUserByProvider: jest.fn(),
-            getByGithubId: jest.fn(),
-            saveUser: jest.fn(),
-            updateUser: jest.fn(),
+            getUserByProvider: vi.fn(),
+            getByGithubId: vi.fn(),
+            saveUser: vi.fn(),
+            updateUser: vi.fn(),
           },
         },
         {
@@ -76,7 +77,7 @@ describe('AuthService', () => {
         { provide: UserNotificationsService, useValue: {} },
         { provide: HttpService, useValue: {} },
         { provide: getRepositoryToken(NotificationUserConnection), useValue: {} },
-        { provide: CACHE_MANAGER, useValue: { del: jest.fn() } },
+        { provide: CACHE_MANAGER, useValue: { del: vi.fn() } },
       ],
     }).compile();
 
@@ -91,7 +92,7 @@ describe('AuthService', () => {
 
   describe('createAuthUser', () => {
     beforeEach(() => {
-      jest.spyOn(service, 'getAuthDetails').mockResolvedValue(mockAuthDetails);
+      vi.spyOn(service, 'getAuthDetails').mockResolvedValue(mockAuthDetails);
       courseTasksService.getByOwner.mockResolvedValue([]);
     });
 
@@ -249,7 +250,7 @@ describe('AuthService', () => {
       const adminProfile = { ...mockProfile, username: 'admin' };
       const adminAuthDetails = { ...mockAuthDetails, githubId: 'admin' };
       usersService.getUserByProvider.mockResolvedValue(mockUser as User);
-      jest.spyOn(service, 'getAuthDetails').mockResolvedValue(adminAuthDetails);
+      vi.spyOn(service, 'getAuthDetails').mockResolvedValue(adminAuthDetails);
 
       const result = await service.createAuthUser(adminProfile, false);
 
@@ -288,7 +289,7 @@ describe('AuthService', () => {
 
     it('should call getAuthUser with correct parameters', async () => {
       usersService.getUserByProvider.mockResolvedValue(mockUser as User);
-      const getAuthUserSpy = jest.spyOn(service, 'getAuthUser');
+      const getAuthUserSpy = vi.spyOn(service, 'getAuthUser');
 
       await service.createAuthUser(mockProfile, true);
 

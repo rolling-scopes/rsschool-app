@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import { IsBoolean, IsDate, IsInt, IsOptional, IsString } from 'class-validator';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 export class HeroesRadarQueryDto {
   @ApiProperty()

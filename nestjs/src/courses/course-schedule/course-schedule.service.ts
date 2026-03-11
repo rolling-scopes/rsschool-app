@@ -11,7 +11,7 @@ import { PersonDto } from '../../core/dto';
 import { Repository } from 'typeorm';
 import { EventType } from '../course-events/dto/course-event.dto';
 import { Course } from '@entities/course';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { TeamDistribution } from '@entities/teamDistribution';
 import { TeamDistributionStudent } from '@entities/teamDistributionStudent';
 

@@ -2,7 +2,7 @@ import { CourseTask } from '@entities/courseTask';
 import { TaskVerification } from '@entities/taskVerification';
 import { ForbiddenException, Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { Repository } from 'typeorm';
 import { WriteScoreService } from '../score';
 import { SelfEducationAnswers } from './dto';

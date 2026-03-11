@@ -1,5 +1,5 @@
 import { In, Repository } from 'typeorm';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '@entities/user';

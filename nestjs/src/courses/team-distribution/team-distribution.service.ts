@@ -2,7 +2,7 @@ import { Student, TeamDistributionStudent } from '@entities/index';
 import { TeamDistribution } from '@entities/teamDistribution';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { Repository } from 'typeorm';
 import { TeamService } from './team.service';
 import { SaveScoreInput, WriteScoreService } from '../score';

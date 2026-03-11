@@ -1,6 +1,6 @@
 import eslint from '@eslint/js';
 import turbo from 'eslint-config-turbo/flat';
-import jest from 'eslint-plugin-jest';
+import vitest from '@vitest/eslint-plugin';
 import globals from 'globals';
 import tsEslint from 'typescript-eslint';
 
@@ -17,7 +17,7 @@ export default tsEslint.config(
   ...turbo,
   {
     files: ['**/__tests__/**/*.ts?(x)', '**/?(*.)+(spec|test).ts?(x)'],
-    ...jest.configs['flat/recommended'],
+    ...vitest.configs.recommended,
   },
   {
     ignores: ['node_modules', 'dist'],

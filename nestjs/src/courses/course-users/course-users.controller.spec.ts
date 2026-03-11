@@ -23,14 +23,14 @@ const mockCourseUser = {
   name: 'Foo Bar',
 } as ExtendedCourseUser;
 
-const mockGetByUserId = jest.fn();
-const mockGetCourseUsersByCourseId = jest.fn();
-const mockGetUsersToUpdateAndToInsert = jest.fn();
-const mockSaveCourseUsers = jest.fn();
-const mockUpdateCourseUser = jest.fn();
-const mockUpdateCourseUsersRoles = jest.fn();
+const mockGetByUserId = vi.fn();
+const mockGetCourseUsersByCourseId = vi.fn();
+const mockGetUsersToUpdateAndToInsert = vi.fn();
+const mockSaveCourseUsers = vi.fn();
+const mockUpdateCourseUser = vi.fn();
+const mockUpdateCourseUsersRoles = vi.fn();
 
-const mockCourseUsersServiceFactory = jest.fn(() => ({
+const mockCourseUsersServiceFactory = vi.fn(() => ({
   getByUserId: mockGetByUserId,
   getCourseUsersByCourseId: mockGetCourseUsersByCourseId,
   getUsersToUpdateAndToInsert: mockGetUsersToUpdateAndToInsert,
@@ -39,9 +39,9 @@ const mockCourseUsersServiceFactory = jest.fn(() => ({
   updateCourseUsersRoles: mockUpdateCourseUsersRoles,
 }));
 
-const mockGetByGithubId = jest.fn();
+const mockGetByGithubId = vi.fn();
 
-const mockUsersServiceFactory = jest.fn(() => ({
+const mockUsersServiceFactory = vi.fn(() => ({
   getByGithubId: mockGetByGithubId,
 }));
 
