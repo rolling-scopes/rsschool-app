@@ -9,10 +9,10 @@
     "start": "tsnd --ignore-watch node_modules --inspect --notify false -r dotenv/config -- ./src/index.ts | pino-pretty -i time,hostname,pid,host,method,remoteAddress",
     "start:prod": "node dist/server/src/index.js",
     "lint": "eslint src",
-    "test": "jest",
-    "test:ci": "jest --ci --reporters=default --reporters=jest-junit",
-    "test-watch": "jest --watch",
-    "coverage": "jest --coverage",
+    "test": "vitest run",
+    "test:ci": "vitest run --reporter=default --reporter=junit --outputFile.junit=../reports/jest-junit-server.xml",
+    "test-watch": "vitest watch",
+    "coverage": "vitest run --coverage",
     "typeorm": "typeorm-ts-node-commonjs",
     "typeorm:migration:generate": "npm run migration",
     "migration": "typeorm-ts-node-commonjs migration:generate -d src/dataSource.ts"
@@ -52,14 +52,8 @@
     "@types/pg": "8.6.4",
     "@types/pino-multi-stream": "3.1.2",
     "cross-env": "7.0.3",
-    "jest-junit": "16.0.0",
     "pino-pretty": "7.5.1",
-    "ts-jest": "29.4.6",
     "ts-node-dev": "2.0.0",
     "tsconfig-paths": "4.1.0"
-  },
-  "jest-junit": {
-    "outputDirectory": "../reports",
-    "outputName": "jest-junit-server.xml"
   }
 }
