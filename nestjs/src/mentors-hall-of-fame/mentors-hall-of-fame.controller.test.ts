@@ -23,9 +23,9 @@ const mockTopMentors = [
   }),
 ];
 
-const mockGetTopMentors = jest.fn(() => Promise.resolve(mockTopMentors));
+const mockGetTopMentors = vi.fn(() => Promise.resolve(mockTopMentors));
 
-const mockServiceFactory = jest.fn(() => ({
+const mockServiceFactory = vi.fn(() => ({
   getTopMentors: mockGetTopMentors,
 }));
 
@@ -33,7 +33,7 @@ describe('MentorsHallOfFameController', () => {
   let controller: MentorsHallOfFameController;
 
   beforeEach(async () => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [MentorsHallOfFameController],

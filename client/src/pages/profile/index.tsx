@@ -95,7 +95,7 @@ const Profile = () => {
 
   const updateProfile = async (data: UpdateProfileInfoDto) => {
     setIsSaving(true);
-    let isUpdated = false;
+    let isUpdated: boolean;
     try {
       await profileApi.updateProfileInfoFlat(data);
       setIsSaving(false);

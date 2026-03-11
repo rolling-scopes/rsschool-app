@@ -43,7 +43,13 @@ const getColumns = (handleDelete: (id: string) => void, isDeleting: boolean): Co
     title: 'Reasons for Leaving',
     dataIndex: 'reasonForLeaving',
     key: 'reasons',
-    render: (reasons?: string[]) => <>{reasons?.map(reason => <Tag key={reason}>{reason.replace(/_/g, ' ')}</Tag>)}</>,
+    render: (reasons?: string[]) => (
+      <>
+        {reasons?.map(reason => (
+          <Tag key={reason}>{reason.replace(/_/g, ' ')}</Tag>
+        ))}
+      </>
+    ),
   },
   {
     title: 'Other Comments',

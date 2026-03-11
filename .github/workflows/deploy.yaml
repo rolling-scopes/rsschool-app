@@ -4,14 +4,19 @@ on:
   push:
     branches: [master]
 
-concurrency:
-  group: deploy
-  cancel-in-progress: true
+env:
+  DO_NOT_TRACK: '1'
+  NODE_OPTIONS: '--no-warnings'
+  TURBO_VERSION: '2.8.12'
 
 jobs:
   deploy_build_client:
     name: Build (Client)
+    concurrency:
+      group: deploy-build-client
+      cancel-in-progress: true
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
@@ -20,16 +25,6 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
-
-      # - name: Restore next cache
-      #   uses: actions/cache@v4
-      #   env:
-      #     cache-name: cache-next
-      #   with:
-      #     path: client/.next/cache/
-      #     key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.sha }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-${{ env.cache-name }}-
 
       - name: Restore npm cache
         uses: actions/cache@v4
@@ -41,8 +36,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
 
-      - name: Generate a isolated subworkspace for Client
-        run: npx turbo prune --scope=client --docker
+      - name: Generate isolated subworkspace for Client
+        run: npx turbo@${{ env.TURBO_VERSION }} prune --scope=client --docker
 
       - name: Add lockfile and package.json's and source of isolated subworkspace
         run: |
@@ -67,18 +62,17 @@ jobs:
           RSSHCOOL_UI_GCP_MAPS_API_KEY: ${{ secrets.RSSHCOOL_UI_GCP_MAPS_API_KEY }}
           CDN_HOST: 'https://cdn.rs.school'
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          DO_NOT_TRACK: 1
         working-directory: ./app
         run: npm run build
 
       - name: Clean modules
         working-directory: ./app
-        run: npm prune --production
+        run: npm prune --omit=dev
 
       - name: Upload to CDN
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID  }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY  }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: eu-central-1
         run: aws s3 cp ./app/client/.next/static s3://cdn.rs.school/_next/static/ --recursive --cache-control "public,max-age=15552000,immutable"
 
@@ -86,7 +80,7 @@ jobs:
         run: docker build -t ghcr.io/rolling-scopes/rsschool-app-client:master -f client/Dockerfile ./app
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -97,7 +91,11 @@ jobs:
 
   deploy_build_server:
     name: Build (Server)
+    concurrency:
+      group: deploy-build-server
+      cancel-in-progress: true
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
@@ -117,8 +115,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
 
-      - name: Generate a isolated subworkspace for Client
-        run: npx turbo prune --scope=server --docker
+      - name: Generate isolated subworkspace for Server
+        run: npx turbo@${{ env.TURBO_VERSION }} prune --scope=server --docker
 
       - name: Add lockfile and package.json's and source of isolated subworkspace
         run: |
@@ -139,7 +137,6 @@ jobs:
       - name: Build (npm run build)
         env:
           NODE_ENV: production
-          DO_NOT_TRACK: 1
         run: npm run build
         working-directory: ./app
 
@@ -147,7 +144,7 @@ jobs:
         run: docker build -t ghcr.io/rolling-scopes/rsschool-app-server:master -f server/Dockerfile ./app
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -158,7 +155,11 @@ jobs:
 
   deploy_build_nestjs:
     name: Build (Nest.js)
+    concurrency:
+      group: deploy-build-nestjs
+      cancel-in-progress: true
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
@@ -178,8 +179,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
 
-      - name: Generate a isolated subworkspace for Client
-        run: npx turbo prune --scope=server --scope=nestjs --docker
+      - name: Generate isolated subworkspace for Nest.js
+        run: npx turbo@${{ env.TURBO_VERSION }} prune --scope=server --scope=nestjs --docker
 
       - name: Add lockfile and package.json's and source of isolated subworkspace
         run: |
@@ -193,13 +194,9 @@ jobs:
         run: npm ci
         working-directory: ./app
 
-      # - name: Test (npm test)
-      #   run: npm test
-
       - name: Build (npm run build)
         env:
           NODE_ENV: production
-          DO_NOT_TRACK: 1
         run: npx turbo run build --filter=nestjs
         working-directory: ./app
 
@@ -207,7 +204,7 @@ jobs:
         run: docker build -t ghcr.io/rolling-scopes/rsschool-app-nestjs:master -f nestjs/Dockerfile ./app
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -218,12 +215,16 @@ jobs:
 
   deploy_aws:
     name: Deploy to AWS
+    concurrency:
+      group: deploy-aws
+      cancel-in-progress: false
     needs: [deploy_build_client, deploy_build_server, deploy_build_nestjs]
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     env:
-      PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY  }}
-      HOSTNAME: ${{ secrets.EC2_HOSTNAME  }}
-      USERNAME: ${{ secrets.EC2_USERNAME  }}
+      PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY }}
+      HOSTNAME: ${{ secrets.EC2_HOSTNAME }}
+      USERNAME: ${{ secrets.EC2_USERNAME }}
     environment:
       name: production
       url: https://app.rs.school
@@ -242,9 +243,11 @@ jobs:
           format: dotenv
           output: .env
 
+      - name: Setup SSH key
+        run: echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+
       - name: Pull the latest images
         run: |
-          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           scp -o StrictHostKeyChecking=no -i private_key ./.env ${USERNAME}@${HOSTNAME}:~/.env
           scp -o StrictHostKeyChecking=no -i private_key ./docker-compose.yml ${USERNAME}@${HOSTNAME}:~/docker-compose.yml
           scp -o StrictHostKeyChecking=no -i private_key ./setup/nginx/nginx.conf ${USERNAME}@${HOSTNAME}:~/nginx/nginx.conf
@@ -255,7 +258,6 @@ jobs:
 
       - name: Restart
         run: |
-          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} '
             docker-compose up -d
             docker-compose restart nginx
@@ -263,7 +265,7 @@ jobs:
 
       - name: Clean up
         run: |
-          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} '
             docker system prune -f
           '
+          rm -f private_key

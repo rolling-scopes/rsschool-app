@@ -17,7 +17,7 @@
       "eslint --fix"
     ],
     "*.css": [
-      "prettier --write --config .prettierrc"
+      "oxfmt"
     ]
   },
   "dependencies": {
@@ -49,7 +49,7 @@
     "eslint-plugin-vue": "9.3.0",
     "lint-staged": "13.0.3",
     "npm-run-all": "4.1.5",
-    "prettier": "2.7.1",
+    "oxfmt": "0.36.0",
     "typescript": "4.7.4",
     "vite": "3.2.11",
     "vue-eslint-parser": "9.0.3",

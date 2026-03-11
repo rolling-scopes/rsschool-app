@@ -21,7 +21,8 @@
     "noUnusedLocals": true,
     "noUncheckedIndexedAccess": true,
     "noFallthroughCasesInSwitch": false,
-    "forceConsistentCasingInFileNames": false
+    "forceConsistentCasingInFileNames": false,
+    "types": ["vitest/globals"]
   },
   "ts-node": {
     "require": ["tsconfig-paths/register"]

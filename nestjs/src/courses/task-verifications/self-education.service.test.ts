@@ -4,7 +4,6 @@ import { TaskVerification } from '@entities/taskVerification';
 import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import * as dayjs from 'dayjs';
 import { WriteScoreService } from '../score/write-score.service';
 import { SelfEducationAnswers } from './dto';
 import { SelfEducationAttributes, SelfEducationService } from './self-education.service';
@@ -172,59 +171,53 @@ describe('SelfEducationService', () => {
     describe('Time-Based Attempt Restrictions', () => {
       const hoursRestriction = 2;
       const attempt = 1;
+      const fixedNow = new Date('2026-01-01T12:00:00.000Z');
 
       beforeEach(() => {
+        vi.useFakeTimers();
+        vi.setSystemTime(fixedNow);
         mockTask = createMockCourseTask({
           public: { oneAttemptPerNumberOfHours: hoursRestriction, strictAttemptsMode: true, maxAttemptsNumber: 5 },
           answers: [0, [1, 2]],
         });
       });
+      afterEach(() => {
+        vi.useRealTimers();
+      });
 
       it('should throw ForbiddenException if last attempt was less than required hours ago', () => {
-        const lastAttemptTime = dayjs()
-          .subtract(hoursRestriction - 1, 'hour')
-          .toISOString();
+        const lastAttemptTime = new Date(fixedNow.getTime() - (hoursRestriction - 1) * 60 * 60 * 1000).toISOString();
         expect(() => service.verifySelfEducationAnswers(mockTask, studentAnswers, attempt, lastAttemptTime)).toThrow(
           ForbiddenException,
         );
       });
 
       it('should NOT throw if last attempt was exactly required hours ago', () => {
-        const mockDiff = jest.fn().mockReturnValue(hoursRestriction);
-        jest.spyOn(dayjs.prototype, 'diff').mockImplementation(mockDiff);
-        const lastAttemptTime = dayjs().subtract(hoursRestriction, 'hour').toISOString();
+        const lastAttemptTime = new Date(fixedNow.getTime() - hoursRestriction * 60 * 60 * 1000).toISOString();
 
         expect(() =>
           service.verifySelfEducationAnswers(mockTask, studentAnswers, attempt, lastAttemptTime),
-        ).not.toThrow(ForbiddenException);
-        expect(mockDiff).toHaveBeenCalledWith(lastAttemptTime, 'hours');
+        ).not.toThrow();
       });
 
       it('should NOT throw if last attempt was more than required hours ago', () => {
-        const mockDiff = jest.fn().mockReturnValue(hoursRestriction + 1);
-        jest.spyOn(dayjs.prototype, 'diff').mockImplementation(mockDiff);
-        const lastAttemptTime = dayjs()
-          .subtract(hoursRestriction + 1, 'hour')
-          .toISOString();
+        const lastAttemptTime = new Date(fixedNow.getTime() - (hoursRestriction + 1) * 60 * 60 * 1000).toISOString();
 
         expect(() =>
           service.verifySelfEducationAnswers(mockTask, studentAnswers, attempt, lastAttemptTime),
-        ).not.toThrow(ForbiddenException);
-        expect(mockDiff).toHaveBeenCalledWith(lastAttemptTime, 'hours');
+        ).not.toThrow();
       });
 
       it('should NOT throw if lastAttemptTime is undefined', () => {
-        expect(() => service.verifySelfEducationAnswers(mockTask, studentAnswers, attempt, undefined)).not.toThrow(
-          ForbiddenException,
-        );
+        expect(() => service.verifySelfEducationAnswers(mockTask, studentAnswers, attempt, undefined)).not.toThrow();
       });
 
       it('should NOT throw if oneAttemptPerNumberOfHours is 0', () => {
         mockTask = createMockCourseTask({ public: { oneAttemptPerNumberOfHours: 0 } });
-        const lastAttemptTime = dayjs().subtract(1, 'minute').toISOString();
+        const lastAttemptTime = new Date(fixedNow.getTime() - 60 * 1000).toISOString();
         expect(() =>
           service.verifySelfEducationAnswers(mockTask, studentAnswers, attempt, lastAttemptTime),
-        ).not.toThrow(ForbiddenException);
+        ).not.toThrow();
       });
     });
 
@@ -237,9 +230,7 @@ describe('SelfEducationService', () => {
       });
 
       it('should NOT throw if attempt < maxAttemptsNumber', () => {
-        expect(() => service.verifySelfEducationAnswers(mockTask, studentAnswers, maxAttempts - 1)).not.toThrow(
-          ForbiddenException,
-        );
+        expect(() => service.verifySelfEducationAnswers(mockTask, studentAnswers, maxAttempts - 1)).not.toThrow();
       });
 
       it('should throw ForbiddenException if attempt >= maxAttemptsNumber', () => {

@@ -1,8 +1,8 @@
 import eslint from '@eslint/js';
-import tsEslint from 'typescript-eslint';
 import turbo from 'eslint-config-turbo/flat';
+import vitest from '@vitest/eslint-plugin';
 import globals from 'globals';
-import jest from 'eslint-plugin-jest';
+import tsEslint from 'typescript-eslint';
 
 const IS_AGENT =
   Boolean(process.env.AGENT) ||
@@ -17,7 +17,7 @@ export default tsEslint.config(
   ...turbo,
   {
     files: ['**/__tests__/**/*.ts?(x)', '**/?(*.)+(spec|test).ts?(x)'],
-    ...jest.configs['flat/recommended'],
+    ...vitest.configs.recommended,
   },
   {
     ignores: ['node_modules', 'dist'],

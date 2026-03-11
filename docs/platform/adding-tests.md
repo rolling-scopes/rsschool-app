@@ -7,7 +7,6 @@
    </br>![Add Task Button1](./img/adding-tests-2.png)
 
 3. Fill in the form and save it:
-
    - "Name" - task title;
    - "Task Type" - select "RS School App Test";
    - "Discipline" - select course-related discipline;
@@ -24,7 +23,6 @@
    </br>![Add Task Button2](./img/adding-tests-5.png)
 
 6. Fill in the form again and save it:
-
    - "Task" - select the task you have just created;
    - "Task Type" - select "RS School App Test";
    - "Checker" - select "Auto-Test";

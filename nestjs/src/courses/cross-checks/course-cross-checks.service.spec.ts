@@ -18,12 +18,12 @@ const mockRawData = [
   },
 ];
 
-const mockTaskSolutionRepositoryFactory = jest.fn(() => ({
-  createQueryBuilder: jest.fn(() => ({
-    leftJoin: jest.fn().mockReturnThis(),
-    addSelect: jest.fn().mockReturnThis(),
-    where: jest.fn().mockReturnThis(),
-    andWhere: jest.fn().mockReturnThis(),
+const mockTaskSolutionRepositoryFactory = vi.fn(() => ({
+  createQueryBuilder: vi.fn(() => ({
+    leftJoin: vi.fn().mockReturnThis(),
+    addSelect: vi.fn().mockReturnThis(),
+    where: vi.fn().mockReturnThis(),
+    andWhere: vi.fn().mockReturnThis(),
     getRawMany: () => Promise.resolve(mockRawData),
   })),
 }));

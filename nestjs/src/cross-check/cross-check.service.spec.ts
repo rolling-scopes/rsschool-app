@@ -99,13 +99,13 @@ const tasks = [
   },
 ];
 
-const mockPost = jest.fn(() => ({
-  pipe: jest.fn(() => []),
+const mockPost = vi.fn(() => ({
+  pipe: vi.fn(() => []),
 }));
 
-const mockCourseTaskRepositoryFind = jest.fn(() => tasks);
+const mockCourseTaskRepositoryFind = vi.fn(() => tasks);
 
-const mockCourseTaskRepositoryFactory = jest.fn(() => ({
+const mockCourseTaskRepositoryFactory = vi.fn(() => ({
   find: mockCourseTaskRepositoryFind,
 }));
 
@@ -146,7 +146,7 @@ describe('CrossCheckService', () => {
 
   describe('executeCronJobs should work correctly', () => {
     beforeEach(async () => {
-      jest.spyOn(Date, 'now').mockImplementation(() => MOCK_CURRENT_TIMESTAMP);
+      vi.spyOn(Date, 'now').mockImplementation(() => MOCK_CURRENT_TIMESTAMP);
       await service.executeCronJobs();
     });
 
