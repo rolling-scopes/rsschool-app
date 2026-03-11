@@ -1,7 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import { IsBoolean, IsDate, IsInt, IsOptional, IsString } from 'class-validator';
-import * as dayjs from 'dayjs';
 
 export class HeroesRadarQueryDto {
   @ApiProperty()
@@ -47,6 +46,12 @@ export class HeroesRadarQueryDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsDate()
-  @Transform(({ value }) => dayjs(value).utc().endOf('day').toDate(), { toClassOnly: true })
+  @Transform(
+    ({ value }) => {
+      const date = new Date(value);
+      return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 23, 59, 59, 999));
+    },
+    { toClassOnly: true },
+  )
   endDate?: Date;
 }

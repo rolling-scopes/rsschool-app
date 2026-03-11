@@ -13,8 +13,8 @@ export default mergeConfig(
     ],
     resolve: {
       alias: {
-        '@entities': path.resolve(import.meta.dirname, '../server/src/models'),
-        src: path.resolve(import.meta.dirname, 'src'),
+        '@entities': path.resolve(__dirname, '../server/src/models'),
+        src: path.resolve(__dirname, 'src'),
       },
     },
     test: {
@@ -25,11 +25,6 @@ export default mergeConfig(
       },
       deps: {
         interopDefault: true,
-      },
-      server: {
-        deps: {
-          inline: ['dayjs'],
-        },
       },
     },
   }),

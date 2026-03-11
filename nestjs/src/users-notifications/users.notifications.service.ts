@@ -10,7 +10,7 @@ import { NotificationConnectionExistsDto } from 'src/users-notifications/dto/not
 import { NotificationUserConnection } from '@entities/notificationUserConnection';
 import { UpsertNotificationConnectionDto } from 'src/users-notifications/dto/upsert-notification-connection.dto';
 import { SendUserNotificationDto } from './dto/send-user-notification.dto';
-import * as dayjs from 'dayjs';
+import { addHours, differenceInMilliseconds } from 'date-fns';
 import { NotificationData, NotificationsService } from '../notifications/notifications.service';
 import { AuthService } from '../auth';
 import { UsersService } from '../users/users.service';
@@ -224,7 +224,7 @@ export class UserNotificationsService {
 
     if (connections.find(connection => connection.channelId === 'email' && connection.enabled)) return;
 
-    if (checkTimeLimit && lastLink && dayjs().diff(lastLink.createdDate) < 1000 * 60) {
+    if (checkTimeLimit && lastLink && differenceInMilliseconds(new Date(), lastLink.createdDate) < 1000 * 60) {
       throw new BadRequestException('Link was just sent. Please try later');
     }
 
@@ -234,7 +234,7 @@ export class UserNotificationsService {
         externalId: email,
       },
       userId,
-      expires: dayjs().add(24, 'hours').toISOString(),
+      expires: addHours(new Date(), 24).toISOString(),
     });
 
     await this.notificationsService.sendMessage({

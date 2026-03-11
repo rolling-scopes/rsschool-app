@@ -12,7 +12,7 @@ import {
   FindOptionsWhere,
   In,
 } from 'typeorm';
-import * as dayjs from 'dayjs';
+import { addHours, subHours } from 'date-fns';
 import { TaskResult } from '@entities/taskResult';
 import { TaskInterviewResult } from '@entities/taskInterviewResult';
 import { TaskSolution } from '@entities/taskSolution';
@@ -133,7 +133,7 @@ export class CourseTasksService {
   }
 
   public getUpdatedTasks(courseId: number, lastHours: number) {
-    const date = dayjs().subtract(lastHours, 'hours');
+    const date = subHours(new Date(), lastHours);
 
     return this.courseTaskRepository.find({
       where: { courseId, updatedDate: MoreThanOrEqual(date.toISOString()) },
@@ -145,14 +145,14 @@ export class CourseTasksService {
     courseId: number,
     { deadlineWithinHours = 24, safeBuffer = 1 }: { deadlineWithinHours?: number; safeBuffer?: number } = {},
   ) {
-    const now = dayjs();
-    const endDate = dayjs().add(deadlineWithinHours, 'hours').toISOString();
+    const now = new Date();
+    const endDate = addHours(now, deadlineWithinHours).toISOString();
 
     const where: FindOptionsWhere<CourseTask> = {
       courseId,
       disabled: false,
       studentStartDate: LessThanOrEqual(now.toISOString()),
-      studentEndDate: Between(now.add(safeBuffer, 'hours').toISOString(), endDate),
+      studentEndDate: Between(addHours(now, safeBuffer).toISOString(), endDate),
     };
 
     return this.courseTaskRepository.find({

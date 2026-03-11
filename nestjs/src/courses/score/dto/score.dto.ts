@@ -127,9 +127,6 @@ export class ScoreStudentDto extends StudentDto {
   @ApiProperty({ type: MentorDto, nullable: true })
   mentor: MentorDto | undefined;
 
-  @ApiProperty({ type: String })
-  name: string;
-
   @ApiProperty()
   githubId: string;
 

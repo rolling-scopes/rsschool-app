@@ -3,7 +3,6 @@ import { TeamDistribution } from '@entities/teamDistribution';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Brackets, FindOptionsRelations, In, Repository } from 'typeorm';
-import * as dayjs from 'dayjs';
 import { paginate } from 'src/core/paginate';
 
 @Injectable()
@@ -95,9 +94,9 @@ export class TeamDistributionStudentService {
   }
 
   private verifyDateWithinDistributionPeriod(startDate: Date, endDate: Date) {
-    const currentDate = dayjs();
-    const distributionStartDate = dayjs(startDate);
-    const distributionEndDate = dayjs(endDate);
+    const currentDate = new Date();
+    const distributionStartDate = new Date(startDate);
+    const distributionEndDate = new Date(endDate);
     if (currentDate < distributionStartDate || currentDate > distributionEndDate) {
       throw new BadRequestException();
     }

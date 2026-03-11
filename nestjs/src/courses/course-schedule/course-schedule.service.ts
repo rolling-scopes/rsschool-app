@@ -11,7 +11,7 @@ import { PersonDto } from '../../core/dto';
 import { Repository } from 'typeorm';
 import { EventType } from '../course-events/dto/course-event.dto';
 import { Course } from '@entities/course';
-import * as dayjs from 'dayjs';
+import { differenceInMinutes } from 'date-fns';
 import { TeamDistribution } from '@entities/teamDistribution';
 import { TeamDistributionStudent } from '@entities/teamDistributionStudent';
 
@@ -90,7 +90,7 @@ export class CourseScheduleService {
       coding: 3,
     };
 
-    const timeDifference = dayjs(a.startDate).diff(dayjs(b.startDate), 'minute');
+    const timeDifference = differenceInMinutes(a.startDate, b.startDate);
     if (timeDifference !== 0) {
       return timeDifference;
     }
@@ -124,8 +124,8 @@ export class CourseScheduleService {
     teamDistribution: TeamDistribution,
     teamDistributionStudents: TeamDistributionStudent[],
   ) {
-    const currTimestampUTC = dayjs();
-    const distributionStartDate = dayjs(teamDistribution.startDate);
+    const currTimestampUTC = new Date();
+    const distributionStartDate = new Date(teamDistribution.startDate);
     const teamDistributionStudent = teamDistributionStudents.find(el => el.teamDistributionId === teamDistribution.id);
 
     if (currTimestampUTC < distributionStartDate) {
@@ -148,7 +148,7 @@ export class CourseScheduleService {
       return CourseScheduleItemStatus.Unavailable;
     }
 
-    const distributionEndDate = dayjs(teamDistribution.endDate);
+    const distributionEndDate = new Date(teamDistribution.endDate);
     if (currTimestampUTC <= distributionEndDate && currTimestampUTC >= distributionStartDate) {
       return CourseScheduleItemStatus.Available;
     }
