@@ -25,7 +25,7 @@ describe('ExpirationTooltip', () => {
     const modal = await screen.findByRole('dialog');
 
     expect(modal).toBeInTheDocument();
-    const title = within(modal).getByText(`Your CV is public until ${datestring30DaysAfter}`);
+    const title = within(modal).getAllByText(`Your CV is public until ${datestring30DaysAfter}`)[0];
     const text = within(modal).getByText(/If you won't renew your CV until this date/);
     expect(title).toBeInTheDocument();
     expect(text).toBeInTheDocument();
@@ -52,7 +52,7 @@ describe('ExpirationTooltip', () => {
 
     expect(modal).toBeInTheDocument();
 
-    const title = within(modal).getByText(`Your CV will expire in 2 days on ${datestring1DayAfter}`);
+    const title = within(modal).getAllByText(`Your CV will expire in 2 days on ${datestring1DayAfter}`)[0];
     const text = within(modal).getByText(/If you won't renew your CV until this date/);
 
     expect(title).toBeInTheDocument();
@@ -77,7 +77,7 @@ describe('ExpirationTooltip', () => {
 
     expect(modal).toBeInTheDocument();
 
-    const title = within(modal).getByText('Your CV is archived');
+    const title = within(modal).getAllByText('Your CV is archived')[0];
     const text = within(modal).getByText(/You need to renew your resume/i);
 
     expect(title).toBeInTheDocument();
@@ -103,7 +103,7 @@ describe('ExpirationTooltip', () => {
 
     expect(modal).toBeInTheDocument();
 
-    const title = within(modal).getByText('Your CV is archived');
+    const title = within(modal).getAllByText('Your CV is archived')[0];
     const text = within(modal).getByText(/You need to renew your resume/i);
 
     expect(title).toBeInTheDocument();

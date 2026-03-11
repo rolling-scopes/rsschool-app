@@ -1,6 +1,7 @@
 import { PageLayout } from 'components/PageLayout';
 import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
 import { DatePickerProps, Empty, theme } from 'antd';
+import type { Dayjs } from 'dayjs';
 import { useContext, useState } from 'react';
 import { useCoursesStats } from '../hooks';
 import { StatScope } from '../constants';
@@ -36,8 +37,8 @@ function CourseStatistic() {
     router.push(`?${params.toString()}`);
   };
 
-  const handleYearSelection: DatePickerProps['onChange'] = date => {
-    if (!date) {
+  const handleYearSelection: DatePickerProps<Dayjs>['onChange'] = date => {
+    if (!date || Array.isArray(date)) {
       return;
     }
     params.set('year', date.year().toString());

@@ -9,13 +9,13 @@ import { getStudentCoreJSInterviews } from '@client/utils/profilePageUtils';
 describe('InterviewCard', () => {
   it('renders Empty when no data is provided', () => {
     render(<InterviewCard />);
-    expect(screen.getByText(/No Data/i)).toBeInTheDocument();
+    expect(screen.getByText(/No Data/i, { selector: ':not(title)' })).toBeInTheDocument();
     expect(screen.getByText(/Interviews/i)).toBeInTheDocument();
   });
 
   it('renders Empty when review lists are empty', () => {
     render(<InterviewCard prescreeningInterview={[]} coreJsInterview={getStudentCoreJSInterviews([])} />);
-    expect(screen.getByText(/No Data/i)).toBeInTheDocument();
+    expect(screen.getByText(/No Data/i, { selector: ':not(title)' })).toBeInTheDocument();
     expect(screen.getByText(/Interviews/i)).toBeInTheDocument();
   });
 

@@ -113,7 +113,7 @@ describe('useCourseTaskSubmit', () => {
 
         expect(mockErrorNotification).toHaveBeenCalledWith({
           message,
-          duration: statusCode === 401 ? null : undefined,
+          duration: statusCode === 401 ? false : undefined,
         });
       },
     );

@@ -47,7 +47,7 @@ describe('MentorStatsModal', () => {
     const onHide = jest.fn();
     render(<MentorStatsModal stats={stats as unknown as MentorStats} isVisible={true} onHide={onHide} />);
 
-    const closeBtn = screen.getByLabelText('Close');
+    const closeBtn = screen.getByRole('button', { name: 'Close' });
     fireEvent.click(closeBtn);
     expect(onHide).toHaveBeenCalled();
   });

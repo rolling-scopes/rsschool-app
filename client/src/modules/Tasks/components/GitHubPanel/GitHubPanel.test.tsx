@@ -49,7 +49,7 @@ describe('GitHub', () => {
 
     fireEvent.change(field, { target: { value: 'http://github.com/i-vasilich-i' } });
 
-    const errorMessage = await screen.findByRole('alert');
+    const errorMessage = await screen.findByText(ERROR_MESSAGES.sourceGithubRepoUrl);
     expect(errorMessage).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent(ERROR_MESSAGES.sourceGithubRepoUrl);
   });

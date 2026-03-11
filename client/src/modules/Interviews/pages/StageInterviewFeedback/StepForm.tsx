@@ -12,7 +12,7 @@ type Props = {
   step: FeedbackStep;
   back: () => void;
   next: (values: Values) => void;
-  onValuesChange: (changedValues: Values, values: Values) => void;
+  onValuesChange: (changedValues: Partial<Values>, values: Values) => void;
   isLast: boolean;
   isFirst: boolean;
 };

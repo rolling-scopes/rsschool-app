@@ -35,13 +35,11 @@ export const ExpirationTooltip = ({ expirationDate, expirationState, publicMode 
     if (publicMode) return;
 
     const title =
-      expirationState === ExpirationState.NotExpired ? (
-        <Text strong>Your CV is public until {expirationDate}</Text>
-      ) : expirationState === ExpirationState.NearlyExpired ? (
-        <Text strong>Your CV will expire in 2 days on {expirationDate}</Text>
-      ) : (
-        <Text strong>Your CV is archived</Text>
-      );
+      expirationState === ExpirationState.NotExpired
+        ? `Your CV is public until ${expirationDate}`
+        : expirationState === ExpirationState.NearlyExpired
+          ? `Your CV will expire in 2 days on ${expirationDate}`
+          : 'Your CV is archived';
     const content =
       expirationState === ExpirationState.Expired ? (
         <Paragraph>You need to renew your resume to make it visible to other users again.</Paragraph>

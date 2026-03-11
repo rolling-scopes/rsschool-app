@@ -89,7 +89,7 @@ describe('MentorStatsCard', () => {
     fireEvent.click(screen.getByTestId('expand-button'));
     expect(screen.getByText('rs-2018-q1 statistics')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByLabelText('Close'));
+    fireEvent.click(screen.getByRole('button', { name: 'Close' }));
     await waitFor(() => expect(screen.getByText('rs-2018-q1 statistics')).not.toBeVisible());
   });
 

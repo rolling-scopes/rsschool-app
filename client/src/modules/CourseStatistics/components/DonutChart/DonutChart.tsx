@@ -15,9 +15,7 @@ const DonutChart = ({ data, config = {} }: Props) => {
     angleField: 'value',
     colorField: 'type',
     innerRadius: 0.6,
-    label: {
-      content: '',
-    },
+    label: false,
     legend: {
       color: {
         title: false,

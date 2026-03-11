@@ -29,7 +29,7 @@ describe('JSON Attributes', () => {
 
     fireEvent.change(textarea, { target: { value: invalidJson } });
 
-    const errorMessage = await screen.findByRole('alert');
+    const errorMessage = await screen.findByText(ERROR_MESSAGES.invalidJson);
     expect(errorMessage).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent(ERROR_MESSAGES.invalidJson);
   });
