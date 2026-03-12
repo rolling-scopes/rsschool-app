@@ -18,7 +18,7 @@ export class UsersService {
   async findAllEmails(): Promise<string[]> {
     const users = await this.repo.find();
     // Fetches ALL columns for ALL users
-    return users.map((u) => u.email);
+    return users.map(u => u.email);
   }
 
   async getUserSummary(id: string): Promise<UserSummary> {
@@ -52,7 +52,7 @@ export class UsersService {
     const users = await this.repo.find({
       select: ['email'], // Only fetch email column
     });
-    return users.map((u) => u.email);
+    return users.map(u => u.email);
   }
 
   // Use QueryBuilder for complex selections

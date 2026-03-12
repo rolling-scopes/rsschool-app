@@ -123,7 +123,7 @@ export default defineComponent({
 
   computed: {
     guesses(): number {
-      return this.result.filter((el) => el).length;
+      return this.result.filter(el => el).length;
     },
 
     allGuesses(): boolean {
@@ -164,13 +164,13 @@ export default defineComponent({
       const gameCards = [] as GameCard[];
       this.result = [];
 
-      this.questions.forEach((question) => {
+      this.questions.forEach(question => {
         const newGameCard = {} as GameCard;
         newGameCard.question = question;
 
-        const trueCard = this.answers.filter((el) => el.caption === question.caption);
+        const trueCard = this.answers.filter(el => el.caption === question.caption);
         const answers = this.answers
-          .filter((el) => el.caption !== question.caption)
+          .filter(el => el.caption !== question.caption)
           .sort(() => Math.random() - 0.5)
           .filter((el, i) => i < 3);
         answers.push(trueCard[0]);

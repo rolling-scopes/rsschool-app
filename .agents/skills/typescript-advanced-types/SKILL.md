@@ -32,7 +32,7 @@ function identity<T>(value: T): T {
 }
 
 const num = identity<number>(42); // Type: number
-const str = identity<string>("hello"); // Type: string
+const str = identity<string>('hello'); // Type: string
 const auto = identity(true); // Type inferred: boolean
 ```
 
@@ -48,7 +48,7 @@ function logLength<T extends HasLength>(item: T): T {
   return item;
 }
 
-logLength("hello"); // OK: string has length
+logLength('hello'); // OK: string has length
 logLength([1, 2, 3]); // OK: array has length
 logLength({ length: 10 }); // OK: object has length
 // logLength(42);             // Error: number has no length
@@ -61,7 +61,7 @@ function merge<T, U>(obj1: T, obj2: U): T & U {
   return { ...obj1, ...obj2 };
 }
 
-const merged = merge({ name: "John" }, { age: 30 });
+const merged = merge({ name: 'John' }, { age: 30 });
 // Type: { name: string } & { age: number }
 ```
 
@@ -84,7 +84,7 @@ type B = IsString<number>; // false
 type ReturnType<T> = T extends (...args: any[]) => infer R ? R : never;
 
 function getUser() {
-  return { id: 1, name: "John" };
+  return { id: 1, name: 'John' };
 }
 
 type User = ReturnType<typeof getUser>;
@@ -104,16 +104,16 @@ type StrOrNumArray = ToArray<string | number>;
 
 ```typescript
 type TypeName<T> = T extends string
-  ? "string"
+  ? 'string'
   : T extends number
-    ? "number"
+    ? 'number'
     : T extends boolean
-      ? "boolean"
+      ? 'boolean'
       : T extends undefined
-        ? "undefined"
+        ? 'undefined'
         : T extends Function
-          ? "function"
-          : "object";
+          ? 'function'
+          : 'object';
 
 type T1 = TypeName<string>; // "string"
 type T2 = TypeName<() => void>; // "function"
@@ -191,7 +191,7 @@ type OnlyNumbers = PickByType<Mixed, number>;
 **Basic Template Literal:**
 
 ```typescript
-type EventName = "click" | "focus" | "blur";
+type EventName = 'click' | 'focus' | 'blur';
 type EventHandler = `on${Capitalize<EventName>}`;
 // Type: "onClick" | "onFocus" | "onBlur"
 ```
@@ -199,10 +199,10 @@ type EventHandler = `on${Capitalize<EventName>}`;
 **String Manipulation:**
 
 ```typescript
-type UppercaseGreeting = Uppercase<"hello">; // "HELLO"
-type LowercaseGreeting = Lowercase<"HELLO">; // "hello"
-type CapitalizedName = Capitalize<"john">; // "John"
-type UncapitalizedName = Uncapitalize<"John">; // "john"
+type UppercaseGreeting = Uppercase<'hello'>; // "HELLO"
+type LowercaseGreeting = Lowercase<'HELLO'>; // "hello"
+type CapitalizedName = Capitalize<'john'>; // "John"
+type UncapitalizedName = Uncapitalize<'John'>; // "john"
 ```
 
 **Path Building:**
@@ -243,22 +243,22 @@ type RequiredUser = Required<PartialUser>;
 type ReadonlyUser = Readonly<User>;
 
 // Pick<T, K> - Select specific properties
-type UserName = Pick<User, "name" | "email">;
+type UserName = Pick<User, 'name' | 'email'>;
 
 // Omit<T, K> - Remove specific properties
-type UserWithoutPassword = Omit<User, "password">;
+type UserWithoutPassword = Omit<User, 'password'>;
 
 // Exclude<T, U> - Exclude types from union
-type T1 = Exclude<"a" | "b" | "c", "a">; // "b" | "c"
+type T1 = Exclude<'a' | 'b' | 'c', 'a'>; // "b" | "c"
 
 // Extract<T, U> - Extract types from union
-type T2 = Extract<"a" | "b" | "c", "a" | "b">; // "a" | "b"
+type T2 = Extract<'a' | 'b' | 'c', 'a' | 'b'>; // "a" | "b"
 
 // NonNullable<T> - Exclude null and undefined
 type T3 = NonNullable<string | null | undefined>; // string
 
 // Record<K, T> - Create object type with keys K and values T
-type PageInfo = Record<"home" | "about", { title: string }>;
+type PageInfo = Record<'home' | 'about', { title: string }>;
 ```
 
 ## Advanced Patterns
@@ -267,9 +267,9 @@ type PageInfo = Record<"home" | "about", { title: string }>;
 
 ```typescript
 type EventMap = {
-  "user:created": { id: string; name: string };
-  "user:updated": { id: string };
-  "user:deleted": { id: string };
+  'user:created': { id: string; name: string };
+  'user:updated': { id: string };
+  'user:deleted': { id: string };
 };
 
 class TypedEventEmitter<T extends Record<string, any>> {
@@ -287,32 +287,32 @@ class TypedEventEmitter<T extends Record<string, any>> {
   emit<K extends keyof T>(event: K, data: T[K]): void {
     const callbacks = this.listeners[event];
     if (callbacks) {
-      callbacks.forEach((callback) => callback(data));
+      callbacks.forEach(callback => callback(data));
     }
   }
 }
 
 const emitter = new TypedEventEmitter<EventMap>();
 
-emitter.on("user:created", (data) => {
+emitter.on('user:created', data => {
   console.log(data.id, data.name); // Type-safe!
 });
 
-emitter.emit("user:created", { id: "1", name: "John" });
+emitter.emit('user:created', { id: '1', name: 'John' });
 // emitter.emit("user:created", { id: "1" });  // Error: missing 'name'
 ```
 
 ### Pattern 2: Type-Safe API Client
 
 ```typescript
-type HTTPMethod = "GET" | "POST" | "PUT" | "DELETE";
+type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
 type EndpointConfig = {
-  "/users": {
+  '/users': {
     GET: { response: User[] };
     POST: { body: { name: string; email: string }; response: User };
   };
-  "/users/:id": {
+  '/users/:id': {
     GET: { params: { id: string }; response: User };
     PUT: { params: { id: string }; body: Partial<User>; response: User };
     DELETE: { params: { id: string }; response: void };
@@ -346,16 +346,16 @@ class APIClient<Config extends Record<string, Record<HTTPMethod, any>>> {
 const api = new APIClient<EndpointConfig>();
 
 // Type-safe API calls
-const users = await api.request("/users", "GET");
+const users = await api.request('/users', 'GET');
 // Type: User[]
 
-const newUser = await api.request("/users", "POST", {
-  body: { name: "John", email: "john@example.com" },
+const newUser = await api.request('/users', 'POST', {
+  body: { name: 'John', email: 'john@example.com' },
 });
 // Type: User
 
-const user = await api.request("/users/:id", "GET", {
-  params: { id: "123" },
+const user = await api.request('/users/:id', 'GET', {
+  params: { id: '123' },
 });
 // Type: User
 ```
@@ -375,12 +375,7 @@ type OptionalKeys<T> = {
   [K in keyof T]-?: {} extends Pick<T, K> ? K : never;
 }[keyof T];
 
-type IsComplete<T, S> =
-  RequiredKeys<T> extends keyof S
-    ? S[RequiredKeys<T>] extends undefined
-      ? false
-      : true
-    : false;
+type IsComplete<T, S> = RequiredKeys<T> extends keyof S ? (S[RequiredKeys<T>] extends undefined ? false : true) : false;
 
 class Builder<T, S extends BuilderState<T> = {}> {
   private state: S = {} as S;
@@ -404,11 +399,7 @@ interface User {
 
 const builder = new Builder<User>();
 
-const user = builder
-  .set("id", "1")
-  .set("name", "John")
-  .set("email", "john@example.com")
-  .build(); // OK: all required fields set
+const user = builder.set('id', '1').set('name', 'John').set('email', 'john@example.com').build(); // OK: all required fields set
 
 // const incomplete = builder
 //   .set("id", "1")
@@ -419,11 +410,7 @@ const user = builder
 
 ```typescript
 type DeepReadonly<T> = {
-  readonly [P in keyof T]: T[P] extends object
-    ? T[P] extends Function
-      ? T[P]
-      : DeepReadonly<T[P]>
-    : T[P];
+  readonly [P in keyof T]: T[P] extends object ? (T[P] extends Function ? T[P] : DeepReadonly<T[P]>) : T[P];
 };
 
 type DeepPartial<T> = {
@@ -514,25 +501,25 @@ interface LoginForm {
 const validator = new FormValidator<LoginForm>({
   email: [
     {
-      validate: (v) => v.includes("@"),
-      message: "Email must contain @",
+      validate: v => v.includes('@'),
+      message: 'Email must contain @',
     },
     {
-      validate: (v) => v.length > 0,
-      message: "Email is required",
+      validate: v => v.length > 0,
+      message: 'Email is required',
     },
   ],
   password: [
     {
-      validate: (v) => v.length >= 8,
-      message: "Password must be at least 8 characters",
+      validate: v => v.length >= 8,
+      message: 'Password must be at least 8 characters',
     },
   ],
 });
 
 const errors = validator.validate({
-  email: "invalid",
-  password: "short",
+  email: 'invalid',
+  password: 'short',
 });
 // Type: { email?: string[]; password?: string[]; } | null
 ```
@@ -541,65 +528,63 @@ const errors = validator.validate({
 
 ```typescript
 type Success<T> = {
-  status: "success";
+  status: 'success';
   data: T;
 };
 
 type Error = {
-  status: "error";
+  status: 'error';
   error: string;
 };
 
 type Loading = {
-  status: "loading";
+  status: 'loading';
 };
 
 type AsyncState<T> = Success<T> | Error | Loading;
 
 function handleState<T>(state: AsyncState<T>): void {
   switch (state.status) {
-    case "success":
+    case 'success':
       console.log(state.data); // Type: T
       break;
-    case "error":
+    case 'error':
       console.log(state.error); // Type: string
       break;
-    case "loading":
-      console.log("Loading...");
+    case 'loading':
+      console.log('Loading...');
       break;
   }
 }
 
 // Type-safe state machine
 type State =
-  | { type: "idle" }
-  | { type: "fetching"; requestId: string }
-  | { type: "success"; data: any }
-  | { type: "error"; error: Error };
+  | { type: 'idle' }
+  | { type: 'fetching'; requestId: string }
+  | { type: 'success'; data: any }
+  | { type: 'error'; error: Error };
 
 type Event =
-  | { type: "FETCH"; requestId: string }
-  | { type: "SUCCESS"; data: any }
-  | { type: "ERROR"; error: Error }
-  | { type: "RESET" };
+  | { type: 'FETCH'; requestId: string }
+  | { type: 'SUCCESS'; data: any }
+  | { type: 'ERROR'; error: Error }
+  | { type: 'RESET' };
 
 function reducer(state: State, event: Event): State {
   switch (state.type) {
-    case "idle":
-      return event.type === "FETCH"
-        ? { type: "fetching", requestId: event.requestId }
-        : state;
-    case "fetching":
-      if (event.type === "SUCCESS") {
-        return { type: "success", data: event.data };
+    case 'idle':
+      return event.type === 'FETCH' ? { type: 'fetching', requestId: event.requestId } : state;
+    case 'fetching':
+      if (event.type === 'SUCCESS') {
+        return { type: 'success', data: event.data };
       }
-      if (event.type === "ERROR") {
-        return { type: "error", error: event.error };
+      if (event.type === 'ERROR') {
+        return { type: 'error', error: event.error };
       }
       return state;
-    case "success":
-    case "error":
-      return event.type === "RESET" ? { type: "idle" } : state;
+    case 'success':
+    case 'error':
+      return event.type === 'RESET' ? { type: 'idle' } : state;
   }
 }
 ```
@@ -631,20 +616,17 @@ type FooParams = Parameters<typeof foo>; // [string, number]
 
 ```typescript
 function isString(value: unknown): value is string {
-  return typeof value === "string";
+  return typeof value === 'string';
 }
 
-function isArrayOf<T>(
-  value: unknown,
-  guard: (item: unknown) => item is T,
-): value is T[] {
+function isArrayOf<T>(value: unknown, guard: (item: unknown) => item is T): value is T[] {
   return Array.isArray(value) && value.every(guard);
 }
 
-const data: unknown = ["a", "b", "c"];
+const data: unknown = ['a', 'b', 'c'];
 
 if (isArrayOf(data, isString)) {
-  data.forEach((s) => s.toUpperCase()); // Type: string[]
+  data.forEach(s => s.toUpperCase()); // Type: string[]
 }
 ```
 
@@ -652,8 +634,8 @@ if (isArrayOf(data, isString)) {
 
 ```typescript
 function assertIsString(value: unknown): asserts value is string {
-  if (typeof value !== "string") {
-    throw new Error("Not a string");
+  if (typeof value !== 'string') {
+    throw new Error('Not a string');
   }
 }
 
@@ -681,11 +663,7 @@ function processValue(value: unknown) {
 
 ```typescript
 // Type assertion tests
-type AssertEqual<T, U> = [T] extends [U]
-  ? [U] extends [T]
-    ? true
-    : false
-  : false;
+type AssertEqual<T, U> = [T] extends [U] ? ([U] extends [T] ? true : false) : false;
 
 type Test1 = AssertEqual<string, string>; // true
 type Test2 = AssertEqual<string, number>; // false

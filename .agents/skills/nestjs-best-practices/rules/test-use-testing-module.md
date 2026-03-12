@@ -86,9 +86,7 @@ describe('UsersService', () => {
     it('should throw on duplicate email', async () => {
       repo.findOne.mockResolvedValue({ id: '1', email: 'test@test.com' });
 
-      await expect(
-        service.create({ name: 'Test', email: 'test@test.com' }),
-      ).rejects.toThrow(ConflictException);
+      await expect(service.create({ name: 'Test', email: 'test@test.com' })).rejects.toThrow(ConflictException);
     });
   });
 

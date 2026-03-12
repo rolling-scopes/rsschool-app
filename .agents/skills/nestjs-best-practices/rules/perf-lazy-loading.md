@@ -81,10 +81,7 @@ export class ModuleLoaderService {
 
   constructor(private lazyModuleLoader: LazyModuleLoader) {}
 
-  async load<T>(
-    key: string,
-    importFn: () => Promise<{ default: Type<T> } | Type<T>>,
-  ): Promise<ModuleRef> {
+  async load<T>(key: string, importFn: () => Promise<{ default: Type<T> } | Type<T>>): Promise<ModuleRef> {
     if (!this.loadedModules.has(key)) {
       const module = await importFn();
       const moduleType = 'default' in module ? module.default : module;
