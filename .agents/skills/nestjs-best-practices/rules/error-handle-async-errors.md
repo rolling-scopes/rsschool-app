@@ -61,7 +61,7 @@ export class UsersService {
     const user = await this.repo.save(dto);
 
     // Explicitly catch and log errors
-    this.emailService.sendWelcome(user.email).catch((error) => {
+    this.emailService.sendWelcome(user.email).catch(error => {
       this.logger.error('Failed to send welcome email', error.stack);
       // Optionally queue for retry
     });
@@ -113,7 +113,7 @@ async function bootstrap() {
     logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
   });
 
-  process.on('uncaughtException', (error) => {
+  process.on('uncaughtException', error => {
     logger.error('Uncaught Exception:', error);
     process.exit(1);
   });

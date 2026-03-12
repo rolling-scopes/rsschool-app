@@ -67,10 +67,7 @@ export class OrdersService {
     const order = await this.repo.save(dto);
 
     // Emit event - no knowledge of consumers
-    this.eventEmitter.emit(
-      'order.created',
-      new OrderCreatedEvent(order.id, order.userId, order.items, order.total),
-    );
+    this.eventEmitter.emit('order.created', new OrderCreatedEvent(order.id, order.userId, order.items, order.total));
 
     return order;
   }

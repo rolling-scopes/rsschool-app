@@ -37,26 +37,20 @@ Required settings in tsconfig.json:
 ### Basic Entity
 
 ```typescript
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity("users")
+@Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: "varchar", length: 255, unique: true })
+  @Column({ type: 'varchar', length: 255, unique: true })
   email: string;
 
-  @Column({ type: "varchar", length: 255, nullable: true })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   name: string | null;
 
-  @Column({ type: "boolean", default: true })
+  @Column({ type: 'boolean', default: true })
   isActive: boolean;
 
   @CreateDateColumn()
@@ -102,34 +96,34 @@ export class Product {
   id: number;
 
   // String columns
-  @Column({ type: "varchar", length: 255 })
+  @Column({ type: 'varchar', length: 255 })
   name: string;
 
-  @Column({ type: "text", nullable: true })
+  @Column({ type: 'text', nullable: true })
   description: string | null;
 
   // Numeric columns
-  @Column({ type: "decimal", precision: 10, scale: 2 })
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
   price: number;
 
-  @Column({ type: "int", default: 0 })
+  @Column({ type: 'int', default: 0 })
   stock: number;
 
   // Boolean
-  @Column({ type: "boolean", default: true })
+  @Column({ type: 'boolean', default: true })
   isAvailable: boolean;
 
   // JSON
-  @Column({ type: "jsonb", nullable: true })
+  @Column({ type: 'jsonb', nullable: true })
   metadata: Record<string, any> | null;
 
   // Enum
   @Column({
-    type: "enum",
-    enum: ["active", "inactive", "pending"],
-    default: "pending",
+    type: 'enum',
+    enum: ['active', 'inactive', 'pending'],
+    default: 'pending',
   })
-  status: "active" | "inactive" | "pending";
+  status: 'active' | 'inactive' | 'pending';
 
   // Timestamps
   @CreateDateColumn()
@@ -157,7 +151,7 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => Profile, (profile) => profile.user, { cascade: true })
+  @OneToOne(() => Profile, profile => profile.user, { cascade: true })
   @JoinColumn()
   profile: Profile;
 }
@@ -170,7 +164,7 @@ export class Profile {
   @Column()
   bio: string;
 
-  @OneToOne(() => User, (user) => user.profile)
+  @OneToOne(() => User, user => user.profile)
   user: User;
 }
 ```
@@ -186,7 +180,7 @@ export class User {
   @Column()
   name: string;
 
-  @OneToMany(() => Post, (post) => post.author)
+  @OneToMany(() => Post, post => post.author)
   posts: Post[];
 }
 
@@ -198,8 +192,8 @@ export class Post {
   @Column()
   title: string;
 
-  @ManyToOne(() => User, (user) => user.posts, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "author_id" })
+  @ManyToOne(() => User, user => user.posts, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'author_id' })
   author: User;
 
   @Column()
@@ -218,11 +212,11 @@ export class Post {
   @Column()
   title: string;
 
-  @ManyToMany(() => Tag, (tag) => tag.posts)
+  @ManyToMany(() => Tag, tag => tag.posts)
   @JoinTable({
-    name: "post_tags",
-    joinColumn: { name: "post_id" },
-    inverseJoinColumn: { name: "tag_id" },
+    name: 'post_tags',
+    joinColumn: { name: 'post_id' },
+    inverseJoinColumn: { name: 'tag_id' },
   })
   tags: Tag[];
 }
@@ -235,7 +229,7 @@ export class Tag {
   @Column({ unique: true })
   name: string;
 
-  @ManyToMany(() => Post, (post) => post.tags)
+  @ManyToMany(() => Post, post => post.tags)
   posts: Post[];
 }
 ```
@@ -245,8 +239,8 @@ export class Tag {
 ### Basic Repository Usage
 
 ```typescript
-import { AppDataSource } from "./data-source";
-import { User } from "./entities/User";
+import { AppDataSource } from './data-source';
+import { User } from './entities/User';
 
 const userRepository = AppDataSource.getRepository(User);
 
@@ -270,13 +264,13 @@ const user = await userRepository.findOneOrFail({
 
 // Save
 const newUser = userRepository.create({
-  email: "user@example.com",
-  name: "John Doe",
+  email: 'user@example.com',
+  name: 'John Doe',
 });
 await userRepository.save(newUser);
 
 // Update
-await userRepository.update({ id: 1 }, { name: "Jane Doe" });
+await userRepository.update({ id: 1 }, { name: 'Jane Doe' });
 
 // Delete
 await userRepository.delete({ id: 1 });
@@ -288,8 +282,8 @@ await userRepository.softDelete({ id: 1 });
 ### Custom Repository
 
 ```typescript
-import { Repository, DataSource } from "typeorm";
-import { User } from "./entities/User";
+import { Repository, DataSource } from 'typeorm';
+import { User } from './entities/User';
 
 export class UserRepository extends Repository<User> {
   constructor(private dataSource: DataSource) {
@@ -303,14 +297,14 @@ export class UserRepository extends Repository<User> {
   async findActiveUsers(): Promise<User[]> {
     return this.find({
       where: { isActive: true },
-      order: { createdAt: "DESC" },
+      order: { createdAt: 'DESC' },
     });
   }
 
   async findWithPosts(userId: number): Promise<User | null> {
     return this.findOne({
       where: { id: userId },
-      relations: ["posts"],
+      relations: ['posts'],
     });
   }
 }
@@ -320,20 +314,20 @@ export class UserRepository extends Repository<User> {
 
 ```typescript
 const users = await userRepository
-  .createQueryBuilder("user")
-  .leftJoinAndSelect("user.posts", "post")
-  .where("user.isActive = :isActive", { isActive: true })
-  .andWhere("post.publishedAt IS NOT NULL")
-  .orderBy("user.createdAt", "DESC")
+  .createQueryBuilder('user')
+  .leftJoinAndSelect('user.posts', 'post')
+  .where('user.isActive = :isActive', { isActive: true })
+  .andWhere('post.publishedAt IS NOT NULL')
+  .orderBy('user.createdAt', 'DESC')
   .skip(0)
   .take(10)
   .getMany();
 
 // With raw results
 const result = await userRepository
-  .createQueryBuilder("user")
-  .select("COUNT(*)", "count")
-  .where("user.isActive = :isActive", { isActive: true })
+  .createQueryBuilder('user')
+  .select('COUNT(*)', 'count')
+  .where('user.isActive = :isActive', { isActive: true })
   .getRawOne();
 
 // Insert with query builder
@@ -342,8 +336,8 @@ await userRepository
   .insert()
   .into(User)
   .values([
-    { email: "user1@example.com", name: "User 1" },
-    { email: "user2@example.com", name: "User 2" },
+    { email: 'user1@example.com', name: 'User 1' },
+    { email: 'user2@example.com', name: 'User 2' },
   ])
   .execute();
 ```
@@ -352,14 +346,14 @@ await userRepository
 
 ```typescript
 // data-source.ts
-import { DataSource } from "typeorm";
-import { User } from "./entities/User";
-import { Post } from "./entities/Post";
+import { DataSource } from 'typeorm';
+import { User } from './entities/User';
+import { Post } from './entities/Post';
 
 export const AppDataSource = new DataSource({
-  type: "postgres",
-  host: process.env.DB_HOST || "localhost",
-  port: parseInt(process.env.DB_PORT || "5432"),
+  type: 'postgres',
+  host: process.env.DB_HOST || 'localhost',
+  port: parseInt(process.env.DB_PORT || '5432'),
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
@@ -369,25 +363,25 @@ export const AppDataSource = new DataSource({
   // Or use glob pattern: entities: ["src/entities/**/*.ts"]
 
   // Migrations
-  migrations: ["src/migrations/**/*.ts"],
+  migrations: ['src/migrations/**/*.ts'],
 
   // Synchronize - NEVER use in production
   synchronize: false,
 
   // Logging
-  logging: process.env.NODE_ENV === "development",
+  logging: process.env.NODE_ENV === 'development',
 
   // Connection pool
   poolSize: 10,
 
   // SSL (for production)
-  ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
 });
 
 // Initialize connection
 AppDataSource.initialize()
-  .then(() => console.log("Data Source initialized"))
-  .catch((error) => console.error("Error initializing Data Source:", error));
+  .then(() => console.log('Data Source initialized'))
+  .catch(error => console.error('Error initializing Data Source:', error));
 ```
 
 ## Migrations
@@ -411,66 +405,66 @@ npx typeorm migration:revert -d src/data-source.ts
 ### Migration File Structure
 
 ```typescript
-import { MigrationInterface, QueryRunner, Table, TableIndex } from "typeorm";
+import { MigrationInterface, QueryRunner, Table, TableIndex } from 'typeorm';
 
 export class CreateUsers1234567890 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: "users",
+        name: 'users',
         columns: [
           {
-            name: "id",
-            type: "int",
+            name: 'id',
+            type: 'int',
             isPrimary: true,
             isGenerated: true,
-            generationStrategy: "increment",
+            generationStrategy: 'increment',
           },
           {
-            name: "email",
-            type: "varchar",
-            length: "255",
+            name: 'email',
+            type: 'varchar',
+            length: '255',
             isUnique: true,
           },
           {
-            name: "name",
-            type: "varchar",
-            length: "255",
+            name: 'name',
+            type: 'varchar',
+            length: '255',
             isNullable: true,
           },
           {
-            name: "is_active",
-            type: "boolean",
+            name: 'is_active',
+            type: 'boolean',
             default: true,
           },
           {
-            name: "created_at",
-            type: "timestamp",
-            default: "CURRENT_TIMESTAMP",
+            name: 'created_at',
+            type: 'timestamp',
+            default: 'CURRENT_TIMESTAMP',
           },
           {
-            name: "updated_at",
-            type: "timestamp",
-            default: "CURRENT_TIMESTAMP",
-            onUpdate: "CURRENT_TIMESTAMP",
+            name: 'updated_at',
+            type: 'timestamp',
+            default: 'CURRENT_TIMESTAMP',
+            onUpdate: 'CURRENT_TIMESTAMP',
           },
         ],
       }),
-      true
+      true,
     );
 
     await queryRunner.createIndex(
-      "users",
+      'users',
       new TableIndex({
-        name: "IDX_USERS_EMAIL",
-        columnNames: ["email"],
-      })
+        name: 'IDX_USERS_EMAIL',
+        columnNames: ['email'],
+      }),
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropIndex("users", "IDX_USERS_EMAIL");
-    await queryRunner.dropTable("users");
+    await queryRunner.dropIndex('users', 'IDX_USERS_EMAIL');
+    await queryRunner.dropTable('users');
   }
 }
 ```
@@ -485,13 +479,13 @@ await queryRunner.startTransaction();
 
 try {
   const user = queryRunner.manager.create(User, {
-    email: "user@example.com",
-    name: "User",
+    email: 'user@example.com',
+    name: 'User',
   });
   await queryRunner.manager.save(user);
 
   const post = queryRunner.manager.create(Post, {
-    title: "First Post",
+    title: 'First Post',
     author: user,
   });
   await queryRunner.manager.save(post);
@@ -505,15 +499,15 @@ try {
 }
 
 // Using transaction method
-await AppDataSource.transaction(async (manager) => {
+await AppDataSource.transaction(async manager => {
   const user = manager.create(User, {
-    email: "user@example.com",
-    name: "User",
+    email: 'user@example.com',
+    name: 'User',
   });
   await manager.save(user);
 
   const post = manager.create(Post, {
-    title: "First Post",
+    title: 'First Post',
     author: user,
   });
   await manager.save(post);
@@ -524,20 +518,20 @@ await AppDataSource.transaction(async (manager) => {
 
 ```typescript
 // app.module.ts
-import { Module } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { User } from "./entities/user.entity";
-import { UsersModule } from "./users/users.module";
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: "postgres",
-      host: "localhost",
+      type: 'postgres',
+      host: 'localhost',
       port: 5432,
-      username: "user",
-      password: "password",
-      database: "db",
+      username: 'user',
+      password: 'password',
+      database: 'db',
       entities: [User],
       synchronize: false,
     }),
@@ -612,7 +606,7 @@ for (const user of users) {
 
 // Good: Eager load relations
 const users = await userRepository.find({
-  relations: ["posts"],
+  relations: ['posts'],
 });
 ```
 
@@ -620,8 +614,8 @@ const users = await userRepository.find({
 
 ```typescript
 @Entity()
-@Index(["email"])
-@Index(["firstName", "lastName"])
+@Index(['email'])
+@Index(['firstName', 'lastName'])
 export class User {
   @Column()
   @Index()

@@ -88,7 +88,7 @@ export default defineComponent({
         if (response.status !== RESPONSE_STATUS_OK) throw new Error(this.$t('catalog.stickersNotFound'));
 
         const data: string[] = await response.json();
-        this.cleanedFilelist = data.map((file) => `${CDN_CLEANED_URL}/${file}`);
+        this.cleanedFilelist = data.map(file => `${CDN_CLEANED_URL}/${file}`);
       } catch (error) {
         this.showErrorModal(error);
       }
@@ -101,12 +101,12 @@ export default defineComponent({
         if (response.status !== RESPONSE_STATUS_OK) throw new Error(this.$t('catalog.stickersNotFound'));
 
         const data: MetadataSloths = await response.json();
-        this.sloths = data.stickers.map((sloth) => ({
+        this.sloths = data.stickers.map(sloth => ({
           ...sloth,
           image: `${CDN_STICKERS_URL}/${sloth.id}/image.svg`,
           checked: false,
         }));
-        this.originalFilelist = data.stickers.map((file) => `${CDN_STICKERS_URL}/${file.id}/image.svg`);
+        this.originalFilelist = data.stickers.map(file => `${CDN_STICKERS_URL}/${file.id}/image.svg`);
       } catch (error) {
         this.showErrorModal(error);
       }

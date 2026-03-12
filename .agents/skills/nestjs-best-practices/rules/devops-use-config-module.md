@@ -61,9 +61,7 @@ export const appConfig = registerAs('app', () => ({
 
 // config/validation.schema.ts
 export const validationSchema = Joi.object({
-  NODE_ENV: Joi.string()
-    .valid('development', 'production', 'test')
-    .default('development'),
+  NODE_ENV: Joi.string().valid('development', 'production', 'test').default('development'),
   PORT: Joi.number().default(3000),
   DB_HOST: Joi.string().required(),
   DB_PORT: Joi.number().default(5432),
@@ -147,12 +145,7 @@ export class DatabaseService {
 
 // Environment files support
 ConfigModule.forRoot({
-  envFilePath: [
-    `.env.${process.env.NODE_ENV}.local`,
-    `.env.${process.env.NODE_ENV}`,
-    '.env.local',
-    '.env',
-  ],
+  envFilePath: [`.env.${process.env.NODE_ENV}.local`, `.env.${process.env.NODE_ENV}`, '.env.local', '.env'],
 });
 
 // .env.development

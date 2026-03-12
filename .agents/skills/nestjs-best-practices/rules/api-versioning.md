@@ -159,10 +159,7 @@ export class UsersService {
 @Controller('users')
 export class UsersController {
   @Get(':id')
-  async findOne(
-    @Param('id') id: string,
-    @Headers('X-API-Version') version: string = '1',
-  ): Promise<any> {
+  async findOne(@Param('id') id: string, @Headers('X-API-Version') version: string = '1'): Promise<any> {
     return this.usersService.findOne(id, version);
   }
 }

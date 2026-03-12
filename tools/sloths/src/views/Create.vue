@@ -171,7 +171,7 @@ export default defineComponent({
       this.imgCanvasElement,
       this.topCanvasElement,
       this.bottomCanvasElement,
-      this.canvasProps.scaleSteps
+      this.canvasProps.scaleSteps,
     );
     if (!loaded) this.centering();
 
@@ -224,7 +224,7 @@ export default defineComponent({
         this.imgCanvasElement,
         this.topCanvasElement,
         this.bottomCanvasElement,
-        this.canvasProps.scaleSteps
+        this.canvasProps.scaleSteps,
       );
 
       this.draw();
@@ -240,7 +240,7 @@ export default defineComponent({
         this.imgCanvasElement,
         this.topCanvasElement,
         this.bottomCanvasElement,
-        this.canvasProps.scaleSteps
+        this.canvasProps.scaleSteps,
       );
       CanvasUtils.calcElementsPosition(this.layers, this.canvasProps.scaleSteps);
 
@@ -253,7 +253,7 @@ export default defineComponent({
         this.imgCanvasElement.scaledLeft,
         this.imgCanvasElement.scaledTop,
         this.imgCanvasElement.scaledWidth,
-        this.imgCanvasElement.scaledHeight
+        this.imgCanvasElement.scaledHeight,
       );
 
       const { scaleSteps } = this.canvasProps;
@@ -262,7 +262,7 @@ export default defineComponent({
       CanvasUtils.drawTextUp(height, this.ctx, this.canvasProps, this.bottomCanvasElement, scaleSteps, true);
 
       const color = CanvasUtils.invertHex(this.canvasProps.backgroundColor, this.canvasProps.backgroundTransparent);
-      this.layers.forEach((el) => CanvasUtils.drawBorder(el, this.ctx, color));
+      this.layers.forEach(el => CanvasUtils.drawBorder(el, this.ctx, color));
     },
 
     handleMouseMove(e: MouseEvent) {
@@ -309,7 +309,7 @@ export default defineComponent({
         this.imgCanvasElement,
         this.topCanvasElement,
         this.bottomCanvasElement,
-        this.canvasProps.scaleSteps
+        this.canvasProps.scaleSteps,
       );
       this.centering();
 
@@ -325,7 +325,7 @@ export default defineComponent({
     },
 
     copyImage() {
-      this.canvas.toBlob((blob) => {
+      this.canvas.toBlob(blob => {
         const type = blob?.type;
         if (!type) return;
         const item = new ClipboardItem({ [type]: blob });

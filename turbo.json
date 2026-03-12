@@ -57,14 +57,7 @@
       ]
     },
     "lint": {
-      "env": [
-        "AGENT",
-        "OPENCODE",
-        "CLAUDECODE",
-        "CURSOR_AGENT",
-        "CODEX_THREAD_ID",
-        "NO_COLOR"
-      ]
+      "env": ["AGENT", "OPENCODE", "CLAUDECODE", "CURSOR_AGENT", "CODEX_THREAD_ID", "NO_COLOR"]
     },
     "test": {},
     "test:ci": {},

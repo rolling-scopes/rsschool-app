@@ -41,7 +41,7 @@ export default defineComponent({
   computed: {
     ...mapWritableState(useThemeProp, ['currTheme']),
     themeStatus(): string {
-      return this.themes.filter((theme) => theme !== this.currTheme)[0];
+      return this.themes.filter(theme => theme !== this.currTheme)[0];
     },
   },
 
