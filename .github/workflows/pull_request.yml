@@ -60,27 +60,6 @@ jobs:
         if: success() || failure()
         working-directory: nestjs
 
-      - name: Upload test report (client)
-        uses: actions/upload-artifact@v4
-        if: success() || failure()
-        with:
-          name: test-report-client
-          path: reports/jest-junit-client.xml
-
-      - name: Upload test report (server)
-        uses: actions/upload-artifact@v4
-        if: success() || failure()
-        with:
-          name: test-report-server
-          path: reports/jest-junit-server.xml
-
-      - name: Upload test report (nestjs)
-        uses: actions/upload-artifact@v4
-        if: success() || failure()
-        with:
-          name: test-report-nestjs
-          path: reports/jest-junit-nestjs.xml
-
   pr_build:
     name: Build
     concurrency:

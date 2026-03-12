@@ -10,7 +10,7 @@
     "start:prod": "node dist/server/src/index.js",
     "lint": "eslint src",
     "test": "vitest run",
-    "test:ci": "vitest run --reporter=default --reporter=junit --outputFile.junit=../reports/jest-junit-server.xml",
+    "test:ci": "vitest run",
     "test-watch": "vitest watch",
     "coverage": "vitest run --coverage",
     "typeorm": "typeorm-ts-node-commonjs",

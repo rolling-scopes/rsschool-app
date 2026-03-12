@@ -1,7 +1,7 @@
 import path from 'node:path';
 import swc from 'unplugin-swc';
 import { defineConfig, mergeConfig } from 'vitest/config';
-import shared from '../vitest.shared';
+import shared from '../vitest.shared.mjs';
 
 export default mergeConfig(
   shared,
