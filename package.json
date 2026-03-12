@@ -40,7 +40,8 @@
     "@types/jest": "30.0.0",
     "@types/lodash": "4.17.24",
     "@types/node": "24.12.0",
-    "@vitest/eslint-plugin": "^1.6.10",
+    "@vitest/coverage-v8": "~4.1.0",
+    "@vitest/eslint-plugin": "^1.6.11",
     "dotenv": "^16.5.0",
     "eslint": "10.0.3",
     "eslint-config-turbo": "2.8.16",
@@ -49,12 +50,13 @@
     "globals": "^17.4.0",
     "jest": "30.2.0",
     "oxfmt": "0.38.0",
+    "std-env": "^4.0.0",
     "ts-node": "10.9.2",
     "turbo": "2.8.12",
     "typescript": "5.9.3",
     "typescript-eslint": "8.57.0",
     "unplugin-swc": "^1.5.9",
-    "vitest": "^4.0.18"
+    "vitest": "~4.1.0"
   },
   "packageManager": "npm@10.7.0"
 }
