@@ -14,7 +14,7 @@
     "start:prod": "node dist/nestjs/src/main.js",
     "lint": "eslint src",
     "test": "vitest run --passWithNoTests",
-    "test:ci": "vitest run --reporter=default --reporter=junit --outputFile.junit=../reports/jest-junit-nestjs.xml",
+    "test:ci": "vitest run",
     "test:watch": "vitest watch",
     "test:cov": "vitest run --coverage",
     "test:debug": "vitest run --inspect-brk --no-file-parallelism",
