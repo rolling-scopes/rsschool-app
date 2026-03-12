@@ -10,11 +10,47 @@ env:
   TURBO_VERSION: '2.8.12'
 
 jobs:
-  deploy_build_client:
+  checks:
+    name: Test, Lint
+    concurrency:
+      group: deploy-checks
+      cancel-in-progress: true
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Restore npm cache
+        uses: actions/cache@v4
+        env:
+          cache-name: cache-npm
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Test
+        run: npm run test
+
+      - name: Lint
+        run: npm run lint
+
+  build_client:
     name: Build (Client)
     concurrency:
       group: deploy-build-client
       cancel-in-progress: true
+    needs: [checks]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -52,10 +88,6 @@ jobs:
         run: npm ci
         working-directory: ./app
 
-      - name: Test (npm run test:ci)
-        run: npm run test:ci
-        working-directory: ./app
-
       - name: Build (npm run build)
         env:
           NODE_ENV: production
@@ -89,11 +121,12 @@ jobs:
       - name: Publish "client" container
         run: docker push ghcr.io/rolling-scopes/rsschool-app-client:master
 
-  deploy_build_server:
+  build_server:
     name: Build (Server)
     concurrency:
       group: deploy-build-server
       cancel-in-progress: true
+    needs: [checks]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -131,10 +164,6 @@ jobs:
         run: npm ci
         working-directory: ./app
 
-      - name: Test (npm test)
-        run: npm test
-        working-directory: ./app
-
       - name: Build (npm run build)
         env:
           NODE_ENV: production
@@ -154,11 +183,12 @@ jobs:
       - name: Publish "server" container
         run: docker push ghcr.io/rolling-scopes/rsschool-app-server:master
 
-  deploy_build_nestjs:
+  build_nestjs:
     name: Build (Nest.js)
     concurrency:
       group: deploy-build-nestjs
       cancel-in-progress: true
+    needs: [checks]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -215,12 +245,12 @@ jobs:
       - name: Publish "nestjs" container
         run: docker push ghcr.io/rolling-scopes/rsschool-app-nestjs:master
 
-  deploy_aws:
-    name: Deploy to AWS
+  deploy:
+    name: deploy
     concurrency:
       group: deploy-aws
       cancel-in-progress: false
-    needs: [deploy_build_client, deploy_build_server, deploy_build_nestjs]
+    needs: [build_client, build_server, build_nestjs]
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
