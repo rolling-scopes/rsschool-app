@@ -126,7 +126,7 @@ export class TeamDistributionService {
         const studentsIds = team.students.map(el => el.id);
         const studentsWithTaskResultsInTeam = studentsWithScore.filter(el => studentsIds.includes(el.studentId));
 
-        const taskResults = studentsWithTaskResultsInTeam.map(el => el.student.taskResults?.at(0));
+        const taskResults = studentsWithTaskResultsInTeam.map(el => el.student.taskResults?.[0]);
         const maxScore = taskResults.length ? Math.max(...taskResults.map(taskResult => taskResult?.score ?? 0)) : 0;
         const taskResultWithMaxScore = taskResults.find(taskResult => taskResult?.score === maxScore);
 

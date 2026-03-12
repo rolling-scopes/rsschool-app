@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import relative from 'dayjs/plugin/relativeTime';
 import { PublicFeedback } from '@common/models/profile';
 import { Typography, Tooltip, Modal, Row, Col } from 'antd';
-import { Comment } from '@ant-design/compatible';
+import { Comment } from 'components/Comment';
 import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 import heroesBadges from '../../configs/heroes-badges';
 
