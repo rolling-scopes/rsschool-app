@@ -43,11 +43,12 @@ describe('useSubmitTeamScore', () => {
     const { result } = renderHook(() => useSubmitTeamScore(1, 2));
 
     await act(async () => {
-      result.current.handleSubmit();
+      await result.current.handleSubmit();
     });
 
     expect(TeamDistributionApi.prototype.submitScore).toHaveBeenCalledTimes(0);
     expect(result.current.taskId).toBe(null);
+    expect(result.current.loading).toBe(false);
     expect(mockSuccess).toHaveBeenCalledTimes(0);
   });
 
@@ -61,11 +62,12 @@ describe('useSubmitTeamScore', () => {
     });
 
     await act(async () => {
-      result.current.handleSubmit();
+      await result.current.handleSubmit();
     });
 
     expect(TeamDistributionApi.prototype.submitScore).toHaveBeenCalledWith(1, 2, 3);
     expect(result.current.taskId).toBe(null);
+    expect(result.current.loading).toBe(false);
   });
 
   it('should handle failed score submission', async () => {
@@ -78,7 +80,12 @@ describe('useSubmitTeamScore', () => {
     });
 
     await act(async () => {
-      result.current.handleSubmit();
+      await result.current.handleSubmit();
     });
+
+    expect(TeamDistributionApi.prototype.submitScore).toHaveBeenCalledWith(1, 2, 3);
+    expect(result.current.taskId).toBe(3);
+    expect(result.current.loading).toBe(false);
+    expect(mockSuccess).toHaveBeenCalledTimes(0);
   });
 });
