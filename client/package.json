@@ -9,7 +9,6 @@
   "scripts": {
     "start": "next dev",
     "build": "next build",
-    "build:analyze": "ANALYZE=1 next build",
     "compile": "tsc -p tsconfig.json --noEmit",
     "prod": "next start -p 8080",
     "lint": "eslint src",
@@ -43,7 +42,6 @@
     "use-places-autocomplete": "4.0.1"
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "16.1.6",
     "@playwright/test": "1.49.1",
     "@testing-library/jest-dom": "6.1.4",
     "@testing-library/react": "14.1.2",
@@ -56,8 +54,7 @@
     "jest-environment-jsdom": "30.2.0",
     "jest-junit": "16.0.0",
     "jest-mock-axios": "4.9.0",
-    "mq-polyfill": "1.1.8",
-    "nextjs-bundle-analysis": "0.4.0"
+    "mq-polyfill": "1.1.8"
   },
   "nextBundleAnalysis": {
     "budget": 512000,
