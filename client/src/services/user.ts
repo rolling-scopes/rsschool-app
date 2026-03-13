@@ -1,20 +1,19 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { getApiConfiguration, getServerAxiosProps } from 'utils/axios';
 import { EnglishLevel } from '@common/models';
-import { ProfileApi, ProfileDto, UsersNotificationsApi, UpdateUserDtoLanguagesEnum } from 'api';
-import discordIntegration from '../configs/discord-integration';
 import type {
   ConfigurableProfilePermissions,
   Contacts,
   Discord,
   GeneralInfo,
+  Location,
   MentorStats,
   PublicFeedback,
   StageInterviewDetailedFeedback,
   StudentStats,
-  Location,
 } from '@common/models/profile';
 import { Rule } from 'antd/lib/form';
+import { ProfileApi, ProfileDto, UpdateUserDtoLanguagesEnum, UsersNotificationsApi } from 'api';
+import axios, { AxiosInstance } from 'axios';
+import discordIntegration from '../configs/discord-integration';
 
 export interface UserBasic {
   name: string;
@@ -24,17 +23,14 @@ export interface UserBasic {
 
 type SearchResponse = { data: UserBasic[] };
 
+const profileApi = new ProfileApi();
+const usersApi = new UsersNotificationsApi();
+
 export class UserService {
   private axios: AxiosInstance;
-  private profileApi: ProfileApi;
-  private opts: AxiosRequestConfig;
-  private usersApi: UsersNotificationsApi;
 
-  constructor(private token?: string) {
-    this.opts = getServerAxiosProps(this.token);
-    this.axios = axios.create(this.opts);
-    this.profileApi = new ProfileApi(getApiConfiguration(this.token));
-    this.usersApi = new UsersNotificationsApi(getApiConfiguration(this.token));
+  constructor() {
+    this.axios = axios.create();
   }
 
   async getDiscordIds() {
@@ -67,7 +63,7 @@ export class UserService {
   }
 
   async getCourses() {
-    const { data } = await this.profileApi.getUserCourses('me');
+    const { data } = await profileApi.getUserCourses('me');
     return data;
   }
 
@@ -96,7 +92,7 @@ export class UserService {
   }
 
   async sendEmailConfirmationLink() {
-    return this.usersApi.sendEmailConfirmationLink();
+    return usersApi.sendEmailConfirmationLink();
   }
 }
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import { render } from '@testing-library/react';
 import StudentStatsCard from '../StudentStatsCard';
 import { StudentStats } from '@common/models/profile';

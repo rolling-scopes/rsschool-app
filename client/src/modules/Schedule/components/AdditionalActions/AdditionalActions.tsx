@@ -1,7 +1,6 @@
 import { Button, Dropdown, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import React from 'react';
 import { buildExportLink, buildICalendarLink, setExportLink } from './helpers';
 import { SettingsButtons } from '../SettingsPanel';
 import { useCopyToClipboard } from 'react-use';

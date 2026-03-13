@@ -1,4 +1,3 @@
-import * as React from 'react';
 import CommonCard from '../CommonDashboardCard';
 import { Typography, Table } from 'antd';
 import { getAvailableTasksColumns } from './renderers';

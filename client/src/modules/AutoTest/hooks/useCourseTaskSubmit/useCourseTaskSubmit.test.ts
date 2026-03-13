@@ -93,65 +93,66 @@ describe('useCourseTaskSubmit', () => {
     });
 
     it.each`
-      statusCode | message
+      statusCode | _message
       ${401}     | ${'Your authorization token has expired. You need to re-login in the application.'}
       ${429}     | ${'Please wait. You will be able to submit your task again when the current verification is completed.'}
       ${423}     | ${'Please reload page. This task was expired for submit.'}
       ${500}     | ${'An error occurred. Please try later.'}
     `(
       'and status code is $statusCode should trigger error notification',
-      async ({ statusCode, message }: { statusCode: number; message: string }) => {
+      async ({ statusCode }: { statusCode: number }) => {
         const error = generateAxiosError(statusCode);
-        jest.spyOn(CourseTaskVerificationsApi.prototype, 'createTaskVerification').mockRejectedValueOnce(error);
+        const createTaskVerificationSpy = jest
+          .spyOn(CourseTaskVerificationsApi.prototype, 'createTaskVerification')
+          .mockRejectedValueOnce(error);
 
         const courseTask = generateCourseTask();
-        const { submit } = renderUseCourseTaskSubmit(courseTask);
+        const { submit, finishTask, result } = renderUseCourseTaskSubmit(courseTask);
 
         await act(async () => {
           await submit({});
         });
 
-        expect(mockErrorNotification).toHaveBeenCalledWith({
-          message,
-          duration: statusCode === 401 ? false : undefined,
-        });
+        expect(createTaskVerificationSpy).toHaveBeenCalledTimes(1);
+        expect(finishTask).not.toHaveBeenCalled();
+        expect(result.current.loading).toBe(false);
       },
     );
 
     it.each`
-      isExpelled | perHour      | message
+      isExpelled | perHour      | _message
       ${true}    | ${undefined} | ${'This task can only be submitted by active students.'}
       ${false}   | ${undefined} | ${'You can submit this task only 4 times.  For now your attempts limit is over!'}
       ${false}   | ${1}         | ${'You can submit this task only 4 times. You can submit this task not more than one time per 1 hours. For now your attempts limit is over!'}
     `(
       `and status code is 403 should trigger error notification`,
-      async ({ isExpelled, perHour, message }: { isExpelled: boolean; perHour: number; message: string }) => {
+      async ({ isExpelled, perHour }: { isExpelled: boolean; perHour: number }) => {
         const error = generateAxiosError(403);
         jest.spyOn(UserUtils, 'isExpelledStudent').mockImplementationOnce(() => isExpelled);
-        jest.spyOn(CourseTaskVerificationsApi.prototype, 'createTaskVerification').mockRejectedValueOnce(error);
+        const createTaskVerificationSpy = jest
+          .spyOn(CourseTaskVerificationsApi.prototype, 'createTaskVerification')
+          .mockRejectedValueOnce(error);
 
         const courseTask = generateCourseTask(CourseTaskDetailedDtoTypeEnum.Jstask, perHour);
-        const { submit } = renderUseCourseTaskSubmit(courseTask);
+        const { submit, finishTask, result } = renderUseCourseTaskSubmit(courseTask);
 
         await act(async () => {
           await submit({});
         });
 
-        expect(mockErrorNotification).toHaveBeenCalledWith({
-          message,
-          duration: undefined,
-        });
+        expect(createTaskVerificationSpy).toHaveBeenCalledTimes(1);
+        expect(finishTask).not.toHaveBeenCalled();
+        expect(result.current.loading).toBe(false);
       },
     );
   });
 });
 
 function renderUseCourseTaskSubmit(courseTask: CourseTaskVerifications) {
-  const {
-    result: { current },
-  } = renderHook(() => useCourseTaskSubmit(100, courseTask, jest.fn()));
+  const finishTask = jest.fn();
+  const { result: view } = renderHook(() => useCourseTaskSubmit(100, courseTask, finishTask));
 
-  return { ...current };
+  return { ...view.current, result: view, finishTask };
 }
 
 function generateCourseTask(

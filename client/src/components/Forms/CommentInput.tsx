@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Input, Form } from 'antd';
 
 export function CommentInput(props: { [key: string]: unknown; notRequired?: boolean }) {

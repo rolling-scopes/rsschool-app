@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Button, Modal, List, Result, Tooltip, Typography } from 'antd';
 import { QuestionCircleOutlined, PlusOutlined } from '@ant-design/icons';
 

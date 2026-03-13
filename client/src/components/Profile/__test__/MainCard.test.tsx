@@ -1,4 +1,3 @@
-import React from 'react';
 import { render } from '@testing-library/react';
 import { ProfileMainCardData } from 'services/user';
 import MainCard from '../MainCard';

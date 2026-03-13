@@ -1,4 +1,3 @@
-import React from 'react';
 import { UserData } from 'modules/Opportunities/models';
 import { AvatarCv } from '../AvatarCv';
 

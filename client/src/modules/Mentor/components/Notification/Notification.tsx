@@ -1,5 +1,4 @@
 import { Alert } from 'antd';
-import React from 'react';
 import { useLocalStorage } from 'react-use';
 import { INFO_MESSAGE } from 'modules/Mentor/constants';
 
