@@ -1,6 +1,6 @@
-import { CDN_AVATARS_URL } from 'configs/cdn';
+import { CDN_AVATARS_URL } from '@client/configs/cdn';
 import { Avatar } from 'antd';
-import { CrossCheckMessageAuthor } from 'services/course';
+import { CrossCheckMessageAuthor } from '@client/services/course';
 import { AVATAR_ICON_PATH } from '@client/modules/CrossCheck/constants';
 import { CrossCheckMessageDtoRoleEnum } from '@client/api';
 

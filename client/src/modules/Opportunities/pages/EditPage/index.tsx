@@ -6,7 +6,7 @@ import Head from 'next/head';
 import { OpportunitiesApi, ResumeDto } from '@client/api';
 import { Header } from '@client/shared/components/Header';
 import { LoadingScreen } from '@client/shared/components/LoadingScreen';
-import { useLoading } from 'components/useLoading';
+import { useLoading } from '@client/components/useLoading';
 import { SessionContext } from '@client/modules/Course/contexts';
 import { EditViewCv } from '@client/modules/Opportunities/components/EditViewCv';
 

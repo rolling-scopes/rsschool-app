@@ -2,7 +2,7 @@ import { Table, Tag, Typography } from 'antd';
 import { stringSorter } from '@client/shared/components/Table';
 import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 import { UserGroupDto } from '@client/api';
-import { CustomPopconfirm } from 'components/common/CustomPopconfirm';
+import { CustomPopconfirm } from '@client/components/common/CustomPopconfirm';
 
 type Props = {
   data: UserGroupDto[];

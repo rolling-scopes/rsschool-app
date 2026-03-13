@@ -1,11 +1,11 @@
 import { Form, Modal, Spin, Typography } from 'antd';
-import { MentorOptions, Options } from 'components/MentorOptions';
+import { MentorOptions, Options } from '@client/components/MentorOptions';
 import React, { createContext, useState } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService } from 'services/course';
+import { CourseService } from '@client/services/course';
 import { MentorDetailsDtoStudentsPreferenceEnum, MentorsApi } from '@client/api';
-import { getMentorId } from 'domain/user';
-import { Session } from 'components/withSession';
+import { getMentorId } from '@client/domain/user';
+import { Session } from '@client/components/withSession';
 
 type Props = {
   course: { id: number; name: string };

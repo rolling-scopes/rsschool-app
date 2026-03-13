@@ -2,7 +2,7 @@ import { Col, Form, Input, Row, Select } from 'antd';
 import { ModalForm } from '@client/shared/components/Forms';
 import { UserGroupDto, UpdateUserGroupDto } from '@client/api';
 import { UserSearch } from '@client/shared/components/UserSearch';
-import { CourseRole } from 'services/models';
+import { CourseRole } from '@client/services/models';
 
 type Props = {
   data: Partial<UserGroupDto> | null;

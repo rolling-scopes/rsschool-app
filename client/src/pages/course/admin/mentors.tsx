@@ -2,15 +2,15 @@ import { DownOutlined, FileExcelOutlined, SyncOutlined } from '@ant-design/icons
 import { Button, Divider, Dropdown, MenuProps, Modal, Row, Space, Statistic, Table, message } from 'antd';
 import { CourseMentorsApi, CourseStatsApi, MentorDetailsDto } from '@client/api';
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
-import { AssignStudentModal } from 'components/Student';
+import { AssignStudentModal } from '@client/components/Student';
 import { PersonCell, getColumnSearchProps, numberSorter, stringSorter } from '@client/shared/components/Table';
-import { Session } from 'components/withSession';
+import { Session } from '@client/components/withSession';
 import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { useContext, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService } from 'services/course';
-import { relativeDays } from 'services/formatter';
-import { CourseRole } from 'services/models';
+import { CourseService } from '@client/services/course';
+import { relativeDays } from '@client/services/formatter';
+import { CourseRole } from '@client/services/models';
 
 type Stats = {
   students: { studentsGroupName: string; totalCount: number }[];

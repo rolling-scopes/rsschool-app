@@ -1,12 +1,12 @@
 import { Tag, Typography } from 'antd';
 import { TaskDtoTypeEnum } from '@client/api';
 import { StageInterviewFeedbackVerdict, InterviewDetails as CommonInterviewDetails } from '@common/models';
-import { Decision } from 'data/interviews/technical-screening';
+import { Decision } from '@client/data/interviews/technical-screening';
 import dayjs from 'dayjs';
 import between from 'dayjs/plugin/isBetween';
-import { featureToggles } from 'services/features';
+import { featureToggles } from '@client/services/features';
 import CalendarOutlined from '@ant-design/icons/CalendarOutlined';
-import { formatDate, formatShortDate } from 'services/formatter';
+import { formatDate, formatShortDate } from '@client/services/formatter';
 
 dayjs.extend(between);
 

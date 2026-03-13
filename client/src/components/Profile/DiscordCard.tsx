@@ -4,7 +4,7 @@ import { Discord } from '@common/models/profile';
 import discordIntegration from '../../configs/discord-integration';
 import { DiscordOutlined } from '@client/shared/components/Icons/DiscordOutlined';
 import CommonCard from './CommonCard';
-import { StudentDiscord } from 'components/StudentDiscord';
+import { StudentDiscord } from '@client/components/StudentDiscord';
 
 const { Paragraph } = Typography;
 

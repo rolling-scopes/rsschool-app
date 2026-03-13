@@ -8,8 +8,8 @@ import {
   tagsRenderer,
   dateSorter,
 } from '@client/shared/components/Table';
-import { formatDate } from 'services/formatter';
-import { Course } from 'services/models';
+import { formatDate } from '@client/services/formatter';
+import { Course } from '@client/services/models';
 import CopyToClipboardButton from '@client/shared/components/CopyToClipboardButton';
 import { MentorsRegistryColumnKey, MentorsRegistryColumnName, TABS, MentorRegistryTabsMode } from '../constants';
 import { FilterValue } from 'antd/lib/table/interface';

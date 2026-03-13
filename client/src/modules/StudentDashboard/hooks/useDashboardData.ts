@@ -11,7 +11,7 @@ import {
   StudentsApi,
 } from '@client/api';
 import { TaskStat } from '@client/modules/StudentDashboard/components';
-import { UserService } from 'services/user';
+import { UserService } from '@client/services/user';
 
 const coursesTasksApi = new CoursesTasksApi();
 const coursesStatsApi = new CourseStatsApi();

@@ -1,6 +1,6 @@
 import { Row, Col, Space, Typography, theme } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import { getAutoTestRoute } from 'services/routes';
+import { getAutoTestRoute } from '@client/services/routes';
 import { TaskDeadlineDate } from '..';
 import { CourseTaskVerifications } from '@client/modules/AutoTest/types';
 

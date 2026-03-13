@@ -4,7 +4,7 @@ import { TeamDistributionStudentDto } from '@client/api';
 import { StudentsTableColumnKey, StudentsTableColumnName } from '@client/modules/Teams/constants';
 import { TeamOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Breakpoint } from 'antd/lib';
-import { StudentDiscord } from 'components/StudentDiscord';
+import { StudentDiscord } from '@client/components/StudentDiscord';
 const { Text, Link } = Typography;
 
 function renderName({ fullName, cvUuid, id }: TeamDistributionStudentDto, teamLeadId?: number) {

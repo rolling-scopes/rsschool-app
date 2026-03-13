@@ -5,7 +5,7 @@ import {
   isInterviewCanceled,
   getUpdatedFeedback,
 } from './feedbackTemplateHandler';
-import { Decision, Feedback, FeedbackStepId, feedbackTemplate } from 'data/interviews/technical-screening';
+import { Decision, Feedback, FeedbackStepId, feedbackTemplate } from '@client/data/interviews/technical-screening';
 
 describe('getFeedbackFromTemplate', () => {
   test('should return default template when no feedback exists', () => {

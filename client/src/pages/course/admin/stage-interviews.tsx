@@ -8,12 +8,12 @@ import {
   stringSorter,
   PersonCell,
 } from '@client/shared/components/Table';
-import { useLoading } from 'components/useLoading';
+import { useLoading } from '@client/components/useLoading';
 import { useMemo, useState, useContext } from 'react';
-import { CourseService } from 'services/course';
-import { CourseRole } from 'services/models';
+import { CourseService } from '@client/services/course';
+import { CourseRole } from '@client/services/models';
 import { useAsync } from 'react-use';
-import { isCourseManager, isCourseSupervisor } from 'domain/user';
+import { isCourseManager, isCourseSupervisor } from '@client/domain/user';
 import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 
 function Page() {

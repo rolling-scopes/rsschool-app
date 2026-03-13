@@ -9,7 +9,7 @@ import {
 } from '@ant-design/icons';
 import { OpportunitiesApi } from '@client/api';
 import { ExpirationState } from '@client/modules/Opportunities/constants';
-import { useMessage } from 'hooks';
+import { useMessage } from '@client/hooks';
 
 const { Text, Paragraph } = Typography;
 

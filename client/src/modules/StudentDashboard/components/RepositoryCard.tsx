@@ -1,6 +1,6 @@
 import { GithubFilled, WarningTwoTone } from '@ant-design/icons';
 import { Button, Col, Modal, Row, Spin, theme, Typography } from 'antd';
-import { useLoading } from 'components/useLoading';
+import { useLoading } from '@client/components/useLoading';
 import CommonCard from './CommonDashboardCard';
 
 type Props = {

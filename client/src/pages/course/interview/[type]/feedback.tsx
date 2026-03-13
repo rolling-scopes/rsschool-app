@@ -5,7 +5,7 @@ import { getInterviewData, getStageInterviewData, PageProps } from '@client/modu
 import { StageInterviewFeedback } from '@client/modules/Interviews/pages/StageInterviewFeedback';
 import { InterviewFeedback } from '@client/modules/Interviews/pages/InterviewFeedback';
 import { useRouter } from 'next/router';
-import { CourseRole } from 'services/models';
+import { CourseRole } from '@client/services/models';
 
 export default function (props: PageProps) {
   return (

@@ -1,7 +1,7 @@
 import { Table, Typography } from 'antd';
 import { stringSorter, stringTrimRenderer, getColumnSearchProps } from '@client/shared/components/Table';
 import { EventDto } from '@client/api';
-import { CustomPopconfirm } from 'components/common/CustomPopconfirm';
+import { CustomPopconfirm } from '@client/components/common/CustomPopconfirm';
 import { ColumnsType } from 'antd/lib/table';
 
 type Props = {

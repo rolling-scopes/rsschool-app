@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { TopMentorDto } from 'api';
+import { TopMentorDto } from '@client/api';
 
 jest.mock('next/config', () => () => ({}));
 const mockedGetTopMentors = jest.fn();

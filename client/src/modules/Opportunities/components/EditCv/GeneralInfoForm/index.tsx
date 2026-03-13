@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { Form, Input, Select, DatePicker, Checkbox, Card, FormInstance, Typography, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { UserData } from '@client/modules/Opportunities/models';
-import { ENGLISH_LEVELS } from 'data/english';
+import { ENGLISH_LEVELS } from '@client/data/english';
 import { userDataValidationRules as validationRules } from '../form-validation';
 
 const { Item } = Form;

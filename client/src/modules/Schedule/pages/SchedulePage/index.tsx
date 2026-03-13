@@ -8,7 +8,7 @@ import {
   CreateCourseTaskDto,
 } from '@client/api';
 import { PageLayout } from '@client/shared/components/PageLayout';
-import { isCourseManager } from 'domain/user';
+import { isCourseManager } from '@client/domain/user';
 import uniq from 'lodash/uniq';
 import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { CoursesListModal } from '@client/modules/CourseManagement/components/CoursesListModal';

@@ -1,10 +1,10 @@
 import { StudentSummaryDto } from '@client/api';
-import { Session } from 'components/withSession';
-import { isStudent } from 'domain/user';
+import { Session } from '@client/components/withSession';
+import { isStudent } from '@client/domain/user';
 import { loadHomeData } from '@client/modules/Home/data/loadHomeData';
 import { useState } from 'react';
 import { useAsync } from 'react-use';
-import { Course } from 'services/models';
+import { Course } from '@client/services/models';
 
 export function useStudentSummary(session: Session, course: Course | null) {
   const [studentSummary, setStudentSummary] = useState<StudentSummaryDto | null>(null);

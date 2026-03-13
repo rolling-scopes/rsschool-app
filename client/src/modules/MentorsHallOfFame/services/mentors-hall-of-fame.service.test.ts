@@ -1,4 +1,4 @@
-import { MentorsHallOfFameApi, TopMentorDto } from 'api';
+import { MentorsHallOfFameApi, TopMentorDto } from '@client/api';
 import { MentorsHallOfFameService } from './mentors-hall-of-fame.service';
 
 jest.mock('api');

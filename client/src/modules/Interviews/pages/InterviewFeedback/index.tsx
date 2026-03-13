@@ -3,13 +3,13 @@ import { AxiosError } from 'axios';
 import { CommentInput } from '@client/shared/components/Forms';
 import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 import { PageLayoutSimple } from '@client/shared/components/PageLayout';
-import { InputType, templates } from 'data/interviews';
+import { InputType, templates } from '@client/data/interviews';
 import { Fragment, useMemo, useState } from 'react';
-import { CourseService } from 'services/course';
+import { CourseService } from '@client/services/course';
 import { FeedbackProps } from '../../data/getInterviewData';
 import { ScoreSelector } from '@client/shared/components/ScoreSelector';
 import { useRouter } from 'next/router';
-import { useMessage } from 'hooks';
+import { useMessage } from '@client/hooks';
 
 type FormAnswer = {
   questionId: string;

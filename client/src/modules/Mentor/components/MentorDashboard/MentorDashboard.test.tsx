@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { CourseInfo, Session } from 'components/withSession';
+import { CourseInfo, Session } from '@client/components/withSession';
 import { SessionContext } from '@client/modules/Course/contexts';
 import { INSTRUCTIONS_TEXT } from '../Instructions';
 import MentorDashboard from './MentorDashboard';

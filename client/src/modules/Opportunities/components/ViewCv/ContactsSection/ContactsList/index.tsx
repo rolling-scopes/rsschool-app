@@ -14,7 +14,7 @@ import { Contacts, ContactType } from '@client/modules/Opportunities/models';
 import { getContactsToRender } from '@client/modules/Opportunities/data/getContactsToRender';
 
 import { Link } from '@client/modules/Opportunities/components/Link';
-import { useMessage } from 'hooks';
+import { useMessage } from '@client/hooks';
 import styles from './index.module.css';
 
 const { Text } = Typography;

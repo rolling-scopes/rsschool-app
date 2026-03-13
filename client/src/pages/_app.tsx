@@ -3,7 +3,7 @@ import Head from 'next/head';
 
 import { ActiveCourseProvider } from '@client/modules/Course/contexts';
 import 'antd/dist/reset.css';
-import { initializeFeatures } from 'services/features';
+import { initializeFeatures } from '@client/services/features';
 import { Analytics } from '../components/Analytics';
 import '../styles/main.css';
 import { DevToolsProvider, MessageProvider, ThemeProvider } from '@client/providers';

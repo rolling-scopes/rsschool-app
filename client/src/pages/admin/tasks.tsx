@@ -1,4 +1,4 @@
-import { CourseRole } from 'services/models';
+import { CourseRole } from '@client/services/models';
 import { SessionProvider } from '@client/modules/Course/contexts';
 import { TasksPage } from '@client/modules/Tasks/pages';
 

@@ -1,11 +1,11 @@
 import { Alert, Button, Col, Divider, Form, notification, Row, Spin, Typography } from 'antd';
-import { Comment } from 'components/Comment';
+import { Comment } from '@client/components/Comment';
 import PreparedComment, { markdownLabel } from '@client/shared/components/Forms/PreparedComment';
 import { ScoreIcon } from '@client/shared/components/Icons/ScoreIcon';
 import { SolutionReviewSettings } from '@client/modules/CrossCheck/constants';
 import { useEffect, useMemo, useState } from 'react';
-import { CourseService } from 'services/course';
-import { formatDateTime } from 'services/formatter';
+import { CourseService } from '@client/services/course';
+import { formatDateTime } from '@client/services/formatter';
 import { CrossCheckCriteriaModal } from '../criteria/CrossCheckCriteriaModal';
 import { StudentDiscord } from '@client/components/StudentDiscord';
 import { getAmountUnreadMessages, getHowManyUnreadMessagesText } from './helpers';
@@ -14,7 +14,7 @@ import { MessageSendingPanel } from './MessageSendingPanel';
 import { UserAvatar } from './UserAvatar';
 import { Username } from './Username';
 import { CrossCheckCriteriaDataDto, CrossCheckMessageDtoRoleEnum, CrossCheckSolutionReviewDto } from '@client/api';
-import { useMessage } from 'hooks';
+import { useMessage } from '@client/hooks';
 import styles from './SolutionReview.module.css';
 
 const { Text } = Typography;

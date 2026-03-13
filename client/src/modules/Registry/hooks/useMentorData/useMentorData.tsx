@@ -9,9 +9,9 @@ import {
   ProfileApi,
 } from '@client/api';
 import { Location } from '@common/models';
-import { CdnService } from 'services/cdn';
-import { Course } from 'services/models';
-import { UserFull, UserService } from 'services/user';
+import { CdnService } from '@client/services/cdn';
+import { Course } from '@client/services/models';
+import { UserFull, UserService } from '@client/services/user';
 import { GeneralSection, MentorshipSection, DoneSection } from '@client/modules/Registry/components';
 import { ERROR_MESSAGES } from '@client/modules/Registry/constants';
 

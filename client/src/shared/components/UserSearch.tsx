@@ -3,7 +3,7 @@ import { Select, Typography } from 'antd';
 import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 import { get, debounce } from 'lodash';
 import { SelectProps } from 'antd/lib/select';
-import type { SearchStudent } from 'services/course';
+import type { SearchStudent } from '@client/services/course';
 
 type Person = { id: number; githubId: string; name: string } | SearchStudent;
 

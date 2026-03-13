@@ -4,7 +4,7 @@ import type { MenuProps } from 'antd';
 import { buildExportLink, buildICalendarLink, setExportLink } from './helpers';
 import { SettingsButtons } from '../SettingsPanel';
 import { useCopyToClipboard } from 'react-use';
-import { useMessage } from 'hooks';
+import { useMessage } from '@client/hooks';
 
 export type MenuItemType = Required<MenuProps>['items'][number];
 type MenuItemClickHandler = Required<MenuProps>['onClick'];

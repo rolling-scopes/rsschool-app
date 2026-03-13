@@ -1,4 +1,4 @@
-import { RegistrationPageLayout } from 'components/RegistrationPageLayout';
+import { RegistrationPageLayout } from '@client/components/RegistrationPageLayout';
 import { SessionContext } from '@client/modules/Course/contexts';
 import { CourseCertificateAlert, NoCourses, RegistrationForm } from '@client/modules/Registry/components';
 import { useStudentData } from '@client/modules/Registry/hooks';

@@ -7,9 +7,9 @@ import { Contacts } from '@common/models/profile';
 import { NotificationChannel } from '@client/modules/Notifications/services/notifications';
 import { EmailConfirmation } from './EmailConfirmation';
 import CommonCardWithSettingsModal from './CommonCardWithSettingsModal';
-import { Contact, ContactsKeys } from 'services/user';
+import { Contact, ContactsKeys } from '@client/services/user';
 import ContactsCardForm from './ContactsCardForm';
-import { epamEmailPattern } from 'services/validators';
+import { epamEmailPattern } from '@client/services/validators';
 
 const { Paragraph, Text } = Typography;
 

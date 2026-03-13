@@ -1,5 +1,5 @@
 import { Button, message } from 'antd';
-import { useLoading } from 'components/useLoading';
+import { useLoading } from '@client/components/useLoading';
 import { MentorsApi } from '@client/api';
 import { AxiosError } from 'axios';
 import { EyeOutlined } from '@ant-design/icons';

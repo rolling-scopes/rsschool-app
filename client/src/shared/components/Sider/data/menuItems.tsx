@@ -13,7 +13,7 @@ import ExclamationCircleOutlined from '@ant-design/icons/ExclamationCircleOutlin
 import QqOutlined from '@ant-design/icons/QqOutlined';
 
 import { DiscordOutlined } from '@client/shared/components/Icons/DiscordOutlined';
-import { Session } from 'components/withSession';
+import { Session } from '@client/components/withSession';
 import {
   isAdmin,
   isAnyCourseManager,
@@ -24,8 +24,8 @@ import {
   isHirer,
   isAnyCourseDementor,
   isTaskOwner,
-} from 'domain/user';
-import { Course } from 'services/models';
+} from '@client/domain/user';
+import { Course } from '@client/services/models';
 
 export interface MenuItemsData {
   name: string;

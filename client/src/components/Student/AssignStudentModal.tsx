@@ -1,8 +1,8 @@
 import { Modal, Typography } from 'antd';
 import { StudentSearch } from '@client/shared/components/StudentSearch';
 import { useCallback, useState } from 'react';
-import { CourseService } from 'services/course';
-import { useMessage } from 'hooks';
+import { CourseService } from '@client/services/course';
+import { useMessage } from '@client/hooks';
 
 const { Text } = Typography;
 

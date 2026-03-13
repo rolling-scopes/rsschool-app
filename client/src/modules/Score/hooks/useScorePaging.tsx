@@ -1,7 +1,7 @@
 import { NextRouter } from 'next/router';
 import { ParsedUrlQuery } from 'querystring';
 import { useCallback } from 'react';
-import { CourseService } from 'services/course';
+import { CourseService } from '@client/services/course';
 import { getQueryParams } from '@client/shared/utils/queryParams-utils';
 import { IPaginationInfo } from '@client/shared/utils/pagination';
 import { ScoreOrder, ScoreTableFilters } from './types';

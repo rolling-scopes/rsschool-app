@@ -6,7 +6,7 @@ import {
   PLACEHOLDERS,
   RSSCHOOL_BOT_LINK,
 } from '@client/modules/Registry/constants';
-import { emailPattern, phonePattern } from 'services/validators';
+import { emailPattern, phonePattern } from '@client/services/validators';
 import { FormButtons, FormCard } from '@client/modules/Registry/components';
 
 const { Title, Text } = Typography;

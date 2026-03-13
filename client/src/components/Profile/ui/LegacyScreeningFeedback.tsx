@@ -1,7 +1,7 @@
 import { Tag, Typography, Table } from 'antd';
 import { LegacyFeedback } from '@common/models/profile';
-import { ENGLISH_LEVELS } from 'data/english';
-import { CODING_LEVELS, SKILLS_LEVELS } from 'data/interviews/technical-screening';
+import { ENGLISH_LEVELS } from '@client/data/english';
+import { CODING_LEVELS, SKILLS_LEVELS } from '@client/data/interviews/technical-screening';
 import { Rating } from '@client/shared/components/Rating';
 
 const { Text } = Typography;

@@ -1,6 +1,6 @@
 import ClockCircleOutlined from '@ant-design/icons/ClockCircleOutlined';
 import { Tooltip } from 'antd';
-import { formatDateTime } from 'services/formatter';
+import { formatDateTime } from '@client/services/formatter';
 import { Group, GroupType } from '../Forms/CourseTaskSelect';
 
 enum Color {

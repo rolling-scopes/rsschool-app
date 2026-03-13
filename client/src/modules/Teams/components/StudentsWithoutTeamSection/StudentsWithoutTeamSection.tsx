@@ -5,8 +5,8 @@ import { TeamDistributionApi, TeamDistributionDetailedDto, TeamDistributionStude
 import { useAsync } from 'react-use';
 import StudentsTable from '../StudentsTable/StudentsTable';
 import { IPaginationInfo } from '@client/shared/utils/pagination';
-import { useLoading } from 'components/useLoading';
-import { useMessage } from 'hooks';
+import { useLoading } from '@client/components/useLoading';
+import { useMessage } from '@client/hooks';
 
 type Props = {
   distribution: TeamDistributionDetailedDto;

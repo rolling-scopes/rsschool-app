@@ -7,7 +7,7 @@ import { LocationSelect } from '@client/shared/components/Forms';
 import { Location } from '@common/models/profile';
 import ProfileSettingsModal from './ProfileSettingsModal';
 import { UpdateProfileInfoDto } from '@client/api';
-import { ProfileMainCardData } from 'services/user';
+import { ProfileMainCardData } from '@client/services/user';
 import ObfuscationModal from './ObfuscateConfirmationModal';
 
 const { Title, Paragraph, Text } = Typography;

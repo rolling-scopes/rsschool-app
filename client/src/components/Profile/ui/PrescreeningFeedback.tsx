@@ -1,6 +1,6 @@
 import { Row, Space, Table, Typography } from 'antd';
 import { StageInterviewDetailedFeedback } from '@common/models/profile';
-import { CODING_LEVELS, FeedbackStepId, SKILLS_LEVELS } from 'data/interviews/technical-screening';
+import { CODING_LEVELS, FeedbackStepId, SKILLS_LEVELS } from '@client/data/interviews/technical-screening';
 import { InterviewFeedbackStepData, InterviewFeedbackValues, InterviewQuestion } from '@common/models';
 import { Rating } from '@client/shared/components/Rating';
 import { useMemo } from 'react';

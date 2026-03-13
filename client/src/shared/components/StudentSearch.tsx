@@ -1,6 +1,6 @@
 import { UserSearch, UserProps } from '@client/shared/components/UserSearch';
 import { useCallback, useMemo } from 'react';
-import { CourseService } from 'services/course';
+import { CourseService } from '@client/services/course';
 
 type Props = UserProps & {
   courseId: number;

@@ -3,12 +3,12 @@ import { BadgeDto, BadgeEnum, GratitudesApi } from '@client/api';
 import { AxiosError } from 'axios';
 import { PageLayoutSimple } from '@client/shared/components/PageLayout';
 import { UserSearch } from '@client/shared/components/UserSearch';
-import { useMessage } from 'hooks';
+import { useMessage } from '@client/hooks';
 import { SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useAsync } from 'react-use';
-import { type UserBasic, UserService } from 'services/user';
+import { type UserBasic, UserService } from '@client/services/user';
 
 interface IGratitude {
   userIds: number[];

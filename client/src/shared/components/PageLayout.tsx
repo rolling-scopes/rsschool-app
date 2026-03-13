@@ -2,7 +2,7 @@ import { PropsWithChildren, ReactNode } from 'react';
 import { Header } from './Header';
 import { Button, Col, Layout, Result, Row, Spin, theme } from 'antd';
 import { AdminSider } from './Sider/AdminSider';
-import { Course } from 'services/models';
+import { Course } from '@client/services/models';
 
 type Props = {
   loading: boolean;

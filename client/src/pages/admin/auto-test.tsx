@@ -5,7 +5,7 @@ import AutoTestTaskCard from '@client/modules/AutoTest/components/AutoTestTaskCa
 import { SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { useState } from 'react';
 import { useAsync } from 'react-use';
-import { CourseRole } from 'services/models';
+import { CourseRole } from '@client/services/models';
 
 const RESPONSIVE_COLUMNS: ColProps = {
   sm: 24,

@@ -1,5 +1,5 @@
 import { DisciplineDto } from '@client/api';
-import { Course } from 'services/models';
+import { Course } from '@client/services/models';
 import { Preferences, Disciplines, AdditionalInfo } from '@client/modules/Registry/components';
 import { Col, Row } from 'antd';
 

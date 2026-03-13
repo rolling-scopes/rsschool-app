@@ -4,13 +4,13 @@ import union from 'lodash/union';
 import { TaskDto, CriteriaDto, DisciplineDto } from '@client/api';
 import { ModalForm } from '@client/shared/components/Forms';
 import { stringSorter } from '@client/shared/components/Table';
-import { SKILLS } from 'data/skills';
-import { TASK_TYPES } from 'data/taskTypes';
-import { ModalFormMode } from 'hooks';
+import { SKILLS } from '@client/data/skills';
+import { TASK_TYPES } from '@client/data/taskTypes';
+import { ModalFormMode } from '@client/hooks';
 import { TaskSettings } from '@client/modules/Tasks/components';
 import { ERROR_MESSAGES, LABELS, MODAL_TITLES, PLACEHOLDERS } from '@client/modules/Tasks/constants';
 import { FormValues } from '@client/modules/Tasks/types';
-import { urlPattern } from 'services/validators';
+import { urlPattern } from '@client/services/validators';
 
 const { Text } = Typography;
 const { TextArea } = Input;

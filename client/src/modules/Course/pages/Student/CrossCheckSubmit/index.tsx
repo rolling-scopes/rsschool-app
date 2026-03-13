@@ -19,10 +19,16 @@ import { SubmittedStatus } from '@client/modules/CrossCheck/components/Submitted
 import { useSolutionReviewSettings } from '@client/modules/CrossCheck/hooks';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useMemo, useState } from 'react';
-import { CourseService, CrossCheckComment, CrossCheckCriteria, CrossCheckReview, TaskSolution } from 'services/course';
-import { githubPrUrl, privateRsRepoPattern, urlWithIpPattern } from 'services/validators';
+import {
+  CourseService,
+  CrossCheckComment,
+  CrossCheckCriteria,
+  CrossCheckReview,
+  TaskSolution,
+} from '@client/services/course';
+import { githubPrUrl, privateRsRepoPattern, urlWithIpPattern } from '@client/services/validators';
 import { getQueryString } from '@client/shared/utils/queryParams-utils';
-import { useMessage } from 'hooks';
+import { useMessage } from '@client/hooks';
 
 const colSizes = { xs: 24, sm: 18, md: 12, lg: 10 };
 

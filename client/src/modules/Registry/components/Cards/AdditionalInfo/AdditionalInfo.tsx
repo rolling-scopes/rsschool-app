@@ -1,6 +1,6 @@
 import { Form, Select, Input, Typography } from 'antd';
 import { CARD_TITLES, LABELS, PLACEHOLDERS, WIDE_FORM_ITEM_LAYOUT } from '@client/modules/Registry/constants';
-import { Course } from 'services/models';
+import { Course } from '@client/services/models';
 import {
   CourseLabel,
   DataProcessingCheckbox,

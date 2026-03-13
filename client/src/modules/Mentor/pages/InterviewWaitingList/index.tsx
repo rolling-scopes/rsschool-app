@@ -9,15 +9,15 @@ import {
   PersonCell,
   dateRenderer,
 } from '@client/shared/components/Table';
-import { useLoading } from 'components/useLoading';
+import { useLoading } from '@client/components/useLoading';
 import { useMemo, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService } from 'services/course';
-import { CoursePageProps } from 'services/models';
-import { isCourseManager, isMentor } from 'domain/user';
+import { CourseService } from '@client/services/course';
+import { CoursePageProps } from '@client/services/models';
+import { isCourseManager, isMentor } from '@client/domain/user';
 import { AvailableStudentDto, CoursesInterviewsApi, InterviewDto, TaskDtoTypeEnum } from '@client/api';
-import { getRating } from 'domain/interview';
-import { CustomPopconfirm } from 'components/common/CustomPopconfirm';
+import { getRating } from '@client/domain/interview';
+import { CustomPopconfirm } from '@client/components/common/CustomPopconfirm';
 import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { useRequest } from 'ahooks';
 import { useRouter } from 'next/router';

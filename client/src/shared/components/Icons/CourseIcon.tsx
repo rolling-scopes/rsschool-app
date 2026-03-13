@@ -1,6 +1,6 @@
 import { CheckCircleTwoTone, PlayCircleTwoTone } from '@ant-design/icons';
-import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
-import { Course } from 'services/models';
+import { DEFAULT_COURSE_ICONS } from '@client/configs/course-icons';
+import { Course } from '@client/services/models';
 import { PublicSvgIcon } from '@client/shared/components/Icons/PublicSvgIcon';
 
 export const CourseIcon = ({ course }: { course: Course }) => {

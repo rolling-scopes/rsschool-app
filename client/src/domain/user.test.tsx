@@ -1,5 +1,5 @@
-import { Session } from 'components/withSession';
-import { CourseRole } from 'services/models';
+import { Session } from '@client/components/withSession';
+import { CourseRole } from '@client/services/models';
 import * as user from './user';
 
 const mockSession: Session = {

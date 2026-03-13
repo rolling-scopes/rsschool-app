@@ -16,9 +16,9 @@ import { SessionProvider, useActiveCourseContext } from '@client/modules/Course/
 import { CourseTaskModal } from '@client/modules/CourseManagement/components/CourseTaskModal';
 import { useCallback, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService } from 'services/course';
-import { CourseRole } from 'services/models';
-import { useMessage } from 'hooks';
+import { CourseService } from '@client/services/course';
+import { CourseRole } from '@client/services/models';
+import { useMessage } from '@client/hooks';
 
 const courseTasksApi = new CoursesTasksApi();
 

@@ -1,10 +1,10 @@
 import { renderHook } from '@testing-library/react';
 import { CourseTaskDetailedDtoTypeEnum, CourseTaskVerificationsApi } from '@client/api';
 import { IpynbFile, useCourseTaskSubmit } from './useCourseTaskSubmit';
-import { FilesService } from 'services/files';
+import { FilesService } from '@client/services/files';
 import { act } from 'react-dom/test-utils';
 import { AxiosError } from 'axios';
-import * as UserUtils from 'domain/user';
+import * as UserUtils from '@client/domain/user';
 import { CourseTaskVerifications } from '@client/modules/AutoTest/types';
 
 jest.mock('services/files');

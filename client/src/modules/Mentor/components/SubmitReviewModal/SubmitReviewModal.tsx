@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 import { ModalSubmitForm } from '@client/shared/components/Forms';
 import { ScoreInput } from '@client/shared/components/Forms';
 import { MentorDashboardDto } from '@client/api';
-import { CourseService } from 'services/course';
+import { CourseService } from '@client/services/course';
 import isEmpty from 'lodash/isEmpty';
 import { AxiosError } from 'axios';
 

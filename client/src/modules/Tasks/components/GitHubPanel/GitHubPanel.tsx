@@ -1,6 +1,6 @@
 import { Form, Checkbox, Input } from 'antd';
 import { LABELS, ERROR_MESSAGES, PLACEHOLDERS } from '@client/modules/Tasks/constants';
-import { githubRepoUrl } from 'services/validators';
+import { githubRepoUrl } from '@client/services/validators';
 
 export function GitHubPanel() {
   return (

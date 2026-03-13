@@ -4,8 +4,8 @@ import axios from 'axios';
 import { GithubUserLink } from '@client/shared/components/GithubUserLink';
 import { stringSorter } from '@client/shared/components/Table';
 import { useState } from 'react';
-import { formatMonthFriendly } from 'services/formatter';
-import { Course, CourseRole } from 'services/models';
+import { formatMonthFriendly } from '@client/services/formatter';
+import { Course, CourseRole } from '@client/services/models';
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import { SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 

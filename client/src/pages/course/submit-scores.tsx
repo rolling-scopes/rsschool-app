@@ -7,13 +7,13 @@ import csv from 'csvtojson';
 import isUndefined from 'lodash/isUndefined';
 import { useMemo, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService } from 'services/course';
+import { CourseService } from '@client/services/course';
 import { filterLogin } from '@client/shared/utils/text-utils';
-import { isCourseManager } from 'domain/user';
+import { isCourseManager } from '@client/domain/user';
 import { CoursesTasksApi, CourseTaskDto } from '@client/api';
 import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
-import { CourseRole } from 'services/models';
-import { useMessage } from 'hooks';
+import { CourseRole } from '@client/services/models';
+import { useMessage } from '@client/hooks';
 
 interface SubmitResult {
   status: string;

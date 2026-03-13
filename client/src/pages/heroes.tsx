@@ -3,7 +3,7 @@ import { HeroesForm } from '@client/shared/components/Forms/Heroes';
 import { useState } from 'react';
 import { SessionProvider } from '@client/modules/Course/contexts';
 import { Tabs } from 'antd';
-import HeroesRadarTab from 'components/Heroes/HeroesRadarTab';
+import HeroesRadarTab from '@client/components/Heroes/HeroesRadarTab';
 
 function Page() {
   const [loading, setLoading] = useState(false);

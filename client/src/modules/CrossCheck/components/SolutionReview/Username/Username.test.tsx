@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { CrossCheckMessageAuthor } from 'services/course';
+import { CrossCheckMessageAuthor } from '@client/services/course';
 import { Username } from '.';
 import { CrossCheckMessageDtoRoleEnum } from '@client/api';
 

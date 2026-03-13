@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { TaskCard } from '..';
 import { CheckerEnum } from '@client/api';
-import { Course } from 'services/models';
+import { Course } from '@client/services/models';
 import { CourseTaskState, CourseTaskVerifications } from '@client/modules/AutoTest/types';
 
 const COURSE_MOCK = { alias: 'course-alias', id: 100 } as Course;

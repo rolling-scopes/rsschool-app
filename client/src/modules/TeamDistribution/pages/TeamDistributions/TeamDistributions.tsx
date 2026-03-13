@@ -1,12 +1,12 @@
 import { useMemo, useState, useContext } from 'react';
 import { PageLayout } from '@client/shared/components/PageLayout';
-import { isCourseManager, isDementor } from 'domain/user';
+import { isCourseManager, isDementor } from '@client/domain/user';
 import { TeamDistributionApi, TeamDistributionDto } from '@client/api';
 import { TeamDistributionModal } from '@client/modules/TeamDistribution/components/TeamDistributionModal/';
 import { useAsync } from 'react-use';
 import { TeamDistributionCard } from '@client/modules/TeamDistribution/components/TeamDistributionCard';
 import { WelcomeCard } from '@client/modules/TeamDistribution/components/WelcomeCard';
-import { useMessage, useModalForm } from 'hooks';
+import { useMessage, useModalForm } from '@client/hooks';
 import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { SubmitScoreModal } from '@client/modules/TeamDistribution/components/SubmitScoreModal';
 

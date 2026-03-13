@@ -5,7 +5,7 @@ import { TeamApi, TeamDistributionDetailedDto, TeamDto } from '@client/api';
 import { useAsync } from 'react-use';
 import { IPaginationInfo } from '@client/shared/utils/pagination';
 import { getColumns, expandedRowRender } from './renderers';
-import { useLoading } from 'components/useLoading';
+import { useLoading } from '@client/components/useLoading';
 import { TeamsTableColumnKey } from '@client/modules/Teams/constants';
 
 type Props = {

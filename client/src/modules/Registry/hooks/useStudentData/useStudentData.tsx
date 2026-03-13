@@ -1,18 +1,18 @@
 import { useAsync } from 'react-use';
-import { Course } from 'services/models';
-import { UserFull, UserService } from 'services/user';
+import { Course } from '@client/services/models';
+import { UserFull, UserService } from '@client/services/user';
 import { StudentStats } from '@common/models';
 import { useCallback, useEffect, useState } from 'react';
-import { CdnService } from 'services/cdn';
+import { CdnService } from '@client/services/cdn';
 import { GeneralSection, DoneSection } from '@client/modules/Registry/components';
 import { Location } from '@common/models';
 import { Form, Modal, theme, Typography } from 'antd';
 import { useRouter } from 'next/router';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { DisciplinesApi, ProfileApi } from '@client/api';
-import { TYPES } from 'configs/registry';
+import { TYPES } from '@client/configs/registry';
 import { ERROR_MESSAGES } from '@client/modules/Registry/constants';
-import { useMessage } from 'hooks';
+import { useMessage } from '@client/hooks';
 
 const { Title, Text } = Typography;
 

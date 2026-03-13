@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { Discord } from '@client/api';
-import { StudentDiscord } from 'components/StudentDiscord';
+import { StudentDiscord } from '@client/components/StudentDiscord';
 
 describe('StudentDiscord', () => {
   test('renders a Discord user correctly', () => {

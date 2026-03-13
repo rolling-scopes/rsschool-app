@@ -1,6 +1,6 @@
 import { GithubAvatar } from './GithubAvatar';
 import { CopyOutlined, GithubOutlined } from '@ant-design/icons';
-import { useMessage } from 'hooks';
+import { useMessage } from '@client/hooks';
 import { useCopyToClipboard } from 'react-use';
 import { theme } from 'antd';
 import styles from './GithubUserLink.module.css';

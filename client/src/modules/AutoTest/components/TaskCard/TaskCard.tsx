@@ -1,8 +1,8 @@
 import { Button, Card, Col, Divider, Row, Tag, Typography } from 'antd';
 import Link from 'next/link';
-import { getAutoTestTaskRoute } from 'services/routes';
+import { getAutoTestTaskRoute } from '@client/services/routes';
 import { TaskCardColumn, TaskDeadlineDate } from '..';
-import { Course } from 'services/models';
+import { Course } from '@client/services/models';
 import { useAttemptsMessage } from '@client/modules/AutoTest/hooks';
 import { CourseTaskState, CourseTaskVerifications } from '@client/modules/AutoTest/types';
 

@@ -1,6 +1,6 @@
 import { Typography, Form, Row, Checkbox, Radio, Col, Space } from 'antd';
 import { useMemo } from 'react';
-import { SelfEducationQuestionWithIndex, SelfEducationQuestion } from 'services/course';
+import { SelfEducationQuestionWithIndex, SelfEducationQuestion } from '@client/services/course';
 import shuffle from 'lodash/shuffle';
 import { CourseTaskVerifications } from '@client/modules/AutoTest/types';
 

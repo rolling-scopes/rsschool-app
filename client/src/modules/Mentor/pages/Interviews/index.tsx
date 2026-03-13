@@ -1,9 +1,9 @@
 import { CoursesInterviewsApi, InterviewDto, TaskDtoTypeEnum } from '@client/api';
 import { PageLayout } from '@client/shared/components/PageLayout';
-import { useLoading } from 'components/useLoading';
+import { useLoading } from '@client/components/useLoading';
 import { useCallback, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService, MentorInterview } from 'services/course';
+import { CourseService, MentorInterview } from '@client/services/course';
 import { InterviewCard } from './components/InterviewCard';
 import { MentorOptionsProvider } from './components/MentorPreferencesModal';
 import groupBy from 'lodash/groupBy';

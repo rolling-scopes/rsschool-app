@@ -13,7 +13,7 @@ import {
   TasksStatsCard,
   useDashboardData,
 } from '@client/modules/StudentDashboard';
-import { CourseService } from 'services/course';
+import { CourseService } from '@client/services/course';
 
 const gapSize = 24;
 

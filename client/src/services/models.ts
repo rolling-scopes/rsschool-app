@@ -1,4 +1,4 @@
-import { Session } from 'components/withSession';
+import { Session } from '@client/components/withSession';
 import { StudentBasic as CommonStudentBasic } from '@common/models';
 import { ProfileCourseDto, UserGroupDtoRolesEnum as CourseRole } from '@client/api';
 

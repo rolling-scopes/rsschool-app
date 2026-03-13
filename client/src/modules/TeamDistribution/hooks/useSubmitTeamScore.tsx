@@ -1,6 +1,6 @@
 import { TeamDistributionApi } from '@client/api';
 import { useState } from 'react';
-import { useMessage } from 'hooks';
+import { useMessage } from '@client/hooks';
 
 const teamDistributionApi = new TeamDistributionApi();
 

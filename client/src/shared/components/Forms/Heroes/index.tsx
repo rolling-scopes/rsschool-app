@@ -2,11 +2,16 @@ import { Avatar, Button, Card, Form, Grid, Input, Pagination, Row, Select, Space
 import { FormLayout } from 'antd/es/form/Form';
 import { useCallback, useEffect, useState } from 'react';
 import Masonry from 'react-masonry-css';
-import heroesBadges from 'configs/heroes-badges';
+import heroesBadges from '@client/configs/heroes-badges';
 import styles from './index.module.css';
-import { GratitudeService, HeroesFormData, IGratitudeGetRequest, IGratitudeGetResponse } from 'services/gratitude';
+import {
+  GratitudeService,
+  HeroesFormData,
+  IGratitudeGetRequest,
+  IGratitudeGetResponse,
+} from '@client/services/gratitude';
 import { onlyDefined } from '@client/shared/utils/onlyDefined';
-import { getFullName } from 'domain/user';
+import { getFullName } from '@client/domain/user';
 import { useActiveCourseContext } from '@client/modules/Course/contexts';
 
 const { Text, Link, Paragraph } = Typography;

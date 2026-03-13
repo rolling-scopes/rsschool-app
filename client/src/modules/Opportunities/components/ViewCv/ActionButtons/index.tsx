@@ -2,7 +2,7 @@ import { Row, Modal, Button, Divider, Alert, Typography } from 'antd';
 import { useCallback } from 'react';
 import { useCopyToClipboard } from 'react-use';
 import { DeleteOutlined, EditOutlined, ShareAltOutlined } from '@ant-design/icons';
-import { useMessage } from 'hooks';
+import { useMessage } from '@client/hooks';
 
 const { Paragraph } = Typography;
 

@@ -7,12 +7,12 @@ import {
   InterviewPeriod,
   InterviewStatus,
   isRegistrationNotStarted,
-} from 'domain/interview';
+} from '@client/domain/interview';
 import { InterviewDescription } from './InterviewDescription';
 import { getInterviewCardDetails } from '../data/getInterviewCardDetails';
 import { AlertDescription } from './AlertDescription';
 import { ExtraInfo } from './ExtraInfo';
-import { Decision } from 'data/interviews/technical-screening';
+import { Decision } from '@client/data/interviews/technical-screening';
 
 const { Meta } = Card;
 

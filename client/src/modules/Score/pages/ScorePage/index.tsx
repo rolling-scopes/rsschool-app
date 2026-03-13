@@ -1,5 +1,5 @@
 import { CourseNoAccess } from '@client/modules/Course/components/CourseNoAccess';
-import { CoursePageLayout } from 'components/CoursePageLayout';
+import { CoursePageLayout } from '@client/components/CoursePageLayout';
 import { useContext, useState } from 'react';
 import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { ScoreTableTabs } from '@client/modules/Score/components/ScoreTable/ScoreTableTabs';

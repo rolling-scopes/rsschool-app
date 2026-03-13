@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAsync } from 'react-use';
 import { UserGroupApi, UpdateUserGroupDto, UserGroupDto } from '@client/api';
-import { UserService } from 'services/user';
+import { UserService } from '@client/services/user';
 
 const userGroupService = new UserGroupApi();
 const userService = new UserService();

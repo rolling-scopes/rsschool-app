@@ -9,12 +9,12 @@ import {
   TeamsHeader,
   TeamsSection,
 } from '../components';
-import { isActiveStudent, isCourseManager } from 'domain/user';
+import { isActiveStudent, isCourseManager } from '@client/domain/user';
 import { useCopyToClipboard } from 'react-use';
 import { CreateTeamDto, TeamApi, TeamDto, JoinTeamDto, TeamDistributionApi } from '@client/api';
-import { useLoading } from 'components/useLoading';
+import { useLoading } from '@client/components/useLoading';
 import { useDistribution } from '../hooks';
-import { useMessage, useModalForm } from 'hooks';
+import { useMessage, useModalForm } from '@client/hooks';
 import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { useRouter } from 'next/router';
 import CheckCircleTwoTone from '@ant-design/icons/CheckCircleTwoTone';

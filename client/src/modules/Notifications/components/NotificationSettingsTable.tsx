@@ -1,7 +1,7 @@
 import { Table, Typography } from 'antd';
 import { ColumnType } from 'antd/lib/table';
 import { NotificationDto } from '@client/api';
-import { CustomPopconfirm } from 'components/common/CustomPopconfirm';
+import { CustomPopconfirm } from '@client/components/common/CustomPopconfirm';
 import { boolIconRenderer } from '@client/shared/components/Table';
 import { useMemo } from 'react';
 

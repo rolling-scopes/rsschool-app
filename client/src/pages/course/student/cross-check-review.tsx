@@ -11,7 +11,7 @@ import { CourseTaskSelect } from '@client/shared/components/Forms';
 import MarkdownInput from '@client/shared/components/Forms/MarkdownInput';
 import { markdownLabel } from '@client/shared/components/Forms/PreparedComment';
 import { PageLayout } from '@client/shared/components/PageLayout';
-import { useLoading } from 'components/useLoading';
+import { useLoading } from '@client/components/useLoading';
 import { UserSearch } from '@client/shared/components/UserSearch';
 import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 import {
@@ -24,10 +24,10 @@ import { TaskType } from '@client/modules/CrossCheck/constants';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { useAsync, useLocalStorage } from 'react-use';
-import { CourseService } from 'services/course';
-import { CourseRole } from 'services/models';
+import { CourseService } from '@client/services/course';
+import { CourseRole } from '@client/services/models';
 import { getQueryString } from '@client/shared/utils/queryParams-utils';
-import { useMessage } from 'hooks';
+import { useMessage } from '@client/hooks';
 
 enum LocalStorage {
   IsUsernameVisible = 'crossCheckIsUsernameVisible',

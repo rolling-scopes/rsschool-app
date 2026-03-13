@@ -1,7 +1,7 @@
 import { Button, Card, Col, Row, Typography } from 'antd';
 import Icon from '@ant-design/icons';
 import type { CustomIconComponentProps } from '@ant-design/icons/lib/components/Icon';
-import { SlothImage } from 'components/SlothImage';
+import { SlothImage } from '@client/components/SlothImage';
 import { SUCCESS_TEXT } from '@client/modules/Registry/constants';
 
 type Props = {

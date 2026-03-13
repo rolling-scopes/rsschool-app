@@ -1,6 +1,6 @@
 import { CourseDto } from '@client/api';
 import { CourseIcon } from '@client/shared/components/Icons';
-import { formatMonthFriendly } from 'services/formatter';
+import { formatMonthFriendly } from '@client/services/formatter';
 import { LABELS } from '@client/modules/Registry/constants';
 
 type Props = {

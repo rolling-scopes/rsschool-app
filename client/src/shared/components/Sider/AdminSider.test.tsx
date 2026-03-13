@@ -1,9 +1,9 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { AdminSider } from './AdminSider';
 import { SessionContext } from '@client/modules/Course/contexts';
-import { Course } from 'services/models';
+import { Course } from '@client/services/models';
 import { useLocalStorage } from 'react-use';
-import { Session } from 'components/withSession';
+import { Session } from '@client/components/withSession';
 import { getAdminMenuItems, getCourseManagementMenuItems } from './data/menuItems';
 import router from 'next/router';
 

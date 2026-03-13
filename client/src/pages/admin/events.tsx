@@ -1,5 +1,5 @@
 import { SessionProvider } from '@client/modules/Course/contexts';
-import { CourseRole } from 'services/models';
+import { CourseRole } from '@client/services/models';
 import { EventsAdminPage } from '@client/modules/EventsAdmin';
 
 export default function () {

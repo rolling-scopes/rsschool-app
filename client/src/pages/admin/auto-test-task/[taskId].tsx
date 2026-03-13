@@ -6,7 +6,7 @@ import { Question } from '@client/modules/AutoTest/components';
 import { SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { CourseRole } from 'services/models';
+import { CourseRole } from '@client/services/models';
 
 const api = new AutoTestsApi();
 

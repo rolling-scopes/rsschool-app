@@ -1,6 +1,6 @@
 import { CourseTaskDetailedDto } from '@client/api';
 import dayjs from 'dayjs';
-import { SelfEducationPublicAttributes, Verification } from 'services/course';
+import { SelfEducationPublicAttributes, Verification } from '@client/services/course';
 import { CourseTaskState, CourseTaskStatus, CourseTaskVerifications } from '../types';
 
 function getState(courseTask: CourseTaskDetailedDto, verifications: Verification[]): CourseTaskState {

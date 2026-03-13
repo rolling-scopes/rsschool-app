@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { Form } from 'antd';
 import { UpdateUserDtoLanguagesEnum } from '@client/api';
 import { LABELS } from '@client/modules/Registry/constants';
-import { Course } from 'services/models';
+import { Course } from '@client/services/models';
 import { AdditionalInfo } from './AdditionalInfo';
 
 const courses = [

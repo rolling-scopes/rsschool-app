@@ -1,7 +1,7 @@
 import { Space } from 'antd';
 import { ReactNode } from 'react';
 import { Status } from '.';
-import { CountBadge } from 'components/CountBadge';
+import { CountBadge } from '@client/components/CountBadge';
 import { TASKS_STATUSES } from '@client/modules/Mentor/constants';
 
 type TabItem = {

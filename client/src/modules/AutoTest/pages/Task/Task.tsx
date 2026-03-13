@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { CoursePageProps } from 'services/models';
+import { CoursePageProps } from '@client/services/models';
 import { CourseTaskDetailedDto } from '@client/api';
 import { PageLayout } from '@client/shared/components/PageLayout';
 import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';

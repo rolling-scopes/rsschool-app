@@ -1,13 +1,13 @@
 import { Col, Row, Button, Typography, Space, Popconfirm } from 'antd';
 import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 import GithubFilled from '@ant-design/icons/GithubFilled';
-import { DecisionTag, getInterviewFeedbackUrl, InterviewStatus } from 'domain/interview';
-import { CourseService, MentorInterview } from 'services/course';
+import { DecisionTag, getInterviewFeedbackUrl, InterviewStatus } from '@client/domain/interview';
+import { CourseService, MentorInterview } from '@client/services/course';
 import { useState } from 'react';
 import styles from './StudentInterview.module.css';
 import { CloseCircleOutlined } from '@ant-design/icons';
 import { TaskDtoTypeEnum } from '@client/api';
-import { useMessage } from 'hooks';
+import { useMessage } from '@client/hooks';
 
 export function StudentInterview(props: {
   interview: MentorInterview;

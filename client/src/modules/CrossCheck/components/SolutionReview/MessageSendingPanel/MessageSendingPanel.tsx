@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect, KeyboardEvent } from 'react';
 import { MessageFilled, SendOutlined } from '@ant-design/icons';
 import { Button, Col, Form, Input, InputRef, Row, Typography } from 'antd';
-import { Comment } from 'components/Comment';
+import { Comment } from '@client/components/Comment';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { CrossCheckMessageAuthor } from 'services/course';
+import { CrossCheckMessageAuthor } from '@client/services/course';
 import { UserAvatar } from '../UserAvatar';
 import { CrossCheckMessageDtoRoleEnum } from '@client/api';
 

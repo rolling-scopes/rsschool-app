@@ -4,11 +4,11 @@ import { PageLayout, PageLayoutSimple } from '@client/shared/components/PageLayo
 import { useRouter } from 'next/router';
 import { useContext, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService } from 'services/course';
-import { CoursesService } from 'services/courses';
-import { MentorRegistryService, MentorResponse } from 'services/mentorRegistry';
-import { Warning } from 'components/Warning';
-import { MentorOptions } from 'components/MentorOptions';
+import { CourseService } from '@client/services/course';
+import { CoursesService } from '@client/services/courses';
+import { MentorRegistryService, MentorResponse } from '@client/services/mentorRegistry';
+import { Warning } from '@client/components/Warning';
+import { MentorOptions } from '@client/components/MentorOptions';
 import { SessionContext, SessionProvider } from '@client/modules/Course/contexts';
 import { LoadingScreen } from '@client/shared/components/LoadingScreen';
 import { useAsyncEffect } from 'ahooks';

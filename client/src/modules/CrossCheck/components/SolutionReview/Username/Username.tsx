@@ -1,5 +1,5 @@
 import { Typography } from 'antd';
-import { CrossCheckMessageAuthor } from 'services/course';
+import { CrossCheckMessageAuthor } from '@client/services/course';
 import { GithubUserLink } from '@client/shared/components/GithubUserLink';
 import { CrossCheckMessageDtoRoleEnum } from '@client/api';
 

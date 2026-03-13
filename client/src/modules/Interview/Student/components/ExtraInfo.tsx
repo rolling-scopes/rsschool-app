@@ -1,7 +1,7 @@
 import { CheckCircleOutlined } from '@ant-design/icons';
 import { Button, Tag } from 'antd';
-import { formatShortDate } from 'services/formatter';
-import { isRegistrationNotStarted } from 'domain/interview';
+import { formatShortDate } from '@client/services/formatter';
+import { isRegistrationNotStarted } from '@client/domain/interview';
 
 export const ExtraInfo = ({
   id,

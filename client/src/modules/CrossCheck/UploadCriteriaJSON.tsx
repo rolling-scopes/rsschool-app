@@ -2,9 +2,9 @@ import { Button, Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload';
 import { CriteriaDto } from '@client/api';
-import { CrossCheckCriteriaType } from 'services/course';
+import { CrossCheckCriteriaType } from '@client/services/course';
 import { TaskType } from './constants';
-import { useMessage } from 'hooks';
+import { useMessage } from '@client/hooks';
 
 interface IUploadCriteriaJSON {
   onLoad: (data: CriteriaDto[]) => void;

@@ -1,7 +1,7 @@
 import { Table, Typography } from 'antd';
 import { stringSorter } from '@client/shared/components/Table';
 import { DiscordServerDto } from '@client/api';
-import { CustomPopconfirm } from 'components/common/CustomPopconfirm';
+import { CustomPopconfirm } from '@client/components/common/CustomPopconfirm';
 
 type Props = {
   data: DiscordServerDto[];

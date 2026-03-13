@@ -2,7 +2,7 @@ import { Form, Input, Typography } from 'antd';
 import { Dispatch, SetStateAction } from 'react';
 import { Location } from '@common/models';
 import { DataProcessingCheckbox, FormButtons, FormCard } from '@client/modules/Registry/components';
-import { emailPattern, englishNamePattern, epamEmailPattern } from 'services/validators';
+import { emailPattern, englishNamePattern, epamEmailPattern } from '@client/services/validators';
 import {
   CARD_TITLES,
   ERROR_MESSAGES,

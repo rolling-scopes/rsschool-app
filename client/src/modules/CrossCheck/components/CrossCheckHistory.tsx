@@ -6,7 +6,7 @@ import { markdownLabel } from '@client/shared/components/Forms/PreparedComment';
 import { SolutionReview } from '@client/modules/CrossCheck/components/SolutionReview';
 import { SolutionReviewSettingsPanel } from '@client/modules/CrossCheck/components/SolutionReviewSettingsPanel';
 import { CrossCheckMessageDtoRoleEnum, CrossCheckSolutionReviewDto } from '@client/api';
-import { useMessage } from 'hooks';
+import { useMessage } from '@client/hooks';
 
 type CrossCheckHistoryState = {
   loading: boolean;

@@ -8,7 +8,7 @@ import useWindowDimensions from '@client/shared/hooks/useWindowDimensions';
 import { useState, useEffect } from 'react';
 import type { LayoutType } from './HeroesRadarTab';
 import { getTableWidth } from '@client/modules/Score/components/ScoreTable';
-import heroesBadges from 'configs/heroes-badges';
+import heroesBadges from '@client/configs/heroes-badges';
 
 interface HeroesRadarTableProps {
   heroes: HeroesRadarDto;

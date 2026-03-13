@@ -1,10 +1,10 @@
 import { Col, Row, Typography, Rate, Input, Avatar, Card } from 'antd';
-import { Comment } from 'components/Comment';
+import { Comment } from '@client/components/Comment';
 import { useCallback } from 'react';
 import { FrownTwoTone, MehTwoTone, SmileTwoTone } from '@ant-design/icons';
 import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 
-import { CrossCheckCriteria, CrossCheckComment } from 'services/course';
+import { CrossCheckCriteria, CrossCheckComment } from '@client/services/course';
 
 function RateIcon({ index, value }: { index: number; value: number }) {
   const color = index + 1 <= value ? colors[index] : '#aaa';

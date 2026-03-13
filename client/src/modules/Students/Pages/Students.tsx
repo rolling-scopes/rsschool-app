@@ -3,7 +3,7 @@ import { FilterValue } from 'antd/es/table/interface';
 import { StudentsApi, UserStudentDto } from '@client/api';
 import { IPaginationInfo } from '@client/shared/utils/pagination';
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
-import { useLoading } from 'components/useLoading';
+import { useLoading } from '@client/components/useLoading';
 import { useState } from 'react';
 import { useAsync } from 'react-use';
 import StudentsTable from '../components/StudentsTable';

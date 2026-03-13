@@ -6,7 +6,7 @@ import { useMemo, useContext } from 'react';
 import { useLocalStorage } from 'react-use';
 import { getAdminMenuItems, getCourseManagementMenuItems } from './data/menuItems';
 import { SessionContext } from '@client/modules/Course/contexts';
-import { Course } from 'services/models';
+import { Course } from '@client/services/models';
 import { useActiveCourse } from '@client/modules/Home/hooks/useActiveCourse';
 const { Sider } = Layout;
 

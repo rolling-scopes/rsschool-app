@@ -1,7 +1,7 @@
 import { Form, Input, Select } from 'antd';
 import { ModalForm } from '@client/shared/components/Forms';
 import { EventDto, DisciplineDto } from '@client/api';
-import { EVENT_TYPES } from 'data/eventTypes';
+import { EVENT_TYPES } from '@client/data/eventTypes';
 
 type Props = {
   data: Partial<EventDto> | null;

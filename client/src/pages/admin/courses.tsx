@@ -3,14 +3,14 @@ import { Button, Layout, Table } from 'antd';
 import { CoursesApi, DisciplinesApi, DiscordServersApi } from '@client/api';
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import { boolIconRenderer, dateUtcRenderer, stringSorter, stringTrimRenderer } from '@client/shared/components/Table';
-import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
+import { DEFAULT_COURSE_ICONS } from '@client/configs/course-icons';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { isCourseManager } from 'domain/user';
+import { isCourseManager } from '@client/domain/user';
 import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { CourseModal } from '@client/modules/CourseManagement/components/CourseModal';
 import { useContext, useState } from 'react';
-import { Course, CourseRole } from 'services/models';
+import { Course, CourseRole } from '@client/services/models';
 import { PublicSvgIcon } from '@client/shared/components/Icons';
 
 dayjs.extend(utc);

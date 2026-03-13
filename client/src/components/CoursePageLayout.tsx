@@ -1,5 +1,5 @@
 import { Layout, Spin, theme } from 'antd';
-import { Course } from 'services/models';
+import { Course } from '@client/services/models';
 import { CourseNoAccess } from '../modules/Course/components/CourseNoAccess';
 import { Header } from '@client/shared/components/Header';
 import { ReactNode } from 'react';

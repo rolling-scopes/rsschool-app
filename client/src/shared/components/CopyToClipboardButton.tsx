@@ -1,6 +1,6 @@
 import { Button, ButtonProps } from 'antd';
 import { useCopyToClipboard } from 'react-use';
-import { useMessage } from 'hooks';
+import { useMessage } from '@client/hooks';
 import { CopyOutlined } from '@ant-design/icons';
 
 type Props = {

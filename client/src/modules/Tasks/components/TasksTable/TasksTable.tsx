@@ -8,7 +8,7 @@ import {
   tagsCoursesRendererWithRemainingNumber,
   boolIconRenderer,
 } from '@client/shared/components/Table';
-import { TASK_TYPES } from 'data/taskTypes';
+import { TASK_TYPES } from '@client/data/taskTypes';
 import { uniqBy } from 'lodash';
 import { ColumnName } from '@client/modules/Tasks/types';
 import { useMemo } from 'react';

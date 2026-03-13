@@ -1,5 +1,5 @@
 import { TaskDto, TaskDtoTypeEnum } from '@client/api';
-import { TASK_TYPES } from 'data/taskTypes';
+import { TASK_TYPES } from '@client/data/taskTypes';
 
 export const COURSE_NAME_MOCK = 'RS2023';
 

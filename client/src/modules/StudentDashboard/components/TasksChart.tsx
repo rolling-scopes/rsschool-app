@@ -1,6 +1,6 @@
 import { Pie, PieConfig } from '@ant-design/plots';
 import { getTaskStatusColor } from '@client/modules/Schedule';
-import { CourseScheduleItemDtoStatusEnum } from 'api';
+import { CourseScheduleItemDtoStatusEnum } from '@client/api';
 import { useMemo } from 'react';
 import capitalize from 'lodash/capitalize';
 

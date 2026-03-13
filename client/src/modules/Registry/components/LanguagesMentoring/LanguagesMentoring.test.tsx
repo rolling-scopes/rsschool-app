@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { Form } from 'antd';
 import { UpdateUserDtoLanguagesEnum } from '@client/api';
-import { getLanguageName } from 'components/SelectLanguages';
+import { getLanguageName } from '@client/components/SelectLanguages';
 import { LABELS } from '@client/modules/Registry/constants';
 import { LanguagesMentoring } from './LanguagesMentoring';
 

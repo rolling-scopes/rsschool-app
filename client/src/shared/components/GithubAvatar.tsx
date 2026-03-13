@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Avatar } from 'antd';
-import { CDN_AVATARS_URL } from 'configs/cdn';
+import { CDN_AVATARS_URL } from '@client/configs/cdn';
 
 type Props = {
   githubId?: string;

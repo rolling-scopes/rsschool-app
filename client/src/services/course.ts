@@ -21,9 +21,9 @@ import {
   CoursesInterviewsApi,
   MentorDetailsDtoStudentsPreferenceEnum,
 } from '@client/api';
-import { optionalQueryString } from 'utils/optionalQueryString';
-import { Decision } from 'data/interviews/technical-screening';
-import { InterviewStatus } from 'domain/interview';
+import { optionalQueryString } from '@client/utils/optionalQueryString';
+import { Decision } from '@client/data/interviews/technical-screening';
+import { InterviewStatus } from '@client/domain/interview';
 
 export type CrossCheckCriteriaType = 'title' | 'subtask' | 'penalty';
 

@@ -2,13 +2,13 @@ import { Alert, Checkbox, Form, Select, Space, Spin } from 'antd';
 import { useAsync } from 'react-use';
 import { InviteMentorsDto } from '@client/api';
 import { ModalForm } from '@client/shared/components/Forms';
-import { useLoading } from 'components/useLoading';
+import { useLoading } from '@client/components/useLoading';
 import ReactQuill from 'react-quill';
-import { MentorRegistryService } from 'services/mentorRegistry';
+import { MentorRegistryService } from '@client/services/mentorRegistry';
 import { DisciplinesApi } from '@client/api';
 
 import 'react-quill/dist/quill.snow.css';
-import { useMessage } from 'hooks';
+import { useMessage } from '@client/hooks';
 
 type Props = {
   onCancel: () => void;

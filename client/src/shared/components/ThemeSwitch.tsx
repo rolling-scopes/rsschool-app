@@ -1,5 +1,5 @@
 import { Dropdown, Flex, MenuProps, theme as antTheme } from 'antd';
-import { useTheme } from 'hooks';
+import { useTheme } from '@client/hooks';
 import { AppTheme } from '@client/providers';
 import { MoonOutlined, SkinOutlined, SunOutlined } from '@ant-design/icons';
 import NonTouchTooltip from '@client/shared/components/NonTouchTooltip';

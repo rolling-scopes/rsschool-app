@@ -5,27 +5,27 @@ import { dynamicWithSkeleton } from '@client/utils/dynamicWithSkeleton';
 import { ProfileApi, UpdateProfileInfoDto, UpdateUserDtoLanguagesEnum } from '@client/api';
 import { Header } from '@client/shared/components/Header';
 import { LoadingScreen } from '@client/shared/components/LoadingScreen';
-import { withGoogleMaps } from 'components/withGoogleMaps';
+import { withGoogleMaps } from '@client/components/withGoogleMaps';
 import { NotificationChannel, NotificationsService } from '@client/modules/Notifications/services/notifications';
-import { ProfileInfo, ProfileMainCardData, UserService } from 'services/user';
+import { ProfileInfo, ProfileMainCardData, UserService } from '@client/services/user';
 import { SessionContext, SessionProvider } from '@client/modules/Course/contexts';
 import { useAsync } from 'react-use';
-import { checkIsProfileOwner, getStudentCoreJSInterviews } from 'utils/profilePageUtils';
-import { useMessage } from 'hooks';
+import { checkIsProfileOwner, getStudentCoreJSInterviews } from '@client/utils/profilePageUtils';
+import { useMessage } from '@client/hooks';
 import Masonry from 'react-masonry-css';
 import styles from './index.module.css';
 
-const MainCard = dynamicWithSkeleton(() => import('components/Profile/MainCard'));
-const AboutCard = dynamicWithSkeleton(() => import('components/Profile/AboutCard'));
-const DiscordCard = dynamicWithSkeleton(() => import('components/Profile/DiscordCard'));
-const EducationCard = dynamicWithSkeleton(() => import('components/Profile/EducationCard'));
-const ContactsCard = dynamicWithSkeleton(() => import('components/Profile/ContactsCard'));
-const PublicFeedbackCard = dynamicWithSkeleton(() => import('components/Profile/PublicFeedbackCard'));
-const StudentStatsCard = dynamicWithSkeleton(() => import('components/Profile/StudentStatsCard'));
+const MainCard = dynamicWithSkeleton(() => import('@client/components/Profile/MainCard'));
+const AboutCard = dynamicWithSkeleton(() => import('@client/components/Profile/AboutCard'));
+const DiscordCard = dynamicWithSkeleton(() => import('@client/components/Profile/DiscordCard'));
+const EducationCard = dynamicWithSkeleton(() => import('@client/components/Profile/EducationCard'));
+const ContactsCard = dynamicWithSkeleton(() => import('@client/components/Profile/ContactsCard'));
+const PublicFeedbackCard = dynamicWithSkeleton(() => import('@client/components/Profile/PublicFeedbackCard'));
+const StudentStatsCard = dynamicWithSkeleton(() => import('@client/components/Profile/StudentStatsCard'));
 const MentorStatsCard = dynamicWithSkeleton(() =>
-  import('components/Profile/MentorStatsCard').then(m => m.MentorStatsCard),
+  import('@client/components/Profile/MentorStatsCard').then(m => m.MentorStatsCard),
 );
-const LanguagesCard = dynamicWithSkeleton(() => import('components/Profile/LanguagesCard'));
+const LanguagesCard = dynamicWithSkeleton(() => import('@client/components/Profile/LanguagesCard'));
 const InterviewCard = dynamicWithSkeleton(() => import('@client/components/Profile/InterviewCard'));
 
 type ConnectionValue = {

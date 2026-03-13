@@ -1,4 +1,4 @@
-import { ModalFormMode } from 'hooks';
+import { ModalFormMode } from '@client/hooks';
 
 const LABELS = {
   name: 'Task name',

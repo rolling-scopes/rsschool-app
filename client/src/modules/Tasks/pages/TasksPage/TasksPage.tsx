@@ -11,7 +11,7 @@ import {
   TasksCriteriaApi,
 } from '@client/api';
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
-import { useModalForm } from 'hooks';
+import { useModalForm } from '@client/hooks';
 import { useActiveCourseContext } from '@client/modules/Course/contexts';
 import { TasksTable, TaskModal } from '@client/modules/Tasks/components';
 import { FormValues } from '@client/modules/Tasks/types';

@@ -1,7 +1,7 @@
 import { Button, Layout, message } from 'antd';
 import { PromptDto, PromptsApi } from '@client/api';
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
-import { useModalForm } from 'hooks';
+import { useModalForm } from '@client/hooks';
 import { useActiveCourseContext } from '@client/modules/Course/contexts';
 import { useCallback, useState } from 'react';
 import { useAsync } from 'react-use';

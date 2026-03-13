@@ -9,12 +9,12 @@ import {
 import { Button, Card, Col, Empty, Row, Statistic, Typography } from 'antd';
 import { GithubUserLink } from '@client/shared/components/GithubUserLink';
 import { PageLayoutSimple } from '@client/shared/components/PageLayout';
-import { getMentorId } from 'domain/user';
+import { getMentorId } from '@client/domain/user';
 import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { useMentorStudents } from '@client/modules/Mentor/hooks/useMentorStudents';
 import Link from 'next/link';
 import { useContext } from 'react';
-import * as routes from 'services/routes';
+import * as routes from '@client/services/routes';
 
 export function Students() {
   const session = useContext(SessionContext);
