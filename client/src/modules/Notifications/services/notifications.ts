@@ -6,14 +6,11 @@ import {
   UpdateNotificationUserSettingsDto,
   UsersNotificationsApi,
 } from 'api';
-import axiosFactory from 'axios';
-import { getApiConfiguration, getServerAxiosProps } from 'utils/axios';
 
 export class NotificationsService {
   constructor(
-    private axios = axiosFactory.create(getServerAxiosProps()),
-    private notificationsApi = new NotificationsApi(getApiConfiguration()),
-    private usersApi = new UsersNotificationsApi(getApiConfiguration()),
+    private notificationsApi = new NotificationsApi(),
+    private usersApi = new UsersNotificationsApi(),
   ) {}
 
   // System notifications settings
@@ -48,14 +45,6 @@ export class NotificationsService {
   async getUserConnections() {
     const { data } = await this.usersApi.getUserNotificationConnections();
     return data.connections;
-  }
-
-  // messenger
-  async sendMessage(channel: NotificationChannel, payload: MessagePayload) {
-    await this.axios.post('/api/v2/notification/send', {
-      payload,
-      channel,
-    });
   }
 }
 

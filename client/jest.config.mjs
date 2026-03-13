@@ -39,6 +39,7 @@ export default async () => {
       '^@client/hooks$': '<rootDir>/__mocks__/hooks',
       '^@client/(.*)$': '<rootDir>/$1',
       '^@common/(.*)$': '<rootDir>/../../common/$1',
+      '^next/config$': '<rootDir>/__mocks__/next/config',
     },
     testTimeout: 30000,
   })();

@@ -1,5 +1,5 @@
 import { Col, Form, message, Row, Typography } from 'antd';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ModalSubmitForm } from 'components/Forms/ModalSubmitForm';
 import { MentorReviewAssignDto, MentorReviewDto, MentorReviewsApi } from 'api';
 import isEmpty from 'lodash/isEmpty';

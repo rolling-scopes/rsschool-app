@@ -13,7 +13,7 @@
     "allowJs": true,
     "declaration": false,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "target": "ES2015",
     "module": "CommonJS",
     "moduleResolution": "node",
@@ -27,6 +27,6 @@
     },
     "incremental": true
   },
-  "include": ["./next-env.d.ts", "./src/**/*.ts", "./src/**/*.tsx"],
+  "include": ["./next-env.d.ts", "./lambda/**/*.ts", "./src/**/*.ts", "./src/**/*.tsx"],
   "exclude": ["./node_modules"]
 }

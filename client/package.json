@@ -9,12 +9,11 @@
   "scripts": {
     "start": "next dev",
     "build": "next build",
-    "build:analyze": "ANALYZE=1 next build",
     "compile": "tsc -p tsconfig.json --noEmit",
     "prod": "next start -p 8080",
     "lint": "eslint src",
     "test": "jest --silent",
-    "test:ci": "jest --ci --silent",
+    "test:ci": "jest --ci --reporters=default --reporters=jest-junit --silent",
     "test:watch": "jest --watch",
     "test:e2e": "npx playwright test",
     "coverage": "jest --coverage"
@@ -29,38 +28,41 @@
     "@dnd-kit/utilities": "^3.2.2",
     "ahooks": "3.8.4",
     "antd": "6.3.1",
+    "clsx": "2.1.1",
     "cookie": "0.7.0",
     "csvtojson": "2.0.10",
-    "next": "13.4.3",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "next": "^16.1.6",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
     "react-markdown": "8.0.7",
     "react-masonry-css": "1.0.16",
     "react-quill": "2.0.0",
     "react-use": "17.4.0",
     "remark-gfm": "3.0.1",
-    "clsx": "2.1.1",
     "use-places-autocomplete": "4.0.1"
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "13.4.3",
     "@playwright/test": "1.49.1",
     "@testing-library/jest-dom": "6.1.4",
     "@testing-library/react": "14.1.2",
     "@testing-library/user-event": "14.5.1",
     "@types/aws-lambda": "8.10.126",
     "@types/cookie": "0.5.4",
-    "@types/react": "18.2.37",
-    "@types/react-dom": "18.2.15",
+    "@types/react": "18.3.18",
+    "@types/react-dom": "18.3.5",
     "eslint-plugin-testing-library": "7.16.0",
     "jest-environment-jsdom": "30.2.0",
+    "jest-junit": "16.0.0",
     "jest-mock-axios": "4.9.0",
-    "mq-polyfill": "1.1.8",
-    "nextjs-bundle-analysis": "0.4.0"
+    "mq-polyfill": "1.1.8"
   },
   "nextBundleAnalysis": {
     "budget": 512000,
     "budgetPercentIncreaseRed": 5,
     "showDetails": true
+  },
+  "jest-junit": {
+    "outputDirectory": "../reports",
+    "outputName": "jest-junit-client.xml"
   }
 }

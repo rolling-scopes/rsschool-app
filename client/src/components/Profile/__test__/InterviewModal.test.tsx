@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen, within } from '@testing-library/react';
 import InterviewModal from '../InterviewModal';
 import { CoreJsInterviewFeedback, LegacyFeedback, StageInterviewDetailedFeedback } from '@common/models/profile';

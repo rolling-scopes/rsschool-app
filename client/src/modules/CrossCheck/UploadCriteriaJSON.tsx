@@ -1,6 +1,5 @@
 import { Button, Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import React from 'react';
 import { UploadChangeParam, UploadFile } from 'antd/lib/upload';
 import { CriteriaDto } from 'api';
 import { CrossCheckCriteriaType } from 'services/course';

@@ -1,5 +1,5 @@
 import { Select } from 'antd';
-import React, { CSSProperties } from 'react';
+import { CSSProperties } from 'react';
 import { Course } from 'services/models';
 import { CourseIcon } from 'components/Icons/CourseIcon';
 

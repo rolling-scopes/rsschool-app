@@ -1,5 +1,5 @@
 import { Button, Form, Input, InputNumber } from 'antd';
-import React, { ChangeEventHandler, useMemo, useState } from 'react';
+import { ChangeEventHandler, useMemo, useState } from 'react';
 import { CrossCheckCriteriaType, IAddCriteriaForCrossCheck } from 'services/course';
 import { CriteriaTypeSelect } from './CriteriaTypeSelect';
 import { TaskType } from './constants';

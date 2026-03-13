@@ -1,5 +1,5 @@
 import { Col, Form, Row, Typography } from 'antd';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ModalSubmitForm } from 'components/Forms/ModalSubmitForm';
 import { ScoreInput } from 'components/Forms';
 import { MentorDashboardDto } from 'api';

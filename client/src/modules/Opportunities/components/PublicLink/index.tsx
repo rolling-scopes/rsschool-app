@@ -1,6 +1,5 @@
 import { CopyOutlined } from '@ant-design/icons';
 import { Alert, Button, notification } from 'antd';
-import React from 'react';
 import { useCopyToClipboard } from 'react-use';
 
 type Props = {

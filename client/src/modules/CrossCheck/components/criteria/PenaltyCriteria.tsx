@@ -1,4 +1,3 @@
-import React from 'react';
 import { Radio, RadioChangeEvent, theme, Typography } from 'antd';
 import { CrossCheckCriteriaDataDto } from 'api';
 

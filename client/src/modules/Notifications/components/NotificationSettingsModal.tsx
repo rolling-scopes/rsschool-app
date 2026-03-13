@@ -1,7 +1,6 @@
 import { Form, Input, Select, Checkbox, Tabs } from 'antd';
 import { NotificationDto, NotificationType } from 'api';
 import { ModalForm } from 'components/Forms';
-import React from 'react';
 import { NotificationTemlate } from '../services/notifications';
 import styles from './NotificationSettingsModal.module.css';
 
