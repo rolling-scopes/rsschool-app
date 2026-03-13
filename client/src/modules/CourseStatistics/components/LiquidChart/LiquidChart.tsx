@@ -17,14 +17,14 @@ function LiquidChart({ count, total, color = Colors.Blue, background }: Props) {
       background: background || token.colorBgContainer,
     },
     percent: percent,
-    outline: {
-      border: 4,
-      distance: 8,
+    style: {
+      fill: color,
+      outlineBorder: 4,
+      outlineDistance: 8,
+      outlineStroke: color,
+      waveLength: 128,
+      contentText: `${(percent * 100).toFixed(2)}%`,
     },
-    wave: {
-      length: 128,
-    },
-    color: () => color,
   };
   return <Liquid {...config} />;
 }

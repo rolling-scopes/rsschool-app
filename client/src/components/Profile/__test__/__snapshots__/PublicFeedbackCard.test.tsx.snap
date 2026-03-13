@@ -3,7 +3,7 @@
 exports[`PublicFeedbackCard should render correctly 1`] = `
 <div>
   <div
-    class="ant-card ant-card-bordered css-dev-only-do-not-override-1v2lwm6"
+    class="ant-card ant-card-bordered css-dev-only-do-not-override-1enej14 css-var-root"
   >
     <div
       class="ant-card-head"
@@ -15,7 +15,7 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
           class="ant-card-head-title"
         >
           <h2
-            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-1v2lwm6"
+            class="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line css-dev-only-do-not-override-1enej14 css-var-root"
             style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
             <span>
@@ -52,7 +52,7 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
         style="margin-bottom: 20px;"
       >
         <span
-          class="ant-typography css-dev-only-do-not-override-1v2lwm6"
+          class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
         >
           <strong>
             Total badges:
@@ -68,11 +68,11 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
           style="margin: 5px; display: inline-block;"
         >
           <span
-            class="ant-badge css-dev-only-do-not-override-1v2lwm6"
+            class="ant-badge css-dev-only-do-not-override-1enej14 css-var-root"
           >
             <span
-              class="ant-avatar ant-avatar-circle ant-avatar-image css-dev-only-do-not-override-1v2lwm6"
-              style="width: 48px; height: 48px; line-height: 48px; font-size: 18px;"
+              class="ant-avatar ant-avatar-circle ant-avatar-image css-var-root ant-avatar-css-var css-dev-only-do-not-override-1enej14"
+              style="width: 48px; height: 48px; font-size: 18px;"
             >
               <img
                 alt="Congratulations badge"
@@ -103,11 +103,11 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
           style="margin: 5px; display: inline-block;"
         >
           <span
-            class="ant-badge css-dev-only-do-not-override-1v2lwm6"
+            class="ant-badge css-dev-only-do-not-override-1enej14 css-var-root"
           >
             <span
-              class="ant-avatar ant-avatar-circle ant-avatar-image css-dev-only-do-not-override-1v2lwm6"
-              style="width: 48px; height: 48px; line-height: 48px; font-size: 18px;"
+              class="ant-avatar ant-avatar-circle ant-avatar-image css-var-root ant-avatar-css-var css-dev-only-do-not-override-1enej14"
+              style="width: 48px; height: 48px; font-size: 18px;"
             >
               <img
                 alt="Great_speaker badge"
@@ -138,11 +138,11 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
           style="margin: 5px; display: inline-block;"
         >
           <span
-            class="ant-badge css-dev-only-do-not-override-1v2lwm6"
+            class="ant-badge css-dev-only-do-not-override-1enej14 css-var-root"
           >
             <span
-              class="ant-avatar ant-avatar-circle ant-avatar-image css-dev-only-do-not-override-1v2lwm6"
-              style="width: 48px; height: 48px; line-height: 48px; font-size: 18px;"
+              class="ant-avatar ant-avatar-circle ant-avatar-image css-var-root ant-avatar-css-var css-dev-only-do-not-override-1enej14"
+              style="width: 48px; height: 48px; font-size: 18px;"
             >
               <img
                 alt="Thank_you badge"
@@ -174,7 +174,7 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
         style="margin-bottom: 0px;"
       >
         <span
-          class="ant-typography css-dev-only-do-not-override-1v2lwm6"
+          class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
         >
           <strong>
             Last feedback:
@@ -182,85 +182,58 @@ exports[`PublicFeedbackCard should render correctly 1`] = `
         </span>
       </div>
       <div
-        class="ant-comment css-dev-only-do-not-override-1v2lwm6"
+        style="display: flex; gap: 8px;"
       >
         <div
-          class="ant-comment-inner"
+          style="flex-shrink: 0;"
+        >
+          <span
+            class="ant-avatar ant-avatar-circle ant-avatar-image css-var-root ant-avatar-css-var css-dev-only-do-not-override-1enej14"
+            style="width: 48px; height: 48px; font-size: 18px;"
+          >
+            <img
+              src="https://cdn.rs.school/avatars/apetr.png?size=96"
+            />
+          </span>
+        </div>
+        <div
+          style="flex: 1 1 0%; min-width: 0;"
         >
           <div
-            class="ant-comment-avatar"
+            style="margin-bottom: 4px;"
           >
             <span
-              class="ant-avatar ant-avatar-circle ant-avatar-image css-dev-only-do-not-override-1v2lwm6"
-              style="width: 48px; height: 48px; line-height: 48px; font-size: 18px;"
+              style="font-weight: 500; margin-right: 8px;"
             >
-              <img
-                src="https://cdn.rs.school/avatars/apetr.png?size=96"
-              />
+              <a
+                href="/profile?githubId=apetr"
+              >
+                Anton Petrov
+              </a>
+            </span>
+            <span
+              style="color: rgba(0, 0, 0, 0.65); font-size: 12px;"
+            >
+              <span>
+                a month ago
+              </span>
             </span>
           </div>
-          <div
-            class="ant-comment-content"
-          >
-            <div
-              class="ant-comment-content-author"
+          <div>
+            <span
+              class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
+              style="font-size: 12px;"
             >
-              <span
-                class="ant-comment-content-author-name"
-              >
-                <a
-                  href="/profile?githubId=apetr"
-                >
-                  Anton Petrov
-                </a>
-              </span>
-              <span
-                class="ant-comment-content-author-time"
-              >
-                <span>
-                  a month ago
-                </span>
-              </span>
-            </div>
+              <strong>
+                Congratulations
+              </strong>
+            </span>
             <div
-              class="ant-comment-content-detail"
+              aria-label="Test"
+              class="ant-typography ant-typography-ellipsis css-dev-only-do-not-override-1enej14 css-var-root"
+              style=""
             >
-              <span
-                class="ant-typography css-dev-only-do-not-override-1v2lwm6"
-                style="font-size: 12px;"
-              >
-                <strong>
-                  Congratulations
-                </strong>
-              </span>
-              <div
-                aria-label="Test"
-                class="ant-typography ant-typography-ellipsis css-dev-only-do-not-override-1v2lwm6"
-              >
-                Test
-                <span
-                  aria-hidden="true"
-                  style="position: fixed; display: block; left: 0px; top: 0px; z-index: -9999; visibility: hidden; pointer-events: none; font-size: 0px; word-break: keep-all; white-space: nowrap;"
-                >
-                  lg
-                </span>
-                <span
-                  aria-hidden="true"
-                  style="position: fixed; display: block; left: 0px; top: 0px; z-index: -9999; visibility: hidden; pointer-events: none; font-size: 0px; width: 0px; white-space: normal; margin: 0px; padding: 0px;"
-                >
-                  <span
-                    aria-hidden="true"
-                  >
-                    ...
-                  </span>
-                  <a
-                    aria-label="Expand"
-                    class="ant-typography-expand"
-                  >
-                    Expand
-                  </a>
-                </span>
-              </div>
+              Test
             </div>
           </div>
         </div>

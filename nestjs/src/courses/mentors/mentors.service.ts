@@ -13,7 +13,7 @@ import { MentorBasic, MentorDetails } from '@common/models';
 
 import { PersonDto } from 'src/core/dto';
 import { MentorDashboardDto, SolutionItemStatus } from './dto/mentor-dashboard.dto';
-import * as dayjs from 'dayjs';
+import { addWeeks } from 'date-fns';
 import { TaskChecker, User } from '../../../../server/src/models';
 import { PreferredStudentsLocation } from '@entities/mentorRegistry';
 
@@ -138,7 +138,7 @@ export class MentorsService {
       solutionUrl: s.ts_url,
       taskDescriptionUrl: s.t_descriptionUrl,
       status: this.getStatus(s.s_mentorId, s.tr_score),
-      endDate: dayjs(s.ct_studentEndDate).add(2, 'w').toISOString(),
+      endDate: addWeeks(new Date(s.ct_studentEndDate), 2).toISOString(),
       person: new PersonDto({
         id: s.s_id,
         firstName: s.u_firstName,

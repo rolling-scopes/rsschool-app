@@ -4,8 +4,8 @@ import { ConfigService } from '../../config';
 import { Strategy, Profile } from 'passport-github2';
 import { AuthService, LoginStateParams } from '../auth.service';
 import { AuthUser, CurrentRequest } from '..';
+import { addHours } from 'date-fns';
 import passport from 'passport';
-import * as dayjs from 'dayjs';
 
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
@@ -33,7 +33,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
         data: {
           redirectUrl: url as string,
         },
-        expires: dayjs().add(1, 'hour').toISOString(),
+        expires: addHours(new Date(), 1).toISOString(),
       });
       opts.state = id;
     }

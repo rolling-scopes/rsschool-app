@@ -95,20 +95,11 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    const status =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
+    const status = exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    const message =
-      exception instanceof HttpException
-        ? exception.message
-        : 'Internal server error';
+    const message = exception instanceof HttpException ? exception.message : 'Internal server error';
 
-    this.logger.error(
-      `${request.method} ${request.url}`,
-      exception instanceof Error ? exception.stack : exception,
-    );
+    this.logger.error(`${request.method} ${request.url}`, exception instanceof Error ? exception.stack : exception);
 
     response.status(status).json({
       statusCode: status,
@@ -120,10 +111,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
 }
 
 // Register globally in main.ts
-app.useGlobalFilters(
-  new AllExceptionsFilter(app.get(Logger)),
-  new DomainExceptionFilter(),
-);
+app.useGlobalFilters(new AllExceptionsFilter(app.get(Logger)), new DomainExceptionFilter());
 
 // Or via module
 @Module({

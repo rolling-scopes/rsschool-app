@@ -3,13 +3,8 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import ical from 'ical-generator';
-import * as dayjs from 'dayjs';
-import * as utc from 'dayjs/plugin/utc';
-import * as timezone from 'dayjs/plugin/timezone';
+import { formatInTimeZone } from 'date-fns-tz';
 import { CourseScheduleItem, CourseScheduleItemTag } from './course-schedule.service';
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
 
 @Injectable()
 export class CourseICalendarService {
@@ -37,8 +32,8 @@ export class CourseICalendarService {
       const id = item.tag === CourseScheduleItemTag.CrossCheckReview ? `${item.id}-1` : item.id;
       const endDate = item.endDate || new Date(item.startDate.getTime() + 1000 * 60 * 60);
       icalData.createEvent({
-        start: dayjs.utc(item.startDate).tz(timezone).format('YYYY-MM-DDTHH:mm'),
-        end: dayjs.utc(endDate).tz(timezone).format('YYYY-MM-DDTHH:mm'),
+        start: formatInTimeZone(item.startDate, timezone, "yyyy-MM-dd'T'HH:mm"),
+        end: formatInTimeZone(endDate, timezone, "yyyy-MM-dd'T'HH:mm"),
         summary: item.name,
         description: this.buildDescription(item),
         id,

@@ -1,6 +1,6 @@
 import next from 'next/jest.js';
 
-// eslint-disable-next-line turbo/no-undeclared-env-vars, no-undef
+// eslint-disable-next-line turbo/no-undeclared-env-vars
 process.env.TZ = 'UTC';
 
 const esModules = [

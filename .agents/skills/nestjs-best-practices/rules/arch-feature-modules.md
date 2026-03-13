@@ -1,7 +1,7 @@
 ---
 title: Organize by Feature Modules
 impact: CRITICAL
-impactDescription: "3-5x faster onboarding and development"
+impactDescription: '3-5x faster onboarding and development'
 tags: architecture, modules, organization
 ---
 

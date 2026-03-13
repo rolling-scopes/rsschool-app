@@ -50,7 +50,7 @@ async function bootstrap() {
 
   // Handle graceful shutdown
   const signals = ['SIGTERM', 'SIGINT'];
-  signals.forEach((signal) => {
+  signals.forEach(signal => {
     process.on(signal, async () => {
       console.log(`Received ${signal}, starting graceful shutdown...`);
 
@@ -79,9 +79,7 @@ export class DatabaseService implements OnApplicationShutdown {
     console.log(`Database service shutting down on ${signal}`);
 
     // Close all connections gracefully
-    await Promise.all(
-      this.connections.map((conn) => conn.close()),
-    );
+    await Promise.all(this.connections.map(conn => conn.close()));
 
     console.log('All database connections closed');
   }
@@ -150,9 +148,7 @@ export class HealthController {
       throw new ServiceUnavailableException('Shutting down');
     }
 
-    return this.health.check([
-      () => this.db.pingCheck('database'),
-    ]);
+    return this.health.check([() => this.db.pingCheck('database')]);
   }
 }
 
@@ -203,15 +199,12 @@ export class RequestTracker implements NestMiddleware, OnApplicationShutdown {
 
     if (this.activeRequests > 0) {
       console.log(`Waiting for ${this.activeRequests} requests to complete`);
-      this.shutdownPromise = new Promise((resolve) => {
+      this.shutdownPromise = new Promise(resolve => {
         this.resolveShutdown = resolve;
       });
 
       // Wait with timeout
-      await Promise.race([
-        this.shutdownPromise,
-        new Promise((resolve) => setTimeout(resolve, 30000)),
-      ]);
+      await Promise.race([this.shutdownPromise, new Promise(resolve => setTimeout(resolve, 30000))]);
     }
 
     console.log('All requests completed');

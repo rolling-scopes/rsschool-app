@@ -3,6 +3,7 @@ import { CoursesService } from 'src/courses/courses.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '@entities/user';
 import { In, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
+import { isEqual, subHours } from 'date-fns';
 import { Course } from '@entities/course';
 import { Student } from '@entities/student';
 import { Mentor } from '@entities/mentor';
@@ -10,7 +11,6 @@ import { CourseUser } from '@entities/courseUser';
 import { History } from '@entities/history';
 import { CourseEvent } from '@entities/courseEvent';
 import { CourseTask } from '@entities/courseTask';
-import * as dayjs from 'dayjs';
 
 @Injectable()
 export class ScheduleService {
@@ -201,7 +201,7 @@ export class ScheduleService {
   }
 
   private async getScheduleUpdatedRecords(lastHours: number) {
-    const date = dayjs().subtract(lastHours, 'hours');
+    const date = subHours(new Date(), lastHours);
     const records = await this.historyRepository
       .createQueryBuilder('entry')
       .where({
@@ -296,7 +296,8 @@ export class ScheduleService {
 
   private isDateEqual(date1: string | Date | null, date2: string | Date | null) {
     if (!date1 && !date2) return true;
-    return dayjs(date1).isSame(dayjs(date2));
+    if (!date1 || !date2) return false;
+    return isEqual(new Date(date1 as string | Date), new Date(date2 as string | Date));
   }
 }
 

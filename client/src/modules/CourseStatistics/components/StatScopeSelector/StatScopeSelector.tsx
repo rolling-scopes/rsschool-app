@@ -1,10 +1,11 @@
 import { DatePicker, DatePickerProps, Flex, Space, Switch, SwitchProps } from 'antd';
+import type { Dayjs } from 'dayjs';
 import { StatScope } from '@client/modules/CourseStatistics/constants';
 import dayjs from 'dayjs';
 
 type StatScopeSelectorProps = {
   statScope: StatScope;
-  handleYearSelection: DatePickerProps['onChange'];
+  handleYearSelection: DatePickerProps<Dayjs>['onChange'];
   handleStatScope: SwitchProps['onChange'];
   selectedYear?: number;
 };

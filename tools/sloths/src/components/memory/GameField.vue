@@ -173,7 +173,7 @@ export default defineComponent({
     },
 
     startGame() {
-      const isAllClosed = this.cards.every((el) => !el.open);
+      const isAllClosed = this.cards.every(el => !el.open);
 
       if (!isAllClosed) {
         playAudio(audioFlip);
@@ -261,7 +261,7 @@ export default defineComponent({
     },
 
     isWin(): boolean {
-      return this.cards.every((el) => el.open);
+      return this.cards.every(el => el.open);
     },
 
     shuffleCards() {

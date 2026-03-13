@@ -24,15 +24,15 @@ export class SlothsService {
     });
     if (filter) {
       const filterTags = filter.split(',');
-      items = items.filter((sloth) => {
-        return sloth.tags.some((tag) => filterTags.includes(tag));
+      items = items.filter(sloth => {
+        return sloth.tags.some(tag => filterTags.includes(tag));
       });
     }
     if (searchText) {
       items = items.filter(
-        (sloth) =>
+        sloth =>
           sloth.name.toLowerCase().includes(searchText.toLowerCase()) ||
-          sloth.description.toLowerCase().includes(searchText.toLowerCase())
+          sloth.description.toLowerCase().includes(searchText.toLowerCase()),
       );
     }
 
@@ -46,11 +46,11 @@ export class SlothsService {
   }
 
   public getById(id: string) {
-    return this.data.find((sloth) => id === sloth.id);
+    return this.data.find(sloth => id === sloth.id);
   }
 
   public getTags() {
-    const allTags = this.data.flatMap((sloth) => sloth.tags);
+    const allTags = this.data.flatMap(sloth => sloth.tags);
     const uniqueTags = [...new Set(allTags)];
     return uniqueTags.sort();
   }

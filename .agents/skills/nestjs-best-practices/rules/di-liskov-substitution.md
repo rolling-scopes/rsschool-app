@@ -178,9 +178,7 @@ export class OrdersService {
 
 ```typescript
 // Shared test suite that any implementation must pass
-function testPaymentGatewayContract(
-  createGateway: () => PaymentGateway,
-) {
+function testPaymentGatewayContract(createGateway: () => PaymentGateway) {
   describe('PaymentGateway contract', () => {
     let gateway: PaymentGateway;
 
@@ -197,13 +195,11 @@ function testPaymentGatewayContract(
     });
 
     it('throws InvalidCurrencyException for unsupported currency', async () => {
-      await expect(gateway.charge(1000, 'INVALID'))
-        .rejects.toThrow(InvalidCurrencyException);
+      await expect(gateway.charge(1000, 'INVALID')).rejects.toThrow(InvalidCurrencyException);
     });
 
     it('throws TransactionNotFoundException for invalid refund', async () => {
-      await expect(gateway.refund('nonexistent'))
-        .rejects.toThrow(TransactionNotFoundException);
+      await expect(gateway.refund('nonexistent')).rejects.toThrow(TransactionNotFoundException);
     });
   });
 }

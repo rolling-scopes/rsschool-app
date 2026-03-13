@@ -1,6 +1,11 @@
 import { Entity, CreateDateColumn, UpdateDateColumn, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { User } from './user';
 
+export enum PreferredStudentsLocation {
+  ANY = 'any',
+  COUNTRY = 'country',
+  CITY = 'city',
+}
 @Entity()
 export class MentorRegistry {
   @PrimaryGeneratedColumn()
@@ -50,10 +55,4 @@ export class MentorRegistry {
 
   @Column({ nullable: true })
   sendDate: Date;
-}
-
-export enum PreferredStudentsLocation {
-  ANY = 'any',
-  COUNTRY = 'country',
-  CITY = 'city',
 }

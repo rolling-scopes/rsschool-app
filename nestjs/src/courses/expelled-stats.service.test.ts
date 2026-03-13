@@ -12,10 +12,10 @@ const mockDeleteResponse = { affected: 1 };
 const mockCreateResponse = mockSurvey;
 const mockSaveResponse = mockSurvey;
 
-const mockFind = jest.fn(() => Promise.resolve(mockFindResponse));
-const mockDelete = jest.fn(() => Promise.resolve(mockDeleteResponse));
-const mockCreate = jest.fn(() => mockCreateResponse);
-const mockSave = jest.fn(() => Promise.resolve(mockSaveResponse));
+const mockFind = vi.fn(() => Promise.resolve(mockFindResponse));
+const mockDelete = vi.fn(() => Promise.resolve(mockDeleteResponse));
+const mockCreate = vi.fn(() => mockCreateResponse);
+const mockSave = vi.fn(() => Promise.resolve(mockSaveResponse));
 
 const mockSurveyRepositoryFactory = () => ({
   find: mockFind,
@@ -29,7 +29,7 @@ describe('ExpelledStatsService', () => {
   let repository: Repository<CourseLeaveSurveyResponse>;
 
   beforeEach(async () => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [

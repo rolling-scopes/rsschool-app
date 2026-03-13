@@ -1,6 +1,6 @@
 import { MoreOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Table } from 'antd';
-import { ItemType } from 'antd/es/menu/hooks/useItems';
+import { ItemType } from 'antd/es/menu/interface';
 import { ColumnsType } from 'antd/lib/table';
 import { CoursesTasksApi, CourseTaskDto, CrossCheckStatusEnum } from 'api';
 import { GithubUserLink } from 'components/GithubUserLink';

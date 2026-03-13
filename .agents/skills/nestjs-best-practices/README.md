@@ -36,11 +36,12 @@ npx skills add Kadajett/agent-nestjs-skills -a claude-code -a cursor
   - `area-description.md` - Individual rule files
 - `scripts/` - Build scripts and utilities
 - `metadata.json` - Document metadata (version, organization, abstract)
-- __`AGENTS.md`__ - Compiled output (generated)
+- **`AGENTS.md`** - Compiled output (generated)
 
 ## Getting Started
 
 1. Install dependencies:
+
    ```bash
    cd scripts && npm install
    ```
@@ -74,7 +75,7 @@ npx skills add Kadajett/agent-nestjs-skills -a claude-code -a cursor
 
 Each rule file should follow this structure:
 
-```markdown
+````markdown
 ---
 title: Rule Title Here
 impact: MEDIUM
@@ -91,6 +92,7 @@ Brief explanation of the rule and why it matters.
 ```typescript
 // Bad code example
 ```
+````
 
 **Correct (description of what's right):**
 
@@ -102,7 +104,6 @@ Optional explanatory text after examples.
 
 Reference: [NestJS Documentation](https://docs.nestjs.com)
 
-
 ## File Naming Convention
 
 - Files starting with `_` are special (excluded from build)
@@ -113,13 +114,13 @@ Reference: [NestJS Documentation](https://docs.nestjs.com)
 
 ## Impact Levels
 
-| Level | Description |
-|-------|-------------|
-| CRITICAL | Violations cause runtime errors, security vulnerabilities, or architectural breakdown |
-| HIGH | Significant impact on reliability, security, or maintainability |
-| MEDIUM-HIGH | Notable impact on quality and developer experience |
-| MEDIUM | Moderate impact on code quality and best practices |
-| LOW-MEDIUM | Minor improvements for consistency and maintainability |
+| Level       | Description                                                                           |
+| ----------- | ------------------------------------------------------------------------------------- |
+| CRITICAL    | Violations cause runtime errors, security vulnerabilities, or architectural breakdown |
+| HIGH        | Significant impact on reliability, security, or maintainability                       |
+| MEDIUM-HIGH | Notable impact on quality and developer experience                                    |
+| MEDIUM      | Moderate impact on code quality and best practices                                    |
+| LOW-MEDIUM  | Minor improvements for consistency and maintainability                                |
 
 ## Scripts
 
@@ -160,4 +161,3 @@ These NestJS skills work with:
 
 - [Claude Code](https://claude.ai/code) - Anthropic's official CLI
 - [AdaL](https://sylph.ai/adal) - Self-evolving AI coding agent with MCP support
-

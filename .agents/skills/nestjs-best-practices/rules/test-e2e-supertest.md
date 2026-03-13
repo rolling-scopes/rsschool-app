@@ -77,7 +77,7 @@ describe('UsersController (e2e)', () => {
         .post('/users')
         .send({ name: 'John', email: 'john@test.com' })
         .expect(201)
-        .expect((res) => {
+        .expect(res => {
           expect(res.body).toHaveProperty('id');
           expect(res.body.name).toBe('John');
           expect(res.body.email).toBe('john@test.com');
@@ -89,7 +89,7 @@ describe('UsersController (e2e)', () => {
         .post('/users')
         .send({ name: 'John', email: 'invalid-email' })
         .expect(400)
-        .expect((res) => {
+        .expect(res => {
           expect(res.body.message).toContain('email');
         });
     });
@@ -97,9 +97,7 @@ describe('UsersController (e2e)', () => {
 
   describe('/users/:id (GET)', () => {
     it('should return 404 for non-existent user', () => {
-      return request(app.getHttpServer())
-        .get('/users/non-existent-id')
-        .expect(404);
+      return request(app.getHttpServer()).get('/users/non-existent-id').expect(404);
     });
   });
 });
@@ -127,9 +125,7 @@ describe('Protected Routes (e2e)', () => {
   });
 
   it('should return 401 without token', () => {
-    return request(app.getHttpServer())
-      .get('/users/me')
-      .expect(401);
+    return request(app.getHttpServer()).get('/users/me').expect(401);
   });
 
   it('should return user profile with valid token', () => {
@@ -137,7 +133,7 @@ describe('Protected Routes (e2e)', () => {
       .get('/users/me')
       .set('Authorization', `Bearer ${authToken}`)
       .expect(200)
-      .expect((res) => {
+      .expect(res => {
         expect(res.body.email).toBe('test@test.com');
       });
   });

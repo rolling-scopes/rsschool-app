@@ -4,7 +4,7 @@ import { TaskType } from '@entities/task';
 import { TaskVerification } from '@entities/taskVerification';
 import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as dayjs from 'dayjs';
+import { isBefore, isValid, subHours } from 'date-fns';
 import { CloudApiService } from 'src/cloud-api/cloud-api.service';
 import { MoreThan, Repository } from 'typeorm';
 import { SelfEducationAnswers, SelfEducationQuestionSelectedAnswersDto, TaskVerificationAttemptDto } from './dto';
@@ -41,10 +41,10 @@ export class TaskVerificationsService {
   public async getAnswersByAttempts(courseTaskId: number, studentId: number): Promise<TaskVerificationAttemptDto[]> {
     const courseTask = await this.courseTasksRepository.findOneByOrFail({ id: courseTaskId });
 
-    const now = dayjs();
-    const endDate = dayjs(courseTask?.studentEndDate);
+    const now = new Date();
+    const endDate = courseTask?.studentEndDate ? new Date(courseTask.studentEndDate) : null;
 
-    if (now.isBefore(endDate)) {
+    if (endDate && isValid(endDate) && isBefore(now, endDate)) {
       throw new BadRequestException('The answers cannot be checked until the deadline has passed.');
     }
 
@@ -125,7 +125,7 @@ export class TaskVerificationsService {
         status: 'pending',
         studentId,
         courseTaskId,
-        updatedDate: MoreThan(dayjs().add(-1, 'hour').toDate()),
+        updatedDate: MoreThan(subHours(new Date(), 1)),
       },
       select: ['id'],
     });
@@ -134,10 +134,10 @@ export class TaskVerificationsService {
       throw new HttpException(`Task Verification [${existing.id}] is in progress`, HttpStatus.TOO_MANY_REQUESTS);
     }
 
-    const now = dayjs();
-    const endDate = dayjs(courseTask?.studentEndDate);
+    const now = new Date();
+    const endDate = courseTask?.studentEndDate ? new Date(courseTask.studentEndDate) : null;
 
-    if (endDate.isBefore(now)) {
+    if (endDate && isValid(endDate) && isBefore(endDate, now)) {
       throw new BadRequestException(`Task Verification [${courseTask.id}] expired`);
     }
 

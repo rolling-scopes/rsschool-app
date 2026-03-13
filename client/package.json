@@ -14,22 +14,21 @@
     "prod": "next start -p 8080",
     "lint": "eslint src",
     "test": "jest --silent",
-    "test:ci": "jest --ci --reporters=default --reporters=jest-junit --silent",
+    "test:ci": "jest --ci --silent",
     "test:watch": "jest --watch",
     "test:e2e": "npx playwright test",
     "coverage": "jest --coverage"
   },
   "dependencies": {
-    "@ant-design/compatible": "5.1.2",
-    "@ant-design/cssinjs": "^1.20.0",
-    "@ant-design/icons": "5.5.2",
-    "@ant-design/plots": "1.2.5",
+    "@ant-design/cssinjs": "^2.1.0",
+    "@ant-design/icons": "6.1.0",
+    "@ant-design/plots": "2.6.8",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/modifiers": "^9.0.0",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "ahooks": "3.8.4",
-    "antd": "5.11.2",
+    "antd": "6.3.1",
     "cookie": "0.7.0",
     "csvtojson": "2.0.10",
     "next": "13.4.3",
@@ -55,7 +54,6 @@
     "@types/react-dom": "18.2.15",
     "eslint-plugin-testing-library": "7.16.0",
     "jest-environment-jsdom": "30.2.0",
-    "jest-junit": "16.0.0",
     "jest-mock-axios": "4.9.0",
     "mq-polyfill": "1.1.8",
     "nextjs-bundle-analysis": "0.4.0"
@@ -64,9 +62,5 @@
     "budget": 512000,
     "budgetPercentIncreaseRed": 5,
     "showDetails": true
-  },
-  "jest-junit": {
-    "outputDirectory": "../reports",
-    "outputName": "jest-junit-client.xml"
   }
 }

@@ -1,7 +1,7 @@
 ---
 title: Avoid Circular Dependencies
 impact: CRITICAL
-impactDescription: "#1 cause of runtime crashes"
+impactDescription: '#1 cause of runtime crashes'
 tags: architecture, modules, dependencies
 ---
 

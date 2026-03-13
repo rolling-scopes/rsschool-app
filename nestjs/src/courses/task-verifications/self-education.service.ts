@@ -2,9 +2,9 @@ import { CourseTask } from '@entities/courseTask';
 import { TaskVerification } from '@entities/taskVerification';
 import { ForbiddenException, Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as dayjs from 'dayjs';
+import { differenceInHours } from 'date-fns';
 import { Repository } from 'typeorm';
-import { WriteScoreService } from '../score';
+import { WriteScoreService } from '../score/write-score.service';
 import { SelfEducationAnswers } from './dto';
 
 type CheckedAnswer = SelfEducationAnswers[number] & { isCorrect: boolean };
@@ -157,7 +157,7 @@ export class SelfEducationService {
   private isNextSubmitAllowed(hours: number, lastAttemptTime?: string) {
     if (!hours || !lastAttemptTime) return true;
 
-    return dayjs().diff(lastAttemptTime, 'hours') >= hours;
+    return differenceInHours(new Date(), new Date(lastAttemptTime)) >= hours;
   }
 
   /**

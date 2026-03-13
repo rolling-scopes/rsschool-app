@@ -4,7 +4,7 @@
 
 # RS School App
 
-The [app.rs.school](https://app.rs.school) is an application for the [RS School](https://rs.school) education process. It helps thousands students to become Front-end/Back-end/Mobile/Data Science engineers.
+[app.rs.school](https://app.rs.school) is an application for the [RS School](https://rs.school) educational process. It helps thousands of students become front-end, back-end, mobile, and data science engineers.
 
 <img src="https://user-images.githubusercontent.com/618807/138608245-f00471ce-f982-4901-a32e-7246720ed13b.png" width="600px"/>
 
@@ -16,7 +16,7 @@ https://status.rs.school/
 
 ### Stack
 
-- Language: [Typescript](https://www.typescriptlang.org/)
+- Language: [TypeScript](https://www.typescriptlang.org/)
 - Front-end: [Next.js](https://nextjs.org/) / [React](https://reactjs.org/)
 - Back-end: [NestJS](https://nestjs.com/) and [Koa.js](https://koajs.com/) (deprecated backend) / [Node.js](https://nodejs.org/en/)
 - End-to-end: [Playwright](https://playwright.dev/)
@@ -47,8 +47,8 @@ Please install the following software before starting development:
 - Clone [repository](https://github.com/rolling-scopes/rsschool-app)
 - Run `npm install` (installs dependencies in the root folder and `client` / `server` folders.)
 - Run `npm run db:up` (starts local database)
-- Run `npm run db:restore` (restore a test DB snapshot)
-- Make a copy of `server/.env.example` and `nestjs/.env.example` and rename it to `server/.env` and `nestjs/.env` respectively.
+- Run `npm run db:restore` (restores a test DB snapshot)
+- Make copies of `server/.env.example` and `nestjs/.env.example`, then rename them to `server/.env` and `nestjs/.env` respectively
 - Run `npm start` (starts application by running Next.js and REST API server)
 - Open `http://localhost:3000` in a browser
 - See more in [CONTRIBUTING](https://github.com/rolling-scopes/rsschool-app/blob/master/CONTRIBUTING.md) guide
