@@ -1,7 +1,7 @@
 import { StudentSummaryDto } from '@client/api';
 import { Session } from 'components/withSession';
 import { isStudent } from 'domain/user';
-import { loadHomeData } from 'modules/Home/data/loadHomeData';
+import { loadHomeData } from '@client/modules/Home/data/loadHomeData';
 import { useState } from 'react';
 import { useAsync } from 'react-use';
 import { Course } from 'services/models';

@@ -1,5 +1,5 @@
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
-import { SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { CourseRole } from 'services/models';
 import ExpelledStudentsStats from '@client/modules/CourseManagement/components/ExpelledStudentsStats';
 

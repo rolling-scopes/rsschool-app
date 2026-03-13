@@ -4,7 +4,7 @@ import CommonCard from './CommonCard';
 import MentorStatsModal from './MentorStatsModal';
 import { MentorStats, Student } from '@common/models/profile';
 import { FileTextOutlined, TeamOutlined } from '@ant-design/icons';
-import { MentorEndorsement } from 'modules/Profile/components/MentorEndorsement';
+import { MentorEndorsement } from '@client/modules/Profile/components/MentorEndorsement';
 import { ExpandButtonWidget, ScoreWidget } from '@client/components/Profile/ui';
 
 const { Text } = Typography;

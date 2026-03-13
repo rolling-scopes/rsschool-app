@@ -4,7 +4,7 @@ import { PageLayoutSimple } from '@client/shared/components/PageLayout';
 import { UserSearch } from '@client/shared/components/UserSearch';
 import { getMentorId, isMentor } from 'domain/user';
 import { useMessage } from 'hooks';
-import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { useContext, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';

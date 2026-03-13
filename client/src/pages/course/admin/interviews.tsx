@@ -14,7 +14,7 @@ import { CourseService } from 'services/course';
 import { CourseRole } from 'services/models';
 import { useAsync } from 'react-use';
 import { isCourseManager } from 'domain/user';
-import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { CoursesInterviewsApi, InterviewDto, InterviewPairDto } from '@client/api';
 
 const coursesInterviewsApi = new CoursesInterviewsApi();

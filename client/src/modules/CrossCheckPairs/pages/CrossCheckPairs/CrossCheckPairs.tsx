@@ -8,15 +8,15 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CourseService, CourseTaskDetails } from 'services/course';
 import { CoursesTasksApi, CrossCheckMessageDtoRoleEnum, CrossCheckPairDto } from '@client/api';
 import PreparedComment from '@client/shared/components/Forms/PreparedComment';
-import { Message } from 'modules/CrossCheck/components/SolutionReview/Message';
-import { CrossCheckCriteria } from 'modules/CrossCheck/components/criteria/CrossCheckCriteria';
-import { BadReviewControllers } from 'modules/CrossCheckPairs/components/BadReview/BadReviewControllers';
+import { Message } from '@client/modules/CrossCheck/components/SolutionReview/Message';
+import { CrossCheckCriteria } from '@client/modules/CrossCheck/components/criteria/CrossCheckCriteria';
+import { BadReviewControllers } from '@client/modules/CrossCheckPairs/components/BadReview/BadReviewControllers';
 import {
   Filters,
   Sorter,
   CrossCheckPairsTable,
-} from 'modules/CrossCheckPairs/components/CrossCheckPairsTable/CrossCheckPairsTable';
-import { useActiveCourseContext } from 'modules/Course/contexts';
+} from '@client/modules/CrossCheckPairs/components/CrossCheckPairsTable/CrossCheckPairsTable';
+import { useActiveCourseContext } from '@client/modules/Course/contexts';
 
 enum OrderDirection {
   ASC = 'ASC',

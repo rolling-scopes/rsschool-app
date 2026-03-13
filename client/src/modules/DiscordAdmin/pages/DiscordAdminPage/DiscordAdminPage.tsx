@@ -5,7 +5,7 @@ import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import { DiscordServersTable } from '../../components/DiscordServersTable';
 import { DiscordServersModal } from '../../components/DiscordServersModal';
 import { useDiscordServers } from '../../hooks/useDiscordServers';
-import { useActiveCourseContext } from 'modules/Course/contexts';
+import { useActiveCourseContext } from '@client/modules/Course/contexts';
 
 const { Content } = Layout;
 

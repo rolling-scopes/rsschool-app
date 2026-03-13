@@ -1,4 +1,4 @@
-import { MentorsHallOfFamePage } from 'modules/MentorsHallOfFame';
+import { MentorsHallOfFamePage } from '@client/modules/MentorsHallOfFame';
 import Head from 'next/head';
 
 function Page() {

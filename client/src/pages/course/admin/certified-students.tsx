@@ -1,4 +1,4 @@
-import { SessionProvider } from 'modules/Course/contexts';
+import { SessionProvider } from '@client/modules/Course/contexts';
 import { CourseRole } from 'services/models';
 
 export default function () {

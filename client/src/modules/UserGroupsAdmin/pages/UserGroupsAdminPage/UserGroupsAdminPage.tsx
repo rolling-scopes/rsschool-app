@@ -5,7 +5,7 @@ import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import { UserGroupsTable } from '../../components/UserGroupsTable';
 import { UserGroupsModal } from '../../components/UserGroupsModal';
 import { useUserGroups } from '../../hooks/useUserGroups';
-import { useActiveCourseContext } from 'modules/Course/contexts';
+import { useActiveCourseContext } from '@client/modules/Course/contexts';
 
 const { Content } = Layout;
 

@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, within, waitFor } from '@testing-library/react';
-import { ExpirationState } from 'modules/Opportunities/constants';
+import { ExpirationState } from '@client/modules/Opportunities/constants';
 import { ExpirationTooltip } from './index';
 
 const mockSystemTime = new Date('2022-09-26T13:41:39.161Z');

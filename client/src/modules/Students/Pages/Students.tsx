@@ -9,7 +9,7 @@ import { useAsync } from 'react-use';
 import StudentsTable from '../components/StudentsTable';
 import { ColumnKey } from '../components/StudentsTable/renderers';
 import { StudentInfo } from '../components/StudentInfo';
-import { useActiveCourseContext } from 'modules/Course/contexts';
+import { useActiveCourseContext } from '@client/modules/Course/contexts';
 
 const studentsApi = new StudentsApi();
 

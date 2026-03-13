@@ -1,6 +1,6 @@
 import { Form, Input, InputNumber, Alert, Checkbox, Modal, Row, Col, Button, Space } from 'antd';
 import { useState } from 'react';
-import { SelectCourseTasks } from 'modules/CourseManagement/components';
+import { SelectCourseTasks } from '@client/modules/CourseManagement/components';
 
 export type FormValues = {
   courseTaskIds: number[];

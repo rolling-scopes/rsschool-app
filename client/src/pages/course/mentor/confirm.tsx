@@ -9,7 +9,7 @@ import { CoursesService } from 'services/courses';
 import { MentorRegistryService, MentorResponse } from 'services/mentorRegistry';
 import { Warning } from 'components/Warning';
 import { MentorOptions } from 'components/MentorOptions';
-import { SessionContext, SessionProvider } from 'modules/Course/contexts';
+import { SessionContext, SessionProvider } from '@client/modules/Course/contexts';
 import { LoadingScreen } from '@client/shared/components/LoadingScreen';
 import { useAsyncEffect } from 'ahooks';
 

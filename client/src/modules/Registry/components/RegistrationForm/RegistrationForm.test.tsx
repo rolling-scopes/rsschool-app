@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { Form } from 'antd';
-import { FORM_TITLES } from 'modules/Registry/constants';
+import { FORM_TITLES } from '@client/modules/Registry/constants';
 import { RegistrationForm } from './RegistrationForm';
 
 const steps = [

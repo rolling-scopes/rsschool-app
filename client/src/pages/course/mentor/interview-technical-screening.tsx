@@ -7,7 +7,7 @@ import { useMessage } from 'hooks';
 import get from 'lodash/get';
 import keys from 'lodash/keys';
 import set from 'lodash/set';
-import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { ChangeEvent, useContext, useEffect, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';

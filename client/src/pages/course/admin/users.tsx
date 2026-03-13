@@ -10,7 +10,7 @@ import { CourseRole } from 'services/models';
 import { UserService } from 'services/user';
 import { UserGroupApi, UserGroupDto } from '@client/api';
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
-import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 
 const userGroupService = new UserGroupApi();
 const userService = new UserService();

@@ -1,6 +1,6 @@
 import { Col, Row, Tabs } from 'antd';
 import { FC, useMemo, PropsWithChildren } from 'react';
-import { ALL_TAB_KEY } from 'modules/Schedule/constants';
+import { ALL_TAB_KEY } from '@client/modules/Schedule/constants';
 import { tabsRenderer } from './renderers';
 
 export type Status = string;

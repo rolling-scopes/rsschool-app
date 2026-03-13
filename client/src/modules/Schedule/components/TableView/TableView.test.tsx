@@ -1,14 +1,14 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import TableView from './TableView';
 import * as ReactUse from 'react-use';
-import { ALL_TAB_KEY, ColumnKey, ColumnName } from 'modules/Schedule/constants';
+import { ALL_TAB_KEY, ColumnKey, ColumnName } from '@client/modules/Schedule/constants';
 import {
   CourseScheduleItemDto,
   CourseScheduleItemDtoStatusEnum as StatusEnum,
   CourseScheduleItemDtoTagEnum as TagsEnum,
   CourseScheduleItemDtoTypeEnum,
 } from '@client/api';
-import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
+import { ScheduleSettings } from '@client/modules/Schedule/hooks/useScheduleSettings';
 
 const PROPS_SETTINGS_MOCK: ScheduleSettings = {
   timezone: 'Europe/Moscow',

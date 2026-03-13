@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import StatusTabs, { Status } from './StatusTabs';
-import { ALL_TAB_KEY, SCHEDULE_STATUSES } from 'modules/Schedule/constants';
+import { ALL_TAB_KEY, SCHEDULE_STATUSES } from '@client/modules/Schedule/constants';
 import { CourseScheduleItemDtoStatusEnum } from '@client/api';
 
 const StatusEnum = CourseScheduleItemDtoStatusEnum;

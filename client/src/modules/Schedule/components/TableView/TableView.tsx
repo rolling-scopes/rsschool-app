@@ -10,7 +10,7 @@ import {
   scoreRenderer,
   weightRenderer,
 } from '@client/shared/components/Table';
-import FilteredTags from 'modules/Schedule/components/FilteredTags';
+import FilteredTags from '@client/modules/Schedule/components/FilteredTags';
 import {
   ALL_TAB_KEY,
   ColumnKey,
@@ -20,8 +20,8 @@ import {
   SCHEDULE_STATUSES,
   TAG_NAME_MAP,
   TAGS,
-} from 'modules/Schedule/constants';
-import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
+} from '@client/modules/Schedule/constants';
+import { ScheduleSettings } from '@client/modules/Schedule/hooks/useScheduleSettings';
 import { useMemo, useState, useEffect } from 'react';
 import { useLocalStorage } from 'react-use';
 import dayjs from 'dayjs';

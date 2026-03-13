@@ -2,7 +2,7 @@ import { Alert, Button, Col, Divider, Form, notification, Row, Spin, Typography 
 import { Comment } from 'components/Comment';
 import PreparedComment, { markdownLabel } from '@client/shared/components/Forms/PreparedComment';
 import { ScoreIcon } from '@client/shared/components/Icons/ScoreIcon';
-import { SolutionReviewSettings } from 'modules/CrossCheck/constants';
+import { SolutionReviewSettings } from '@client/modules/CrossCheck/constants';
 import { useEffect, useMemo, useState } from 'react';
 import { CourseService } from 'services/course';
 import { formatDateTime } from 'services/formatter';

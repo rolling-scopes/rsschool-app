@@ -2,7 +2,7 @@ import { Typography, Form, Row, Checkbox, Radio, Col, Space } from 'antd';
 import { useMemo } from 'react';
 import { SelfEducationQuestionWithIndex, SelfEducationQuestion } from 'services/course';
 import shuffle from 'lodash/shuffle';
-import { CourseTaskVerifications } from 'modules/AutoTest/types';
+import { CourseTaskVerifications } from '@client/modules/AutoTest/types';
 
 import styles from './SelfEducation.module.css';
 

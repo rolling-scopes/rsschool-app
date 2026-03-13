@@ -1,6 +1,6 @@
 import { RegistrationPageLayout } from 'components/RegistrationPageLayout';
-import { RegistrationForm } from 'modules/Registry/components';
-import { useMentorData } from 'modules/Registry/hooks';
+import { RegistrationForm } from '@client/modules/Registry/components';
+import { useMentorData } from '@client/modules/Registry/hooks';
 import { useRouter } from 'next/router';
 
 export function MentorRegistry() {

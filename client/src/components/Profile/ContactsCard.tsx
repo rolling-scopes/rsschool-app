@@ -4,7 +4,7 @@ import ContactsOutlined from '@ant-design/icons/ContactsOutlined';
 import isEqual from 'lodash/isEqual';
 import { UpdateProfileInfoDto } from '@client/api';
 import { Contacts } from '@common/models/profile';
-import { NotificationChannel } from 'modules/Notifications/services/notifications';
+import { NotificationChannel } from '@client/modules/Notifications/services/notifications';
 import { EmailConfirmation } from './EmailConfirmation';
 import CommonCardWithSettingsModal from './CommonCardWithSettingsModal';
 import { Contact, ContactsKeys } from 'services/user';

@@ -8,12 +8,12 @@ import { dateWithTimeZoneRenderer, idFromArrayRenderer } from '@client/shared/co
 import { CourseEvent, CourseService } from 'services/course';
 import { ALL_TIMEZONES } from '@client/configs/timezones';
 import { getColumnSearchProps } from '@client/shared/components/Table';
-import { CourseEventModal } from 'modules/CourseManagement/components/CourseEventModal';
+import { CourseEventModal } from '@client/modules/CourseManagement/components/CourseEventModal';
 import { EventDto, EventsApi } from '@client/api';
 
 import tz from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import { SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { CourseRole } from 'services/models';
 import { CustomPopconfirm } from 'components/common/CustomPopconfirm';
 

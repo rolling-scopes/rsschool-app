@@ -7,7 +7,7 @@ import styles from './index.module.css';
 import { GratitudeService, HeroesFormData, IGratitudeGetRequest, IGratitudeGetResponse } from 'services/gratitude';
 import { onlyDefined } from '@client/shared/utils/onlyDefined';
 import { getFullName } from 'domain/user';
-import { useActiveCourseContext } from 'modules/Course/contexts';
+import { useActiveCourseContext } from '@client/modules/Course/contexts';
 
 const { Text, Link, Paragraph } = Typography;
 const { useBreakpoint } = Grid;

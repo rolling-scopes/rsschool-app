@@ -1,7 +1,7 @@
 import { PageLayout } from '@client/shared/components/PageLayout';
 import { HeroesForm } from '@client/shared/components/Forms/Heroes';
 import { useState } from 'react';
-import { SessionProvider } from 'modules/Course/contexts';
+import { SessionProvider } from '@client/modules/Course/contexts';
 import { Tabs } from 'antd';
 import HeroesRadarTab from 'components/Heroes/HeroesRadarTab';
 

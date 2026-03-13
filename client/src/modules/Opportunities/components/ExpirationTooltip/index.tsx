@@ -8,7 +8,7 @@ import {
   ClockCircleOutlined,
 } from '@ant-design/icons';
 import { OpportunitiesApi } from '@client/api';
-import { ExpirationState } from 'modules/Opportunities/constants';
+import { ExpirationState } from '@client/modules/Opportunities/constants';
 import { useMessage } from 'hooks';
 
 const { Text, Paragraph } = Typography;

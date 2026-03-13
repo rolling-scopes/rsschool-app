@@ -5,7 +5,7 @@ import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import { EventsTable } from '../../components/EventsTable';
 import { EventsModal } from '../../components/EventsModal';
 import { useEvents } from '../../hooks/useEvents';
-import { useActiveCourseContext } from 'modules/Course/contexts';
+import { useActiveCourseContext } from '@client/modules/Course/contexts';
 import { CreateEventDto } from '@client/api';
 
 const { Content } = Layout;

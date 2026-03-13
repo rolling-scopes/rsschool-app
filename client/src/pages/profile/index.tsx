@@ -6,9 +6,9 @@ import { ProfileApi, UpdateProfileInfoDto, UpdateUserDtoLanguagesEnum } from '@c
 import { Header } from '@client/shared/components/Header';
 import { LoadingScreen } from '@client/shared/components/LoadingScreen';
 import { withGoogleMaps } from 'components/withGoogleMaps';
-import { NotificationChannel, NotificationsService } from 'modules/Notifications/services/notifications';
+import { NotificationChannel, NotificationsService } from '@client/modules/Notifications/services/notifications';
 import { ProfileInfo, ProfileMainCardData, UserService } from 'services/user';
-import { SessionContext, SessionProvider } from 'modules/Course/contexts';
+import { SessionContext, SessionProvider } from '@client/modules/Course/contexts';
 import { useAsync } from 'react-use';
 import { checkIsProfileOwner, getStudentCoreJSInterviews } from 'utils/profilePageUtils';
 import { useMessage } from 'hooks';

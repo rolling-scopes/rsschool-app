@@ -3,7 +3,7 @@ import { message } from 'antd';
 import { CheckerEnum, CoursesTasksApi, CourseTaskDtoTypeEnum } from '@client/api';
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
-import { mapTo } from 'modules/AutoTest/utils/map';
+import { mapTo } from '@client/modules/AutoTest/utils/map';
 import { useEffect, useMemo, useState } from 'react';
 import { CourseService } from 'services/course';
 

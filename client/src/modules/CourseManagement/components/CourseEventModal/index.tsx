@@ -4,7 +4,7 @@ import { ModalForm } from '@client/shared/components/Forms';
 import { UserSearch } from '@client/shared/components/UserSearch';
 import { TIMEZONES } from 'configs/timezones';
 import { EVENT_TYPES } from 'data/eventTypes';
-import { SPECIAL_ENTITY_TAGS } from 'modules/Schedule/constants';
+import { SPECIAL_ENTITY_TAGS } from '@client/modules/Schedule/constants';
 import { useCallback } from 'react';
 import { useAsync } from 'react-use';
 import { CourseEvent } from 'services/course';

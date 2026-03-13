@@ -6,10 +6,10 @@ import { FilesService } from 'services/files';
 import { SelfEducationPublicAttributes } from 'services/course';
 import { AxiosError } from 'axios';
 import { isExpelledStudent } from 'domain/user';
-import { SessionContext } from 'modules/Course/contexts';
+import { SessionContext } from '@client/modules/Course/contexts';
 import { InternalUploadFile } from 'antd/lib/upload/interface';
 import { useBeforeUnload } from 'react-use';
-import { CourseTaskVerifications } from 'modules/AutoTest/types';
+import { CourseTaskVerifications } from '@client/modules/AutoTest/types';
 import { useMessage } from 'hooks';
 
 type SelfEducationValues = Record<string, number>;

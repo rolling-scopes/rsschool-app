@@ -1,10 +1,10 @@
 import { useState, useMemo, useCallback, ReactNode } from 'react';
 import { Button, Spin } from 'antd';
-import { NotificationsService } from 'modules/Notifications/services/notifications';
+import { NotificationsService } from '@client/modules/Notifications/services/notifications';
 import { useLoading } from 'components/useLoading';
 import { useAsync } from 'react-use';
-import { NotificationSettingsTable } from 'modules/Notifications/components/NotificationSettingsTable';
-import { NotificationSettingsModal } from 'modules/Notifications/components/NotificationSettingsModal';
+import { NotificationSettingsTable } from '@client/modules/Notifications/components/NotificationSettingsTable';
+import { NotificationSettingsModal } from '@client/modules/Notifications/components/NotificationSettingsModal';
 import { NotificationDto } from '@client/api';
 import { useMessage } from 'hooks';
 

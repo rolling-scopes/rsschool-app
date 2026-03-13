@@ -10,7 +10,7 @@ import {
 } from '@client/shared/components/Table';
 import { TASK_TYPES } from 'data/taskTypes';
 import { uniqBy } from 'lodash';
-import { ColumnName } from 'modules/Tasks/types';
+import { ColumnName } from '@client/modules/Tasks/types';
 import { useMemo } from 'react';
 
 function getColumns(

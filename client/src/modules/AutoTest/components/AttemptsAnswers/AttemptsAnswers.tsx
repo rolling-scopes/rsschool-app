@@ -1,6 +1,6 @@
 import { Button, Col, Form, Row, Space, theme, Typography } from 'antd';
 import { TaskVerificationAttemptDto } from '@client/api';
-import { Question } from 'modules/AutoTest/components';
+import { Question } from '@client/modules/AutoTest/components';
 import dayjs from 'dayjs';
 import { Fragment } from 'react';
 import CalendarOutlined from '@ant-design/icons/CalendarOutlined';

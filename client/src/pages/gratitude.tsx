@@ -4,7 +4,7 @@ import { AxiosError } from 'axios';
 import { PageLayoutSimple } from '@client/shared/components/PageLayout';
 import { UserSearch } from '@client/shared/components/UserSearch';
 import { useMessage } from 'hooks';
-import { SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useAsync } from 'react-use';

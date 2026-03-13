@@ -1,6 +1,6 @@
 import { Form } from 'antd';
 import { SelectLanguages } from 'components/SelectLanguages';
-import { LABELS, VALIDATION_RULES, WIDE_FORM_ITEM_LAYOUT } from 'modules/Registry/constants';
+import { LABELS, VALIDATION_RULES, WIDE_FORM_ITEM_LAYOUT } from '@client/modules/Registry/constants';
 
 type Props = {
   isStudentForm?: boolean;

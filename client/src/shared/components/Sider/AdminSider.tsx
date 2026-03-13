@@ -5,9 +5,9 @@ import Router from 'next/router';
 import { useMemo, useContext } from 'react';
 import { useLocalStorage } from 'react-use';
 import { getAdminMenuItems, getCourseManagementMenuItems } from './data/menuItems';
-import { SessionContext } from 'modules/Course/contexts';
+import { SessionContext } from '@client/modules/Course/contexts';
 import { Course } from 'services/models';
-import { useActiveCourse } from 'modules/Home/hooks/useActiveCourse';
+import { useActiveCourse } from '@client/modules/Home/hooks/useActiveCourse';
 const { Sider } = Layout;
 
 type Props = { courses: Course[]; activeCourse?: Course | null };

@@ -1,7 +1,7 @@
 import { Button, Col, Input, List, Row, Layout, Form } from 'antd';
 import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
-import { useActiveCourseContext } from 'modules/Course/contexts';
+import { useActiveCourseContext } from '@client/modules/Course/contexts';
 import { useUsersSearch } from '../../hooks/useUsersSearch';
 import { UserSearchDto } from '@client/api';
 

@@ -1,6 +1,6 @@
-import { SessionProvider } from 'modules/Course/contexts';
+import { SessionProvider } from '@client/modules/Course/contexts';
 import { CourseRole } from 'services/models';
-import { UsersAdminPage } from 'modules/UsersAdmin';
+import { UsersAdminPage } from '@client/modules/UsersAdmin';
 
 export default function () {
   return (

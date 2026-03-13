@@ -12,10 +12,10 @@ import {
 } from '@client/api';
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import { useModalForm } from 'hooks';
-import { useActiveCourseContext } from 'modules/Course/contexts';
-import { TasksTable, TaskModal } from 'modules/Tasks/components';
-import { FormValues } from 'modules/Tasks/types';
-import { TaskType } from 'modules/CrossCheck/constants';
+import { useActiveCourseContext } from '@client/modules/Course/contexts';
+import { TasksTable, TaskModal } from '@client/modules/Tasks/components';
+import { FormValues } from '@client/modules/Tasks/types';
+import { TaskType } from '@client/modules/CrossCheck/constants';
 
 const { Content } = Layout;
 

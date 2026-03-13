@@ -2,13 +2,13 @@ import { useMemo, useState, useContext } from 'react';
 import { PageLayout } from '@client/shared/components/PageLayout';
 import { isCourseManager, isDementor } from 'domain/user';
 import { TeamDistributionApi, TeamDistributionDto } from '@client/api';
-import { TeamDistributionModal } from 'modules/TeamDistribution/components/TeamDistributionModal/';
+import { TeamDistributionModal } from '@client/modules/TeamDistribution/components/TeamDistributionModal/';
 import { useAsync } from 'react-use';
-import { TeamDistributionCard } from 'modules/TeamDistribution/components/TeamDistributionCard';
-import { WelcomeCard } from 'modules/TeamDistribution/components/WelcomeCard';
+import { TeamDistributionCard } from '@client/modules/TeamDistribution/components/TeamDistributionCard';
+import { WelcomeCard } from '@client/modules/TeamDistribution/components/WelcomeCard';
 import { useMessage, useModalForm } from 'hooks';
-import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
-import { SubmitScoreModal } from 'modules/TeamDistribution/components/SubmitScoreModal';
+import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
+import { SubmitScoreModal } from '@client/modules/TeamDistribution/components/SubmitScoreModal';
 
 const teamDistributionApi = new TeamDistributionApi();
 

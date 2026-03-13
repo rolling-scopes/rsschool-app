@@ -5,7 +5,7 @@ import { FilesService } from 'services/files';
 import { act } from 'react-dom/test-utils';
 import { AxiosError } from 'axios';
 import * as UserUtils from 'domain/user';
-import { CourseTaskVerifications } from 'modules/AutoTest/types';
+import { CourseTaskVerifications } from '@client/modules/AutoTest/types';
 
 jest.mock('services/files');
 jest.mock('domain/user');

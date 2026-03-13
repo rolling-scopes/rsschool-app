@@ -1,9 +1,9 @@
 import { useRequest } from 'ahooks';
 import { TaskDtoTypeEnum } from '@client/api';
-import { SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
-import { getInterviewData, getStageInterviewData, PageProps } from 'modules/Interviews/data';
-import { StageInterviewFeedback } from 'modules/Interviews/pages/StageInterviewFeedback';
-import { InterviewFeedback } from 'modules/Interviews/pages/InterviewFeedback';
+import { SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
+import { getInterviewData, getStageInterviewData, PageProps } from '@client/modules/Interviews/data';
+import { StageInterviewFeedback } from '@client/modules/Interviews/pages/StageInterviewFeedback';
+import { InterviewFeedback } from '@client/modules/Interviews/pages/InterviewFeedback';
 import { useRouter } from 'next/router';
 import { CourseRole } from 'services/models';
 

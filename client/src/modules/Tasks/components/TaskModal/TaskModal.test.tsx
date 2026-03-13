@@ -1,7 +1,13 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { generateTasksData } from 'modules/Tasks/utils/test-utils';
-import { FormValues } from 'modules/Tasks/types';
-import { ERROR_MESSAGES, LABELS, MODAL_TITLES, PLACEHOLDERS, TASK_SETTINGS_HEADERS } from 'modules/Tasks/constants';
+import { generateTasksData } from '@client/modules/Tasks/utils/test-utils';
+import { FormValues } from '@client/modules/Tasks/types';
+import {
+  ERROR_MESSAGES,
+  LABELS,
+  MODAL_TITLES,
+  PLACEHOLDERS,
+  TASK_SETTINGS_HEADERS,
+} from '@client/modules/Tasks/constants';
 import { ModalProps, TaskModal } from './TaskModal';
 
 const mockData = generateData();

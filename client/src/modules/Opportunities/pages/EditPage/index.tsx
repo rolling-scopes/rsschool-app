@@ -7,8 +7,8 @@ import { OpportunitiesApi, ResumeDto } from '@client/api';
 import { Header } from '@client/shared/components/Header';
 import { LoadingScreen } from '@client/shared/components/LoadingScreen';
 import { useLoading } from 'components/useLoading';
-import { SessionContext } from 'modules/Course/contexts';
-import { EditViewCv } from 'modules/Opportunities/components/EditViewCv';
+import { SessionContext } from '@client/modules/Course/contexts';
+import { EditViewCv } from '@client/modules/Opportunities/components/EditViewCv';
 
 const { Content } = Layout;
 const { Text, Paragraph } = Typography;

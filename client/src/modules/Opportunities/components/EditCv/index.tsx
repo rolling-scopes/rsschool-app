@@ -15,8 +15,8 @@ import {
   UserDataToSubmit,
   VisibleCourses,
   VisibleCoursesFormData,
-} from 'modules/Opportunities/models';
-import { splitDataForForms, transformFieldsData } from 'modules/Opportunities/transformers';
+} from '@client/modules/Opportunities/models';
+import { splitDataForForms, transformFieldsData } from '@client/modules/Opportunities/transformers';
 import { useMessage } from 'hooks';
 
 const { Content } = Layout;

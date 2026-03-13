@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { Form } from 'antd';
 import { UpdateUserDtoLanguagesEnum } from '@client/api';
 import { getLanguageName } from 'components/SelectLanguages';
-import { LABELS } from 'modules/Registry/constants';
+import { LABELS } from '@client/modules/Registry/constants';
 import { LanguagesMentoring } from './LanguagesMentoring';
 
 const mockValues = [UpdateUserDtoLanguagesEnum.En, UpdateUserDtoLanguagesEnum.Ru];

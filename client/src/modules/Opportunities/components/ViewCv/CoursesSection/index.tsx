@@ -4,8 +4,8 @@ import { ResumeCourseDto, ResumeDto } from '@client/api';
 import { BaseSection } from '../BaseSection';
 
 import styles from './CoursesSection.module.css';
-import { StudentStatus } from 'modules/Opportunities/components/StudentStatus';
-import { DataTextValue } from 'modules/Opportunities/components/ViewCv/DataTextValue';
+import { StudentStatus } from '@client/modules/Opportunities/components/StudentStatus';
+import { DataTextValue } from '@client/modules/Opportunities/components/ViewCv/DataTextValue';
 
 const { Text } = Typography;
 const { Item } = List;

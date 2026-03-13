@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { getAutoTestTaskRoute } from 'services/routes';
 import { TaskCardColumn, TaskDeadlineDate } from '..';
 import { Course } from 'services/models';
-import { useAttemptsMessage } from 'modules/AutoTest/hooks';
-import { CourseTaskState, CourseTaskVerifications } from 'modules/AutoTest/types';
+import { useAttemptsMessage } from '@client/modules/AutoTest/hooks';
+import { CourseTaskState, CourseTaskVerifications } from '@client/modules/AutoTest/types';
 
 const { Title, Paragraph } = Typography;
 

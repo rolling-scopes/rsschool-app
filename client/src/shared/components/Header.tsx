@@ -12,9 +12,9 @@ import {
 import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 import { HeaderMiniBannerCarousel, HeaderMiniBannerCarouselItem } from '@client/components/HeaderMiniBannerCarousel';
 import { SolidarityUkraine } from './SolidarityUkraine';
-import { SessionContext } from 'modules/Course/contexts';
-import { getNavigationItems } from 'modules/Home/data/links';
-import { useActiveCourseContext } from 'modules/Course/contexts/ActiveCourseContext';
+import { SessionContext } from '@client/modules/Course/contexts';
+import { getNavigationItems } from '@client/modules/Home/data/links';
+import { useActiveCourseContext } from '@client/modules/Course/contexts/ActiveCourseContext';
 import ThemeSwitch from '@client/shared/components/ThemeSwitch';
 import styles from './Header.module.css';
 import clsx from 'clsx';

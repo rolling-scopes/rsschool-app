@@ -1,5 +1,5 @@
 import { Form, Select, Input, Typography } from 'antd';
-import { CARD_TITLES, LABELS, PLACEHOLDERS, WIDE_FORM_ITEM_LAYOUT } from 'modules/Registry/constants';
+import { CARD_TITLES, LABELS, PLACEHOLDERS, WIDE_FORM_ITEM_LAYOUT } from '@client/modules/Registry/constants';
 import { Course } from 'services/models';
 import {
   CourseLabel,
@@ -7,7 +7,7 @@ import {
   FormButtons,
   FormCard,
   LanguagesMentoring,
-} from 'modules/Registry/components';
+} from '@client/modules/Registry/components';
 
 type Props = {
   courses: Course[];

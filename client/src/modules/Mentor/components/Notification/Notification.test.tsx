@@ -1,6 +1,6 @@
 import { screen, render, fireEvent } from '@testing-library/react';
 import { Notification } from '.';
-import { INFO_MESSAGE } from 'modules/Mentor/constants';
+import { INFO_MESSAGE } from '@client/modules/Mentor/constants';
 import * as ReactUse from 'react-use';
 
 describe('Notification', () => {

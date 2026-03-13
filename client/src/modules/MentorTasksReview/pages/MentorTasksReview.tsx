@@ -7,7 +7,7 @@ import { IPaginationInfo } from '@client/shared/utils/pagination';
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import { useLoading } from 'components/useLoading';
 import { isCourseManager } from 'domain/user';
-import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { useContext, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import MentorReviewsTable from '../components/ReviewsTable';

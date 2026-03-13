@@ -1,5 +1,5 @@
-import { CrossCheckSubmit } from 'modules/Course/pages/Student/CrossCheckSubmit';
-import { SessionProvider } from 'modules/Course/contexts';
+import { CrossCheckSubmit } from '@client/modules/Course/pages/Student/CrossCheckSubmit';
+import { SessionProvider } from '@client/modules/Course/contexts';
 import { CourseRole } from '@client/services/models';
 
 function Page() {

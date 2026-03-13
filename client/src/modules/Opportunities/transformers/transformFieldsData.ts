@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { AllDataToSubmit } from 'modules/Opportunities/models';
+import { AllDataToSubmit } from '@client/modules/Opportunities/models';
 
 const LOCATIONS_COUNT = 3;
 

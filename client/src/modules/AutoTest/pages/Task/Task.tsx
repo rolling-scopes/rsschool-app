@@ -2,9 +2,14 @@ import { useContext } from 'react';
 import { CoursePageProps } from 'services/models';
 import { CourseTaskDetailedDto } from '@client/api';
 import { PageLayout } from '@client/shared/components/PageLayout';
-import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
-import { AttemptsAnswers, Exercise, TaskDescription, VerificationInformation } from 'modules/AutoTest/components';
-import { useCourseTaskVerifications, useVerificationsAnswers } from 'modules/AutoTest/hooks';
+import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
+import {
+  AttemptsAnswers,
+  Exercise,
+  TaskDescription,
+  VerificationInformation,
+} from '@client/modules/AutoTest/components';
+import { useCourseTaskVerifications, useVerificationsAnswers } from '@client/modules/AutoTest/hooks';
 import { useRouter } from 'next/router';
 import { theme } from 'antd';
 

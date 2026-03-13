@@ -1,6 +1,6 @@
 import { Alert } from 'antd';
 import { useLocalStorage } from 'react-use';
-import { INFO_MESSAGE } from 'modules/Mentor/constants';
+import { INFO_MESSAGE } from '@client/modules/Mentor/constants';
 
 function Notification() {
   const [isShown, setIsShown] = useLocalStorage('isPersonalInformationNotificationShown', true);

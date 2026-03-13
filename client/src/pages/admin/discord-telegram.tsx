@@ -1,5 +1,5 @@
-import { SessionProvider } from 'modules/Course/contexts';
-import { DiscordAdminPage } from 'modules/DiscordAdmin';
+import { SessionProvider } from '@client/modules/Course/contexts';
+import { DiscordAdminPage } from '@client/modules/DiscordAdmin';
 
 export default function () {
   return (

@@ -1,10 +1,10 @@
 import { Col, Row } from 'antd';
 import { ColProps } from 'antd/lib/grid';
 import { PageLayout } from '@client/shared/components/PageLayout';
-import { StatusTabs, TaskCard } from 'modules/AutoTest/components';
-import { useCourseTaskVerifications } from 'modules/AutoTest/hooks';
-import { CourseTaskStatus } from 'modules/AutoTest/types';
-import { useActiveCourseContext } from 'modules/Course/contexts';
+import { StatusTabs, TaskCard } from '@client/modules/AutoTest/components';
+import { useCourseTaskVerifications } from '@client/modules/AutoTest/hooks';
+import { CourseTaskStatus } from '@client/modules/AutoTest/types';
+import { useActiveCourseContext } from '@client/modules/Course/contexts';
 import { useMemo, useState } from 'react';
 
 const RESPONSIVE_COLUMNS: ColProps = {

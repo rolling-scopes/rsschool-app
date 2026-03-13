@@ -10,10 +10,10 @@ import {
   MessageOutlined,
   CopyOutlined,
 } from '@ant-design/icons';
-import { Contacts, ContactType } from 'modules/Opportunities/models';
-import { getContactsToRender } from 'modules/Opportunities/data/getContactsToRender';
+import { Contacts, ContactType } from '@client/modules/Opportunities/models';
+import { getContactsToRender } from '@client/modules/Opportunities/data/getContactsToRender';
 
-import { Link } from 'modules/Opportunities/components/Link';
+import { Link } from '@client/modules/Opportunities/components/Link';
 import { useMessage } from 'hooks';
 import styles from './index.module.css';
 

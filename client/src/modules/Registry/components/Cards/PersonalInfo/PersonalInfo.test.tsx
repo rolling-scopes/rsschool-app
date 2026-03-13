@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Form } from 'antd';
-import { ERROR_MESSAGES, LABELS, PLACEHOLDERS } from 'modules/Registry/constants';
+import { ERROR_MESSAGES, LABELS, PLACEHOLDERS } from '@client/modules/Registry/constants';
 import { PersonalInfo } from './PersonalInfo';
 import usePlacesAutocomplete from 'use-places-autocomplete';
 

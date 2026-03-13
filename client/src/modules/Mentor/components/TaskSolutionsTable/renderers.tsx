@@ -1,5 +1,5 @@
 import { ColumnsType, ColumnType } from 'antd/lib/table';
-import { TaskSolutionsTableColumnKey, TaskSolutionsTableColumnName } from 'modules/Mentor/constants';
+import { TaskSolutionsTableColumnKey, TaskSolutionsTableColumnName } from '@client/modules/Mentor/constants';
 import { dateSorter, dateWithTimeZoneRenderer, getColumnSearchProps } from '@client/shared/components/Table';
 import { Button, Space, Typography } from 'antd';
 import { MentorDashboardDto } from '@client/api';

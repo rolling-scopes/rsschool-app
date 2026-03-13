@@ -10,7 +10,7 @@ import {
   CourseStatsApi,
   StudentsApi,
 } from '@client/api';
-import { TaskStat } from 'modules/StudentDashboard/components';
+import { TaskStat } from '@client/modules/StudentDashboard/components';
 import { UserService } from 'services/user';
 
 const coursesTasksApi = new CoursesTasksApi();

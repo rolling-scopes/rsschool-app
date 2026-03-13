@@ -10,7 +10,7 @@ import { ModalForm } from '@client/shared/components/Forms';
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import { tabRenderer } from 'components/TabsWithCounter/renderers';
 import { useLoading } from 'components/useLoading';
-import { SessionContext, SessionProvider } from 'modules/Course/contexts';
+import { SessionContext, SessionProvider } from '@client/modules/Course/contexts';
 import {
   CombinedFilter,
   MentorRegistryDeleteModal,
@@ -19,7 +19,7 @@ import {
   MentorRegistryTableContainer,
   MentorRegistryTabsMode,
   PAGINATION,
-} from 'modules/MentorRegistry';
+} from '@client/modules/MentorRegistry';
 import dynamic from 'next/dynamic';
 import { CoursesService } from 'services/courses';
 import { MentorRegistryService } from 'services/mentorRegistry';

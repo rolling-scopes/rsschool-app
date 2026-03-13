@@ -1,5 +1,5 @@
-import { SessionProvider } from 'modules/Course/contexts';
-import { MentorTasksReview } from 'modules/MentorTasksReview/pages/MentorTasksReview';
+import { SessionProvider } from '@client/modules/Course/contexts';
+import { MentorTasksReview } from '@client/modules/MentorTasksReview/pages/MentorTasksReview';
 import { CourseRole } from 'services/models';
 
 export default function () {

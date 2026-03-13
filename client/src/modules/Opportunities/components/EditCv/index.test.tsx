@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { forwardRef } from 'react';
 import { AxiosResponse } from 'axios';
-import { Contacts, UserData } from 'modules/Opportunities/models';
+import { Contacts, UserData } from '@client/modules/Opportunities/models';
 import { OpportunitiesApi } from '@client/api';
 import { EditCV } from './index';
 

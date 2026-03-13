@@ -1,5 +1,5 @@
-import { SessionProvider } from 'modules/Course/contexts';
-import { InterviewWaitingList } from 'modules/Mentor/pages/InterviewWaitingList';
+import { SessionProvider } from '@client/modules/Course/contexts';
+import { InterviewWaitingList } from '@client/modules/Mentor/pages/InterviewWaitingList';
 import { CourseRole } from 'services/models';
 
 function Page() {

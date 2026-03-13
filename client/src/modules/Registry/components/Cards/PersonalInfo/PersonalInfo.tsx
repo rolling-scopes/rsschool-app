@@ -1,9 +1,16 @@
 import { Form, Input, Typography } from 'antd';
 import { Dispatch, SetStateAction } from 'react';
 import { Location } from '@common/models';
-import { DataProcessingCheckbox, FormButtons, FormCard } from 'modules/Registry/components';
+import { DataProcessingCheckbox, FormButtons, FormCard } from '@client/modules/Registry/components';
 import { emailPattern, englishNamePattern, epamEmailPattern } from 'services/validators';
-import { CARD_TITLES, ERROR_MESSAGES, EXTRAS, LABELS, PLACEHOLDERS, TOOLTIPS } from 'modules/Registry/constants';
+import {
+  CARD_TITLES,
+  ERROR_MESSAGES,
+  EXTRAS,
+  LABELS,
+  PLACEHOLDERS,
+  TOOLTIPS,
+} from '@client/modules/Registry/constants';
 import { LocationSelect } from '@client/shared/components/Forms';
 
 type Props = {

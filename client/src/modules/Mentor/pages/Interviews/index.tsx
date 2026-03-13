@@ -8,7 +8,7 @@ import { InterviewCard } from './components/InterviewCard';
 import { MentorOptionsProvider } from './components/MentorPreferencesModal';
 import groupBy from 'lodash/groupBy';
 import type { Dictionary } from 'lodash';
-import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
 import styles from './index.module.css';
 
 export function Interviews() {

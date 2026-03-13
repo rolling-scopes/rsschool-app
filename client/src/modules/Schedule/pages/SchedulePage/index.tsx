@@ -10,17 +10,17 @@ import {
 import { PageLayout } from '@client/shared/components/PageLayout';
 import { isCourseManager } from 'domain/user';
 import uniq from 'lodash/uniq';
-import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
-import { CoursesListModal } from 'modules/CourseManagement/components/CoursesListModal';
-import { CourseTaskModal } from 'modules/CourseManagement/components/CourseTaskModal';
-import { CourseEventModal } from 'modules/CourseManagement/components/CourseEventModal';
-import { SettingsPanel } from 'modules/Schedule/components/SettingsPanel';
-import { TableView } from 'modules/Schedule/components/TableView';
-import { StatusTabs } from 'modules/Schedule/components/StatusTabs';
-import { useScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
+import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
+import { CoursesListModal } from '@client/modules/CourseManagement/components/CoursesListModal';
+import { CourseTaskModal } from '@client/modules/CourseManagement/components/CourseTaskModal';
+import { CourseEventModal } from '@client/modules/CourseManagement/components/CourseEventModal';
+import { SettingsPanel } from '@client/modules/Schedule/components/SettingsPanel';
+import { TableView } from '@client/modules/Schedule/components/TableView';
+import { StatusTabs } from '@client/modules/Schedule/components/StatusTabs';
+import { useScheduleSettings } from '@client/modules/Schedule/hooks/useScheduleSettings';
 import { useContext, useMemo, useState } from 'react';
 import { useAsyncRetry, useLocalStorage, useMedia } from 'react-use';
-import { ALL_TAB_KEY, LocalStorageKeys } from 'modules/Schedule/constants';
+import { ALL_TAB_KEY, LocalStorageKeys } from '@client/modules/Schedule/constants';
 
 const courseScheduleApi = new CoursesScheduleApi();
 const coursesScheduleIcalApi = new CoursesScheduleIcalApi();

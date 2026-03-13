@@ -7,9 +7,9 @@ import { stringSorter } from '@client/shared/components/Table';
 import { SKILLS } from 'data/skills';
 import { TASK_TYPES } from 'data/taskTypes';
 import { ModalFormMode } from 'hooks';
-import { TaskSettings } from 'modules/Tasks/components';
-import { ERROR_MESSAGES, LABELS, MODAL_TITLES, PLACEHOLDERS } from 'modules/Tasks/constants';
-import { FormValues } from 'modules/Tasks/types';
+import { TaskSettings } from '@client/modules/Tasks/components';
+import { ERROR_MESSAGES, LABELS, MODAL_TITLES, PLACEHOLDERS } from '@client/modules/Tasks/constants';
+import { FormValues } from '@client/modules/Tasks/types';
 import { urlPattern } from 'services/validators';
 
 const { Text } = Typography;

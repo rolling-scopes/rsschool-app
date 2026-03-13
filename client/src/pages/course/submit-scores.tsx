@@ -11,7 +11,7 @@ import { CourseService } from 'services/course';
 import { filterLogin } from '@client/shared/utils/text-utils';
 import { isCourseManager } from 'domain/user';
 import { CoursesTasksApi, CourseTaskDto } from '@client/api';
-import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { CourseRole } from 'services/models';
 import { useMessage } from 'hooks';
 

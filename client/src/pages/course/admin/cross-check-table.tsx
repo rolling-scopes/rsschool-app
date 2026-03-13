@@ -1,5 +1,5 @@
-import { SessionProvider } from 'modules/Course/contexts';
-import { CrossCheckPairs } from 'modules/CrossCheckPairs/pages/CrossCheckPairs';
+import { SessionProvider } from '@client/modules/Course/contexts';
+import { CrossCheckPairs } from '@client/modules/CrossCheckPairs/pages/CrossCheckPairs';
 import { CourseRole } from 'services/models';
 
 export default function () {

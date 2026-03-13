@@ -1,6 +1,6 @@
 import { Typography, Form, Radio } from 'antd';
-import { CARD_TITLES, EXTRAS, LABELS, WIDE_FORM_ITEM_LAYOUT } from 'modules/Registry/constants';
-import { FormCard } from 'modules/Registry/components';
+import { CARD_TITLES, EXTRAS, LABELS, WIDE_FORM_ITEM_LAYOUT } from '@client/modules/Registry/constants';
+import { FormCard } from '@client/modules/Registry/components';
 import { MentorOptionsDtoPreferedStudentsLocationEnum } from '@client/api';
 
 const { Title } = Typography;

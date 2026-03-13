@@ -4,14 +4,14 @@ import { UserFull, UserService } from 'services/user';
 import { StudentStats } from '@common/models';
 import { useCallback, useEffect, useState } from 'react';
 import { CdnService } from 'services/cdn';
-import { GeneralSection, DoneSection } from 'modules/Registry/components';
+import { GeneralSection, DoneSection } from '@client/modules/Registry/components';
 import { Location } from '@common/models';
 import { Form, Modal, theme, Typography } from 'antd';
 import { useRouter } from 'next/router';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { DisciplinesApi, ProfileApi } from '@client/api';
 import { TYPES } from 'configs/registry';
-import { ERROR_MESSAGES } from 'modules/Registry/constants';
+import { ERROR_MESSAGES } from '@client/modules/Registry/constants';
 import { useMessage } from 'hooks';
 
 const { Title, Text } = Typography;

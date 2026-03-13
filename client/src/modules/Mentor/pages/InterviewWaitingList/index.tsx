@@ -18,7 +18,7 @@ import { isCourseManager, isMentor } from 'domain/user';
 import { AvailableStudentDto, CoursesInterviewsApi, InterviewDto, TaskDtoTypeEnum } from '@client/api';
 import { getRating } from 'domain/interview';
 import { CustomPopconfirm } from 'components/common/CustomPopconfirm';
-import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { useRequest } from 'ahooks';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';

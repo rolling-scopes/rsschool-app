@@ -1,5 +1,5 @@
-import { Task } from 'modules/AutoTest/pages';
-import { SessionProvider } from 'modules/Course/contexts';
+import { Task } from '@client/modules/AutoTest/pages';
+import { SessionProvider } from '@client/modules/Course/contexts';
 import { CourseRole } from 'services/models';
 
 function Page() {

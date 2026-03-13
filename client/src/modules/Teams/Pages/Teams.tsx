@@ -15,7 +15,7 @@ import { CreateTeamDto, TeamApi, TeamDto, JoinTeamDto, TeamDistributionApi } fro
 import { useLoading } from 'components/useLoading';
 import { useDistribution } from '../hooks';
 import { useMessage, useModalForm } from 'hooks';
-import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { useRouter } from 'next/router';
 import CheckCircleTwoTone from '@ant-design/icons/CheckCircleTwoTone';
 

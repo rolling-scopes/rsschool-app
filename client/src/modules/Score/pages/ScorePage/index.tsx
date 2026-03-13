@@ -1,7 +1,7 @@
-import { CourseNoAccess } from 'modules/Course/components/CourseNoAccess';
+import { CourseNoAccess } from '@client/modules/Course/components/CourseNoAccess';
 import { CoursePageLayout } from 'components/CoursePageLayout';
 import { useContext, useState } from 'react';
-import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { ScoreTableTabs } from '@client/modules/Score/components/ScoreTable/ScoreTableTabs';
 
 export function ScorePage() {

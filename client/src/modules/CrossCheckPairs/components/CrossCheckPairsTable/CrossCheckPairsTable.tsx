@@ -5,7 +5,7 @@ import {
   CustomColumnType,
   fields,
   getCrossCheckPairsColumns,
-} from 'modules/CrossCheckPairs/data/getCrossCheckPairsColumns';
+} from '@client/modules/CrossCheckPairs/data/getCrossCheckPairsColumns';
 
 import styles from './CrossCheckPairsTable.module.css';
 

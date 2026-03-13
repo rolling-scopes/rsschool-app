@@ -4,7 +4,7 @@ import { ModalSubmitForm } from '@client/shared/components/Forms';
 import { MentorReviewAssignDto, MentorReviewDto, MentorReviewsApi } from '@client/api';
 import isEmpty from 'lodash/isEmpty';
 import { MentorSearch } from '@client/shared/components/MentorSearch';
-import { useActiveCourseContext } from 'modules/Course/contexts';
+import { useActiveCourseContext } from '@client/modules/Course/contexts';
 import useRequest from 'ahooks/lib/useRequest';
 
 const mentorReviewsApi = new MentorReviewsApi();

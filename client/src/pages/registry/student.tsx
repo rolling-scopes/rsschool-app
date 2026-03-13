@@ -1,5 +1,5 @@
-import { SessionProvider } from 'modules/Course/contexts';
-import { StudentRegistry } from 'modules/Registry/pages';
+import { SessionProvider } from '@client/modules/Course/contexts';
+import { StudentRegistry } from '@client/modules/Registry/pages';
 
 function StudentRegistryPage() {
   return (

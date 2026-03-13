@@ -1,4 +1,4 @@
-import { CourseTaskStatus, COURSE_TASK_STATUSES } from 'modules/AutoTest/types';
+import { CourseTaskStatus, COURSE_TASK_STATUSES } from '@client/modules/AutoTest/types';
 import { LabelItem, tabRenderer } from 'components/TabsWithCounter/renderers';
 
 export const tabsRenderer = (statuses: CourseTaskStatus[], activeTab?: string) => {

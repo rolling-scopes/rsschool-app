@@ -3,7 +3,7 @@ import { ApplicantResumeDto, OpportunitiesApi } from '@client/api';
 import { Header } from '@client/shared/components/Header';
 import { LoadingScreen } from '@client/shared/components/LoadingScreen';
 import { dateRenderer, getColumnSearchProps, stringSorter } from '@client/shared/components/Table';
-import { SessionContext, SessionProvider } from 'modules/Course/contexts';
+import { SessionContext, SessionProvider } from '@client/modules/Course/contexts';
 import { withRouter } from 'next/router';
 import { useCallback, useContext, useEffect, useState } from 'react';
 

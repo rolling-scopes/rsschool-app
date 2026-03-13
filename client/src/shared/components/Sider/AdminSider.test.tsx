@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { AdminSider } from './AdminSider';
-import { SessionContext } from 'modules/Course/contexts';
+import { SessionContext } from '@client/modules/Course/contexts';
 import { Course } from 'services/models';
 import { useLocalStorage } from 'react-use';
 import { Session } from 'components/withSession';

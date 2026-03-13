@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import { CourseInfo, Session } from 'components/withSession';
-import { SessionContext } from 'modules/Course/contexts';
+import { SessionContext } from '@client/modules/Course/contexts';
 import { INSTRUCTIONS_TEXT } from '../Instructions';
 import MentorDashboard from './MentorDashboard';
-import { useMentorDashboard } from 'modules/Mentor/hooks/useMentorDashboard';
+import { useMentorDashboard } from '@client/modules/Mentor/hooks/useMentorDashboard';
 
 jest.mock('modules/Mentor/hooks/useMentorDashboard');
 

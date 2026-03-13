@@ -1,7 +1,7 @@
 import { CourseScheduleItemDto } from '@client/api';
 import { ColumnType } from 'antd/lib/table';
 import { coloredDateRenderer, renderTask } from '@client/shared/components/Table';
-import { renderTagWithStyle } from 'modules/Schedule/components/TableView/renderers';
+import { renderTagWithStyle } from '@client/modules/Schedule/components/TableView/renderers';
 import CalendarOutlined from '@ant-design/icons/CalendarOutlined';
 import { Space, Typography } from 'antd';
 

@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Form } from 'antd';
 import { UpdateUserDtoLanguagesEnum } from '@client/api';
-import { LABELS } from 'modules/Registry/constants';
+import { LABELS } from '@client/modules/Registry/constants';
 import { Course } from 'services/models';
 import { AdditionalInfo } from './AdditionalInfo';
 

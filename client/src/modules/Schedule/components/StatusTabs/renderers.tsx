@@ -1,5 +1,5 @@
 import { CourseScheduleItemDtoStatusEnum } from '@client/api';
-import { ALL_TAB_KEY, ALL_TAB_LABEL, SCHEDULE_STATUSES } from 'modules/Schedule/constants';
+import { ALL_TAB_KEY, ALL_TAB_LABEL, SCHEDULE_STATUSES } from '@client/modules/Schedule/constants';
 import { Status } from './StatusTabs';
 import { LabelItem, tabRenderer } from 'components/TabsWithCounter/renderers';
 

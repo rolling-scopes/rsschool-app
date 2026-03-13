@@ -1,10 +1,10 @@
 import { PageLayoutSimple } from '@client/shared/components/PageLayout';
 import { getMentorId } from 'domain/user';
-import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
-import { useMentorStudents } from 'modules/Mentor/hooks/useMentorStudents';
+import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
+import { useMentorStudents } from '@client/modules/Mentor/hooks/useMentorStudents';
 import { useContext } from 'react';
 import { CreateStudentFeedbackDto, StudentsFeedbacksApi } from '@client/api';
-import { FeedbackForm } from 'modules/Feedback/components/FeedbackForm';
+import { FeedbackForm } from '@client/modules/Feedback/components/FeedbackForm';
 import { useRouter } from 'next/router';
 import { useMessage } from 'hooks';
 

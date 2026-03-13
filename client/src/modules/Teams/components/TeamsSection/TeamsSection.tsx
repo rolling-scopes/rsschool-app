@@ -6,7 +6,7 @@ import { useAsync } from 'react-use';
 import { IPaginationInfo } from '@client/shared/utils/pagination';
 import { getColumns, expandedRowRender } from './renderers';
 import { useLoading } from 'components/useLoading';
-import { TeamsTableColumnKey } from 'modules/Teams/constants';
+import { TeamsTableColumnKey } from '@client/modules/Teams/constants';
 
 type Props = {
   distribution: TeamDistributionDetailedDto;

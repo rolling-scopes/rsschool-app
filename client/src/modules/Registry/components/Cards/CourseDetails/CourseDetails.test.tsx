@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { Form } from 'antd';
 import { CourseDto } from '@client/api';
-import { LABELS, PLACEHOLDERS } from 'modules/Registry/constants';
+import { LABELS, PLACEHOLDERS } from '@client/modules/Registry/constants';
 import { CourseDetails } from './CourseDetails';
 
 const renderCourseDetails = (courses: CourseDto[] = []) =>

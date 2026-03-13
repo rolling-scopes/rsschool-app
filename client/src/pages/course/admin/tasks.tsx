@@ -12,8 +12,8 @@ import {
   getColumnSearchProps,
   stringSorter,
 } from '@client/shared/components/Table';
-import { SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
-import { CourseTaskModal } from 'modules/CourseManagement/components/CourseTaskModal';
+import { SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
+import { CourseTaskModal } from '@client/modules/CourseManagement/components/CourseTaskModal';
 import { useCallback, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService } from 'services/course';
