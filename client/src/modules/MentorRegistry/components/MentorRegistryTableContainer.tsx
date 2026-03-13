@@ -17,7 +17,7 @@ import { Button, Dropdown, Tooltip, message, theme } from 'antd';
 import { MoreOutlined, MessageTwoTone } from '@ant-design/icons';
 import { ColumnType } from 'antd/lib/table';
 import { DisciplineDto, MentorRegistryDto } from '@client/api';
-import { ModalDataMode } from 'pages/admin/mentor-registry';
+import { ModalDataMode } from '@client/pages/admin/mentor-registry';
 import { PublicSvgIcon } from '@client/shared/components/Icons';
 import styles from './MentorRegistryTableContainer.module.css';
 

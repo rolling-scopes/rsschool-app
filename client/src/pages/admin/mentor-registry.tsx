@@ -26,7 +26,7 @@ import { MentorRegistryService } from '@client/services/mentorRegistry';
 import { Course, CourseRole } from '@client/services/models';
 import styles from './mentor-registry.module.css';
 
-const InviteMentorsModal = dynamic(() => import('modules/MentorRegistry/components/InviteMentorsModal'), {
+const InviteMentorsModal = dynamic(() => import('@client/modules/MentorRegistry/components/InviteMentorsModal'), {
   ssr: false,
 });
 
