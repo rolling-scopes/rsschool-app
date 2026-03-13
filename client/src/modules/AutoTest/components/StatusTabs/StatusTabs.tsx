@@ -1,6 +1,6 @@
 import { Tabs } from 'antd';
 import { useMemo } from 'react';
-import { CourseTaskStatus } from 'modules/AutoTest/types';
+import { CourseTaskStatus } from '@client/modules/AutoTest/types';
 import { tabsRenderer } from './renderers';
 
 export interface StatusTabsProps {

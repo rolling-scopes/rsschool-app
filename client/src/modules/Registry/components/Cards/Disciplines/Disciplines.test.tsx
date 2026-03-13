@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { Form } from 'antd';
-import { DisciplineDto } from 'api';
-import { LABELS } from 'modules/Registry/constants';
+import { DisciplineDto } from '@client/api';
+import { LABELS } from '@client/modules/Registry/constants';
 import { Disciplines } from './Disciplines';
 
 const mockDisciplines = [

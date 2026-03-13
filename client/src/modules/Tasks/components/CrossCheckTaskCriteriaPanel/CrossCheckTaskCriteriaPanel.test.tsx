@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { Form } from 'antd';
-import { CriteriaDto } from 'api';
-import { LABELS } from 'modules/Tasks/constants';
+import { CriteriaDto } from '@client/api';
+import { LABELS } from '@client/modules/Tasks/constants';
 import { CrossCheckTaskCriteriaPanel } from './CrossCheckTaskCriteriaPanel';
 
 const criteriaMock: CriteriaDto = { type: 'title', text: 'Title', key: 'key', index: 1 };

@@ -1,6 +1,6 @@
 import useRequest from 'ahooks/lib/useRequest';
 import { Descriptions, Typography } from 'antd';
-import { SessionApi } from 'api';
+import { SessionApi } from '@client/api';
 
 const { Text } = Typography;
 const { Item } = Descriptions;

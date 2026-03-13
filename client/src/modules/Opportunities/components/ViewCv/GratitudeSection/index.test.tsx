@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { GratitudeDto } from 'api';
+import { GratitudeDto } from '@client/api';
 import { GratitudeSection } from './index';
 
 jest.mock('./GratitudeList', () => ({

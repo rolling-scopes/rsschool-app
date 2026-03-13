@@ -1,8 +1,8 @@
 import { Form, Input, message, Space, Typography, Modal } from 'antd';
-import { CreateTeamDto, TeamDto } from 'api';
-import { StudentSearch } from 'components/StudentSearch';
-import { useLoading } from 'components/useLoading';
-import { urlPattern } from 'services/validators';
+import { CreateTeamDto, TeamDto } from '@client/api';
+import { StudentSearch } from '@client/shared/components/StudentSearch';
+import { useLoading } from '@client/components/useLoading';
+import { urlPattern } from '@client/services/validators';
 
 const { TextArea } = Input;
 

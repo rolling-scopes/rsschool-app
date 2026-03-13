@@ -1,4 +1,5 @@
-export type { TopMentorDto, MentorCourseStatsDto } from 'api';
+import { MentorCourseStatsDto, TopMentorDto } from '@client/api';
 
-export type TopMentor = import('api').TopMentorDto;
-export type CourseStats = import('api').MentorCourseStatsDto;
+export type { TopMentorDto, MentorCourseStatsDto } from '@client/api';
+export type TopMentor = TopMentorDto;
+export type CourseStats = MentorCourseStatsDto;

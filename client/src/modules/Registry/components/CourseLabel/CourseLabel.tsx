@@ -1,7 +1,7 @@
-import { CourseDto } from 'api';
-import { CourseIcon } from 'components/Icons';
-import { formatMonthFriendly } from 'services/formatter';
-import { LABELS } from 'modules/Registry/constants';
+import { CourseDto } from '@client/api';
+import { CourseIcon } from '@client/shared/components/Icons';
+import { formatMonthFriendly } from '@client/services/formatter';
+import { LABELS } from '@client/modules/Registry/constants';
 
 type Props = {
   course: CourseDto;

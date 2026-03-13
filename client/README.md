@@ -106,8 +106,8 @@ modules/<Feature>/
 ## Example Page Wrapper
 
 ```tsx
-import { SessionProvider } from 'modules/Course/contexts';
-import { ScorePage } from 'modules/Score/pages/ScorePage';
+import { SessionProvider } from '@client/modules/Course/contexts';
+import { ScorePage } from '@client/modules/Score/pages/ScorePage';
 
 export default function Page() {
   return (

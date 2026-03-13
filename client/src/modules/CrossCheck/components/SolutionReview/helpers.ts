@@ -1,4 +1,4 @@
-import { CrossCheckMessageDto, CrossCheckMessageDtoRoleEnum } from 'api';
+import { CrossCheckMessageDto, CrossCheckMessageDtoRoleEnum } from '@client/api';
 
 export const getAmountUnreadMessages = (
   currentRole: CrossCheckMessageDtoRoleEnum,

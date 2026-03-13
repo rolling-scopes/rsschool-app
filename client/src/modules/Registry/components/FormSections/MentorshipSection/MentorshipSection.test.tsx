@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { Form } from 'antd';
-import { CARD_TITLES } from 'modules/Registry/constants';
+import { CARD_TITLES } from '@client/modules/Registry/constants';
 import { MentorshipSection } from './MentorshipSection';
 
 const renderMentorshipSection = () => {

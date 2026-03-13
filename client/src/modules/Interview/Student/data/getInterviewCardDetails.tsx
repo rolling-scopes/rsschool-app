@@ -1,5 +1,5 @@
-import { InterviewResult } from 'domain/interview';
-import { formatShortDate } from 'services/formatter';
+import { InterviewResult } from '@client/domain/interview';
+import { formatShortDate } from '@client/services/formatter';
 
 interface StudentInterviewDetails {
   registrationNotStarted: boolean;

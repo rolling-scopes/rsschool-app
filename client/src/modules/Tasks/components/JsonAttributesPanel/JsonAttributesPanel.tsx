@@ -1,5 +1,5 @@
 import { Form, Input } from 'antd';
-import { ERROR_MESSAGES, PLACEHOLDERS } from 'modules/Tasks/constants';
+import { ERROR_MESSAGES, PLACEHOLDERS } from '@client/modules/Tasks/constants';
 
 export function JsonAttributesPanel() {
   return (

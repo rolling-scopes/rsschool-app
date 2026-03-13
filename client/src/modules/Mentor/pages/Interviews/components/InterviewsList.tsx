@@ -1,12 +1,12 @@
 import { Alert, Spin } from 'antd';
 import InfoCircleTwoTone from '@ant-design/icons/InfoCircleTwoTone';
 import { useState } from 'react';
-import { MentorInterview } from 'services/course';
+import { MentorInterview } from '@client/services/course';
 import { StudentInterview } from './StudentInterview';
 import { InterviewsSummary } from './InterviewsSummary';
-import { InterviewDto, TaskDtoTypeEnum } from 'api';
-import { Course } from 'services/models';
-import { useLoading } from 'components/useLoading';
+import { InterviewDto, TaskDtoTypeEnum } from '@client/api';
+import { Course } from '@client/services/models';
+import { useLoading } from '@client/components/useLoading';
 import { useAsyncFn } from 'react-use';
 import styles from './InterviewsList.module.css';
 

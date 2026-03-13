@@ -1,6 +1,6 @@
 import { Typography } from 'antd';
-import { StudentBasic } from 'services/models';
-import { StudentDiscord } from '../../../components/StudentDiscord';
+import { StudentBasic } from '@client/services/models';
+import { StudentDiscord } from '@client/components/StudentDiscord';
 
 export type AssignmentLink = { student: StudentBasic; url: string };
 

@@ -1,4 +1,4 @@
-import { CriteriaDto } from 'api';
+import { CriteriaDto } from '@client/api';
 
 export function arrayMoveMutable(array: CriteriaDto[], fromIndex: number, toIndex: number) {
   const startIndex = fromIndex < 0 ? array.length + fromIndex : fromIndex;

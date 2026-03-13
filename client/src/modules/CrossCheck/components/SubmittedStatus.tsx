@@ -1,6 +1,6 @@
 import { Alert } from 'antd';
-import { formatDate } from 'services/formatter';
-import { TaskSolution } from 'services/course';
+import { formatDate } from '@client/services/formatter';
+import { TaskSolution } from '@client/services/course';
 
 type Props = {
   solution: TaskSolution | null;

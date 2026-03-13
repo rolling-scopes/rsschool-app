@@ -1,16 +1,16 @@
 import { Form } from 'antd';
-import { CourseTaskDetailedDtoTypeEnum, CourseTaskVerificationsApi } from 'api';
+import { CourseTaskDetailedDtoTypeEnum, CourseTaskVerificationsApi } from '@client/api';
 import snakeCase from 'lodash/snakeCase';
 import { useContext, useMemo, useState } from 'react';
-import { FilesService } from 'services/files';
-import { SelfEducationPublicAttributes } from 'services/course';
+import { FilesService } from '@client/services/files';
+import { SelfEducationPublicAttributes } from '@client/services/course';
 import { AxiosError } from 'axios';
-import { isExpelledStudent } from 'domain/user';
-import { SessionContext } from 'modules/Course/contexts';
+import { isExpelledStudent } from '@client/domain/user';
+import { SessionContext } from '@client/modules/Course/contexts';
 import { InternalUploadFile } from 'antd/lib/upload/interface';
 import { useBeforeUnload } from 'react-use';
-import { CourseTaskVerifications } from 'modules/AutoTest/types';
-import { useMessage } from 'hooks';
+import { CourseTaskVerifications } from '@client/modules/AutoTest/types';
+import { useMessage } from '@client/hooks';
 
 type SelfEducationValues = Record<string, number>;
 export type IpynbFile = { upload: { file: InternalUploadFile } };

@@ -1,6 +1,6 @@
 import { Form, Input, Typography, Modal } from 'antd';
-import { JoinTeamDto } from 'api';
-import { passwordPattern } from 'services/validators';
+import { JoinTeamDto } from '@client/api';
+import { passwordPattern } from '@client/services/validators';
 
 type Props = {
   onCancel: () => void;

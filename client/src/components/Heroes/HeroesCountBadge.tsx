@@ -1,6 +1,6 @@
 import heroesBadges from '@client/configs/heroes-badges';
 import { Avatar, Badge, Tooltip } from 'antd';
-import { HeroesRadarBadgeDto } from 'api';
+import { HeroesRadarBadgeDto } from '@client/api';
 import dayjs from 'dayjs';
 
 type HeroesCountBadgeProps = {

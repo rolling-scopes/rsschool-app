@@ -1,6 +1,6 @@
 import DeleteOutlined from '@ant-design/icons/DeleteOutlined';
 import { Button, Popconfirm } from 'antd';
-import { CriteriaDto } from 'api';
+import { CriteriaDto } from '@client/api';
 
 interface Props {
   setDataCriteria: (criteria: CriteriaDto[]) => void;

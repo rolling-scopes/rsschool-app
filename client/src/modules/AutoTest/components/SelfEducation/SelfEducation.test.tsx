@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { Form } from 'antd';
-import { SelfEducationPublicAttributes, SelfEducationQuestion } from 'services/course';
+import { SelfEducationPublicAttributes, SelfEducationQuestion } from '@client/services/course';
 import { CourseTaskVerifications } from '../../types';
 import SelfEducation from './SelfEducation';
 

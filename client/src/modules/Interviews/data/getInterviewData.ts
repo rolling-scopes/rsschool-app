@@ -1,7 +1,7 @@
-import { CoursesInterviewsApi } from 'api';
-import { templates } from 'data/interviews';
+import { CoursesInterviewsApi } from '@client/api';
+import { templates } from '@client/data/interviews';
 import { ParsedUrlQuery } from 'querystring';
-import type { CourseOnlyPageProps } from 'services/models';
+import type { CourseOnlyPageProps } from '@client/services/models';
 
 export type FeedbackProps = CourseOnlyPageProps & {
   interviewTaskId: number;

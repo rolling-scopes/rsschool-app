@@ -1,14 +1,14 @@
 import { Divider, Flex, Form } from 'antd';
-import { CriteriaDto } from 'api';
+import { CriteriaDto } from '@client/api';
 import {
   addKeyAndIndex,
   UploadCriteriaJSON,
   AddCriteriaForCrossCheck,
   EditableTable,
   ExportJSONButton,
-} from 'modules/CrossCheck';
-import { DeleteAllCrossCheckCriteriaButton } from 'modules/CrossCheck/DeleteAllCrossCheckCriteriaButton';
-import { LABELS } from 'modules/Tasks/constants';
+} from '@client/modules/CrossCheck';
+import { DeleteAllCrossCheckCriteriaButton } from '@client/modules/CrossCheck/DeleteAllCrossCheckCriteriaButton';
+import { LABELS } from '@client/modules/Tasks/constants';
 import { Dispatch, SetStateAction } from 'react';
 
 type Props = {

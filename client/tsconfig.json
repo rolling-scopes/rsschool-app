@@ -20,10 +20,9 @@
     "noEmit": true,
     "skipLibCheck": true,
     "lib": ["dom", "es2015", "es2016", "es2017"],
-    "baseUrl": "src",
     "paths": {
-      "@common/*": ["../../common/*"],
-      "@client/*": ["./*"]
+      "@common/*": ["../common/*"],
+      "@client/*": ["./src/*"]
     },
     "incremental": true
   },

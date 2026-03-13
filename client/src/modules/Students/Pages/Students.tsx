@@ -1,15 +1,15 @@
 import { Drawer, TablePaginationConfig, message } from 'antd';
 import { FilterValue } from 'antd/es/table/interface';
-import { StudentsApi, UserStudentDto } from 'api';
-import { IPaginationInfo } from '@client/utils/pagination';
-import { AdminPageLayout } from 'components/PageLayout';
-import { useLoading } from 'components/useLoading';
+import { StudentsApi, UserStudentDto } from '@client/api';
+import { IPaginationInfo } from '@client/shared/utils/pagination';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
+import { useLoading } from '@client/components/useLoading';
 import { useState } from 'react';
 import { useAsync } from 'react-use';
 import StudentsTable from '../components/StudentsTable';
 import { ColumnKey } from '../components/StudentsTable/renderers';
 import { StudentInfo } from '../components/StudentInfo';
-import { useActiveCourseContext } from 'modules/Course/contexts';
+import { useActiveCourseContext } from '@client/modules/Course/contexts';
 
 const studentsApi = new StudentsApi();
 

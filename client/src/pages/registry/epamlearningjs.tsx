@@ -1,17 +1,17 @@
 import { Button, Col, Form, Input, message, Result, Row, Typography } from 'antd';
 import axios from 'axios';
-import { PageLayout } from 'components/PageLayout';
-import { GdprCheckbox, LocationSelect } from 'components/Forms';
-import { withGoogleMaps } from 'components/withGoogleMaps';
+import { PageLayout } from '@client/shared/components/PageLayout';
+import { GdprCheckbox, LocationSelect } from '@client/shared/components/Forms';
+import { withGoogleMaps } from '@client/components/withGoogleMaps';
 import { useState, useEffect } from 'react';
 import { useAsync, useUpdate } from 'react-use';
-import { CoursesService } from 'services/courses';
-import { Course } from 'services/models';
-import { UserFull, UserService } from 'services/user';
-import { emailPattern, englishNamePattern } from 'services/validators';
+import { CoursesService } from '@client/services/courses';
+import { Course } from '@client/services/models';
+import { UserFull, UserService } from '@client/services/user';
+import { emailPattern, englishNamePattern } from '@client/services/validators';
 import { TYPES } from './../../configs/registry';
 import { Location } from '@common/models/profile';
-import { SessionProvider } from 'modules/Course/contexts';
+import { SessionProvider } from '@client/modules/Course/contexts';
 
 const defaultColumnSizes = { xs: 18, sm: 10, md: 8, lg: 6 };
 const defaultRowGutter = 24;

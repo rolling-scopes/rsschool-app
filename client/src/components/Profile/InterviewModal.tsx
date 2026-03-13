@@ -9,7 +9,7 @@ import {
   PrescreeningFeedback,
   ScoreWidget,
 } from '@client/components/Profile/ui';
-import { Rating } from '@client/components/Rating';
+import { Rating } from '@client/shared/components/Rating';
 
 const { Text } = Typography;
 

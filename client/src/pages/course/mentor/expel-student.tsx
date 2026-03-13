@@ -1,14 +1,14 @@
 import { Button, Form, Input, Radio, Typography } from 'antd';
-import { CoursesApi, MentorsApi, MentorStudentDto } from 'api';
-import { PageLayoutSimple } from 'components/PageLayout';
-import { UserSearch } from 'components/UserSearch';
-import { getMentorId, isMentor } from 'domain/user';
-import { useMessage } from 'hooks';
-import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { CoursesApi, MentorsApi, MentorStudentDto } from '@client/api';
+import { PageLayoutSimple } from '@client/shared/components/PageLayout';
+import { UserSearch } from '@client/shared/components/UserSearch';
+import { getMentorId, isMentor } from '@client/domain/user';
+import { useMessage } from '@client/hooks';
+import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { useContext, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService } from 'services/course';
-import { CourseRole } from 'services/models';
+import { CourseService } from '@client/services/course';
+import { CourseRole } from '@client/services/models';
 
 type ActionOnStudent = 'expel' | 'unassign' | 'self-study';
 

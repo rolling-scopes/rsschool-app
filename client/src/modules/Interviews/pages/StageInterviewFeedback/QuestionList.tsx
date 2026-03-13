@@ -4,7 +4,7 @@ import PlusOutlined from '@ant-design/icons/PlusOutlined';
 import { QuestionCard } from './QuestionCard';
 import { QuestionsPicker } from './QuestionsPicker';
 import { useMemo, useState } from 'react';
-import { QuestionItem, FeedbackStepId } from 'data/interviews/technical-screening';
+import { QuestionItem, FeedbackStepId } from '@client/data/interviews/technical-screening';
 import { FormInstance } from 'antd/lib';
 import { CustomQuestion } from './CustomQuestion';
 import { InterviewQuestion } from '@common/models';

@@ -7,9 +7,9 @@ import {
   CloseCircleTwoTone,
   ClockCircleOutlined,
 } from '@ant-design/icons';
-import { OpportunitiesApi } from 'api';
-import { ExpirationState } from 'modules/Opportunities/constants';
-import { useMessage } from 'hooks';
+import { OpportunitiesApi } from '@client/api';
+import { ExpirationState } from '@client/modules/Opportunities/constants';
+import { useMessage } from '@client/hooks';
 
 const { Text, Paragraph } = Typography;
 

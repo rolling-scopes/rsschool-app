@@ -1,5 +1,5 @@
 import { Radio, Space, FormInstance, Form } from 'antd';
-import { RadioOption } from 'data/interviews/technical-screening';
+import { RadioOption } from '@client/data/interviews/technical-screening';
 import { useEffect } from 'react';
 
 const { Item, useWatch } = Form;

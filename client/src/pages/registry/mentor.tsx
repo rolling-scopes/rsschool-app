@@ -1,5 +1,5 @@
-import { SessionProvider } from 'modules/Course/contexts';
-import { MentorRegistry } from 'modules/Registry/pages';
+import { SessionProvider } from '@client/modules/Course/contexts';
+import { MentorRegistry } from '@client/modules/Registry/pages';
 
 function MentorRegistryPage() {
   return (

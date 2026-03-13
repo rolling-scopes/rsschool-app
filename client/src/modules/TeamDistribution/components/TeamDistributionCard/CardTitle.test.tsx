@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { TeamDistributionDto, TeamDistributionDtoRegistrationStatusEnum } from 'api';
+import { TeamDistributionDto, TeamDistributionDtoRegistrationStatusEnum } from '@client/api';
 import { CardTitle } from './CardTitle';
 
 const distribution = {

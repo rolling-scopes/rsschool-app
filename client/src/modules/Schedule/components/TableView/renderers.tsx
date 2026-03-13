@@ -1,8 +1,8 @@
 import { Badge, Tag } from 'antd';
-import { CourseScheduleItemDto, CourseScheduleItemDtoStatusEnum } from 'api';
+import { CourseScheduleItemDto, CourseScheduleItemDtoStatusEnum } from '@client/api';
 import capitalize from 'lodash/capitalize';
-import { DEFAULT_TAG_COLOR_MAP, TAG_NAME_MAP } from 'modules/Schedule/constants';
-import { getStatusStyle, getTagStyle, getTaskStatusColor } from 'modules/Schedule/utils';
+import { DEFAULT_TAG_COLOR_MAP, TAG_NAME_MAP } from '@client/modules/Schedule/constants';
+import { getStatusStyle, getTagStyle, getTaskStatusColor } from '@client/modules/Schedule/utils';
 
 export function statusRenderer(value: CourseScheduleItemDtoStatusEnum) {
   const label = capitalize(value);

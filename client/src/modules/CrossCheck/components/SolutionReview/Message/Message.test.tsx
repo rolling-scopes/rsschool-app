@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Message, { MessageProps } from './Message';
-import { CrossCheckMessageDtoRoleEnum } from 'api';
+import { CrossCheckMessageDtoRoleEnum } from '@client/api';
 
 const messageProps: MessageProps = {
   reviewNumber: 1,

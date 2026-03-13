@@ -1,17 +1,17 @@
 import * as React from 'react';
 import isEqual from 'lodash/isEqual';
 import { Typography, Tooltip } from 'antd';
-import { Comment } from 'components/Comment';
+import { Comment } from '@client/components/Comment';
 import FullscreenOutlined from '@ant-design/icons/FullscreenOutlined';
 import MessageOutlined from '@ant-design/icons/MessageOutlined';
 import CommonCard from './CommonCard';
 import PublicFeedbackModal from './PublicFeedbackModal';
 import heroesBadges from '../../configs/heroes-badges';
 import { PublicFeedback } from '@common/models/profile';
-import { GithubAvatar } from 'components/GithubAvatar';
+import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 import dayjs from 'dayjs';
 import relative from 'dayjs/plugin/relativeTime';
-import HeroesCountBadge from 'components/Heroes/HeroesCountBadge';
+import HeroesCountBadge from '@client/components/Heroes/HeroesCountBadge';
 
 dayjs.extend(relative);
 

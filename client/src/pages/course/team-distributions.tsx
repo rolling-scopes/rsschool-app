@@ -1,5 +1,5 @@
-import { SessionProvider } from 'modules/Course/contexts';
-import { TeamDistributions } from 'modules/TeamDistribution/pages/TeamDistributions';
+import { SessionProvider } from '@client/modules/Course/contexts';
+import { TeamDistributions } from '@client/modules/TeamDistribution/pages/TeamDistributions';
 
 function Page() {
   return (

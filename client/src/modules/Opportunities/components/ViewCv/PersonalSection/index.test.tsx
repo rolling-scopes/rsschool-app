@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import { UserData } from 'modules/Opportunities/models';
-import { getPersonalToRender } from 'modules/Opportunities/data/getPersonalToRender';
+import { UserData } from '@client/modules/Opportunities/models';
+import { getPersonalToRender } from '@client/modules/Opportunities/data/getPersonalToRender';
 import { PersonalSection } from './index';
 
 jest.mock('modules/Opportunities/data/getPersonalToRender');

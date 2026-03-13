@@ -1,10 +1,10 @@
-import { CourseScheduleItemDto } from 'api';
+import { CourseScheduleItemDto } from '@client/api';
 import { Row, Col, Typography } from 'antd';
 import { SwapRightOutlined } from '@ant-design/icons';
-import { coloredDateRenderer } from 'components/Table';
+import { coloredDateRenderer } from '@client/shared/components/Table';
 import { renderTagWithStyle, statusRenderer } from '../TableView/renderers';
 import Link from 'next/link';
-import { ScheduleSettings } from 'modules/Schedule/hooks/useScheduleSettings';
+import { ScheduleSettings } from '@client/modules/Schedule/hooks/useScheduleSettings';
 import dayjs from 'dayjs';
 
 const { Title } = Typography;

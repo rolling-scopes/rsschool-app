@@ -1,4 +1,4 @@
-import { OpportunitiesApi } from 'api';
+import { OpportunitiesApi } from '@client/api';
 import { AxiosError } from 'axios';
 import { useAsync } from 'react-use';
 

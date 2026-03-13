@@ -1,8 +1,8 @@
 import { BranchesOutlined, CheckCircleTwoTone, ClockCircleTwoTone, MinusCircleOutlined } from '@ant-design/icons';
 import { Button, Row, Space, Statistic, Switch, Table, Typography } from 'antd';
 import { ColumnProps } from 'antd/lib/table/Column';
-import { AdminPageLayout } from 'components/PageLayout';
-import { DashboardDetails } from 'components/Student';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
+import { DashboardDetails } from '@client/components/Student';
 import {
   boolIconRenderer,
   boolSorter,
@@ -10,17 +10,17 @@ import {
   numberSorter,
   PersonCell,
   stringSorter,
-} from 'components/Table';
-import { useLoading } from 'components/useLoading';
-import { isAdmin, isCourseManager, isCourseSupervisor } from 'domain/user';
-import { useMessage } from 'hooks';
+} from '@client/shared/components/Table';
+import { useLoading } from '@client/components/useLoading';
+import { isAdmin, isCourseManager, isCourseSupervisor } from '@client/domain/user';
+import { useMessage } from '@client/hooks';
 import keys from 'lodash/keys';
-import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
-import { CertificateCriteriaModal, ExpelCriteriaModal } from 'modules/CourseManagement/components';
+import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
+import { CertificateCriteriaModal, ExpelCriteriaModal } from '@client/modules/CourseManagement/components';
 import { useContext, useMemo, useState } from 'react';
 import { useAsync, useToggle } from 'react-use';
-import { CourseService, StudentDetails } from 'services/course';
-import { CourseRole } from 'services/models';
+import { CourseService, StudentDetails } from '@client/services/course';
+import { CourseRole } from '@client/services/models';
 
 const { Text } = Typography;
 

@@ -1,6 +1,6 @@
-import { UserData } from 'modules/Opportunities/models';
+import { UserData } from '@client/modules/Opportunities/models';
 import { Fragment } from 'react';
-import { getPersonalToRender } from 'modules/Opportunities/data/getPersonalToRender';
+import { getPersonalToRender } from '@client/modules/Opportunities/data/getPersonalToRender';
 
 import styles from './PersonalSection.module.css';
 

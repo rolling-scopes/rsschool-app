@@ -1,5 +1,5 @@
-import { AutoTests } from 'modules/AutoTest/pages';
-import { SessionProvider } from 'modules/Course/contexts';
+import { AutoTests } from '@client/modules/AutoTest/pages';
+import { SessionProvider } from '@client/modules/Course/contexts';
 
 function Page() {
   return (

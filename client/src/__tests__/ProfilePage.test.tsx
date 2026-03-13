@@ -1,7 +1,7 @@
 import { Session } from '@client/components/withSession';
 import ProfilePage from '@client/pages/profile';
 import { render } from '@testing-library/react';
-import { SessionApi } from 'api';
+import { SessionApi } from '@client/api';
 import { NextRouter, useRouter } from 'next/router';
 
 jest.mock('next/config', () => () => ({}));

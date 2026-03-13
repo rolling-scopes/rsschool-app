@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import TaskStatusTabs, { Status } from './TaskStatusTabs';
-import { SolutionItemStatus, TASKS_STATUSES } from 'modules/Mentor/constants';
+import { SolutionItemStatus, TASKS_STATUSES } from '@client/modules/Mentor/constants';
 
 const PROPS_MOCK = {
   statuses: [],

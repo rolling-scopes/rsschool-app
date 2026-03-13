@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { VerificationsTable, VerificationsTableProps } from '..';
-import { Verification } from '../../../../services/course';
+import { Verification } from '@client/services/course';
 
 const PROPS_MOCK: VerificationsTableProps = {
   maxScore: 100,

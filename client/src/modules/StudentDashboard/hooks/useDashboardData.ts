@@ -9,9 +9,9 @@ import {
   CoursesTasksApi,
   CourseStatsApi,
   StudentsApi,
-} from 'api';
-import { TaskStat } from 'modules/StudentDashboard/components';
-import { UserService } from 'services/user';
+} from '@client/api';
+import { TaskStat } from '@client/modules/StudentDashboard/components';
+import { UserService } from '@client/services/user';
 
 const coursesTasksApi = new CoursesTasksApi();
 const coursesStatsApi = new CourseStatsApi();

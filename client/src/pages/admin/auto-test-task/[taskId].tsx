@@ -1,12 +1,12 @@
 import { useRequest } from 'ahooks';
 import { Descriptions, Divider, Form, Space, Switch, Tag, Typography } from 'antd';
-import { AutoTestsApi, SelfEducationQuestionSelectedAnswersDto } from 'api';
-import { AdminPageLayout } from 'components/PageLayout';
-import { Question } from 'modules/AutoTest/components';
-import { SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { AutoTestsApi, SelfEducationQuestionSelectedAnswersDto } from '@client/api';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
+import { Question } from '@client/modules/AutoTest/components';
+import { SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { CourseRole } from 'services/models';
+import { CourseRole } from '@client/services/models';
 
 const api = new AutoTestsApi();
 

@@ -1,5 +1,5 @@
-import { SessionProvider } from 'modules/Course/contexts';
-import { Teams } from 'modules/Teams';
+import { SessionProvider } from '@client/modules/Course/contexts';
+import { Teams } from '@client/modules/Teams';
 
 export function Page() {
   return (

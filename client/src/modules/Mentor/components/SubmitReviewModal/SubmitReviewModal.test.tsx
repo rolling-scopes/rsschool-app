@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { MentorDashboardDto } from 'api';
+import { MentorDashboardDto } from '@client/api';
 import mockAxios from 'jest-mock-axios';
 import { MODAL_TITLE, SubmitReviewModal, SubmitReviewModalProps } from '.';
 import { SUCCESS_MESSAGE } from './SubmitReviewModal';

@@ -1,8 +1,8 @@
 import { renderHook } from '@testing-library/react';
-import { SelfEducationPublicAttributes, Verification } from 'services/course';
-import { CourseTaskDetailedDtoTypeEnum } from 'api';
+import { SelfEducationPublicAttributes, Verification } from '@client/services/course';
+import { CourseTaskDetailedDtoTypeEnum } from '@client/api';
 import { useAttemptsMessage } from './useAttemptsMessage';
-import { CourseTaskVerifications } from 'modules/AutoTest/types';
+import { CourseTaskVerifications } from '@client/modules/AutoTest/types';
 import dayjs from 'dayjs';
 
 const MAX_ATTEMPTS = 4;

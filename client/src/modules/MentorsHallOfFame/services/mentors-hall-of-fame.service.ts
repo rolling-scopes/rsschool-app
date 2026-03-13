@@ -1,4 +1,4 @@
-import { MentorsHallOfFameApi, TopMentorDto } from 'api';
+import { MentorsHallOfFameApi, TopMentorDto } from '@client/api';
 
 const mentorsHallOfFameApi = new MentorsHallOfFameApi();
 

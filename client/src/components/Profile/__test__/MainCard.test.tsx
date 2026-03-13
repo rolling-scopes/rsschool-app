@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { ProfileMainCardData } from 'services/user';
+import { ProfileMainCardData } from '@client/services/user';
 import MainCard from '../MainCard';
 
 // TODO: Known Issue: https://stackoverflow.com/questions/59942808/how-can-i-use-jest-coverage-in-next-js

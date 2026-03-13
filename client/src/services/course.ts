@@ -1,7 +1,7 @@
 import globalAxios, { AxiosInstance } from 'axios';
 import { UserBasic, MentorBasic, StudentBasic, InterviewDetails, InterviewPair } from '@common/models';
-import { ScoreOrder, ScoreTableFilters } from 'modules/Score/hooks/types';
-import { IPaginationInfo } from '@client/utils/pagination';
+import { ScoreOrder, ScoreTableFilters } from '@client/modules/Score/hooks/types';
+import { IPaginationInfo } from '@client/shared/utils/pagination';
 
 import {
   CoursesTasksApi,
@@ -20,10 +20,10 @@ import {
   CertificateApi,
   CoursesInterviewsApi,
   MentorDetailsDtoStudentsPreferenceEnum,
-} from 'api';
-import { optionalQueryString } from 'utils/optionalQueryString';
-import { Decision } from 'data/interviews/technical-screening';
-import { InterviewStatus } from 'domain/interview';
+} from '@client/api';
+import { optionalQueryString } from '@client/utils/optionalQueryString';
+import { Decision } from '@client/data/interviews/technical-screening';
+import { InterviewStatus } from '@client/domain/interview';
 
 export type CrossCheckCriteriaType = 'title' | 'subtask' | 'penalty';
 

@@ -5,9 +5,9 @@ import LinkedinOutlined from '@ant-design/icons/LinkedinOutlined';
 import SkypeOutlined from '@ant-design/icons/SkypeOutlined';
 import PhoneOutlined from '@ant-design/icons/PhoneOutlined';
 import SendOutlined from '@ant-design/icons/SendOutlined';
-import { DiscordOutlined } from 'components/Icons/DiscordOutlined';
-import { GithubAvatar } from 'components/GithubAvatar';
-import { UserStudentDto } from 'api';
+import { DiscordOutlined } from '@client/shared/components/Icons/DiscordOutlined';
+import { GithubAvatar } from '@client/shared/components/GithubAvatar';
+import { UserStudentDto } from '@client/api';
 import { CourseItem } from '../CourseItem';
 
 type Props = {

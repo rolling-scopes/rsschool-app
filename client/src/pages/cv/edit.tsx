@@ -1,5 +1,5 @@
-import { SessionProvider } from 'modules/Course/contexts';
-import { EditPage } from 'modules/Opportunities/pages/EditPage';
+import { SessionProvider } from '@client/modules/Course/contexts';
+import { EditPage } from '@client/modules/Opportunities/pages/EditPage';
 
 // force the page to render on the server to fix issue with getting githubId from url
 export const getServerSideProps = async () => {

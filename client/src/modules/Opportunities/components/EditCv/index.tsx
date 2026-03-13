@@ -2,8 +2,8 @@ import { createRef, RefObject, useState } from 'react';
 import { Alert, Button, Col, Layout, Row, Space } from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
 import { FormInstance } from 'antd/lib/form';
-import { FormDataDto, OpportunitiesApi, ResumeCourseDto } from 'api';
-import { LoadingScreen } from 'components/LoadingScreen';
+import { FormDataDto, OpportunitiesApi, ResumeCourseDto } from '@client/api';
+import { LoadingScreen } from '@client/shared/components/LoadingScreen';
 import { ContactsForm } from './ContactsForm';
 import { GeneralInfoForm } from './GeneralInfoForm';
 import { VisibleCoursesForm } from './VisibleCoursesForm';
@@ -15,9 +15,9 @@ import {
   UserDataToSubmit,
   VisibleCourses,
   VisibleCoursesFormData,
-} from 'modules/Opportunities/models';
-import { splitDataForForms, transformFieldsData } from 'modules/Opportunities/transformers';
-import { useMessage } from 'hooks';
+} from '@client/modules/Opportunities/models';
+import { splitDataForForms, transformFieldsData } from '@client/modules/Opportunities/transformers';
+import { useMessage } from '@client/hooks';
 
 const { Content } = Layout;
 

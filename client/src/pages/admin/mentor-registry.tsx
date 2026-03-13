@@ -3,14 +3,14 @@ import { Alert, Button, Col, Form, message, notification, Row, Select, Space, Ta
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 
-import { DisciplineDto, DisciplinesApi, MentorRegistryDto } from 'api';
+import { DisciplineDto, DisciplinesApi, MentorRegistryDto } from '@client/api';
 
-import { CommentModal } from 'components/CommentModal';
-import { ModalForm } from 'components/Forms';
-import { AdminPageLayout } from 'components/PageLayout';
-import { tabRenderer } from 'components/TabsWithCounter/renderers';
-import { useLoading } from 'components/useLoading';
-import { SessionContext, SessionProvider } from 'modules/Course/contexts';
+import { CommentModal } from '@client/shared/components/CommentModal';
+import { ModalForm } from '@client/shared/components/Forms';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
+import { tabRenderer } from '@client/components/TabsWithCounter/renderers';
+import { useLoading } from '@client/components/useLoading';
+import { SessionContext, SessionProvider } from '@client/modules/Course/contexts';
 import {
   CombinedFilter,
   MentorRegistryDeleteModal,
@@ -19,14 +19,14 @@ import {
   MentorRegistryTableContainer,
   MentorRegistryTabsMode,
   PAGINATION,
-} from 'modules/MentorRegistry';
+} from '@client/modules/MentorRegistry';
 import dynamic from 'next/dynamic';
-import { CoursesService } from 'services/courses';
-import { MentorRegistryService } from 'services/mentorRegistry';
-import { Course, CourseRole } from 'services/models';
+import { CoursesService } from '@client/services/courses';
+import { MentorRegistryService } from '@client/services/mentorRegistry';
+import { Course, CourseRole } from '@client/services/models';
 import styles from './mentor-registry.module.css';
 
-const InviteMentorsModal = dynamic(() => import('modules/MentorRegistry/components/InviteMentorsModal'), {
+const InviteMentorsModal = dynamic(() => import('@client/modules/MentorRegistry/components/InviteMentorsModal'), {
   ssr: false,
 });
 

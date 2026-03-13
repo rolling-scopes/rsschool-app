@@ -1,5 +1,5 @@
-import { SessionProvider } from 'modules/Course/contexts';
-import { AdminPage } from 'modules/Notifications/pages/AdminNotificationsPage';
+import { SessionProvider } from '@client/modules/Course/contexts';
+import { AdminPage } from '@client/modules/Notifications/pages/AdminNotificationsPage';
 
 export default function () {
   return (

@@ -3,7 +3,7 @@ import { Table } from 'antd';
 
 import styles from './NotificationsUserSettingsTable.module.css';
 import { ColumnType } from 'antd/lib/table';
-import { buildCheckBoxRenderer } from 'components/Table';
+import { buildCheckBoxRenderer } from '@client/shared/components/Table';
 import { NotificationChannel, UserNotificationSettings } from '../services/notifications';
 
 export function NotificationsTable({

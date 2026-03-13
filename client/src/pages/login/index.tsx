@@ -1,6 +1,6 @@
 import { GithubOutlined } from '@ant-design/icons';
 import { Button, Card, Flex } from 'antd';
-import ThemeSwitch from '@client/components/ThemeSwitch';
+import ThemeSwitch from '@client/shared/components/ThemeSwitch';
 import styles from './index.module.css';
 
 const { Meta } = Card;

@@ -1,17 +1,17 @@
 import { Checkbox, Col, DatePicker, Divider, Form, Input, InputNumber, message, Row, Select, Typography } from 'antd';
-import { CheckerEnum, CourseTaskDto, CourseTaskDtoTypeEnum, CreateCourseTaskDto, TaskDto, TasksApi } from 'api';
-import { ModalForm } from 'components/Forms';
-import { tagsRenderer } from 'components/Table';
-import { UserSearch } from 'components/UserSearch';
-import { TASK_TYPES } from 'data/taskTypes';
+import { CheckerEnum, CourseTaskDto, CourseTaskDtoTypeEnum, CreateCourseTaskDto, TaskDto, TasksApi } from '@client/api';
+import { ModalForm } from '@client/shared/components/Forms';
+import { tagsRenderer } from '@client/shared/components/Table';
+import { UserSearch } from '@client/shared/components/UserSearch';
+import { TASK_TYPES } from '@client/data/taskTypes';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import utc from 'dayjs/plugin/utc';
 import times from 'lodash/times';
 import { useCallback, useEffect, useState } from 'react';
 import { useAsync } from 'react-use';
-import { CourseTaskDetails } from 'services/course';
-import { UserService } from 'services/user';
+import { CourseTaskDetails } from '@client/services/course';
+import { UserService } from '@client/services/user';
 
 dayjs.extend(duration);
 dayjs.extend(utc);

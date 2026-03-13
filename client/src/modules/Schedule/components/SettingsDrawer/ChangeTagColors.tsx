@@ -1,8 +1,8 @@
 import { BgColorsOutlined } from '@ant-design/icons';
 import { ColorPicker, Space, Tag } from 'antd';
-import { CourseScheduleItemDtoTagEnum } from 'api';
-import { TAG_NAME_MAP } from 'modules/Schedule/constants';
-import { getTagStyle } from 'modules/Schedule/utils';
+import { CourseScheduleItemDtoTagEnum } from '@client/api';
+import { TAG_NAME_MAP } from '@client/modules/Schedule/constants';
+import { getTagStyle } from '@client/modules/Schedule/utils';
 import React from 'react';
 import type { Color } from 'antd/es/color-picker';
 import SettingsItem from '@client/components/SettingsItem';
