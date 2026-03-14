@@ -1,4 +1,4 @@
-import { Button, Card, Col, Divider, Row, Tag, Typography } from 'antd';
+import { Button, Card, Col, Divider, Row, Tag, Tooltip, Typography } from 'antd';
 import Link from 'next/link';
 import { getAutoTestTaskRoute } from 'services/routes';
 import { TaskCardColumn, TaskDeadlineDate } from '..';
@@ -11,6 +11,7 @@ const { Title, Paragraph } = Typography;
 export interface TaskCardProps {
   courseTask: CourseTaskVerifications;
   course: Course;
+  isAvailableTab: boolean;
 }
 
 function getStatusTag(state: CourseTaskState) {
@@ -24,11 +25,14 @@ function getStatusTag(state: CourseTaskState) {
   }
 }
 
-function TaskCard({ courseTask, course }: TaskCardProps) {
-  const { id, name, studentStartDate, studentEndDate, verifications, state, descriptionUrl } = courseTask;
+function TaskCard({ courseTask, course, isAvailableTab }: TaskCardProps) {
+  const { id, name, studentStartDate, studentEndDate, verifications, state, descriptionUrl, publicAttributes } =
+    courseTask;
   const { attemptsCount, explanation } = useAttemptsMessage(courseTask);
 
   const score = verifications?.[0]?.score ?? null;
+  const isMinimumScoreDone = score >= publicAttributes.tresholdPercentage;
+  console.log(isMinimumScoreDone);
 
   const columns = [
     {
@@ -77,10 +81,17 @@ function TaskCard({ courseTask, course }: TaskCardProps) {
             {explanation}
           </Paragraph>
         </Col>
-        <Col span={24}>
+        <Col span={24} style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Link href={getAutoTestTaskRoute(course.alias, id)} legacyBehavior>
             <Button type="primary">Open Task</Button>
           </Link>
+          {!isAvailableTab && (
+            <Tooltip title="move to the 'Done' tab">
+              <Button type="primary" onClick={() => console.log('moveToDone')} disabled={!isMinimumScoreDone}>
+                Done Task
+              </Button>
+            </Tooltip>
+          )}
         </Col>
       </Row>
       <Divider />
