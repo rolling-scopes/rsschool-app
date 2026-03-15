@@ -1,4 +1,5 @@
 import { Button, Row, Select, Table, Popconfirm } from 'antd';
+import { useRequest } from 'ahooks';
 import { StudentMentorModal } from '@client/shared/components/StudentMentorModal';
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import {
@@ -8,7 +9,6 @@ import {
   PersonCell,
   numberSorter,
 } from '@client/shared/components/Table';
-import { useLoading } from '@client/components/useLoading';
 import { useMemo, useState, useContext } from 'react';
 import { CourseService } from '@client/services/course';
 import { CourseRole } from '@client/services/models';
@@ -24,7 +24,6 @@ function Page() {
   const { course, courses } = useActiveCourseContext();
   const courseId = course.id;
 
-  const [loading, withLoading] = useLoading(false);
   const [interviews, setInterviews] = useState<InterviewDto[]>([]);
 
   const [data, setData] = useState([] as InterviewPairDto[]);
@@ -41,11 +40,14 @@ function Page() {
     setSelected(filtered[0]?.id.toString() ?? null);
   };
 
-  const deleteInterview = withLoading(async (record: InterviewPairDto) => {
-    await courseService.cancelInterviewPair(selected!, String(record.id));
-    const filtered = data.filter(d => d.id !== record.id);
-    setData(filtered);
-  });
+  const { loading: loadingDeleteInterview, runAsync: deleteInterview } = useRequest(
+    async (record: InterviewPairDto) => {
+      await courseService.cancelInterviewPair(selected!, String(record.id));
+      const filtered = data.filter(d => d.id !== record.id);
+      setData(filtered);
+    },
+    { manual: true },
+  );
 
   const loadData = async () => {
     if (selected) {
@@ -54,21 +56,38 @@ function Page() {
     }
   };
 
-  const createInterviews = withLoading(async () => {
-    if (selected) {
-      const courseTaskId = Number(selected);
-      const isInterviewsIncludesSelected = interviews.map(({ id }) => id).includes(courseTaskId);
+  const { loading: loadingCreateInterviews, runAsync: createInterviews } = useRequest(
+    async () => {
+      if (selected) {
+        const courseTaskId = Number(selected);
+        const isInterviewsIncludesSelected = interviews.map(({ id }) => id).includes(courseTaskId);
 
-      if (isInterviewsIncludesSelected) {
-        await courseService.createInterviewDistribution(courseTaskId);
-        await loadData();
+        if (isInterviewsIncludesSelected) {
+          await courseService.createInterviewDistribution(courseTaskId);
+          await loadDataRequest();
+        }
       }
-    }
-  });
+    },
+    { manual: true },
+  );
 
-  useAsync(withLoading(loadData), [selected]);
+  const { loading: loadingData, runAsync: loadDataRequest } = useRequest(loadData, { manual: true });
+  const { loading: loadingInterviews, runAsync: loadInterviewsRequest } = useRequest(loadInterviews, { manual: true });
+  const { loading: loadingAddPair, runAsync: addInterviewPair } = useRequest(
+    async (studentGithubId: string, mentorGithubId: string) => {
+      await courseService.addInterviewPair(selected!, mentorGithubId, studentGithubId);
+      await loadDataRequest();
+      setModal(false);
+    },
+    { manual: true },
+  );
 
-  useAsync(withLoading(loadInterviews), []);
+  const loading =
+    loadingDeleteInterview || loadingCreateInterviews || loadingData || loadingInterviews || loadingAddPair;
+
+  useAsync(async () => loadDataRequest(), [selected]);
+
+  useAsync(async () => loadInterviewsRequest(), []);
 
   return (
     <AdminPageLayout loading={loading} title="Interviews" showCourseName courses={courses}>
@@ -149,11 +168,7 @@ function Page() {
       />
 
       <StudentMentorModal
-        onOk={withLoading(async (studentGithubId, mentorGithubId) => {
-          await courseService.addInterviewPair(selected!, mentorGithubId, studentGithubId);
-          await loadData();
-          setModal(false);
-        })}
+        onOk={addInterviewPair}
         onCancel={() => setModal(false)}
         visible={modal}
         courseId={course.id}

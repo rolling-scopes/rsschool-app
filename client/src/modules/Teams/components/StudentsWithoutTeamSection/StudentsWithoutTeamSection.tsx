@@ -1,11 +1,11 @@
 import { Col, Input, Row, Space, TablePaginationConfig, Typography, Modal } from 'antd';
+import { useRequest } from 'ahooks';
 import { useState } from 'react';
 
 import { TeamDistributionApi, TeamDistributionDetailedDto, TeamDistributionStudentDto } from '@client/api';
 import { useAsync } from 'react-use';
 import StudentsTable from '../StudentsTable/StudentsTable';
 import { IPaginationInfo } from '@client/shared/utils/pagination';
-import { useLoading } from '@client/components/useLoading';
 import { useMessage } from '@client/hooks';
 
 type Props = {
@@ -32,23 +32,24 @@ export default function StudentsWithoutTeamSection({ distribution, isManager, re
     pagination: { current: 1, pageSize: 10 },
     search: '',
   });
-  const [loading, withLoading] = useLoading(false);
+  const { loading, runAsync: getStudents } = useRequest(
+    async (pagination: TablePaginationConfig) => {
+      const { data } = await teamDistributionApi.getStudentsWithoutTeam(
+        distribution.courseId,
+        distribution.id,
+        pagination.pageSize ?? 10,
+        pagination.current ?? 1,
+        search,
+      );
+      setStudents({ ...students, ...data });
+    },
+    { manual: true },
+  );
   const [search, setSearch] = useState<string>('');
 
   const onSearch = (value: string) => {
     setSearch(value);
   };
-
-  const getStudents = withLoading(async (pagination: TablePaginationConfig) => {
-    const { data } = await teamDistributionApi.getStudentsWithoutTeam(
-      distribution.courseId,
-      distribution.id,
-      pagination.pageSize ?? 10,
-      pagination.current ?? 1,
-      search,
-    );
-    setStudents({ ...students, ...data });
-  });
 
   const handleDeleteStudent = async (student: TeamDistributionStudentDto) => {
     confirm({

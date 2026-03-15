@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, ReactNode } from 'react';
+import { useRequest } from 'ahooks';
 import { Button, Spin } from 'antd';
 import { NotificationsService } from '@client/modules/Notifications/services/notifications';
-import { useLoading } from '@client/components/useLoading';
 import { useAsync } from 'react-use';
 import { NotificationSettingsTable } from '@client/modules/Notifications/components/NotificationSettingsTable';
 import { NotificationSettingsModal } from '@client/modules/Notifications/components/NotificationSettingsModal';
@@ -11,16 +11,14 @@ import { useMessage } from '@client/hooks';
 export function AdminNotificationsPage() {
   const { message } = useMessage();
   const [notifications, setNotifications] = useState<NotificationDto[]>([]);
-  const [loading, withLoading] = useLoading(false);
+  const { loading, runAsync: loadData } = useRequest(
+    async () => {
+      setNotifications(await service.getNotifications());
+    },
+    { manual: true },
+  );
   const service = useMemo(() => new NotificationsService(), []);
   const [modal, setModal] = useState<ReactNode>();
-
-  const loadData = useCallback(
-    withLoading(async () => {
-      setNotifications(await service.getNotifications());
-    }),
-    [],
-  );
 
   useAsync(loadData, []);
 

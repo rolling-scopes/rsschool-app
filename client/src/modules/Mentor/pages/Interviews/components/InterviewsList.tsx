@@ -1,4 +1,5 @@
 import { Alert, Spin } from 'antd';
+import { useRequest } from 'ahooks';
 import InfoCircleTwoTone from '@ant-design/icons/InfoCircleTwoTone';
 import { useState } from 'react';
 import { MentorInterview } from '@client/services/course';
@@ -6,7 +7,6 @@ import { StudentInterview } from './StudentInterview';
 import { InterviewsSummary } from './InterviewsSummary';
 import { InterviewDto, TaskDtoTypeEnum } from '@client/api';
 import { Course } from '@client/services/models';
-import { useLoading } from '@client/components/useLoading';
 import { useAsyncFn } from 'react-use';
 import styles from './InterviewsList.module.css';
 
@@ -22,8 +22,8 @@ export function InterviewsList(props: StudentsListProps) {
   const template = interviewTask.attributes?.template;
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const [loading, withLoading] = useLoading();
-  const [, reloadList] = useAsyncFn(withLoading(fetchStudentInterviews));
+  const { loading, runAsync } = useRequest(async () => fetchStudentInterviews(), { manual: true });
+  const [, reloadList] = useAsyncFn(runAsync);
 
   if (!interviews.length) {
     return (

@@ -1,4 +1,5 @@
 import FileExcelOutlined from '@ant-design/icons/FileExcelOutlined';
+import { useRequest } from 'ahooks';
 import { Alert, Button, Col, Form, message, notification, Row, Select, Space, Tabs, Tooltip, Typography } from 'antd';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
@@ -9,7 +10,6 @@ import { CommentModal } from '@client/shared/components/CommentModal';
 import { ModalForm } from '@client/shared/components/Forms';
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import { tabRenderer } from '@client/components/TabsWithCounter/renderers';
-import { useLoading } from '@client/components/useLoading';
 import { SessionContext, SessionProvider } from '@client/modules/Course/contexts';
 import {
   CombinedFilter,
@@ -54,7 +54,6 @@ const coursesService = new CoursesService();
 const disciplinesApi = new DisciplinesApi();
 
 function Page() {
-  const [loading, withLoading] = useLoading(false);
   const session = useContext(SessionContext);
 
   const [api, contextHolder] = notification.useNotification();
@@ -83,51 +82,62 @@ function Page() {
     [MentorRegistryTabsMode.All]: 0,
   });
 
-  const loadData = withLoading(async () => {
-    const [allData, courses] = await Promise.all([
-      mentorRegistryService.getMentors({
-        status: activeTab,
-        pageSize: PAGINATION,
-        currentPage,
-        githubId: combinedFilter.githubId?.[0] ?? undefined,
-        cityName: combinedFilter.cityName?.[0] ?? undefined,
-        preferedCourses: combinedFilter.preferredCourses?.length
-          ? combinedFilter.preferredCourses.map(Number)
-          : undefined,
-        preselectedCourses: combinedFilter.preselectedCourses?.length
-          ? combinedFilter.preselectedCourses.map(Number)
-          : undefined,
-        technicalMentoring: combinedFilter.technicalMentoring?.length ? combinedFilter.technicalMentoring : undefined,
-      }),
-      coursesService.getCourses(),
-    ]);
-    const { data: disciplines } = await disciplinesApi.getDisciplines();
-    setAllData(allData.mentors);
-    setData(allData.mentors);
-    setTotal(total => ({ ...total, [activeTab]: allData.total }));
-    setMaxStudents(allData.mentors.reduce((sum, it) => sum + it.maxStudentsLimit, 0));
-    setCourses(courses);
-    setDisciplines(disciplines);
-  });
+  const { loading: loadingData, runAsync: loadData } = useRequest(
+    async () => {
+      const [allData, courses] = await Promise.all([
+        mentorRegistryService.getMentors({
+          status: activeTab,
+          pageSize: PAGINATION,
+          currentPage,
+          githubId: combinedFilter.githubId?.[0] ?? undefined,
+          cityName: combinedFilter.cityName?.[0] ?? undefined,
+          preferedCourses: combinedFilter.preferredCourses?.length
+            ? combinedFilter.preferredCourses.map(Number)
+            : undefined,
+          preselectedCourses: combinedFilter.preselectedCourses?.length
+            ? combinedFilter.preselectedCourses.map(Number)
+            : undefined,
+          technicalMentoring: combinedFilter.technicalMentoring?.length ? combinedFilter.technicalMentoring : undefined,
+        }),
+        coursesService.getCourses(),
+      ]);
+      const { data: disciplines } = await disciplinesApi.getDisciplines();
+      setAllData(allData.mentors);
+      setData(allData.mentors);
+      setTotal(total => ({ ...total, [activeTab]: allData.total }));
+      setMaxStudents(allData.mentors.reduce((sum, it) => sum + it.maxStudentsLimit, 0));
+      setCourses(courses);
+      setDisciplines(disciplines);
+    },
+    { manual: true },
+  );
 
-  const cancelMentor = withLoading(async (githubId: string) => {
-    setModalData(null);
-    await mentorRegistryService.cancelMentorRegistry(githubId);
-    await loadData();
-    setIsModalOpen(false);
-  });
-
-  const sendMentorRegistryComment = withLoading(async (comment: string) => {
-    if (!modalData?.record?.githubId) return;
-    try {
-      await mentorRegistryService.sendCommentMentorRegistry(modalData?.record?.githubId, comment);
+  const { loading: loadingCancelMentor, runAsync: cancelMentor } = useRequest(
+    async (githubId: string) => {
+      setModalData(null);
+      await mentorRegistryService.cancelMentorRegistry(githubId);
       await loadData();
-    } catch {
-      message.error('An error occurred. Please try again later.');
-    } finally {
       setIsModalOpen(false);
-    }
-  });
+    },
+    { manual: true },
+  );
+
+  const { loading: loadingComment, runAsync: sendMentorRegistryComment } = useRequest(
+    async (comment: string) => {
+      if (!modalData?.record?.githubId) return;
+      try {
+        await mentorRegistryService.sendCommentMentorRegistry(modalData?.record?.githubId, comment);
+        await loadData();
+      } catch {
+        message.error('An error occurred. Please try again later.');
+      } finally {
+        setIsModalOpen(false);
+      }
+    },
+    { manual: true },
+  );
+
+  const loading = loadingData || loadingCancelMentor || loadingComment;
 
   useAsync(loadData, [combinedFilter, currentPage, activeTab]);
 

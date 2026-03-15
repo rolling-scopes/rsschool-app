@@ -2,7 +2,7 @@ import { Button, Divider, Form, Input, InputNumber, Radio, Rate, Space, Typograp
 import { AxiosError } from 'axios';
 import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 import { PageLayoutSimple } from '@client/shared/components/PageLayout';
-import { useLoading } from '@client/components/useLoading';
+import { useRequest } from 'ahooks';
 import { useMessage } from '@client/hooks';
 import get from 'lodash/get';
 import keys from 'lodash/keys';
@@ -268,21 +268,22 @@ function Page() {
 
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
-  const [loading, withLoading] = useLoading(false);
+  const { loading: loadingData, runAsync: loadData } = useRequest(
+    async () => {
+      const interviews = await courseService.getInterviewerStageInterviews(session.githubId);
+      setStudents(interviews.filter(i => !i.completed).map(i => i.student));
+      setStudents(students);
+      setInterviews(interviews);
+    },
+    { manual: true },
+  );
   const [studentGitHubId, setStudentGitHubId] = useState<string>();
   const [students, setStudents] = useState([] as StudentBasic[]);
   const [interviews, setInterviews] = useState([] as { id: number; completed: boolean; student: StudentBasic }[]);
 
   const [resume, setResume] = useState(defaultInitialValues);
 
-  const loadData = async () => {
-    const interviews = await courseService.getInterviewerStageInterviews(session.githubId);
-    setStudents(interviews.filter(i => !i.completed).map(i => i.student));
-    setStudents(students);
-    setInterviews(interviews);
-  };
-
-  useAsync(withLoading(loadData), []);
+  useAsync(async () => loadData(), []);
 
   useEffect(() => {
     form.setFieldsValue({ githubId });
@@ -324,32 +325,37 @@ function Page() {
     return Math.floor(rating * 10);
   };
 
-  const handleSubmit = withLoading(async (values: FormValues) => {
-    if (!githubId || !values['resume-verdict'] || loading) {
-      return;
-    }
-    const interview = interviews.find(i => i.student.githubId === githubId);
-    if (interview == null) {
-      return;
-    }
+  const { loading: loadingSubmit, runAsync: handleSubmit } = useRequest(
+    async (values: FormValues) => {
+      if (!githubId || !values['resume-verdict'] || loading) {
+        return;
+      }
+      const interview = interviews.find(i => i.student.githubId === githubId);
+      if (interview == null) {
+        return;
+      }
 
-    try {
-      const json = serializeToJson(values);
-      await courseService.postStageInterviewFeedback(interview?.id, {
-        json,
-        githubId: githubId ?? '',
-        isCompleted: values['resume-verdict'] !== 'didNotDecideYet',
-        isGoodCandidate: values['resume-verdict'] === 'noButGoodCandidate',
-        decision: values['resume-verdict'],
-      });
-      message.success('You interview feedback has been submitted. Thank you.');
-      form.resetFields();
-    } catch (e) {
-      const error = e as AxiosError<{ data?: { message?: string } }>;
-      const errorMessage = error?.response?.data?.data?.message ?? 'An error occurred. Please try later.';
-      message.error(errorMessage);
-    }
-  });
+      try {
+        const json = serializeToJson(values);
+        await courseService.postStageInterviewFeedback(interview?.id, {
+          json,
+          githubId: githubId ?? '',
+          isCompleted: values['resume-verdict'] !== 'didNotDecideYet',
+          isGoodCandidate: values['resume-verdict'] === 'noButGoodCandidate',
+          decision: values['resume-verdict'],
+        });
+        message.success('You interview feedback has been submitted. Thank you.');
+        form.resetFields();
+      } catch (e) {
+        const error = e as AxiosError<{ data?: { message?: string } }>;
+        const errorMessage = error?.response?.data?.data?.message ?? 'An error occurred. Please try later.';
+        message.error(errorMessage);
+      }
+    },
+    { manual: true },
+  );
+
+  const loading = loadingData || loadingSubmit;
 
   const handleTotalScoreChange = (skillName: string) => (value: ChangeEvent<HTMLInputElement> | number) => {
     const comment = (value as ChangeEvent<HTMLInputElement>)?.target?.value;

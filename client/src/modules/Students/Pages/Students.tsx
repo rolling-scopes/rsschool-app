@@ -1,9 +1,9 @@
 import { Drawer, TablePaginationConfig, message } from 'antd';
+import { useRequest } from 'ahooks';
 import { FilterValue } from 'antd/es/table/interface';
 import { StudentsApi, UserStudentDto } from '@client/api';
 import { IPaginationInfo } from '@client/shared/utils/pagination';
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
-import { useLoading } from '@client/components/useLoading';
 import { useState } from 'react';
 import { useAsync } from 'react-use';
 import StudentsTable from '../components/StudentsTable';
@@ -26,9 +26,7 @@ export const Students = () => {
   });
   const [activeStudent, setActiveStudent] = useState<UserStudentDto | null>(null);
 
-  const [loading, withLoading] = useLoading(false);
-
-  const getStudents = withLoading(
+  const { loading, runAsync: getStudents } = useRequest(
     async (pagination: TablePaginationConfig, filters?: Record<ColumnKey, FilterValue | null>) => {
       try {
         const { student, country, city, onGoingCourses, previousCourses } = filters || {};
@@ -46,6 +44,7 @@ export const Students = () => {
         message.error('Failed to load students list. Please try again.');
       }
     },
+    { manual: true },
   );
 
   useAsync(async () => await getStudents(students.pagination), []);

@@ -1,8 +1,8 @@
 import { Alert, Checkbox, Form, Select, Space, Spin } from 'antd';
+import { useRequest } from 'ahooks';
 import { useAsync } from 'react-use';
 import { InviteMentorsDto } from '@client/api';
 import { ModalForm } from '@client/shared/components/Forms';
-import { useLoading } from '@client/components/useLoading';
 import ReactQuill from 'react-quill';
 import { MentorRegistryService } from '@client/services/mentorRegistry';
 import { DisciplinesApi } from '@client/api';
@@ -18,12 +18,14 @@ const disciplinesApi = new DisciplinesApi();
 
 function InviteMentorsModal({ onCancel }: Props) {
   const { message } = useMessage();
-  const [loading, withLoading] = useLoading(false);
-  const submit = withLoading(async (data: InviteMentorsDto) => {
-    await mentorRegistryService.inviteMentors(data);
-    message.success('Invitation successfully send.');
-    onCancel();
-  });
+  const { loading, runAsync: submit } = useRequest(
+    async (data: InviteMentorsDto) => {
+      await mentorRegistryService.inviteMentors(data);
+      message.success('Invitation successfully send.');
+      onCancel();
+    },
+    { manual: true },
+  );
 
   const { loading: disciplinesLoading, value: disciplines = [] } = useAsync(async () => {
     const { data } = await disciplinesApi.getDisciplines();

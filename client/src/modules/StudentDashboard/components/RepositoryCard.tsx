@@ -1,6 +1,6 @@
 import { GithubFilled, WarningTwoTone } from '@ant-design/icons';
 import { Button, Col, Modal, Row, Spin, theme, Typography } from 'antd';
-import { useLoading } from '@client/components/useLoading';
+import { useRequest } from 'ahooks';
 import CommonCard from './CommonDashboardCard';
 
 type Props = {
@@ -17,7 +17,17 @@ export function RepositoryCard(props: Props) {
   const { url, githubId, onSendInviteRepository, onUpdateUrl } = props;
   const repoName = getGithubRepoName(url);
   const hasRepo = !!url;
-  const [loading, withLoading] = useLoading(false);
+  const { loading, runAsync: handleSubmit } = useRequest(
+    async () => {
+      await onSendInviteRepository(githubId);
+      const shouldShowInformation = !hasRepo;
+      if (shouldShowInformation) {
+        showInformation();
+      }
+      onUpdateUrl();
+    },
+    { manual: true },
+  );
   const [modal, contextHolder] = Modal.useModal();
   const { token } = theme.useToken();
 
@@ -47,15 +57,6 @@ export function RepositoryCard(props: Props) {
       ),
     });
   };
-
-  const handleSubmit = withLoading(async () => {
-    await onSendInviteRepository(githubId);
-    const shouldShowInformation = !hasRepo;
-    if (shouldShowInformation) {
-      showInformation();
-    }
-    onUpdateUrl();
-  });
 
   return (
     <Spin spinning={loading}>

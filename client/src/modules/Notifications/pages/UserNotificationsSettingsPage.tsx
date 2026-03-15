@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
+import { useRequest } from 'ahooks';
 import { Button, Space } from 'antd';
 import {
   NotificationsService,
@@ -6,7 +7,6 @@ import {
   UserNotificationSettings,
 } from '@client/modules/Notifications/services/notifications';
 import set from 'lodash/set';
-import { useLoading } from '@client/components/useLoading';
 import { useAsync } from 'react-use';
 import { PageLayout } from '@client/shared/components/PageLayout';
 import { NotificationsTable } from '../components/NotificationsUserSettingsTable';
@@ -17,15 +17,14 @@ import { useMessage } from '@client/hooks';
 export function UserNotificationsPage() {
   const { message } = useMessage();
   const [notifications, setNotifications] = useState<UserNotificationSettings[]>([]);
-  const [loading, withLoading] = useLoading(false);
   const service = useMemo(() => new NotificationsService(), []);
   const [email, setEmail] = useState<Connection>();
   const [telegram, setTelegram] = useState<Connection>();
   const [discord, setDiscord] = useState<Connection>();
   const [disabledChannels, setDisabledChannels] = useState<NotificationChannel[]>([]);
 
-  const loadData = useCallback(
-    withLoading(async () => {
+  const { loading, runAsync: loadData } = useRequest(
+    async () => {
       const { connections, notifications } = await service.getUserNotificationSettings();
       setNotifications(notifications);
 
@@ -48,8 +47,13 @@ export function UserNotificationsPage() {
         disabledChannels.push(NotificationChannel.discord);
       }
       setDisabledChannels(disabledChannels);
-    }),
-    [],
+    },
+    {
+      manual: true,
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
   );
 
   useAsync(loadData, []);

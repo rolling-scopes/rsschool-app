@@ -5,7 +5,6 @@ import { SorterResult } from 'antd/lib/table/interface';
 import { CoursesTasksApi, CourseTaskDtoCheckerEnum, MentorReviewDto, MentorReviewsApi } from '@client/api';
 import { IPaginationInfo } from '@client/shared/utils/pagination';
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
-import { useLoading } from '@client/components/useLoading';
 import { isCourseManager } from '@client/domain/user';
 import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { useContext, useMemo, useState } from 'react';
@@ -39,9 +38,7 @@ export const MentorTasksReview = () => {
     content: [],
     pagination: { current: 1, pageSize: 20 },
   });
-  const [loading, withLoading] = useLoading(false);
-
-  const getMentorReviews = withLoading(
+  const { loading, runAsync: getMentorReviews } = useRequest(
     async (
       pagination: TablePaginationConfig,
       filters?: Record<ColumnKey, FilterValue | null>,
@@ -67,6 +64,7 @@ export const MentorTasksReview = () => {
         message.error('Failed to load mentor reviews. Please try later.');
       }
     },
+    { manual: true },
   );
 
   const handleReviewerAssigned = async () => {

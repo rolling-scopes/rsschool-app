@@ -1,4 +1,5 @@
 import { BranchesOutlined, CheckCircleTwoTone, ClockCircleTwoTone, MinusCircleOutlined } from '@ant-design/icons';
+import { useRequest } from 'ahooks';
 import { Button, Row, Space, Statistic, Switch, Table, Typography } from 'antd';
 import { ColumnProps } from 'antd/lib/table/Column';
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
@@ -11,7 +12,6 @@ import {
   PersonCell,
   stringSorter,
 } from '@client/shared/components/Table';
-import { useLoading } from '@client/components/useLoading';
 import { isAdmin, isCourseManager, isCourseSupervisor } from '@client/domain/user';
 import { useMessage } from '@client/hooks';
 import keys from 'lodash/keys';
@@ -46,7 +46,6 @@ function Page() {
   const courseId = course.id;
   const hasAdminRole = isAdmin(session);
 
-  const [loading, withLoading] = useLoading(false);
   const [hasCourseManagerRole] = useState(isCourseManager(session, courseId));
   const hasCourseSupervisorRole = useMemo(() => isCourseSupervisor(session, course.id), [session, course.id]);
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
@@ -57,71 +56,115 @@ function Page() {
   const [isExpelModalOpen, toggleExpelModal] = useToggle(false);
   const [isCertificateModalOpen, toggleCertificateModal] = useToggle(false);
 
-  useAsync(withLoading(loadStudents), [activeOnly, details]);
+  const { loading: loadingStudents, runAsync: loadStudentsRequest } = useRequest(
+    async () => {
+      const courseStudents = await courseService.getCourseStudentsWithDetails(activeOnly);
+      setStudents(courseStudents);
+      setStats(calculateStats(courseStudents));
+    },
+    { manual: true },
+  );
 
-  const issueCertificate = withLoading(async () => {
-    const githubId = details?.githubId;
-    if (githubId != null) {
-      await courseService.createCertificate(githubId);
-      message.info('The certificate has been requested.');
-    }
-  });
+  useAsync(async () => loadStudentsRequest(), [activeOnly, details]);
 
-  const removeCertificate = withLoading(async () => {
-    const studentId = details?.id;
-    if (studentId != null) {
-      await courseService.removeCertificate(studentId);
-      message.info('The certificate has been removed.');
-    }
-  });
+  const { loading: loadingIssueCertificate, runAsync: issueCertificate } = useRequest(
+    async () => {
+      const githubId = details?.githubId;
+      if (githubId != null) {
+        await courseService.createCertificate(githubId);
+        message.info('The certificate has been requested.');
+      }
+    },
+    { manual: true },
+  );
 
-  const createRepository = withLoading(async () => {
-    const githubId = details?.githubId;
-    if (githubId != null) {
-      const { repository } = await courseService.createRepository(githubId);
-      const newStudents = students.map(s => (s.githubId === githubId ? { ...s, repository: repository } : s));
-      setStudents(newStudents);
-    }
-  });
+  const { loading: loadingRemoveCertificate, runAsync: removeCertificate } = useRequest(
+    async () => {
+      const studentId = details?.id;
+      if (studentId != null) {
+        await courseService.removeCertificate(studentId);
+        message.info('The certificate has been removed.');
+      }
+    },
+    { manual: true },
+  );
 
-  const expelStudent = withLoading(async (text: string) => {
-    const githubId = details?.githubId;
-    if (githubId != null) {
-      await courseService.expelStudent(githubId, text);
-      message.info('Student has been expelled');
-      setDetails(null);
-    }
-  });
+  const { loading: loadingCreateRepository, runAsync: createRepository } = useRequest(
+    async () => {
+      const githubId = details?.githubId;
+      if (githubId != null) {
+        const { repository } = await courseService.createRepository(githubId);
+        const newStudents = students.map(s => (s.githubId === githubId ? { ...s, repository: repository } : s));
+        setStudents(newStudents);
+      }
+    },
+    { manual: true },
+  );
 
-  const restoreStudent = withLoading(async () => {
-    const githubId = details?.githubId;
-    if (githubId != null) {
-      await courseService.restoreStudent(githubId);
-      message.info('Student has been restored');
-      setDetails(null);
-    }
-  });
+  const { loading: loadingExpelStudent, runAsync: expelStudent } = useRequest(
+    async (text: string) => {
+      const githubId = details?.githubId;
+      if (githubId != null) {
+        await courseService.expelStudent(githubId, text);
+        message.info('Student has been expelled');
+        setDetails(null);
+      }
+    },
+    { manual: true },
+  );
 
-  const updateMentor = withLoading(async (mentorGithuId: string | null = null) => {
-    const githubId = details?.githubId;
-    if (details != null && githubId != null) {
-      const student = await courseService.updateStudent(githubId, { mentorGithuId });
-      setDetails({ ...details, mentor: student.mentor });
-    }
-  });
+  const { loading: loadingRestoreStudent, runAsync: restoreStudent } = useRequest(
+    async () => {
+      const githubId = details?.githubId;
+      if (githubId != null) {
+        await courseService.restoreStudent(githubId);
+        message.info('Student has been restored');
+        setDetails(null);
+      }
+    },
+    { manual: true },
+  );
 
-  const expelStudents = withLoading(async ({ minScore, keepWithMentor, courseTaskIds, reason }: ExpelCriteria) => {
-    await courseService.expelStudents({ courseTaskIds, minScore }, { keepWithMentor }, reason);
-    toggleExpelModal();
-    loadStudents();
-    message.success('Students successfully expelled');
-  });
+  const { loading: loadingUpdateMentor, runAsync: updateMentor } = useRequest(
+    async (mentorGithuId: string | null = null) => {
+      const githubId = details?.githubId;
+      if (details != null && githubId != null) {
+        const student = await courseService.updateStudent(githubId, { mentorGithuId });
+        setDetails({ ...details, mentor: student.mentor });
+      }
+    },
+    { manual: true },
+  );
 
-  const issueCertificates = withLoading(async (criteria: CertificateCriteria) => {
-    await courseService.postCertificateStudents(criteria);
-    toggleCertificateModal();
-    message.success('All certificates successfully issued');
-  });
+  const { loading: loadingExpelStudents, runAsync: expelStudents } = useRequest(
+    async ({ minScore, keepWithMentor, courseTaskIds, reason }: ExpelCriteria) => {
+      await courseService.expelStudents({ courseTaskIds, minScore }, { keepWithMentor }, reason);
+      toggleExpelModal();
+      loadStudentsRequest();
+      message.success('Students successfully expelled');
+    },
+    { manual: true },
+  );
+
+  const { loading: loadingIssueCertificates, runAsync: issueCertificates } = useRequest(
+    async (criteria: CertificateCriteria) => {
+      await courseService.postCertificateStudents(criteria);
+      toggleCertificateModal();
+      message.success('All certificates successfully issued');
+    },
+    { manual: true },
+  );
+
+  const loading =
+    loadingStudents ||
+    loadingIssueCertificate ||
+    loadingRemoveCertificate ||
+    loadingCreateRepository ||
+    loadingExpelStudent ||
+    loadingRestoreStudent ||
+    loadingUpdateMentor ||
+    loadingExpelStudents ||
+    loadingIssueCertificates;
 
   return render();
 
@@ -159,7 +202,7 @@ function Page() {
           onCreateRepository={createRepository}
           onClose={() => {
             setDetails(null);
-            loadStudents();
+            loadStudentsRequest();
           }}
           details={details}
           courseId={course.id}
@@ -201,12 +244,6 @@ function Page() {
 
   function exportStudents() {
     courseService.exportStudentsCsv(activeOnly);
-  }
-
-  async function loadStudents() {
-    const courseStudents = await courseService.getCourseStudentsWithDetails(activeOnly);
-    setStudents(courseStudents);
-    setStats(calculateStats(courseStudents));
   }
 
   function getColumns(): ColumnProps<StudentDetails>[] {

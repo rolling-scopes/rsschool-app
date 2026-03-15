@@ -9,9 +9,7 @@ import {
   PersonCell,
   dateRenderer,
 } from '@client/shared/components/Table';
-import { useLoading } from '@client/components/useLoading';
 import { useMemo, useState, useContext } from 'react';
-import { useAsync } from 'react-use';
 import { CourseService } from '@client/services/course';
 import { CoursePageProps } from '@client/services/models';
 import { isCourseManager, isMentor } from '@client/domain/user';
@@ -35,7 +33,6 @@ export function InterviewWaitingList() {
   const router = useRouter();
   const interviewId = Number(router.query.interviewId);
   const isPowerUser = useMemo(() => isCourseManager(session, courseId), [session, courseId]);
-  const [loading, withLoading] = useLoading(false);
   const [availableStudents, setAvailableStudents] = useState<AvailableStudentDto[]>([]);
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
 
@@ -50,32 +47,43 @@ export function InterviewWaitingList() {
 
   const isStageInterview = interview?.type === TaskDtoTypeEnum.StageInterview;
 
-  useAsync(
-    withLoading(async () => {
+  const { loading: loadingAvailableStudents } = useRequest(
+    async () => {
       const { data } = await api.getAvailableStudents(courseId, interviewId);
       setAvailableStudents(data);
-    }),
-    [],
+    },
+    { refreshDeps: [courseId, interviewId] },
   );
 
-  const inviteStudent = withLoading(async (githubId: string) => {
-    if (isStageInterview) {
-      await courseService.createInterview(githubId, session.githubId);
-    } else {
-      await courseService.addInterviewPair(`${interviewId}`, session.githubId, githubId);
-    }
-    removeStudentFromList(githubId);
-  });
+  const { loading: loadingInviteStudent, runAsync: inviteStudent } = useRequest(
+    async (githubId: string) => {
+      if (isStageInterview) {
+        await courseService.createInterview(githubId, session.githubId);
+      } else {
+        await courseService.addInterviewPair(`${interviewId}`, session.githubId, githubId);
+      }
+      removeStudentFromList(githubId);
+    },
+    { manual: true },
+  );
 
-  const assignStudentToMentor = withLoading(async (studentId: string) => {
-    await courseService.updateStudent(studentId, { mentorGithuId: session.githubId });
-    removeStudentFromList(studentId);
-  });
+  const { loading: loadingAssignStudent, runAsync: assignStudentToMentor } = useRequest(
+    async (studentId: string) => {
+      await courseService.updateStudent(studentId, { mentorGithuId: session.githubId });
+      removeStudentFromList(studentId);
+    },
+    { manual: true },
+  );
 
-  const removeFromList = withLoading(async (githubId: string) => {
-    await courseService.updateMentoringAvailability(githubId, false);
-    removeStudentFromList(githubId);
-  });
+  const { loading: loadingRemoveFromList, runAsync: removeFromList } = useRequest(
+    async (githubId: string) => {
+      await courseService.updateMentoringAvailability(githubId, false);
+      removeStudentFromList(githubId);
+    },
+    { manual: true },
+  );
+
+  const loading = loadingAvailableStudents || loadingInviteStudent || loadingAssignStudent || loadingRemoveFromList;
 
   return (
     <PageLayout loading={loading} title={`${interview?.name.trim()}: Wait list`} showCourseName>

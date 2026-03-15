@@ -1,6 +1,6 @@
 import { CoursesInterviewsApi, InterviewDto, TaskDtoTypeEnum } from '@client/api';
+import { useRequest } from 'ahooks';
 import { PageLayout } from '@client/shared/components/PageLayout';
-import { useLoading } from '@client/components/useLoading';
 import { useCallback, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
 import { CourseService, MentorInterview } from '@client/services/course';
@@ -16,26 +16,28 @@ export function Interviews() {
   const { course } = useActiveCourseContext();
   const [interviews, setInterviews] = useState<InterviewDto[]>([]);
   const [interviewsByTask, setInterviewsByTask] = useState<Dictionary<MentorInterview[]>>({});
-  const [loading, withLoading] = useLoading();
 
   const fetchStudentInterviews = useCallback(async () => {
     const interviews = await new CourseService(course.id).getMentorInterviews(session.githubId);
     setInterviewsByTask(groupBy(interviews, 'name'));
   }, [course.id, session.githubId]);
 
-  const loadData = async () => {
-    const [{ data }] = await Promise.all([
-      new CoursesInterviewsApi().getInterviews(course.id, false, [
-        TaskDtoTypeEnum.Interview,
-        TaskDtoTypeEnum.StageInterview,
-      ]),
-      fetchStudentInterviews(),
-    ]);
+  const { loading, runAsync: loadData } = useRequest(
+    async () => {
+      const [{ data }] = await Promise.all([
+        new CoursesInterviewsApi().getInterviews(course.id, false, [
+          TaskDtoTypeEnum.Interview,
+          TaskDtoTypeEnum.StageInterview,
+        ]),
+        fetchStudentInterviews(),
+      ]);
 
-    setInterviews(data);
-  };
+      setInterviews(data);
+    },
+    { manual: true },
+  );
 
-  useAsync(withLoading(loadData), []);
+  useAsync(async () => loadData(), []);
 
   return (
     <PageLayout loading={loading} title="Interviews" showCourseName>

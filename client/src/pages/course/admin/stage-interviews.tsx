@@ -1,4 +1,5 @@
 import { Button, Row, Table, Checkbox, Popconfirm } from 'antd';
+import { useRequest } from 'ahooks';
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import { StudentMentorModal } from '@client/shared/components/StudentMentorModal';
 import {
@@ -8,7 +9,6 @@ import {
   stringSorter,
   PersonCell,
 } from '@client/shared/components/Table';
-import { useLoading } from '@client/components/useLoading';
 import { useMemo, useState, useContext } from 'react';
 import { CourseService } from '@client/services/course';
 import { CourseRole } from '@client/services/models';
@@ -21,7 +21,6 @@ function Page() {
   const { course, courses } = useActiveCourseContext();
   const courseId = course.id;
 
-  const [loading, withLoading] = useLoading(false);
   const [interviews, setInterviews] = useState([] as any[]);
   const [modal, setModal] = useState(false);
   const [noRegistration, setNoRegistration] = useState(false);
@@ -37,12 +36,25 @@ function Page() {
     await loadInterviews();
   };
 
-  const deleteInterview = withLoading(async (record: any) => {
-    await courseService.deleteStageInterview(record.id);
-    await loadInterviews();
-  });
+  const { loading: loadingDeleteInterview, runAsync: deleteInterview } = useRequest(
+    async (record: any) => {
+      await courseService.deleteStageInterview(record.id);
+      await loadInterviewsRequest();
+    },
+    { manual: true },
+  );
+  const { loading: loadingInterviews, runAsync: loadInterviewsRequest } = useRequest(loadInterviews, { manual: true });
+  const { loading: loadingCreateInterview, runAsync: createInterview } = useRequest(
+    async (studentGithubId: string, mentorGithubId: string) => {
+      await courseService.createInterview(studentGithubId, mentorGithubId);
+      await loadInterviewsRequest();
+      setModal(false);
+    },
+    { manual: true },
+  );
+  const loading = loadingDeleteInterview || loadingInterviews || loadingCreateInterview;
 
-  useAsync(withLoading(loadInterviews), []);
+  useAsync(async () => loadInterviewsRequest(), []);
 
   return (
     <AdminPageLayout loading={loading} title="Technical Screening" showCourseName courses={courses}>
@@ -129,11 +141,7 @@ function Page() {
       />
 
       <StudentMentorModal
-        onOk={withLoading(async (studentGithubId, mentorGithubId) => {
-          await courseService.createInterview(studentGithubId, mentorGithubId);
-          await loadInterviews();
-          setModal(false);
-        })}
+        onOk={createInterview}
         onCancel={() => setModal(false)}
         visible={modal}
         courseId={course.id}
