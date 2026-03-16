@@ -2,7 +2,7 @@ import { Col, Form, Input, Modal, Row } from 'antd';
 
 type Props = {
   title: string;
-  visible: boolean;
+  open: boolean;
   onCancel: () => void;
   onOk: (text: string) => void;
   initialValue?: string;
@@ -23,7 +23,7 @@ export function CommentModal(props: Props) {
   };
 
   return (
-    <Modal title={props.title} open={props.visible} onOk={onOk} onCancel={props.onCancel}>
+    <Modal title={props.title} open={props.open} onOk={onOk} onCancel={props.onCancel}>
       <Form form={form} layout="vertical" initialValues={{ comment: props.initialValue ?? '' }}>
         <Row gutter={24}>
           <Col span={24}>
