@@ -1,5 +1,5 @@
 import { Rule } from 'antd/lib/form';
-import { githubUsernamePattern } from 'services/validators';
+import { githubUsernamePattern } from '@client/services/validators';
 
 const validationMessages = {
   required: "Field can't be empty",

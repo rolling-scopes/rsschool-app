@@ -1,4 +1,6 @@
 import { EnglishLevel } from '@common/models';
+import { ProfileApi, ProfileDto, UsersNotificationsApi, UpdateUserDtoLanguagesEnum } from '@client/api';
+import discordIntegration from '../configs/discord-integration';
 import type {
   ConfigurableProfilePermissions,
   Contacts,
@@ -11,9 +13,7 @@ import type {
   StudentStats,
 } from '@common/models/profile';
 import { Rule } from 'antd/lib/form';
-import { ProfileApi, ProfileDto, UpdateUserDtoLanguagesEnum, UsersNotificationsApi } from 'api';
 import axios, { AxiosInstance } from 'axios';
-import discordIntegration from '../configs/discord-integration';
 
 export interface UserBasic {
   name: string;

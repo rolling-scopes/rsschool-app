@@ -1,4 +1,4 @@
-import { CourseRole } from 'services/models';
+import { CourseRole } from '@client/services/models';
 
 export interface CourseInfo {
   mentorId?: number;

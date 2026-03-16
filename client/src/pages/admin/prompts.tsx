@@ -1,5 +1,5 @@
-import { SessionProvider } from 'modules/Course/contexts';
-import { PromptsPage } from 'modules/Prompts/pages/PromptPage';
+import { SessionProvider } from '@client/modules/Course/contexts';
+import { PromptsPage } from '@client/modules/Prompts/pages/PromptPage';
 
 export default function () {
   return (

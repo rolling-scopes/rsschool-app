@@ -13,7 +13,7 @@ import {
 } from '@client/components/Profile/ui/';
 import { CoreJsInterviewFeedback, StageInterviewDetailedFeedback } from '@common/models';
 import InterviewModal from '@client/components/Profile/InterviewModal';
-import { Rating } from '@client/components/Rating';
+import { Rating } from '@client/shared/components/Rating';
 
 const { Text } = Typography;
 

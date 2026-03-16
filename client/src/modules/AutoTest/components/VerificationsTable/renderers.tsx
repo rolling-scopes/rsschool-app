@@ -1,9 +1,9 @@
 import { Space, Typography } from 'antd';
 import { ColumnType } from 'antd/lib/table';
-import { dateWithTimeZoneRenderer } from 'components/Table';
-import { CourseTaskDetailedDtoTypeEnum } from 'api';
+import { dateWithTimeZoneRenderer } from '@client/shared/components/Table';
+import { CourseTaskDetailedDtoTypeEnum } from '@client/api';
 import { CheckSquareTwoTone, CloseSquareTwoTone } from '@ant-design/icons';
-import { Verification } from 'services/course';
+import { Verification } from '@client/services/course';
 
 const { Text, Link, Title } = Typography;
 

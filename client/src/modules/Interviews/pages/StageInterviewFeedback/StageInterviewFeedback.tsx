@@ -1,16 +1,16 @@
 import { Divider, Layout } from 'antd';
 import dynamic from 'next/dynamic';
-import { Header } from 'components/Header';
+import { Header } from '@client/shared/components/Header';
 
 import { Steps } from './Steps';
 import { StudentInfo } from './StudentInfo';
 import { SubHeader } from './SubHeader';
 import { StepContextProvider } from './StepContext';
 import { StepsContent } from './StepsContent';
-import { featureToggles } from 'services/features';
+import { featureToggles } from '@client/services/features';
 import { StageFeedbackProps } from '../../data';
 
-const LegacyTechScreening = dynamic(() => import('pages/course/mentor/interview-technical-screening'), {
+const LegacyTechScreening = dynamic(() => import('@client/pages/course/mentor/interview-technical-screening'), {
   loading: () => <p>Loading...</p>,
 });
 

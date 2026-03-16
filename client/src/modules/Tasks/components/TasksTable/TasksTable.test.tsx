@@ -1,10 +1,10 @@
 import assert from 'node:assert';
 import { fireEvent, render, screen, within } from '@testing-library/react';
-import { TaskDto } from 'api';
+import { TaskDto } from '@client/api';
 import { TasksTable } from './TasksTable';
-import { ColumnName } from 'modules/Tasks/types';
-import { TASK_TYPES } from 'data/taskTypes';
-import { COURSE_NAME_MOCK, generateTasksData } from 'modules/Tasks/utils/test-utils';
+import { ColumnName } from '@client/modules/Tasks/types';
+import { TASK_TYPES } from '@client/data/taskTypes';
+import { COURSE_NAME_MOCK, generateTasksData } from '@client/modules/Tasks/utils/test-utils';
 
 const renderTasksTable = (data: TaskDto[] = generateTasksData(1), handleEditItem = jest.fn()) => {
   render(<TasksTable data={data} handleEditItem={handleEditItem} />);

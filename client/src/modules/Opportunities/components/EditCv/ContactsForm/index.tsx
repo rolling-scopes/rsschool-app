@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, ForwardedRef } from 'react';
 import { Form, Input, Card, FormInstance, Typography } from 'antd';
-import { Contacts } from 'modules/Opportunities/models';
+import { Contacts } from '@client/modules/Opportunities/models';
 import { contactsValidationRules as validationRules } from '../form-validation';
 
 const { Item } = Form;

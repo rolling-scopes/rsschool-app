@@ -1,9 +1,9 @@
 import { message, Alert, Space } from 'antd';
-import { EmailConfirmation } from 'components/Profile/EmailConfirmation';
-import discordIntegration from 'configs/discord-integration';
+import { EmailConfirmation } from '@client/components/Profile/EmailConfirmation';
+import discordIntegration from '@client/configs/discord-integration';
 import Link from 'next/link';
 import { useCallback } from 'react';
-import { UserService } from 'services/user';
+import { UserService } from '@client/services/user';
 
 const rsschoolBotLink = 'https://t.me/rsschool_bot?start=connect';
 

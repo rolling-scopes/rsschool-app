@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import ContactsCardForm from '../ContactsCardForm';
-import { Contact, ContactsKeys } from 'services/user';
+import { Contact, ContactsKeys } from '@client/services/user';
 
 describe('ContactsCardForm', () => {
   const contacts: Contact[] = [

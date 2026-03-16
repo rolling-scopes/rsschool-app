@@ -1,6 +1,6 @@
 import { Col, Modal, Spin, Typography } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { MentorRegistryDto } from 'api';
+import { MentorRegistryDto } from '@client/api';
 
 interface MentorRegistryModalProps {
   modalData: any;

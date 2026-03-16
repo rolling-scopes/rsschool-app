@@ -1,8 +1,8 @@
-import { OpportunitiesApi } from 'api';
-import { BASE_PATH } from 'api/base';
-import { Configuration } from 'api/configuration';
-import { AxiosRequestConfig } from 'axios';
 import { GetServerSidePropsContext } from 'next';
+import { OpportunitiesApi } from '@client/api';
+import { BASE_PATH } from '@client/api/base';
+import { Configuration } from '@client/api/configuration';
+import { AxiosRequestConfig } from 'axios';
 
 const rsHost = process.env.RS_HOST || '';
 

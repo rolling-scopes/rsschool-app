@@ -3,8 +3,8 @@ import dayjs from 'dayjs';
 import relative from 'dayjs/plugin/relativeTime';
 import { PublicFeedback } from '@common/models/profile';
 import { Typography, Tooltip, Modal, Row, Col } from 'antd';
-import { Comment } from 'components/Comment';
-import { GithubAvatar } from 'components/GithubAvatar';
+import { Comment } from '@client/components/Comment';
+import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 import heroesBadges from '../../configs/heroes-badges';
 
 dayjs.extend(relative);

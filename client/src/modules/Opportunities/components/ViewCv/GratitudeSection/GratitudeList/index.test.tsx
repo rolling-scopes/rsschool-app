@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { GratitudeDto } from 'api';
+import { GratitudeDto } from '@client/api';
 import { GratitudeList } from './index';
 
 const mockGratitudes = [

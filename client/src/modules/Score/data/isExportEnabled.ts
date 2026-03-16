@@ -1,7 +1,7 @@
-import { ProfileCourseDto } from 'api';
-import { Session } from 'components/withSession';
-import { isCourseManager } from 'domain/user';
-import { CourseRole } from 'services/models';
+import { ProfileCourseDto } from '@client/api';
+import { Session } from '@client/components/withSession';
+import { isCourseManager } from '@client/domain/user';
+import { CourseRole } from '@client/services/models';
 
 export function isExportEnabled({ session, course }: { session?: Session; course: ProfileCourseDto }) {
   if (!session) {

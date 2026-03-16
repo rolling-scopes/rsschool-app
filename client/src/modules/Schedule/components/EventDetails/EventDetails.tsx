@@ -1,10 +1,10 @@
 import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Col, Row, Tooltip, Typography } from 'antd';
-import { GithubUserLink } from 'components/GithubUserLink';
-import { renderTag, tagsRenderer } from 'components/Table';
+import { GithubUserLink } from '@client/shared/components/GithubUserLink';
+import { renderTag, tagsRenderer } from '@client/shared/components/Table';
 import dayjs from 'dayjs';
 import Link from 'next/link';
-import { CourseEvent } from 'services/course';
+import { CourseEvent } from '@client/services/course';
 
 import styles from './EventDetails.module.css';
 

@@ -1,5 +1,5 @@
-import { DisciplinePage } from 'modules/Discipline/pages/DisciplinePage';
-import { SessionProvider } from 'modules/Course/contexts';
+import { DisciplinePage } from '@client/modules/Discipline/pages/DisciplinePage';
+import { SessionProvider } from '@client/modules/Course/contexts';
 
 export default function () {
   return (

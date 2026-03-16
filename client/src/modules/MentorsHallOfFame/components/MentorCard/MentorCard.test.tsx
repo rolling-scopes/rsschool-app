@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { TopMentorDto } from 'api';
+import { TopMentorDto } from '@client/api';
 import { MentorCard } from './MentorCard';
 
 jest.mock('next/config', () => () => ({}));

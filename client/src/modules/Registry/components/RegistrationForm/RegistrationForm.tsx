@@ -1,9 +1,9 @@
 import { Col, Form, FormInstance, Row, Steps, theme } from 'antd';
 import { Store } from 'antd/lib/form/interface';
 import { useUpdate } from 'react-use';
-import { Footer, Header } from 'modules/Registry/components';
-import { DEFAULT_FORM_ITEM_LAYOUT, FORM_TITLES } from 'modules/Registry/constants';
-import { useFormLayout } from 'modules/Registry/hooks';
+import { Footer, Header } from '@client/modules/Registry/components';
+import { DEFAULT_FORM_ITEM_LAYOUT, FORM_TITLES } from '@client/modules/Registry/constants';
+import { useFormLayout } from '@client/modules/Registry/hooks';
 import { useMemo } from 'react';
 
 type Props = {

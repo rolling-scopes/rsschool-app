@@ -1,5 +1,5 @@
-import { SessionProvider } from 'modules/Course/contexts';
-import { HomePage } from 'modules/Home/pages/HomePage';
+import { SessionProvider } from '@client/modules/Course/contexts';
+import { HomePage } from '@client/modules/Home/pages/HomePage';
 
 function Page() {
   return (

@@ -1,17 +1,17 @@
 import { Button, Divider, Form, Input, InputNumber, Radio, Rate, Space, Typography } from 'antd';
 import { AxiosError } from 'axios';
-import { GithubAvatar } from 'components/GithubAvatar';
-import { PageLayoutSimple } from 'components/PageLayout';
-import { useLoading } from 'components/useLoading';
-import { useMessage } from 'hooks';
+import { GithubAvatar } from '@client/shared/components/GithubAvatar';
+import { PageLayoutSimple } from '@client/shared/components/PageLayout';
+import { useLoading } from '@client/components/useLoading';
+import { useMessage } from '@client/hooks';
 import get from 'lodash/get';
 import keys from 'lodash/keys';
 import set from 'lodash/set';
-import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { ChangeEvent, useContext, useEffect, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService } from 'services/course';
-import { CourseRole, StudentBasic } from 'services/models';
+import { CourseService } from '@client/services/course';
+import { CourseRole, StudentBasic } from '@client/services/models';
 
 type FormValues = typeof defaultInitialValues;
 

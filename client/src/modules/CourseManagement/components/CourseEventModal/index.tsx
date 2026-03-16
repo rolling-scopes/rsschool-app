@@ -1,15 +1,15 @@
 import { Col, DatePicker, Form, Input, Row, Select, Typography } from 'antd';
-import { DisciplinesApi, EventsApi } from 'api';
-import { ModalForm } from 'components/Forms';
-import { UserSearch } from 'components/UserSearch';
-import { TIMEZONES } from 'configs/timezones';
-import { EVENT_TYPES } from 'data/eventTypes';
-import { SPECIAL_ENTITY_TAGS } from 'modules/Schedule/constants';
+import { DisciplinesApi, EventsApi } from '@client/api';
+import { ModalForm } from '@client/shared/components/Forms';
+import { UserSearch } from '@client/shared/components/UserSearch';
+import { TIMEZONES } from '@client/configs/timezones';
+import { EVENT_TYPES } from '@client/data/eventTypes';
+import { SPECIAL_ENTITY_TAGS } from '@client/modules/Schedule/constants';
 import { useCallback } from 'react';
 import { useAsync } from 'react-use';
-import { CourseEvent } from 'services/course';
-import { UserService } from 'services/user';
-import { urlPattern } from 'services/validators';
+import { CourseEvent } from '@client/services/course';
+import { UserService } from '@client/services/user';
+import { urlPattern } from '@client/services/validators';
 import { getInitialValues, submitEvent } from './formState';
 
 const { Option } = Select;

@@ -1,14 +1,20 @@
 import { Button, Row, Table, Checkbox, Popconfirm } from 'antd';
-import { AdminPageLayout } from 'components/PageLayout';
-import { StudentMentorModal } from 'components/StudentMentorModal';
-import { boolIconRenderer, getColumnSearchProps, numberSorter, stringSorter, PersonCell } from 'components/Table';
-import { useLoading } from 'components/useLoading';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
+import { StudentMentorModal } from '@client/shared/components/StudentMentorModal';
+import {
+  boolIconRenderer,
+  getColumnSearchProps,
+  numberSorter,
+  stringSorter,
+  PersonCell,
+} from '@client/shared/components/Table';
+import { useLoading } from '@client/components/useLoading';
 import { useMemo, useState, useContext } from 'react';
-import { CourseService } from 'services/course';
-import { CourseRole } from 'services/models';
+import { CourseService } from '@client/services/course';
+import { CourseRole } from '@client/services/models';
 import { useAsync } from 'react-use';
-import { isCourseManager, isCourseSupervisor } from 'domain/user';
-import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { isCourseManager, isCourseSupervisor } from '@client/domain/user';
+import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 
 function Page() {
   const session = useContext(SessionContext);

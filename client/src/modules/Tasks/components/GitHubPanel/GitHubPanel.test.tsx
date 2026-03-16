@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Form } from 'antd';
-import { ERROR_MESSAGES, LABELS, PLACEHOLDERS } from 'modules/Tasks/constants';
+import { ERROR_MESSAGES, LABELS, PLACEHOLDERS } from '@client/modules/Tasks/constants';
 import { GitHubPanel } from './GitHubPanel';
 
 const renderPanel = () => {

@@ -1,10 +1,10 @@
 import { Button, Card, Col, Divider, Row, Tag, Typography } from 'antd';
 import Link from 'next/link';
-import { getAutoTestTaskRoute } from 'services/routes';
+import { getAutoTestTaskRoute } from '@client/services/routes';
 import { TaskCardColumn, TaskDeadlineDate } from '..';
-import { Course } from 'services/models';
-import { useAttemptsMessage } from 'modules/AutoTest/hooks';
-import { CourseTaskState, CourseTaskVerifications } from 'modules/AutoTest/types';
+import { Course } from '@client/services/models';
+import { useAttemptsMessage } from '@client/modules/AutoTest/hooks';
+import { CourseTaskState, CourseTaskVerifications } from '@client/modules/AutoTest/types';
 
 const { Title, Paragraph } = Typography;
 

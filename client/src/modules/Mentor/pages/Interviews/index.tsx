@@ -1,14 +1,14 @@
-import { CoursesInterviewsApi, InterviewDto, TaskDtoTypeEnum } from 'api';
-import { PageLayout } from 'components/PageLayout';
-import { useLoading } from 'components/useLoading';
+import { CoursesInterviewsApi, InterviewDto, TaskDtoTypeEnum } from '@client/api';
+import { PageLayout } from '@client/shared/components/PageLayout';
+import { useLoading } from '@client/components/useLoading';
 import { useCallback, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService, MentorInterview } from 'services/course';
+import { CourseService, MentorInterview } from '@client/services/course';
 import { InterviewCard } from './components/InterviewCard';
 import { MentorOptionsProvider } from './components/MentorPreferencesModal';
 import groupBy from 'lodash/groupBy';
 import type { Dictionary } from 'lodash';
-import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
 import styles from './index.module.css';
 
 export function Interviews() {

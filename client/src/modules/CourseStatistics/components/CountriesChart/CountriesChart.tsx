@@ -1,7 +1,7 @@
 import { Bar, BarConfig } from '@ant-design/plots';
 import { Flex, Image, Typography } from 'antd';
-import { CountryStatDto } from 'api';
-import { useMemo } from 'react';
+import { CountryStatDto } from '@client/api';
+import { useCallback, useMemo } from 'react';
 import { Colors } from '../../data';
 
 type Props = {
@@ -11,31 +11,44 @@ type Props = {
   color?: Colors;
 };
 
+/*
+ * Defining the Datum type manually as it cannot be imported directly from @ant-design/plots.
+ * This type is inferred from the 'data' property of the Bar component's first parameter.
+ * This approach is necessary because @ant-design/plots does not explicitly export the Datum type.
+ * Use this type definition cautiously and review it if the library updates.
+ */
+type Datum = Parameters<typeof Bar>[0]['data'][number];
+
 const { Text } = Typography;
 
 function CountriesChart({ data, activeCount, xAxisTitle, color = Colors.Blue }: Props) {
+  const tooltipFormatter = useCallback(
+    (datum: Datum) => {
+      const percentage = activeCount ? Math.ceil((datum.count / activeCount) * 100) : 0;
+      return {
+        name: xAxisTitle,
+        value: `${datum.count} (${percentage}%)`,
+      };
+    },
+    [activeCount],
+  );
+
   const config: BarConfig = useMemo(
     () => ({
       data,
-      xField: 'countryName',
-      yField: 'count',
-      axis: {
-        x: { labelAutoRotate: false },
-        y: { title: xAxisTitle },
+      yField: 'countryName',
+      xField: 'count',
+      yAxis: {
+        label: { autoRotate: false },
       },
-      tooltip: {
-        items: [
-          (d: Record<string, number | undefined>) => {
-            const count = d.count ?? 0;
-            const percentage = activeCount ? Math.ceil((count / activeCount) * 100) : 0;
-            return { name: xAxisTitle, value: `${count} (${percentage}%)` };
-          },
-        ],
-      },
-      scrollbar: { x: {} },
-      style: { fill: color },
+      tooltip: { formatter: tooltipFormatter },
+      xAxis: { title: { text: xAxisTitle } },
+      scrollbar: { type: 'vertical' },
+      //Why this affects the size of the chart, I don't know. Do not delete.
+      seriesField: 'type',
+      color: () => color,
     }),
-    [data, activeCount, xAxisTitle, color],
+    [data, tooltipFormatter],
   );
 
   if (!data.length) {

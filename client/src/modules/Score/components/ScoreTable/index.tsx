@@ -6,17 +6,17 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocalStorage } from 'react-use';
 import isUndefined from 'lodash/isUndefined';
 import { useRouter } from 'next/router';
-import { CoursesTasksApi, CourseTaskDto, ScoreStudentDto } from 'api';
+import { CoursesTasksApi, CourseTaskDto, ScoreStudentDto } from '@client/api';
 import styles from './index.module.css';
-import { getColumns } from 'modules/Score/data/getColumns';
-import { getTaskColumns } from 'modules/Score/data/getTaskColumns';
-import { useScorePaging } from 'modules/Score/hooks/useScorePaging';
-import { SettingsDrawer } from 'modules/Score/components/SettingsDrawer';
-import { CourseService } from 'services/course';
-import { CoursePageProps } from 'services/models';
-import { IPaginationInfo } from '@client/utils/pagination';
-import { ScoreOrder, ScoreTableFilters } from 'modules/Score/hooks/types';
-import useWindowDimensions from 'utils/useWindowDimensions';
+import { getColumns } from '@client/modules/Score/data/getColumns';
+import { getTaskColumns } from '@client/modules/Score/data/getTaskColumns';
+import { useScorePaging } from '@client/modules/Score/hooks/useScorePaging';
+import { SettingsDrawer } from '@client/modules/Score/components/SettingsDrawer';
+import { CourseService } from '@client/services/course';
+import { CoursePageProps } from '@client/services/models';
+import { IPaginationInfo } from '@client/shared/utils/pagination';
+import { ScoreOrder, ScoreTableFilters } from '@client/modules/Score/hooks/types';
+import useWindowDimensions from '@client/shared/hooks/useWindowDimensions';
 import { Summary } from './Summary';
 
 type Props = CoursePageProps & {

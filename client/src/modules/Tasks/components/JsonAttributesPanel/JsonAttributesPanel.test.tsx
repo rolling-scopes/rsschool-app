@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { JsonAttributesPanel } from './JsonAttributesPanel';
 import { Form } from 'antd';
-import { ERROR_MESSAGES, PLACEHOLDERS } from 'modules/Tasks/constants';
+import { ERROR_MESSAGES, PLACEHOLDERS } from '@client/modules/Tasks/constants';
 
 const renderPanel = () => {
   render(

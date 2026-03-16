@@ -1,9 +1,9 @@
-import { PageLayout } from 'components/PageLayout';
-import { HeroesForm } from '../components/Forms/Heroes';
+import { PageLayout } from '@client/shared/components/PageLayout';
+import { HeroesForm } from '@client/shared/components/Forms/Heroes';
 import { useState } from 'react';
-import { SessionProvider } from 'modules/Course/contexts';
+import { SessionProvider } from '@client/modules/Course/contexts';
 import { Tabs } from 'antd';
-import HeroesRadarTab from 'components/Heroes/HeroesRadarTab';
+import HeroesRadarTab from '@client/components/Heroes/HeroesRadarTab';
 
 function Page() {
   const [loading, setLoading] = useState(false);

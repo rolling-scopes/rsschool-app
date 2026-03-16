@@ -1,10 +1,10 @@
 import { Col, Form, message, Row, Typography } from 'antd';
 import { useState } from 'react';
-import { ModalSubmitForm } from 'components/Forms/ModalSubmitForm';
-import { MentorReviewAssignDto, MentorReviewDto, MentorReviewsApi } from 'api';
+import { ModalSubmitForm } from '@client/shared/components/Forms';
+import { MentorReviewAssignDto, MentorReviewDto, MentorReviewsApi } from '@client/api';
 import isEmpty from 'lodash/isEmpty';
-import { MentorSearch } from 'components/MentorSearch';
-import { useActiveCourseContext } from 'modules/Course/contexts';
+import { MentorSearch } from '@client/shared/components/MentorSearch';
+import { useActiveCourseContext } from '@client/modules/Course/contexts';
 import useRequest from 'ahooks/lib/useRequest';
 
 const mentorReviewsApi = new MentorReviewsApi();

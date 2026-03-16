@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Col, Empty, Flex, Row, Segmented, Space, Spin, Typography } from 'antd';
 import { TrophyOutlined } from '@ant-design/icons';
-import { TopMentorDto } from 'api';
+import { TopMentorDto } from '@client/api';
 import { MentorCard } from '../components/MentorCard/MentorCard';
 import { MentorsHallOfFameService } from '../services/mentors-hall-of-fame.service';
 

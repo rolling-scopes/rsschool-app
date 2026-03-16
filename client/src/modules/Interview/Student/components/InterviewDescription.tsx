@@ -1,7 +1,7 @@
 import { Descriptions } from 'antd';
-import { InterviewDetails, getInterviewResult } from 'domain/interview';
-import { GithubUserLink } from 'components/GithubUserLink';
-import { Decision } from 'data/interviews/technical-screening';
+import { InterviewDetails, getInterviewResult } from '@client/domain/interview';
+import { GithubUserLink } from '@client/shared/components/GithubUserLink';
+import { Decision } from '@client/data/interviews/technical-screening';
 import { StatusLabel } from './StatusLabel';
 
 export const InterviewDescription = ({ interviewer, status, result }: InterviewDetails) => {

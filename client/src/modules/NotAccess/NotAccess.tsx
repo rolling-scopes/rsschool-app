@@ -1,5 +1,5 @@
 import { Row, Image } from 'antd';
-import { PageLayout } from 'components/PageLayout';
+import { PageLayout } from '@client/shared/components/PageLayout';
 
 export default function NotAccess() {
   return (

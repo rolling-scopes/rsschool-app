@@ -1,7 +1,7 @@
 import { Select } from 'antd';
 import { CSSProperties } from 'react';
-import { Course } from 'services/models';
-import { CourseIcon } from 'components/Icons/CourseIcon';
+import { Course } from '@client/services/models';
+import { CourseIcon } from '@client/shared/components/Icons/CourseIcon';
 
 type Props = {
   course: Course | null;

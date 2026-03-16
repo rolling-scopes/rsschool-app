@@ -1,13 +1,13 @@
 import { DislikeOutlined, HourglassOutlined, LikeOutlined } from '@ant-design/icons';
 import { Button, Col, Row, Select, Statistic, Table, Typography } from 'antd';
 import axios from 'axios';
-import { GithubUserLink } from 'components/GithubUserLink';
-import { stringSorter } from 'components/Table';
+import { GithubUserLink } from '@client/shared/components/GithubUserLink';
+import { stringSorter } from '@client/shared/components/Table';
 import { useState } from 'react';
-import { formatMonthFriendly } from 'services/formatter';
-import { Course, CourseRole } from 'services/models';
-import { AdminPageLayout } from 'components/PageLayout';
-import { SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { formatMonthFriendly } from '@client/services/formatter';
+import { Course, CourseRole } from '@client/services/models';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
+import { SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 
 const defaultRowGutter = 24;
 const PAGINATION = 200;

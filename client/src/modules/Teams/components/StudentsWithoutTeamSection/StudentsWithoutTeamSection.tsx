@@ -1,12 +1,12 @@
 import { Col, Input, Row, Space, TablePaginationConfig, Typography, Modal } from 'antd';
 import { useState } from 'react';
 
-import { TeamDistributionApi, TeamDistributionDetailedDto, TeamDistributionStudentDto } from 'api';
+import { TeamDistributionApi, TeamDistributionDetailedDto, TeamDistributionStudentDto } from '@client/api';
 import { useAsync } from 'react-use';
 import StudentsTable from '../StudentsTable/StudentsTable';
-import { IPaginationInfo } from '@client/utils/pagination';
-import { useLoading } from 'components/useLoading';
-import { useMessage } from 'hooks';
+import { IPaginationInfo } from '@client/shared/utils/pagination';
+import { useLoading } from '@client/components/useLoading';
+import { useMessage } from '@client/hooks';
 
 type Props = {
   distribution: TeamDistributionDetailedDto;

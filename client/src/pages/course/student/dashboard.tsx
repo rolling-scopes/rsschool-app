@@ -1,8 +1,8 @@
-import { PageLayout } from 'components/PageLayout';
+import { PageLayout } from '@client/shared/components/PageLayout';
 import { useContext, useMemo } from 'react';
 import Masonry from 'react-masonry-css';
 
-import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 import styles from './dashboard.module.css';
 import {
   AvailableReviewCard,
@@ -12,8 +12,8 @@ import {
   RepositoryCard,
   TasksStatsCard,
   useDashboardData,
-} from 'modules/StudentDashboard';
-import { CourseService } from 'services/course';
+} from '@client/modules/StudentDashboard';
+import { CourseService } from '@client/services/course';
 
 const gapSize = 24;
 

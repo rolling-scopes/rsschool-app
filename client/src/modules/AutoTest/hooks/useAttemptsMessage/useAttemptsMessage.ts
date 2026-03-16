@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { CourseTaskDetailedDtoTypeEnum } from 'api';
-import { CourseTaskVerifications } from 'modules/AutoTest/types';
+import { CourseTaskDetailedDtoTypeEnum } from '@client/api';
+import { CourseTaskVerifications } from '@client/modules/AutoTest/types';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 

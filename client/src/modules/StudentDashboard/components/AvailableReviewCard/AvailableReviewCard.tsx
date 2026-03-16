@@ -1,5 +1,5 @@
 import { Divider, Empty, Progress, Row, Typography } from 'antd';
-import { AvailableReviewStatsDto } from 'api';
+import { AvailableReviewStatsDto } from '@client/api';
 import CommonCard from '../CommonDashboardCard';
 
 type Props = {

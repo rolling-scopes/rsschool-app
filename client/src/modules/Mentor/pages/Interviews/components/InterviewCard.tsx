@@ -1,10 +1,10 @@
 import { Button, Card } from 'antd';
-import { InterviewPeriod } from 'domain/interview';
+import { InterviewPeriod } from '@client/domain/interview';
 import styles from './InterviewCard.module.css';
 import { InterviewDetails } from './InterviewDetails';
-import { InterviewDto } from 'api';
-import { Course } from 'services/models';
-import { MentorInterview } from 'services/course';
+import { InterviewDto } from '@client/api';
+import { Course } from '@client/services/models';
+import { MentorInterview } from '@client/services/course';
 
 export function InterviewCard(props: {
   interviewTask: InterviewDto;

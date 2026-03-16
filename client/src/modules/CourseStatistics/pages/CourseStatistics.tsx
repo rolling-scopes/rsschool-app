@@ -1,5 +1,5 @@
-import { PageLayout } from 'components/PageLayout';
-import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
+import { PageLayout } from '@client/shared/components/PageLayout';
+import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { DatePickerProps, Empty, theme } from 'antd';
 import type { Dayjs } from 'dayjs';
 import { useContext, useState } from 'react';

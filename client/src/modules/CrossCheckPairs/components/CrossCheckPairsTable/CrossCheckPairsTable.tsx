@@ -1,11 +1,11 @@
 import { Table, TablePaginationConfig } from 'antd';
-import { CrossCheckPairDto } from 'api';
+import { CrossCheckPairDto } from '@client/api';
 import { FilterValue, SorterResult } from 'antd/lib/table/interface';
 import {
   CustomColumnType,
   fields,
   getCrossCheckPairsColumns,
-} from 'modules/CrossCheckPairs/data/getCrossCheckPairsColumns';
+} from '@client/modules/CrossCheckPairs/data/getCrossCheckPairsColumns';
 
 import styles from './CrossCheckPairsTable.module.css';
 

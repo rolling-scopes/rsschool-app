@@ -1,5 +1,5 @@
-import { CourseScheduleItemDtoStatusEnum } from 'api';
-import { DEFAULT_COLOR } from 'modules/Schedule/constants';
+import { CourseScheduleItemDtoStatusEnum } from '@client/api';
+import { DEFAULT_COLOR } from '@client/modules/Schedule/constants';
 import { CSSProperties } from 'react';
 
 export const getTagStyle = (tagName: string, tagColors: Record<string, string> = {}, styles?: CSSProperties) => {

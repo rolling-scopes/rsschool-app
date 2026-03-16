@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import StatusTabs from './StatusTabs';
-import { CourseTaskStatus } from 'modules/AutoTest/types';
+import { CourseTaskStatus } from '@client/modules/AutoTest/types';
 
 describe('StatusTabs', () => {
   const onTabChangeMock = jest.fn();

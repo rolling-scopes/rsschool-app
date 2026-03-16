@@ -1,4 +1,4 @@
-import { ResumeDto } from 'api';
+import { ResumeDto } from '@client/api';
 
 export const transformInitialCvData = (data: ResumeDto | null) => {
   const {

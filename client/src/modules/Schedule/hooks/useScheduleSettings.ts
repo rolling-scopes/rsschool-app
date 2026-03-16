@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useLocalStorage } from 'react-use';
-import { DEFAULT_TAG_COLOR_MAP, LocalStorageKeys } from 'modules/Schedule/constants';
+import { DEFAULT_TAG_COLOR_MAP, LocalStorageKeys } from '@client/modules/Schedule/constants';
 
 export interface ScheduleSettings {
   timezone: string;

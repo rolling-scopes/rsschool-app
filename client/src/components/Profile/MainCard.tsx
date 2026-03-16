@@ -2,12 +2,12 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { Card, Typography, Input, Row, Col, Button } from 'antd';
 import { GithubFilled, EnvironmentFilled, EditOutlined } from '@ant-design/icons';
 import isEqual from 'lodash/isEqual';
-import { GithubAvatar } from 'components/GithubAvatar';
-import { LocationSelect } from 'components/Forms';
+import { GithubAvatar } from '@client/shared/components/GithubAvatar';
+import { LocationSelect } from '@client/shared/components/Forms';
 import { Location } from '@common/models/profile';
 import ProfileSettingsModal from './ProfileSettingsModal';
-import { UpdateProfileInfoDto } from 'api';
-import { ProfileMainCardData } from 'services/user';
+import { UpdateProfileInfoDto } from '@client/api';
+import { ProfileMainCardData } from '@client/services/user';
 import ObfuscationModal from './ObfuscateConfirmationModal';
 
 const { Title, Paragraph, Text } = Typography;

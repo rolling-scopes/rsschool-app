@@ -18,12 +18,12 @@ import {
 } from 'antd';
 import { Tooltip } from 'antd/lib';
 
-import { CoursesApi, CreateCourseDto, DisciplineDto, IdNameDto, UpdateCourseDto } from 'api';
-import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
+import { CoursesApi, CreateCourseDto, DisciplineDto, IdNameDto, UpdateCourseDto } from '@client/api';
+import { DEFAULT_COURSE_ICONS } from '@client/configs/course-icons';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { Course } from 'services/models';
-import { PublicSvgIcon } from '@client/components/Icons';
+import { Course } from '@client/services/models';
+import { PublicSvgIcon } from '@client/shared/components/Icons';
 
 dayjs.extend(utc);
 

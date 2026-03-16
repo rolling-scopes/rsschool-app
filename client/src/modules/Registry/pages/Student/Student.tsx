@@ -1,7 +1,7 @@
-import { RegistrationPageLayout } from 'components/RegistrationPageLayout';
-import { SessionContext } from 'modules/Course/contexts';
-import { CourseCertificateAlert, NoCourses, RegistrationForm } from 'modules/Registry/components';
-import { useStudentData } from 'modules/Registry/hooks';
+import { RegistrationPageLayout } from '@client/components/RegistrationPageLayout';
+import { SessionContext } from '@client/modules/Course/contexts';
+import { CourseCertificateAlert, NoCourses, RegistrationForm } from '@client/modules/Registry/components';
+import { useStudentData } from '@client/modules/Registry/hooks';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
 

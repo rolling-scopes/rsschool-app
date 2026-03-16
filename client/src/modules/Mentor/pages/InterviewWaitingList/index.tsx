@@ -1,5 +1,5 @@
 import { Button, Table } from 'antd';
-import { PageLayout } from 'components/PageLayout';
+import { PageLayout } from '@client/shared/components/PageLayout';
 import {
   getColumnSearchProps,
   numberSorter,
@@ -8,21 +8,21 @@ import {
   boolIconRenderer,
   PersonCell,
   dateRenderer,
-} from 'components/Table';
-import { useLoading } from 'components/useLoading';
+} from '@client/shared/components/Table';
+import { useLoading } from '@client/components/useLoading';
 import { useMemo, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService } from 'services/course';
-import { CoursePageProps } from 'services/models';
-import { isCourseManager, isMentor } from 'domain/user';
-import { AvailableStudentDto, CoursesInterviewsApi, InterviewDto, TaskDtoTypeEnum } from 'api';
-import { getRating } from 'domain/interview';
-import { CustomPopconfirm } from 'components/common/CustomPopconfirm';
-import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
+import { CourseService } from '@client/services/course';
+import { CoursePageProps } from '@client/services/models';
+import { isCourseManager, isMentor } from '@client/domain/user';
+import { AvailableStudentDto, CoursesInterviewsApi, InterviewDto, TaskDtoTypeEnum } from '@client/api';
+import { getRating } from '@client/domain/interview';
+import { CustomPopconfirm } from '@client/components/common/CustomPopconfirm';
+import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { useRequest } from 'ahooks';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
-import { Rating } from '@client/components/Rating';
+import { Rating } from '@client/shared/components/Rating';
 
 const api = new CoursesInterviewsApi();
 

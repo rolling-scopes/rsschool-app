@@ -5,7 +5,7 @@ import { reactTemplate } from './react';
 import { shortTrackScreeningTemplate } from './shortTrackScreening';
 import { shortTrackJavaScriptTemplate } from './shortTrackJavaScript';
 import { shortTrackTypeScriptTemplate } from './shortTrackTypeScript';
-import { shortTrackPerformanceTemplate } from 'data/interviews/shortTrackPerformance';
+import { shortTrackPerformanceTemplate } from '@client/data/interviews/shortTrackPerformance';
 import { validateInterviewTemplate } from './templateValidator';
 
 export * from './types';

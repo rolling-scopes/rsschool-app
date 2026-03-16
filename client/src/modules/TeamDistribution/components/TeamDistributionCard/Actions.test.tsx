@@ -1,5 +1,5 @@
 import { screen, render, fireEvent } from '@testing-library/react';
-import { TeamDistributionDto, TeamDistributionDtoRegistrationStatusEnum } from 'api';
+import { TeamDistributionDto, TeamDistributionDtoRegistrationStatusEnum } from '@client/api';
 import { Actions } from './Actions';
 
 const mockOnRegister = jest.fn();

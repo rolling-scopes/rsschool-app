@@ -1,5 +1,5 @@
 import { Tag } from 'antd';
-import { InterviewStatus } from 'domain/interview';
+import { InterviewStatus } from '@client/domain/interview';
 
 export const StatusLabel = ({ status }: { status: InterviewStatus }) => {
   const statusMap = {

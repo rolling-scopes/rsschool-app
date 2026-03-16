@@ -1,22 +1,22 @@
 import { Collapse, Modal, Space, TablePaginationConfig } from 'antd';
-import { Comment } from 'components/Comment';
+import { Comment } from '@client/components/Comment';
 import { FilterValue } from 'antd/lib/table/interface';
-import { IPaginationInfo } from '@client/utils/pagination';
-import { AdminPageLayout } from 'components/PageLayout';
-import { dateTimeRenderer } from 'components/Table';
+import { IPaginationInfo } from '@client/shared/utils/pagination';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
+import { dateTimeRenderer } from '@client/shared/components/Table';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { CourseService, CourseTaskDetails } from 'services/course';
-import { CoursesTasksApi, CrossCheckMessageDtoRoleEnum, CrossCheckPairDto } from 'api';
-import PreparedComment from 'components/Forms/PreparedComment';
-import { Message } from 'modules/CrossCheck/components/SolutionReview/Message';
-import { CrossCheckCriteria } from 'modules/CrossCheck/components/criteria/CrossCheckCriteria';
-import { BadReviewControllers } from 'modules/CrossCheckPairs/components/BadReview/BadReviewControllers';
+import { CourseService, CourseTaskDetails } from '@client/services/course';
+import { CoursesTasksApi, CrossCheckMessageDtoRoleEnum, CrossCheckPairDto } from '@client/api';
+import PreparedComment from '@client/shared/components/Forms/PreparedComment';
+import { Message } from '@client/modules/CrossCheck/components/SolutionReview/Message';
+import { CrossCheckCriteria } from '@client/modules/CrossCheck/components/criteria/CrossCheckCriteria';
+import { BadReviewControllers } from '@client/modules/CrossCheckPairs/components/BadReview/BadReviewControllers';
 import {
   Filters,
   Sorter,
   CrossCheckPairsTable,
-} from 'modules/CrossCheckPairs/components/CrossCheckPairsTable/CrossCheckPairsTable';
-import { useActiveCourseContext } from 'modules/Course/contexts';
+} from '@client/modules/CrossCheckPairs/components/CrossCheckPairsTable/CrossCheckPairsTable';
+import { useActiveCourseContext } from '@client/modules/Course/contexts';
 
 enum OrderDirection {
   ASC = 'ASC',

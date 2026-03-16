@@ -1,6 +1,6 @@
 import { Form, Input, List, Typography } from 'antd';
 import { Contacts } from '@common/models/profile';
-import { Contact } from 'services/user';
+import { Contact } from '@client/services/user';
 
 const { Text } = Typography;
 

@@ -1,5 +1,5 @@
-import { CoursesTasksApi } from 'api';
-import { CourseService } from 'services/course';
+import { CoursesTasksApi } from '@client/api';
+import { CourseService } from '@client/services/course';
 
 export async function loadHomeData(courseId: number, githubId: string) {
   const [studentSummary, { data: courseTasks }] = await Promise.all([

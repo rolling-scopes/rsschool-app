@@ -4,15 +4,15 @@ import {
   NotificationsService,
   NotificationChannel,
   UserNotificationSettings,
-} from 'modules/Notifications/services/notifications';
+} from '@client/modules/Notifications/services/notifications';
 import set from 'lodash/set';
-import { useLoading } from 'components/useLoading';
+import { useLoading } from '@client/components/useLoading';
 import { useAsync } from 'react-use';
-import { PageLayout } from 'components/PageLayout';
+import { PageLayout } from '@client/shared/components/PageLayout';
 import { NotificationsTable } from '../components/NotificationsUserSettingsTable';
 import { Consents, Connection } from '../components/Consents';
-import { UpdateNotificationUserSettingsDto } from 'api';
-import { useMessage } from 'hooks';
+import { UpdateNotificationUserSettingsDto } from '@client/api';
+import { useMessage } from '@client/hooks';
 
 export function UserNotificationsPage() {
   const { message } = useMessage();

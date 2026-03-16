@@ -1,9 +1,9 @@
 import { useAsync } from 'react-use';
 import { Card, Form, Modal, Select, Space, Spin, Typography, message } from 'antd';
 
-import { CoursesTasksApi, TeamDistributionDto } from 'api';
-import { useActiveCourseContext } from 'modules/Course/contexts';
-import { useSubmitTeamScore } from 'modules/TeamDistribution/hooks/useSubmitTeamScore';
+import { CoursesTasksApi, TeamDistributionDto } from '@client/api';
+import { useActiveCourseContext } from '@client/modules/Course/contexts';
+import { useSubmitTeamScore } from '@client/modules/TeamDistribution/hooks/useSubmitTeamScore';
 
 const { Text } = Typography;
 const { Option } = Select;

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLocalStorage } from 'react-use';
-import { Course } from 'services/models';
+import { Course } from '@client/services/models';
 
 export function useActiveCourse(courses: Course[]): [Course | null, (courseId: number) => void] {
   const [courseId, setCourseId] = useState<number>();

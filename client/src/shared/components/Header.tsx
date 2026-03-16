@@ -1,0 +1,154 @@
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useContext, useMemo } from 'react';
+import { Button, Dropdown, Flex, Menu, MenuProps, Space, theme } from 'antd';
+import {
+  EyeOutlined,
+  LogoutOutlined,
+  NotificationOutlined,
+  QuestionCircleFilled,
+  SolutionOutlined,
+} from '@ant-design/icons';
+import { GithubAvatar } from '@client/shared/components/GithubAvatar';
+import { HeaderMiniBannerCarousel, HeaderMiniBannerCarouselItem } from '@client/components/HeaderMiniBannerCarousel';
+import { SolidarityUkraine } from './SolidarityUkraine';
+import { SessionContext } from '@client/modules/Course/contexts';
+import { getNavigationItems } from '@client/modules/Home/data/links';
+import { useActiveCourseContext } from '@client/modules/Course/contexts/ActiveCourseContext';
+import ThemeSwitch from '@client/shared/components/ThemeSwitch';
+import styles from './Header.module.css';
+import clsx from 'clsx';
+
+type Props = {
+  showCourseName?: boolean;
+  showCarousel?: boolean;
+  title?: string;
+};
+
+type MenuItem = Required<MenuProps>['items'][number];
+
+const MENU_ITEMS = [
+  {
+    link: '/profile',
+    icon: <EyeOutlined />,
+    title: 'Profile',
+  },
+  {
+    link: '/profile/notifications',
+    icon: <NotificationOutlined />,
+    title: 'Notifications',
+  },
+  {
+    link: '/cv/edit',
+    icon: <SolutionOutlined />,
+    title: 'My CV',
+  },
+  {
+    link: 'https://rs.school/docs/en',
+    icon: <QuestionCircleFilled />,
+    title: 'Help',
+    target: '_blank',
+  },
+  {
+    link: '/api/v2/auth/github/logout',
+    icon: <LogoutOutlined />,
+    title: 'Logout',
+  },
+];
+
+const CAROUSEL_ITEMS: ReadonlyArray<HeaderMiniBannerCarouselItem> = [
+  {
+    banner: '/static/images/banner-mentors-hall-of-fame.svg',
+    url: '/mentors-hall-of-fame',
+    title: 'Mentors Hall of Fame',
+  },
+  {
+    banner: '/static/images/banner-gratitude.svg',
+    url: '/gratitude',
+    title: '#gratitude',
+  },
+];
+const CAROUSEL_INTERVAL_MS = 5000;
+
+export function Header({ title, showCourseName, showCarousel = true }: Props) {
+  const { asPath: currentRoute } = useRouter();
+
+  const session = useContext(SessionContext);
+  const { course } = useActiveCourseContext();
+  const courseNotEmpty = course.id ? course : null;
+  const courseLinks = useMemo(() => getNavigationItems(session, courseNotEmpty ?? null), [session, course.id]);
+
+  const menuItems = useMemo((): MenuProps['items'] => {
+    const items = MENU_ITEMS.map(({ title, link, target, icon }) => {
+      const isActive = currentRoute === link;
+
+      return {
+        key: title,
+        label: (
+          <Button type="link" target={target} href={link} className={isActive ? styles.menuItemActive : undefined}>
+            {icon} {title}
+          </Button>
+        ),
+      };
+    });
+
+    const lastItem = items.pop() as MenuItem;
+
+    return [...items, { type: 'divider' }, lastItem];
+  }, [currentRoute]);
+
+  const { token } = theme.useToken();
+
+  return (
+    <Space
+      direction="vertical"
+      size={0}
+      style={{
+        width: '100%',
+        boxShadow: token.boxShadow,
+      }}
+    >
+      <nav
+        className={`${styles.nav} no-print page-header`}
+        style={{
+          background: token.colorBgContainer,
+          color: token.colorTextBase,
+        }}
+      >
+        <Space className={styles.icons}>
+          <Link href="/" className={styles.logoLink}>
+            <img
+              className={clsx(styles.headerLogo, 'header-logo')}
+              src="/static/images/logo-rsschool3.png"
+              alt="Rolling Scopes School Logo"
+            />
+          </Link>
+          <SolidarityUkraine />
+          {showCarousel && (
+            <HeaderMiniBannerCarousel
+              className={styles.carousel}
+              items={CAROUSEL_ITEMS}
+              intervalMs={CAROUSEL_INTERVAL_MS}
+            />
+          )}
+        </Space>
+        <div className={styles.center}>
+          <div className={styles.title}>
+            {title} {showCourseName ? course?.name : null}
+          </div>
+        </div>
+        <Flex align="center" className={styles.controls}>
+          <ThemeSwitch />
+          {session.githubId && (
+            <Dropdown menu={{ items: menuItems }} trigger={['click']}>
+              <Button type="link" className={styles.avatarButton}>
+                <GithubAvatar githubId={session?.githubId} size={32} />
+              </Button>
+            </Dropdown>
+          )}
+        </Flex>
+      </nav>
+      <Menu selectedKeys={[currentRoute]} mode="horizontal" items={courseLinks} />
+    </Space>
+  );
+}

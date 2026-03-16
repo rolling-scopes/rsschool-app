@@ -1,7 +1,7 @@
 import { Typography } from 'antd';
 import { BaseSection } from '../BaseSection';
 import { GratitudeList } from './GratitudeList';
-import { GratitudeDto } from 'api';
+import { GratitudeDto } from '@client/api';
 
 const { Text } = Typography;
 

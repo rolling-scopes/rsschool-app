@@ -1,6 +1,6 @@
-import { CourseRole } from 'services/models';
-import { SessionProvider } from 'modules/Course/contexts';
-import { StudentFeedback } from 'modules/Mentor/pages/StudentFeedback';
+import { CourseRole } from '@client/services/models';
+import { SessionProvider } from '@client/modules/Course/contexts';
+import { StudentFeedback } from '@client/modules/Mentor/pages/StudentFeedback';
 
 export default function () {
   return (

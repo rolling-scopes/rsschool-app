@@ -1,7 +1,7 @@
 import { Alert, theme, Typography } from 'antd';
 import InfoCircleTwoTone from '@ant-design/icons/InfoCircleTwoTone';
 import Link from 'next/link';
-import { getInterviewWaitList } from 'domain/interview';
+import { getInterviewWaitList } from '@client/domain/interview';
 import { useAlert } from '../hooks/useAlert';
 import styles from './WaitListAlert.module.css';
 

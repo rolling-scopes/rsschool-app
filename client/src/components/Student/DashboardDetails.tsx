@@ -7,10 +7,10 @@ import {
 } from '@ant-design/icons';
 import { Button, Descriptions, Drawer, Popconfirm, theme } from 'antd';
 import { MentorBasic } from '@common/models';
-import { CommentModal } from 'components/CommentModal';
-import { MentorSearch } from 'components/MentorSearch';
+import { CommentModal } from '@client/shared/components/CommentModal';
+import { MentorSearch } from '@client/shared/components/MentorSearch';
 import { useState } from 'react';
-import { StudentDetails } from 'services/course';
+import { StudentDetails } from '@client/services/course';
 import styles from './DashboardDetails.module.css';
 
 type Props = {
