@@ -80,7 +80,6 @@ export default function DevToolsUsers() {
       <Table
         style={{ width: '100%' }}
         size="small"
-        variant="borderless"
         rowKey="id"
         dataSource={users}
         columns={tableColumns}
