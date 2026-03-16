@@ -1,8 +1,7 @@
-import { CoursesInterviewsApi, InterviewDto, TaskDtoTypeEnum } from '@client/api';
+import { CoursesInterviewsApi, TaskDtoTypeEnum } from '@client/api';
 import { useRequest } from 'ahooks';
 import { PageLayout } from '@client/shared/components/PageLayout';
-import { useCallback, useState, useContext } from 'react';
-import { useAsync } from 'react-use';
+import { useCallback, useContext, useState } from 'react';
 import { CourseService, MentorInterview } from '@client/services/course';
 import { InterviewCard } from './components/InterviewCard';
 import { MentorOptionsProvider } from './components/MentorPreferencesModal';
@@ -14,7 +13,6 @@ import styles from './index.module.css';
 export function Interviews() {
   const session = useContext(SessionContext);
   const { course } = useActiveCourseContext();
-  const [interviews, setInterviews] = useState<InterviewDto[]>([]);
   const [interviewsByTask, setInterviewsByTask] = useState<Dictionary<MentorInterview[]>>({});
 
   const fetchStudentInterviews = useCallback(async () => {
@@ -22,7 +20,7 @@ export function Interviews() {
     setInterviewsByTask(groupBy(interviews, 'name'));
   }, [course.id, session.githubId]);
 
-  const { loading, runAsync: loadData } = useRequest(
+  const { data: interviews = [], loading } = useRequest(
     async () => {
       const [{ data }] = await Promise.all([
         new CoursesInterviewsApi().getInterviews(course.id, false, [
@@ -32,12 +30,10 @@ export function Interviews() {
         fetchStudentInterviews(),
       ]);
 
-      setInterviews(data);
+      return data;
     },
-    { manual: true },
+    { refreshDeps: [course.id, fetchStudentInterviews] },
   );
-
-  useAsync(async () => loadData(), []);
 
   return (
     <PageLayout loading={loading} title="Interviews" showCourseName>

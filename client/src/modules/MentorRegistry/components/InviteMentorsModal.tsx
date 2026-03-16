@@ -1,6 +1,5 @@
 import { Alert, Checkbox, Form, Select, Space, Spin } from 'antd';
 import { useRequest } from 'ahooks';
-import { useAsync } from 'react-use';
 import { InviteMentorsDto } from '@client/api';
 import { ModalForm } from '@client/shared/components/Forms';
 import ReactQuill from 'react-quill';
@@ -27,10 +26,10 @@ function InviteMentorsModal({ onCancel }: Props) {
     { manual: true },
   );
 
-  const { loading: disciplinesLoading, value: disciplines = [] } = useAsync(async () => {
+  const { loading: disciplinesLoading, data: disciplines = [] } = useRequest(async () => {
     const { data } = await disciplinesApi.getDisciplines();
     return data;
-  }, []);
+  });
 
   return (
     <ModalForm data={{}} title="Invite as a Mentor" submit={submit} cancel={onCancel} loading={loading}>

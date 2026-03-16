@@ -12,7 +12,6 @@ import {
 import { useMemo, useState, useContext } from 'react';
 import { CourseService } from '@client/services/course';
 import { CourseRole } from '@client/services/models';
-import { useAsync } from 'react-use';
 import { isCourseManager, isCourseSupervisor } from '@client/domain/user';
 import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 
@@ -29,32 +28,32 @@ function Page() {
   const courseManagerRole = useMemo(() => isCourseManager(session, courseId), [course, session]);
   const courseSupervisorRole = useMemo(() => isCourseSupervisor(session, courseId), [course, session]);
 
-  const loadInterviews = async () => setInterviews(await courseService.getStageInterviews());
-
-  const createInterviews = async () => {
-    await courseService.createStageInterviews({ noRegistration });
-    await loadInterviews();
-  };
+  const loadInterviews = async () => courseService.getStageInterviews();
 
   const { loading: loadingDeleteInterview, runAsync: deleteInterview } = useRequest(
     async (record: any) => {
       await courseService.deleteStageInterview(record.id);
-      await loadInterviewsRequest();
     },
-    { manual: true },
+    { manual: true, onSuccess: () => loadInterviewsRequest.runAsync() },
   );
-  const { loading: loadingInterviews, runAsync: loadInterviewsRequest } = useRequest(loadInterviews, { manual: true });
+  const loadInterviewsRequest = useRequest(loadInterviews, {
+    onSuccess: data => setInterviews(data),
+  });
   const { loading: loadingCreateInterview, runAsync: createInterview } = useRequest(
     async (studentGithubId: string, mentorGithubId: string) => {
       await courseService.createInterview(studentGithubId, mentorGithubId);
-      await loadInterviewsRequest();
       setModal(false);
     },
-    { manual: true },
+    { manual: true, onSuccess: () => loadInterviewsRequest.runAsync() },
   );
-  const loading = loadingDeleteInterview || loadingInterviews || loadingCreateInterview;
-
-  useAsync(async () => loadInterviewsRequest(), []);
+  const { loading: loadingCreateInterviews, runAsync: createInterviews } = useRequest(
+    async () => {
+      await courseService.createStageInterviews({ noRegistration });
+    },
+    { manual: true, onSuccess: () => loadInterviewsRequest.runAsync() },
+  );
+  const loading =
+    loadingDeleteInterview || loadInterviewsRequest.loading || loadingCreateInterview || loadingCreateInterviews;
 
   return (
     <AdminPageLayout loading={loading} title="Technical Screening" showCourseName courses={courses}>

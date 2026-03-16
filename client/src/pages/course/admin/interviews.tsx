@@ -12,10 +12,9 @@ import {
 import { useMemo, useState, useContext } from 'react';
 import { CourseService } from '@client/services/course';
 import { CourseRole } from '@client/services/models';
-import { useAsync } from 'react-use';
 import { isCourseManager } from '@client/domain/user';
 import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
-import { CoursesInterviewsApi, InterviewDto, InterviewPairDto } from '@client/api';
+import { CoursesInterviewsApi, InterviewPairDto } from '@client/api';
 
 const coursesInterviewsApi = new CoursesInterviewsApi();
 
@@ -24,86 +23,72 @@ function Page() {
   const { course, courses } = useActiveCourseContext();
   const courseId = course.id;
 
-  const [interviews, setInterviews] = useState<InterviewDto[]>([]);
-
-  const [data, setData] = useState([] as InterviewPairDto[]);
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selected, setSelected] = useState<number | null>(null);
   const [modal, setModal] = useState(false);
-  const courseService = useMemo(() => new CourseService(courseId), [courseId]);
 
+  const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const courseManagerRole = useMemo(() => isCourseManager(session, courseId), [course, session]);
 
-  const loadInterviews = async () => {
-    const { data: interviews } = await coursesInterviewsApi.getInterviews(courseId);
-    const filtered = interviews.filter(({ type }) => type === 'interview');
-    setInterviews(filtered);
-    setSelected(filtered[0]?.id.toString() ?? null);
-  };
-
-  const { loading: loadingDeleteInterview, runAsync: deleteInterview } = useRequest(
-    async (record: InterviewPairDto) => {
-      await courseService.cancelInterviewPair(selected!, String(record.id));
-      const filtered = data.filter(d => d.id !== record.id);
-      setData(filtered);
-    },
-    { manual: true },
-  );
-
-  const loadData = async () => {
-    if (selected) {
-      const { data } = await coursesInterviewsApi.getInterviewPairs(Number(selected), courseId);
-      setData(data);
-    }
-  };
-
-  const { loading: loadingCreateInterviews, runAsync: createInterviews } = useRequest(
+  const interviewsRequest = useRequest(
     async () => {
-      if (selected) {
-        const courseTaskId = Number(selected);
-        const isInterviewsIncludesSelected = interviews.map(({ id }) => id).includes(courseTaskId);
-
-        if (isInterviewsIncludesSelected) {
-          await courseService.createInterviewDistribution(courseTaskId);
-          await loadDataRequest();
-        }
-      }
+      const { data: interviews } = await coursesInterviewsApi.getInterviews(courseId);
+      const filtered = interviews
+        .filter(({ type }) => type === 'interview')
+        .map(({ id, name }) => ({ label: name, value: id }));
+      return filtered;
     },
-    { manual: true },
+    { onSuccess: data => setSelected(data[0]?.value ?? null) },
   );
 
-  const { loading: loadingData, runAsync: loadDataRequest } = useRequest(loadData, { manual: true });
-  const { loading: loadingInterviews, runAsync: loadInterviewsRequest } = useRequest(loadInterviews, { manual: true });
-  const { loading: loadingAddPair, runAsync: addInterviewPair } = useRequest(
+  const interviewPairsRequest = useRequest(
+    async () => {
+      const { data } = await coursesInterviewsApi.getInterviewPairs(Number(selected), courseId);
+      return data;
+    },
+    { ready: Boolean(selected), refreshDeps: [selected] },
+  );
+
+  const deleteInterviewRequest = useRequest(
+    async (selected: number, record: InterviewPairDto) =>
+      courseService.cancelInterviewPair(selected, String(record.id)),
+    { manual: true, onSuccess: interviewPairsRequest.runAsync },
+  );
+
+  const createInterviewsRequest = useRequest(
+    async (selected: number) => courseService.createInterviewDistribution(selected),
+    { ready: Boolean(selected), manual: true, onSuccess: interviewPairsRequest.runAsync },
+  );
+
+  const addInterviewPairRequest = useRequest(
     async (studentGithubId: string, mentorGithubId: string) => {
-      await courseService.addInterviewPair(selected!, mentorGithubId, studentGithubId);
-      await loadDataRequest();
+      await courseService.addInterviewPair(String(selected), mentorGithubId, studentGithubId);
+      await interviewPairsRequest.runAsync();
       setModal(false);
     },
     { manual: true },
   );
 
   const loading =
-    loadingDeleteInterview || loadingCreateInterviews || loadingData || loadingInterviews || loadingAddPair;
-
-  useAsync(async () => loadDataRequest(), [selected]);
-
-  useAsync(async () => loadInterviewsRequest(), []);
+    deleteInterviewRequest.loading ||
+    interviewPairsRequest.loading ||
+    createInterviewsRequest.loading ||
+    interviewsRequest.loading ||
+    addInterviewPairRequest.loading;
 
   return (
     <AdminPageLayout loading={loading} title="Interviews" showCourseName courses={courses}>
       <Row style={{ marginBottom: 16, gap: 16 }} justify="space-between">
         <Row style={{ gap: 16 }}>
-          <Select value={selected!} onChange={(value: string) => setSelected(value)} style={{ minWidth: 300 }}>
-            {interviews.map(interview => (
-              <Select.Option value={interview.id.toString()} key={interview.id.toString()}>
-                {interview.name}
-              </Select.Option>
-            ))}
-          </Select>
+          <Select
+            value={selected}
+            options={interviewsRequest.data}
+            onChange={setSelected}
+            style={{ minWidth: 300 }}
+          ></Select>
           {courseManagerRole ? (
             <div>
               <Popconfirm
-                onConfirm={() => createInterviews()}
+                onConfirm={() => createInterviewsRequest.run(selected!)}
                 title="Do you want to create interview pairs for not distributed students?"
               >
                 <Button>Create Interview Pairs</Button>
@@ -120,7 +105,7 @@ function Page() {
         pagination={{ defaultPageSize: 50 }}
         size="small"
         rowKey="id"
-        dataSource={data}
+        dataSource={interviewPairsRequest.data}
         columns={[
           {
             fixed: 'left',
@@ -156,7 +141,7 @@ function Page() {
             render: (_, record) => {
               if (isCourseManager(session, course.id)) {
                 return (
-                  <Button type="link" onClick={() => deleteInterview(record)}>
+                  <Button type="link" onClick={() => deleteInterviewRequest.run(selected!, record)}>
                     Cancel
                   </Button>
                 );
@@ -168,7 +153,7 @@ function Page() {
       />
 
       <StudentMentorModal
-        onOk={addInterviewPair}
+        onOk={addInterviewPairRequest.run}
         onCancel={() => setModal(false)}
         visible={modal}
         courseId={course.id}

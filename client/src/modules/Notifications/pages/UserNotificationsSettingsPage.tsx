@@ -7,7 +7,6 @@ import {
   UserNotificationSettings,
 } from '@client/modules/Notifications/services/notifications';
 import set from 'lodash/set';
-import { useAsync } from 'react-use';
 import { PageLayout } from '@client/shared/components/PageLayout';
 import { NotificationsTable } from '../components/NotificationsUserSettingsTable';
 import { Consents, Connection } from '../components/Consents';
@@ -23,7 +22,7 @@ export function UserNotificationsPage() {
   const [discord, setDiscord] = useState<Connection>();
   const [disabledChannels, setDisabledChannels] = useState<NotificationChannel[]>([]);
 
-  const { loading, runAsync: loadData } = useRequest(
+  const { loading } = useRequest(
     async () => {
       const { connections, notifications } = await service.getUserNotificationSettings();
       setNotifications(notifications);
@@ -49,14 +48,11 @@ export function UserNotificationsPage() {
       setDisabledChannels(disabledChannels);
     },
     {
-      manual: true,
       onError: () => {
         message.error('An unexpected error occurred. Please try later.');
       },
     },
   );
-
-  useAsync(loadData, []);
 
   const onCheck = useCallback(
     async (dataIndex: string[], record: UserNotificationSettings, checked: boolean) => {

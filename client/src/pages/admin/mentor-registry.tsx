@@ -2,7 +2,6 @@ import FileExcelOutlined from '@ant-design/icons/FileExcelOutlined';
 import { useRequest } from 'ahooks';
 import { Alert, Button, Col, Form, message, notification, Row, Select, Space, Tabs, Tooltip, Typography } from 'antd';
 import { useCallback, useContext, useMemo, useState } from 'react';
-import { useAsync } from 'react-use';
 
 import { DisciplineDto, DisciplinesApi, MentorRegistryDto } from '@client/api';
 
@@ -82,9 +81,9 @@ function Page() {
     [MentorRegistryTabsMode.All]: 0,
   });
 
-  const { loading: loadingData, runAsync: loadData } = useRequest(
+  const loadData = useRequest(
     async () => {
-      const [allData, courses] = await Promise.all([
+      const [mentorRegistryData, courses] = await Promise.all([
         mentorRegistryService.getMentors({
           status: activeTab,
           pageSize: PAGINATION,
@@ -102,24 +101,28 @@ function Page() {
         coursesService.getCourses(),
       ]);
       const { data: disciplines } = await disciplinesApi.getDisciplines();
-      setAllData(allData.mentors);
-      setData(allData.mentors);
-      setTotal(total => ({ ...total, [activeTab]: allData.total }));
-      setMaxStudents(allData.mentors.reduce((sum, it) => sum + it.maxStudentsLimit, 0));
-      setCourses(courses);
-      setDisciplines(disciplines);
+      return { courses, disciplines, mentorRegistryData };
     },
-    { manual: true },
+    {
+      refreshDeps: [activeTab, combinedFilter, currentPage],
+      onSuccess: ({ courses, disciplines, mentorRegistryData }) => {
+        setAllData(mentorRegistryData.mentors);
+        setData(mentorRegistryData.mentors);
+        setTotal(total => ({ ...total, [activeTab]: mentorRegistryData.total }));
+        setMaxStudents(mentorRegistryData.mentors.reduce((sum, it) => sum + it.maxStudentsLimit, 0));
+        setCourses(courses);
+        setDisciplines(disciplines);
+      },
+    },
   );
 
   const { loading: loadingCancelMentor, runAsync: cancelMentor } = useRequest(
     async (githubId: string) => {
       setModalData(null);
       await mentorRegistryService.cancelMentorRegistry(githubId);
-      await loadData();
       setIsModalOpen(false);
     },
-    { manual: true },
+    { manual: true, onSuccess: () => loadData.runAsync() },
   );
 
   const { loading: loadingComment, runAsync: sendMentorRegistryComment } = useRequest(
@@ -127,19 +130,16 @@ function Page() {
       if (!modalData?.record?.githubId) return;
       try {
         await mentorRegistryService.sendCommentMentorRegistry(modalData?.record?.githubId, comment);
-        await loadData();
       } catch {
         message.error('An error occurred. Please try again later.');
       } finally {
         setIsModalOpen(false);
       }
     },
-    { manual: true },
+    { manual: true, onSuccess: () => loadData.runAsync() },
   );
 
-  const loading = loadingData || loadingCancelMentor || loadingComment;
-
-  useAsync(loadData, [combinedFilter, currentPage, activeTab]);
+  const loading = loadData.loading || loadingCancelMentor || loadingComment;
 
   const openNotificationWithIcon = (type: NotificationType) => {
     api[type]({
@@ -169,7 +169,7 @@ function Page() {
           });
         }
         setModalData(null);
-        await loadData();
+        await loadData.runAsync();
         openNotificationWithIcon('success');
       } catch {
         message.error('An error occurred. Please try again later.');
@@ -226,7 +226,7 @@ function Page() {
       await mentorRegistryService.updateMentor(record!.githubId, {
         preselectedCourses: record.preselectedCourses.map(v => String(v)),
       });
-      loadData();
+      loadData.runAsync();
     } catch {
       message.error('An error occurred. Please try again later.');
     } finally {

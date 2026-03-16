@@ -18,7 +18,7 @@ import keys from 'lodash/keys';
 import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { CertificateCriteriaModal, ExpelCriteriaModal } from '@client/modules/CourseManagement/components';
 import { useContext, useMemo, useState } from 'react';
-import { useAsync, useToggle } from 'react-use';
+import { useToggle } from 'react-use';
 import { CourseService, StudentDetails } from '@client/services/course';
 import { CourseRole } from '@client/services/models';
 
@@ -56,16 +56,22 @@ function Page() {
   const [isExpelModalOpen, toggleExpelModal] = useToggle(false);
   const [isCertificateModalOpen, toggleCertificateModal] = useToggle(false);
 
-  const { loading: loadingStudents, runAsync: loadStudentsRequest } = useRequest(
+  const loadStudentsRequest = useRequest(
     async () => {
       const courseStudents = await courseService.getCourseStudentsWithDetails(activeOnly);
-      setStudents(courseStudents);
-      setStats(calculateStats(courseStudents));
+      return {
+        stats: calculateStats(courseStudents),
+        students: courseStudents,
+      };
     },
-    { manual: true },
+    {
+      refreshDeps: [activeOnly, details],
+      onSuccess: data => {
+        setStudents(data.students);
+        setStats(data.stats);
+      },
+    },
   );
-
-  useAsync(async () => loadStudentsRequest(), [activeOnly, details]);
 
   const { loading: loadingIssueCertificate, runAsync: issueCertificate } = useRequest(
     async () => {
@@ -140,7 +146,7 @@ function Page() {
     async ({ minScore, keepWithMentor, courseTaskIds, reason }: ExpelCriteria) => {
       await courseService.expelStudents({ courseTaskIds, minScore }, { keepWithMentor }, reason);
       toggleExpelModal();
-      loadStudentsRequest();
+      await loadStudentsRequest.runAsync();
       message.success('Students successfully expelled');
     },
     { manual: true },
@@ -156,7 +162,7 @@ function Page() {
   );
 
   const loading =
-    loadingStudents ||
+    loadStudentsRequest.loading ||
     loadingIssueCertificate ||
     loadingRemoveCertificate ||
     loadingCreateRepository ||
@@ -202,7 +208,7 @@ function Page() {
           onCreateRepository={createRepository}
           onClose={() => {
             setDetails(null);
-            loadStudentsRequest();
+            loadStudentsRequest.runAsync();
           }}
           details={details}
           courseId={course.id}

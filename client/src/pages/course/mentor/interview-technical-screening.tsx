@@ -8,12 +8,51 @@ import get from 'lodash/get';
 import keys from 'lodash/keys';
 import set from 'lodash/set';
 import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
-import { ChangeEvent, useContext, useEffect, useMemo, useState } from 'react';
-import { useAsync } from 'react-use';
+import { ChangeEvent, useContext, useMemo, useState } from 'react';
 import { CourseService } from '@client/services/course';
 import { CourseRole, StudentBasic } from '@client/services/models';
 
-type FormValues = typeof defaultInitialValues;
+type FormValues = Omit<typeof defaultInitialValues, 'githubId'> & { githubId: string | null };
+
+type SerializedFormValues = {
+  skills: {
+    common: {
+      binaryNumber: number;
+      oop: number;
+      bigONotation: number;
+      sortingAndSearchAlgorithms: number;
+    };
+    dataStructures: {
+      array: number;
+      list: number;
+      stack: number;
+      queue: number;
+      tree: number;
+      hashTable: number;
+      heap: number;
+    };
+    htmlCss: {
+      level: number;
+    };
+  };
+  programmingTask: {
+    task: string;
+    codeWritingLevel: number;
+    resolved: number;
+    comment: string;
+  };
+  english: {
+    levelStudentOpinion: number;
+    levelMentorOpinion: number;
+    whereAndWhenLearned: string;
+    comment: string;
+  };
+  resume: {
+    verdict: string;
+    comment: string;
+    score: number;
+  };
+};
 
 type HandleChangeValue = (skillName: string) => (value: any) => void;
 
@@ -264,50 +303,50 @@ function Page() {
   const { course } = useActiveCourseContext();
   const session = useContext(SessionContext);
   const courseId = course.id;
-  const [githubId] = useState(window ? new URLSearchParams(window.location.search).get('githubId') : null);
+
+  const githubId = useMemo(() => new URLSearchParams(window.location.search).get('githubId'), []);
 
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
-  const { loading: loadingData, runAsync: loadData } = useRequest(
+  const interviewsRequest = useRequest(
     async () => {
       const interviews = await courseService.getInterviewerStageInterviews(session.githubId);
-      setStudents(interviews.filter(i => !i.completed).map(i => i.student));
-      setStudents(students);
-      setInterviews(interviews);
+      return interviews;
     },
-    { manual: true },
+    {
+      onSuccess: interviews => setInterviews(interviews),
+    },
   );
-  const [studentGitHubId, setStudentGitHubId] = useState<string>();
-  const [students, setStudents] = useState([] as StudentBasic[]);
   const [interviews, setInterviews] = useState([] as { id: number; completed: boolean; student: StudentBasic }[]);
 
-  const [resume, setResume] = useState(defaultInitialValues);
+  const [resume, setResume] = useState({
+    ...defaultInitialValues,
+    githubId,
+  });
 
-  useAsync(async () => loadData(), []);
-
-  useEffect(() => {
-    form.setFieldsValue({ githubId });
-  }, [githubId]);
-
-  useEffect(() => {
-    if (interviews?.length && githubId) {
-      handleStudentSelect(githubId);
-    }
-  }, [interviews, githubId]);
-
-  const handleStudentSelect = async (githubId: string) => {
-    setStudentGitHubId(githubId);
-
-    const interview = interviews.find(i => i.student.githubId === githubId);
-    if (interview != null) {
+  useRequest(
+    async () => {
+      const interview = interviews.find(i => i.student.githubId === githubId);
+      if (interview == null) {
+        return null;
+      }
       const feedback = await courseService.getStageInterviewFeedback(interview.id);
-      const deserializeFeedback = deserializeFromJson(feedback);
-      setResume(deserializeFeedback);
-      form.setFieldsValue(deserializeFeedback);
-    }
-  };
+      return deserializeFromJson(feedback);
+    },
+    {
+      ready: Boolean(interviews.length && githubId),
+      refreshDeps: [githubId, interviews],
+      onSuccess: feedback => {
+        if (feedback == null) {
+          return;
+        }
+        setResume(feedback);
+        form.setFieldsValue(feedback);
+      },
+    },
+  );
 
-  const calculateResult = (result: any) => {
+  const calculateResult = (result: SerializedFormValues) => {
     const { skills, programmingTask } = result;
     const commonSkills = Object.values(skills.common).filter(Boolean) as number[];
     const dataStructuresSkills = Object.values(skills.dataStructures).filter(Boolean) as number[];
@@ -355,7 +394,7 @@ function Page() {
     { manual: true },
   );
 
-  const loading = loadingData || loadingSubmit;
+  const loading = interviewsRequest.loading || loadingSubmit;
 
   const handleTotalScoreChange = (skillName: string) => (value: ChangeEvent<HTMLInputElement> | number) => {
     const comment = (value as ChangeEvent<HTMLInputElement>)?.target?.value;
@@ -367,7 +406,7 @@ function Page() {
       newResult = { ...resume, [skillName]: value, 'resume-score': result };
     }
     setResume(newResult);
-    form.setFieldsValue({ ...newResult, githubId: studentGitHubId });
+    form.setFieldsValue({ ...newResult, githubId });
   };
 
   return (
@@ -403,15 +442,15 @@ function Page() {
   );
 }
 
-function serializeToJson(values: FormValues): any {
+function serializeToJson(values: FormValues): SerializedFormValues {
   return keys(values)
     .filter(v => v !== 'githubId')
     .reduce((acc, key) => {
       return set(acc, key.split('-').join('.'), values[key as keyof FormValues]);
-    }, {});
+    }, {} as SerializedFormValues);
 }
 
-function deserializeFromJson(json: Record<string, unknown>): any {
+function deserializeFromJson(json: Record<string, unknown>): FormValues {
   return keys(defaultInitialValues)
     .filter(key => key !== 'githubId')
     .reduce((acc, key) => {
