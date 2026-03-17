@@ -143,7 +143,7 @@ export function TaskModal({
         <Col span={24}>
           <Space direction="vertical" size={8} style={{ width: '100%', marginBottom: 24 }}>
             <Text>{LABELS.usedInCourses}</Text>
-            <Card bodyStyle={{ padding: 8 }}>
+            <Card styles={{ body: { padding: 8 } }}>
               {formData?.courses?.length ? (
                 <Space size={[0, 8]} wrap>
                   {formData.courses.map(({ name, isActive }) => (
