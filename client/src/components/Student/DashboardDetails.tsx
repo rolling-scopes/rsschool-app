@@ -107,7 +107,7 @@ export function DashboardDetails(props: Props) {
       </Drawer>
       <CommentModal
         title="Expelling Reason"
-        visible={expelMode}
+        open={expelMode}
         onCancel={() => setExpelMode(false)}
         onOk={(text: string) => {
           props.onExpelStudent(text);
