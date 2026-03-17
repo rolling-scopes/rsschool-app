@@ -9,6 +9,7 @@ import keys from 'lodash/keys';
 import set from 'lodash/set';
 import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { ChangeEvent, useContext, useMemo, useState } from 'react';
+import { useRouter } from 'next/router';
 import { CourseService } from '@client/services/course';
 import { CourseRole, StudentBasic } from '@client/services/models';
 
@@ -302,29 +303,29 @@ function Page() {
   const { message } = useMessage();
   const { course } = useActiveCourseContext();
   const session = useContext(SessionContext);
+  const router = useRouter();
   const courseId = course.id;
-
-  const githubId = useMemo(() => new URLSearchParams(window.location.search).get('githubId'), []);
+  const githubId = typeof router.query.githubId === 'string' ? router.query.githubId : null;
+  const defaultResume = useMemo(
+    () => ({
+      ...defaultInitialValues,
+      githubId,
+    }),
+    [githubId],
+  );
 
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
-  const interviewsRequest = useRequest(
-    async () => {
-      const interviews = await courseService.getInterviewerStageInterviews(session.githubId);
-      return interviews;
+  const interviewsRequest = useRequest(async () => courseService.getInterviewerStageInterviews(session.githubId), {
+    onError: () => {
+      message.error('An unexpected error occurred. Please try later.');
     },
-    {
-      onSuccess: interviews => setInterviews(interviews),
-    },
-  );
-  const [interviews, setInterviews] = useState([] as { id: number; completed: boolean; student: StudentBasic }[]);
-
-  const [resume, setResume] = useState({
-    ...defaultInitialValues,
-    githubId,
   });
+  const interviews = (interviewsRequest.data ?? []) as { id: number; completed: boolean; student: StudentBasic }[];
 
-  useRequest(
+  const [resume, setResume] = useState(defaultResume);
+
+  const feedbackRequest = useRequest(
     async () => {
       const interview = interviews.find(i => i.student.githubId === githubId);
       if (interview == null) {
@@ -334,14 +335,15 @@ function Page() {
       return deserializeFromJson(feedback);
     },
     {
-      ready: Boolean(interviews.length && githubId),
-      refreshDeps: [githubId, interviews],
+      ready: Boolean(githubId && interviews.length),
+      refreshDeps: [defaultResume, githubId, interviews],
       onSuccess: feedback => {
-        if (feedback == null) {
-          return;
-        }
-        setResume(feedback);
-        form.setFieldsValue(feedback);
+        const nextResume = feedback == null ? defaultResume : { ...defaultResume, ...feedback };
+        setResume(nextResume);
+        form.setFieldsValue(nextResume);
+      },
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
       },
     },
   );
@@ -364,7 +366,7 @@ function Page() {
     return Math.floor(rating * 10);
   };
 
-  const { loading: loadingSubmit, runAsync: handleSubmit } = useRequest(
+  const handleSubmitRequest = useRequest(
     async (values: FormValues) => {
       if (!githubId || !values['resume-verdict'] || loading) {
         return;
@@ -394,7 +396,7 @@ function Page() {
     { manual: true },
   );
 
-  const loading = interviewsRequest.loading || loadingSubmit;
+  const loading = interviewsRequest.loading || feedbackRequest.loading || handleSubmitRequest.loading;
 
   const handleTotalScoreChange = (skillName: string) => (value: ChangeEvent<HTMLInputElement> | number) => {
     const comment = (value as ChangeEvent<HTMLInputElement>)?.target?.value;
@@ -415,7 +417,7 @@ function Page() {
         form={form}
         initialValues={resume}
         layout="vertical"
-        onFinish={handleSubmit}
+        onFinish={handleSubmitRequest.runAsync}
         onFinishFailed={({ errorFields: [errorField] }) => form.scrollToField(errorField?.name)}
       >
         <Space align="baseline">

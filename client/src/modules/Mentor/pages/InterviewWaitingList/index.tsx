@@ -1,4 +1,4 @@
-import { Button, Table } from 'antd';
+import { Button, message, Table } from 'antd';
 import { PageLayout } from '@client/shared/components/PageLayout';
 import {
   getColumnSearchProps,
@@ -32,30 +32,41 @@ export function InterviewWaitingList() {
   const courseId = course.id;
   const router = useRouter();
   const interviewId = Number(router.query.interviewId);
+  const isInterviewReady = router.isReady && Number.isFinite(interviewId);
   const isPowerUser = useMemo(() => isCourseManager(session, courseId), [session, courseId]);
   const [availableStudents, setAvailableStudents] = useState<AvailableStudentDto[]>([]);
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
 
-  const { data: interview } = useRequest(async () => {
-    const { data } = await api.getInterview(interviewId, courseId);
-    const isStage = data.type === TaskDtoTypeEnum.StageInterview;
-    if (!isStage && dayjs(data.startDate).isAfter(dayjs())) {
-      router.push(`/403`);
-    }
-    return data;
-  });
+  const interviewRequest = useRequest(
+    async () => {
+      const { data } = await api.getInterview(interviewId, courseId);
+      const isStage = data.type === TaskDtoTypeEnum.StageInterview;
+      if (!isStage && dayjs(data.startDate).isAfter(dayjs())) {
+        router.push(`/403`);
+      }
+      return data;
+    },
+    { ready: isInterviewReady },
+  );
+  const interview = interviewRequest.data;
 
   const isStageInterview = interview?.type === TaskDtoTypeEnum.StageInterview;
 
-  const { loading: loadingAvailableStudents } = useRequest(
+  const availableStudentsRequest = useRequest(
     async () => {
       const { data } = await api.getAvailableStudents(courseId, interviewId);
       setAvailableStudents(data);
     },
-    { refreshDeps: [courseId, interviewId] },
+    {
+      ready: isInterviewReady,
+      refreshDeps: [courseId, interviewId],
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
   );
 
-  const { loading: loadingInviteStudent, runAsync: inviteStudent } = useRequest(
+  const inviteStudentRequest = useRequest(
     async (githubId: string) => {
       if (isStageInterview) {
         await courseService.createInterview(githubId, session.githubId);
@@ -64,26 +75,45 @@ export function InterviewWaitingList() {
       }
       removeStudentFromList(githubId);
     },
-    { manual: true },
+    {
+      manual: true,
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
   );
 
-  const { loading: loadingAssignStudent, runAsync: assignStudentToMentor } = useRequest(
+  const assignStudentToMentorRequest = useRequest(
     async (studentId: string) => {
       await courseService.updateStudent(studentId, { mentorGithuId: session.githubId });
       removeStudentFromList(studentId);
     },
-    { manual: true },
+    {
+      manual: true,
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
   );
 
-  const { loading: loadingRemoveFromList, runAsync: removeFromList } = useRequest(
+  const removeFromListRequest = useRequest(
     async (githubId: string) => {
       await courseService.updateMentoringAvailability(githubId, false);
       removeStudentFromList(githubId);
     },
-    { manual: true },
+    {
+      manual: true,
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
   );
 
-  const loading = loadingAvailableStudents || loadingInviteStudent || loadingAssignStudent || loadingRemoveFromList;
+  const loading =
+    availableStudentsRequest.loading ||
+    inviteStudentRequest.loading ||
+    assignStudentToMentorRequest.loading ||
+    removeFromListRequest.loading;
 
   return (
     <PageLayout loading={loading} title={`${interview?.name.trim()}: Wait list`} showCourseName>
@@ -160,7 +190,7 @@ export function InterviewWaitingList() {
                     </>
                   }
                   okText="Yes"
-                  onConfirm={() => inviteStudent(record.githubId)}
+                  onConfirm={() => inviteStudentRequest.runAsync(record.githubId)}
                 >
                   <Button type="link">Want to interview</Button>
                 </CustomPopconfirm>
@@ -172,7 +202,7 @@ export function InterviewWaitingList() {
                       </>
                     }
                     okText="Yes"
-                    onConfirm={() => assignStudentToMentor(record.githubId)}
+                    onConfirm={() => assignStudentToMentorRequest.runAsync(record.githubId)}
                   >
                     <Button type="link">Assign student to me</Button>
                   </CustomPopconfirm>
@@ -181,7 +211,7 @@ export function InterviewWaitingList() {
                   <CustomPopconfirm
                     title={<>Are you sure to remove {record.githubId} from the wait list?</>}
                     okText="Yes"
-                    onConfirm={() => removeFromList(record.githubId)}
+                    onConfirm={() => removeFromListRequest.runAsync(record.githubId)}
                   >
                     <Button type="link">Remove from list</Button>
                   </CustomPopconfirm>

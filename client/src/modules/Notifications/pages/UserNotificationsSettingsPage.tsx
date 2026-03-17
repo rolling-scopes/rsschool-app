@@ -22,7 +22,7 @@ export function UserNotificationsPage() {
   const [discord, setDiscord] = useState<Connection>();
   const [disabledChannels, setDisabledChannels] = useState<NotificationChannel[]>([]);
 
-  const { loading } = useRequest(
+  const userNotificationsRequest = useRequest(
     async () => {
       const { connections, notifications } = await service.getUserNotificationSettings();
       setNotifications(notifications);
@@ -74,9 +74,9 @@ export function UserNotificationsPage() {
   const hasConnections = Object.keys(NotificationChannel).length !== disabledChannels.length;
 
   return (
-    <PageLayout loading={loading} title="Notifications" showCourseName>
+    <PageLayout loading={userNotificationsRequest.loading} title="Notifications" showCourseName>
       <Space direction="vertical" style={{ width: '100%' }}>
-        {!loading && <Consents email={email} telegram={telegram} discord={discord} />}
+        {!userNotificationsRequest.loading && <Consents email={email} telegram={telegram} discord={discord} />}
         <Space direction="horizontal" style={{ width: '100%', justifyContent: 'flex-end' }}>
           <Button disabled={!hasConnections} type="primary" onClick={saveSettings}>
             Save

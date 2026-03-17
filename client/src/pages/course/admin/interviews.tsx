@@ -1,4 +1,4 @@
-import { Button, Row, Select, Table, Popconfirm } from 'antd';
+import { Button, message, Row, Select, Table, Popconfirm } from 'antd';
 import { useRequest } from 'ahooks';
 import { StudentMentorModal } from '@client/shared/components/StudentMentorModal';
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
@@ -28,6 +28,7 @@ function Page() {
 
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
   const courseManagerRole = useMemo(() => isCourseManager(session, courseId), [course, session]);
+  const hasSelectedInterview = selected != null;
 
   const interviewsRequest = useRequest(
     async () => {
@@ -37,7 +38,12 @@ function Page() {
         .map(({ id, name }) => ({ label: name, value: id }));
       return filtered;
     },
-    { onSuccess: data => setSelected(data[0]?.value ?? null) },
+    {
+      onSuccess: data => setSelected(data[0]?.value ?? null),
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
   );
 
   const interviewPairsRequest = useRequest(
@@ -45,18 +51,37 @@ function Page() {
       const { data } = await coursesInterviewsApi.getInterviewPairs(Number(selected), courseId);
       return data;
     },
-    { ready: Boolean(selected), refreshDeps: [selected] },
+    {
+      ready: hasSelectedInterview,
+      refreshDeps: [selected],
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
   );
 
   const deleteInterviewRequest = useRequest(
     async (selected: number, record: InterviewPairDto) =>
       courseService.cancelInterviewPair(selected, String(record.id)),
-    { manual: true, onSuccess: interviewPairsRequest.runAsync },
+    {
+      manual: true,
+      onSuccess: () => interviewPairsRequest.runAsync(),
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
   );
 
   const createInterviewsRequest = useRequest(
     async (selected: number) => courseService.createInterviewDistribution(selected),
-    { ready: Boolean(selected), manual: true, onSuccess: interviewPairsRequest.runAsync },
+    {
+      ready: hasSelectedInterview,
+      manual: true,
+      onSuccess: () => interviewPairsRequest.runAsync(),
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
   );
 
   const addInterviewPairRequest = useRequest(
@@ -65,7 +90,12 @@ function Page() {
       await interviewPairsRequest.runAsync();
       setModal(false);
     },
-    { manual: true },
+    {
+      manual: true,
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
   );
 
   const loading =
@@ -79,24 +109,19 @@ function Page() {
     <AdminPageLayout loading={loading} title="Interviews" showCourseName courses={courses}>
       <Row style={{ marginBottom: 16, gap: 16 }} justify="space-between">
         <Row style={{ gap: 16 }}>
-          <Select
-            value={selected}
-            options={interviewsRequest.data}
-            onChange={setSelected}
-            style={{ minWidth: 300 }}
-          ></Select>
+          <Select value={selected} options={interviewsRequest.data} onChange={setSelected} style={{ minWidth: 300 }} />
           {courseManagerRole ? (
             <div>
               <Popconfirm
                 onConfirm={() => createInterviewsRequest.run(selected!)}
                 title="Do you want to create interview pairs for not distributed students?"
               >
-                <Button>Create Interview Pairs</Button>
+                <Button disabled={!hasSelectedInterview}>Create Interview Pairs</Button>
               </Popconfirm>
             </div>
           ) : null}
         </Row>
-        <Button type="primary" onClick={() => setModal(true)}>
+        <Button type="primary" disabled={!hasSelectedInterview} onClick={() => setModal(true)}>
           Create
         </Button>
       </Row>

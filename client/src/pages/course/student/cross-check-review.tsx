@@ -48,7 +48,7 @@ function Page() {
   const queryGithubId = router.query.githubId ?? null;
   const [form] = Form.useForm();
 
-  const { loading, runAsync: submitReview } = useRequest(
+  const submitReviewRequest = useRequest(
     async (values: any) => {
       try {
         if (values.maxScore != null && values.maxScore < score) {
@@ -172,7 +172,7 @@ function Page() {
   }, [historicalCommentSelected]);
 
   const handleSubmit = async (values: any) => {
-    if (!values.githubId || loading) {
+    if (!values.githubId || submitReviewRequest.loading) {
       return;
     }
 
@@ -197,10 +197,10 @@ function Page() {
     }
 
     if (score !== 0) {
-      await submitReview(values);
+      await submitReviewRequest.runAsync(values);
     } else {
       modal.confirm({
-        onOk: () => submitReview(values),
+        onOk: () => submitReviewRequest.runAsync(values),
         okText: 'Yes, submit',
         cancelText: 'Change score',
         content: <Text>Are you sure you want to submit a review with a score of 0 points?</Text>,
@@ -247,7 +247,7 @@ function Page() {
   const assignment = assignments.find(({ student }) => student.githubId === form.getFieldValue('githubId'));
 
   return (
-    <PageLayout loading={loading} title="Cross-Check Review" showCourseName>
+    <PageLayout loading={submitReviewRequest.loading} title="Cross-Check Review" showCourseName>
       {contextHolder}
       <Row gutter={24}>
         <Col {...colSizes}>

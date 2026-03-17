@@ -1,4 +1,4 @@
-import { Button, Row, Table, Checkbox, Popconfirm } from 'antd';
+import { Button, message, Row, Table, Checkbox, Popconfirm } from 'antd';
 import { useRequest } from 'ahooks';
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import { StudentMentorModal } from '@client/shared/components/StudentMentorModal';
@@ -30,30 +30,54 @@ function Page() {
 
   const loadInterviews = async () => courseService.getStageInterviews();
 
-  const { loading: loadingDeleteInterview, runAsync: deleteInterview } = useRequest(
+  const deleteInterviewRequest = useRequest(
     async (record: any) => {
       await courseService.deleteStageInterview(record.id);
     },
-    { manual: true, onSuccess: () => loadInterviewsRequest.runAsync() },
+    {
+      manual: true,
+      onSuccess: () => loadInterviewsRequest.runAsync(),
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
   );
   const loadInterviewsRequest = useRequest(loadInterviews, {
+    onError: () => {
+      message.error('An unexpected error occurred. Please try later.');
+    },
     onSuccess: data => setInterviews(data),
   });
-  const { loading: loadingCreateInterview, runAsync: createInterview } = useRequest(
+  const createInterviewRequest = useRequest(
     async (studentGithubId: string, mentorGithubId: string) => {
       await courseService.createInterview(studentGithubId, mentorGithubId);
       setModal(false);
     },
-    { manual: true, onSuccess: () => loadInterviewsRequest.runAsync() },
+    {
+      manual: true,
+      onSuccess: () => loadInterviewsRequest.runAsync(),
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
   );
-  const { loading: loadingCreateInterviews, runAsync: createInterviews } = useRequest(
+  const createInterviewsRequest = useRequest(
     async () => {
       await courseService.createStageInterviews({ noRegistration });
     },
-    { manual: true, onSuccess: () => loadInterviewsRequest.runAsync() },
+    {
+      manual: true,
+      onSuccess: () => loadInterviewsRequest.runAsync(),
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
   );
   const loading =
-    loadingDeleteInterview || loadInterviewsRequest.loading || loadingCreateInterview || loadingCreateInterviews;
+    deleteInterviewRequest.loading ||
+    loadInterviewsRequest.loading ||
+    createInterviewRequest.loading ||
+    createInterviewsRequest.loading;
 
   return (
     <AdminPageLayout loading={loading} title="Technical Screening" showCourseName courses={courses}>
@@ -64,7 +88,7 @@ function Page() {
               No Registration
             </Checkbox>
             <Popconfirm
-              onConfirm={() => createInterviews()}
+              onConfirm={() => createInterviewsRequest.runAsync()}
               title="Do you want to create interview pairs for not distributed students?"
             >
               <Button>Create Interview Pairs</Button>
@@ -128,7 +152,7 @@ function Page() {
             render: (_, record) => {
               if (courseManagerRole || courseSupervisorRole) {
                 return (
-                  <Button type="link" onClick={() => deleteInterview(record)}>
+                  <Button type="link" onClick={() => deleteInterviewRequest.runAsync(record)}>
                     Cancel
                   </Button>
                 );
@@ -140,7 +164,7 @@ function Page() {
       />
 
       <StudentMentorModal
-        onOk={createInterview}
+        onOk={createInterviewRequest.runAsync}
         onCancel={() => setModal(false)}
         visible={modal}
         courseId={course.id}

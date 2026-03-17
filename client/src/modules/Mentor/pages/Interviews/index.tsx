@@ -1,5 +1,6 @@
 import { CoursesInterviewsApi, TaskDtoTypeEnum } from '@client/api';
 import { useRequest } from 'ahooks';
+import { message } from 'antd';
 import { PageLayout } from '@client/shared/components/PageLayout';
 import { useCallback, useContext, useState } from 'react';
 import { CourseService, MentorInterview } from '@client/services/course';
@@ -20,7 +21,7 @@ export function Interviews() {
     setInterviewsByTask(groupBy(interviews, 'name'));
   }, [course.id, session.githubId]);
 
-  const { data: interviews = [], loading } = useRequest(
+  const interviewsRequest = useRequest(
     async () => {
       const [{ data }] = await Promise.all([
         new CoursesInterviewsApi().getInterviews(course.id, false, [
@@ -32,11 +33,17 @@ export function Interviews() {
 
       return data;
     },
-    { refreshDeps: [course.id, fetchStudentInterviews] },
+    {
+      refreshDeps: [course.id, fetchStudentInterviews],
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
   );
+  const interviews = interviewsRequest.data ?? [];
 
   return (
-    <PageLayout loading={loading} title="Interviews" showCourseName>
+    <PageLayout loading={interviewsRequest.loading} title="Interviews" showCourseName>
       <MentorOptionsProvider course={course} session={session}>
         <div className={styles.container}>
           {interviews.map(interviewTask => (

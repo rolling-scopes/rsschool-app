@@ -11,7 +11,7 @@ interface Props {
 }
 
 function ReviewRandomTask({ mentorId, courseId, onClick }: Props) {
-  const { loading, runAsync: handleClick } = useRequest(
+  const reviewRandomTaskRequest = useRequest(
     async () => {
       const service = new MentorsApi();
       await service.getRandomTask(mentorId, courseId);
@@ -30,7 +30,13 @@ function ReviewRandomTask({ mentorId, courseId, onClick }: Props) {
   );
 
   return (
-    <Button type="primary" icon={<EyeOutlined />} loading={loading} disabled={loading} onClick={handleClick}>
+    <Button
+      type="primary"
+      icon={<EyeOutlined />}
+      loading={reviewRandomTaskRequest.loading}
+      disabled={reviewRandomTaskRequest.loading}
+      onClick={reviewRandomTaskRequest.runAsync}
+    >
       Review random task
     </Button>
   );

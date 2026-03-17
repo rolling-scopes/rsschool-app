@@ -47,7 +47,7 @@ export function StepContextProvider(props: PropsWithChildren<ContextProps>) {
   );
   const isFinalStep = activeStepIndex === feedback.steps.length - 1 || isFinished;
 
-  const { loading, runAsync: saveFeedback } = useRequest(
+  const saveFeedbackRequest = useRequest(
     async (values: InterviewFeedbackValues) => {
       const { feedbackValues, steps, isCompleted, score, decision, isGoodCandidate } = getUpdatedFeedback({
         feedback,
@@ -91,7 +91,7 @@ export function StepContextProvider(props: PropsWithChildren<ContextProps>) {
   const next = useCallback(
     async (values: InterviewFeedbackValues) => {
       try {
-        await saveFeedback(values);
+        await saveFeedbackRequest.runAsync(values);
       } catch {
         return;
       }
@@ -128,10 +128,10 @@ export function StepContextProvider(props: PropsWithChildren<ContextProps>) {
       next,
       prev,
       onValuesChange,
-      loading,
+      loading: saveFeedbackRequest.loading,
       isFinalStep,
     }),
-    [activeStepIndex, feedback.steps, isFinalStep, loading, onValuesChange],
+    [activeStepIndex, feedback.steps, isFinalStep, onValuesChange, saveFeedbackRequest.loading],
   );
 
   return <StepContext.Provider value={api}>{children}</StepContext.Provider>;

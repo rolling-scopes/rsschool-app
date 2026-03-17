@@ -6,7 +6,7 @@ import { AxiosError } from 'axios';
 
 export function useVerificationsAnswers(courseId: number, courseTaskId: number) {
   const [answers, setAnswers] = useState<TaskVerificationAttemptDto[] | null>(null);
-  const { loading, runAsync: showAnswers } = useRequest(
+  const showAnswersRequest = useRequest(
     async () => {
       const result = await new CourseTaskVerificationsApi().getAnswers(courseId, courseTaskId);
       setAnswers(result.data);
@@ -24,5 +24,10 @@ export function useVerificationsAnswers(courseId: number, courseTaskId: number) 
     setAnswers(null);
   };
 
-  return { loading, answers, showAnswers, hideAnswers };
+  return {
+    loading: showAnswersRequest.loading,
+    answers,
+    showAnswers: showAnswersRequest.runAsync,
+    hideAnswers,
+  };
 }

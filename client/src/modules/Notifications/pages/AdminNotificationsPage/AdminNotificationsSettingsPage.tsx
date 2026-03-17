@@ -11,7 +11,11 @@ export function AdminNotificationsPage() {
   const { message } = useMessage();
   const service = useMemo(() => new NotificationsService(), []);
   const [modal, setModal] = useState<ReactNode>();
-  const notificationsRequest = useRequest(async () => service.getNotifications());
+  const notificationsRequest = useRequest(async () => service.getNotifications(), {
+    onError: () => {
+      message.error('An unexpected error occurred. Please try later.');
+    },
+  });
   const notifications = notificationsRequest.data ?? [];
 
   const edit = useCallback(

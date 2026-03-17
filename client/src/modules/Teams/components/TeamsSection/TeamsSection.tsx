@@ -1,4 +1,4 @@
-import { Col, Input, Row, Space, Table, TablePaginationConfig, TableProps, Typography } from 'antd';
+import { Col, Input, message, Row, Space, Table, TablePaginationConfig, TableProps, Typography } from 'antd';
 import { useRequest } from 'ahooks';
 import { useMemo, useState } from 'react';
 
@@ -34,7 +34,7 @@ export default function TeamSection({ distribution, toggleTeamModal, isManager }
     setSearch(value);
   };
 
-  const { loading, runAsync: getTeams } = useRequest(
+  const teamsRequest = useRequest(
     async (pagination: TablePaginationConfig) => {
       const { data } = await teamApi.getTeams(
         distribution.courseId,
@@ -45,7 +45,12 @@ export default function TeamSection({ distribution, toggleTeamModal, isManager }
       );
       setTeams({ ...teams, ...data });
     },
-    { manual: true },
+    {
+      manual: true,
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
   );
 
   const columns = useMemo(() => {
@@ -55,10 +60,10 @@ export default function TeamSection({ distribution, toggleTeamModal, isManager }
   }, [isManager, distribution, toggleTeamModal]);
 
   const handleChange: TableProps<TeamDto>['onChange'] = pagination => {
-    getTeams(pagination);
+    teamsRequest.runAsync(pagination);
   };
 
-  useAsync(async () => await getTeams(teams.pagination), [distribution, search]);
+  useAsync(async () => await teamsRequest.runAsync(teams.pagination), [distribution, search]);
 
   return (
     <Space size={24} direction="vertical" style={{ width: '100%' }}>
@@ -78,7 +83,7 @@ export default function TeamSection({ distribution, toggleTeamModal, isManager }
         dataSource={teams.content}
         columns={columns}
         expandable={{ expandedRowRender, rowExpandable: record => record.students.length > 0 }}
-        loading={loading}
+        loading={teamsRequest.loading}
       />
     </Space>
   );

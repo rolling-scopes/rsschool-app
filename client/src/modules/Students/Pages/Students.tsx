@@ -26,7 +26,7 @@ export const Students = () => {
   });
   const [activeStudent, setActiveStudent] = useState<UserStudentDto | null>(null);
 
-  const { loading, runAsync: getStudents } = useRequest(
+  const studentsRequest = useRequest(
     async (pagination: TablePaginationConfig, filters?: Record<ColumnKey, FilterValue | null>) => {
       try {
         const { student, country, city, onGoingCourses, previousCourses } = filters || {};
@@ -47,13 +47,13 @@ export const Students = () => {
     { manual: true },
   );
 
-  useAsync(async () => await getStudents(students.pagination), []);
+  useAsync(async () => await studentsRequest.runAsync(students.pagination), []);
 
   return (
-    <AdminPageLayout loading={loading} title="Students List" courses={courses}>
+    <AdminPageLayout loading={studentsRequest.loading} title="Students List" courses={courses}>
       <StudentsTable
-        handleChange={getStudents}
-        loading={loading}
+        handleChange={studentsRequest.runAsync}
+        loading={studentsRequest.loading}
         content={students.content}
         pagination={students.pagination}
         courses={courses}

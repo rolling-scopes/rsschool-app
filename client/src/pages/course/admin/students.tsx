@@ -55,6 +55,9 @@ function Page() {
   const [details, setDetails] = useState<StudentDetails | null>(null);
   const [isExpelModalOpen, toggleExpelModal] = useToggle(false);
   const [isCertificateModalOpen, toggleCertificateModal] = useToggle(false);
+  const handleRequestError = () => {
+    message.error('An unexpected error occurred. Please try later.');
+  };
 
   const loadStudentsRequest = useRequest(
     async () => {
@@ -66,6 +69,7 @@ function Page() {
     },
     {
       refreshDeps: [activeOnly, details],
+      onError: handleRequestError,
       onSuccess: data => {
         setStudents(data.students);
         setStats(data.stats);
@@ -73,7 +77,7 @@ function Page() {
     },
   );
 
-  const { loading: loadingIssueCertificate, runAsync: issueCertificate } = useRequest(
+  const issueCertificateRequest = useRequest(
     async () => {
       const githubId = details?.githubId;
       if (githubId != null) {
@@ -81,10 +85,10 @@ function Page() {
         message.info('The certificate has been requested.');
       }
     },
-    { manual: true },
+    { manual: true, onError: handleRequestError },
   );
 
-  const { loading: loadingRemoveCertificate, runAsync: removeCertificate } = useRequest(
+  const removeCertificateRequest = useRequest(
     async () => {
       const studentId = details?.id;
       if (studentId != null) {
@@ -92,10 +96,10 @@ function Page() {
         message.info('The certificate has been removed.');
       }
     },
-    { manual: true },
+    { manual: true, onError: handleRequestError },
   );
 
-  const { loading: loadingCreateRepository, runAsync: createRepository } = useRequest(
+  const createRepositoryRequest = useRequest(
     async () => {
       const githubId = details?.githubId;
       if (githubId != null) {
@@ -104,10 +108,10 @@ function Page() {
         setStudents(newStudents);
       }
     },
-    { manual: true },
+    { manual: true, onError: handleRequestError },
   );
 
-  const { loading: loadingExpelStudent, runAsync: expelStudent } = useRequest(
+  const expelStudentRequest = useRequest(
     async (text: string) => {
       const githubId = details?.githubId;
       if (githubId != null) {
@@ -116,10 +120,10 @@ function Page() {
         setDetails(null);
       }
     },
-    { manual: true },
+    { manual: true, onError: handleRequestError },
   );
 
-  const { loading: loadingRestoreStudent, runAsync: restoreStudent } = useRequest(
+  const restoreStudentRequest = useRequest(
     async () => {
       const githubId = details?.githubId;
       if (githubId != null) {
@@ -128,10 +132,10 @@ function Page() {
         setDetails(null);
       }
     },
-    { manual: true },
+    { manual: true, onError: handleRequestError },
   );
 
-  const { loading: loadingUpdateMentor, runAsync: updateMentor } = useRequest(
+  const updateMentorRequest = useRequest(
     async (mentorGithuId: string | null = null) => {
       const githubId = details?.githubId;
       if (details != null && githubId != null) {
@@ -139,38 +143,38 @@ function Page() {
         setDetails({ ...details, mentor: student.mentor });
       }
     },
-    { manual: true },
+    { manual: true, onError: handleRequestError },
   );
 
-  const { loading: loadingExpelStudents, runAsync: expelStudents } = useRequest(
+  const expelStudentsRequest = useRequest(
     async ({ minScore, keepWithMentor, courseTaskIds, reason }: ExpelCriteria) => {
       await courseService.expelStudents({ courseTaskIds, minScore }, { keepWithMentor }, reason);
       toggleExpelModal();
       await loadStudentsRequest.runAsync();
       message.success('Students successfully expelled');
     },
-    { manual: true },
+    { manual: true, onError: handleRequestError },
   );
 
-  const { loading: loadingIssueCertificates, runAsync: issueCertificates } = useRequest(
+  const issueCertificatesRequest = useRequest(
     async (criteria: CertificateCriteria) => {
       await courseService.postCertificateStudents(criteria);
       toggleCertificateModal();
       message.success('All certificates successfully issued');
     },
-    { manual: true },
+    { manual: true, onError: handleRequestError },
   );
 
   const loading =
     loadStudentsRequest.loading ||
-    loadingIssueCertificate ||
-    loadingRemoveCertificate ||
-    loadingCreateRepository ||
-    loadingExpelStudent ||
-    loadingRestoreStudent ||
-    loadingUpdateMentor ||
-    loadingExpelStudents ||
-    loadingIssueCertificates;
+    issueCertificateRequest.loading ||
+    removeCertificateRequest.loading ||
+    createRepositoryRequest.loading ||
+    expelStudentRequest.loading ||
+    restoreStudentRequest.loading ||
+    updateMentorRequest.loading ||
+    expelStudentsRequest.loading ||
+    issueCertificatesRequest.loading;
 
   return render();
 
@@ -200,12 +204,12 @@ function Page() {
         <DashboardDetails
           isLoading={loading}
           isAdmin={hasAdminRole}
-          onUpdateMentor={updateMentor}
-          onRestoreStudent={restoreStudent}
-          onIssueCertificate={issueCertificate}
-          onRemoveCertificate={removeCertificate}
-          onExpelStudent={expelStudent}
-          onCreateRepository={createRepository}
+          onUpdateMentor={updateMentorRequest.runAsync}
+          onRestoreStudent={restoreStudentRequest.runAsync}
+          onIssueCertificate={issueCertificateRequest.runAsync}
+          onRemoveCertificate={removeCertificateRequest.runAsync}
+          onExpelStudent={expelStudentRequest.runAsync}
+          onCreateRepository={createRepositoryRequest.runAsync}
           onClose={() => {
             setDetails(null);
             loadStudentsRequest.runAsync();
@@ -217,13 +221,13 @@ function Page() {
         <ExpelCriteriaModal
           courseId={course.id}
           onClose={toggleExpelModal}
-          onSubmit={expelStudents}
+          onSubmit={expelStudentsRequest.runAsync}
           isModalOpen={isExpelModalOpen}
         />
         <CertificateCriteriaModal
           courseId={course.id}
           onClose={toggleCertificateModal}
-          onSubmit={issueCertificates}
+          onSubmit={issueCertificatesRequest.runAsync}
           isModalOpen={isCertificateModalOpen}
         />
       </AdminPageLayout>

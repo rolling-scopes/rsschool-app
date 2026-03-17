@@ -32,7 +32,7 @@ export default function StudentsWithoutTeamSection({ distribution, isManager, re
     pagination: { current: 1, pageSize: 10 },
     search: '',
   });
-  const { loading, runAsync: getStudents } = useRequest(
+  const studentsRequest = useRequest(
     async (pagination: TablePaginationConfig) => {
       const { data } = await teamDistributionApi.getStudentsWithoutTeam(
         distribution.courseId,
@@ -43,7 +43,12 @@ export default function StudentsWithoutTeamSection({ distribution, isManager, re
       );
       setStudents({ ...students, ...data });
     },
-    { manual: true },
+    {
+      manual: true,
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
   );
   const [search, setSearch] = useState<string>('');
 
@@ -66,7 +71,7 @@ export default function StudentsWithoutTeamSection({ distribution, isManager, re
             distribution.id,
           );
           message.success('Student removed successfully');
-          await getStudents(students.pagination);
+          await studentsRequest.runAsync(students.pagination);
           await reloadDistribution();
         } catch {
           message.error('Failed to remove student. Please try again later.');
@@ -75,7 +80,7 @@ export default function StudentsWithoutTeamSection({ distribution, isManager, re
     });
   };
 
-  useAsync(async () => await getStudents(students.pagination), [distribution, search]);
+  useAsync(async () => await studentsRequest.runAsync(students.pagination), [distribution, search]);
 
   return (
     <Space size={24} direction="vertical" style={{ width: '100%' }}>
@@ -90,8 +95,8 @@ export default function StudentsWithoutTeamSection({ distribution, isManager, re
       <StudentsTable
         content={students.content}
         pagination={students.pagination}
-        handleChange={getStudents}
-        loading={loading}
+        handleChange={studentsRequest.runAsync}
+        loading={studentsRequest.loading}
         onDelete={isManager ? handleDeleteStudent : undefined}
       />
     </Space>

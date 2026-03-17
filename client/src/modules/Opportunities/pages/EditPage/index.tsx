@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { Layout, message, Modal, Typography } from 'antd';
 import { useRequest } from 'ahooks';
 import { AxiosError } from 'axios';
@@ -24,11 +24,7 @@ export function EditPage() {
 
   const switchView = () => setEditMode(!editMode);
 
-  useEffect(() => {
-    getData();
-  }, [editMode]);
-
-  const { loading, runAsync: getData } = useRequest(
+  const loadDataRequest = useRequest(
     async () => {
       const { data } = await service.getConsent();
       if (data.consent) {
@@ -47,18 +43,26 @@ export function EditPage() {
       setConsent(data.consent);
     },
     {
-      manual: true,
+      refreshDeps: [editMode],
       onError: () => {
         message.error('An unexpected error occurred. Please try later.');
       },
     },
   );
 
-  const handleDeleteConsent = async () => {
-    const { data } = await service.deleteConsent();
-    await getData();
-    return data;
-  };
+  const deleteConsentRequest = useRequest(
+    async () => {
+      const { data } = await service.deleteConsent();
+      await loadDataRequest.runAsync();
+      return data;
+    },
+    {
+      manual: true,
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
+  );
 
   const showCreationModal = (validUntilTimestamp: number) => {
     const validUntil = dayjs(validUntilTimestamp).format('YY-MM-DD');
@@ -84,12 +88,22 @@ export function EditPage() {
     });
   };
 
-  const handleCreateConsent = async () => {
-    const { data } = await service.createConsent();
-    await getData();
-    showCreationModal(data.expires);
-    setEditMode(true);
-  };
+  const createConsentRequest = useRequest(
+    async () => {
+      const { data } = await service.createConsent();
+      await loadDataRequest.runAsync();
+      showCreationModal(data.expires);
+      setEditMode(true);
+    },
+    {
+      manual: true,
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
+  );
+
+  const loading = loadDataRequest.loading || deleteConsentRequest.loading || createConsentRequest.loading;
 
   return (
     <>
@@ -106,9 +120,9 @@ export function EditPage() {
             data={resume}
             editMode={editMode || resume == null}
             switchView={switchView}
-            onRemoveConsent={handleDeleteConsent}
-            onCreateConsent={handleCreateConsent}
-            onUpdateResume={() => getData()}
+            onRemoveConsent={deleteConsentRequest.runAsync}
+            onCreateConsent={createConsentRequest.runAsync}
+            onUpdateResume={loadDataRequest.runAsync}
           />
         </Content>
       </LoadingScreen>

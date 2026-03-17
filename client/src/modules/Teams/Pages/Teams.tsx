@@ -55,7 +55,7 @@ function Teams() {
     toggleTeamModal();
   };
 
-  const { loading: loadingDistributeStudents, runAsync: distributeStudentsToTeam } = useRequest(
+  const distributeStudentsToTeamRequest = useRequest(
     async () => {
       try {
         await teamDistributionApi.distributeStudentsToTeam(course.id, teamDistributionId);
@@ -67,7 +67,7 @@ function Teams() {
   );
 
   const handleDistributeStudents = async () => {
-    await distributeStudentsToTeam();
+    await distributeStudentsToTeamRequest.runAsync();
     await loadDistribution();
   };
 
@@ -75,7 +75,7 @@ function Teams() {
     setShowJoinTeamModal(true);
   };
 
-  const { loading: loadingJoinTeam, runAsync: joinTeam } = useRequest(
+  const joinTeamRequest = useRequest(
     async (teamId: number, record: JoinTeamDto) => {
       try {
         const { data: team } = await teamApi.joinTeam(course.id, teamDistributionId, teamId, record);
@@ -119,7 +119,7 @@ function Teams() {
     }
   };
 
-  const { loading: loadingSubmitTeam, runAsync: submitTeam } = useRequest(
+  const submitTeamRequest = useRequest(
     async (record: CreateTeamDto, id?: number) => {
       try {
         if (id) {
@@ -151,7 +151,7 @@ function Teams() {
     { manual: true },
   );
 
-  const loading = loadingDistributeStudents || loadingJoinTeam || loadingSubmitTeam;
+  const loading = distributeStudentsToTeamRequest.loading || joinTeamRequest.loading || submitTeamRequest.loading;
 
   const contentRenderers = () => {
     if (!distribution) {
@@ -196,13 +196,15 @@ function Teams() {
           mode={mode}
           isManager={isManager}
           data={teamData}
-          onSubmit={submitTeam}
+          onSubmit={submitTeamRequest.runAsync}
           onCancel={toggleTeamModal}
           maxStudentsCount={distribution.strictTeamSize}
           courseId={distribution.courseId}
         />
       )}
-      {showJoinTeamModal && <JoinTeamModal onSubmit={joinTeam} onCancel={() => setShowJoinTeamModal(false)} />}
+      {showJoinTeamModal && (
+        <JoinTeamModal onSubmit={joinTeamRequest.runAsync} onCancel={() => setShowJoinTeamModal(false)} />
+      )}
       {distribution ? (
         <TeamsHeader
           courseAlias={course.alias}

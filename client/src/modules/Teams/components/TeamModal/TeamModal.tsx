@@ -40,12 +40,17 @@ export default function TeamModal({ onCancel, onSubmit, data, courseId, isManage
     };
   };
 
-  const { loading, runAsync: handleModalSubmit } = useRequest(
+  const handleModalSubmitRequest = useRequest(
     async (values: CreateTeamDto) => {
       const record = createRecord(values);
       await onSubmit(record, data?.id);
     },
-    { manual: true },
+    {
+      manual: true,
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
   );
 
   const handleChangeStudents = (value: number[]) => {
@@ -70,9 +75,9 @@ export default function TeamModal({ onCancel, onSubmit, data, courseId, isManage
         if (values == null) {
           return;
         }
-        handleModalSubmit(values);
+        handleModalSubmitRequest.runAsync(values);
       }}
-      okButtonProps={{ disabled: loading }}
+      okButtonProps={{ disabled: handleModalSubmitRequest.loading }}
       onCancel={() => {
         onCancel();
         form.resetFields();

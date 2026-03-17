@@ -1,4 +1,4 @@
-import { Alert, Spin } from 'antd';
+import { Alert, message, Spin } from 'antd';
 import { useRequest } from 'ahooks';
 import InfoCircleTwoTone from '@ant-design/icons/InfoCircleTwoTone';
 import { useState } from 'react';
@@ -22,8 +22,13 @@ export function InterviewsList(props: StudentsListProps) {
   const template = interviewTask.attributes?.template;
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const { loading, runAsync } = useRequest(async () => fetchStudentInterviews(), { manual: true });
-  const [, reloadList] = useAsyncFn(runAsync);
+  const reloadListRequest = useRequest(async () => fetchStudentInterviews(), {
+    manual: true,
+    onError: () => {
+      message.error('An unexpected error occurred. Please try later.');
+    },
+  });
+  const [, reloadList] = useAsyncFn(reloadListRequest.runAsync);
 
   if (!interviews.length) {
     return (
@@ -37,7 +42,7 @@ export function InterviewsList(props: StudentsListProps) {
   }
 
   return (
-    <Spin spinning={loading}>
+    <Spin spinning={reloadListRequest.loading}>
       <div className={styles.container}>
         <InterviewsSummary
           interviewTask={interviewTask}

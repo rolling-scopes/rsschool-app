@@ -81,7 +81,7 @@ function Page() {
     [MentorRegistryTabsMode.All]: 0,
   });
 
-  const loadData = useRequest(
+  const loadDataRequest = useRequest(
     async () => {
       const [mentorRegistryData, courses] = await Promise.all([
         mentorRegistryService.getMentors({
@@ -105,6 +105,9 @@ function Page() {
     },
     {
       refreshDeps: [activeTab, combinedFilter, currentPage],
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
       onSuccess: ({ courses, disciplines, mentorRegistryData }) => {
         setAllData(mentorRegistryData.mentors);
         setData(mentorRegistryData.mentors);
@@ -116,16 +119,22 @@ function Page() {
     },
   );
 
-  const { loading: loadingCancelMentor, runAsync: cancelMentor } = useRequest(
+  const cancelMentorRequest = useRequest(
     async (githubId: string) => {
       setModalData(null);
       await mentorRegistryService.cancelMentorRegistry(githubId);
       setIsModalOpen(false);
     },
-    { manual: true, onSuccess: () => loadData.runAsync() },
+    {
+      manual: true,
+      onSuccess: () => loadDataRequest.runAsync(),
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
   );
 
-  const { loading: loadingComment, runAsync: sendMentorRegistryComment } = useRequest(
+  const sendMentorRegistryCommentRequest = useRequest(
     async (comment: string) => {
       if (!modalData?.record?.githubId) return;
       try {
@@ -136,10 +145,10 @@ function Page() {
         setIsModalOpen(false);
       }
     },
-    { manual: true, onSuccess: () => loadData.runAsync() },
+    { manual: true, onSuccess: () => loadDataRequest.runAsync() },
   );
 
-  const loading = loadData.loading || loadingCancelMentor || loadingComment;
+  const loading = loadDataRequest.loading || cancelMentorRequest.loading || sendMentorRegistryCommentRequest.loading;
 
   const openNotificationWithIcon = (type: NotificationType) => {
     api[type]({
@@ -169,7 +178,7 @@ function Page() {
           });
         }
         setModalData(null);
-        await loadData.runAsync();
+        await loadDataRequest.runAsync();
         openNotificationWithIcon('success');
       } catch {
         message.error('An error occurred. Please try again later.');
@@ -177,7 +186,7 @@ function Page() {
         setModalLoading(false);
       }
     },
-    [modalData, openNotificationWithIcon, loadData],
+    [modalData, openNotificationWithIcon, loadDataRequest],
   );
 
   const renderModal = useCallback(() => {
@@ -226,7 +235,7 @@ function Page() {
       await mentorRegistryService.updateMentor(record!.githubId, {
         preselectedCourses: record.preselectedCourses.map(v => String(v)),
       });
-      loadData.runAsync();
+      loadDataRequest.runAsync();
     } catch {
       message.error('An error occurred. Please try again later.');
     } finally {
@@ -321,7 +330,7 @@ function Page() {
           modalData={modalData || {}}
           modalLoading={modalLoading}
           onCancel={onCancelModal}
-          cancelMentor={cancelMentor}
+          cancelMentor={cancelMentorRequest.runAsync}
         />
       )}
       {isModalOpen && modalData?.mode === ModalDataMode.Comment && (
@@ -332,7 +341,7 @@ function Page() {
           initialValue={modalData?.record?.comment ?? undefined}
           availableEmptyComment={true}
           onOk={(comment: string) => {
-            sendMentorRegistryComment(comment);
+            sendMentorRegistryCommentRequest.runAsync(comment);
           }}
         />
       )}

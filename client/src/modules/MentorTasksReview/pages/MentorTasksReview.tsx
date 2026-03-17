@@ -27,7 +27,7 @@ export const MentorTasksReview = () => {
   const { courses, course } = useActiveCourseContext();
   const session = useContext(SessionContext);
 
-  const { data: tasks } = useRequest(async () => {
+  const tasksRequest = useRequest(async () => {
     const { data } = await coursesTasksApi.getCourseTasks(course.id, undefined, CourseTaskDtoCheckerEnum.Mentor);
     return data;
   });
@@ -38,7 +38,7 @@ export const MentorTasksReview = () => {
     content: [],
     pagination: { current: 1, pageSize: 20 },
   });
-  const { loading, runAsync: getMentorReviews } = useRequest(
+  const mentorReviewsRequest = useRequest(
     async (
       pagination: TablePaginationConfig,
       filters?: Record<ColumnKey, FilterValue | null>,
@@ -68,13 +68,18 @@ export const MentorTasksReview = () => {
   );
 
   const handleReviewerAssigned = async () => {
-    await getMentorReviews(reviews.pagination);
+    await mentorReviewsRequest.runAsync(reviews.pagination);
   };
 
-  useAsync(async () => await getMentorReviews(reviews.pagination), [course]);
+  useAsync(async () => await mentorReviewsRequest.runAsync(reviews.pagination), [course]);
 
   return (
-    <AdminPageLayout loading={loading} title="Mentor tasks review" showCourseName courses={courses}>
+    <AdminPageLayout
+      loading={mentorReviewsRequest.loading}
+      title="Mentor tasks review"
+      showCourseName
+      courses={courses}
+    >
       <Space direction="vertical">
         <Space>
           <Text strong>Submitted tasks</Text>
@@ -85,9 +90,9 @@ export const MentorTasksReview = () => {
       <MentorReviewsTable
         content={reviews.content}
         pagination={reviews.pagination}
-        handleChange={getMentorReviews}
+        handleChange={mentorReviewsRequest.runAsync}
         handleReviewerAssigned={handleReviewerAssigned}
-        tasks={tasks ?? []}
+        tasks={tasksRequest.data ?? []}
         isManager={isManager}
       />
     </AdminPageLayout>
