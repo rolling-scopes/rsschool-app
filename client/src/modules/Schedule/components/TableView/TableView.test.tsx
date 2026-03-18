@@ -69,8 +69,7 @@ describe('TableView', () => {
 
   describe('should filter data', () => {
     it('by selected tag', () => {
-      vi
-        .spyOn(ReactUse, 'useLocalStorage')
+      vi.spyOn(ReactUse, 'useLocalStorage')
         // Mock useLocalStorage for combinedFilter
         .mockReturnValueOnce([{ types: [TagsEnum.Test], statuses: [], tags: [] }, vi.fn(), vi.fn()]);
       const data = generateCourseData();
@@ -164,8 +163,7 @@ describe('TableView', () => {
     ${TagsEnum.Test}
     ${TagsEnum.Interview}
   `('should check filters in dropdown when tag "$tag" was selected', async ({ tag }: { tag: string }) => {
-    vi
-      .spyOn(ReactUse, 'useLocalStorage')
+    vi.spyOn(ReactUse, 'useLocalStorage')
       // Mock useLocalStorage for combinedFilter
       .mockReturnValueOnce([
         { types: [TagsEnum.Coding, TagsEnum.Test, TagsEnum.Interview], statuses: [], tags: [] },
@@ -186,8 +184,7 @@ describe('TableView', () => {
   });
 
   it('should not render filtered tags when tags is empty', () => {
-    vi
-      .spyOn(ReactUse, 'useLocalStorage')
+    vi.spyOn(ReactUse, 'useLocalStorage')
       // Mock useLocalStorage for combinedFilter
       .mockReturnValueOnce([{ tags: [] }, vi.fn(), vi.fn()]);
     render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
@@ -200,8 +197,7 @@ describe('TableView', () => {
   it('should remove tags when "Clear all" button was clicked', async () => {
     const setFilterMock = vi.fn();
     const types = [TagsEnum.Coding, TagsEnum.Test, TagsEnum.Interview];
-    vi
-      .spyOn(ReactUse, 'useLocalStorage')
+    vi.spyOn(ReactUse, 'useLocalStorage')
       // Mock useLocalStorage for combinedFilter
       .mockReturnValueOnce([
         {

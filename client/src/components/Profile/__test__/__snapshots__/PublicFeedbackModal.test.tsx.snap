@@ -1,5 +1,3 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`PublicFeedbackModal > Should render correctly 1`] = `<div />`;
-
-exports[`PublicFeedbackModal Should render correctly 1`] = `<div />`;

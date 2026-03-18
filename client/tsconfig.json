@@ -28,5 +28,12 @@
     "types": ["vitest/globals"]
   },
   "include": ["./next-env.d.ts", "./lambda/**/*.ts", "./src/**/*.ts", "./src/**/*.tsx"],
-  "exclude": ["./node_modules", "./src/**/*.test.ts", "./src/**/*.test.tsx", "./src/**/__tests__/**", "./src/**/__test__/**", "./src/__mocks__/**"]
+  "exclude": [
+    "./node_modules",
+    "./src/**/*.test.ts",
+    "./src/**/*.test.tsx",
+    "./src/**/__tests__/**",
+    "./src/**/__test__/**",
+    "./src/__mocks__/**"
+  ]
 }
