@@ -30,7 +30,7 @@ export function ExpelCriteriaModal({ courseId, onSubmit, onClose, isModalOpen }:
       title="Expel Criteria"
       onCancel={onClose}
       open={isModalOpen}
-      bodyStyle={{ paddingBlock: 16 }}
+      styles={{ body: { paddingBlock: 16 } }}
       footer={null}
     >
       <Form

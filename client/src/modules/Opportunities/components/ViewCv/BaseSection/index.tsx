@@ -20,7 +20,7 @@ export const BaseSection = (props: Props) => {
   ) : null;
 
   return (
-    <Card className="cv-card-section" size="small" title={complexTitle} bordered={false}>
+    <Card className="cv-card-section" size="small" title={complexTitle} variant="borderless">
       {children}
     </Card>
   );

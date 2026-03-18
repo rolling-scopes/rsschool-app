@@ -155,7 +155,7 @@ function Page() {
           setModal(false);
         })}
         onCancel={() => setModal(false)}
-        visible={modal}
+        open={modal}
         courseId={course.id}
       />
     </AdminPageLayout>
