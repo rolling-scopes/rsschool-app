@@ -9,6 +9,10 @@ describe('useExpiration', () => {
     vi.useFakeTimers().setSystemTime(mockCurrentTime);
   });
 
+  afterAll(() => {
+    vi.useRealTimers();
+  });
+
   it('should correctly return NotExpired status', () => {
     const addition = 30 * 24 * 60 * 60 * 1000;
     const mockExpiresIn30Days = String(mockCurrentTime + addition);

@@ -65,6 +65,10 @@ describe('PublicFeedbackCard', () => {
     },
   ];
 
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('should render correctly', () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date('2019-01-01'));

@@ -69,6 +69,10 @@ describe('PublicFeedbackModal', () => {
     vi.useFakeTimers().setSystemTime(new Date('2022-01-01T00:00:00Z').getTime());
   });
 
+  afterAll(() => {
+    vi.useRealTimers();
+  });
+
   it('Should render correctly', () => {
     const { container } = render(<PublicFeedbackModal data={data} isVisible={true} onHide={vi.fn()} />);
     expect(container).toMatchSnapshot();
