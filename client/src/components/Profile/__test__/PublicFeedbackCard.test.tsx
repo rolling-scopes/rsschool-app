@@ -66,8 +66,8 @@ describe('PublicFeedbackCard', () => {
   ];
 
   it('should render correctly', () => {
-    jest.useFakeTimers();
-    jest.setSystemTime(new Date('2019-01-01'));
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2019-01-01'));
     const { container } = render(<PublicFeedbackCard data={data} />);
     expect(container).toMatchSnapshot();
   });

@@ -1,16 +1,18 @@
+import { vi } from 'vitest';
+
 export const useMessage = () => ({
   message: {
-    success: jest.fn(),
-    error: jest.fn(),
-    info: jest.fn(),
-    warning: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
+    warning: vi.fn(),
   },
   notification: {
-    success: jest.fn(),
-    error: jest.fn(),
-    info: jest.fn(),
-    warning: jest.fn(),
-    open: jest.fn(),
-    close: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
+    warning: vi.fn(),
+    open: vi.fn(),
+    close: vi.fn(),
   },
 });

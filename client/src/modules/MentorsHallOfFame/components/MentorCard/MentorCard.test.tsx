@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { TopMentorDto } from '@client/api';
 import { MentorCard } from './MentorCard';
 
-jest.mock('next/config', () => () => ({}));
+vi.mock('next/config', () => () => ({}));
 
 const mockMentor: TopMentorDto = {
   rank: 1,

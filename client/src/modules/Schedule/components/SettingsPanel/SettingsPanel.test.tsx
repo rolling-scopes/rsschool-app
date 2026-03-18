@@ -10,10 +10,10 @@ const PROPS_MOCK: SettingsPanelProps = {
   } as SettingsPanelProps['settings'],
   calendarToken: 'calendar-token',
   tags: [],
-  onCreateCourseTask: jest.fn(),
-  onCopyFromCourse: jest.fn(),
-  onCreateCourseEvent: jest.fn(),
-  refreshData: jest.fn(),
+  onCreateCourseTask: vi.fn(),
+  onCopyFromCourse: vi.fn(),
+  onCreateCourseEvent: vi.fn(),
+  refreshData: vi.fn(),
 };
 
 describe('SettingsPanel', () => {

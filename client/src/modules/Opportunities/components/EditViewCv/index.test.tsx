@@ -7,15 +7,15 @@ const enum CvComponents {
   ViewCV,
 }
 
-jest.mock('../NoConsentView', () => ({
+vi.mock('../NoConsentView', () => ({
   NoConsentView: () => <div>{CvComponents.NoConsentView}</div>,
 }));
 
-jest.mock('../EditCv', () => ({
+vi.mock('../EditCv', () => ({
   EditCV: () => <div>{CvComponents.EditCV}</div>,
 }));
 
-jest.mock('../ViewCv', () => ({
+vi.mock('../ViewCv', () => ({
   ViewCV: () => <div>{CvComponents.ViewCV}</div>,
 }));
 

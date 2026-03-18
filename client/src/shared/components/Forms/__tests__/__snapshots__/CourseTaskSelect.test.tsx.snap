@@ -1,4 +1,278 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`CourseTaskSelect > Should render correctly > if groupBy is cross-check deadline 1`] = `
+<body>
+  <div>
+    <form
+      class="ant-form ant-form-horizontal css-var-root ant-form-css-var css-dev-only-do-not-override-1enej14"
+    >
+      <div
+        class="ant-form-item css-var-root ant-form-css-var css-dev-only-do-not-override-1enej14 ant-form-item-horizontal"
+      >
+        <div
+          class="ant-row ant-form-item-row css-dev-only-do-not-override-1enej14 css-var-root"
+        >
+          <div
+            class="ant-col ant-form-item-label css-dev-only-do-not-override-1enej14 css-var-root"
+          >
+            <label
+              class="ant-form-item-required"
+              for="courseTaskId"
+              title="Task"
+            >
+              Task
+            </label>
+          </div>
+          <div
+            class="ant-col ant-form-item-control css-dev-only-do-not-override-1enej14 css-var-root"
+          >
+            <div
+              class="ant-form-item-control-input"
+            >
+              <div
+                class="ant-form-item-control-input-content"
+              >
+                <div
+                  class="ant-select ant-select-outlined ant-select-in-form-item css-var-root ant-select-css-var css-dev-only-do-not-override-1enej14 ant-select-single ant-select-show-arrow ant-select-show-search"
+                >
+                  <div
+                    class="ant-select-content"
+                  >
+                    <div
+                      class="ant-select-placeholder"
+                      style="visibility: visible;"
+                    >
+                      Select task
+                    </div>
+                    <input
+                      aria-autocomplete="list"
+                      aria-expanded="false"
+                      aria-haspopup="listbox"
+                      aria-required="true"
+                      autocomplete="off"
+                      class="ant-select-input"
+                      id="courseTaskId"
+                      role="combobox"
+                      type="search"
+                      value=""
+                    />
+                  </div>
+                  <div
+                    class="ant-select-suffix"
+                  >
+                    <span
+                      aria-label="down"
+                      class="anticon anticon-down"
+                      role="img"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        data-icon="down"
+                        fill="currentColor"
+                        focusable="false"
+                        height="1em"
+                        viewBox="64 64 896 896"
+                        width="1em"
+                      >
+                        <path
+                          d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"
+                        />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</body>
+`;
+
+exports[`CourseTaskSelect > Should render correctly > if groupBy is deadline 1`] = `
+<body>
+  <div>
+    <form
+      class="ant-form ant-form-horizontal css-var-root ant-form-css-var css-dev-only-do-not-override-1enej14"
+    >
+      <div
+        class="ant-form-item css-var-root ant-form-css-var css-dev-only-do-not-override-1enej14 ant-form-item-horizontal"
+      >
+        <div
+          class="ant-row ant-form-item-row css-dev-only-do-not-override-1enej14 css-var-root"
+        >
+          <div
+            class="ant-col ant-form-item-label css-dev-only-do-not-override-1enej14 css-var-root"
+          >
+            <label
+              class="ant-form-item-required"
+              for="courseTaskId"
+              title="Task"
+            >
+              Task
+            </label>
+          </div>
+          <div
+            class="ant-col ant-form-item-control css-dev-only-do-not-override-1enej14 css-var-root"
+          >
+            <div
+              class="ant-form-item-control-input"
+            >
+              <div
+                class="ant-form-item-control-input-content"
+              >
+                <div
+                  class="ant-select ant-select-outlined ant-select-in-form-item css-var-root ant-select-css-var css-dev-only-do-not-override-1enej14 ant-select-single ant-select-show-arrow ant-select-show-search"
+                >
+                  <div
+                    class="ant-select-content"
+                  >
+                    <div
+                      class="ant-select-placeholder"
+                      style="visibility: visible;"
+                    >
+                      Select task
+                    </div>
+                    <input
+                      aria-autocomplete="list"
+                      aria-expanded="false"
+                      aria-haspopup="listbox"
+                      aria-required="true"
+                      autocomplete="off"
+                      class="ant-select-input"
+                      id="courseTaskId"
+                      role="combobox"
+                      type="search"
+                      value=""
+                    />
+                  </div>
+                  <div
+                    class="ant-select-suffix"
+                  >
+                    <span
+                      aria-label="down"
+                      class="anticon anticon-down"
+                      role="img"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        data-icon="down"
+                        fill="currentColor"
+                        focusable="false"
+                        height="1em"
+                        viewBox="64 64 896 896"
+                        width="1em"
+                      >
+                        <path
+                          d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"
+                        />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      ,
+    </form>
+  </div>
+</body>
+`;
+
+exports[`CourseTaskSelect > Should render correctly > if groupBy is default 1`] = `
+<body>
+  <div>
+    <form
+      class="ant-form ant-form-horizontal css-var-root ant-form-css-var css-dev-only-do-not-override-1enej14"
+    >
+      <div
+        class="ant-form-item css-var-root ant-form-css-var css-dev-only-do-not-override-1enej14 ant-form-item-horizontal"
+      >
+        <div
+          class="ant-row ant-form-item-row css-dev-only-do-not-override-1enej14 css-var-root"
+        >
+          <div
+            class="ant-col ant-form-item-label css-dev-only-do-not-override-1enej14 css-var-root"
+          >
+            <label
+              class="ant-form-item-required"
+              for="courseTaskId"
+              title="Task"
+            >
+              Task
+            </label>
+          </div>
+          <div
+            class="ant-col ant-form-item-control css-dev-only-do-not-override-1enej14 css-var-root"
+          >
+            <div
+              class="ant-form-item-control-input"
+            >
+              <div
+                class="ant-form-item-control-input-content"
+              >
+                <div
+                  class="ant-select ant-select-outlined ant-select-in-form-item css-var-root ant-select-css-var css-dev-only-do-not-override-1enej14 ant-select-single ant-select-show-arrow ant-select-show-search"
+                >
+                  <div
+                    class="ant-select-content"
+                  >
+                    <div
+                      class="ant-select-placeholder"
+                      style="visibility: visible;"
+                    >
+                      Select task
+                    </div>
+                    <input
+                      aria-autocomplete="list"
+                      aria-expanded="false"
+                      aria-haspopup="listbox"
+                      aria-required="true"
+                      autocomplete="off"
+                      class="ant-select-input"
+                      id="courseTaskId"
+                      role="combobox"
+                      type="search"
+                      value=""
+                    />
+                  </div>
+                  <div
+                    class="ant-select-suffix"
+                  >
+                    <span
+                      aria-label="down"
+                      class="anticon anticon-down"
+                      role="img"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        data-icon="down"
+                        fill="currentColor"
+                        focusable="false"
+                        height="1em"
+                        viewBox="64 64 896 896"
+                        width="1em"
+                      >
+                        <path
+                          d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"
+                        />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</body>
+`;
 
 exports[`CourseTaskSelect Should render correctly if groupBy is cross-check deadline 1`] = `
 <body>

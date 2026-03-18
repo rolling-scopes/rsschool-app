@@ -5,23 +5,23 @@ import { CARD_TITLES } from '@client/modules/Registry/constants';
 import { GeneralSection } from './GeneralSection';
 import usePlacesAutocomplete from 'use-places-autocomplete';
 
-jest.mock('use-places-autocomplete');
+vi.mock('use-places-autocomplete');
 
-(usePlacesAutocomplete as jest.Mock).mockImplementation(() => ({
+vi.mocked(usePlacesAutocomplete).mockImplementation(() => ({
   value: null,
   suggestions: {
     data: {
-      map: jest.fn(),
+      map: vi.fn(),
     },
     loading: false,
   },
-  setValue: jest.fn(),
+  setValue: vi.fn(),
 }));
 
 const renderGeneralSection = (courses?: CourseDto[]) => {
   render(
     <Form>
-      <GeneralSection location={null} setLocation={jest.fn()} courses={courses} />
+      <GeneralSection location={null} setLocation={vi.fn()} courses={courses} />
     </Form>,
   );
 };

@@ -8,8 +8,8 @@ type Props = {
   submitTitle?: string;
 };
 
-const previousHandler = jest.fn();
-const submitHandler = jest.fn();
+const previousHandler = vi.fn();
+const submitHandler = vi.fn();
 
 const renderFormButtons = ({ onPrevious, submitTitle }: Props = {}) =>
   render(
@@ -20,7 +20,7 @@ const renderFormButtons = ({ onPrevious, submitTitle }: Props = {}) =>
 
 describe('FormButtons', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   const user = userEvent.setup();

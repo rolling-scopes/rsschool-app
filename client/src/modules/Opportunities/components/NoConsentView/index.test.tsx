@@ -3,13 +3,13 @@ import { NoConsentView, confirmationModalInfo } from '../NoConsentView';
 
 describe('NoConsentView', () => {
   it('should render 403 correctly', () => {
-    render(<NoConsentView giveConsent={jest.fn()} />);
+    render(<NoConsentView giveConsent={vi.fn()} />);
 
     expect(screen.getByText("This user doesn't have CV yet")).toBeInTheDocument();
   });
 
   it('should render initial owner view correctly', () => {
-    render(<NoConsentView isOwner={true} giveConsent={jest.fn()} />);
+    render(<NoConsentView isOwner={true} giveConsent={vi.fn()} />);
 
     const title = screen.getByRole('heading', { name: "You don't have a CV yet." });
     const createCvButton = screen.getByRole('button', { name: 'plus Create CV' });
@@ -19,7 +19,7 @@ describe('NoConsentView', () => {
   });
 
   it('should show confirmation modal', async () => {
-    render(<NoConsentView isOwner={true} giveConsent={jest.fn()} />);
+    render(<NoConsentView isOwner={true} giveConsent={vi.fn()} />);
 
     const createCvButton = screen.getByRole('button', { name: 'plus Create CV' });
 
@@ -41,7 +41,7 @@ describe('NoConsentView', () => {
   });
 
   it('should render tooltip', async () => {
-    render(<NoConsentView isOwner={true} giveConsent={jest.fn()} />);
+    render(<NoConsentView isOwner={true} giveConsent={vi.fn()} />);
 
     const createCvButton = screen.getByRole('button', { name: 'plus Create CV' });
 
@@ -72,7 +72,7 @@ describe('NoConsentView', () => {
     ${confirmationModalInfo.en.availableDataList[2]}
     ${confirmationModalInfo.en.availableDataList[3]}
   `('should render visible text $text', async ({ text }) => {
-    render(<NoConsentView isOwner={true} giveConsent={jest.fn()} />);
+    render(<NoConsentView isOwner={true} giveConsent={vi.fn()} />);
 
     const createCvButton = screen.getByRole('button', { name: 'plus Create CV' });
 
@@ -98,7 +98,7 @@ describe('NoConsentView', () => {
     ${confirmationModalInfo.ru.availableDataList[2]}
     ${confirmationModalInfo.ru.availableDataList[3]}
   `('should render tooltip $text', async ({ text }) => {
-    render(<NoConsentView isOwner={true} giveConsent={jest.fn()} />);
+    render(<NoConsentView isOwner={true} giveConsent={vi.fn()} />);
 
     const createCvButton = screen.getByRole('button', { name: 'plus Create CV' });
 
@@ -123,7 +123,7 @@ describe('NoConsentView', () => {
   });
 
   it('should handle cancel correctly', async () => {
-    render(<NoConsentView isOwner={true} giveConsent={jest.fn()} />);
+    render(<NoConsentView isOwner={true} giveConsent={vi.fn()} />);
 
     const createCvButton = screen.getByRole('button', { name: 'plus Create CV' });
     expect(createCvButton).toBeInTheDocument();
@@ -143,7 +143,7 @@ describe('NoConsentView', () => {
   });
 
   it('should handle consent correctly', async () => {
-    const mockGiveConsent = jest.fn();
+    const mockGiveConsent = vi.fn();
 
     render(<NoConsentView isOwner={true} giveConsent={mockGiveConsent} />);
 

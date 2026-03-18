@@ -4,15 +4,15 @@ import * as usePlacesAutocompleteModule from 'use-places-autocomplete';
 import { useInterval } from 'ahooks';
 import { Location } from '@common/models/profile';
 
-jest.mock('use-places-autocomplete');
-jest.mock('ahooks');
+vi.mock('use-places-autocomplete');
+vi.mock('ahooks');
 
 describe('useGoogleMapsPlaces', () => {
-  const mockInit = jest.fn();
-  const mockSetValue = jest.fn();
-  const mockStopPolling = jest.fn();
-  const usePlacesAutocompleteMock = usePlacesAutocompleteModule.default as jest.Mock;
-  const useIntervalMock = useInterval as jest.Mock;
+  const mockInit = vi.fn();
+  const mockSetValue = vi.fn();
+  const mockStopPolling = vi.fn();
+  const usePlacesAutocompleteMock = vi.mocked(usePlacesAutocompleteModule.default);
+  const useIntervalMock = vi.mocked(useInterval);
 
   const defaultAutocompleteState = {
     value: '',
@@ -38,7 +38,7 @@ describe('useGoogleMapsPlaces', () => {
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     usePlacesAutocompleteMock.mockReturnValue(defaultAutocompleteState);
     useIntervalMock.mockReturnValue(mockStopPolling);
     delete (window as unknown as { google?: unknown }).google;

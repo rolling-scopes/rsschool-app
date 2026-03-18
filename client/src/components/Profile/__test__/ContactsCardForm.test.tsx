@@ -21,12 +21,12 @@ describe('ContactsCardForm', () => {
   describe('Should render correctly', () => {
     it('if "contacts" is not empty', () => {
       const { container } = render(
-        <ContactsCardForm contacts={contacts} setHasError={jest.fn()} setValues={jest.fn()} />,
+        <ContactsCardForm contacts={contacts} setHasError={vi.fn()} setValues={vi.fn()} />,
       );
       expect(container).toMatchSnapshot();
     });
     it('if "contacts" is empty', () => {
-      const { container } = render(<ContactsCardForm contacts={[]} setHasError={jest.fn()} setValues={jest.fn()} />);
+      const { container } = render(<ContactsCardForm contacts={[]} setHasError={vi.fn()} setValues={vi.fn()} />);
       expect(container).toMatchSnapshot();
     });
   });

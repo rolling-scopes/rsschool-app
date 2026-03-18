@@ -4,17 +4,17 @@ import { ERROR_MESSAGES, LABELS, PLACEHOLDERS } from '@client/modules/Registry/c
 import { PersonalInfo } from './PersonalInfo';
 import usePlacesAutocomplete from 'use-places-autocomplete';
 
-jest.mock('use-places-autocomplete');
+vi.mock('use-places-autocomplete');
 
-(usePlacesAutocomplete as jest.Mock).mockImplementation(() => ({
+vi.mocked(usePlacesAutocomplete).mockImplementation(() => ({
   value: null,
   suggestions: {
     data: {
-      map: jest.fn(),
+      map: vi.fn(),
     },
     loading: false,
   },
-  setValue: jest.fn(),
+  setValue: vi.fn(),
 }));
 
 const mockValues = {
@@ -30,7 +30,7 @@ type Values = typeof mockValues | Record<string, unknown>;
 const renderPersonalInfo = (values: Values = mockValues, isStudentForm?: boolean) =>
   render(
     <Form role="form" initialValues={values}>
-      <PersonalInfo location={null} setLocation={jest.fn()} isStudentForm={isStudentForm} />
+      <PersonalInfo location={null} setLocation={vi.fn()} isStudentForm={isStudentForm} />
     </Form>,
   );
 

@@ -66,11 +66,11 @@ describe('PublicFeedbackModal', () => {
   ];
 
   beforeAll(() => {
-    jest.useFakeTimers().setSystemTime(new Date('2022-01-01T00:00:00Z').getTime());
+    vi.useFakeTimers().setSystemTime(new Date('2022-01-01T00:00:00Z').getTime());
   });
 
   it('Should render correctly', () => {
-    const { container } = render(<PublicFeedbackModal data={data} isVisible={true} onHide={jest.fn()} />);
+    const { container } = render(<PublicFeedbackModal data={data} isVisible={true} onHide={vi.fn()} />);
     expect(container).toMatchSnapshot();
   });
 });

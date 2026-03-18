@@ -15,7 +15,7 @@ const renderSelectCourseTasks = () => {
 describe('SelectCourseTasks', () => {
   beforeAll(() => {
     // mock CoursesTasksApi call
-    jest.spyOn(ReactUse, 'useAsync').mockReturnValue({
+    vi.spyOn(ReactUse, 'useAsync').mockReturnValue({
       value: [
         {
           name: 'course 1',

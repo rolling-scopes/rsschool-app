@@ -1,4 +1,194 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ContactsCardForm > Should render correctly > if "contacts" is empty 1`] = `
+<div>
+  <form
+    class="ant-form ant-form-horizontal css-var-root ant-form-css-var css-dev-only-do-not-override-1enej14"
+  >
+    <div
+      class="ant-list ant-list-split css-dev-only-do-not-override-1enej14 css-var-root"
+    >
+      <div
+        aria-busy="false"
+        aria-live="polite"
+        class="ant-spin css-dev-only-do-not-override-1enej14 css-var-root"
+      >
+        <div
+          class="ant-spin-container"
+        >
+          <div
+            class="ant-list-empty-text"
+          >
+            <div
+              class="css-dev-only-do-not-override-1enej14 css-var-root ant-empty ant-empty-normal"
+            >
+              <div
+                class="ant-empty-image"
+              >
+                <svg
+                  height="41"
+                  viewBox="0 0 64 41"
+                  width="64"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <title>
+                    No data
+                  </title>
+                  <g
+                    fill="none"
+                    fill-rule="evenodd"
+                    transform="translate(0 1)"
+                  >
+                    <ellipse
+                      cx="32"
+                      cy="33"
+                      fill="#f5f5f5"
+                      rx="32"
+                      ry="7"
+                    />
+                    <g
+                      fill-rule="nonzero"
+                      stroke="#d9d9d9"
+                    >
+                      <path
+                        d="M55 12.8 44.9 1.3Q44 0 42.9 0H21.1q-1.2 0-2 1.3L9 12.8V22h46z"
+                      />
+                      <path
+                        d="M41.6 16c0-1.7 1-3 2.2-3H55v18.1c0 2.2-1.3 3.9-3 3.9H12c-1.7 0-3-1.7-3-3.9V13h11.2c1.2 0 2.2 1.3 2.2 3s1 2.9 2.2 2.9h14.8c1.2 0 2.2-1.4 2.2-3"
+                        fill="#fafafa"
+                      />
+                    </g>
+                  </g>
+                </svg>
+              </div>
+              <div
+                class="ant-empty-description"
+              >
+                No data
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+`;
+
+exports[`ContactsCardForm > Should render correctly > if "contacts" is not empty 1`] = `
+<div>
+  <form
+    class="ant-form ant-form-horizontal css-var-root ant-form-css-var css-dev-only-do-not-override-1enej14"
+  >
+    <div
+      class="ant-list ant-list-split css-dev-only-do-not-override-1enej14 css-var-root"
+    >
+      <div
+        aria-busy="false"
+        aria-live="polite"
+        class="ant-spin css-dev-only-do-not-override-1enej14 css-var-root"
+      >
+        <div
+          class="ant-spin-container"
+        >
+          <ul
+            class="ant-list-items ant-list-container css-var-root"
+          >
+            <li
+              class="ant-list-item"
+            >
+              <label
+                style="width: 100%;"
+              >
+                <span
+                  class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
+                  style="font-size: 18px; margin-bottom: 5px; display: inline-block;"
+                >
+                  <strong>
+                    EPAM E-mail
+                    :
+                  </strong>
+                </span>
+                <div
+                  class="ant-form-item css-var-root ant-form-css-var css-dev-only-do-not-override-1enej14 ant-form-item-horizontal"
+                >
+                  <div
+                    class="ant-row ant-form-item-row css-dev-only-do-not-override-1enej14 css-var-root"
+                  >
+                    <div
+                      class="ant-col ant-form-item-control css-dev-only-do-not-override-1enej14 css-var-root"
+                    >
+                      <div
+                        class="ant-form-item-control-input"
+                      >
+                        <div
+                          class="ant-form-item-control-input-content"
+                        >
+                          <input
+                            class="ant-input css-dev-only-do-not-override-1enej14 ant-input-outlined css-var-root ant-input-css-var"
+                            id="epamEmail"
+                            style="width: 100%;"
+                            type="text"
+                            value="epamEmail"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </label>
+            </li>
+            <li
+              class="ant-list-item"
+            >
+              <label
+                style="width: 100%;"
+              >
+                <span
+                  class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
+                  style="font-size: 18px; margin-bottom: 5px; display: inline-block;"
+                >
+                  <strong>
+                    E-mail
+                    :
+                  </strong>
+                </span>
+                <div
+                  class="ant-form-item css-var-root ant-form-css-var css-dev-only-do-not-override-1enej14 ant-form-item-horizontal"
+                >
+                  <div
+                    class="ant-row ant-form-item-row css-dev-only-do-not-override-1enej14 css-var-root"
+                  >
+                    <div
+                      class="ant-col ant-form-item-control css-dev-only-do-not-override-1enej14 css-var-root"
+                    >
+                      <div
+                        class="ant-form-item-control-input"
+                      >
+                        <div
+                          class="ant-form-item-control-input-content"
+                        >
+                          <input
+                            class="ant-input css-dev-only-do-not-override-1enej14 ant-input-outlined css-var-root ant-input-css-var"
+                            id="email"
+                            style="width: 100%;"
+                            type="text"
+                            value="email"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+`;
 
 exports[`ContactsCardForm Should render correctly if "contacts" is empty 1`] = `
 <div>

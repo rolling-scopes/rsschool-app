@@ -6,7 +6,7 @@ const mockCurrentTime = 1664564110455;
 
 describe('useExpiration', () => {
   beforeAll(() => {
-    jest.useFakeTimers().setSystemTime(mockCurrentTime);
+    vi.useFakeTimers().setSystemTime(mockCurrentTime);
   });
 
   it('should correctly return NotExpired status', () => {

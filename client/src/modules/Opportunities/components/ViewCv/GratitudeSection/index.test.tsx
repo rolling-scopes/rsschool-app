@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { GratitudeDto } from '@client/api';
 import { GratitudeSection } from './index';
 
-jest.mock('./GratitudeList', () => ({
+vi.mock('./GratitudeList', () => ({
   GratitudeList: () => <div>Mock GratitudeList</div>,
 }));
 

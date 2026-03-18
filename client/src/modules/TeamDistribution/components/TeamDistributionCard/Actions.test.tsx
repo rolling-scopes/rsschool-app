@@ -2,8 +2,8 @@ import { screen, render, fireEvent } from '@testing-library/react';
 import { TeamDistributionDto, TeamDistributionDtoRegistrationStatusEnum } from '@client/api';
 import { Actions } from './Actions';
 
-const mockOnRegister = jest.fn();
-const mockOnDeleteRegister = jest.fn();
+const mockOnRegister = vi.fn();
+const mockOnDeleteRegister = vi.fn();
 
 const distribution = {
   id: 1,
@@ -21,15 +21,15 @@ function renderActions(distribution: TeamDistributionDto, isManager = false) {
       isManager={isManager}
       courseAlias="test"
       isCourseDementor={false}
-      onOpenSubmitScoreModal={jest.fn()}
+      onOpenSubmitScoreModal={vi.fn()}
     />,
   );
 }
 
 describe('Actions', () => {
-  beforeAll(() => jest.useFakeTimers().setSystemTime(new Date('2022-01-02')));
+  beforeAll(() => vi.useFakeTimers().setSystemTime(new Date('2022-01-02')));
 
-  afterAll(() => jest.useRealTimers());
+  afterAll(() => vi.useRealTimers());
 
   afterEach(() => {
     mockOnRegister.mockClear();

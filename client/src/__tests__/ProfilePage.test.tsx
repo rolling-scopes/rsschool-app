@@ -4,20 +4,20 @@ import { render } from '@testing-library/react';
 import { SessionApi } from '@client/api';
 import { NextRouter, useRouter } from 'next/router';
 
-jest.mock('next/config', () => () => ({}));
-jest.mock('next/router', () => ({
-  ...jest.requireActual('next/router'),
-  useRouter: jest.fn(),
+vi.mock('next/config', () => () => ({}));
+vi.mock('next/router', async () => ({
+  ...(await vi.importActual('next/router')),
+  useRouter: vi.fn(),
 }));
 
-jest.mock('api', () => ({
-  ...jest.requireActual('api'),
-  ProfileApi: jest.fn(),
-  UsersNotificationsApi: jest.fn(),
-  NotificationsApi: jest.fn(),
-  CoursesApi: jest.fn(),
-  CoursesTasksApi: jest.fn(),
-  StudentsScoreApi: jest.fn(),
+vi.mock('@client/api', async () => ({
+  ...(await vi.importActual('@client/api')),
+  ProfileApi: vi.fn(),
+  UsersNotificationsApi: vi.fn(),
+  NotificationsApi: vi.fn(),
+  CoursesApi: vi.fn(),
+  CoursesTasksApi: vi.fn(),
+  StudentsScoreApi: vi.fn(),
   UpdateUserDtoLanguagesEnum: {},
 }));
 
@@ -40,7 +40,7 @@ const session = {
   },
 } as Session;
 
-SessionApi.prototype.getSession = jest.fn().mockResolvedValue({ data: session });
+SessionApi.prototype.getSession = vi.fn().mockResolvedValue({ data: session });
 
 const router = {
   query: {
@@ -51,7 +51,7 @@ const router = {
 describe('ProfilePage', () => {
   describe('Should render correctly', () => {
     it('if full profile info is in the state', () => {
-      jest.mocked(useRouter).mockReturnValue(router);
+      vi.mocked(useRouter).mockReturnValue(router);
       const { container } = render(<ProfilePage />);
       expect(container).toMatchSnapshot();
     });

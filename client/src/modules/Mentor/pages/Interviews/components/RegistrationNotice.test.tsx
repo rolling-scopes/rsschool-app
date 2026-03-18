@@ -3,9 +3,9 @@ import { InterviewDto } from '@client/api';
 import { RegistrationNoticeAlert } from './RegistrationNoticeAlert';
 
 describe('RegistrationNoticeAlert', () => {
-  beforeAll(() => jest.useFakeTimers().setSystemTime(new Date('2023-01-01')));
+  beforeAll(() => vi.useFakeTimers().setSystemTime(new Date('2023-01-01')));
 
-  afterAll(() => jest.useRealTimers());
+  afterAll(() => vi.useRealTimers());
 
   const interview: InterviewDto = {
     id: 1,

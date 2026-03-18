@@ -1,4 +1,323 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`AddCriteriaForCrossCheck > should match shapshot 1`] = `
+{
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <div
+        class="ant-form-item css-var-root ant-form-css-var css-dev-only-do-not-override-1enej14 ant-form-item-horizontal"
+      >
+        <div
+          class="ant-row ant-form-item-row css-dev-only-do-not-override-1enej14 css-var-root"
+        >
+          <div
+            class="ant-col ant-form-item-label css-dev-only-do-not-override-1enej14 css-var-root"
+          >
+            <label
+              class=""
+              title="Criteria Type"
+            >
+              Criteria Type
+            </label>
+          </div>
+          <div
+            class="ant-col ant-form-item-control css-dev-only-do-not-override-1enej14 css-var-root"
+          >
+            <div
+              class="ant-form-item-control-input"
+            >
+              <div
+                class="ant-form-item-control-input-content"
+              >
+                <div
+                  class="ant-select ant-select-outlined ant-select-in-form-item css-var-root ant-select-css-var css-dev-only-do-not-override-1enej14 ant-select-single ant-select-show-arrow"
+                >
+                  <div
+                    class="ant-select-content"
+                  >
+                    <div
+                      class="ant-select-placeholder"
+                      style="visibility: visible;"
+                    >
+                      Select type
+                    </div>
+                    <input
+                      aria-autocomplete="list"
+                      aria-expanded="false"
+                      aria-haspopup="listbox"
+                      autocomplete="off"
+                      class="ant-select-input"
+                      id="test-id"
+                      readonly=""
+                      role="combobox"
+                      type="search"
+                      value=""
+                    />
+                  </div>
+                  <div
+                    class="ant-select-suffix"
+                  >
+                    <span
+                      aria-label="down"
+                      class="anticon anticon-down"
+                      role="img"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        data-icon="down"
+                        fill="currentColor"
+                        focusable="false"
+                        height="1em"
+                        viewBox="64 64 896 896"
+                        width="1em"
+                      >
+                        <path
+                          d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"
+                        />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="ant-form-item css-var-root ant-form-css-var css-dev-only-do-not-override-1enej14 ant-form-item-horizontal"
+      >
+        <div
+          class="ant-row ant-form-item-row css-dev-only-do-not-override-1enej14 css-var-root"
+        >
+          <div
+            class="ant-col ant-form-item-label css-dev-only-do-not-override-1enej14 css-var-root"
+          >
+            <label
+              class=""
+              title="Add Text"
+            >
+              Add Text
+            </label>
+          </div>
+          <div
+            class="ant-col ant-form-item-control css-dev-only-do-not-override-1enej14 css-var-root"
+          >
+            <div
+              class="ant-form-item-control-input"
+            >
+              <div
+                class="ant-form-item-control-input-content"
+              >
+                <textarea
+                  class="ant-input css-dev-only-do-not-override-1enej14 ant-input-outlined css-var-root ant-input-css-var"
+                  placeholder="Add description"
+                  rows="3"
+                  style="max-width: 1200px;"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        style="text-align: right;"
+      >
+        <button
+          class="ant-btn css-dev-only-do-not-override-1enej14 css-var-root ant-btn-primary ant-btn-color-primary ant-btn-variant-solid"
+          disabled=""
+          type="button"
+        >
+          <span>
+            Add New Criteria
+          </span>
+        </button>
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="ant-form-item css-var-root ant-form-css-var css-dev-only-do-not-override-1enej14 ant-form-item-horizontal"
+    >
+      <div
+        class="ant-row ant-form-item-row css-dev-only-do-not-override-1enej14 css-var-root"
+      >
+        <div
+          class="ant-col ant-form-item-label css-dev-only-do-not-override-1enej14 css-var-root"
+        >
+          <label
+            class=""
+            title="Criteria Type"
+          >
+            Criteria Type
+          </label>
+        </div>
+        <div
+          class="ant-col ant-form-item-control css-dev-only-do-not-override-1enej14 css-var-root"
+        >
+          <div
+            class="ant-form-item-control-input"
+          >
+            <div
+              class="ant-form-item-control-input-content"
+            >
+              <div
+                class="ant-select ant-select-outlined ant-select-in-form-item css-var-root ant-select-css-var css-dev-only-do-not-override-1enej14 ant-select-single ant-select-show-arrow"
+              >
+                <div
+                  class="ant-select-content"
+                >
+                  <div
+                    class="ant-select-placeholder"
+                    style="visibility: visible;"
+                  >
+                    Select type
+                  </div>
+                  <input
+                    aria-autocomplete="list"
+                    aria-expanded="false"
+                    aria-haspopup="listbox"
+                    autocomplete="off"
+                    class="ant-select-input"
+                    id="test-id"
+                    readonly=""
+                    role="combobox"
+                    type="search"
+                    value=""
+                  />
+                </div>
+                <div
+                  class="ant-select-suffix"
+                >
+                  <span
+                    aria-label="down"
+                    class="anticon anticon-down"
+                    role="img"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      data-icon="down"
+                      fill="currentColor"
+                      focusable="false"
+                      height="1em"
+                      viewBox="64 64 896 896"
+                      width="1em"
+                    >
+                      <path
+                        d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"
+                      />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="ant-form-item css-var-root ant-form-css-var css-dev-only-do-not-override-1enej14 ant-form-item-horizontal"
+    >
+      <div
+        class="ant-row ant-form-item-row css-dev-only-do-not-override-1enej14 css-var-root"
+      >
+        <div
+          class="ant-col ant-form-item-label css-dev-only-do-not-override-1enej14 css-var-root"
+        >
+          <label
+            class=""
+            title="Add Text"
+          >
+            Add Text
+          </label>
+        </div>
+        <div
+          class="ant-col ant-form-item-control css-dev-only-do-not-override-1enej14 css-var-root"
+        >
+          <div
+            class="ant-form-item-control-input"
+          >
+            <div
+              class="ant-form-item-control-input-content"
+            >
+              <textarea
+                class="ant-input css-dev-only-do-not-override-1enej14 ant-input-outlined css-var-root ant-input-css-var"
+                placeholder="Add description"
+                rows="3"
+                style="max-width: 1200px;"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      style="text-align: right;"
+    >
+      <button
+        class="ant-btn css-dev-only-do-not-override-1enej14 css-var-root ant-btn-primary ant-btn-color-primary ant-btn-variant-solid"
+        disabled=""
+        type="button"
+      >
+        <span>
+          Add New Criteria
+        </span>
+      </button>
+    </div>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;
 
 exports[`AddCriteriaForCrossCheck should match shapshot 1`] = `
 {

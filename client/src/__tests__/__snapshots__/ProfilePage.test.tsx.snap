@@ -1,4 +1,57 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ProfilePage > Should render correctly > if full profile info is in the state 1`] = `
+<div>
+  <div
+    class="_loadingScreen_7068aa"
+    data-testid="loading-screen"
+    style="justify-content: center; align-items: center; display: flex; width: 100vw; position: fixed; height: 100vh; background: rgb(255, 255, 255);"
+  >
+    <div
+      aria-busy="true"
+      aria-live="polite"
+      class="ant-spin ant-spin-spinning css-dev-only-do-not-override-1enej14 css-var-root"
+    >
+      <div
+        class="ant-spin-section"
+      >
+        <span
+          class="ant-spin-dot-holder"
+        >
+          <span
+            class="ant-spin-dot ant-spin-dot-spin"
+          >
+            <i
+              class="ant-spin-dot-item"
+            />
+            <i
+              class="ant-spin-dot-item"
+            />
+            <i
+              class="ant-spin-dot-item"
+            />
+            <i
+              class="ant-spin-dot-item"
+            />
+          </span>
+        </span>
+        <div
+          class="ant-spin-description"
+        >
+          Loading...
+        </div>
+      </div>
+      <div
+        class="ant-spin-container"
+      >
+        <div
+          style="padding: 50px;"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
 
 exports[`ProfilePage Should render correctly if full profile info is in the state 1`] = `
 <div>

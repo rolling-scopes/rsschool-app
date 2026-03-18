@@ -4,8 +4,8 @@ import { CourseScheduleItemDto, CourseScheduleItemDtoTagEnum as TagsEnum } from 
 import { TAG_NAME_MAP } from '@client/modules/Schedule/constants';
 
 describe('FilteredTags', () => {
-  const onTagCloseMock = jest.fn();
-  const onClearAllButtonClick = jest.fn();
+  const onTagCloseMock = vi.fn();
+  const onClearAllButtonClick = vi.fn();
 
   it('should not render when tags were not provided', () => {
     render(<FilteredTags tagFilters={[]} onTagClose={onTagCloseMock} onClearAllButtonClick={onClearAllButtonClick} />);

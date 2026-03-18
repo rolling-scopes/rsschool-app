@@ -6,7 +6,7 @@ import { MentorshipSection } from './MentorshipSection';
 const renderMentorshipSection = () => {
   render(
     <Form>
-      <MentorshipSection courses={[]} disciplines={[]} onPrevious={jest.fn()} />
+      <MentorshipSection courses={[]} disciplines={[]} onPrevious={vi.fn()} />
     </Form>,
   );
 };
