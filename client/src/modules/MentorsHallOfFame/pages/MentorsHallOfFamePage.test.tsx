@@ -2,12 +2,14 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TopMentorDto } from '@client/api';
 
-jest.mock('next/config', () => () => ({}));
-const mockedGetTopMentors = jest.fn();
-jest.mock('../services/mentors-hall-of-fame.service', () => ({
-  MentorsHallOfFameService: jest.fn().mockImplementation(() => ({
-    getTopMentors: (...args: unknown[]) => mockedGetTopMentors(...args),
-  })),
+vi.mock('next/config', () => () => ({}));
+const mockedGetTopMentors = vi.fn();
+vi.mock('../services/mentors-hall-of-fame.service', () => ({
+  MentorsHallOfFameService: class {
+    getTopMentors(...args: unknown[]) {
+      return mockedGetTopMentors(...args);
+    }
+  },
 }));
 
 import { MentorsHallOfFamePage } from './MentorsHallOfFamePage';
@@ -36,7 +38,7 @@ const allTimeMentors: TopMentorDto[] = [
 
 describe('MentorsHallOfFamePage', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockedGetTopMentors.mockReset();
     mockedGetTopMentors.mockResolvedValue([]);
   });
@@ -127,7 +129,7 @@ describe('MentorsHallOfFamePage', () => {
   });
 
   it('handles request error and shows empty state', async () => {
-    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation();
     mockedGetTopMentors.mockRejectedValueOnce(new Error('Request failed'));
 
     render(<MentorsHallOfFamePage />);

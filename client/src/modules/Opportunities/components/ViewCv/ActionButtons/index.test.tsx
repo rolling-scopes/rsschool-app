@@ -3,15 +3,15 @@ import { ActionButtons } from './index';
 
 const mockUrl = 'https://example.com';
 
-const mockSwitchView = jest.fn();
-const mockCopyToClipboard = jest.fn();
-const mockOnRemoveConsent = jest.fn();
-jest.mock('react-use', () => ({
-  useCopyToClipboard: () => [jest.fn(), mockCopyToClipboard],
+const mockSwitchView = vi.fn();
+const mockCopyToClipboard = vi.fn();
+const mockOnRemoveConsent = vi.fn();
+vi.mock('react-use', () => ({
+  useCopyToClipboard: () => [vi.fn(), mockCopyToClipboard],
 }));
 
-const mockSuccessNotification = jest.fn();
-jest.mock('hooks', () => ({
+const mockSuccessNotification = vi.fn();
+vi.mock('@client/hooks', () => ({
   useMessage: () => ({
     notification: {
       success: mockSuccessNotification,
@@ -21,7 +21,7 @@ jest.mock('hooks', () => ({
 
 describe('ActionButtons', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should have Edit, Share, Delete buttons', () => {

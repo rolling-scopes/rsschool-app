@@ -1,9 +1,9 @@
 import { getRating, isInterviewRegistrationInProgress, isInterviewStarted } from './interview';
 
 describe('interview', () => {
-  beforeAll(() => jest.useFakeTimers().setSystemTime(new Date('2023-01-01')));
+  beforeAll(() => vi.useFakeTimers().setSystemTime(new Date('2023-01-01')));
 
-  afterAll(() => jest.useRealTimers());
+  afterAll(() => vi.useRealTimers());
 
   describe('isInterviewRegistrationInProgess', () => {
     test('should return false if interview period starts more than in 2 weeks from now', () => {

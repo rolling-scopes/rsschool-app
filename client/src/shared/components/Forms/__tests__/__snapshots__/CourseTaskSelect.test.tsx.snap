@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`CourseTaskSelect Should render correctly if groupBy is cross-check deadline 1`] = `
+exports[`CourseTaskSelect > Should render correctly > if groupBy is cross-check deadline 1`] = `
 <body>
   <div>
     <form
@@ -91,7 +91,7 @@ exports[`CourseTaskSelect Should render correctly if groupBy is cross-check dead
 </body>
 `;
 
-exports[`CourseTaskSelect Should render correctly if groupBy is deadline 1`] = `
+exports[`CourseTaskSelect > Should render correctly > if groupBy is deadline 1`] = `
 <body>
   <div>
     <form
@@ -183,7 +183,7 @@ exports[`CourseTaskSelect Should render correctly if groupBy is deadline 1`] = `
 </body>
 `;
 
-exports[`CourseTaskSelect Should render correctly if groupBy is default 1`] = `
+exports[`CourseTaskSelect > Should render correctly > if groupBy is default 1`] = `
 <body>
   <div>
     <form

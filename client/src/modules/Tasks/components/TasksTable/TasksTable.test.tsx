@@ -6,7 +6,7 @@ import { ColumnName } from '@client/modules/Tasks/types';
 import { TASK_TYPES } from '@client/data/taskTypes';
 import { COURSE_NAME_MOCK, generateTasksData } from '@client/modules/Tasks/utils/test-utils';
 
-const renderTasksTable = (data: TaskDto[] = generateTasksData(1), handleEditItem = jest.fn()) => {
+const renderTasksTable = (data: TaskDto[] = generateTasksData(1), handleEditItem = vi.fn()) => {
   render(<TasksTable data={data} handleEditItem={handleEditItem} />);
 };
 
@@ -74,7 +74,7 @@ describe('TasksTable', () => {
   });
 
   test('should call handleEditItem on "Edit" click with proper record', () => {
-    const handleEditItem = jest.fn();
+    const handleEditItem = vi.fn();
     const data = generateTasksData();
 
     renderTasksTable(data, handleEditItem);

@@ -5,12 +5,12 @@ describe('AboutCard', () => {
   describe('Should render correctly', () => {
     it('if "data" is present', () => {
       const { container } = render(
-        <AboutCard data={'Top contributor of Rolling Scopes'} isEditingModeEnabled={false} updateProfile={jest.fn()} />,
+        <AboutCard data={'Top contributor of Rolling Scopes'} isEditingModeEnabled={false} updateProfile={vi.fn()} />,
       );
       expect(container).toMatchSnapshot();
     });
     it('if "data" is not present', () => {
-      const { container } = render(<AboutCard data={''} isEditingModeEnabled={false} updateProfile={jest.fn()} />);
+      const { container } = render(<AboutCard data={''} isEditingModeEnabled={false} updateProfile={vi.fn()} />);
 
       expect(container).toMatchSnapshot();
     });

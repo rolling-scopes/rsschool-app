@@ -1,10 +1,10 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ProfileSettingsModal should render correctly 1`] = `
+exports[`ProfileSettingsModal > should render correctly 1`] = `
 <div
   aria-labelledby="test-id"
   aria-modal="true"
-  class="ant-modal css-dev-only-do-not-override-1enej14 modal ant-zoom-appear ant-zoom-appear-prepare ant-zoom"
+  class="ant-modal css-dev-only-do-not-override-1enej14 _modal_0afd3f ant-zoom-appear ant-zoom-appear-prepare ant-zoom"
   role="dialog"
   style="width: 520px;"
   tabindex="-1"

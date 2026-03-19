@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`PublicFeedbackCard should render correctly 1`] = `
+exports[`PublicFeedbackCard > should render correctly 1`] = `
 <div>
   <div
     class="ant-card ant-card-bordered css-dev-only-do-not-override-1enej14 css-var-root"

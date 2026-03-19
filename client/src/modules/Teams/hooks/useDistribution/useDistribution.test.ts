@@ -4,9 +4,9 @@ import { TeamDistributionApi, TeamDistributionDetailedDto } from '@client/api';
 import { useDistribution } from './useDistribution';
 import { AxiosResponse } from 'axios';
 
-jest.mock('antd', () => ({
+vi.mock('antd', () => ({
   message: {
-    error: jest.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -22,7 +22,7 @@ describe('useDistribution', () => {
   });
 
   it('should set loading to false and update distribution when getCourseTeamDistributionDetailed is successful', async () => {
-    jest.spyOn(TeamDistributionApi.prototype, 'getCourseTeamDistributionDetailed').mockResolvedValue({
+    vi.spyOn(TeamDistributionApi.prototype, 'getCourseTeamDistributionDetailed').mockResolvedValue({
       status: 200,
       statusText: 'OK',
       headers: {},
@@ -41,7 +41,7 @@ describe('useDistribution', () => {
   });
 
   it('should set loading to false and call message.error when getCourseTeamDistributionDetailed fails', async () => {
-    jest.spyOn(TeamDistributionApi.prototype, 'getCourseTeamDistributionDetailed').mockRejectedValueOnce(null);
+    vi.spyOn(TeamDistributionApi.prototype, 'getCourseTeamDistributionDetailed').mockRejectedValueOnce(null);
     const { result } = renderHook(() => useDistribution(courseId, mockDistributionData.id));
 
     await act(async () => {

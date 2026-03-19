@@ -1,13 +1,13 @@
 import { MentorsHallOfFameApi, TopMentorDto } from '@client/api';
 import { MentorsHallOfFameService } from './mentors-hall-of-fame.service';
 
-jest.mock('api');
+vi.mock('@client/api');
 
 describe('MentorsHallOfFameService', () => {
-  const getTopMentorsApiMock = MentorsHallOfFameApi.prototype.getTopMentors as jest.Mock;
+  const getTopMentorsApiMock = vi.mocked(MentorsHallOfFameApi.prototype.getTopMentors);
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('calls API with provided allTime parameter', async () => {

@@ -3,7 +3,7 @@ import { UserData } from '@client/modules/Opportunities/models';
 import { getPersonalToRender } from '@client/modules/Opportunities/data/getPersonalToRender';
 import { PersonalSection } from './index';
 
-jest.mock('modules/Opportunities/data/getPersonalToRender');
+vi.mock('@client/modules/Opportunities/data/getPersonalToRender');
 
 describe('PersonalSection', () => {
   test('should display nothing if user data is not provided', () => {
@@ -26,7 +26,7 @@ describe('PersonalSection', () => {
         value: 'Value 3',
       },
     ];
-    (getPersonalToRender as jest.Mock).mockReturnValue(mockData);
+    vi.mocked(getPersonalToRender).mockReturnValue(mockData);
 
     render(<PersonalSection user={{} as UserData} />);
 

@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`CommonCardWithSettingsModal Should render correctly if just basic props are present 1`] = `
+exports[`CommonCardWithSettingsModal > Should render correctly > if just basic props are present 1`] = `
 <div>
   <div
     class="ant-card ant-card-bordered css-dev-only-do-not-override-1enej14 css-var-root"
@@ -60,7 +60,7 @@ exports[`CommonCardWithSettingsModal Should render correctly if just basic props
 </div>
 `;
 
-exports[`CommonCardWithSettingsModal Should render correctly if null content is passed and editing mode is disabled 1`] = `
+exports[`CommonCardWithSettingsModal > Should render correctly > if null content is passed and editing mode is disabled 1`] = `
 <div>
   <div
     class="ant-card ant-card-bordered css-dev-only-do-not-override-1enej14 css-var-root"

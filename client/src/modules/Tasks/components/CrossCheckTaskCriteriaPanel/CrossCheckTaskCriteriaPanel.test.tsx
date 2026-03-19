@@ -6,7 +6,7 @@ import { CrossCheckTaskCriteriaPanel } from './CrossCheckTaskCriteriaPanel';
 
 const criteriaMock: CriteriaDto = { type: 'title', text: 'Title', key: 'key', index: 1 };
 
-const renderPanel = (dataCriteria: CriteriaDto[] = [], setDataCriteria = jest.fn()) => {
+const renderPanel = (dataCriteria: CriteriaDto[] = [], setDataCriteria = vi.fn()) => {
   render(
     <Form>
       <CrossCheckTaskCriteriaPanel dataCriteria={dataCriteria} setDataCriteria={setDataCriteria} />

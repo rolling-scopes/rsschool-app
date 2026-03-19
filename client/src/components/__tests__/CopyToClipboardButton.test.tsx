@@ -2,24 +2,24 @@ import { act, render, screen } from '@testing-library/react';
 import CopyToClipboardButton from '@client/shared/components/CopyToClipboardButton';
 import { useCopyToClipboard } from 'react-use';
 
-jest.mock('hooks', () => ({
+vi.mock('@client/hooks', () => ({
   useMessage: () => ({
     message: { success: mockSuccess },
   }),
 }));
 
-jest.mock('react-use', () => ({
-  useCopyToClipboard: jest.fn(),
+vi.mock('react-use', () => ({
+  useCopyToClipboard: vi.fn(),
 }));
 
 const TEST_VALUE = 'test-value';
 
-const mockSuccess = jest.fn();
-const mockCopyToClipboard = jest.fn();
+const mockSuccess = vi.fn();
+const mockCopyToClipboard = vi.fn();
 
 describe('CopyToClipboardButton', () => {
   beforeEach(() => {
-    (useCopyToClipboard as jest.Mock).mockReturnValue([null, mockCopyToClipboard]);
+    vi.mocked(useCopyToClipboard).mockReturnValue([null, mockCopyToClipboard]);
   });
 
   it('should render with default style', () => {

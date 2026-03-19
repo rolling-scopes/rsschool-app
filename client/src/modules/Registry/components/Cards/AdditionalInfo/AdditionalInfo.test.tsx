@@ -24,9 +24,9 @@ const mockValues = {
 
 type Values = typeof mockValues;
 
-const previousHandler = jest.fn();
-const submitHandler = jest.fn();
-const submitFailedHandler = jest.fn();
+const previousHandler = vi.fn();
+const submitHandler = vi.fn();
+const submitFailedHandler = vi.fn();
 
 const renderAdditionalInfo = (values: Values) =>
   render(
@@ -37,7 +37,7 @@ const renderAdditionalInfo = (values: Values) =>
 
 describe('AdditionalInfo', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   const user = userEvent.setup();

@@ -17,9 +17,9 @@ describe('ContactsCard', () => {
             whatsApp: '1234567890',
           }}
           isEditingModeEnabled={false}
-          sendConfirmationEmail={jest.fn()}
+          sendConfirmationEmail={vi.fn()}
           connections={{}}
-          updateProfile={jest.fn()}
+          updateProfile={vi.fn()}
         />,
       );
       expect(container).toMatchSnapshot();
@@ -38,9 +38,9 @@ describe('ContactsCard', () => {
             whatsApp: '1234567890',
           }}
           isEditingModeEnabled={true}
-          sendConfirmationEmail={jest.fn()}
+          sendConfirmationEmail={vi.fn()}
           connections={{}}
-          updateProfile={jest.fn()}
+          updateProfile={vi.fn()}
         />,
       );
       expect(container).toMatchSnapshot();

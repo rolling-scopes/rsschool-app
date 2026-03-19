@@ -5,8 +5,8 @@ import * as ReactUse from 'react-use';
 
 const props = {
   courseId: 1,
-  onSubmit: jest.fn(),
-  onClose: jest.fn(),
+  onSubmit: vi.fn(),
+  onClose: vi.fn(),
   isModalOpen: true,
 };
 
@@ -17,7 +17,7 @@ const renderExpelCriteriaModal = () => {
 describe('ExpelCriteriaModal', () => {
   beforeAll(() => {
     // mock CoursesTasksApi call
-    jest.spyOn(ReactUse, 'useAsync').mockReturnValue({
+    vi.spyOn(ReactUse, 'useAsync').mockReturnValue({
       value: [
         {
           name: 'course 1',
@@ -29,7 +29,7 @@ describe('ExpelCriteriaModal', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   const user = userEvent.setup();

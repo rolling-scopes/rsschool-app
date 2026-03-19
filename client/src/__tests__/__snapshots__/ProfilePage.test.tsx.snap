@@ -1,9 +1,9 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ProfilePage Should render correctly if full profile info is in the state 1`] = `
+exports[`ProfilePage > Should render correctly > if full profile info is in the state 1`] = `
 <div>
   <div
-    class="loadingScreen"
+    class="_loadingScreen_7068aa"
     data-testid="loading-screen"
     style="justify-content: center; align-items: center; display: flex; width: 100vw; position: fixed; height: 100vh; background: rgb(255, 255, 255);"
   >

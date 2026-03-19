@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = `
+exports[`ContactsCard > Should render correctly > if editing mode is disabled 1`] = `
 <div>
   <div
     class="ant-card ant-card-bordered css-dev-only-do-not-override-1enej14 css-var-root"
@@ -192,7 +192,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
 </div>
 `;
 
-exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
+exports[`ContactsCard > Should render correctly > if editing mode is enabled 1`] = `
 <div>
   <div
     class="ant-card ant-card-bordered css-dev-only-do-not-override-1enej14 css-var-root"

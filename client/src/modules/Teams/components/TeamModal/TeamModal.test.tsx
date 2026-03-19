@@ -1,8 +1,8 @@
 import { screen, render, fireEvent } from '@testing-library/react';
 import TeamModal from './TeamModal';
 
-const onSubmit = jest.fn();
-const onCancel = jest.fn();
+const onSubmit = vi.fn();
+const onCancel = vi.fn();
 
 function renderModal() {
   return render(

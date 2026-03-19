@@ -25,7 +25,7 @@ const rejectedMock: AxiosError = {
 
 describe('useSubmitTaskSolution', () => {
   it('should show modal with course tasks', async () => {
-    jest.spyOn(CoursesTasksApi.prototype, 'getCourseTasksWithStudentSolution').mockResolvedValue({
+    vi.spyOn(CoursesTasksApi.prototype, 'getCourseTasksWithStudentSolution').mockResolvedValue({
       ...resolvedMock,
       data: generateCourseTasks(),
     });
@@ -39,7 +39,7 @@ describe('useSubmitTaskSolution', () => {
   });
 
   it('should save solution', async () => {
-    jest.spyOn(CoursesTaskSolutionsApi.prototype, 'createTaskSolution').mockResolvedValue(resolvedMock);
+    vi.spyOn(CoursesTaskSolutionsApi.prototype, 'createTaskSolution').mockResolvedValue(resolvedMock);
     const { result } = renderHook(() => useSubmitTaskSolution(COURSE_ID));
 
     await act(async () => {
@@ -61,7 +61,7 @@ describe('useSubmitTaskSolution', () => {
 
   describe('should show error', () => {
     it('when getCourseTasksWithStudentSolution request failed', async () => {
-      jest.spyOn(CoursesTasksApi.prototype, 'getCourseTasksWithStudentSolution').mockRejectedValue(rejectedMock);
+      vi.spyOn(CoursesTasksApi.prototype, 'getCourseTasksWithStudentSolution').mockRejectedValue(rejectedMock);
       const { result } = renderHook(() => useSubmitTaskSolution(COURSE_ID));
 
       await act(async () => {
@@ -72,7 +72,7 @@ describe('useSubmitTaskSolution', () => {
     });
 
     it('when createTaskSolution request failed', async () => {
-      jest.spyOn(CoursesTaskSolutionsApi.prototype, 'createTaskSolution').mockRejectedValue(rejectedMock);
+      vi.spyOn(CoursesTaskSolutionsApi.prototype, 'createTaskSolution').mockRejectedValue(rejectedMock);
       const { result } = renderHook(() => useSubmitTaskSolution(COURSE_ID));
 
       await act(async () => {

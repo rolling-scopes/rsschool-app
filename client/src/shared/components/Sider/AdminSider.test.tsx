@@ -7,14 +7,14 @@ import { Session } from '@client/components/withSession';
 import { getAdminMenuItems, getCourseManagementMenuItems } from './data/menuItems';
 import router from 'next/router';
 
-jest.mock('next/router', () => ({
+vi.mock('next/router', () => ({
   __esModule: true,
   default: {
-    push: jest.fn(),
+    push: vi.fn(),
   },
 }));
-jest.mock('react-use');
-jest.mock('./data/menuItems');
+vi.mock('react-use');
+vi.mock('./data/menuItems');
 
 describe('AdminSider', () => {
   const mockCourses: Course[] = [
@@ -71,15 +71,15 @@ describe('AdminSider', () => {
   ];
 
   beforeEach(() => {
-    (useLocalStorage as jest.Mock).mockImplementation(key => {
-      if (key === 'isSiderCollapsed') return [false, jest.fn()];
-      if (key === 'openedSidebarItems') return [[], jest.fn()];
-      return [undefined, jest.fn()];
+    vi.mocked(useLocalStorage).mockImplementation(key => {
+      if (key === 'isSiderCollapsed') return [false, vi.fn()];
+      if (key === 'openedSidebarItems') return [[], vi.fn()];
+      return [undefined, vi.fn()];
     });
 
-    (getAdminMenuItems as jest.Mock).mockReturnValue(mockAdminMenuItems);
-    (getCourseManagementMenuItems as jest.Mock).mockReturnValue(mockCourseMenuItems);
-    (router.push as jest.Mock).mockClear();
+    vi.mocked(getAdminMenuItems).mockReturnValue(mockAdminMenuItems);
+    vi.mocked(getCourseManagementMenuItems).mockReturnValue(mockCourseMenuItems);
+    vi.mocked(router.push).mockClear();
   });
 
   const renderComponent = (props = {}) => {
@@ -100,11 +100,11 @@ describe('AdminSider', () => {
   });
 
   it('handles sidebar collapse toggle', () => {
-    const setIsSiderCollapsed = jest.fn();
+    const setIsSiderCollapsed = vi.fn();
 
-    (useLocalStorage as jest.Mock).mockImplementation(key => {
+    vi.mocked(useLocalStorage).mockImplementation(key => {
       if (key === 'isSiderCollapsed') return [false, setIsSiderCollapsed];
-      return [undefined, jest.fn()];
+      return [undefined, vi.fn()];
     });
 
     renderComponent();

@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`getPersonalToRender should correctly handle missing values 1`] = `
+exports[`getPersonalToRender > should correctly handle missing values 1`] = `
 [
   {
     "title": "English",
@@ -29,7 +29,7 @@ exports[`getPersonalToRender should correctly handle missing values 1`] = `
 ]
 `;
 
-exports[`getPersonalToRender should return correct data in case all values are present 1`] = `
+exports[`getPersonalToRender > should return correct data in case all values are present 1`] = `
 [
   {
     "title": "English",
