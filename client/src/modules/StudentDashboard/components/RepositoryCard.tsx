@@ -1,6 +1,6 @@
 import { GithubFilled, WarningTwoTone } from '@ant-design/icons';
-import { Button, Col, Modal, Row, Spin, theme, Typography } from 'antd';
-import { useLoading } from '@client/components/useLoading';
+import { Button, Col, message, Modal, Row, Spin, theme, Typography } from 'antd';
+import { useRequest } from 'ahooks';
 import CommonCard from './CommonDashboardCard';
 
 type Props = {
@@ -17,7 +17,22 @@ export function RepositoryCard(props: Props) {
   const { url, githubId, onSendInviteRepository, onUpdateUrl } = props;
   const repoName = getGithubRepoName(url);
   const hasRepo = !!url;
-  const [loading, withLoading] = useLoading(false);
+  const submitRequest = useRequest(
+    async () => {
+      await onSendInviteRepository(githubId);
+      const shouldShowInformation = !hasRepo;
+      if (shouldShowInformation) {
+        showInformation();
+      }
+      onUpdateUrl();
+    },
+    {
+      manual: true,
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
+  );
   const [modal, contextHolder] = Modal.useModal();
   const { token } = theme.useToken();
 
@@ -48,17 +63,8 @@ export function RepositoryCard(props: Props) {
     });
   };
 
-  const handleSubmit = withLoading(async () => {
-    await onSendInviteRepository(githubId);
-    const shouldShowInformation = !hasRepo;
-    if (shouldShowInformation) {
-      showInformation();
-    }
-    onUpdateUrl();
-  });
-
   return (
-    <Spin spinning={loading}>
+    <Spin spinning={submitRequest.loading}>
       {contextHolder}
       <CommonCard
         title="Your repository"
@@ -82,7 +88,7 @@ export function RepositoryCard(props: Props) {
                     </Text>
                   </div>
                 )}
-                <Button style={{ marginBottom: 7 }} type={url ? 'default' : 'primary'} onClick={handleSubmit}>
+                <Button style={{ marginBottom: 7 }} type={url ? 'default' : 'primary'} onClick={submitRequest.runAsync}>
                   {url ? 'Fix repository' : 'Create repository'}
                 </Button>
               </Col>

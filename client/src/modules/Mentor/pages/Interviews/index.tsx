@@ -1,8 +1,8 @@
-import { CoursesInterviewsApi, InterviewDto, TaskDtoTypeEnum } from '@client/api';
+import { CoursesInterviewsApi, TaskDtoTypeEnum } from '@client/api';
+import { useRequest } from 'ahooks';
+import { message } from 'antd';
 import { PageLayout } from '@client/shared/components/PageLayout';
-import { useLoading } from '@client/components/useLoading';
-import { useCallback, useState, useContext } from 'react';
-import { useAsync } from 'react-use';
+import { useCallback, useContext, useState } from 'react';
 import { CourseService, MentorInterview } from '@client/services/course';
 import { InterviewCard } from './components/InterviewCard';
 import { MentorOptionsProvider } from './components/MentorPreferencesModal';
@@ -14,31 +14,36 @@ import styles from './index.module.css';
 export function Interviews() {
   const session = useContext(SessionContext);
   const { course } = useActiveCourseContext();
-  const [interviews, setInterviews] = useState<InterviewDto[]>([]);
   const [interviewsByTask, setInterviewsByTask] = useState<Dictionary<MentorInterview[]>>({});
-  const [loading, withLoading] = useLoading();
 
   const fetchStudentInterviews = useCallback(async () => {
     const interviews = await new CourseService(course.id).getMentorInterviews(session.githubId);
     setInterviewsByTask(groupBy(interviews, 'name'));
   }, [course.id, session.githubId]);
 
-  const loadData = async () => {
-    const [{ data }] = await Promise.all([
-      new CoursesInterviewsApi().getInterviews(course.id, false, [
-        TaskDtoTypeEnum.Interview,
-        TaskDtoTypeEnum.StageInterview,
-      ]),
-      fetchStudentInterviews(),
-    ]);
+  const interviewsRequest = useRequest(
+    async () => {
+      const [{ data }] = await Promise.all([
+        new CoursesInterviewsApi().getInterviews(course.id, false, [
+          TaskDtoTypeEnum.Interview,
+          TaskDtoTypeEnum.StageInterview,
+        ]),
+        fetchStudentInterviews(),
+      ]);
 
-    setInterviews(data);
-  };
-
-  useAsync(withLoading(loadData), []);
+      return data;
+    },
+    {
+      refreshDeps: [course.id, fetchStudentInterviews],
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
+  );
+  const interviews = interviewsRequest.data ?? [];
 
   return (
-    <PageLayout loading={loading} title="Interviews" showCourseName>
+    <PageLayout loading={interviewsRequest.loading} title="Interviews" showCourseName>
       <MentorOptionsProvider course={course} session={session}>
         <div className={styles.container}>
           {interviews.map(interviewTask => (

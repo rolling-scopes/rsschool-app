@@ -1,8 +1,7 @@
 import { Alert, Checkbox, Form, Select, Space, Spin } from 'antd';
-import { useAsync } from 'react-use';
+import { useRequest } from 'ahooks';
 import { InviteMentorsDto } from '@client/api';
 import { ModalForm } from '@client/shared/components/Forms';
-import { useLoading } from '@client/components/useLoading';
 import ReactQuill from 'react-quill';
 import { MentorRegistryService } from '@client/services/mentorRegistry';
 import { DisciplinesApi } from '@client/api';
@@ -18,20 +17,34 @@ const disciplinesApi = new DisciplinesApi();
 
 function InviteMentorsModal({ onCancel }: Props) {
   const { message } = useMessage();
-  const [loading, withLoading] = useLoading(false);
-  const submit = withLoading(async (data: InviteMentorsDto) => {
-    await mentorRegistryService.inviteMentors(data);
-    message.success('Invitation successfully send.');
-    onCancel();
-  });
+  const submitRequest = useRequest(
+    async (data: InviteMentorsDto) => {
+      await mentorRegistryService.inviteMentors(data);
+      message.success('Invitation successfully send.');
+      onCancel();
+    },
+    {
+      manual: true,
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
+  );
 
-  const { loading: disciplinesLoading, value: disciplines = [] } = useAsync(async () => {
+  const disciplinesRequest = useRequest(async () => {
     const { data } = await disciplinesApi.getDisciplines();
     return data;
-  }, []);
+  });
+  const disciplines = disciplinesRequest.data ?? [];
 
   return (
-    <ModalForm data={{}} title="Invite as a Mentor" submit={submit} cancel={onCancel} loading={loading}>
+    <ModalForm
+      data={{}}
+      title="Invite as a Mentor"
+      submit={submitRequest.runAsync}
+      cancel={onCancel}
+      loading={submitRequest.loading}
+    >
       <Space direction="vertical" style={{ width: '100%' }}>
         <Alert showIcon message="Invitation will be send to all mentors meeting the criteria below." type="info" />
         <Form.Item
@@ -43,7 +56,7 @@ function InviteMentorsModal({ onCancel }: Props) {
           <Select
             mode="multiple"
             optionFilterProp="children"
-            notFoundContent={disciplinesLoading ? <Spin size="small" /> : null}
+            notFoundContent={disciplinesRequest.loading ? <Spin size="small" /> : null}
           >
             {disciplines.map(discipline => (
               <Select.Option key={discipline.id} value={discipline.id}>

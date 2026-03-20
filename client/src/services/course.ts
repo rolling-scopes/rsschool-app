@@ -557,8 +557,8 @@ export class CourseService {
     return result.data.data as InterviewPair[];
   }
 
-  async cancelInterviewPair(interviewId: string, pairId: string) {
-    const result = await this.axios.delete(`/interviews/${interviewId}/${pairId}`);
+  async cancelInterviewPair(interviewId: string | number, pairId: string) {
+    const result = await this.axios.delete(`/interviews/${String(interviewId)}/${pairId}`);
     return result.data.data;
   }
 

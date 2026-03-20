@@ -1,4 +1,5 @@
-import { Button, Row, Select, Table, Popconfirm } from 'antd';
+import { Button, message, Row, Select, Table, Popconfirm } from 'antd';
+import { useRequest } from 'ahooks';
 import { StudentMentorModal } from '@client/shared/components/StudentMentorModal';
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import {
@@ -8,14 +9,12 @@ import {
   PersonCell,
   numberSorter,
 } from '@client/shared/components/Table';
-import { useLoading } from '@client/components/useLoading';
 import { useMemo, useState, useContext } from 'react';
 import { CourseService } from '@client/services/course';
 import { CourseRole } from '@client/services/models';
-import { useAsync } from 'react-use';
 import { isCourseManager } from '@client/domain/user';
 import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
-import { CoursesInterviewsApi, InterviewDto, InterviewPairDto } from '@client/api';
+import { CoursesInterviewsApi, InterviewPairDto } from '@client/api';
 
 const coursesInterviewsApi = new CoursesInterviewsApi();
 
@@ -24,75 +23,105 @@ function Page() {
   const { course, courses } = useActiveCourseContext();
   const courseId = course.id;
 
-  const [loading, withLoading] = useLoading(false);
-  const [interviews, setInterviews] = useState<InterviewDto[]>([]);
-
-  const [data, setData] = useState([] as InterviewPairDto[]);
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selected, setSelected] = useState<number | null>(null);
   const [modal, setModal] = useState(false);
+
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
-
   const courseManagerRole = useMemo(() => isCourseManager(session, courseId), [course, session]);
+  const hasSelectedInterview = selected != null;
 
-  const loadInterviews = async () => {
-    const { data: interviews } = await coursesInterviewsApi.getInterviews(courseId);
-    const filtered = interviews.filter(({ type }) => type === 'interview');
-    setInterviews(filtered);
-    setSelected(filtered[0]?.id.toString() ?? null);
-  };
+  const interviewsRequest = useRequest(
+    async () => {
+      const { data: interviews } = await coursesInterviewsApi.getInterviews(courseId);
+      const filtered = interviews
+        .filter(({ type }) => type === 'interview')
+        .map(({ id, name }) => ({ label: name, value: id }));
+      return filtered;
+    },
+    {
+      onSuccess: data => setSelected(data[0]?.value ?? null),
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
+  );
 
-  const deleteInterview = withLoading(async (record: InterviewPairDto) => {
-    await courseService.cancelInterviewPair(selected!, String(record.id));
-    const filtered = data.filter(d => d.id !== record.id);
-    setData(filtered);
-  });
-
-  const loadData = async () => {
-    if (selected) {
+  const interviewPairsRequest = useRequest(
+    async () => {
       const { data } = await coursesInterviewsApi.getInterviewPairs(Number(selected), courseId);
-      setData(data);
-    }
-  };
+      return data;
+    },
+    {
+      ready: hasSelectedInterview,
+      refreshDeps: [selected],
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
+  );
 
-  const createInterviews = withLoading(async () => {
-    if (selected) {
-      const courseTaskId = Number(selected);
-      const isInterviewsIncludesSelected = interviews.map(({ id }) => id).includes(courseTaskId);
+  const deleteInterviewRequest = useRequest(
+    async (selected: number, record: InterviewPairDto) =>
+      courseService.cancelInterviewPair(selected, String(record.id)),
+    {
+      manual: true,
+      onSuccess: () => interviewPairsRequest.runAsync(),
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
+  );
 
-      if (isInterviewsIncludesSelected) {
-        await courseService.createInterviewDistribution(courseTaskId);
-        await loadData();
-      }
-    }
-  });
+  const createInterviewsRequest = useRequest(
+    async (selected: number) => courseService.createInterviewDistribution(selected),
+    {
+      ready: hasSelectedInterview,
+      manual: true,
+      onSuccess: () => interviewPairsRequest.runAsync(),
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
+  );
 
-  useAsync(withLoading(loadData), [selected]);
+  const addInterviewPairRequest = useRequest(
+    async (studentGithubId: string, mentorGithubId: string) => {
+      await courseService.addInterviewPair(String(selected), mentorGithubId, studentGithubId);
+      await interviewPairsRequest.runAsync();
+      setModal(false);
+    },
+    {
+      manual: true,
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
+  );
 
-  useAsync(withLoading(loadInterviews), []);
+  const loading =
+    deleteInterviewRequest.loading ||
+    interviewPairsRequest.loading ||
+    createInterviewsRequest.loading ||
+    interviewsRequest.loading ||
+    addInterviewPairRequest.loading;
 
   return (
     <AdminPageLayout loading={loading} title="Interviews" showCourseName courses={courses}>
       <Row style={{ marginBottom: 16, gap: 16 }} justify="space-between">
         <Row style={{ gap: 16 }}>
-          <Select value={selected!} onChange={(value: string) => setSelected(value)} style={{ minWidth: 300 }}>
-            {interviews.map(interview => (
-              <Select.Option value={interview.id.toString()} key={interview.id.toString()}>
-                {interview.name}
-              </Select.Option>
-            ))}
-          </Select>
+          <Select value={selected} options={interviewsRequest.data} onChange={setSelected} style={{ minWidth: 300 }} />
           {courseManagerRole ? (
             <div>
               <Popconfirm
-                onConfirm={() => createInterviews()}
+                onConfirm={() => createInterviewsRequest.run(selected!)}
                 title="Do you want to create interview pairs for not distributed students?"
               >
-                <Button>Create Interview Pairs</Button>
+                <Button disabled={!hasSelectedInterview}>Create Interview Pairs</Button>
               </Popconfirm>
             </div>
           ) : null}
         </Row>
-        <Button type="primary" onClick={() => setModal(true)}>
+        <Button type="primary" disabled={!hasSelectedInterview} onClick={() => setModal(true)}>
           Create
         </Button>
       </Row>
@@ -101,7 +130,7 @@ function Page() {
         pagination={{ defaultPageSize: 50 }}
         size="small"
         rowKey="id"
-        dataSource={data}
+        dataSource={interviewPairsRequest.data}
         columns={[
           {
             fixed: 'left',
@@ -137,7 +166,7 @@ function Page() {
             render: (_, record) => {
               if (isCourseManager(session, course.id)) {
                 return (
-                  <Button type="link" onClick={() => deleteInterview(record)}>
+                  <Button type="link" onClick={() => deleteInterviewRequest.run(selected!, record)}>
                     Cancel
                   </Button>
                 );
@@ -149,11 +178,7 @@ function Page() {
       />
 
       <StudentMentorModal
-        onOk={withLoading(async (studentGithubId, mentorGithubId) => {
-          await courseService.addInterviewPair(selected!, mentorGithubId, studentGithubId);
-          await loadData();
-          setModal(false);
-        })}
+        onOk={addInterviewPairRequest.run}
         onCancel={() => setModal(false)}
         visible={modal}
         courseId={course.id}

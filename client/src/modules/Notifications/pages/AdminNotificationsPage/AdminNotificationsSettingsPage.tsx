@@ -1,8 +1,7 @@
 import { useState, useMemo, useCallback, ReactNode } from 'react';
+import { useRequest } from 'ahooks';
 import { Button, Spin } from 'antd';
 import { NotificationsService } from '@client/modules/Notifications/services/notifications';
-import { useLoading } from '@client/components/useLoading';
-import { useAsync } from 'react-use';
 import { NotificationSettingsTable } from '@client/modules/Notifications/components/NotificationSettingsTable';
 import { NotificationSettingsModal } from '@client/modules/Notifications/components/NotificationSettingsModal';
 import { NotificationDto } from '@client/api';
@@ -10,19 +9,14 @@ import { useMessage } from '@client/hooks';
 
 export function AdminNotificationsPage() {
   const { message } = useMessage();
-  const [notifications, setNotifications] = useState<NotificationDto[]>([]);
-  const [loading, withLoading] = useLoading(false);
   const service = useMemo(() => new NotificationsService(), []);
   const [modal, setModal] = useState<ReactNode>();
-
-  const loadData = useCallback(
-    withLoading(async () => {
-      setNotifications(await service.getNotifications());
-    }),
-    [],
-  );
-
-  useAsync(loadData, []);
+  const notificationsRequest = useRequest(async () => service.getNotifications(), {
+    onError: () => {
+      message.error('An unexpected error occurred. Please try later.');
+    },
+  });
+  const notifications = notificationsRequest.data ?? [];
 
   const edit = useCallback(
     (notification: NotificationDto) => {
@@ -49,7 +43,7 @@ export function AdminNotificationsPage() {
   }, [notifications]);
 
   return (
-    <Spin spinning={loading}>
+    <Spin spinning={notificationsRequest.loading}>
       <Button type="primary" onClick={create}>
         Add Notification
       </Button>
@@ -65,11 +59,11 @@ export function AdminNotificationsPage() {
         ? service.saveNotification(notification)
         : service.createNotification(notification));
 
-      setNotifications(notifications => {
-        return isSave
+      notificationsRequest.mutate(
+        isSave
           ? notifications.map(notification => (notification.id === data.id ? data : notification))
-          : [...notifications, data];
-      });
+          : [...notifications, data],
+      );
       setModal(null);
       message.success('New notification settings saved.');
     } catch {
@@ -80,7 +74,7 @@ export function AdminNotificationsPage() {
   async function deleteNotification(notification: NotificationDto) {
     try {
       await service.deleteNotification(notification.id);
-      setNotifications(notifications => notifications.filter(n => n.id !== notification.id));
+      notificationsRequest.mutate(notifications.filter(n => n.id !== notification.id));
       message.success('Notification is deleted.');
     } catch {
       message.error('Failed to delete notification.');

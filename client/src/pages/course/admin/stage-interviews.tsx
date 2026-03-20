@@ -1,4 +1,5 @@
-import { Button, Row, Table, Checkbox, Popconfirm } from 'antd';
+import { Button, message, Row, Table, Checkbox, Popconfirm } from 'antd';
+import { useRequest } from 'ahooks';
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import { StudentMentorModal } from '@client/shared/components/StudentMentorModal';
 import {
@@ -8,11 +9,9 @@ import {
   stringSorter,
   PersonCell,
 } from '@client/shared/components/Table';
-import { useLoading } from '@client/components/useLoading';
 import { useMemo, useState, useContext } from 'react';
 import { CourseService } from '@client/services/course';
 import { CourseRole } from '@client/services/models';
-import { useAsync } from 'react-use';
 import { isCourseManager, isCourseSupervisor } from '@client/domain/user';
 import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 
@@ -21,7 +20,6 @@ function Page() {
   const { course, courses } = useActiveCourseContext();
   const courseId = course.id;
 
-  const [loading, withLoading] = useLoading(false);
   const [interviews, setInterviews] = useState([] as any[]);
   const [modal, setModal] = useState(false);
   const [noRegistration, setNoRegistration] = useState(false);
@@ -30,19 +28,56 @@ function Page() {
   const courseManagerRole = useMemo(() => isCourseManager(session, courseId), [course, session]);
   const courseSupervisorRole = useMemo(() => isCourseSupervisor(session, courseId), [course, session]);
 
-  const loadInterviews = async () => setInterviews(await courseService.getStageInterviews());
+  const loadInterviews = async () => courseService.getStageInterviews();
 
-  const createInterviews = async () => {
-    await courseService.createStageInterviews({ noRegistration });
-    await loadInterviews();
-  };
-
-  const deleteInterview = withLoading(async (record: any) => {
-    await courseService.deleteStageInterview(record.id);
-    await loadInterviews();
+  const deleteInterviewRequest = useRequest(
+    async (record: any) => {
+      await courseService.deleteStageInterview(record.id);
+    },
+    {
+      manual: true,
+      onSuccess: () => loadInterviewsRequest.runAsync(),
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
+  );
+  const loadInterviewsRequest = useRequest(loadInterviews, {
+    onError: () => {
+      message.error('An unexpected error occurred. Please try later.');
+    },
+    onSuccess: data => setInterviews(data),
   });
-
-  useAsync(withLoading(loadInterviews), []);
+  const createInterviewRequest = useRequest(
+    async (studentGithubId: string, mentorGithubId: string) => {
+      await courseService.createInterview(studentGithubId, mentorGithubId);
+      setModal(false);
+    },
+    {
+      manual: true,
+      onSuccess: () => loadInterviewsRequest.runAsync(),
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
+  );
+  const createInterviewsRequest = useRequest(
+    async () => {
+      await courseService.createStageInterviews({ noRegistration });
+    },
+    {
+      manual: true,
+      onSuccess: () => loadInterviewsRequest.runAsync(),
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
+  );
+  const loading =
+    deleteInterviewRequest.loading ||
+    loadInterviewsRequest.loading ||
+    createInterviewRequest.loading ||
+    createInterviewsRequest.loading;
 
   return (
     <AdminPageLayout loading={loading} title="Technical Screening" showCourseName courses={courses}>
@@ -53,7 +88,7 @@ function Page() {
               No Registration
             </Checkbox>
             <Popconfirm
-              onConfirm={() => createInterviews()}
+              onConfirm={() => createInterviewsRequest.runAsync()}
               title="Do you want to create interview pairs for not distributed students?"
             >
               <Button>Create Interview Pairs</Button>
@@ -117,7 +152,7 @@ function Page() {
             render: (_, record) => {
               if (courseManagerRole || courseSupervisorRole) {
                 return (
-                  <Button type="link" onClick={() => deleteInterview(record)}>
+                  <Button type="link" onClick={() => deleteInterviewRequest.runAsync(record)}>
                     Cancel
                   </Button>
                 );
@@ -129,11 +164,7 @@ function Page() {
       />
 
       <StudentMentorModal
-        onOk={withLoading(async (studentGithubId, mentorGithubId) => {
-          await courseService.createInterview(studentGithubId, mentorGithubId);
-          await loadInterviews();
-          setModal(false);
-        })}
+        onOk={createInterviewRequest.runAsync}
         onCancel={() => setModal(false)}
         visible={modal}
         courseId={course.id}
