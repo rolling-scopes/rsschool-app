@@ -305,4 +305,42 @@ describe('AuthService', () => {
       expect(usersService.updateUser).not.toHaveBeenCalled();
     });
   });
+
+  describe('getRedirectUrl', () => {
+    it('should return / when no loginData is provided', () => {
+      expect(service.getRedirectUrl(undefined)).toBe('/');
+    });
+
+    it('should return / when loginData has no redirectUrl', () => {
+      expect(service.getRedirectUrl({})).toBe('/');
+    });
+
+    it('should return a valid relative path', () => {
+      expect(service.getRedirectUrl({ redirectUrl: '/dashboard' })).toBe('/dashboard');
+    });
+
+    it('should return a relative path with query string', () => {
+      expect(service.getRedirectUrl({ redirectUrl: '/course?id=123' })).toBe('/course?id=123');
+    });
+
+    it('should decode a percent-encoded relative path', () => {
+      expect(service.getRedirectUrl({ redirectUrl: '/course%3Fid%3D123' })).toBe('/course?id=123');
+    });
+
+    it('should return / for an absolute URL (open redirect prevention)', () => {
+      expect(service.getRedirectUrl({ redirectUrl: 'https://evil.com' })).toBe('/');
+    });
+
+    it('should return / for a protocol-relative URL (open redirect prevention)', () => {
+      expect(service.getRedirectUrl({ redirectUrl: '//evil.com' })).toBe('/');
+    });
+
+    it('should return / for an http URL (open redirect prevention)', () => {
+      expect(service.getRedirectUrl({ redirectUrl: 'http://evil.com/path' })).toBe('/');
+    });
+
+    it('should return / for malformed percent-encoding', () => {
+      expect(service.getRedirectUrl({ redirectUrl: '/path%GGinvalid' })).toBe('/');
+    });
+  });
 });
