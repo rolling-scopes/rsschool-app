@@ -1,9 +1,9 @@
-import {Bar, BarConfig} from '@ant-design/plots';
-import {Flex, Image, Typography} from 'antd';
-import {CountryStatDto} from '@client/api';
-import {useCallback, useMemo} from 'react';
-import {Colors} from '../../data';
-import {useTheme} from '@client/shared/hooks/useTheme';
+import { Bar, BarConfig } from '@ant-design/plots';
+import { Flex, Image, Typography } from 'antd';
+import { CountryStatDto } from '@client/api';
+import { useCallback, useMemo } from 'react';
+import { Colors } from '../../data';
+import { useTheme } from '@client/shared/hooks/useTheme';
 
 type Props = {
   data: CountryStatDto[];
@@ -20,20 +20,13 @@ type Props = {
  */
 type Datum = Parameters<typeof Bar>[0]['data'][number];
 
-const {Text} = Typography;
+const { Text } = Typography;
 
-function CountriesChart({
-  data,
-  activeCount,
-  xAxisTitle,
-  color = Colors.Blue,
-}: Props) {
-  const {theme} = useTheme();
+function CountriesChart({ data, activeCount, xAxisTitle, color = Colors.Blue }: Props) {
+  const { theme } = useTheme();
   const tooltipFormatter = useCallback(
     (datum: Datum) => {
-      const percentage = activeCount ?
-        Math.ceil((datum.count / activeCount) * 100) :
-        0;
+      const percentage = activeCount ? Math.ceil((datum.count / activeCount) * 100) : 0;
       return {
         name: xAxisTitle,
         value: `${datum.count} (${percentage}%)`,
@@ -48,11 +41,11 @@ function CountriesChart({
       xField: 'count',
       yField: 'countryName',
       axis: {
-        y: {labelAutoRotate: false},
-        x: {title: xAxisTitle},
+        y: { labelAutoRotate: false },
+        x: { title: xAxisTitle },
       },
-      tooltip: {formatter: tooltipFormatter},
-      scrollbar: {type: 'vertical'},
+      tooltip: { formatter: tooltipFormatter },
+      scrollbar: { type: 'vertical' },
       colorField: 'countryName',
       color,
       theme,
@@ -64,11 +57,7 @@ function CountriesChart({
     return (
       <Flex vertical gap="middle" align="center" justify="center">
         <Text strong>No student data available to display</Text>
-        <Image
-          preview={false} src="/static/svg/err.svg"
-          alt="Error 404"
-          width={175} height={175}
-        />
+        <Image preview={false} src="/static/svg/err.svg" alt="Error 404" width={175} height={175} />
       </Flex>
     );
   }
