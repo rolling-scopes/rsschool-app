@@ -173,7 +173,7 @@ const renderProgrammingTask = (handleSkillChange: HandleChangeValue) => (
     </Form.Item>
     <Form.Item label="Has the student solved the task(s)?" name="programmingTask-resolved">
       <Radio.Group onChange={handleSkillChange('programmingTask-resolved')}>
-        <Space direction="vertical">
+        <Space orientation="vertical">
           <Radio value={1}>Yes, he/she has</Radio>
           <Radio value={2}>Yes, he/she has, but with tips</Radio>
           <Radio value={3}>No, he/she hasn't</Radio>
@@ -233,7 +233,7 @@ const renderResume = (handleSkillChange: HandleChangeValue) => (
     <Typography.Title level={3}>Resume</Typography.Title>
     <Form.Item label="Do you want take the student in your group and be his/her mentor?" name="resume-verdict" required>
       <Radio.Group onChange={handleSkillChange('resume-verdict')}>
-        <Space direction="vertical">
+        <Space orientation="vertical">
           <Radio value={'yes'}>Yes, I do.</Radio>
           <Radio value={'no'}>No, I do not.</Radio>
           <Radio value={'noButGoodCandidate'}>No, I do not, but he/she is a good candidate.</Radio>

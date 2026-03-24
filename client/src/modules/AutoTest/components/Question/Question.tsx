@@ -35,7 +35,7 @@ function Question({ question: selfEducationQuestion }: QuestionProps): JSX.Eleme
           </Row>
         }
       >
-        <Space direction="vertical" size="small">
+        <Space orientation="vertical" size="small">
           {answers?.map((answer, answerIndex) => {
             const checked = selectedAnswers?.includes(answerIndex);
 

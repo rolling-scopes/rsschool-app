@@ -33,7 +33,7 @@ const ObfuscationModal = ({ githubId, setIsModalVisible, open }: Props) => {
 
   return (
     <Modal open={open} title="Confirm GitHub Profile Obfuscation" onOk={handleOk} onCancel={handleCancel}>
-      <Space direction="vertical">
+      <Space orientation="vertical">
         <Paragraph>
           <Text>
             Please type the GitHub nickname <Text strong>"{githubId}"</Text> to confirm obfuscation.

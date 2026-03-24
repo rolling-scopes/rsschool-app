@@ -77,7 +77,7 @@ export const MentorTasksReview = () => {
 
   return (
     <AdminPageLayout loading={loading} title="Mentor tasks review" showCourseName courses={courses}>
-      <Space direction="vertical">
+      <Space orientation="vertical">
         <Space>
           <Text strong>Submitted tasks</Text>
           <Text>{course.name}</Text>

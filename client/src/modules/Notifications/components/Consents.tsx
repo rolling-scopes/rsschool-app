@@ -39,7 +39,7 @@ export function Consents({
   }, []);
 
   return !hasContacts ? (
-    <Space direction="vertical" style={{ width: '100%' }}>
+    <Space orientation="vertical" style={{ width: '100%' }}>
       <Alert
         message={
           hasTelegram ? (

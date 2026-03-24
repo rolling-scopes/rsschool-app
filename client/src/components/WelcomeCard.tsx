@@ -16,9 +16,9 @@ export function WelcomeCard() {
         />
       </Row>
       <Row justify="center">
-        <Space direction="vertical" align="center" size="middle" style={{ padding: '20px' }}>
+        <Space orientation="vertical" align="center" size="middle" style={{ padding: '20px' }}>
           <Alert message="Welcome to RS School App! Please register to continue" type="info" showIcon />
-          <Space direction="vertical" align="center">
+          <Space orientation="vertical" align="center">
             <Space wrap>
               <Link href="/registry/student">
                 <Button type="default">Register as a student 🎓</Button>

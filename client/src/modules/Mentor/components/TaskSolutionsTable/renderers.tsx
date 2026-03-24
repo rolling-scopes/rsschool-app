@@ -124,7 +124,7 @@ function renderSubmitButton(row: MentorDashboardDto, handleSubmitClick: (d: Ment
 
 function renderMobile(row: MentorDashboardDto) {
   return (
-    <Space direction="vertical">
+    <Space orientation="vertical">
       {renderName(row.studentName, row)}
       {renderTask(row.taskName, row)}
       {renderSolutionUrl(row.solutionUrl, row)}

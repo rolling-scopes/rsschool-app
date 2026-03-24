@@ -32,7 +32,7 @@ function InviteMentorsModal({ onCancel }: Props) {
 
   return (
     <ModalForm data={{}} title="Invite as a Mentor" submit={submit} cancel={onCancel} loading={loading}>
-      <Space direction="vertical" style={{ width: '100%' }}>
+      <Space orientation="vertical" style={{ width: '100%' }}>
         <Alert showIcon message="Invitation will be send to all mentors meeting the criteria below." type="info" />
         <Form.Item
           name="disciplines"
