@@ -23,7 +23,7 @@ export const LoadingScreen = (props: Props) => {
         background: token.colorBgContainer,
       }}
     >
-      <Spin tip="Loading..." size="default">
+      <Spin description="Loading..." size="default">
         <div style={{ padding: '50px' }} />
       </Spin>
     </div>
