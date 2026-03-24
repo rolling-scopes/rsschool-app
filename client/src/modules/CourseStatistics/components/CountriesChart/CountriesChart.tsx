@@ -1,8 +1,9 @@
-import { Bar, BarConfig } from '@ant-design/plots';
-import { Flex, Image, Typography } from 'antd';
-import { CountryStatDto } from '@client/api';
-import { useCallback, useMemo } from 'react';
-import { Colors } from '../../data';
+import {Bar, BarConfig} from '@ant-design/plots';
+import {Flex, Image, Typography} from 'antd';
+import {CountryStatDto} from '@client/api';
+import {useCallback, useMemo} from 'react';
+import {Colors} from '../../data';
+import {useTheme} from '@client/shared/hooks/useTheme';
 
 type Props = {
   data: CountryStatDto[];
@@ -19,12 +20,20 @@ type Props = {
  */
 type Datum = Parameters<typeof Bar>[0]['data'][number];
 
-const { Text } = Typography;
+const {Text} = Typography;
 
-function CountriesChart({ data, activeCount, xAxisTitle, color = Colors.Blue }: Props) {
+function CountriesChart({
+  data,
+  activeCount,
+  xAxisTitle,
+  color = Colors.Blue,
+}: Props) {
+  const {theme} = useTheme();
   const tooltipFormatter = useCallback(
     (datum: Datum) => {
-      const percentage = activeCount ? Math.ceil((datum.count / activeCount) * 100) : 0;
+      const percentage = activeCount ?
+        Math.ceil((datum.count / activeCount) * 100) :
+        0;
       return {
         name: xAxisTitle,
         value: `${datum.count} (${percentage}%)`,
@@ -36,25 +45,30 @@ function CountriesChart({ data, activeCount, xAxisTitle, color = Colors.Blue }: 
   const config: BarConfig = useMemo(
     () => ({
       data,
-      yField: 'countryName',
       xField: 'count',
-      yAxis: {
-        label: { autoRotate: false },
+      yField: 'countryName',
+      axis: {
+        y: {labelAutoRotate: false},
+        x: {title: xAxisTitle},
       },
-      tooltip: { formatter: tooltipFormatter },
-      xAxis: { title: { text: xAxisTitle } },
-      scrollbar: { type: 'vertical' },
+      tooltip: {formatter: tooltipFormatter},
+      scrollbar: {type: 'vertical'},
       colorField: 'countryName',
       color,
+      theme,
     }),
-    [data, tooltipFormatter, color],
+    [data, tooltipFormatter, color, theme],
   );
 
   if (!data.length) {
     return (
       <Flex vertical gap="middle" align="center" justify="center">
         <Text strong>No student data available to display</Text>
-        <Image preview={false} src="/static/svg/err.svg" alt="Error 404" width={175} height={175} />
+        <Image
+          preview={false} src="/static/svg/err.svg"
+          alt="Error 404"
+          width={175} height={175}
+        />
       </Flex>
     );
   }
