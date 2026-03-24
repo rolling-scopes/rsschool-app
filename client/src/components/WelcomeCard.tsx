@@ -17,7 +17,7 @@ export function WelcomeCard() {
       </Row>
       <Row justify="center">
         <Space orientation="vertical" align="center" size="middle" style={{ padding: '20px' }}>
-          <Alert message="Welcome to RS School App! Please register to continue" type="info" showIcon />
+          <Alert title="Welcome to RS School App! Please register to continue" type="info" showIcon />
           <Space orientation="vertical" align="center">
             <Space wrap>
               <Link href="/registry/student">

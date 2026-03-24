@@ -41,7 +41,7 @@ export function Consents({
   return !hasContacts ? (
     <Space orientation="vertical" style={{ width: '100%' }}>
       <Alert
-        message={
+        title={
           hasTelegram ? (
             <>
               Telegram notifications are sent from <a href={rsschoolBotLink}>@rsschool_bot</a>
@@ -58,7 +58,7 @@ export function Consents({
 
       {!hasDiscord && (
         <Alert
-          message={
+          title={
             <div>
               Note: To enable discord notifications please <a href={discordIntegration.api.auth}>authorize</a> first
             </div>
@@ -68,7 +68,7 @@ export function Consents({
       )}
       {!emailAdded && (
         <Alert
-          message={
+          title={
             <div>
               To set up email notification, please enter your email on <Link href="/profile">Profile</Link> page
             </div>

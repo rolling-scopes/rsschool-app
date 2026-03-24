@@ -26,7 +26,7 @@ export function LocationSelect(props: Props) {
   };
 
   if (error) {
-    return <Alert message={error.message} type="error" showIcon />;
+    return <Alert title={error.message} type="error" showIcon />;
   }
 
   if (!initialized) {

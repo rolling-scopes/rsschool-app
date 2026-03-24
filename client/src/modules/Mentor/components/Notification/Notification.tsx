@@ -10,7 +10,7 @@ function Notification() {
   };
 
   return isShown ? (
-    <Alert message={INFO_MESSAGE} type="info" showIcon closable onClose={handleClose} style={{ marginBottom: 24 }} />
+    <Alert title={INFO_MESSAGE} type="info" showIcon closable onClose={handleClose} style={{ marginBottom: 24 }} />
   ) : null;
 }
 
