@@ -24,6 +24,8 @@ export class UpdateCourseDto {
   @ApiPropertyOptional()
   descriptionUrl?: string;
 
+  @IsNumber()
+  @IsOptional()
   @ApiPropertyOptional()
   year?: number;
 
