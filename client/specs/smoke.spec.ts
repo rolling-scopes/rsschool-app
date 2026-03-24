@@ -11,18 +11,24 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('Home', () => {
   test('should have link to Score page', async ({ page }) => {
-    expect(await page.locator('css=a >> text="Score"').isVisible()).toBe(true);
+    const scoreLink = page.getByRole('link', { name: /score/i });
+    await expect(scoreLink).toBeVisible();
 
-    const href = await page.locator('css=a >> text="Score"').getAttribute('href');
-    expect(href?.includes('/course/score')).toBeTruthy();
+    const href = await scoreLink.getAttribute('href');
+    expect(href).toMatch(/\/course\/score/);
   });
 
   test('should navigate to Courses page and verify threshold', async ({ page }) => {
-    await page.click('span[role="img"][aria-label="menu-unfold"]');
+    const adminSider = page.getByTestId('admin-sider');
+    const isCollapsed = await adminSider.locator('span[aria-label="menu-unfold"]').isVisible();
 
-    await page.click('text=Admin Area');
+    if (isCollapsed) {
+      await adminSider.locator('span[aria-label="menu-unfold"]').click();
+    }
 
-    const coursesLink = page.locator('text=Courses');
+    await page.getByText('Admin Area').click();
+
+    const coursesLink = page.getByRole('menuitem', { name: 'Courses' });
     await expect(coursesLink).toBeVisible();
     await coursesLink.click();
 
