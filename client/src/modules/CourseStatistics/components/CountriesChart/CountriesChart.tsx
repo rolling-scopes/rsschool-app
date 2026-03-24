@@ -44,11 +44,10 @@ function CountriesChart({ data, activeCount, xAxisTitle, color = Colors.Blue }: 
       tooltip: { formatter: tooltipFormatter },
       xAxis: { title: { text: xAxisTitle } },
       scrollbar: { type: 'vertical' },
-      //Why this affects the size of the chart, I don't know. Do not delete.
-      seriesField: 'type',
-      color: () => color,
+      colorField: 'countryName',
+      color,
     }),
-    [data, tooltipFormatter],
+    [data, tooltipFormatter, color],
   );
 
   if (!data.length) {
