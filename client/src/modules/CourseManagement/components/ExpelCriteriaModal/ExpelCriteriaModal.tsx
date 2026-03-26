@@ -43,7 +43,7 @@ export function ExpelCriteriaModal({ courseId, onSubmit, onClose, isModalOpen }:
       >
         <Row gutter={[0, 16]}>
           <Col span={24}>
-            <Alert type="warning" message={EXPEL_ALERT_MESSAGE} showIcon />
+            <Alert type="warning" title={EXPEL_ALERT_MESSAGE} showIcon />
           </Col>
           <Col span={24}>
             <SelectCourseTasks courseId={courseId} label="Didn't Complete Following Tasks" />

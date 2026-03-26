@@ -15,7 +15,7 @@ export function ActionCard({ title, text, buttonCaption, onClick }: Props) {
   return (
     <Col xs={24} sm={12}>
       <Card title={<Title level={5}>{title}</Title>} style={{ backgroundColor: token.blue1 }}>
-        <Space size={12} direction="vertical">
+        <Space size={12} orientation="vertical">
           <Text type="secondary">{text}</Text>
           <Popconfirm title={<>Are you sure you want to {buttonCaption.toLowerCase()}?</>} onConfirm={onClick}>
             <Button>{buttonCaption}</Button>

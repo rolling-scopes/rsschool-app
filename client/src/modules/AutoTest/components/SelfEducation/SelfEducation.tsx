@@ -60,7 +60,7 @@ function SelfEducation({ courseTask }: SelfEducationProps) {
             >
               {multiple ? (
                 <Checkbox.Group>
-                  <Space direction="vertical" size="small">
+                  <Space orientation="vertical" size="small">
                     {answers?.map((answer, answerIndex) => (
                       <Checkbox key={answerIndex} value={answerIndex}>
                         {answersType === 'image' ? (
@@ -84,7 +84,7 @@ function SelfEducation({ courseTask }: SelfEducationProps) {
                 </Checkbox.Group>
               ) : (
                 <Radio.Group>
-                  <Space direction="vertical" size="small">
+                  <Space orientation="vertical" size="small">
                     {answers?.map((answer, index) => (
                       <Radio key={index} value={index}>
                         {answersType === 'image' ? (

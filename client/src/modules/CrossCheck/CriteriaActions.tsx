@@ -22,14 +22,14 @@ export const CriteriaActions: FC<CriteriaActionsProps> = ({
   editingKey,
 }) =>
   editing ? (
-    <Space direction="horizontal">
+    <Space orientation="horizontal">
       <Typography.Link onClick={() => save(record.key)}>Save</Typography.Link>
       <Typography.Link type="secondary" onClick={cancel}>
         Cancel
       </Typography.Link>
     </Space>
   ) : (
-    <Space direction="horizontal">
+    <Space orientation="horizontal">
       <Typography.Link disabled={!!editingKey} onClick={() => edit(record)}>
         Edit
       </Typography.Link>

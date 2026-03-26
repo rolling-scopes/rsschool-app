@@ -121,7 +121,7 @@ export default function Page() {
       maskClosable: true,
       title: `Comment from ${checker.githubId}`,
       content: historicalScores.map((historicalScore, index) => (
-        <Space direction="vertical" key={historicalScore.dateTime} style={{ width: '100%' }}>
+        <Space orientation="vertical" key={historicalScore.dateTime} style={{ width: '100%' }}>
           <Comment
             content={
               <>

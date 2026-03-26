@@ -141,7 +141,7 @@ export function TaskModal({
       </Form.Item>
       <Row gutter={24}>
         <Col span={24}>
-          <Space direction="vertical" size={8} style={{ width: '100%', marginBottom: 24 }}>
+          <Space orientation="vertical" size={8} style={{ width: '100%', marginBottom: 24 }}>
             <Text>{LABELS.usedInCourses}</Text>
             <Card bodyStyle={{ padding: 8 }}>
               {formData?.courses?.length ? (

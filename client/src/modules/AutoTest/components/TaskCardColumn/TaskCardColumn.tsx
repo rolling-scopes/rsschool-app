@@ -10,7 +10,7 @@ const { Text } = Typography;
 
 function TaskCardColumn({ label, value }: TaskCardColumnProps) {
   return (
-    <Space direction="vertical">
+    <Space orientation="vertical">
       <Text type="secondary">{label}</Text>
       {value}
     </Space>

@@ -85,7 +85,7 @@ export function HomePage() {
               <Alert
                 type="success"
                 showIcon
-                message={`You are approved as a mentor to "${approvedCourse.name}" course`}
+                title={`You are approved as a mentor to "${approvedCourse.name}" course`}
                 description={
                   <Button type="primary" href={`/course/mentor/confirm?course=${approvedCourse.alias}`}>
                     Confirm Participation
