@@ -5,7 +5,7 @@ export function RegistryBanner(props: Partial<AlertProps>) {
     <Alert
       type="info"
       showIcon
-      message="New RS School Course is starting and we are looking for mentors!"
+      title="New RS School Course is starting and we are looking for mentors!"
       description={
         <Button type="primary" href="/registry/mentor">
           Register as Mentor

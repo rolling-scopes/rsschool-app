@@ -19,7 +19,7 @@ const ChangeTagColors: React.FC<ChangeTagColorProps> = ({ tagColors, setTagColor
 
   return (
     <SettingsItem header="Change Tag Colors" IconComponent={BgColorsOutlined}>
-      <Space direction="vertical">
+      <Space orientation="vertical">
         {tags.map(tag => (
           <Space key={tag}>
             <ColorPicker defaultValue={tagColors[tag]} onChange={value => changeColor(value, tag)} />

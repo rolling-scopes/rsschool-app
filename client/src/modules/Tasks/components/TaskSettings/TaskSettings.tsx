@@ -48,7 +48,7 @@ export function TaskSettings({ dataCriteria, taskType, setDataCriteria }: Props)
   }, [taskType]);
 
   return (
-    <Space direction="vertical" size={16} style={{ width: '100%' }}>
+    <Space orientation="vertical" size={16} style={{ width: '100%' }}>
       <Text strong>Settings for some types of tasks</Text>
       <Collapse items={collapseItems} defaultActiveKey={[]} activeKey={activeKey} onChange={handleChange} accordion />
     </Space>

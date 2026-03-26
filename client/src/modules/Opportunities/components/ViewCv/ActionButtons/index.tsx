@@ -32,7 +32,7 @@ export const ActionButtons = ({ onRemoveConsent, switchView, url, isExpired }: P
         <Alert
           type="warning"
           showIcon
-          message={
+          title={
             <>
               <Paragraph>{message}</Paragraph>
               <Paragraph>{messageRu}</Paragraph>

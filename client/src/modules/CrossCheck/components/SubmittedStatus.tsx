@@ -17,7 +17,7 @@ export function SubmittedStatus(props: Props) {
     const deadlinePassedMessage = 'Submission deadline has already passed';
     const tipMessage = 'Try to submit your solution as soon as possible';
     const message = `You haven't submitted solution. ${deadlinePassed ? deadlinePassedMessage : tipMessage}`;
-    return <Alert message={message} type="warning" showIcon style={{ marginBottom: 8 }} />;
+    return <Alert title={message} type="warning" showIcon style={{ marginBottom: 8 }} />;
   }
 
   return (

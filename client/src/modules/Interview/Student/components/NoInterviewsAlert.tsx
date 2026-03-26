@@ -9,7 +9,7 @@ export const NoInterviewsAlert = () => (
         type="info"
         showIcon
         icon={<InfoCircleTwoTone />}
-        message="There are no planned interviews."
+        title="There are no planned interviews."
         description={<AlertDescription />}
       />
     </Col>

@@ -118,7 +118,7 @@ function SolutionReview(props: SolutionReviewProps) {
       {amountUnreadMessages > 0 && (
         <Row>
           <Col>
-            <Alert message={howManyUnreadMessagesText} type="info" showIcon />
+            <Alert title={howManyUnreadMessagesText} type="info" showIcon />
           </Col>
         </Row>
       )}

@@ -48,7 +48,7 @@ function MentorInfo({ mentor }: Props) {
           <GithubAvatar size={48} githubId={githubId!} />
         </Col>
         <Col>
-          <Space direction="vertical" size={4}>
+          <Space orientation="vertical" size={4}>
             {name && <Text strong>{name}</Text>}
             <Link target="_blank" href={`https://github.com/${githubId}`}>
               <GithubFilled /> {githubId}

@@ -75,9 +75,9 @@ export function UserNotificationsPage() {
 
   return (
     <PageLayout loading={loading} title="Notifications" showCourseName>
-      <Space direction="vertical" style={{ width: '100%' }}>
+      <Space orientation="vertical" style={{ width: '100%' }}>
         {!loading && <Consents email={email} telegram={telegram} discord={discord} />}
-        <Space direction="horizontal" style={{ width: '100%', justifyContent: 'flex-end' }}>
+        <Space orientation="horizontal" style={{ width: '100%', justifyContent: 'flex-end' }}>
           <Button disabled={!hasConnections} type="primary" onClick={saveSettings}>
             Save
           </Button>

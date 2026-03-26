@@ -38,7 +38,7 @@ function renderAction(onEditTeam: () => void) {
 
 function renderTeam(team: TeamDto, distribution: TeamDistributionDetailedDto) {
   return (
-    <Space direction="vertical" size="small">
+    <Space orientation="vertical" size="small">
       {renderName('', team)}
       {renderDescription('', team)}
       {renderMemberCount(team, distribution.strictTeamSize)}

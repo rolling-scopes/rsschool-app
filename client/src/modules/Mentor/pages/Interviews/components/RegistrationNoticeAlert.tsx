@@ -23,7 +23,7 @@ export function RegistrationNoticeAlert(props: { interview: InterviewDto; startD
     <>
       <Alert
         closable
-        message="Registration period"
+        title="Registration period"
         icon={<InfoCircleTwoTone />}
         showIcon
         onClose={() => setDismissed()}

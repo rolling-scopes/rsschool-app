@@ -40,7 +40,7 @@ export function MentorsHallOfFamePage() {
 
   return (
     <Flex justify="center" style={{ padding: 24 }}>
-      <Space direction="vertical" size="large" style={{ width: '100%', maxWidth: 1200 }}>
+      <Space orientation="vertical" size="large" style={{ width: '100%', maxWidth: 1200 }}>
         <Flex vertical align="center" gap="middle">
           <TrophyOutlined style={{ fontSize: 48, color: '#faad14' }} />
           <Title level={1} style={{ margin: 0 }}>
