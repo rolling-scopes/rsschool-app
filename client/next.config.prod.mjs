@@ -1,7 +1,7 @@
 const isProd = process.env.NODE_ENV === 'production';
 
 const nextConfig = {
-  assetPrefix: isProd ? 'https://cdn.rs.school' : '',
+  assetPrefix: isProd ? process.env.CDN_HOST : '',
   env: {
     BUILD_VERSION: process.env.BUILD_VERSION || '0.0.0.0.0',
     APP_VERSION: process.env.APP_VERSION,
