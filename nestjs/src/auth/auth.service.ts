@@ -164,7 +164,21 @@ export class AuthService {
   }
 
   public getRedirectUrl(loginData?: LoginData) {
-    return loginData?.redirectUrl ? decodeURIComponent(loginData.redirectUrl) : '/';
+    if (!loginData?.redirectUrl) {
+      return '/';
+    }
+    let url: string;
+    try {
+      url = decodeURIComponent(loginData.redirectUrl);
+    } catch {
+      return '/';
+    }
+    // Only allow relative paths to prevent open redirects.
+    // Reject protocol-relative URLs (starting with //) which behave like absolute URLs.
+    if (url.startsWith('/') && !url.startsWith('//')) {
+      return url;
+    }
+    return '/';
   }
 
   public async onConnectionComplete(loginData: LoginData, userId: number) {
