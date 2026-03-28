@@ -47,7 +47,7 @@ export const InterviewCard = ({
   return (
     <Col key={id} xs={24} lg={12}>
       <Card
-        bodyStyle={{ paddingTop: 0 }}
+        styles={{ body: { paddingTop: 0 } }}
         hoverable
         title={
           <Button type="link" href={descriptionUrl} target="_blank" style={{ padding: 0, fontWeight: 500 }}>

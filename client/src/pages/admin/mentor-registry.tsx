@@ -317,7 +317,7 @@ function Page() {
       {isModalOpen && modalData?.mode === ModalDataMode.Comment && (
         <CommentModal
           title="Comment"
-          visible={isModalOpen}
+          open={isModalOpen}
           onCancel={onCancelModal}
           initialValue={modalData?.record?.comment ?? undefined}
           availableEmptyComment={true}

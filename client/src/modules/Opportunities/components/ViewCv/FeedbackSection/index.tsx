@@ -37,7 +37,7 @@ export const FeedbackSection = ({ data }: Props) => {
             <Col flex={1} style={{ paddingRight: 16 }}>
               <Badge.Ribbon text="Recommend To Hire" color="green">
                 <Card
-                  bordered={false}
+                  variant="borderless"
                   title={
                     <DataTextValue>
                       <div>

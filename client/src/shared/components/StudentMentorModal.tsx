@@ -9,7 +9,7 @@ interface FormValues {
 }
 
 type Props = {
-  visible: boolean;
+  open: boolean;
   courseId: number;
   onCancel: () => void;
   onOk: (studentGithubId: string, mentorGithubId: string) => void;
@@ -20,7 +20,7 @@ export function StudentMentorModal(props: Props) {
     props.onOk(values.studentGithubId, values.mentorGithubId);
   };
 
-  if (!props.visible) {
+  if (!props.open) {
     return null;
   }
 
