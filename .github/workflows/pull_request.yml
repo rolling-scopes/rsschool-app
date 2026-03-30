@@ -143,6 +143,15 @@ jobs:
           AWS_DEFAULT_REGION: eu-central-1
         run: aws s3 cp .next/static s3://cdn.rs.school/_next/static/ --recursive --cache-control "public,max-age=15552000,immutable"
 
+      - name: Upload public static assets to CDN
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
+        working-directory: ./client
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: eu-central-1
+        run: aws s3 cp public/static s3://cdn.rs.school/static/ --recursive --cache-control "public,max-age=86400"
+
       - name: Package Client
         uses: docker/build-push-action@v6
         if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
