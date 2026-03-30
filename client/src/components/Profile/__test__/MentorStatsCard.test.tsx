@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MentorStatsCard } from '../MentorStatsCard';
 
-jest.mock('modules/Profile/components/MentorEndorsement', () => ({
+vi.mock('@client/modules/Profile/components/MentorEndorsement', () => ({
   MentorEndorsement: ({ open, onClose }: { open: boolean; onClose: () => void }) => (
     <div>
       {open ? <div data-testid="endorsement-open">endorsement-open</div> : null}

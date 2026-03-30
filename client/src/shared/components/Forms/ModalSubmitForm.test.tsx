@@ -3,8 +3,8 @@ import { Form } from 'antd';
 import { ModalSubmitForm } from './ModalSubmitForm';
 
 const PROPS_MOCK = {
-  submit: jest.fn(),
-  close: jest.fn(),
+  submit: vi.fn(),
+  close: vi.fn(),
   children: [],
   title: 'Form',
   data: { field: 'value' },

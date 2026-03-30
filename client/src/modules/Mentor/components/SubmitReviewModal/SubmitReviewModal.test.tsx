@@ -1,8 +1,34 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MentorDashboardDto } from '@client/api';
-import mockAxios from 'jest-mock-axios';
 import { MODAL_TITLE, SubmitReviewModal, SubmitReviewModalProps } from '.';
 import { SUCCESS_MESSAGE } from './SubmitReviewModal';
+
+const { mockAxios } = vi.hoisted(() => {
+  const post = vi.fn();
+  const instance = {
+    get: vi.fn(),
+    post,
+    put: vi.fn(),
+    patch: vi.fn(),
+    delete: vi.fn(),
+    interceptors: {
+      request: { use: vi.fn(), eject: vi.fn() },
+      response: { use: vi.fn(), eject: vi.fn() },
+    },
+  };
+  return {
+    mockAxios: {
+      ...instance,
+      create: vi.fn(() => instance),
+      defaults: { headers: { common: {} } },
+      reset() {
+        post.mockReset();
+      },
+    },
+  };
+});
+
+vi.mock('axios', () => ({ default: mockAxios }));
 
 const MODAL_DATA_MOCK = {
   courseTaskId: 1,
@@ -18,8 +44,8 @@ const MODAL_DATA_MOCK = {
 const PROPS_MOCK: SubmitReviewModalProps = {
   data: MODAL_DATA_MOCK,
   courseId: 1,
-  onClose: jest.fn(),
-  onSubmit: jest.fn(),
+  onClose: vi.fn(),
+  onSubmit: vi.fn(),
 };
 
 describe('SubmitReviewModal', () => {

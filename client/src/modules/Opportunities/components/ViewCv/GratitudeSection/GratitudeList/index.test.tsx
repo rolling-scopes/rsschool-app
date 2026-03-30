@@ -1,5 +1,5 @@
 import assert from 'node:assert';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { GratitudeDto } from '@client/api';
 import { GratitudeList } from './index';
 
@@ -20,11 +20,11 @@ const mockGratitudes = [
 
 describe('GratitudeList', () => {
   beforeAll(() => {
-    jest.useFakeTimers().setSystemTime(1664499199062);
+    vi.useFakeTimers().setSystemTime(1664499199062);
   });
 
   afterAll(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
   test('should display nothing if gratitude list is empty', () => {
     const { container } = render(<GratitudeList feedback={[]} showCount={5} />);
@@ -73,31 +73,19 @@ describe('GratitudeList', () => {
     expect(showAllButton).not.toBeInTheDocument();
   });
 
-  test('should collapse and expand the list of feedbacks correctly', async () => {
+  test('should collapse and expand the list of feedbacks correctly', () => {
     const mockShowCount = 1;
 
     render(<GratitudeList feedback={mockGratitudes} showCount={mockShowCount} />);
 
-    const feedbacksCount = screen.getAllByRole('listitem');
+    expect(screen.getAllByRole('listitem').length).toBe(mockShowCount);
 
-    expect(feedbacksCount.length).toBe(mockShowCount);
+    fireEvent.click(screen.getByRole('button', { name: 'Show all' }));
 
-    const showAllButton = screen.getByRole('button', { name: 'Show all' });
+    expect(screen.getAllByRole('listitem').length).toBe(mockGratitudes.length);
 
-    fireEvent.click(showAllButton);
+    fireEvent.click(screen.getByRole('button', { name: 'Show partially' }));
 
-    await waitFor(() => {
-      const feedbacksCount = screen.getAllByRole('listitem');
-      expect(feedbacksCount.length).toBe(mockGratitudes.length);
-    });
-
-    const showPartiallyButton = await screen.findByRole('button', { name: 'Show partially' });
-
-    fireEvent.click(showPartiallyButton);
-
-    await waitFor(() => {
-      const feedbacksCount = screen.getAllByRole('listitem');
-      expect(feedbacksCount.length).toBe(mockShowCount);
-    });
+    expect(screen.getAllByRole('listitem').length).toBe(mockShowCount);
   });
 });

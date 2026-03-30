@@ -29,7 +29,7 @@ export function StepForm({ step, next, back, isFirst, isLast, onValuesChange }: 
       initialValues={getInitialQuestions(step)}
       onFinishFailed={({ errorFields: [errorField] }) => errorField && form.scrollToField(errorField.name)}
     >
-      <Space direction="vertical" style={{ width: '100%' }}>
+      <Space orientation="vertical" style={{ width: '100%' }}>
         <Form.Item>
           <Title level={3}>{step.title}</Title>
           <Text type="secondary">{step.description}</Text>

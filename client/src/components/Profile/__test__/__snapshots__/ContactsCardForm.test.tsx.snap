@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ContactsCardForm Should render correctly if "contacts" is empty 1`] = `
+exports[`ContactsCardForm > Should render correctly > if "contacts" is empty 1`] = `
 <div>
   <form
     class="ant-form ant-form-horizontal css-var-root ant-form-css-var css-dev-only-do-not-override-1enej14"
@@ -75,7 +75,7 @@ exports[`ContactsCardForm Should render correctly if "contacts" is empty 1`] = `
 </div>
 `;
 
-exports[`ContactsCardForm Should render correctly if "contacts" is not empty 1`] = `
+exports[`ContactsCardForm > Should render correctly > if "contacts" is not empty 1`] = `
 <div>
   <form
     class="ant-form ant-form-horizontal css-var-root ant-form-css-var css-dev-only-do-not-override-1enej14"

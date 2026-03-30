@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
 import Message, { MessageProps } from './Message';
 import { CrossCheckMessageDtoRoleEnum } from '@client/api';
 

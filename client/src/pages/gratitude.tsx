@@ -88,7 +88,7 @@ function GratitudePage() {
 
   return (
     <PageLayoutSimple loading={loading || loadingUser} title="#gratitude">
-      <Alert message="Your feedback will be posted to #gratitude channel in Discord" style={{ marginBottom: 16 }} />
+      <Alert title="Your feedback will be posted to #gratitude channel in Discord" style={{ marginBottom: 16 }} />
 
       {showForm && (
         <Form layout="vertical" form={form} onFinish={handleSubmit}>

@@ -2,7 +2,9 @@
   background-repeat: no-repeat;
   background-size: contain;
   background-image: url('/static/images/logo-rsschool3.png');
-  margin: 0 auto 50px;
+  margin: 1rem auto 2rem;
+  width: 20rem;
+  height: 7.5rem;
 }
 
 .loginForm {

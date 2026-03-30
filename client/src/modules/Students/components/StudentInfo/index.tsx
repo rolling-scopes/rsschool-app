@@ -37,7 +37,7 @@ export function StudentInfo(props: Props) {
   };
 
   return (
-    <Space direction="vertical" style={{ width: '100%' }}>
+    <Space orientation="vertical" style={{ width: '100%' }}>
       <Row align="middle" gutter={24}>
         <Col>
           <GithubAvatar githubId={githubId} size={48} />

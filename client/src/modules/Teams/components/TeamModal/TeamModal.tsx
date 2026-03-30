@@ -88,7 +88,7 @@ export default function TeamModal({ onCancel, onSubmit, data, courseId, isManage
         >
           <TextArea showCount maxLength={600} />
         </Form.Item>
-        <Space direction="vertical">
+        <Space orientation="vertical">
           <Text>
             The only person who creates the team is the team leader, who shares the team password with the other
             participants.

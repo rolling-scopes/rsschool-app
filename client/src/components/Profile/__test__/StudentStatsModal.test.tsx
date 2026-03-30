@@ -51,7 +51,7 @@ describe('StudentStatsModal', () => {
       ],
     };
 
-    const { container } = render(<StudentStatsModal stats={stats} isVisible={true} onHide={jest.fn()} />);
+    const { container } = render(<StudentStatsModal stats={stats} isVisible={true} onHide={vi.fn()} />);
     expect(container).toMatchSnapshot();
   });
 });

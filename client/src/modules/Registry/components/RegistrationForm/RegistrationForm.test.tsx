@@ -17,7 +17,7 @@ const steps = [
 const FormWrapper = ({ type }: { type?: 'mentor' | 'student' }) => {
   const [form] = Form.useForm();
 
-  return <RegistrationForm form={form} handleSubmit={jest.fn()} steps={steps} currentStep={0} type={type} />;
+  return <RegistrationForm form={form} handleSubmit={vi.fn()} steps={steps} currentStep={0} type={type} />;
 };
 
 const renderForm = (type?: 'mentor' | 'student') => {

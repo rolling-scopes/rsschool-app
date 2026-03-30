@@ -12,16 +12,16 @@ import { ScheduleSettings } from '@client/modules/Schedule/hooks/useScheduleSett
 
 const PROPS_SETTINGS_MOCK: ScheduleSettings = {
   timezone: 'Europe/Moscow',
-  setTimezone: jest.fn(),
+  setTimezone: vi.fn(),
   tagColors: {
     coding: '#722ed1',
     'cross-check': '#13c2c2',
   },
-  setTagColors: jest.fn(),
+  setTagColors: vi.fn(),
   columnsHidden: [],
-  setColumnsHidden: jest.fn(),
+  setColumnsHidden: vi.fn(),
   tagsHidden: [],
-  setTagsHidden: jest.fn(),
+  setTagsHidden: vi.fn(),
 };
 
 describe('TableView', () => {
@@ -69,10 +69,9 @@ describe('TableView', () => {
 
   describe('should filter data', () => {
     it('by selected tag', () => {
-      jest
-        .spyOn(ReactUse, 'useLocalStorage')
+      vi.spyOn(ReactUse, 'useLocalStorage')
         // Mock useLocalStorage for combinedFilter
-        .mockReturnValueOnce([{ types: [TagsEnum.Test], statuses: [], tags: [] }, jest.fn(), jest.fn()]);
+        .mockReturnValueOnce([{ types: [TagsEnum.Test], statuses: [], tags: [] }, vi.fn(), vi.fn()]);
       const data = generateCourseData();
 
       render(<TableView settings={PROPS_SETTINGS_MOCK} data={data} />);
@@ -164,13 +163,12 @@ describe('TableView', () => {
     ${TagsEnum.Test}
     ${TagsEnum.Interview}
   `('should check filters in dropdown when tag "$tag" was selected', async ({ tag }: { tag: string }) => {
-    jest
-      .spyOn(ReactUse, 'useLocalStorage')
+    vi.spyOn(ReactUse, 'useLocalStorage')
       // Mock useLocalStorage for combinedFilter
       .mockReturnValueOnce([
         { types: [TagsEnum.Coding, TagsEnum.Test, TagsEnum.Interview], statuses: [], tags: [] },
-        jest.fn(),
-        jest.fn(),
+        vi.fn(),
+        vi.fn(),
       ]);
     render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
 
@@ -186,10 +184,9 @@ describe('TableView', () => {
   });
 
   it('should not render filtered tags when tags is empty', () => {
-    jest
-      .spyOn(ReactUse, 'useLocalStorage')
+    vi.spyOn(ReactUse, 'useLocalStorage')
       // Mock useLocalStorage for combinedFilter
-      .mockReturnValueOnce([{ tags: [] }, jest.fn(), jest.fn()]);
+      .mockReturnValueOnce([{ tags: [] }, vi.fn(), vi.fn()]);
     render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
 
     const tag = screen.queryByText(/Type: /);
@@ -198,10 +195,9 @@ describe('TableView', () => {
   });
 
   it('should remove tags when "Clear all" button was clicked', async () => {
-    const setFilterMock = jest.fn();
+    const setFilterMock = vi.fn();
     const types = [TagsEnum.Coding, TagsEnum.Test, TagsEnum.Interview];
-    jest
-      .spyOn(ReactUse, 'useLocalStorage')
+    vi.spyOn(ReactUse, 'useLocalStorage')
       // Mock useLocalStorage for combinedFilter
       .mockReturnValueOnce([
         {
@@ -210,7 +206,7 @@ describe('TableView', () => {
           tags: types.map(t => ({ label: `${ColumnName.Type}: ${t}`, value: t, tagType: ColumnName.Type })),
         },
         setFilterMock,
-        jest.fn(),
+        vi.fn(),
       ]);
     render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
 

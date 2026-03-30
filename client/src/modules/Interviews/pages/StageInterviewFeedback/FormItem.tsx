@@ -15,7 +15,7 @@ export function FormItem({ item, form, stepId }: { item: StepFormItem; form: For
       return (
         <Item name={item.id} rules={[{ required: item.required, message: 'Required' }]}>
           <Group>
-            <Space direction="vertical">
+            <Space orientation="vertical">
               {item.options.map((option: RadioOption) => {
                 return (
                   <Fragment key={option.id}>

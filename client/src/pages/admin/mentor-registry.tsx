@@ -271,7 +271,7 @@ function Page() {
       </Row>
       <Col style={{ padding: 24 }}>
         <Alert
-          message={
+          title={
             <>
               The number of mentors below can mentor: <Typography.Text strong>{maxStudents} students</Typography.Text>
             </>

@@ -5,8 +5,8 @@ import { Contacts, UserData } from '@client/modules/Opportunities/models';
 import { OpportunitiesApi } from '@client/api';
 import { EditCV } from './index';
 
-const mockSuccessNotification = jest.fn();
-jest.mock('hooks', () => ({
+const mockSuccessNotification = vi.fn();
+vi.mock('@client/hooks', () => ({
   useMessage: () => ({
     notification: {
       success: mockSuccessNotification,
@@ -20,22 +20,22 @@ const enum EditCvForms {
   VisibleCoursesForm,
 }
 
-jest.mock('./GeneralInfoForm', () => ({
+vi.mock('./GeneralInfoForm', () => ({
   GeneralInfoForm: forwardRef(() => <div>{EditCvForms.GeneralInfoForm}</div>),
 }));
 
-jest.mock('./ContactsForm', () => ({
+vi.mock('./ContactsForm', () => ({
   ContactsForm: forwardRef(() => <div>{EditCvForms.ContactsForm}</div>),
 }));
 
-jest.mock('./VisibleCoursesForm', () => ({
+vi.mock('./VisibleCoursesForm', () => ({
   VisibleCoursesForm: forwardRef(() => <div>{EditCvForms.VisibleCoursesForm}</div>),
 }));
 
 const mockGithubId = 'some-github';
 
-const mockSwitchView = jest.fn();
-const mockOnUpdateResume = jest.fn();
+const mockSwitchView = vi.fn();
+const mockOnUpdateResume = vi.fn();
 
 describe('EditCV', () => {
   test('should display forms and control buttons', () => {
@@ -105,7 +105,7 @@ describe('EditCV', () => {
   });
 
   test('should save data on Save button click and show success notification', async () => {
-    const mockSaveResume = jest
+    const mockSaveResume = vi
       .spyOn(OpportunitiesApi.prototype, 'saveResume')
       .mockResolvedValue({ data: {} } as AxiosResponse);
 

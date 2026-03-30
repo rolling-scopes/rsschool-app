@@ -11,15 +11,15 @@ describe('Notification', () => {
   });
 
   it('should not render alert when it was hide previously', () => {
-    jest.spyOn(ReactUse, 'useLocalStorage').mockReturnValueOnce([false, jest.fn(), jest.fn()]);
+    vi.spyOn(ReactUse, 'useLocalStorage').mockReturnValueOnce([false, vi.fn(), vi.fn()]);
     render(<Notification />);
 
     expect(screen.queryByText(INFO_MESSAGE)).not.toBeInTheDocument();
   });
 
   it('should hide alert when close icon was clicked', () => {
-    const setIsShowMock = jest.fn();
-    jest.spyOn(ReactUse, 'useLocalStorage').mockReturnValueOnce([true, setIsShowMock, jest.fn()]);
+    const setIsShowMock = vi.fn();
+    vi.spyOn(ReactUse, 'useLocalStorage').mockReturnValueOnce([true, setIsShowMock, vi.fn()]);
     render(<Notification />);
 
     const closeIcon = screen.getByRole('img', { name: 'close' });

@@ -67,7 +67,7 @@ export function ModalSubmitForm({
       }}
     >
       <Spin spinning={loading ?? false}>
-        {errorText ? <Alert style={{ marginBottom: 16 }} message={errorText} type="error" showIcon /> : null}
+        {errorText ? <Alert style={{ marginBottom: 16 }} title={errorText} type="error" showIcon /> : null}
         {submitted ? (
           <Result
             status="success"

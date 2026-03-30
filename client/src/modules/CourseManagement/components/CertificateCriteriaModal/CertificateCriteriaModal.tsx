@@ -42,7 +42,7 @@ export function CertificateCriteriaModal({ courseId, onSubmit, onClose, isModalO
       >
         <Row gutter={[0, 16]}>
           <Col span={24}>
-            <Alert message={CERTIFICATE_ALERT_MESSAGE} showIcon />
+            <Alert title={CERTIFICATE_ALERT_MESSAGE} showIcon />
           </Col>
           <Col span={24}>
             <SelectCourseTasks courseId={courseId} label="Tasks" />

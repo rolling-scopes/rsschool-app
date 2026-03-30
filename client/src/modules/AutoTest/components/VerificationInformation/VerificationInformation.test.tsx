@@ -30,9 +30,9 @@ function renderVerificationInformation({
     courseTask,
     isTableVisible,
     loading: false,
-    reload: jest.fn(),
-    startTask: jest.fn(),
-    showAnswers: jest.fn(),
+    reload: vi.fn(),
+    startTask: vi.fn(),
+    showAnswers: vi.fn(),
   };
 
   return render(<VerificationInformation {...props} />);

@@ -225,7 +225,7 @@ export function CrossCheckSubmit() {
                 >
                   <Input placeholder="link in the form of https://www.google.com" />
                 </Form.Item>
-                {task.submitText ? <Alert showIcon message={task.submitText} /> : null}
+                {task.submitText ? <Alert showIcon title={task.submitText} /> : null}
               </>
             )}
             {submitAllowed && newCrossCheck && (
