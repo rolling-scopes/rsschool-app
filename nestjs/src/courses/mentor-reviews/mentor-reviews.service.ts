@@ -54,7 +54,7 @@ export class MentorReviewsService {
       .leftJoin('mentor.user', 'mentorUser')
       .leftJoin('taskResult.lastChecker', 'lastChecker')
       .where('student.courseId = :courseId AND student.isExpelled = false', { courseId })
-      .andWhere('courseTask.checker = :checker', { checker: Checker.Mentor })
+      .andWhere('courseTask.checker = :checkerType', { checkerType: Checker.Mentor })
       .select([
         'student.id',
         'student.mentorId',
