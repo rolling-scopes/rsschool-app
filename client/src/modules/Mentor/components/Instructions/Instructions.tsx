@@ -54,7 +54,7 @@ function Instructions({ courseId, discordServerId }: InstructionsProps) {
                   </Space>
                 }
                 description={
-                  <Space direction="vertical" size="middle">
+                  <Space orientation="vertical" size="middle">
                     {renderDescription(s.html)}
                     {s.links ? renderSocialLinks(s.links) : null}
                   </Space>

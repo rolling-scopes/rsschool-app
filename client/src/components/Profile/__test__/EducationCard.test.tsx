@@ -7,14 +7,14 @@ describe('EducationCard', () => {
 
     it('if editing mode is disabled', () => {
       const { container } = render(
-        <EducationCard data={mockData} isEditingModeEnabled={false} updateProfile={jest.fn()} />,
+        <EducationCard data={mockData} isEditingModeEnabled={false} updateProfile={vi.fn()} />,
       );
       expect(container).toMatchSnapshot();
     });
 
     it('if editing mode is enabled', () => {
       const { container } = render(
-        <EducationCard data={mockData} isEditingModeEnabled={false} updateProfile={jest.fn()} />,
+        <EducationCard data={mockData} isEditingModeEnabled={true} updateProfile={vi.fn()} />,
       );
       expect(container).toMatchSnapshot();
     });
@@ -24,14 +24,14 @@ describe('EducationCard', () => {
         <EducationCard
           data={[{ graduationYear: null, faculty: null, university: null }]}
           isEditingModeEnabled={true}
-          updateProfile={jest.fn()}
+          updateProfile={vi.fn()}
         />,
       );
       expect(container).toMatchSnapshot();
     });
 
     it('if "data" is empty', () => {
-      const { container } = render(<EducationCard data={[]} isEditingModeEnabled={false} updateProfile={jest.fn()} />);
+      const { container } = render(<EducationCard data={[]} isEditingModeEnabled={false} updateProfile={vi.fn()} />);
       expect(container).toMatchSnapshot();
     });
   });

@@ -158,8 +158,8 @@ function generateData(isEmpty = false): ModalProps {
     modalLoading: false,
     disciplines: [],
     mode: isEmpty ? 'create' : 'edit',
-    setDataCriteria: jest.fn(),
-    handleModalSubmit: jest.fn(),
-    toggleModal: jest.fn(),
+    setDataCriteria: vi.fn(),
+    handleModalSubmit: vi.fn(),
+    toggleModal: vi.fn(),
   };
 }

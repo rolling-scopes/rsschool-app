@@ -3,12 +3,12 @@ import { TeamDistributionApi } from '@client/api';
 import { renderHook } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 
-jest.mock('api');
+vi.mock('@client/api');
 
-const mockError = jest.fn();
-const mockSuccess = jest.fn();
+const mockError = vi.fn();
+const mockSuccess = vi.fn();
 
-jest.mock('hooks', () => ({
+vi.mock('@client/hooks', () => ({
   useMessage: () => ({
     message: {
       error: mockError,
@@ -19,7 +19,7 @@ jest.mock('hooks', () => ({
 
 describe('useSubmitTeamScore', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should have the correct initial states', () => {
@@ -53,7 +53,7 @@ describe('useSubmitTeamScore', () => {
   });
 
   it('should handle successful score submission', async () => {
-    (TeamDistributionApi.prototype.submitScore as jest.Mock).mockResolvedValueOnce({});
+    vi.mocked(TeamDistributionApi.prototype.submitScore).mockResolvedValueOnce({});
 
     const { result } = renderHook(() => useSubmitTeamScore(1, 2));
 
@@ -71,7 +71,7 @@ describe('useSubmitTeamScore', () => {
   });
 
   it('should handle failed score submission', async () => {
-    (TeamDistributionApi.prototype.submitScore as jest.Mock).mockRejectedValueOnce(new Error('API error'));
+    vi.mocked(TeamDistributionApi.prototype.submitScore).mockRejectedValueOnce(new Error('API error'));
 
     const { result } = renderHook(() => useSubmitTeamScore(1, 2));
 

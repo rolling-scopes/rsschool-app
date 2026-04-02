@@ -7,14 +7,24 @@ import { AxiosError } from 'axios';
 import * as UserUtils from '@client/domain/user';
 import { CourseTaskVerifications } from '@client/modules/AutoTest/types';
 
-jest.mock('services/files');
-jest.mock('domain/user');
-jest.mock('api');
+vi.mock('@client/services/files', () => ({
+  FilesService: vi.fn(),
+}));
+vi.mock('@client/domain/user');
+vi.mock('@client/api', async importOriginal => {
+  const actual = await importOriginal<typeof import('@client/api')>();
+  function MockCourseTaskVerificationsApi() {}
+  MockCourseTaskVerificationsApi.prototype.createTaskVerification = vi.fn();
+  return {
+    ...actual,
+    CourseTaskVerificationsApi: MockCourseTaskVerificationsApi,
+  };
+});
 
-const mockErrorNotification = jest.fn();
-const mockSuccessNotification = jest.fn();
+const mockErrorNotification = vi.fn();
+const mockSuccessNotification = vi.fn();
 
-jest.mock('hooks/useMessage', () => ({
+vi.mock('@client/hooks/useMessage', () => ({
   useMessage: () => ({
     notification: {
       error: mockErrorNotification,
@@ -23,8 +33,10 @@ jest.mock('hooks/useMessage', () => ({
   }),
 }));
 
-const uploadFileMock = jest.fn().mockImplementation(() => ({ s3Key: 'some-string' }));
-(FilesService as jest.Mock).mockImplementation(() => ({ uploadFile: uploadFileMock }));
+const uploadFileMock = vi.fn().mockImplementation(() => ({ s3Key: 'some-string' }));
+vi.mocked(FilesService).mockImplementation(function () {
+  return { uploadFile: uploadFileMock };
+});
 
 const FILE_VALUE_MOCK = {
   upload: {
@@ -60,10 +72,9 @@ describe('useCourseTaskSubmit', () => {
   `(
     'should post task verification for $type',
     async ({ type, values, result }: { type: CourseTaskDetailedDtoTypeEnum; values: any; result: any }) => {
-      const createTaskVerificationMock = jest.fn().mockResolvedValueOnce(() => ({ data: { courseTask: { type } } }));
-      (CourseTaskVerificationsApi as jest.Mock).mockImplementationOnce(() => ({
-        createTaskVerification: createTaskVerificationMock,
-      }));
+      const createTaskVerificationMock = vi
+        .spyOn(CourseTaskVerificationsApi.prototype, 'createTaskVerification')
+        .mockResolvedValueOnce({ data: { courseTask: { type } } });
 
       const courseTask = generateCourseTask(type);
       const { submit } = renderUseCourseTaskSubmit(courseTask);
@@ -89,7 +100,7 @@ describe('useCourseTaskSubmit', () => {
 
   describe('when request failed', () => {
     beforeEach(() => {
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
 
     it.each`
@@ -102,7 +113,7 @@ describe('useCourseTaskSubmit', () => {
       'and status code is $statusCode should trigger error notification',
       async ({ statusCode }: { statusCode: number }) => {
         const error = generateAxiosError(statusCode);
-        const createTaskVerificationSpy = jest
+        const createTaskVerificationSpy = vi
           .spyOn(CourseTaskVerificationsApi.prototype, 'createTaskVerification')
           .mockRejectedValueOnce(error);
 
@@ -128,8 +139,8 @@ describe('useCourseTaskSubmit', () => {
       `and status code is 403 should trigger error notification`,
       async ({ isExpelled, perHour }: { isExpelled: boolean; perHour: number }) => {
         const error = generateAxiosError(403);
-        jest.spyOn(UserUtils, 'isExpelledStudent').mockImplementationOnce(() => isExpelled);
-        const createTaskVerificationSpy = jest
+        vi.spyOn(UserUtils, 'isExpelledStudent').mockImplementationOnce(() => isExpelled);
+        const createTaskVerificationSpy = vi
           .spyOn(CourseTaskVerificationsApi.prototype, 'createTaskVerification')
           .mockRejectedValueOnce(error);
 
@@ -149,7 +160,7 @@ describe('useCourseTaskSubmit', () => {
 });
 
 function renderUseCourseTaskSubmit(courseTask: CourseTaskVerifications) {
-  const finishTask = jest.fn();
+  const finishTask = vi.fn();
   const { result: view } = renderHook(() => useCourseTaskSubmit(100, courseTask, finishTask));
 
   return { ...view.current, result: view, finishTask };

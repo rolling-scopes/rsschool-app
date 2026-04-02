@@ -28,10 +28,10 @@ export function MentorCard({ mentor }: MentorCardProps) {
         </Link>,
       ]}
     >
-      <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+      <Space orientation="vertical" size="middle" style={{ width: '100%' }}>
         <Flex align="center" gap="middle">
           <GithubAvatar githubId={githubId} size={48} />
-          <Space direction="vertical" size={0} style={{ flex: 1, minWidth: 0 }}>
+          <Space orientation="vertical" size={0} style={{ flex: 1, minWidth: 0 }}>
             <Title level={5} style={{ margin: 0 }}>
               {name}
             </Title>

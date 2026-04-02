@@ -3,7 +3,7 @@ import { TaskSolutionsTable, TaskSolutionsTableProps } from '.';
 import { MentorDashboardDto } from '@client/api';
 import { SolutionItemStatus, TaskSolutionsTableColumnName } from '../../constants';
 
-jest.mock('modules/Mentor/hooks/useMentorDashboard');
+vi.mock('@client/modules/Mentor/hooks/useMentorDashboard');
 
 function generateData(count = 3): MentorDashboardDto[] {
   return new Array(count).fill({}).map((_, idx) => ({
@@ -25,7 +25,7 @@ const mockProps: TaskSolutionsTableProps = {
   courseId: 400,
   data: generateData(),
   loading: false,
-  onChange: jest.fn(),
+  onChange: vi.fn(),
 };
 
 describe('TaskSolutionsTable', () => {

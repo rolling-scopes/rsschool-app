@@ -1,6 +1,8 @@
+import { vi } from 'vitest';
+
 export const useTheme = () => ({
   theme: 'light',
-  themeChange: jest.fn(),
+  themeChange: vi.fn(),
   autoTheme: true,
-  changeAutoTheme: jest.fn(),
+  changeAutoTheme: vi.fn(),
 });

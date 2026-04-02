@@ -75,7 +75,7 @@ export default function StudentLeaveCourse({
             rules={[{ required: true, message: 'Please select at least one reason.' }]}
           >
             <Checkbox.Group>
-              <Space direction="vertical">
+              <Space orientation="vertical">
                 {reasonsOptions.map(option => (
                   <Checkbox key={option.value} value={option.value}>
                     {option.labelEn}

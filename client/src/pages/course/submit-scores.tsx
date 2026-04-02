@@ -189,18 +189,24 @@ async function parseFiles(incomingFiles: IncomingFiles): Promise<StudentScore[]>
 
   const parsedRecords = await Promise.all(filesContent.map(content => csv().fromString(content)));
   const scores = parsedRecords.flat().map(item => {
-    if (isUndefined(item.GitHub) || isUndefined(item.Score)) {
+    // Normalize keys to lowercase for case-insensitive header matching
+    const normalizedItem: Record<string, string> = {};
+    for (const key in item) {
+      normalizedItem[key.toLowerCase()] = item[key];
+    }
+
+    if (isUndefined(normalizedItem.github) || isUndefined(normalizedItem.score)) {
       throw new Error('Incorrect data: CSV file should contain the headers named "GitHub" and "Score"!');
     }
 
-    const parsedScore = parseInt(item.Score, 10);
+    const parsedScore = parseInt(normalizedItem.score, 10);
     if (isNaN(parsedScore)) {
-      throw new Error(`Incorrect data: Cannot parse "Score" for GitHub ${item.GitHub}`);
+      throw new Error(`Incorrect data: Cannot parse "Score" for GitHub ${normalizedItem.github}`);
     }
 
     return {
       score: parsedScore,
-      github: filterLogin(item.GitHub).toLowerCase(),
+      github: filterLogin(normalizedItem.github).toLowerCase(),
     };
   });
 

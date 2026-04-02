@@ -30,7 +30,7 @@ export function EmailConfirmation({ connection, sendConfirmationEmail }: Props) 
   return (
     <Alert
       type="error"
-      message={
+      title={
         <div>
           Email is not verified.{' '}
           {allowedToResend && (

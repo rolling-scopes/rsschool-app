@@ -4,12 +4,12 @@ import { SettingsButtons } from '../SettingsPanel';
 import { buildMenuItem } from '../SettingsPanel/helpers';
 import { buildExportLink, buildICalendarLink, setExportLink } from './helpers';
 
-window.prompt = jest.fn();
+window.prompt = vi.fn();
 
-jest.mock('./helpers', () => ({
-  buildExportLink: jest.fn(),
-  buildICalendarLink: jest.fn(),
-  setExportLink: jest.fn(),
+vi.mock('./helpers', () => ({
+  buildExportLink: vi.fn(),
+  buildICalendarLink: vi.fn(),
+  setExportLink: vi.fn(),
 }));
 
 const PROPS_MOCK: AdditionalActionsProps = {
@@ -18,7 +18,7 @@ const PROPS_MOCK: AdditionalActionsProps = {
   timezone: 'Region/Town',
   calendarToken: 'calendar-token',
   courseAlias: 'course-alias',
-  onCopyFromCourse: jest.fn(),
+  onCopyFromCourse: vi.fn(),
 };
 
 describe('AdditionalActions', () => {

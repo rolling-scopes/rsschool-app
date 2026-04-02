@@ -4,7 +4,7 @@ import { SolutionItemStatus, TASKS_STATUSES } from '@client/modules/Mentor/const
 
 const PROPS_MOCK = {
   statuses: [],
-  onTabChange: jest.fn(),
+  onTabChange: vi.fn(),
   activeTab: SolutionItemStatus.InReview,
 };
 

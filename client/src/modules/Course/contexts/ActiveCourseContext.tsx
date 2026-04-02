@@ -79,7 +79,7 @@ export const ActiveCourseProvider = ({ children, publicRoutes }: Props) => {
       <Row justify="center">
         <Col md={12} xs={18} style={{ marginTop: '60px' }}>
           <Alert
-            message="No Access"
+            title="No Access"
             description="Probably you do not participate in the course. Please register or choose another course."
             type="error"
           />

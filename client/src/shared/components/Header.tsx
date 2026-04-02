@@ -101,7 +101,7 @@ export function Header({ title, showCourseName, showCarousel = true }: Props) {
 
   return (
     <Space
-      direction="vertical"
+      orientation="vertical"
       size={0}
       style={{
         width: '100%',

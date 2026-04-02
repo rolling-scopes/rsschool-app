@@ -6,7 +6,11 @@ const mockSystemTime = new Date('2022-09-26T13:41:39.161Z');
 
 describe('ExpirationTooltip', () => {
   beforeAll(() => {
-    jest.useFakeTimers().setSystemTime(mockSystemTime);
+    vi.useFakeTimers({ shouldAdvanceTime: true }).setSystemTime(mockSystemTime);
+  });
+
+  afterAll(() => {
+    vi.useRealTimers();
   });
 
   test('should show corresponding title and text in case if CV is far from expiration', async () => {

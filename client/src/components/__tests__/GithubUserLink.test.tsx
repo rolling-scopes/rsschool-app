@@ -2,25 +2,25 @@ import { act, render, screen } from '@testing-library/react';
 import { GithubUserLink } from '@client/shared/components/GithubUserLink';
 import { useCopyToClipboard } from 'react-use';
 
-jest.mock('hooks', () => ({
+vi.mock('@client/hooks', () => ({
   useMessage: () => ({
     message: { success: mockSuccess },
   }),
 }));
 
-jest.mock('react-use', () => ({
-  useCopyToClipboard: jest.fn(),
+vi.mock('react-use', () => ({
+  useCopyToClipboard: vi.fn(),
 }));
 
 const TEST_VALUE = 'test-value';
 const TEST_FULL_NAME = 'test-full-name';
 
-const mockSuccess = jest.fn();
-const mockCopyToClipboard = jest.fn();
+const mockSuccess = vi.fn();
+const mockCopyToClipboard = vi.fn();
 
 describe('GithubUserLink', () => {
   beforeEach(() => {
-    (useCopyToClipboard as jest.Mock).mockReturnValue([null, mockCopyToClipboard]);
+    vi.mocked(useCopyToClipboard).mockReturnValue([null, mockCopyToClipboard]);
   });
 
   it('should render correct links', () => {

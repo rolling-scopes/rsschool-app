@@ -6,7 +6,7 @@ import { CourseScheduleItemDtoStatusEnum } from '@client/api';
 const StatusEnum = CourseScheduleItemDtoStatusEnum;
 
 describe('StatusTabs', () => {
-  const onTabChangeMock = jest.fn();
+  const onTabChangeMock = vi.fn();
 
   it('should render status tabs', () => {
     const statuses = generateStatuses();

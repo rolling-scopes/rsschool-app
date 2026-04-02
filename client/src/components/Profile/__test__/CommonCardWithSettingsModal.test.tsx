@@ -11,8 +11,8 @@ describe('CommonCardWithSettingsModal', () => {
           content={<p>Card body</p>}
           profileSettingsContent={<div>Settings content</div>}
           isEditingModeEnabled={true}
-          saveProfile={jest.fn()}
-          cancelChanges={jest.fn()}
+          saveProfile={vi.fn()}
+          cancelChanges={vi.fn()}
         />,
       );
       expect(container).toMatchSnapshot();
@@ -25,8 +25,8 @@ describe('CommonCardWithSettingsModal', () => {
           content={null}
           profileSettingsContent={<div>Settings content</div>}
           isEditingModeEnabled={false}
-          saveProfile={jest.fn()}
-          cancelChanges={jest.fn()}
+          saveProfile={vi.fn()}
+          cancelChanges={vi.fn()}
         />,
       );
       expect(container).toMatchSnapshot();

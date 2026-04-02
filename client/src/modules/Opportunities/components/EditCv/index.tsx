@@ -145,7 +145,7 @@ export const EditCV = (props: Props) => {
                   style={{ marginBottom: '10px', width: '100%' }}
                   showIcon
                   type="error"
-                  message="All required fields must be filled first"
+                  title="All required fields must be filled first"
                 />
               ) : null}
             </Row>

@@ -1,7 +1,27 @@
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
 import matchMediaPolyfill from 'mq-polyfill';
 
 matchMediaPolyfill(window);
+
+// antd v6 @rc-component/util calls getComputedStyle with pseudoElt argument.
+// jsdom does not support the second argument and throws "Not implemented".
+// Provide a stub that returns an empty CSSStyleDeclaration-like object.
+const origGetComputedStyle = window.getComputedStyle;
+window.getComputedStyle = (elt: Element, pseudoElt?: string | null) => {
+  if (pseudoElt) {
+    return {} as CSSStyleDeclaration;
+  }
+  return origGetComputedStyle(elt);
+};
+
+// antd v6 uses CSS.supports for feature detection and animations.
+// jsdom does not include CSS.supports, so we provide a no-op stub.
+if (typeof globalThis.CSS === 'undefined') {
+  // @ts-expect-error partial polyfill for jsdom
+  globalThis.CSS = { supports: () => false };
+} else if (typeof globalThis.CSS.supports !== 'function') {
+  globalThis.CSS.supports = () => false;
+}
 
 // antd v6 uses ResizeObserver internally via @rc-component/resize-observer.
 // jsdom does not include ResizeObserver, so we provide a mock on global.

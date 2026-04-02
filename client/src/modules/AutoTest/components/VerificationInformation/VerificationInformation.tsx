@@ -42,7 +42,7 @@ function VerificationInformation({
         justify="end"
       >
         <Col span={24}>
-          <Alert showIcon type="info" message={explanation} />
+          <Alert showIcon type="info" title={explanation} />
         </Col>
         {attemptsLeftMessage && (
           <Col flex="auto">
