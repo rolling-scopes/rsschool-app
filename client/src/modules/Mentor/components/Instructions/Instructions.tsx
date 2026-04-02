@@ -38,7 +38,7 @@ function Instructions({ courseId, discordServerId }: InstructionsProps) {
   }, []);
 
   return (
-    <Card bordered={false}>
+    <Card variant="borderless">
       <Grid style={{ width: '100%' }} hoverable={false}>
         <Meta title={title} description={<Text>{description}</Text>} />
       </Grid>

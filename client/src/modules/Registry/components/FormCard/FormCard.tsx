@@ -8,7 +8,7 @@ type Props = {
 
 export function FormCard({ title, children }: Props) {
   return (
-    <Card title={title} bordered={false} headStyle={{ paddingBlock: 16 }}>
+    <Card title={title} variant="borderless" styles={{ header: { paddingBlock: 16 } }}>
       {children}
     </Card>
   );
