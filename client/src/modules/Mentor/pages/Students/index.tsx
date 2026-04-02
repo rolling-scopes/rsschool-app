@@ -33,7 +33,7 @@ export function Students() {
             <Card
               key={student.githubId}
               style={{ marginBottom: 32 }}
-              headStyle={{ border: 'none', paddingTop: 12 }}
+              styles={{ header: { border: 'none', paddingTop: 12 } }}
               size="small"
               title={
                 <>
