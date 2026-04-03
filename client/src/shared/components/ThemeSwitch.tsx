@@ -2,48 +2,32 @@ import { Dropdown, Flex, MenuProps, theme as antTheme } from 'antd';
 import { useTheme } from '@client/hooks';
 import { AppTheme } from '@client/providers';
 import { MoonOutlined, SkinOutlined, SunOutlined } from '@ant-design/icons';
-import NonTouchTooltip from '@client/shared/components/NonTouchTooltip';
 
 const THEME_CONFIG = {
-  [AppTheme.Dark]: {
-    icon: <MoonOutlined />,
-    label: 'Dark Theme',
-  },
-  [AppTheme.Light]: {
-    icon: <SunOutlined />,
-    label: 'Light Theme',
-  },
-  auto: {
-    icon: <SkinOutlined />,
-    label: 'Auto Theme',
-  },
+  [AppTheme.Dark]: <MoonOutlined title="Dark Color Theme" />,
+  [AppTheme.Light]: <SunOutlined title="Light Color Theme" />,
+  auto: <SkinOutlined title="Color Them Follows the OS Settings" />,
 };
 
 export default function ThemeSwitch() {
   const { themeChange, theme, autoTheme, changeAutoTheme } = useTheme();
   const { token } = antTheme.useToken();
 
-  const themeIcon = autoTheme ? THEME_CONFIG.auto.icon : THEME_CONFIG[theme].icon;
+  const themeIcon = autoTheme ? THEME_CONFIG.auto : THEME_CONFIG[theme];
 
   const items: MenuProps['items'] = [
     {
-      label: (
-        <NonTouchTooltip title={THEME_CONFIG[AppTheme.Dark].label}>{THEME_CONFIG[AppTheme.Dark].icon}</NonTouchTooltip>
-      ),
+      label: THEME_CONFIG[AppTheme.Dark],
       key: 'dark',
       onClick: () => themeChange(AppTheme.Dark),
     },
     {
-      label: (
-        <NonTouchTooltip title={THEME_CONFIG[AppTheme.Light].label}>
-          {THEME_CONFIG[AppTheme.Light].icon}
-        </NonTouchTooltip>
-      ),
+      label: THEME_CONFIG[AppTheme.Light],
       key: 'light',
       onClick: () => themeChange(AppTheme.Light),
     },
     {
-      label: <NonTouchTooltip title={THEME_CONFIG.auto.label}>{THEME_CONFIG.auto.icon}</NonTouchTooltip>,
+      label: THEME_CONFIG.auto,
       key: 'auto',
       onClick: () => changeAutoTheme(),
     },
@@ -61,11 +45,9 @@ export default function ThemeSwitch() {
         color: token.colorTextLabel,
       }}
     >
-      <NonTouchTooltip title="Change color theme">
-        <Dropdown menu={{ items }} placement="bottom" trigger={['click']}>
-          {themeIcon}
-        </Dropdown>
-      </NonTouchTooltip>
+      <Dropdown menu={{ items }} placement="bottom" trigger={['click']}>
+        {themeIcon}
+      </Dropdown>
     </Flex>
   );
 }
