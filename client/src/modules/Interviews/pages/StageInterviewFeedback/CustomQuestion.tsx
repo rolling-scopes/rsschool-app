@@ -19,7 +19,7 @@ export function CustomQuestion({ cancel, save }: Props) {
   }
 
   return (
-    <Card bodyStyle={{ padding: '12px 24px' }} style={{ marginBottom: 16 }}>
+    <Card styles={{ body: { padding: '12px 24px' } }} style={{ marginBottom: 16 }}>
       <Input
         placeholder="Enter your question"
         ref={addRef}

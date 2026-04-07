@@ -29,7 +29,7 @@ export function CertificateCriteriaModal({ courseId, onSubmit, onClose, isModalO
       title="Certificate Criteria"
       onCancel={onClose}
       open={isModalOpen}
-      bodyStyle={{ paddingBlock: 16 }}
+      styles={{ body: { paddingBlock: 16 } }}
       footer={null}
     >
       <Form
