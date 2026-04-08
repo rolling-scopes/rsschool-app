@@ -10,8 +10,5 @@
     "./src/**/__tests__/*",
     "./src/**/__test__/*"
   ],
-  "exclude": [
-    "./node_modules",
-    "./src/__mocks__/**"
-  ]
+  "exclude": ["./node_modules", "./src/__mocks__/**"]
 }

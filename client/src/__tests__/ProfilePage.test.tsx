@@ -57,4 +57,3 @@ describe('ProfilePage', () => {
     });
   });
 });
-
