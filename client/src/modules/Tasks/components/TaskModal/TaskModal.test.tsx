@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { generateTasksData } from '@client/modules/Tasks/utils/test-utils';
 import { FormValues } from '@client/modules/Tasks/types';
 import {
@@ -99,12 +100,13 @@ describe('TaskModal', () => {
     });
 
     test('should render error messages on required fields', async () => {
+      const user = userEvent.setup();
       render(<TaskModal {...generateData(true)} />);
 
       const save = screen.getByRole('button', { name: /save/i });
       expect(save).toBeInTheDocument();
 
-      fireEvent.click(save);
+      await user.click(save);
 
       const errors = await Promise.all([
         screen.findByText(ERROR_MESSAGES.name),
