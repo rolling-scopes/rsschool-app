@@ -1,6 +1,6 @@
-import { List } from 'antd';
 import Link from 'next/link';
 import { LinkRenderData } from '@client/modules/Home/data/links';
+import { List } from '@client/shared/components/List';
 
 type CourseLinksProps = {
   courseLinks: LinkRenderData[];

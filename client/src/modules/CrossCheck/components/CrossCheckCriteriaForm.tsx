@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Typography, InputNumber, Button, Modal, List } from 'antd';
+import { Typography, InputNumber, Button, Modal } from 'antd';
 import { isEqual } from 'lodash';
 
 import { SubtaskCriteria } from './criteria/SubtaskCriteria';
@@ -8,6 +8,7 @@ import { PenaltyCriteria } from './criteria/PenaltyCriteria';
 import { CrossCheckCriteriaDataDto, CrossCheckSolutionReviewDto } from '@client/api';
 import { TaskType } from '../constants';
 import styles from './CrossCheckCriteriaForm.module.css';
+import { List } from '@client/shared/components/List';
 
 const { Text, Title } = Typography;
 

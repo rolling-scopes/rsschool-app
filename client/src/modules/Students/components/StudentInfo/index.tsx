@@ -1,4 +1,4 @@
-import { Avatar, Col, Collapse, List, Row, Space, Typography } from 'antd';
+import { Avatar, Col, Collapse, Row, Space, Typography } from 'antd';
 import GithubFilled from '@ant-design/icons/GithubFilled';
 import MailOutlined from '@ant-design/icons/MailOutlined';
 import LinkedinOutlined from '@ant-design/icons/LinkedinOutlined';
@@ -9,6 +9,7 @@ import { DiscordOutlined } from '@client/shared/components/Icons/DiscordOutlined
 import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 import { UserStudentDto } from '@client/api';
 import { CourseItem } from '../CourseItem';
+import { List } from '@client/shared/components/List';
 
 type Props = {
   student: UserStudentDto;
@@ -70,7 +71,6 @@ export function StudentInfo(props: Props) {
       <Collapse defaultActiveKey={['courses']}>
         <Panel header="Contacts" key="contacts">
           <List
-            itemLayout="horizontal"
             dataSource={UserContacts(student)}
             renderItem={item => (
               <List.Item>
@@ -81,7 +81,6 @@ export function StudentInfo(props: Props) {
         </Panel>
         <Panel header="Courses" key="courses">
           <List
-            itemLayout="horizontal"
             dataSource={[...student.previousCourses, ...student.onGoingCourses].sort(course =>
               course.hasCertificate ? -1 : 1,
             )}

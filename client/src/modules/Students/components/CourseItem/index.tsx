@@ -1,6 +1,7 @@
-import { Flex, List, Space, Typography } from 'antd';
+import { Flex, Space, Typography } from 'antd';
 import { SafetyCertificateTwoTone } from '@ant-design/icons';
 import { UserStudentCourseDto } from '@client/api';
+import { List } from '@client/shared/components/List';
 
 const { Text, Paragraph, Link } = Typography;
 

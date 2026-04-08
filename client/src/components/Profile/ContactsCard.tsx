@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { List, theme, Typography } from 'antd';
+import { theme, Typography } from 'antd';
 import ContactsOutlined from '@ant-design/icons/ContactsOutlined';
 import isEqual from 'lodash/isEqual';
 import { UpdateProfileInfoDto } from '@client/api';
@@ -10,6 +10,7 @@ import CommonCardWithSettingsModal from './CommonCardWithSettingsModal';
 import { Contact, ContactsKeys } from '@client/services/user';
 import ContactsCardForm from './ContactsCardForm';
 import { epamEmailPattern } from '@client/services/validators';
+import { List } from '@client/shared/components/List';
 
 const { Paragraph, Text } = Typography;
 
@@ -115,7 +116,6 @@ const ContactsCard = ({ connections, data, isEditingModeEnabled, sendConfirmatio
 
   const content = filledContacts.length ? (
     <List
-      itemLayout="horizontal"
       dataSource={filledContacts}
       renderItem={({ name, value, key }: Contact) => (
         <List.Item>
