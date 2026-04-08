@@ -20,7 +20,7 @@ const mockCopyToClipboard = vi.fn();
 
 describe('GithubUserLink', () => {
   beforeEach(() => {
-    vi.mocked(useCopyToClipboard).mockReturnValue([null, mockCopyToClipboard]);
+    vi.mocked(useCopyToClipboard).mockReturnValue([{ noUserInteraction: true }, mockCopyToClipboard]);
   });
 
   it('should render correct links', () => {
