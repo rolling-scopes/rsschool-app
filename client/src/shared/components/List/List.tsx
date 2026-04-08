@@ -51,12 +51,7 @@ export function List<T>({
   };
 
   return (
-    <Flex
-      vertical
-      data-size={size}
-      style={containerStyle}
-      className={className}
-    >
+    <Flex vertical data-size={size} style={containerStyle} className={className}>
       {header && (
         <Space
           style={{

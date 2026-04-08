@@ -30,7 +30,7 @@ export function EmailConfirmation({ connection, sendConfirmationEmail }: Props) 
   return (
     <Alert
       type="error"
-      style={{margin: '0.5rem 0'}}
+      style={{ margin: '0.5rem 0' }}
       title={
         <div>
           Email is not verified.{' '}

@@ -13,12 +13,7 @@ export function ListItemMeta({ avatar, title, description, style, className }: L
   const { token } = theme.useToken();
 
   return (
-    <Flex
-      align="center"
-      gap={token.marginSM}
-      style={{ paddingBlock: token.paddingSM, ...style }}
-      className={className}
-    >
+    <Flex align="center" gap={token.marginSM} style={{ paddingBlock: token.paddingSM, ...style }} className={className}>
       {avatar !== undefined && <Space>{avatar}</Space>}
       {(title !== undefined || description !== undefined) && (
         <Flex vertical gap={token.marginXXS}>

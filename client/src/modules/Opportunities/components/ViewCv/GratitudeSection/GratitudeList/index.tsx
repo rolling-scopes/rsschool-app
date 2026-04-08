@@ -59,11 +59,13 @@ export function GratitudeList({ feedback, showCount }: Props) {
                 {comment}
               </Paragraph>
               <Tooltip title={dateFormatted}>
-                <Text style={{
-                  color: token.colorTextSecondary,
-                  textAlign: 'end',
-                  fontSize: token.fontSizeSM
-                }}>
+                <Text
+                  style={{
+                    color: token.colorTextSecondary,
+                    textAlign: 'end',
+                    fontSize: token.fontSizeSM,
+                  }}
+                >
                   {relativeDate}
                 </Text>
               </Tooltip>
