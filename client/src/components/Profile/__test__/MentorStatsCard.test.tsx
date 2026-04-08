@@ -83,13 +83,14 @@ describe('MentorStatsCard', () => {
   });
 
   it('closes MentorStatsModal when Close is clicked', async () => {
-    render(<MentorStatsCard githubId="test" data={mentorStats} />);
+    const { unmount } = render(<MentorStatsCard githubId="test" data={mentorStats} />);
 
     fireEvent.click(screen.getByTestId('expand-button'));
     expect(screen.getByText('rs-2018-q1 statistics')).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'Close' }));
-    await waitFor(() => expect(screen.getByText('rs-2018-q1 statistics')).not.toBeVisible());
+    unmount();
+    await waitFor(() => expect(screen.queryByText('rs-2018-q1 statistics')).not.toBeInTheDocument());
   });
 
   it('renders students list for the first course when it has students', () => {

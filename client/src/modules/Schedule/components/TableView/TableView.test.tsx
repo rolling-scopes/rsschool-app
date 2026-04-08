@@ -1,4 +1,5 @@
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, within, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import TableView from './TableView';
 import * as ReactUse from 'react-use';
 import { ALL_TAB_KEY, ColumnKey, ColumnName } from '@client/modules/Schedule/constants';
@@ -113,6 +114,7 @@ describe('TableView', () => {
       ${ColumnName.Name}      | ${'Course Item 0'}
       ${ColumnName.Organizer} | ${'organizer 0'}
     `('by "$field" column search', async ({ field, searchQuery }: { field: string; searchQuery: string }) => {
+      const user = userEvent.setup();
       const data = generateCourseData();
       render(<TableView settings={PROPS_SETTINGS_MOCK} data={data} />);
       // Check that all items rendered
@@ -120,19 +122,16 @@ describe('TableView', () => {
       // Find and click search button for column
       const columnHeader = screen.getByRole('columnheader', { name: new RegExp(field, 'i') });
       const searchButton = within(columnHeader).getByRole('button', { name: /search/i });
-      fireEvent.click(searchButton);
+      await user.click(searchButton);
       // Type search query inside search input
       const searchInput = await screen.findByRole('textbox');
-      fireEvent.change(searchInput, { target: { value: searchQuery } });
-
-      // Apply search
-      const inputSearchBtn = screen.getByRole('button', { name: /search search/i });
-      fireEvent.click(inputSearchBtn);
+      await user.type(searchInput, searchQuery);
+      fireEvent.keyDown(searchInput, { key: 'Enter', keyCode: 13 });
 
       // Find the line with search query and no others
       const item = await screen.findByText(searchQuery);
       expect(item).toBeInTheDocument();
-      expect(screen.queryByText(data[1]?.name ?? '')).not.toBeInTheDocument();
+      await waitFor(() => expect(screen.queryByText(data[1]?.name ?? '')).not.toBeInTheDocument());
     });
   });
 
