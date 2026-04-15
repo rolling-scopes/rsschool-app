@@ -33,6 +33,24 @@ if (typeof global.ResizeObserver === 'undefined') {
   };
 }
 
+// @rc-component/motion (used by antd v6 for animations) detects CSS animation support by
+// checking if webkit animation properties exist in document.createElement('div').style.
+// In jsdom these properties exist but animation events never fire, so animated elements
+// (modals, drawers, etc.) remain in the DOM indefinitely after close.
+// Deleting these properties from CSSStyleDeclaration prototype makes supportTransition=false,
+// which causes @rc-component/motion to skip animations and unmount elements immediately.
+const _testDiv = document.createElement('div');
+const _CSSStyleDeclarationProto = Object.getPrototypeOf(_testDiv.style) as Record<string, unknown>;
+['webkitAnimation', 'WebkitAnimation'].forEach(prop => {
+  if (Object.prototype.hasOwnProperty.call(_CSSStyleDeclarationProto, prop)) {
+    try {
+      delete _CSSStyleDeclarationProto[prop];
+    } catch {
+      console.log(`Failed to delete CSSStyleDeclaration property: ${prop}`);
+    }
+  }
+});
+
 // antd v6 uses MessageChannel via @rc-component/form for batching form updates.
 // jsdom does not include MessageChannel, so we provide a working mock implementation on global.
 if (typeof global.MessageChannel === 'undefined') {
