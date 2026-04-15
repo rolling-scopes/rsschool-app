@@ -1,7 +1,8 @@
-import { Badge, Card, Col, List, Typography } from 'antd';
+import { Badge, Card, Col, Typography } from 'antd';
 import { FeedbackDto, FeedbackSoftSkillIdEnum } from '@client/api';
 import { DataTextValue } from '@client/modules/Opportunities/components/ViewCv/DataTextValue';
 import { BaseSection } from '../BaseSection';
+import { List } from '@client/shared/components/List';
 
 const { Text, Paragraph } = Typography;
 

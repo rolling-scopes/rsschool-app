@@ -1,5 +1,5 @@
 import UploadOutlined from '@ant-design/icons/UploadOutlined';
-import { Button, Form, List, Table, Typography, Upload } from 'antd';
+import { Button, Form, Space, Table, Typography, Upload } from 'antd';
 import type { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
 import { PageLayoutSimple } from '@client/shared/components/PageLayout';
 import { CourseTaskSelect } from '@client/shared/components/Forms';
@@ -14,6 +14,7 @@ import { CoursesTasksApi, CourseTaskDto } from '@client/api';
 import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { CourseRole } from '@client/services/models';
 import { useMessage } from '@client/hooks';
+import { List } from '@client/shared/components/List';
 
 interface SubmitResult {
   status: string;
@@ -109,7 +110,10 @@ export function SubmitScorePage() {
           ]}
           renderItem={(item, idx) => (
             <List.Item>
-              <Typography.Text strong>{idx + 1}</Typography.Text> {item}
+              <Space>
+                <Typography.Text strong>{idx + 1}</Typography.Text>
+                <Typography.Text>{item}</Typography.Text>
+              </Space>
             </List.Item>
           )}
           style={{ marginBottom: '1em' }}
