@@ -74,7 +74,7 @@ export function Students() {
               <Row gutter={16}>
                 <Col flex={8}>
                   <Statistic
-                    valueStyle={{ fontSize: 16 }}
+                    styles={{ content: { fontSize: 16 } }}
                     title="Rank"
                     value={student.rank}
                     prefix={<TrophyOutlined />}
@@ -82,7 +82,7 @@ export function Students() {
                 </Col>
                 <Col flex={8}>
                   <Statistic
-                    valueStyle={{ fontSize: 16 }}
+                    styles={{ content: { fontSize: 16 } }}
                     title="Score"
                     value={student.totalScore}
                     prefix={<StarOutlined />}
@@ -100,3 +100,4 @@ export function Students() {
     </PageLayoutSimple>
   );
 }
+
