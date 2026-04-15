@@ -21,13 +21,7 @@ describe('ListItemMeta', () => {
   });
 
   it('renders all parts together', () => {
-    render(
-      <ListItemMeta
-        avatar={<img src="avatar.png" alt="avatar" />}
-        title="Title"
-        description="Description"
-      />,
-    );
+    render(<ListItemMeta avatar={<img src="avatar.png" alt="avatar" />} title="Title" description="Description" />);
 
     expect(screen.getByAltText('avatar')).toBeInTheDocument();
     expect(screen.getByText('Title')).toBeInTheDocument();

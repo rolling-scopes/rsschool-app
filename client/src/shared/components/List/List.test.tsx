@@ -28,9 +28,7 @@ describe('List', () => {
   });
 
   it('renders header when provided', () => {
-    render(
-      <List dataSource={['item']} renderItem={item => <span>{item}</span>} header={<span>My Header</span>} />,
-    );
+    render(<List dataSource={['item']} renderItem={item => <span>{item}</span>} header={<span>My Header</span>} />);
 
     expect(screen.getByText('My Header')).toBeInTheDocument();
   });
@@ -42,9 +40,7 @@ describe('List', () => {
   });
 
   it('calls renderItem with item and index', () => {
-    const renderItem = vi.fn((item: string, index: number) => (
-      <span>{`${index}:${item}`}</span>
-    ));
+    const renderItem = vi.fn((item: string, index: number) => <span>{`${index}:${item}`}</span>);
 
     render(<List dataSource={['X']} renderItem={renderItem} />);
 
