@@ -1,10 +1,10 @@
 import { Button, Card, Divider, Flex, Space, Typography } from 'antd';
 import { HeartOutlined } from '@ant-design/icons';
-import Link from 'next/link';
 import { TopMentorDto } from '@client/api';
 import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 import styles from './MentorCard.module.css';
 import { List } from '@client/shared/components/List';
+import clsx from 'clsx';
 
 const { Title, Link: AntLink, Text } = Typography;
 
@@ -20,13 +20,11 @@ export function MentorCard({ mentor }: MentorCardProps) {
   return (
     <Card
       hoverable
-      className={styles.card}
+      className={clsx(styles.card, 'antd-card_action_button_with_icon-fix')}
       actions={[
-        <Link href={gratitudeUrl} passHref legacyBehavior key="thank">
-          <Button type="text" icon={<HeartOutlined />}>
-            Say Thank you!
-          </Button>
-        </Link>,
+        <Button key="thank" href={gratitudeUrl} type="link" icon={<HeartOutlined />}>
+          Say Thank you!
+        </Button>,
       ]}
     >
       <Space orientation="vertical" size="middle" style={{ width: '100%' }}>

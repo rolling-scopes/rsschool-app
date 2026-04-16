@@ -15,6 +15,7 @@ import { useMentorStudents } from '@client/modules/Mentor/hooks/useMentorStudent
 import Link from 'next/link';
 import { useContext } from 'react';
 import * as routes from '@client/services/routes';
+import { urlToString } from '@client/services/routes';
 
 export function Students() {
   const session = useContext(SessionContext);
@@ -33,8 +34,9 @@ export function Students() {
             <Card
               key={student.githubId}
               style={{ marginBottom: 32 }}
-              styles={{ header: { border: 'none', paddingTop: 12 } }}
+              styles={{ header: { border: 'none', paddingTop: 12 }}}
               size="small"
+              className='antd-card_action_button_with_icon-fix'
               title={
                 <>
                   <div>
@@ -52,17 +54,23 @@ export function Students() {
                 </>
               }
               actions={[
-                <Link key="feedback" href={routes.getStudentFeedbackRoute(alias, student.id)}>
-                  <Button type="link" icon={completed ? <MessageTwoTone twoToneColor="red" /> : <MessageOutlined />}>
-                    {feedback ? `Edit Feedback` : `Give Feedback`}
-                  </Button>
-                </Link>,
+                <Button
+                  key="feedback"
+                  href={urlToString(routes.getStudentFeedbackRoute(alias, student.id))}
+                  type="link"
+                  icon={completed ? <MessageTwoTone twoToneColor="red" /> : <MessageOutlined />}
+                >
+                  {feedback ? `Edit Feedback` : `Give Feedback`}
+                </Button>,
                 student.active ? (
-                  <Link key="expel" href={routes.getExpelRoute(alias)} legacyBehavior>
-                    <Button type="link" icon={<InteractionTwoTone twoToneColor="orange" />}>
-                      Change Status
-                    </Button>
-                  </Link>
+                  <Button
+                    key="expel"
+                    href={urlToString(routes.getExpelRoute(alias))}
+                    type="link"
+                    icon={<InteractionTwoTone twoToneColor="orange" />}
+                  >
+                    Change Status
+                  </Button>
                 ) : null,
               ].filter(Boolean)}
               extra={

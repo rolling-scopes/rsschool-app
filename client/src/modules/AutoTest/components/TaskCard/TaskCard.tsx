@@ -1,6 +1,6 @@
 import { Button, Card, Col, Divider, Row, Tag, Typography } from 'antd';
 import Link from 'next/link';
-import { getAutoTestTaskRoute } from '@client/services/routes';
+import { getAutoTestTaskRoute, urlToString } from '@client/services/routes';
 import { TaskCardColumn, TaskDeadlineDate } from '..';
 import { Course } from '@client/services/models';
 import { useAttemptsMessage } from '@client/modules/AutoTest/hooks';
@@ -78,9 +78,9 @@ function TaskCard({ courseTask, course }: TaskCardProps) {
           </Paragraph>
         </Col>
         <Col span={24}>
-          <Link href={getAutoTestTaskRoute(course.alias, id)} legacyBehavior>
-            <Button type="primary">Open Task</Button>
-          </Link>
+          <Button href={urlToString(getAutoTestTaskRoute(course.alias, id))} type="primary">
+            Open Task
+          </Button>
         </Col>
       </Row>
       <Divider />
