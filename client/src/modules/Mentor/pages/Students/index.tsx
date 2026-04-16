@@ -34,9 +34,9 @@ export function Students() {
             <Card
               key={student.githubId}
               style={{ marginBottom: 32 }}
-              styles={{ header: { border: 'none', paddingTop: 12 }}}
+              styles={{ header: { border: 'none', paddingTop: 12 } }}
               size="small"
-              className='antd-card_action_button_with_icon-fix'
+              className="antd-card_action_button_with_icon-fix"
               title={
                 <>
                   <div>
@@ -108,4 +108,3 @@ export function Students() {
     </PageLayoutSimple>
   );
 }
-
