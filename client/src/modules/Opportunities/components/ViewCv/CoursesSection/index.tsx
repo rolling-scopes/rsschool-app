@@ -1,11 +1,12 @@
 import { StarOutlined, TrophyOutlined } from '@ant-design/icons';
-import { Col, List, Row, Typography } from 'antd';
+import { Col, Row, Typography } from 'antd';
 import { ResumeCourseDto, ResumeDto } from '@client/api';
 import { BaseSection } from '../BaseSection';
 
 import styles from './CoursesSection.module.css';
 import { StudentStatus } from '@client/modules/Opportunities/components/StudentStatus';
 import { DataTextValue } from '@client/modules/Opportunities/components/ViewCv/DataTextValue';
+import { List } from '@client/shared/components/List';
 
 const { Text } = Typography;
 const { Item } = List;

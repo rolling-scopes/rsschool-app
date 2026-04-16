@@ -1,5 +1,6 @@
-import { Button, Modal, List, Result, Tooltip, Typography } from 'antd';
+import { Button, Modal, Result, theme, Tooltip, Typography } from 'antd';
 import { QuestionCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { List } from '@client/shared/components/List';
 
 const { Paragraph, Title, Text } = Typography;
 const { Item } = List;
@@ -31,6 +32,7 @@ export const confirmationModalInfo = {
 };
 
 export const NoConsentView = (props: Props) => {
+  const { token } = theme.useToken();
   const { isOwner, giveConsent } = props;
   const [modal, contextHolder] = Modal.useModal();
 
@@ -50,7 +52,7 @@ export const NoConsentView = (props: Props) => {
       }
       dataSource={confirmationModalInfo.en.availableDataList}
       renderItem={(text, idx) => (
-        <Item style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <Item style={{ alignItems: 'flex-start', flexWrap: 'nowrap', gap: token.paddingXS }}>
           <Paragraph>{text}</Paragraph>
           <Tooltip
             placement="topLeft"

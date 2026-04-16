@@ -1,8 +1,9 @@
-import { Button, Col, List, Tooltip, Typography } from 'antd';
+import { Button, Flex, theme, Tooltip, Typography } from 'antd';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { GratitudeDto } from '@client/api';
+import { List } from '@client/shared/components/List';
 
 dayjs.extend(relativeTime);
 
@@ -14,6 +15,7 @@ type Props = {
 };
 
 export function GratitudeList({ feedback, showCount }: Props) {
+  const { token } = theme.useToken();
   const feedbackPartial = feedback?.slice(0, showCount);
   const expansionNeeded = Number(feedback?.length) > showCount;
 
@@ -52,16 +54,22 @@ export function GratitudeList({ feedback, showCount }: Props) {
         size="small"
         renderItem={({ dateFormatted, relativeDate, comment }, i) => (
           <List.Item key={i}>
-            <Col flex={1} style={{ paddingRight: 16 }}>
+            <Flex vertical style={{ paddingTop: token.paddingXS, width: '100%' }}>
               <Paragraph italic ellipsis={{ rows: 2, expandable: true }}>
-                {comment}{' '}
+                {comment}
               </Paragraph>
-            </Col>
-            <Col style={{ minWidth: 100 }}>
               <Tooltip title={dateFormatted}>
-                <span style={{ color: '#666' }}>{relativeDate}</span>
+                <Text
+                  style={{
+                    color: token.colorTextSecondary,
+                    textAlign: 'end',
+                    fontSize: token.fontSizeSM,
+                  }}
+                >
+                  {relativeDate}
+                </Text>
               </Tooltip>
-            </Col>
+            </Flex>
           </List.Item>
         )}
       />

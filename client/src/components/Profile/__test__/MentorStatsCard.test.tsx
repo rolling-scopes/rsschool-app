@@ -1,5 +1,6 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MentorStatsCard } from '../MentorStatsCard';
+import userEvent from '@testing-library/user-event';
 
 vi.mock('@client/modules/Profile/components/MentorEndorsement', () => ({
   MentorEndorsement: ({ open, onClose }: { open: boolean; onClose: () => void }) => (
@@ -73,23 +74,26 @@ describe('MentorStatsCard', () => {
     expect(screen.queryByRole('button', { name: /Get Endorsement/i })).not.toBeInTheDocument();
   });
 
-  it('opens MentorStatsModal for a course with students when expand is clicked', () => {
+  it('opens MentorStatsModal for a course with students when expand is clicked', async () => {
     render(<MentorStatsCard githubId="test" data={mentorStats} />);
+    const user = userEvent.setup();
 
     const expandBtn = screen.getByTestId('expand-button');
-    fireEvent.click(expandBtn);
+    await user.click(expandBtn);
 
     expect(screen.getByText('rs-2018-q1 statistics')).toBeInTheDocument();
   });
 
   it('closes MentorStatsModal when Close is clicked', async () => {
-    render(<MentorStatsCard githubId="test" data={mentorStats} />);
+    const { unmount } = render(<MentorStatsCard githubId="test" data={mentorStats} />);
+    const user = userEvent.setup();
 
-    fireEvent.click(screen.getByTestId('expand-button'));
+    await user.click(screen.getByTestId('expand-button'));
     expect(screen.getByText('rs-2018-q1 statistics')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Close' }));
-    await waitFor(() => expect(screen.getByText('rs-2018-q1 statistics')).not.toBeVisible());
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    unmount();
+    await waitFor(() => expect(screen.queryByText('rs-2018-q1 statistics')).not.toBeInTheDocument());
   });
 
   it('renders students list for the first course when it has students', () => {
@@ -100,13 +104,14 @@ describe('MentorStatsCard', () => {
     expect(screen.getByText('3453')).toBeInTheDocument();
   });
 
-  it('opens and closes MentorEndorsement modal via the admin button', () => {
+  it('opens and closes MentorEndorsement modal via the admin button', async () => {
     render(<MentorStatsCard githubId="mentor" data={mentorStats} isAdmin={true} />);
+    const user = userEvent.setup();
 
-    fireEvent.click(screen.getByRole('button', { name: /Get Endorsement/i }));
+    await user.click(screen.getByRole('button', { name: /Get Endorsement/i }));
     expect(screen.getByTestId('endorsement-open')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByText('mock-close-endorsement'));
+    await user.click(screen.getByText('mock-close-endorsement'));
     expect(screen.queryByTestId('endorsement-open')).not.toBeInTheDocument();
   });
 });

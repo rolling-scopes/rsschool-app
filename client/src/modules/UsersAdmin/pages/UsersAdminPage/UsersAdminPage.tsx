@@ -1,9 +1,10 @@
-import { Button, Col, Input, List, Row, Layout, Form } from 'antd';
+import { Button, Col, Input, Row, Layout, Form } from 'antd';
 import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import { useActiveCourseContext } from '@client/modules/Course/contexts';
 import { useUsersSearch } from '../../hooks/useUsersSearch';
 import { UserSearchDto } from '@client/api';
+import { List } from '@client/shared/components/List';
 
 const { Content } = Layout;
 
@@ -36,7 +37,6 @@ export function UsersAdminPage() {
               <Col offset={2} xs={20} sm={16} md={10} lg={8}>
                 <List
                   rowKey="id"
-                  locale={{ emptyText: 'No results' }}
                   dataSource={users}
                   renderItem={(user: UserSearchDto) => (
                     <List.Item>

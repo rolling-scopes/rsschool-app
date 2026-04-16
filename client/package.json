@@ -51,6 +51,7 @@
     "@types/react": "18.3.18",
     "@types/react-dom": "18.3.5",
     "eslint-plugin-testing-library": "7.16.0",
+    "jsdom": "^29.0.2",
     "mq-polyfill": "1.1.8"
   },
   "nextBundleAnalysis": {

@@ -197,7 +197,7 @@ exports[`PublicFeedbackCard > should render correctly 1`] = `
           </span>
         </div>
         <div
-          style="flex: 1 1 0%; min-width: 0;"
+          style="flex: 1 1 0%; min-width: 0px;"
         >
           <div
             style="margin-bottom: 4px;"

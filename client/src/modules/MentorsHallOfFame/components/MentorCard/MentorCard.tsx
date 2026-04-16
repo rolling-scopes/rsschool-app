@@ -1,9 +1,10 @@
-import { Button, Card, Divider, Flex, List, Space, Typography } from 'antd';
+import { Button, Card, Divider, Flex, Space, Typography } from 'antd';
 import { HeartOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import { TopMentorDto } from '@client/api';
 import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 import styles from './MentorCard.module.css';
+import { List } from '@client/shared/components/List';
 
 const { Title, Link: AntLink, Text } = Typography;
 

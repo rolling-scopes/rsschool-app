@@ -1,5 +1,6 @@
 import assert from 'node:assert';
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, within, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { TaskDto } from '@client/api';
 import { TasksTable } from './TasksTable';
 import { ColumnName } from '@client/modules/Tasks/types';
@@ -240,8 +241,9 @@ describe('TasksTable', () => {
     });
 
     test('should render only data filtered by Name column search', async () => {
+      const user = userEvent.setup();
       const data = generateTasksData();
-      const searchQuery = TASK_TYPES[0]?.id ?? '';
+      const searchQuery = data[0]?.name ?? '';
       renderTasksTable(data);
 
       // Check that all items rendered
@@ -251,49 +253,47 @@ describe('TasksTable', () => {
 
       // Find and click search button for column
       const searchButton = screen.getByRole('button', { name: /search/i });
-      fireEvent.click(searchButton);
+      await user.click(searchButton);
 
       // Type search query inside search input
       const searchInput = await screen.findByRole('textbox');
-      fireEvent.change(searchInput, { target: { value: searchQuery } });
-
-      // Apply search
-      const inputSearchBtn = screen.getByRole('button', { name: /search search/i });
-      fireEvent.click(inputSearchBtn);
+      await user.type(searchInput, searchQuery);
+      fireEvent.keyDown(searchInput, { key: 'Enter', keyCode: 13 });
 
       // Find the line with search query and no others
       const item = await screen.findByText(searchQuery);
       expect(item).toBeInTheDocument();
       const secondTaskName = data[1]?.name ?? 'non-existent';
-      expect(screen.queryByText(secondTaskName)).not.toBeInTheDocument();
+      await waitFor(() => expect(screen.queryByText(secondTaskName)).not.toBeInTheDocument());
     });
 
     test('should render all data when search query is cleared', async () => {
+      const user = userEvent.setup();
       const data = generateTasksData();
-      const searchQuery = TASK_TYPES[0]?.id ?? '';
+      const searchQuery = data[0]?.name ?? '';
       renderTasksTable(data);
 
       // Find and click search button for column
       const searchButton = screen.getByRole('button', { name: /search/i });
-      fireEvent.click(searchButton);
+      await user.click(searchButton);
 
       // Type search query inside search input
       const searchInput = await screen.findByRole('textbox');
-      fireEvent.change(searchInput, { target: { value: searchQuery } });
-
-      // Apply search
-      const inputSearchBtn = screen.getByRole('button', { name: /search search/i });
-      fireEvent.click(inputSearchBtn);
+      await user.type(searchInput, searchQuery);
+      fireEvent.keyDown(searchInput, { key: 'Enter', keyCode: 13 });
 
       // Find the line with search query and no others
       const item = await screen.findByText(searchQuery);
       expect(item).toBeInTheDocument();
       const secondTaskName = data[1]?.name ?? 'non-existent';
-      expect(screen.queryByText(secondTaskName)).not.toBeInTheDocument();
+      await waitFor(() => expect(screen.queryByText(secondTaskName)).not.toBeInTheDocument());
+
+      // Find and click search button for column
+      await user.click(screen.getByRole('button', { name: /search/i }));
 
       // Reset search
       const inputResetBtn = screen.getByRole('button', { name: /reset/i });
-      fireEvent.click(inputResetBtn);
+      await user.click(inputResetBtn);
 
       // Check that all items rendered
       const table = screen.getByRole('table');
