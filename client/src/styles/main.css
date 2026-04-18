@@ -210,6 +210,6 @@ thead.ant-table-thead > tr > th {
 }
 
 /* FIX TO CORRECT DISPLAY BUTTON IN THE ANTD CARD ACTIONS */
-.antd-card_action_button_with_icon-fix li > span > a {
-  display: flex !important;
+.antd-card_action_button_with_icon-fix .ant-card-actions li > span > a {
+  display: flex;
 }
