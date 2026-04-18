@@ -1,5 +1,4 @@
 import type { UrlObject } from 'url';
-import { format } from 'url';
 
 export const getStudentFeedbackRoute = (course: string, studentId: number): UrlObject => {
   return {
@@ -29,5 +28,3 @@ export const getAutoTestTaskRoute = (course: string, courseTaskId: number): UrlO
 });
 
 export const getAutoTestRoute = (alias: string): string => `/course/student/auto-test?course=${alias}`;
-
-export const urlToString = (urlObject: UrlObject): string => format(urlObject);

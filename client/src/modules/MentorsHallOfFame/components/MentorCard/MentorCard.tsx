@@ -1,5 +1,6 @@
 import { Button, Card, Divider, Flex, Space, Typography } from 'antd';
 import { HeartOutlined } from '@ant-design/icons';
+import { useRouter } from 'next/router';
 import { TopMentorDto } from '@client/api';
 import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 import styles from './MentorCard.module.css';
@@ -14,6 +15,7 @@ interface MentorCardProps {
 
 export function MentorCard({ mentor }: MentorCardProps) {
   const { githubId, name, totalStudents, totalGratitudes, courseStats } = mentor;
+  const router = useRouter();
 
   const gratitudeUrl = `/gratitude?githubId=${githubId}`;
 
@@ -22,7 +24,7 @@ export function MentorCard({ mentor }: MentorCardProps) {
       hoverable
       className={clsx(styles.card, 'antd-card_action_button_with_icon-fix')}
       actions={[
-        <Button key="thank" href={gratitudeUrl} type="link" icon={<HeartOutlined />}>
+        <Button key="thank" onClick={() => router.push(gratitudeUrl)} type="link" icon={<HeartOutlined />}>
           Say Thank you!
         </Button>,
       ]}

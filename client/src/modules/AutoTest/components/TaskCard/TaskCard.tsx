@@ -1,6 +1,7 @@
 import { Button, Card, Col, Divider, Row, Tag, Typography } from 'antd';
 import Link from 'next/link';
-import { getAutoTestTaskRoute, urlToString } from '@client/services/routes';
+import { useRouter } from 'next/router';
+import { getAutoTestTaskRoute } from '@client/services/routes';
 import { TaskCardColumn, TaskDeadlineDate } from '..';
 import { Course } from '@client/services/models';
 import { useAttemptsMessage } from '@client/modules/AutoTest/hooks';
@@ -27,6 +28,7 @@ function getStatusTag(state: CourseTaskState) {
 function TaskCard({ courseTask, course }: TaskCardProps) {
   const { id, name, studentStartDate, studentEndDate, verifications, state, descriptionUrl } = courseTask;
   const { attemptsCount, explanation } = useAttemptsMessage(courseTask);
+  const router = useRouter();
 
   const score = verifications?.[0]?.score ?? null;
 
@@ -78,7 +80,7 @@ function TaskCard({ courseTask, course }: TaskCardProps) {
           </Paragraph>
         </Col>
         <Col span={24}>
-          <Button href={urlToString(getAutoTestTaskRoute(course.alias, id))} type="primary">
+          <Button onClick={() => router.push(getAutoTestTaskRoute(course.alias, id))} type="primary">
             Open Task
           </Button>
         </Col>

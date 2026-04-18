@@ -14,12 +14,13 @@ import { SessionContext, useActiveCourseContext } from '@client/modules/Course/c
 import { useMentorStudents } from '@client/modules/Mentor/hooks/useMentorStudents';
 import Link from 'next/link';
 import { useContext } from 'react';
+import { useRouter } from 'next/router';
 import * as routes from '@client/services/routes';
-import { urlToString } from '@client/services/routes';
 
 export function Students() {
   const session = useContext(SessionContext);
   const { course } = useActiveCourseContext();
+  const router = useRouter();
   const { id: courseId, alias, completed } = course;
   const mentorId = getMentorId(session, courseId);
 
@@ -56,7 +57,7 @@ export function Students() {
               actions={[
                 <Button
                   key="feedback"
-                  href={urlToString(routes.getStudentFeedbackRoute(alias, student.id))}
+                  onClick={() => router.push(routes.getStudentFeedbackRoute(alias, student.id))}
                   type="link"
                   icon={completed ? <MessageTwoTone twoToneColor="red" /> : <MessageOutlined />}
                 >
@@ -65,7 +66,7 @@ export function Students() {
                 student.active ? (
                   <Button
                     key="expel"
-                    href={urlToString(routes.getExpelRoute(alias))}
+                    onClick={() => router.push(routes.getExpelRoute(alias))}
                     type="link"
                     icon={<InteractionTwoTone twoToneColor="orange" />}
                   >
