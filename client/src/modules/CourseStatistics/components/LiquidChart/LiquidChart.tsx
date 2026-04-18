@@ -1,6 +1,6 @@
-import {Liquid, LiquidConfig} from '@ant-design/plots';
-import {Colors} from '../../data';
-import {GlobalToken, theme} from 'antd';
+import { Liquid, LiquidConfig } from '@ant-design/plots';
+import { Colors } from '../../data';
+import { GlobalToken, theme } from 'antd';
 
 type Props = {
   count: number;
@@ -33,4 +33,3 @@ function LiquidChart({ count, total, color = Colors.Blue, background }: Props) {
 }
 
 export default LiquidChart;
-

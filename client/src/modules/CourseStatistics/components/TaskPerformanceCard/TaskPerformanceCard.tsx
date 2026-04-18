@@ -121,4 +121,3 @@ function getChartData(taskPerformanceStats: TaskPerformanceStatsDto) {
     { type: StudentPerformanceType.Perfect, value: taskPerformanceStats.perfectScores },
   ].filter(({ value }) => value > 0);
 }
-

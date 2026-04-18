@@ -48,4 +48,3 @@ const DonutChart = ({ data, config = {} }: Props) => {
 };
 
 export default DonutChart;
-
