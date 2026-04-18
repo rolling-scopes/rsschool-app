@@ -119,7 +119,6 @@ export function tagsCoursesRendererWithRemainingNumber(_: undefined, { courses }
 }
 
 export function renderTag(value: number | string, color?: string, variant?: TagProps['variant']) {
-  console.log('renderTag', value, color);
   return (
     <Tag color={color} key={value} variant={variant}>
       {value}
