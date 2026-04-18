@@ -390,4 +390,3 @@ export const MentorRegistryTableContainer = ({
     activeTab,
   });
 };
-

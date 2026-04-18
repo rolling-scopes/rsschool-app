@@ -222,4 +222,3 @@ export const coloredDateRenderer = (timeZone: string, format: string, date: 'sta
     return <Text type={color}>{text}</Text>;
   };
 };
-
