@@ -4,7 +4,7 @@ import GithubOutlined from '@ant-design/icons/GithubOutlined';
 import MinusCircleOutlined from '@ant-design/icons/MinusCircleOutlined';
 import YoutubeOutlined from '@ant-design/icons/YoutubeOutlined';
 import InfoCircleOutlined from '@ant-design/icons/InfoCircleOutlined';
-import { Tag, Tooltip, Typography } from 'antd';
+import { Tag, TagProps, Tooltip, Typography } from 'antd';
 import { BaseType } from 'antd/lib/typography/Base';
 import {
   CourseScheduleItemDto,
@@ -89,8 +89,8 @@ export function boolIconRenderer(value: unknown) {
   );
 }
 
-export function colorTagRenderer(value: number | string, color?: string) {
-  return <span key={value}>{renderTag(value, color)}</span>;
+export function colorTagRenderer(value: number | string, color?: string, variant?: TagProps['variant']) {
+  return <span key={value}>{renderTag(value, color, variant)}</span>;
 }
 
 export function tagsRenderer(values: (number | string)[]) {
@@ -118,9 +118,10 @@ export function tagsCoursesRendererWithRemainingNumber(_: undefined, { courses }
   return <span>{tags.map(({ value, color }) => renderTag(value, color))}</span>;
 }
 
-export function renderTag(value: number | string, color?: string) {
+export function renderTag(value: number | string, color?: string, variant?: TagProps['variant']) {
+  console.log('renderTag', value, color);
   return (
-    <Tag color={color} key={value}>
+    <Tag color={color} key={value} variant={variant}>
       {value}
     </Tag>
   );
@@ -222,3 +223,4 @@ export const coloredDateRenderer = (timeZone: string, format: string, date: 'sta
     return <Text type={color}>{text}</Text>;
   };
 };
+

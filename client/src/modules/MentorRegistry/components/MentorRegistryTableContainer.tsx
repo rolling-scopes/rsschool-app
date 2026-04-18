@@ -83,9 +83,9 @@ export const MentorRegistryTableContainer = ({
         .map(value => ({
           value: courses.find(course => course.id === value)?.name ?? value.toString(),
           alias: courses.find(course => course.id === value)?.alias ?? '',
-          color: record.courses.includes(value) ? '#87d068' : undefined,
+          color: record.courses.includes(value) ? token.green7 : undefined,
         }))
-        .map(v => (v.color ? colorTagRenderer(v.value, v.color) : renderTagWithCopyButton(v.value, v.alias)));
+        .map(v => (v.color ? colorTagRenderer(v.value, v.color, 'solid') : renderTagWithCopyButton(v.value, v.alias)));
     };
   };
 
@@ -390,3 +390,4 @@ export const MentorRegistryTableContainer = ({
     activeTab,
   });
 };
+
