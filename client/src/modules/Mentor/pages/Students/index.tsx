@@ -14,11 +14,13 @@ import { SessionContext, useActiveCourseContext } from '@client/modules/Course/c
 import { useMentorStudents } from '@client/modules/Mentor/hooks/useMentorStudents';
 import Link from 'next/link';
 import { useContext } from 'react';
+import { useRouter } from 'next/router';
 import * as routes from '@client/services/routes';
 
 export function Students() {
   const session = useContext(SessionContext);
   const { course } = useActiveCourseContext();
+  const router = useRouter();
   const { id: courseId, alias, completed } = course;
   const mentorId = getMentorId(session, courseId);
 
@@ -35,6 +37,7 @@ export function Students() {
               style={{ marginBottom: 32 }}
               styles={{ header: { border: 'none', paddingTop: 12 } }}
               size="small"
+              className="antd-card_action_button_with_icon-fix"
               title={
                 <>
                   <div>
@@ -52,17 +55,23 @@ export function Students() {
                 </>
               }
               actions={[
-                <Link key="feedback" href={routes.getStudentFeedbackRoute(alias, student.id)}>
-                  <Button type="link" icon={completed ? <MessageTwoTone twoToneColor="red" /> : <MessageOutlined />}>
-                    {feedback ? `Edit Feedback` : `Give Feedback`}
-                  </Button>
-                </Link>,
+                <Button
+                  key="feedback"
+                  onClick={() => router.push(routes.getStudentFeedbackRoute(alias, student.id))}
+                  type="link"
+                  icon={completed ? <MessageTwoTone twoToneColor="red" /> : <MessageOutlined />}
+                >
+                  {feedback ? `Edit Feedback` : `Give Feedback`}
+                </Button>,
                 student.active ? (
-                  <Link key="expel" href={routes.getExpelRoute(alias)} legacyBehavior>
-                    <Button type="link" icon={<InteractionTwoTone twoToneColor="orange" />}>
-                      Change Status
-                    </Button>
-                  </Link>
+                  <Button
+                    key="expel"
+                    onClick={() => router.push(routes.getExpelRoute(alias))}
+                    type="link"
+                    icon={<InteractionTwoTone twoToneColor="orange" />}
+                  >
+                    Change Status
+                  </Button>
                 ) : null,
               ].filter(Boolean)}
               extra={
@@ -74,7 +83,7 @@ export function Students() {
               <Row gutter={16}>
                 <Col flex={8}>
                   <Statistic
-                    valueStyle={{ fontSize: 16 }}
+                    styles={{ content: { fontSize: 16 } }}
                     title="Rank"
                     value={student.rank}
                     prefix={<TrophyOutlined />}
@@ -82,7 +91,7 @@ export function Students() {
                 </Col>
                 <Col flex={8}>
                   <Statistic
-                    valueStyle={{ fontSize: 16 }}
+                    styles={{ content: { fontSize: 16 } }}
                     title="Score"
                     value={student.totalScore}
                     prefix={<StarOutlined />}

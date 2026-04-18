@@ -157,7 +157,7 @@ function Page() {
               <Statistic
                 title="Approved"
                 value={stats.approved}
-                valueStyle={{ color: '#3f8600' }}
+                styles={{ content: { color: '#3f8600' } }}
                 prefix={<LikeOutlined />}
               />
             </Col>
@@ -165,7 +165,7 @@ function Page() {
               <Statistic
                 title="Rejected"
                 value={stats.rejected}
-                valueStyle={{ color: '#cf1322' }}
+                styles={{ content: { color: '#cf1322' } }}
                 prefix={<DislikeOutlined />}
               />
             </Col>
