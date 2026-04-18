@@ -1,6 +1,6 @@
-import { Liquid, LiquidConfig } from '@ant-design/plots';
-import { Colors } from '../../data';
-import { GlobalToken, theme } from 'antd';
+import {Liquid, LiquidConfig} from '@ant-design/plots';
+import {Colors} from '../../data';
+import {GlobalToken, theme} from 'antd';
 
 type Props = {
   count: number;
@@ -11,14 +11,17 @@ type Props = {
 
 function LiquidChart({ count, total, color = Colors.Blue, background }: Props) {
   const { token } = theme.useToken();
+
   const percent = count / total;
   const config: LiquidConfig = {
+    interaction: { tooltip: false },
     theme: {
       background: background || token.colorBgContainer,
     },
     percent: percent,
     style: {
       fill: color,
+      textFill: token.colorTextLabel,
       outlineBorder: 4,
       outlineDistance: 8,
       outlineStroke: color,
@@ -30,3 +33,4 @@ function LiquidChart({ count, total, color = Colors.Blue, background }: Props) {
 }
 
 export default LiquidChart;
+
