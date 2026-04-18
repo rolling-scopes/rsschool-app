@@ -1,4 +1,4 @@
-import { Card, Flex, Form, Image, Select, Typography } from 'antd';
+import { Card, Flex, Form, Image, Select, theme, Typography } from 'antd';
 import { CourseStatsApi, CourseTaskDto, TaskPerformanceStatsDto } from '@client/api';
 import { useActiveCourseContext } from '@client/modules/Course/contexts';
 import { useState } from 'react';
@@ -19,6 +19,7 @@ const DonutChart = dynamicWithSkeleton(() => import('../DonutChart/DonutChart'))
 
 export const TaskPerformanceCard = ({ tasks }: Props) => {
   const { course } = useActiveCourseContext();
+  const { token } = theme.useToken();
 
   const [taskId, setTaskId] = useState<number>();
 
@@ -47,7 +48,7 @@ export const TaskPerformanceCard = ({ tasks }: Props) => {
       </Form>
       <div style={{ height: 250, width: '100%' }}>
         {taskPerformanceStats?.totalAchievement ? (
-          <DonutChart data={getChartData(taskPerformanceStats)} config={getChartConfig()} />
+          <DonutChart data={getChartData(taskPerformanceStats)} config={getChartConfig(token.colorTextLabel)} />
         ) : (
           <Flex vertical align="center" justify="center">
             <Text>No data available for this task, please select another task.</Text>
@@ -78,7 +79,7 @@ function getPerformanceDescriptionByType(type: string) {
   }
 }
 
-function getChartConfig(): Partial<PieConfig> {
+function getChartConfig(textColor: string): Partial<PieConfig> {
   return {
     tooltip: {
       items: [
@@ -87,6 +88,20 @@ function getChartConfig(): Partial<PieConfig> {
           value: d.value,
         }),
       ],
+    },
+    interaction: {
+      tooltip: {
+        render: (_: unknown, { items }: { items: Array<{ name: string; value: string | number; color?: string }> }) =>
+          `<div style="padding:4px 0">${items
+            .map(
+              ({ name, value, color }) =>
+                `<div style="display:flex;align-items:center;gap:1rem">
+                  <span style="color:${color};line-height:20px">●</span>
+                  <span style="color:${textColor};white-space:normal;word-break:break-word">${name}: <strong>${value}</strong></span>
+                </div>`,
+            )
+            .join('')}</div>`,
+      },
     },
     scale: {
       color: {
@@ -106,3 +121,4 @@ function getChartData(taskPerformanceStats: TaskPerformanceStatsDto) {
     { type: StudentPerformanceType.Perfect, value: taskPerformanceStats.perfectScores },
   ].filter(({ value }) => value > 0);
 }
+
