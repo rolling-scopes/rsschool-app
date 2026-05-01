@@ -10,6 +10,7 @@ export default mergeConfig(
         '@client/hooks': path.resolve(import.meta.dirname, 'src/__mocks__/hooks'),
         '@client': path.resolve(import.meta.dirname, 'src'),
         'next/config': path.resolve(import.meta.dirname, 'src/__mocks__/next/config'),
+        'next/router': path.resolve(import.meta.dirname, 'src/__mocks__/next/router'),
       },
     },
     test: {

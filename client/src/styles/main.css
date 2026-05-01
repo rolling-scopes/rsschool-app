@@ -208,3 +208,8 @@ thead.ant-table-thead > tr > th {
     color: #000;
   }
 }
+
+/* FIX TO CORRECT DISPLAY BUTTON IN THE ANTD CARD ACTIONS */
+.antd-card_action_button_with_icon-fix .ant-card-actions li > span > a {
+  display: flex;
+}

@@ -1,11 +1,10 @@
 import { useAsync } from 'react-use';
 import { Course } from '@client/services/models';
 import { UserFull, UserService } from '@client/services/user';
-import { StudentStats } from '@common/models';
+import { Location, StudentStats } from '@common/models';
 import { useCallback, useEffect, useState } from 'react';
 import { CdnService } from '@client/services/cdn';
-import { GeneralSection, DoneSection } from '@client/modules/Registry/components';
-import { Location } from '@common/models';
+import { DoneSection, GeneralSection } from '@client/modules/Registry/components';
 import { Form, Modal, theme, Typography } from 'antd';
 import { useRouter } from 'next/router';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
@@ -51,7 +50,7 @@ export function useStudentData(githubId: string, courseAlias?: string) {
     const registeredForCourses = enrolledOtherCourses(profileInfo?.studentStats, courses);
 
     if (courseAlias) {
-      const currentCourse = courses.find(course => course.alias === courseAlias);
+      const currentCourse = courses.find(course => course.alias.toLowerCase() === courseAlias.toLowerCase());
       const value = registeredForCourses.some(({ id }) => id === currentCourse?.id);
 
       if (currentCourse) {
