@@ -2,6 +2,7 @@ import { Pie, PieConfig } from '@ant-design/plots';
 import { getTaskStatusColor } from '@client/modules/Schedule';
 import { CourseScheduleItemDtoStatusEnum } from '@client/api';
 import { useMemo } from 'react';
+import { useTheme } from '@client/shared/hooks/useTheme';
 import capitalize from 'lodash/capitalize';
 
 type Item = { status: string; value: number };
@@ -16,9 +17,11 @@ export function TasksChart({ data, onItemSelected }: Props) {
     () => data.map(d => getTaskStatusColor(d.status as CourseScheduleItemDtoStatusEnum)),
     [data],
   );
+  const { theme } = useTheme();
 
   const config: PieConfig = {
     data,
+    theme,
     angleField: 'value',
     colorField: 'status',
     radius: 1,
@@ -42,14 +45,23 @@ export function TasksChart({ data, onItemSelected }: Props) {
       color: {
         position: 'right',
         layout: { justifyContent: 'center' },
-        itemLabelText: (datum: Record<string, string>) => {
-          const item = data.find(d => d.status === datum.status);
-          return `${capitalize(datum.status)} ${item?.value ?? ''}`;
+        itemLabelText: (datum: string | { label: string; [key: string]: unknown }) => {
+          const status = typeof datum === 'object' ? datum.label : datum;
+          return status ? capitalize(status) : '';
         },
+
         itemLabelFontSize: 14,
         itemLabelFontFamily: 'sans-serif',
         rowPadding: 20,
       },
+    },
+    tooltip: {
+      items: [
+        (datum: Item) => ({
+          name: capitalize(datum.status),
+          value: datum.value,
+        }),
+      ],
     },
     interaction: {
       elementHighlight: true,
