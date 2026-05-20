@@ -11,8 +11,8 @@ vi.mock('@client/shared/components/StudentSearch', () => ({
 }));
 
 const courseTasks = [
-  { id: 1, name: 'Task A', studentStartDate: '2024-01-01', studentEndDate: '2024-12-31' },
-  { id: 2, name: 'Task B', studentStartDate: '2024-01-01', studentEndDate: '2024-12-31' },
+  { id: 1, name: 'Task A', studentStartDate: '2024-01-01', studentEndDate: '2024-12-31', maxScore: 100 },
+  { id: 2, name: 'Task B', studentStartDate: '2024-01-01', studentEndDate: '2024-12-31', maxScore: 50 },
 ] as never;
 
 function makeProps(overrides: Partial<Parameters<typeof ManualSubmitTab>[0]> = {}) {
@@ -98,8 +98,8 @@ describe('<ManualSubmitTab />', () => {
     // After opening, options become visible somewhere in the document.
     return waitFor(() => {
       const popup = document.body;
-      expect(within(popup).getByText('Task A')).toBeInTheDocument();
-      expect(within(popup).getByText('Task B')).toBeInTheDocument();
+      expect(within(popup).getByText('Task A (max 100)')).toBeInTheDocument();
+      expect(within(popup).getByText('Task B (max 50)')).toBeInTheDocument();
     });
   });
 });

@@ -23,8 +23,22 @@ vi.mock('@client/domain/user', () => ({
 const { getCourseTasks } = vi.hoisted(() => ({
   getCourseTasks: vi.fn().mockResolvedValue({
     data: [
-      { id: 1, name: 'Task A', studentStartDate: '2024-01-01', studentEndDate: '2024-12-31', taskOwner: null },
-      { id: 2, name: 'Task B', studentStartDate: '2024-01-01', studentEndDate: '2024-12-31', taskOwner: null },
+      {
+        id: 1,
+        name: 'Task A',
+        studentStartDate: '2024-01-01',
+        studentEndDate: '2024-12-31',
+        taskOwner: null,
+        maxScore: 100,
+      },
+      {
+        id: 2,
+        name: 'Task B',
+        studentStartDate: '2024-01-01',
+        studentEndDate: '2024-12-31',
+        taskOwner: null,
+        maxScore: 50,
+      },
     ],
   }),
 }));

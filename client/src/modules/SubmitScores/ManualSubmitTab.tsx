@@ -31,7 +31,14 @@ export function ManualSubmitTab({ courseId, courseService, courseTasks, onResult
 
   const taskOptions = useMemo(
     () =>
-      [...courseTasks].sort((a, b) => a.name.localeCompare(b.name)).map(task => ({ label: task.name, value: task.id })),
+      [...courseTasks]
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .map(task => ({ label: `${task.name} (max ${task.maxScore})`, value: task.id })),
+    [courseTasks],
+  );
+
+  const maxScoreByTaskId = useMemo(
+    () => new Map<number, number>(courseTasks.map(t => [t.id, t.maxScore])),
     [courseTasks],
   );
 
@@ -115,6 +122,7 @@ export function ManualSubmitTab({ courseId, courseService, courseTasks, onResult
                     optionFilterProp="label"
                     options={taskOptions}
                     className={styles.fullWidth}
+                    onChange={() => form.validateFields([['rows', field.name, 'score']]).catch(() => {})}
                   />
                 </Form.Item>
               ),
@@ -125,11 +133,31 @@ export function ManualSubmitTab({ courseId, courseService, courseTasks, onResult
               width: '15%',
               render: (_: unknown, field: (typeof fields)[number]) => (
                 <Form.Item
-                  name={[field.name, 'score']}
-                  rules={[{ required: true, message: 'Enter score' }]}
-                  className={styles.rowFormItem}
+                  noStyle
+                  shouldUpdate={(prev: ManualFormValues, curr: ManualFormValues) =>
+                    prev?.rows?.[field.name]?.courseTaskId !== curr?.rows?.[field.name]?.courseTaskId
+                  }
                 >
-                  <InputNumber min={0} className={styles.fullWidth} />
+                  {({ getFieldValue }) => {
+                    const taskId = getFieldValue(['rows', field.name, 'courseTaskId']) as number | undefined;
+                    const max = taskId != null ? maxScoreByTaskId.get(taskId) : undefined;
+                    return (
+                      <Form.Item
+                        name={[field.name, 'score']}
+                        rules={[
+                          { required: true, message: 'Enter score' },
+                          {
+                            type: 'number',
+                            max,
+                            message: max != null ? `Max ${max}` : undefined,
+                          },
+                        ]}
+                        className={styles.rowFormItem}
+                      >
+                        <InputNumber min={0} max={max} className={styles.fullWidth} />
+                      </Form.Item>
+                    );
+                  }}
                 </Form.Item>
               ),
             },
