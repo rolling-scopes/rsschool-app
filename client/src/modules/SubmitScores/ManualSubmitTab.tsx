@@ -8,6 +8,7 @@ import { CourseTaskDto } from '@client/api';
 import { StudentSearch } from '@client/shared/components/StudentSearch';
 import { useMessage } from '@client/hooks';
 import { aggregateResults, findDuplicateRow, ManualRow, SubmitResult } from './utils';
+import styles from './SubmitScores.module.css';
 
 type ManualFormRow = Partial<ManualRow>;
 
@@ -92,9 +93,9 @@ export function ManualSubmitTab({ courseId, courseService, courseTasks, onResult
                 <Form.Item
                   name={[field.name, 'studentGithubId']}
                   rules={[{ required: true, message: 'Select a student' }]}
-                  style={{ marginBottom: 0 }}
+                  className={styles.rowFormItem}
                 >
-                  <StudentSearch courseId={courseId} keyField="githubId" style={{ width: '100%' }} />
+                  <StudentSearch courseId={courseId} keyField="githubId" className={styles.fullWidth} />
                 </Form.Item>
               ),
             },
@@ -106,14 +107,14 @@ export function ManualSubmitTab({ courseId, courseService, courseTasks, onResult
                 <Form.Item
                   name={[field.name, 'courseTaskId']}
                   rules={[{ required: true, message: 'Select a task' }]}
-                  style={{ marginBottom: 0 }}
+                  className={styles.rowFormItem}
                 >
                   <Select
                     showSearch
                     placeholder="Select task"
                     optionFilterProp="label"
                     options={taskOptions}
-                    style={{ width: '100%' }}
+                    className={styles.fullWidth}
                   />
                 </Form.Item>
               ),
@@ -126,9 +127,9 @@ export function ManualSubmitTab({ courseId, courseService, courseTasks, onResult
                 <Form.Item
                   name={[field.name, 'score']}
                   rules={[{ required: true, message: 'Enter score' }]}
-                  style={{ marginBottom: 0 }}
+                  className={styles.rowFormItem}
                 >
-                  <InputNumber min={0} style={{ width: '100%' }} />
+                  <InputNumber min={0} className={styles.fullWidth} />
                 </Form.Item>
               ),
             },
@@ -156,7 +157,7 @@ export function ManualSubmitTab({ courseId, courseService, courseTasks, onResult
                 pagination={false}
                 dataSource={fields}
                 columns={columns}
-                style={{ marginBottom: '1em' }}
+                className={styles.rowsTable}
               />
               <Form.Item>
                 <Button onClick={() => add({})} icon={<PlusOutlined />} block>

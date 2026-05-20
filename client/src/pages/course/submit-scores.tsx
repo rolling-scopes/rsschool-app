@@ -17,6 +17,7 @@ import { useMessage } from '@client/hooks';
 import { List } from '@client/shared/components/List';
 import { ManualSubmitTab } from '@client/modules/SubmitScores/ManualSubmitTab';
 import { aggregateResults, SubmitResult } from '@client/modules/SubmitScores/utils';
+import styles from '@client/modules/SubmitScores/SubmitScores.module.css';
 
 interface SubmitFormValues {
   files: {
@@ -111,7 +112,7 @@ export function SubmitScorePage() {
             </Space>
           </List.Item>
         )}
-        style={{ marginBottom: '1em' }}
+        className={styles.rulesList}
       />
       <Form.Item label="CSV File" name="files" rules={[{ required: true, message: 'Please select csv-file' }]}>
         <Upload
@@ -126,7 +127,7 @@ export function SubmitScorePage() {
           </Button>
         </Upload>
       </Form.Item>
-      <Button size="large" type="primary" htmlType="submit" style={{ marginRight: '1.5em' }}>
+      <Button size="large" type="primary" htmlType="submit" className={styles.submitButton}>
         Submit
       </Button>
     </Form>
@@ -153,7 +154,7 @@ export function SubmitScorePage() {
         ]}
       />
       {submitResults.length ? (
-        <div style={{ marginTop: '1.5em' }}>
+        <div className={styles.resultsSection}>
           <h3>Summary</h3>
           <Table
             pagination={false}
@@ -174,14 +175,14 @@ export function SubmitScorePage() {
         </div>
       ) : null}
       {skippedStudents.length ? (
-        <div style={{ marginTop: '1.5em' }}>
+        <div className={styles.resultsSection}>
           <h3>Skipped students</h3>
           <List
             size="small"
             bordered
             dataSource={skippedStudents}
             renderItem={item => <List.Item>{item}</List.Item>}
-            style={{ marginBottom: '1em' }}
+            className={styles.skippedList}
           />
         </div>
       ) : null}
