@@ -1,32 +1,20 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { ReactNode } from 'react';
+import { ReactNode, createContext } from 'react';
 import { SubmitScorePage } from '@client/pages/course/submit-scores';
 
 // --- Mocks -----------------------------------------------------------------
 
 vi.mock('next/config', () => ({ default: () => ({}) }));
 
+// Provide a real React context for SessionContext so `useContext(SessionContext)` in the
+// component returns our test session via the context's default value — without
+// monkey-patching React.useContext globally (which would also affect antd's internals).
 vi.mock('@client/modules/Course/contexts', () => ({
   SessionProvider: ({ children }: { children: ReactNode }) => <>{children}</>,
-  SessionContext: { Provider: ({ children }: { children: ReactNode }) => <>{children}</>, _currentValue: {} },
+  SessionContext: createContext({ id: 1, isAdmin: true, courses: { 42: { roles: ['manager'] } } }),
   useActiveCourseContext: () => ({ course: { id: 42, name: 'Test Course' } }),
 }));
-
-// Provide a stub `useContext(SessionContext)` value.
-vi.mock('react', async () => {
-  const actual = await vi.importActual<typeof import('react')>('react');
-  return {
-    ...actual,
-    useContext: (ctx: unknown) => {
-      // Return a permissive session — course manager for course 42.
-      if (ctx && typeof ctx === 'object') {
-        return { id: 1, isAdmin: true, courses: { 42: { roles: ['manager'] } } };
-      }
-      return actual.useContext(ctx as React.Context<unknown>);
-    },
-  };
-});
 
 vi.mock('@client/domain/user', () => ({
   isCourseManager: () => true,

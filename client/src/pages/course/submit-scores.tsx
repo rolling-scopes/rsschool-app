@@ -153,7 +153,7 @@ export function SubmitScorePage() {
         ]}
       />
       {submitResults.length ? (
-        <Form.Item>
+        <div style={{ marginTop: '1.5em' }}>
           <h3>Summary</h3>
           <Table
             pagination={false}
@@ -171,10 +171,10 @@ export function SubmitScorePage() {
               },
             ]}
           />
-        </Form.Item>
+        </div>
       ) : null}
       {skippedStudents.length ? (
-        <Form.Item>
+        <div style={{ marginTop: '1.5em' }}>
           <h3>Skipped students</h3>
           <List
             size="small"
@@ -183,7 +183,7 @@ export function SubmitScorePage() {
             renderItem={item => <List.Item>{item}</List.Item>}
             style={{ marginBottom: '1em' }}
           />
-        </Form.Item>
+        </div>
       ) : null}
     </PageLayoutSimple>
   );
@@ -247,7 +247,7 @@ async function uploadResults(
   data: StudentScore[],
 ): Promise<SubmitResult[]> {
   const results = await courseService.postMultipleScores(courseTaskId, data);
-  return aggregateResults(results as { status: string; value: string | number }[]);
+  return aggregateResults(results);
 }
 
 function Page() {

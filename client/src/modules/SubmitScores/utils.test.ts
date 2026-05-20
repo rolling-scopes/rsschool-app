@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { aggregateResults } from './utils';
+import { aggregateResults, findDuplicateRow } from './utils';
 
 describe('aggregateResults', () => {
   it('returns an empty array for empty input', () => {
@@ -67,6 +67,19 @@ describe('aggregateResults', () => {
     expect(result).toEqual([{ status: 'mystery', count: 2, messages: undefined }]);
   });
 
+  it('treats `undefined` value (created/updated) without collecting messages', () => {
+    const result = aggregateResults([
+      { status: 'created', value: undefined },
+      { status: 'updated', value: undefined },
+      { status: 'created', value: undefined },
+    ]);
+
+    expect(result).toEqual([
+      { status: 'created', count: 2, messages: undefined },
+      { status: 'updated', count: 1, messages: undefined },
+    ]);
+  });
+
   it('does not mutate the input array', () => {
     const input = [
       { status: 'created', value: 1 },
@@ -77,5 +90,49 @@ describe('aggregateResults', () => {
     aggregateResults(input);
 
     expect(input).toEqual(snapshot);
+  });
+});
+
+describe('findDuplicateRow', () => {
+  it('returns null for an empty list', () => {
+    expect(findDuplicateRow([])).toBeNull();
+  });
+
+  it('returns null when all rows are unique', () => {
+    expect(
+      findDuplicateRow([
+        { studentGithubId: 'alice', courseTaskId: 1, score: 10 },
+        { studentGithubId: 'bob', courseTaskId: 1, score: 5 },
+        { studentGithubId: 'alice', courseTaskId: 2, score: 7 },
+      ]),
+    ).toBeNull();
+  });
+
+  it('returns the second occurrence when (student, task) repeats', () => {
+    const rows = [
+      { studentGithubId: 'alice', courseTaskId: 1, score: 10 },
+      { studentGithubId: 'bob', courseTaskId: 1, score: 5 },
+      { studentGithubId: 'alice', courseTaskId: 1, score: 99 },
+    ];
+
+    expect(findDuplicateRow(rows)).toEqual(rows[2]);
+  });
+
+  it('treats githubId case-insensitively', () => {
+    const rows = [
+      { studentGithubId: 'Alice', courseTaskId: 1, score: 10 },
+      { studentGithubId: 'alice', courseTaskId: 1, score: 99 },
+    ];
+
+    expect(findDuplicateRow(rows)).toEqual(rows[1]);
+  });
+
+  it('does not flag the same student on different tasks', () => {
+    expect(
+      findDuplicateRow([
+        { studentGithubId: 'alice', courseTaskId: 1, score: 10 },
+        { studentGithubId: 'alice', courseTaskId: 2, score: 10 },
+      ]),
+    ).toBeNull();
   });
 });

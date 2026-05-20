@@ -4,9 +4,17 @@ export interface SubmitResult {
   messages?: string[];
 }
 
-interface RawResult {
+export interface RawResult {
   status: string;
-  value: string | number;
+  // Backend (createMultipleScores.ts) returns `value: undefined` for `created`/`updated`
+  // and `value: <message>` for `skipped`/`failed`.
+  value?: string | number;
+}
+
+export interface ManualRow {
+  studentGithubId: string;
+  courseTaskId: number;
+  score: number;
 }
 
 /**
@@ -38,4 +46,20 @@ export function aggregateResults(results: RawResult[]): SubmitResult[] {
   });
 
   return Array.from(groupedByStatus.values());
+}
+
+/**
+ * Returns the first row that duplicates a previous one by (courseTaskId, studentGithubId),
+ * case-insensitive on githubId. Returns null when no duplicates are found.
+ *
+ * Used by the manual submit flow to surface a meaningful error before sending the batch.
+ */
+export function findDuplicateRow(rows: ManualRow[]): ManualRow | null {
+  const seen = new Set<string>();
+  for (const r of rows) {
+    const key = `${r.courseTaskId}::${r.studentGithubId.toLowerCase()}`;
+    if (seen.has(key)) return r;
+    seen.add(key);
+  }
+  return null;
 }

@@ -7,16 +7,12 @@ import { CourseService } from '@client/services/course';
 import { CourseTaskDto } from '@client/api';
 import { StudentSearch } from '@client/shared/components/StudentSearch';
 import { useMessage } from '@client/hooks';
-import { aggregateResults, SubmitResult } from './utils';
+import { aggregateResults, findDuplicateRow, ManualRow, SubmitResult } from './utils';
 
-interface ManualRow {
-  studentGithubId?: string;
-  courseTaskId?: number;
-  score?: number;
-}
+type ManualFormRow = Partial<ManualRow>;
 
 interface ManualFormValues {
-  rows: ManualRow[];
+  rows: ManualFormRow[];
 }
 
 interface Props {
@@ -39,24 +35,21 @@ export function ManualSubmitTab({ courseId, courseService, courseTasks, onResult
   );
 
   const handleSubmit = async (values: ManualFormValues) => {
-    const rows = (values.rows ?? []).filter(
-      r => r && r.studentGithubId && r.courseTaskId != null && r.score != null,
-    ) as Required<ManualRow>[];
+    const rows: ManualRow[] = (values.rows ?? []).flatMap(r =>
+      r && r.studentGithubId && r.courseTaskId != null && r.score != null
+        ? [{ studentGithubId: r.studentGithubId, courseTaskId: r.courseTaskId, score: r.score }]
+        : [],
+    );
 
     if (rows.length === 0) {
       message.error('Add at least one row to submit.');
       return;
     }
 
-    // Detect duplicate (student, task) pairs within the batch.
-    const seen = new Set<string>();
-    for (const r of rows) {
-      const key = `${r.courseTaskId}::${r.studentGithubId.toLowerCase()}`;
-      if (seen.has(key)) {
-        message.error(`Duplicate row: ${r.studentGithubId} for the same task. Remove one of them.`);
-        return;
-      }
-      seen.add(key);
+    const duplicate = findDuplicateRow(rows);
+    if (duplicate) {
+      message.error(`Duplicate row: ${duplicate.studentGithubId} for the same task. Remove one of them.`);
+      return;
     }
 
     try {
@@ -75,8 +68,7 @@ export function ManualSubmitTab({ courseId, courseService, courseTasks, onResult
         ),
       );
 
-      const flat = responses.flat() as { status: string; value: string | number }[];
-      onResults(aggregateResults(flat));
+      onResults(aggregateResults(responses.flat()));
       form.resetFields();
       message.success('Scores have been submitted.');
     } catch {

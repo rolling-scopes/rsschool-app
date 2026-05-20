@@ -84,26 +84,9 @@ describe('<ManualSubmitTab />', () => {
     expect(props.onResults).not.toHaveBeenCalled();
   });
 
-  it('shows an error and does not submit when a duplicate (student, task) pair exists', async () => {
-    // Build a stub form by filling student inputs directly; tasks/scores can't be set easily
-    // through antd Select in jsdom — so we only assert the negative path of validation.
-    // (Positive submission flow is covered indirectly by aggregateResults tests.)
-    const props = makeProps();
-    render(<ManualSubmitTab {...props} />);
-
-    // Two rows, both with the same student. Task/score remain empty → required validators
-    // will block before our duplicate check, but the key invariant is the same: no network.
-    fireEvent.click(screen.getByRole('button', { name: /add row/i }));
-    const inputs = screen.getAllByTestId('student-input');
-    fireEvent.change(inputs[0], { target: { value: 'alice' } });
-    fireEvent.change(inputs[1], { target: { value: 'alice' } });
-
-    fireEvent.click(screen.getByRole('button', { name: /^submit$/i }));
-
-    await waitFor(() => {
-      expect(props.courseService.postMultipleScores).not.toHaveBeenCalled();
-    });
-  });
+  // Note: the (student, task) duplicate-detection logic itself is covered by unit tests
+  // for `findDuplicateRow` in utils.test.ts. Driving antd Select/InputNumber through
+  // jsdom is too brittle to be worth a parallel integration test here.
 
   it('renders the configured task options in each row select', () => {
     render(<ManualSubmitTab {...makeProps()} />);
