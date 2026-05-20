@@ -34,9 +34,7 @@ export function ManualSubmitTab({ courseId, courseService, courseTasks, onResult
 
   const taskOptions = useMemo(
     () =>
-      [...courseTasks]
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .map(task => ({ label: task.name, value: task.id })),
+      [...courseTasks].sort((a, b) => a.name.localeCompare(b.name)).map(task => ({ label: task.name, value: task.id })),
     [courseTasks],
   );
 

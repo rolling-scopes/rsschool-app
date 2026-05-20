@@ -6,11 +6,7 @@ import { ManualSubmitTab } from './ManualSubmitTab';
 // (Form.Item injects `value` and `onChange` into the child via cloneElement).
 vi.mock('@client/shared/components/StudentSearch', () => ({
   StudentSearch: (props: { value?: string; onChange?: (v: string) => void }) => (
-    <input
-      data-testid="student-input"
-      value={props.value ?? ''}
-      onChange={e => props.onChange?.(e.target.value)}
-    />
+    <input data-testid="student-input" value={props.value ?? ''} onChange={e => props.onChange?.(e.target.value)} />
   ),
 }));
 

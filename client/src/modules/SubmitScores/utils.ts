@@ -26,9 +26,7 @@ export function aggregateResults(results: RawResult[]): SubmitResult[] {
         status,
         count: current.count + 1,
         messages:
-          status === 'skipped' && typeof value === 'string'
-            ? (current.messages ?? []).concat(value)
-            : current.messages,
+          status === 'skipped' && typeof value === 'string' ? (current.messages ?? []).concat(value) : current.messages,
       });
     } else {
       groupedByStatus.set(status, {
