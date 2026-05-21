@@ -1,6 +1,6 @@
 import Router from '@koa/router';
 import { BAD_REQUEST, NOT_FOUND, OK, StatusCodes } from 'http-status-codes';
-import { getCustomRepository, getRepository } from 'typeorm';
+import { getCustomRepository, getRepository, QueryFailedError } from 'typeorm';
 import { PreferredStudentsLocation } from '../../models/mentorRegistry';
 import { ILogger } from '../../logger';
 import { Mentor, MentorRegistry, Student } from '../../models';
@@ -8,7 +8,7 @@ import { StudentRepository } from '../../repositories/student.repository';
 import { courseService } from '../../services';
 import { getUserByGithubId } from '../../services/user.service';
 import { userGuards } from '../guards';
-import { setResponse } from '../utils';
+import { setResponse, isUniqueViolation } from '../utils';
 
 type Params = { courseId: number; githubId: string; courseTaskId: number };
 
@@ -77,14 +77,24 @@ export const postMentor = (_: ILogger) => async (ctx: Router.RouterContext) => {
       setResponse(ctx, StatusCodes.FORBIDDEN);
       return;
     }
-    const {
-      identifiers: [identifier],
-    } = await mentorRepository.insert({
-      courseId,
-      userId: user.id,
-      ...data,
-    });
-    mentorId = identifier['id'];
+    try {
+      const {
+        identifiers: [identifier],
+      } = await mentorRepository.insert({
+        courseId,
+        userId: user.id,
+        ...data,
+      });
+      mentorId = identifier['id'];
+    } catch (err) {
+      if (err instanceof QueryFailedError && isUniqueViolation(err)) {
+        setResponse(ctx, StatusCodes.CONFLICT, {
+          message: 'Mentor is already registered for this course (concurrent request).',
+        });
+        return;
+      }
+      throw err;
+    }
   } else {
     await mentorRepository.update(mentorId, data);
   }

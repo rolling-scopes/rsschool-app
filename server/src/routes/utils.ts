@@ -1,6 +1,7 @@
 import { IApiResponse } from '../models';
 import Router from '@koa/router';
 import moment from 'moment-timezone';
+import { QueryFailedError } from 'typeorm';
 
 export function setResponse<T>(
   ctx: Router.RouterContext | Router.RouterContext<any, any>,
@@ -42,3 +43,11 @@ export function setCsvResponse(
 
 export const dateFormatter = (date: string, timeZone: string, format: string) =>
   date ? moment(date).tz(timeZone).format(format) : '';
+
+export function isUniqueViolation(error: QueryFailedError): boolean {
+  // Postgres 23505 unique_violation. Reusable across route handlers that wrap
+  // typeorm insert()/save() calls in try/catch and want to translate
+  // race-condition unique-constraint failures into HTTP 409 Conflict.
+  const driverError = (error as QueryFailedError & { driverError?: { code?: string } }).driverError;
+  return driverError?.code === '23505';
+}
