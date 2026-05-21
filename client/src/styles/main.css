@@ -213,3 +213,9 @@ thead.ant-table-thead > tr > th {
 .antd-card_action_button_with_icon-fix .ant-card-actions li > span > a {
   display: flex;
 }
+
+/* FIX Issue with Checkbox #2994 https://github.com/rolling-scopes/rsschool-app/issues/2994 */
+.ant-checkbox,
+.ant-radio {
+  flex-shrink: 0;
+}

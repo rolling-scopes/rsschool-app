@@ -1,0 +1,29 @@
+/* submit-scores.tsx (page) */
+.rulesList {
+  margin-bottom: 1em;
+}
+
+.submitButton {
+  margin-right: 1.5em;
+}
+
+.resultsSection {
+  margin-top: 1.5em;
+}
+
+.skippedList {
+  margin-bottom: 1em;
+}
+
+/* ManualSubmitTab.tsx */
+.rowFormItem {
+  margin-bottom: 0;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.rowsTable {
+  margin-bottom: 1em;
+}
