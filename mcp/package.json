@@ -15,7 +15,6 @@
   "scripts": {
     "build": "tsc",
     "compile": "tsc --noEmit",
-    "start": "node dist/server.js",
     "lint": "eslint src",
     "test": "vitest run --passWithNoTests",
     "test:ci": "vitest run"
