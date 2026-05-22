@@ -5,7 +5,8 @@
   "workspaces": [
     "server",
     "nestjs",
-    "client"
+    "client",
+    "mcp"
   ],
   "engines": {
     "node": ">=22",
