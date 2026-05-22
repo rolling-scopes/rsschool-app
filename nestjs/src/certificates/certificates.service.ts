@@ -11,6 +11,8 @@ import { Student } from '@entities/student';
 import { Course } from '@entities/course';
 import { User } from '@entities/user';
 import { CertificateMetadataDto } from './dto/certificate-metadata.dto';
+import { CertificateIssuanceRequestDto } from './dto/certificate-issuance-request.dto';
+import { CloudApiService } from '../cloud-api/cloud-api.service';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
 
@@ -25,10 +27,40 @@ export class CertificationsService {
     private courseRepository: Repository<Course>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    @InjectRepository(Student)
+    private studentRepository: Repository<Student>,
     private readonly configService: ConfigService,
     private readonly httpService: HttpService,
+    private readonly cloudApi: CloudApiService,
   ) {
     this.s3 = new S3(this.configService.awsClient);
+  }
+
+  public async requestCertificateIssuance(courseId: number, githubId: string): Promise<CertificateIssuanceRequestDto> {
+    const student = await this.studentRepository.findOne({
+      where: {
+        courseId,
+        user: { githubId: githubId.toLowerCase() },
+      },
+      relations: ['user', 'course', 'course.discipline'],
+    });
+
+    if (!student) {
+      throw new NotFoundException(`No student found for course ${courseId} / github "${githubId}"`);
+    }
+
+    const payload = new CertificateIssuanceRequestDto({
+      courseId,
+      courseName: student.course.name,
+      coursePrimarySkill: student.course.discipline?.name ?? student.course.primarySkillName ?? null,
+      certificateIssuer: student.course.certificateIssuer ?? null,
+      studentId: student.id,
+      studentName: [student.user.firstName, student.user.lastName].filter(Boolean).join(' ').trim(),
+      timestamp: Date.now(),
+    });
+
+    await this.cloudApi.requestCertificate(payload);
+    return payload;
   }
 
   public async getByPublicId(publicId: string) {

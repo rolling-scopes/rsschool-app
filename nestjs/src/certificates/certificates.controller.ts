@@ -10,12 +10,13 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
-import { DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
+import { CourseRole, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { StudentsService } from '../courses/students';
 import { UserNotificationsService } from 'src/users-notifications/users.notifications.service';
 import { CertificationsService } from './certificates.service';
+import { CertificateIssuanceRequestDto } from './dto/certificate-issuance-request.dto';
 import { SaveCertificateDto } from './dto/save-certificate-dto';
 
 @Controller('certificate')
@@ -86,5 +87,17 @@ export class CertificatesController {
   @ApiOperation({ operationId: 'removeCertificate' })
   public async removeCertificate(@Param('studentId', ParseIntPipe) studentId: number) {
     await this.certificatesService.removeCertificate(studentId);
+  }
+
+  @Post('/course/:courseId/student/:githubId')
+  @UseGuards(DefaultGuard, RoleGuard)
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  @ApiOperation({ operationId: 'issueCertificate' })
+  @ApiOkResponse({ type: CertificateIssuanceRequestDto })
+  public async issueCertificate(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('githubId') githubId: string,
+  ): Promise<CertificateIssuanceRequestDto> {
+    return this.certificatesService.requestCertificateIssuance(courseId, githubId);
   }
 }
