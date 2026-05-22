@@ -82,7 +82,7 @@ export class PersonalAccessTokensService {
     const parsed = parseToken(token);
     if (!parsed) return { ok: false, reason: 'malformed' };
 
-    const record = await this.repo.findOne({ where: { prefix: parsed.prefix } });
+    const record = await this.repo.findOne({ where: { prefix: parsed.prefix }, relations: { user: true } });
     if (!record) return { ok: false, reason: 'not_found' };
     if (record.revokedAt) return { ok: false, reason: 'revoked' };
     if (record.expiresAt.getTime() <= Date.now()) return { ok: false, reason: 'expired' };
