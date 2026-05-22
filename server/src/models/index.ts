@@ -21,6 +21,7 @@ import { NotificationChannel } from './notificationChannel';
 import { NotificationChannelSettings } from './notificationChannelSettings';
 import { NotificationUserConnection } from './notificationUserConnection';
 import { NotificationUserSettings } from './notificationUserSettings';
+import { PersonalAccessToken } from './personalAccessToken';
 import { PrivateFeedback } from './privateFeedback';
 import { ProfilePermissions } from './profilePermissions';
 import { Prompt } from './prompt';
@@ -74,6 +75,7 @@ export {
   NotificationChannelSettings,
   NotificationUserConnection,
   NotificationUserSettings,
+  PersonalAccessToken,
   PrivateFeedback,
   ProfilePermissions,
   Prompt,
@@ -125,6 +127,7 @@ export const models = [
   NotificationChannelSettings,
   NotificationUserConnection,
   NotificationUserSettings,
+  PersonalAccessToken,
   PrivateFeedback,
   ProfilePermissions,
   Prompt,
