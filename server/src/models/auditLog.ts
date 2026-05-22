@@ -39,7 +39,7 @@ export class AuditLog {
   resourceId: string | null;
 
   @Column({ type: 'jsonb', nullable: true })
-  requestPayload: unknown;
+  requestPayload: Record<string, unknown> | null;
 
   @Column({ type: 'smallint' })
   responseStatus: number;
