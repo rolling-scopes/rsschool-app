@@ -4,3 +4,5 @@ export * from './default.guard';
 export * from './auth-user.model';
 export * from './auth.service';
 export * from './course.guard';
+export * from './deny-api-token.decorator';
+export * from './api-token-deny.guard';
