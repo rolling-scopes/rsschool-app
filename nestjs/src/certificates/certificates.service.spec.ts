@@ -82,3 +82,74 @@ describe('CertificationsService.requestCertificateIssuance', () => {
     expect(payload.coursePrimarySkill).toBe('JS');
   });
 });
+
+describe('CertificationsService.requestBulkCertificateIssuance', () => {
+  const course = { id: 7, name: 'Course X', certificateIssuer: 'RS School', primarySkillName: 'JS', discipline: null };
+  let courseRepoFindOne: ReturnType<typeof vi.fn>;
+  let cloudApi: { requestCertificate: ReturnType<typeof vi.fn> };
+  let service: CertificationsService;
+
+  beforeEach(async () => {
+    courseRepoFindOne = vi.fn();
+    cloudApi = {
+      requestCertificate: vi.fn().mockResolvedValue({}),
+    };
+
+    const moduleRef = await Test.createTestingModule({
+      providers: [
+        CertificationsService,
+        { provide: getRepositoryToken(Certificate), useValue: {} },
+        { provide: getRepositoryToken(Course), useValue: { findOne: courseRepoFindOne } },
+        { provide: getRepositoryToken(User), useValue: {} },
+        { provide: getRepositoryToken(Student), useValue: {} },
+        { provide: ConfigService, useValue: { awsClient: {} } },
+        { provide: HttpService, useValue: {} },
+        { provide: CloudApiService, useValue: cloudApi },
+      ],
+    }).compile();
+
+    service = moduleRef.get(CertificationsService);
+  });
+
+  it('returns zero and skips cloud API when no students match', async () => {
+    vi.spyOn(service, 'findEligibleStudents').mockResolvedValue([]);
+
+    const result = await service.requestBulkCertificateIssuance(7, { minTotalScore: 100 });
+
+    expect(result).toEqual({ issued: 0, students: [] });
+    expect(cloudApi.requestCertificate).not.toHaveBeenCalled();
+  });
+
+  it('sends a batch payload when students match', async () => {
+    vi.spyOn(service, 'findEligibleStudents').mockResolvedValue([
+      { studentId: 1, githubId: 'ada', name: 'Ada Lovelace', totalScore: 95 },
+      { studentId: 2, githubId: 'grace', name: 'Grace Hopper', totalScore: 88 },
+    ]);
+    courseRepoFindOne.mockResolvedValue(course);
+
+    const result = await service.requestBulkCertificateIssuance(7, { minTotalScore: 80 });
+
+    expect(result.issued).toBe(2);
+    expect(cloudApi.requestCertificate).toHaveBeenCalledOnce();
+    const payloads = cloudApi.requestCertificate.mock.calls[0]![0];
+    expect(payloads).toHaveLength(2);
+    expect(payloads[0]).toMatchObject({
+      courseId: 7,
+      courseName: 'Course X',
+      studentId: 1,
+      studentName: 'Ada Lovelace',
+    });
+  });
+
+  it('throws when course is missing', async () => {
+    vi.spyOn(service, 'findEligibleStudents').mockResolvedValue([
+      { studentId: 1, githubId: 'ada', name: 'Ada', totalScore: 95 },
+    ]);
+    courseRepoFindOne.mockResolvedValue(null);
+
+    await expect(service.requestBulkCertificateIssuance(999, { minTotalScore: 80 })).rejects.toBeInstanceOf(
+      NotFoundException,
+    );
+    expect(cloudApi.requestCertificate).not.toHaveBeenCalled();
+  });
+});

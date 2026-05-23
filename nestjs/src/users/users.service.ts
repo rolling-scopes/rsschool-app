@@ -59,7 +59,7 @@ export class UsersService {
     return result.join(' ');
   }
 
-  public async searchUsers(reqQuery?: string) {
+  public async searchUsers(reqQuery?: string, options?: { includeSystem?: boolean }) {
     if (!reqQuery) {
       return [];
     }
@@ -69,7 +69,12 @@ export class UsersService {
     // Search by full name, githubId, discord username
     const searchTerms = search.split(' ');
 
-    const query = this.userRepository.createQueryBuilder().select(['id']).where('"isSystem" = false').limit(20);
+    const query = this.userRepository.createQueryBuilder().select(['id']).limit(20);
+    if (!options?.includeSystem) {
+      query.where('"isSystem" = false');
+    }
+
+    const numericQuery = /^\d+$/.test(reqQuery.trim()) ? Number(reqQuery.trim()) : null;
 
     searchTerms.forEach((term, index) => {
       query.andWhere(
@@ -80,6 +85,9 @@ export class UsersService {
             .orWhere(`CAST("discord" AS jsonb)->>'username' ILIKE :searchText${index}`, {
               [`searchText${index}`]: `%${term}%`,
             });
+          if (index === 0 && numericQuery !== null) {
+            qb.orWhere('"id" = :userIdQuery', { userIdQuery: numericQuery });
+          }
         }),
       );
     });
