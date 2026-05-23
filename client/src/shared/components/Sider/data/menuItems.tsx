@@ -11,6 +11,9 @@ import UserOutlined from '@ant-design/icons/UserOutlined';
 import FileTextOutlined from '@ant-design/icons/FileTextOutlined';
 import ExclamationCircleOutlined from '@ant-design/icons/ExclamationCircleOutlined';
 import QqOutlined from '@ant-design/icons/QqOutlined';
+import KeyOutlined from '@ant-design/icons/KeyOutlined';
+import AuditOutlined from '@ant-design/icons/AuditOutlined';
+import RobotOutlined from '@ant-design/icons/RobotOutlined';
 
 import { DiscordOutlined } from '@client/shared/components/Icons/DiscordOutlined';
 import { Session } from '@client/components/withSession';
@@ -153,6 +156,27 @@ const adminMenuItems: AdminMenuItemsData[] = [
     icon: <QqOutlined />,
     href: '/admin/students',
     access: session => isAdmin(session) || isHirer(session),
+  },
+  {
+    name: 'System users',
+    key: 'system-users',
+    icon: <RobotOutlined />,
+    href: '/admin/system-users',
+    access: session => isAdmin(session),
+  },
+  {
+    name: 'User API tokens',
+    key: 'user-tokens',
+    icon: <KeyOutlined />,
+    href: '/admin/user-tokens',
+    access: session => isAdmin(session),
+  },
+  {
+    name: 'Audit log',
+    key: 'audit-log',
+    icon: <AuditOutlined />,
+    href: '/admin/audit-log',
+    access: session => isAdmin(session),
   },
 ];
 

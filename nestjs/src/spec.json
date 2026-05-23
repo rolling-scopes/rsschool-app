@@ -52,7 +52,10 @@
     "/users/search": {
       "get": {
         "operationId": "searchUsers",
-        "parameters": [{ "name": "query", "required": true, "in": "query", "schema": { "type": "string" } }],
+        "parameters": [
+          { "name": "query", "required": true, "in": "query", "schema": { "type": "string" } },
+          { "name": "includeSystem", "required": false, "in": "query", "schema": { "type": "boolean" } }
+        ],
         "responses": {
           "200": {
             "description": "",

@@ -23663,10 +23663,11 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 
          * @param {string} query 
+         * @param {boolean} [includeSystem] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        searchUsers: async (query: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        searchUsers: async (query: string, includeSystem?: boolean, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'query' is not null or undefined
             assertParamExists('searchUsers', 'query', query)
             const localVarPath = `/users/search`;
@@ -23683,6 +23684,10 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
 
             if (query !== undefined) {
                 localVarQueryParameter['query'] = query;
+            }
+
+            if (includeSystem !== undefined) {
+                localVarQueryParameter['includeSystem'] = includeSystem;
             }
 
 
@@ -23709,11 +23714,12 @@ export const UsersApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} query 
+         * @param {boolean} [includeSystem] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async searchUsers(query: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<UserSearchDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.searchUsers(query, options);
+        async searchUsers(query: string, includeSystem?: boolean, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<UserSearchDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.searchUsers(query, includeSystem, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -23729,11 +23735,12 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
         /**
          * 
          * @param {string} query 
+         * @param {boolean} [includeSystem] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        searchUsers(query: string, options?: any): AxiosPromise<Array<UserSearchDto>> {
-            return localVarFp.searchUsers(query, options).then((request) => request(axios, basePath));
+        searchUsers(query: string, includeSystem?: boolean, options?: any): AxiosPromise<Array<UserSearchDto>> {
+            return localVarFp.searchUsers(query, includeSystem, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -23748,12 +23755,13 @@ export class UsersApi extends BaseAPI {
     /**
      * 
      * @param {string} query 
+     * @param {boolean} [includeSystem] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public searchUsers(query: string, options?: AxiosRequestConfig) {
-        return UsersApiFp(this.configuration).searchUsers(query, options).then((request) => request(this.axios, this.basePath));
+    public searchUsers(query: string, includeSystem?: boolean, options?: AxiosRequestConfig) {
+        return UsersApiFp(this.configuration).searchUsers(query, includeSystem, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

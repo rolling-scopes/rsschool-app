@@ -1,11 +1,18 @@
 import { useState } from 'react';
-import { Button, Card, DatePicker, Form, Input, InputNumber, Table, Tag, Typography } from 'antd';
+import { Button, Card, DatePicker, Form, Input, Table, Tag, Typography } from 'antd';
 import type { Dayjs } from 'dayjs';
-import { AuditLogApi, AuditLogEntryDto } from '@client/api';
+import { AuditLogApi, AuditLogEntryDto, UsersApi } from '@client/api';
 import { useActiveCourseContext } from '@client/modules/Course/contexts';
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
+import { UserSearch } from '@client/shared/components/UserSearch';
 
 const api = new AuditLogApi();
+const usersApi = new UsersApi();
+
+async function searchUsers(value: string) {
+  const { data } = await usersApi.searchUsers(value, true);
+  return data;
+}
 
 type Filters = {
   userId?: number;
@@ -56,15 +63,15 @@ export function AuditLogPage() {
           layout="inline"
           onFinish={values =>
             load(1, {
-              userId: values.userId ? Number(values.userId) : undefined,
+              userId: values.userId ?? undefined,
               tokenId: values.tokenId || undefined,
               action: values.action || undefined,
               range: values.range,
             })
           }
         >
-          <Form.Item name="userId" label="User ID">
-            <InputNumber min={1} />
+          <Form.Item name="userId" label="User">
+            <UserSearch searchFn={searchUsers} keyField="id" style={{ width: 320 }} />
           </Form.Item>
           <Form.Item name="tokenId" label="Token ID">
             <Input style={{ width: 280 }} />

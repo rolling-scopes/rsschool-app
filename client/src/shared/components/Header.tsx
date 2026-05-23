@@ -4,6 +4,7 @@ import { useContext, useMemo } from 'react';
 import { Button, Dropdown, Flex, Menu, MenuProps, Space, theme } from 'antd';
 import {
   EyeOutlined,
+  KeyOutlined,
   LogoutOutlined,
   NotificationOutlined,
   QuestionCircleFilled,
@@ -37,6 +38,11 @@ const MENU_ITEMS = [
     link: '/profile/notifications',
     icon: <NotificationOutlined />,
     title: 'Notifications',
+  },
+  {
+    link: '/profile/api-tokens',
+    icon: <KeyOutlined />,
+    title: 'API tokens',
   },
   {
     link: '/cv/edit',
