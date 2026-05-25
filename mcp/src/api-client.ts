@@ -8,12 +8,20 @@ export type ApiResult<T> = { ok: true; data: T } | { ok: false; status: number; 
 export class RsappApiClient {
   constructor(private readonly config: ApiClientConfig) {}
 
-  public async post<T>(path: string, body?: unknown): Promise<ApiResult<T>> {
+  public get<T>(path: string): Promise<ApiResult<T>> {
+    return this.request<T>('GET', path);
+  }
+
+  public post<T>(path: string, body?: unknown): Promise<ApiResult<T>> {
+    return this.request<T>('POST', path, body);
+  }
+
+  private async request<T>(method: 'GET' | 'POST', path: string, body?: unknown): Promise<ApiResult<T>> {
     const url = `${this.config.baseUrl.replace(/\/$/, '')}${path}`;
     let response: Response;
     try {
       response = await fetch(url, {
-        method: 'POST',
+        method,
         headers: {
           Authorization: `Bearer ${this.config.token}`,
           'Content-Type': 'application/json',
@@ -43,4 +51,17 @@ export class RsappApiClient {
 
     return { ok: true, data: parsed as T };
   }
+}
+
+const STATUS_HINTS: Record<number, string> = {
+  401: 'Authentication failed. Check that RSAPP_PAT is valid and not revoked.',
+  403: 'Permission denied. The PAT user lacks the required role for this action.',
+  404: 'Resource not found.',
+};
+
+export function describeError(status: number, message: string): string {
+  const hint = STATUS_HINTS[status];
+  if (status === 0) return `Network error: ${message}`;
+  if (hint) return `${hint} (HTTP ${status}). Detail: ${message}`;
+  return `Request failed (HTTP ${status}): ${message}`;
 }

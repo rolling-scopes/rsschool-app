@@ -9,9 +9,31 @@ more.
 
 ## Available tools
 
-- `issue_certificate` — start the certificate issuance pipeline for a student.
-  Requires the PAT owner to be a course manager of the given course, or an
-  admin.
+Read-only (no side effects):
+
+- `list_my_courses` — list courses the PAT user manages
+- `list_course_tasks` — list tasks of a course (use to look up courseTaskIds)
+- `preview_eligible_students` — preview students that match the criteria, without issuing
+- `search_users` — find users by name, GitHub login, or numeric ID
+
+Write:
+
+- `issue_certificate` — issue a certificate to a single student by github login
+- `issue_certificates_bulk` — issue certificates to every student matching the criteria
+
+All write actions require the PAT owner to be a course manager of the target
+course, or an admin.
+
+## Typical workflow for bulk issuance
+
+The agent should follow this order before issuing certificates to many
+students:
+
+1. `list_my_courses` — pick the course
+2. `list_course_tasks` — find the task IDs the criteria reference
+3. `preview_eligible_students` — show the user the count and list
+4. Wait for explicit confirmation from the user
+5. `issue_certificates_bulk` — actually issue
 
 ## Generate a PAT
 

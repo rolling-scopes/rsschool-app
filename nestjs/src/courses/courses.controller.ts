@@ -37,6 +37,16 @@ export class CoursesController {
     return data.map(it => new CourseDto(it));
   }
 
+  @Get('/managed-by-me')
+  @ApiOperation({ operationId: 'getCoursesManagedByMe' })
+  @ApiOkResponse({ type: [CourseDto] })
+  @UseGuards(DefaultGuard, RoleGuard)
+  @RequiredRoles([Role.Admin, CourseRole.Manager])
+  public async getCoursesManagedByMe(@Req() req: CurrentRequest) {
+    const data = await this.courseService.findManagedByUser(req.user);
+    return data.map(it => new CourseDto(it));
+  }
+
   @Post('/')
   @ApiOperation({ operationId: 'createCourse' })
   @UseGuards(DefaultGuard, RoleGuard)

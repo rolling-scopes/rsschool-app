@@ -16,7 +16,10 @@ import { CourseRole, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/au
 import { StudentsService } from '../courses/students';
 import { UserNotificationsService } from 'src/users-notifications/users.notifications.service';
 import { CertificationsService } from './certificates.service';
+import { BulkIssueResultDto } from './dto/bulk-issue-result.dto';
+import { CertificateCriteriaDto } from './dto/certificate-criteria.dto';
 import { CertificateIssuanceRequestDto } from './dto/certificate-issuance-request.dto';
+import { EligibleStudentsPreviewDto } from './dto/eligible-students-preview.dto';
 import { SaveCertificateDto } from './dto/save-certificate-dto';
 
 @Controller('certificate')
@@ -99,5 +102,29 @@ export class CertificatesController {
     @Param('githubId') githubId: string,
   ): Promise<CertificateIssuanceRequestDto> {
     return this.certificatesService.requestCertificateIssuance(courseId, githubId);
+  }
+
+  @Post('/course/:courseId/eligible')
+  @UseGuards(DefaultGuard, RoleGuard)
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  @ApiOperation({ operationId: 'previewEligibleStudents' })
+  @ApiOkResponse({ type: EligibleStudentsPreviewDto })
+  public async previewEligibleStudents(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Body() criteria: CertificateCriteriaDto,
+  ): Promise<EligibleStudentsPreviewDto> {
+    return this.certificatesService.previewEligibleStudents(courseId, criteria);
+  }
+
+  @Post('/course/:courseId/bulk')
+  @UseGuards(DefaultGuard, RoleGuard)
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  @ApiOperation({ operationId: 'issueCertificatesBulk' })
+  @ApiOkResponse({ type: BulkIssueResultDto })
+  public async issueCertificatesBulk(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Body() criteria: CertificateCriteriaDto,
+  ): Promise<BulkIssueResultDto> {
+    return this.certificatesService.requestBulkCertificateIssuance(courseId, criteria);
   }
 }
