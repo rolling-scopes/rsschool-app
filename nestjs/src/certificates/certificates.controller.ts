@@ -17,6 +17,7 @@ import { StudentsService } from '../courses/students';
 import { UserNotificationsService } from 'src/users-notifications/users.notifications.service';
 import { CertificationsService } from './certificates.service';
 import { SaveCertificateDto } from './dto/save-certificate-dto';
+import { CERTIFICATE_TEMPLATES } from './templates/catalog';
 
 @Controller('certificate')
 @ApiTags('certificate')
@@ -26,6 +27,12 @@ export class CertificatesController {
     private notificationService: UserNotificationsService,
     private studentsService: StudentsService,
   ) {}
+
+  @Get('/templates')
+  @ApiOperation({ operationId: 'getCertificateTemplates' })
+  public getTemplates() {
+    return CERTIFICATE_TEMPLATES;
+  }
 
   /**
    * /certificate/abc - returns certificate in PDF format

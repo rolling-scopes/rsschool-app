@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" width="320" height="220">
+  <rect width="320" height="220" fill="#fdf6e3"/>
+  <rect x="10" y="10" width="300" height="200" fill="none" stroke="#222" stroke-width="3"/>
+  <text x="160" y="60" text-anchor="middle" font-family="serif" font-size="20" fill="#222">Certificate</text>
+  <text x="160" y="110" text-anchor="middle" font-family="serif" font-size="14" fill="#444">Student Name</text>
+  <text x="160" y="160" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#777">Default template</text>
+</svg>

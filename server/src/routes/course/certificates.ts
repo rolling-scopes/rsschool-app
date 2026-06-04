@@ -8,10 +8,20 @@ import { setResponse } from '../utils';
 import { config } from '../../config';
 import { StudentRepository } from '../../repositories/student.repository';
 
+const ALLOWED_CERTIFICATE_TEMPLATE_IDS = new Set(['default', 'alt']);
+const DEFAULT_CERTIFICATE_TEMPLATE_ID = 'default';
+
+function resolveTemplateId(input: unknown): string {
+  return typeof input === 'string' && ALLOWED_CERTIFICATE_TEMPLATE_IDS.has(input)
+    ? input
+    : DEFAULT_CERTIFICATE_TEMPLATE_ID;
+}
+
 export const postCertificates = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;
   const data: {
     criteria: { courseTaskIds?: number[]; minScore?: number; minTotalScore: number };
+    templateId?: string;
   } = ctx.request.body;
 
   if (data == null) {
@@ -19,6 +29,7 @@ export const postCertificates = (_: ILogger) => async (ctx: Router.RouterContext
     return;
   }
 
+  const templateId = resolveTemplateId(data.templateId);
   const { courseTaskIds, minScore, minTotalScore } = data.criteria ?? {};
   const emptyCriteria = !minScore && !minTotalScore && (!courseTaskIds || !courseTaskIds?.length);
   const studentRepository = getCustomRepository(StudentRepository);
@@ -81,6 +92,7 @@ export const postCertificates = (_: ILogger) => async (ctx: Router.RouterContext
       studentId: student.id,
       studentName: `${user.firstName} ${user.lastName}`,
       timestamp: Date.now(),
+      templateId,
     };
   });
   await axios.post(`${config.aws.restApiUrl}/certificate`, result, {
@@ -103,6 +115,7 @@ export const postStudentCertificate = (_: ILogger) => async (ctx: Router.RouterC
     setResponse(ctx, BAD_REQUEST, { message: 'No student' });
     return;
   }
+  const templateId = resolveTemplateId((ctx.request.body as { templateId?: string } | undefined)?.templateId);
   const result = {
     courseId,
     courseName: student.course.name,
@@ -111,6 +124,7 @@ export const postStudentCertificate = (_: ILogger) => async (ctx: Router.RouterC
     studentId: student.id,
     studentName: `${student.user.firstName} ${student.user.lastName}`,
     timestamp: Date.now(),
+    templateId,
   };
   await axios.post(`${config.aws.restApiUrl}/certificate`, result, {
     headers: { 'x-api-key': config.aws.restApiKey },
