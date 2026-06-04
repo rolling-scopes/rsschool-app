@@ -8,7 +8,7 @@ import { setResponse } from '../utils';
 import { config } from '../../config';
 import { StudentRepository } from '../../repositories/student.repository';
 
-const ALLOWED_CERTIFICATE_TEMPLATE_IDS = new Set(['default', 'alt']);
+const ALLOWED_CERTIFICATE_TEMPLATE_IDS = new Set(['default', 'bootcamp_13_weeks']);
 const DEFAULT_CERTIFICATE_TEMPLATE_ID = 'default';
 
 function resolveTemplateId(input: unknown): string {

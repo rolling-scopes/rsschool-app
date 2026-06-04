@@ -1,13 +1,13 @@
 export const CERTIFICATE_TEMPLATES = [
   {
     id: 'default',
-    label: 'Default (Avenir, dark)',
-    previewUrl: '/static/certificate-templates/default.svg',
+    label: 'Default (RS School, black/yellow)',
+    previewUrl: '/static/certificate-templates/default.jpg',
   },
   {
-    id: 'alt',
+    id: 'bootcamp_13_weeks',
     label: 'Bootcamp (capybara, navy/gold)',
-    previewUrl: '/static/certificate-templates/alt.jpg',
+    previewUrl: '/static/certificate-templates/bootcamp_13_weeks.jpg',
   },
 ] as const;
 
