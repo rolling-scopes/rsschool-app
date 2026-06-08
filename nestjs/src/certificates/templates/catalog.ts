@@ -14,9 +14,7 @@ export const CERTIFICATE_TEMPLATES = [
 export type CertificateTemplate = (typeof CERTIFICATE_TEMPLATES)[number];
 export type CertificateTemplateId = CertificateTemplate['id'];
 
-export const CERTIFICATE_TEMPLATE_IDS: ReadonlySet<string> = new Set(
-  CERTIFICATE_TEMPLATES.map(t => t.id),
-);
+export const CERTIFICATE_TEMPLATE_IDS: ReadonlySet<string> = new Set(CERTIFICATE_TEMPLATES.map(t => t.id));
 
 export const DEFAULT_CERTIFICATE_TEMPLATE_ID: CertificateTemplateId = 'default';
 

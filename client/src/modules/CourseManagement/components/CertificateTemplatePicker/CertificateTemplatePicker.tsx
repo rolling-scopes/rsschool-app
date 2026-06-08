@@ -1,6 +1,8 @@
-import { Radio, Spin } from 'antd';
+import { FullscreenOutlined } from '@ant-design/icons';
+import { Image, Radio, Spin, Tooltip } from 'antd';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { cloneElement, isValidElement, useEffect, useState, type ReactElement } from 'react';
+import styles from './CertificateTemplatePicker.module.css';
 
 type Template = {
   id: string;
@@ -37,6 +39,7 @@ async function fetchTemplates(): Promise<Template[]> {
 export function CertificateTemplatePicker({ value, onChange }: Props) {
   const [templates, setTemplates] = useState<Template[]>(cachedTemplates ?? []);
   const [loading, setLoading] = useState(cachedTemplates == null);
+  const [previewSrc, setPreviewSrc] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     let cancelled = false;
@@ -73,38 +76,60 @@ export function CertificateTemplatePicker({ value, onChange }: Props) {
     return <Spin />;
   }
 
+  const openPreview = (e: React.MouseEvent, src: string) => {
+    // Prevent the surrounding Radio from toggling selection when opening the preview.
+    e.preventDefault();
+    e.stopPropagation();
+    setPreviewSrc(src);
+  };
+
   return (
-    <Radio.Group
-      value={value}
-      onChange={e => onChange?.(e.target.value)}
-      style={{ display: 'flex', flexWrap: 'wrap', gap: 12, width: '100%' }}
-    >
-      {templates.map(t => {
-        const selected = value === t.id;
-        return (
-          <Radio key={t.id} value={t.id} style={{ display: 'block', margin: 0 }}>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: 4,
-                padding: 8,
-                border: `2px solid ${selected ? '#1677ff' : '#d9d9d9'}`,
-                borderRadius: 6,
-                width: 180,
-              }}
-            >
-              <img
-                src={t.previewUrl}
-                alt={t.label}
-                style={{ width: 160, height: 110, objectFit: 'cover', background: '#fafafa' }}
-              />
-              <span style={{ fontSize: 12, textAlign: 'center' }}>{t.label}</span>
-            </div>
-          </Radio>
-        );
-      })}
-    </Radio.Group>
+    <>
+      <Radio.Group value={value} onChange={e => onChange?.(e.target.value)} className={styles.group}>
+        {templates.map(t => {
+          const selected = value === t.id;
+          return (
+            <Radio key={t.id} value={t.id} className={styles.radio}>
+              <div className={`${styles.card} ${selected ? styles.cardSelected : ''}`}>
+                <div className={styles.thumb}>
+                  <img src={t.previewUrl} alt={t.label} className={styles.thumbImg} />
+                  <Tooltip title="View full preview">
+                    <span
+                      role="button"
+                      aria-label="View full preview"
+                      onClick={e => openPreview(e, t.previewUrl)}
+                      onMouseDown={e => e.stopPropagation()}
+                      className={styles.fullscreenBtn}
+                    >
+                      <FullscreenOutlined />
+                    </span>
+                  </Tooltip>
+                </div>
+                <span className={styles.label}>{t.label}</span>
+              </div>
+            </Radio>
+          );
+        })}
+      </Radio.Group>
+
+      <Image
+        classNames={{ root: styles.hidden }}
+        preview={{
+          open: previewSrc != null,
+          src: previewSrc,
+          onOpenChange: open => {
+            if (!open) setPreviewSrc(undefined);
+          },
+          // Open the preview almost full-screen so the certificate details are readable.
+          imageRender: originalNode => {
+            if (!isValidElement(originalNode)) return originalNode;
+            const node = originalNode as ReactElement<{ className?: string }>;
+            return cloneElement(node, {
+              className: [node.props.className, styles.previewImg].filter(Boolean).join(' '),
+            });
+          },
+        }}
+      />
+    </>
   );
 }
