@@ -1,10 +1,4 @@
-import {
-  MessageOutlined,
-  MessageTwoTone,
-  InteractionTwoTone,
-  StarOutlined,
-  TrophyOutlined,
-} from '@ant-design/icons';
+import { MessageOutlined, MessageTwoTone, InteractionTwoTone, StarOutlined, TrophyOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Empty, Row, Statistic, Typography } from 'antd';
 import { GithubUserLink } from '@client/shared/components/GithubUserLink';
 import { PageLayoutSimple } from '@client/shared/components/PageLayout';
