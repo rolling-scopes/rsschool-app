@@ -18,9 +18,9 @@ describe('HeaderMiniBannerCarousel', () => {
   });
 
   it('should render link when item has url', () => {
-    render(<HeaderMiniBannerCarousel items={[{ title: 'Open docs', url: 'https://rs.school/docs/en' }]} />);
+    render(<HeaderMiniBannerCarousel items={[{ title: 'Open docs', url: 'https://rs.school/docs' }]} />);
 
-    expect(screen.getByRole('link', { name: 'Open docs' })).toHaveAttribute('href', 'https://rs.school/docs/en');
+    expect(screen.getByRole('link', { name: 'Open docs' })).toHaveAttribute('href', 'https://rs.school/docs');
   });
 
   it('should render controls for multiple items', () => {

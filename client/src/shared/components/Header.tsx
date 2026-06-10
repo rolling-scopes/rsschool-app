@@ -44,7 +44,7 @@ const MENU_ITEMS = [
     title: 'My CV',
   },
   {
-    link: 'https://rs.school/docs/en',
+    link: 'https://rs.school/docs',
     icon: <QuestionCircleFilled />,
     title: 'Help',
     target: '_blank',
