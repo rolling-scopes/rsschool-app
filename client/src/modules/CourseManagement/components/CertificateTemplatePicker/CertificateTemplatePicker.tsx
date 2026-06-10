@@ -1,7 +1,8 @@
 import { FullscreenOutlined } from '@ant-design/icons';
 import { Image, Radio, Spin, Tooltip } from 'antd';
 import axios from 'axios';
-import { cloneElement, isValidElement, useEffect, useState, type ReactElement } from 'react';
+import clsx from 'clsx';
+import { cloneElement, useEffect, useRef, useState, type ReactElement } from 'react';
 import styles from './CertificateTemplatePicker.module.css';
 
 type Template = {
@@ -40,14 +41,15 @@ export function CertificateTemplatePicker({ value, onChange }: Props) {
   const [templates, setTemplates] = useState<Template[]>(cachedTemplates ?? []);
   const [loading, setLoading] = useState(cachedTemplates == null);
   const [previewSrc, setPreviewSrc] = useState<string | undefined>(undefined);
+  const onChangeRef = useRef(onChange);
+  onChangeRef.current = onChange;
 
   useEffect(() => {
-    let cancelled = false;
+    // State is already seeded from the module-level cache by the useState initializers above.
     if (cachedTemplates) {
-      setTemplates(cachedTemplates);
-      setLoading(false);
       return;
     }
+    let cancelled = false;
     fetchTemplates()
       .then(list => {
         if (cancelled) return;
@@ -66,11 +68,11 @@ export function CertificateTemplatePicker({ value, onChange }: Props) {
   }, []);
 
   useEffect(() => {
-    if (value == null && templates.length > 0) {
+    if (value === undefined && templates.length > 0) {
       const fallback = templates.find(t => t.id === DEFAULT_TEMPLATE_ID)?.id ?? templates[0]?.id;
-      if (fallback) onChange?.(fallback);
+      if (fallback) onChangeRef.current?.(fallback);
     }
-  }, [templates, value, onChange]);
+  }, [templates, value]);
 
   if (loading) {
     return <Spin />;
@@ -90,7 +92,7 @@ export function CertificateTemplatePicker({ value, onChange }: Props) {
           const selected = value === t.id;
           return (
             <Radio key={t.id} value={t.id} className={styles.radio}>
-              <div className={`${styles.card} ${selected ? styles.cardSelected : ''}`}>
+              <div className={clsx(styles.card, selected && styles.cardSelected)}>
                 <div className={styles.thumb}>
                   <img src={t.previewUrl} alt={t.label} className={styles.thumbImg} />
                   <Tooltip title="View full preview">
@@ -115,17 +117,16 @@ export function CertificateTemplatePicker({ value, onChange }: Props) {
       <Image
         classNames={{ root: styles.hidden }}
         preview={{
-          open: previewSrc != null,
+          open: !!previewSrc,
           src: previewSrc,
           onOpenChange: open => {
             if (!open) setPreviewSrc(undefined);
           },
           // Open the preview almost full-screen so the certificate details are readable.
           imageRender: originalNode => {
-            if (!isValidElement(originalNode)) return originalNode;
             const node = originalNode as ReactElement<{ className?: string }>;
             return cloneElement(node, {
-              className: [node.props.className, styles.previewImg].filter(Boolean).join(' '),
+              className: clsx(node.props.className, styles.previewImg),
             });
           },
         }}
