@@ -18,7 +18,6 @@ const orderByFieldMapping = {
   cityName: 'user.cityName',
   mentor: 'mu.githubId',
   totalScoreChangeDate: 'student.totalScoreChangeDate',
-  repositoryLastActivityDate: 'student.repositoryLastActivityDate',
 };
 
 const defaultFilter = {
@@ -220,7 +219,6 @@ export class ScoreService {
         totalScore: student.totalScore,
         totalScoreChangeDate: student.totalScoreChangeDate,
         crossCheckScore: student.crossCheckScore,
-        repositoryLastActivityDate: student.repositoryLastActivityDate,
         cityName: user.cityName ?? '',
         countryName: user.countryName ?? 'Other',
         taskResults,

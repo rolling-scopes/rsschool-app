@@ -167,18 +167,6 @@ export class StudentRepository extends AbstractRepository<Student> {
     return records.map(transformStudent);
   }
 
-  public async findAndIncludeRepository(courseId: number) {
-    const query = await getRepository(Student)
-      .createQueryBuilder('student')
-      .innerJoin('student.user', 'sUser')
-      .addSelect(['student.id', 'sUser.githubId'])
-      .where('student.courseId = :courseId', { courseId })
-      .andWhere('student.isExpelled = false AND student.isFailed = false')
-      .andWhere('student.repository IS NOT NULL');
-    const items = await query.getMany();
-    return items.map(m => m.user.githubId);
-  }
-
   public async findForExpel(
     courseId: number,
     criteria: {
@@ -309,17 +297,6 @@ export class StudentRepository extends AbstractRepository<Student> {
 
   public async save(students: Partial<Student>[]) {
     await getRepository(Student).save(students);
-  }
-
-  public async updateRepositoryActivityDate(repositoryUrl: string) {
-    await getRepository(Student).update(
-      {
-        repository: repositoryUrl,
-      },
-      {
-        repositoryLastActivityDate: new Date(),
-      },
-    );
   }
 
   public async updateMentoringAvailability(studentId: number, value: boolean) {

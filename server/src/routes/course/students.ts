@@ -31,7 +31,6 @@ export const getStudentsCsv = (_: ILogger) => async (ctx: Router.RouterContext) 
       totalScore: student.totalScore,
       city: student.cityName,
       country: student.countryName,
-      repository: student.repository,
     })),
   );
   setCsvResponse(ctx, OK, csv, 'students');

@@ -8,7 +8,6 @@ import * as notificationService from './notification.service';
 import * as studentService from './student.service';
 
 export { InterviewService } from './interview.service';
-export { RepositoryService } from './repository.service';
 export { CrossCheckService } from './crossCheck.service';
 
 export * from './operationResult';
