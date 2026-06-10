@@ -445,16 +445,6 @@ export class CourseService {
     return result.data.data;
   }
 
-  async createRepository(githubId: string) {
-    type Response = { data: { repository: string } };
-    const result = await this.axios.post<Response>(`/student/${githubId}/repository`);
-    return result.data.data;
-  }
-
-  async postSyncRepositoriesMentors() {
-    await this.axios.post(`/repositories/mentors`);
-  }
-
   async expelMentor(githubId: string) {
     await this.axios.post(`/mentor/${githubId}/status/expelled`);
   }
@@ -569,11 +559,6 @@ export class CourseService {
     return result.data.data as { id: string };
   }
 
-  async sendInviteRepository(githubId: string) {
-    const result = await this.axios.post(`/student/${githubId}/repository`);
-    return result.data.data;
-  }
-
   exportStudentsCsv(activeOnly?: boolean) {
     window.open(`${this.axios.defaults.baseURL}/students/csv?status=${activeOnly ? 'active' : ''}`, '_blank');
   }
@@ -583,7 +568,6 @@ export interface StudentDetails extends StudentBasic {
   countryName: string;
   cityName: string;
   totalScore: number;
-  repository: string;
   interviews: { id: number; isCompleted: boolean }[];
 }
 
@@ -608,7 +592,6 @@ export interface StudentSummary {
       })
     | null;
   rank: number;
-  repository?: string | null;
 }
 
 export interface TaskSolution {

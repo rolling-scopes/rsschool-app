@@ -3,7 +3,6 @@ import {
   MessageTwoTone,
   InteractionTwoTone,
   StarOutlined,
-  LockFilled,
   TrophyOutlined,
 } from '@ant-design/icons';
 import { Button, Card, Col, Empty, Row, Statistic, Typography } from 'antd';
@@ -44,14 +43,6 @@ export function Students() {
                     <GithubUserLink value={student.githubId} />
                   </div>
                   <Link href={`/profile?githubId=${student.githubId}`}>{student.name}</Link>
-                  {student.repoUrl && (
-                    <div>
-                      <LockFilled />{' '}
-                      <a href={student.repoUrl} target="_blank">
-                        {student.repoUrl.split('/').pop()}
-                      </a>
-                    </div>
-                  )}
                 </>
               }
               actions={[
