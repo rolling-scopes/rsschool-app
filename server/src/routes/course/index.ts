@@ -102,7 +102,6 @@ function addTaskApi(router: Router<any, any>, logger: ILogger) {
   router.get('/tasks/details', courseGuard, tasks.getCourseTasksDetails(logger));
 
   router.get('/tasks/verifications', basicAuthAws, getCourseTasksVerifications(logger));
-  router.post('/task/:courseTaskId/distribution', courseManagerGuard, tasks.createCourseTaskDistribution(logger));
   router.post('/task/:courseTaskId/artefact', courseGuard, postTaskArtefact(logger));
   router.post('/task/:courseTaskId/cross-check/distribution', crossCheckGuard, crossCheck.createDistribution(logger));
   router.get(`/task/:courseTaskId/cross-check/details`, courseGuard, crossCheck.getTaskDetails(logger));

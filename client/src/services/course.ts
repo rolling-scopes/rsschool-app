@@ -480,7 +480,7 @@ export class CourseService {
   }
 
   async createTaskDistribution(courseTaskId: number) {
-    const result = await this.axios.post(`/task/${courseTaskId}/distribution`);
+    const result = await courseTasksApi.createTaskDistribution(this.courseId, courseTaskId, {});
     return result.data;
   }
 
