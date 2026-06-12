@@ -1,8 +1,6 @@
 import Router from '@koa/router';
 import { ILogger } from '../../logger';
 import {
-  adminGuard,
-  anyCourseMentorGuard,
   basicAuthAws,
   courseGuard,
   courseInterviewGuard,
@@ -17,7 +15,7 @@ import {
   taskOwnerGuard,
 } from '../guards';
 import { postCertificates, postStudentCertificate } from './certificates';
-import { getCourseEvent, getCourseEvents } from './events';
+import { getCourseEvents } from './events';
 import {
   deleteMentor as postMentorStatusExpelled,
   getMentorInterview,
@@ -31,11 +29,8 @@ import {
   getStudents,
   getStudentsCsv,
   getStudentsWithDetails,
-  postStudents,
   searchStudent,
-  updateStatuses,
 } from './students';
-import { postTaskArtefact } from './taskArtefact';
 import { getCourseTasksVerifications, getStudentTaskVerifications } from './taskVerifications';
 
 import * as interviews from './interviews';
@@ -52,7 +47,6 @@ import {
   createInterviewResult,
   getCrossMentors,
   getStudent,
-  postFeedback,
   selfUpdateStudentStatus,
   updateMentoringAvailability,
   updateStudent,
@@ -78,7 +72,6 @@ export function courseRoute(logger: ILogger) {
 }
 
 function addScoreApi(router: Router<any, any>, logger: ILogger) {
-  router.post('/scores/calculation', adminGuard, score.recalculateScore(logger));
   router.post('/scores/:courseTaskId', taskOwnerGuard, score.createMultipleScores(logger));
 }
 
@@ -88,12 +81,10 @@ function addInterviewsApi(router: Router<any, any>, logger: ILogger) {
     courseInterviewGuard,
     interviews.createInterview(logger),
   );
-  router.post('/interviews/:courseTaskId', courseManagerGuard, interviews.createInterviews(logger));
   router.delete('/interviews/:courseTaskId/:id', courseManagerGuard, interviews.cancelInterview(logger));
 }
 
 function addEventApi(router: Router<any, any>, logger: ILogger) {
-  router.get('/event/:id', courseGuard, getCourseEvent(logger));
 
   router.get('/events', courseGuard, getCourseEvents(logger));
 }
@@ -103,7 +94,6 @@ function addTaskApi(router: Router<any, any>, logger: ILogger) {
 
   router.get('/tasks/verifications', basicAuthAws, getCourseTasksVerifications(logger));
   router.post('/task/:courseTaskId/distribution', courseManagerGuard, tasks.createCourseTaskDistribution(logger));
-  router.post('/task/:courseTaskId/artefact', courseGuard, postTaskArtefact(logger));
   router.post('/task/:courseTaskId/cross-check/distribution', crossCheckGuard, crossCheck.createDistribution(logger));
   router.get(`/task/:courseTaskId/cross-check/details`, courseGuard, crossCheck.getTaskDetails(logger));
   router.post('/task/:courseTaskId/cross-check/completion', crossCheckGuard, crossCheck.createCompletion(logger));
@@ -189,12 +179,9 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   router.post('/student/:githubId/status-self', courseGuard, selfUpdateStudentStatus(logger));
   router.get('/student/:githubId/score', courseGuard, score.getScoreByStudent(logger));
   router.post('/student/:githubId/certificate', courseManagerGuard, validateGithubId, postStudentCertificate(logger));
-  router.post('/student/feedback', anyCourseMentorGuard, postFeedback(logger));
 
   router.get('/students', courseSupervisorGuard, getStudents(logger));
   router.get('/students/csv', courseSupervisorGuard, getStudentsCsv(logger));
-  router.post('/students/status', courseManagerGuard, updateStatuses(logger));
-  router.post('/students', adminGuard, postStudents(logger));
   router.get('/students/details', courseSupervisorOrDementorGuard, getStudentsWithDetails(logger));
   router.get('/students/score/csv', courseSupervisorGuard, score.getScoreCsv(logger));
 

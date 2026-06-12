@@ -247,12 +247,6 @@ export class CourseService {
     return result.data.data;
   }
 
-  async postPublicFeedback(data: { toUserId: number; badgeId?: string; comment: string }) {
-    type Response = { data: { heroesUrl: string } };
-    const result = await this.axios.post<Response>(`/feedback`, data);
-    return result.data.data;
-  }
-
   async expelStudent(githubId: string, comment = '') {
     await this.axios.post(`/student/${githubId}/status`, { comment, status: 'expelled' });
   }

@@ -490,17 +490,6 @@ export function isPowerUser(courseId: number, session: IUserSession) {
   return isAdmin(session) || isManager(session, courseId) || isSupervisor(session, courseId);
 }
 
-export async function getEvent(eventId: number) {
-  const answer = await getRepository(CourseEvent)
-    .createQueryBuilder('courseEvent')
-    .innerJoinAndSelect('courseEvent.event', 'event')
-    .leftJoin('courseEvent.organizer', 'organizer')
-    .addSelect(['organizer.id', 'organizer.firstName', 'organizer.lastName', 'organizer.githubId'])
-    .where('courseEvent.id = :id', { id: eventId })
-    .getOne();
-  return answer;
-}
-
 export async function getEvents(courseId: number) {
   return getRepository(CourseEvent)
     .createQueryBuilder('courseEvent')
