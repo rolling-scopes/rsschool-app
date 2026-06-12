@@ -54,7 +54,6 @@ import {
   getStudent,
   postFeedback,
   selfUpdateStudentStatus,
-  updateMentoringAvailability,
   updateStudent,
   updateStudentStatus,
 } from './student';
@@ -178,7 +177,6 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
     interviews.getInterviewStudent(logger),
   );
 
-  router.post('/student/:githubId/availability', courseManagerGuard, updateMentoringAvailability(logger));
   router.get('/student/:githubId/tasks/cross-mentors', courseGuard, ...validators, getCrossMentors(logger));
   router.get('/student/:githubId/tasks/verifications', courseGuard, ...validators, getStudentTaskVerifications(logger));
   router.get('/student/:githubId/interviews', courseGuard, ...validators, interviews.getStudentInterviews(logger));
