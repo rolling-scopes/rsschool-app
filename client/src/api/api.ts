@@ -5983,6 +5983,32 @@ export interface SelfEducationQuestionSelectedAnswersDto {
 /**
  * 
  * @export
+ * @interface SelfStudentStatusDto
+ */
+export interface SelfStudentStatusDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof SelfStudentStatusDto
+     */
+    'status': SelfStudentStatusDtoStatusEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof SelfStudentStatusDto
+     */
+    'comment'?: string;
+}
+
+export const SelfStudentStatusDtoStatusEnum = {
+    SelfStudy: 'self-study'
+} as const;
+
+export type SelfStudentStatusDtoStatusEnum = typeof SelfStudentStatusDtoStatusEnum[keyof typeof SelfStudentStatusDtoStatusEnum];
+
+/**
+ * 
+ * @export
  * @interface SendUserNotificationDto
  */
 export interface SendUserNotificationDto {
@@ -7701,6 +7727,34 @@ export const UpdateStudentFeedbackDtoEnglishLevelEnum = {
 } as const;
 
 export type UpdateStudentFeedbackDtoEnglishLevelEnum = typeof UpdateStudentFeedbackDtoEnglishLevelEnum[keyof typeof UpdateStudentFeedbackDtoEnglishLevelEnum];
+
+/**
+ * 
+ * @export
+ * @interface UpdateStudentStatusDto
+ */
+export interface UpdateStudentStatusDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateStudentStatusDto
+     */
+    'status': UpdateStudentStatusDtoStatusEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateStudentStatusDto
+     */
+    'comment'?: string;
+}
+
+export const UpdateStudentStatusDtoStatusEnum = {
+    Expelled: 'expelled',
+    Active: 'active',
+    SelfStudy: 'self-study'
+} as const;
+
+export type UpdateStudentStatusDtoStatusEnum = typeof UpdateStudentStatusDtoStatusEnum[keyof typeof UpdateStudentStatusDtoStatusEnum];
 
 /**
  * 
@@ -9534,6 +9588,35 @@ export const CertificateApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCertificateTemplates: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/certificate/templates`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {number} studentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9622,6 +9705,15 @@ export const CertificateApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCertificateTemplates(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCertificateTemplates(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {number} studentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9661,6 +9753,14 @@ export const CertificateApiFactory = function (configuration?: Configuration, ba
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCertificateTemplates(options?: any): AxiosPromise<void> {
+            return localVarFp.getCertificateTemplates(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {number} studentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9696,6 +9796,16 @@ export class CertificateApi extends BaseAPI {
      */
     public getCertificate(publicId: string, options?: AxiosRequestConfig) {
         return CertificateApiFp(this.configuration).getCertificate(publicId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CertificateApi
+     */
+    public getCertificateTemplates(options?: AxiosRequestConfig) {
+        return CertificateApiFp(this.configuration).getCertificateTemplates(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -19222,6 +19332,92 @@ export const StudentsApiAxiosParamCreator = function (configuration?: Configurat
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} githubId 
+         * @param {SelfStudentStatusDto} selfStudentStatusDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        selfUpdateStudentStatus: async (courseId: number, githubId: string, selfStudentStatusDto: SelfStudentStatusDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('selfUpdateStudentStatus', 'courseId', courseId)
+            // verify required parameter 'githubId' is not null or undefined
+            assertParamExists('selfUpdateStudentStatus', 'githubId', githubId)
+            // verify required parameter 'selfStudentStatusDto' is not null or undefined
+            assertParamExists('selfUpdateStudentStatus', 'selfStudentStatusDto', selfStudentStatusDto)
+            const localVarPath = `/courses/{courseId}/students/{githubId}/status-self`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"githubId"}}`, encodeURIComponent(String(githubId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(selfStudentStatusDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} githubId 
+         * @param {UpdateStudentStatusDto} updateStudentStatusDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateStudentStatus: async (courseId: number, githubId: string, updateStudentStatusDto: UpdateStudentStatusDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('updateStudentStatus', 'courseId', courseId)
+            // verify required parameter 'githubId' is not null or undefined
+            assertParamExists('updateStudentStatus', 'githubId', githubId)
+            // verify required parameter 'updateStudentStatusDto' is not null or undefined
+            assertParamExists('updateStudentStatus', 'updateStudentStatusDto', updateStudentStatusDto)
+            const localVarPath = `/courses/{courseId}/students/{githubId}/status`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"githubId"}}`, encodeURIComponent(String(githubId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateStudentStatusDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -19280,6 +19476,30 @@ export const StudentsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getUserStudents(current, pageSize, student, country, city, ongoingCourses, previousCourses, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} githubId 
+         * @param {SelfStudentStatusDto} selfStudentStatusDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async selfUpdateStudentStatus(courseId: number, githubId: string, selfStudentStatusDto: SelfStudentStatusDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.selfUpdateStudentStatus(courseId, githubId, selfStudentStatusDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} githubId 
+         * @param {UpdateStudentStatusDto} updateStudentStatusDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateStudentStatus(courseId: number, githubId: string, updateStudentStatusDto: UpdateStudentStatusDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateStudentStatus(courseId, githubId, updateStudentStatusDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -19333,6 +19553,28 @@ export const StudentsApiFactory = function (configuration?: Configuration, baseP
          */
         getUserStudents(current: string, pageSize: string, student?: string, country?: string, city?: string, ongoingCourses?: string, previousCourses?: string, options?: any): AxiosPromise<UserStudentsDto> {
             return localVarFp.getUserStudents(current, pageSize, student, country, city, ongoingCourses, previousCourses, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} githubId 
+         * @param {SelfStudentStatusDto} selfStudentStatusDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        selfUpdateStudentStatus(courseId: number, githubId: string, selfStudentStatusDto: SelfStudentStatusDto, options?: any): AxiosPromise<void> {
+            return localVarFp.selfUpdateStudentStatus(courseId, githubId, selfStudentStatusDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} githubId 
+         * @param {UpdateStudentStatusDto} updateStudentStatusDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateStudentStatus(courseId: number, githubId: string, updateStudentStatusDto: UpdateStudentStatusDto, options?: any): AxiosPromise<void> {
+            return localVarFp.updateStudentStatus(courseId, githubId, updateStudentStatusDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -19394,6 +19636,32 @@ export class StudentsApi extends BaseAPI {
      */
     public getUserStudents(current: string, pageSize: string, student?: string, country?: string, city?: string, ongoingCourses?: string, previousCourses?: string, options?: AxiosRequestConfig) {
         return StudentsApiFp(this.configuration).getUserStudents(current, pageSize, student, country, city, ongoingCourses, previousCourses, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {string} githubId 
+     * @param {SelfStudentStatusDto} selfStudentStatusDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StudentsApi
+     */
+    public selfUpdateStudentStatus(courseId: number, githubId: string, selfStudentStatusDto: SelfStudentStatusDto, options?: AxiosRequestConfig) {
+        return StudentsApiFp(this.configuration).selfUpdateStudentStatus(courseId, githubId, selfStudentStatusDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {string} githubId 
+     * @param {UpdateStudentStatusDto} updateStudentStatusDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StudentsApi
+     */
+    public updateStudentStatus(courseId: number, githubId: string, updateStudentStatusDto: UpdateStudentStatusDto, options?: AxiosRequestConfig) {
+        return StudentsApiFp(this.configuration).updateStudentStatus(courseId, githubId, updateStudentStatusDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

@@ -3,7 +3,7 @@ import Router from '@koa/router';
 import { getRepository, getCustomRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { Feedback, TaskInterviewResult } from '../../models';
-import { courseService, taskService, studentService } from '../../services';
+import { courseService, taskService } from '../../services';
 import { setResponse } from '../utils';
 import { StudentRepository } from '../../repositories/student.repository';
 import { userGuards } from '../guards';
@@ -11,53 +11,6 @@ import { sendNotification } from '../../services/notification.service';
 import { MentorBasic } from '../../../../common/models';
 
 type FeedbackInput = { toUserId: number; comment: string };
-
-export const updateStudentStatus = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId, courseId } = ctx.params;
-  const data: { comment?: string; status: 'expelled' | 'active' | 'self-study' } = ctx.request.body;
-  const { allow, message = 'no access' } = await studentService.canChangeStatus(ctx.state.user, courseId, githubId);
-
-  if (!allow) {
-    setResponse(ctx, BAD_REQUEST, { message });
-    return;
-  }
-
-  const studentRepository = getCustomRepository(StudentRepository);
-  switch (data.status) {
-    case 'active':
-      await studentRepository.restore(courseId, githubId);
-      setResponse(ctx, OK);
-      break;
-    case 'expelled':
-      await studentRepository.expel(courseId, githubId, data.comment);
-      setResponse(ctx, OK);
-      break;
-    case 'self-study':
-      await studentRepository.setSelfStudy(courseId, githubId, data.comment);
-      setResponse(ctx, OK);
-      break;
-    default:
-      setResponse(ctx, BAD_REQUEST, { message: 'not supported status' });
-      break;
-  }
-};
-
-export const selfUpdateStudentStatus = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId, courseId } = ctx.params;
-  const data: { status: 'self-study'; comment?: string } = ctx.request.body;
-
-  if (data.status !== 'self-study') {
-    throw new Error('Not supported status');
-  }
-
-  if (ctx.state.user.githubId === githubId) {
-    const studentRepository = getCustomRepository(StudentRepository);
-    await studentRepository.setSelfStudy(courseId, githubId);
-    setResponse(ctx, OK);
-  } else {
-    setResponse(ctx, BAD_REQUEST, { message: 'access denied' });
-  }
-};
 
 export const postFeedback = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;

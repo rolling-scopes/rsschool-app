@@ -1670,6 +1670,38 @@
         "tags": ["students"]
       }
     },
+    "/courses/{courseId}/students/{githubId}/status": {
+      "post": {
+        "operationId": "updateStudentStatus",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateStudentStatusDto" } } }
+        },
+        "responses": { "200": { "description": "" }, "400": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
+        "tags": ["students"]
+      }
+    },
+    "/courses/{courseId}/students/{githubId}/status-self": {
+      "post": {
+        "operationId": "selfUpdateStudentStatus",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SelfStudentStatusDto" } } }
+        },
+        "responses": { "200": { "description": "" }, "400": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
+        "tags": ["students"]
+      }
+    },
     "/courses/{courseId}/students/expel": {
       "post": {
         "operationId": "expelStudents",
@@ -2228,6 +2260,15 @@
         "responses": { "201": { "description": "" } },
         "summary": "",
         "tags": ["registry"]
+      }
+    },
+    "/certificate/templates": {
+      "get": {
+        "operationId": "getCertificateTemplates",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "summary": "",
+        "tags": ["certificate"]
       }
     },
     "/certificate/{publicId}": {
@@ -4649,6 +4690,19 @@
           "rank": { "type": "number" }
         },
         "required": ["totalScore", "results", "isActive", "mentor", "rank"]
+      },
+      "UpdateStudentStatusDto": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "enum": ["expelled", "active", "self-study"] },
+          "comment": { "type": "string" }
+        },
+        "required": ["status"]
+      },
+      "SelfStudentStatusDto": {
+        "type": "object",
+        "properties": { "status": { "type": "string", "enum": ["self-study"] }, "comment": { "type": "string" } },
+        "required": ["status"]
       },
       "ExpelCriteriaDto": {
         "type": "object",
