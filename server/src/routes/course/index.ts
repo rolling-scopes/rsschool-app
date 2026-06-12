@@ -20,7 +20,6 @@ import { postCertificates, postStudentCertificate } from './certificates';
 import { getCourseEvent, getCourseEvents } from './events';
 import {
   deleteMentor as postMentorStatusExpelled,
-  getMentorInterview,
   getMentorStudents,
   postMentor,
   restoreExpelledMentor,
@@ -140,7 +139,6 @@ function addMentorApi(router: Router<any, any>, logger: ILogger) {
   const mentorLogger = logger.child({ module: 'course/mentor' });
   router.post('/mentor/:githubId', guard, ...validators, postMentor(mentorLogger));
   router.get('/mentor/:githubId/students', guard, ...validators, getMentorStudents(mentorLogger));
-  router.get('/mentor/:githubId/interview/:courseTaskId', guard, ...validators, getMentorInterview(mentorLogger));
   router.get('/mentor/:githubId/interviews', guard, ...validators, interviews.getMentorInterviews(mentorLogger));
   router.post(
     '/mentor/:githubId/status/expelled',

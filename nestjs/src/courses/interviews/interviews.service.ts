@@ -374,4 +374,46 @@ export class InterviewsService {
 
     return taskCheckPairs;
   }
+
+  public async getInterviewStudentsByMentor(courseId: number, courseTaskId: number, mentorGithubId: string) {
+    const mentor = await this.mentorRepository
+      .createQueryBuilder('mentor')
+      .innerJoin('mentor.user', 'user')
+      .addSelect(['user.firstName', 'user.lastName', 'user.githubId'])
+      .where('user.githubId = :githubId', { githubId: mentorGithubId })
+      .andWhere('mentor.courseId = :courseId', { courseId })
+      .getOne();
+    if (mentor == null) {
+      return null;
+    }
+
+    const records = await this.studentRepository
+      .createQueryBuilder('student')
+      .innerJoin('student.user', 'user')
+      .innerJoin('student.taskChecker', 'taskChecker')
+      .addSelect([
+        'user.id',
+        'user.firstName',
+        'user.lastName',
+        'user.githubId',
+        'user.cityName',
+        'user.countryName',
+        'user.discord',
+      ])
+      .where('"taskChecker"."courseTaskId" = :courseTaskId', { courseTaskId })
+      .andWhere('"taskChecker"."mentorId" = :mentorId', { mentorId: mentor.id })
+      .getMany();
+
+    return records.map(record => ({
+      name: [record.user.firstName, record.user.lastName].filter(Boolean).map(s => s.trim()).join(' '),
+      isActive: !record.isExpelled && !record.isFailed,
+      id: record.id,
+      githubId: record.user.githubId,
+      mentor: null,
+      cityName: record.user.cityName ?? '',
+      countryName: record.user.countryName ?? '',
+      discord: record.user.discord,
+      totalScore: record.totalScore,
+    }));
+  }
 }

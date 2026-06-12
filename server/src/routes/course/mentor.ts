@@ -1,5 +1,5 @@
 import Router from '@koa/router';
-import { BAD_REQUEST, NOT_FOUND, OK, StatusCodes } from 'http-status-codes';
+import { BAD_REQUEST, OK, StatusCodes } from 'http-status-codes';
 import { getCustomRepository, getRepository, QueryFailedError } from 'typeorm';
 import { PreferredStudentsLocation } from '../../models/mentorRegistry';
 import { ILogger } from '../../logger';
@@ -31,17 +31,6 @@ export const restoreExpelledMentor = (_: ILogger) => async (ctx: Router.RouterCo
   const githubId: string = ctx.params.githubId;
   await courseService.restoreMentor(courseId, githubId);
   setResponse(ctx, OK);
-};
-
-export const getMentorInterview = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { courseId, githubId, courseTaskId } = ctx.params as Params;
-  const mentor = await courseService.getMentorByGithubId(courseId, githubId);
-  if (mentor == null) {
-    setResponse(ctx, NOT_FOUND);
-    return;
-  }
-  const students = await courseService.getInterviewStudentsByMentorId(courseTaskId, mentor.id);
-  setResponse(ctx, OK, students);
 };
 
 export const postMentor = (_: ILogger) => async (ctx: Router.RouterContext) => {

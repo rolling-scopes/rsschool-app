@@ -220,6 +220,23 @@ export class InterviewsController {
     throw new BadRequestException('Invalid interview id');
   }
 
+  @Get('/:courseTaskId/interviewer/me/students')
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  @ApiOperation({ operationId: 'getInterviewerStudents' })
+  @RequiredRoles([CourseRole.Mentor, Role.Admin], true)
+  public async getInterviewerStudents(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+  ) {
+    const students = await this.interviewsService.getInterviewStudentsByMentor(courseId, courseTaskId, req.user.githubId);
+    if (students == null) {
+      throw new NotFoundException('Mentor not found');
+    }
+    return students;
+  }
+
   // use `type` as a way to differentiate between stage-interview and interview.
   @Get('/:interviewId/:type/feedback')
   @ApiOkResponse({ type: InterviewFeedbackDto })
