@@ -2410,6 +2410,31 @@ export interface CreatePromptDto {
 /**
  * 
  * @export
+ * @interface CreateSingleScoreDto
+ */
+export interface CreateSingleScoreDto {
+    /**
+     * 
+     * @type {number | string}
+     * @memberof CreateSingleScoreDto
+     */
+    'score': number | string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateSingleScoreDto
+     */
+    'comment'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateSingleScoreDto
+     */
+    'githubPrUrl'?: string;
+}
+/**
+ * 
+ * @export
  * @interface CreateStudentFeedbackDto
  */
 export interface CreateStudentFeedbackDto {
@@ -9534,6 +9559,35 @@ export const CertificateApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCertificateTemplates: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/certificate/templates`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {number} studentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9622,6 +9676,15 @@ export const CertificateApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCertificateTemplates(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCertificateTemplates(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {number} studentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9661,6 +9724,14 @@ export const CertificateApiFactory = function (configuration?: Configuration, ba
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCertificateTemplates(options?: any): AxiosPromise<void> {
+            return localVarFp.getCertificateTemplates(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {number} studentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9696,6 +9767,16 @@ export class CertificateApi extends BaseAPI {
      */
     public getCertificate(publicId: string, options?: AxiosRequestConfig) {
         return CertificateApiFp(this.configuration).getCertificate(publicId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CertificateApi
+     */
+    public getCertificateTemplates(options?: AxiosRequestConfig) {
+        return CertificateApiFp(this.configuration).getCertificateTemplates(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -19665,6 +19746,53 @@ export const StudentsScoreApiAxiosParamCreator = function (configuration?: Confi
     return {
         /**
          * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
+         * @param {string} githubId 
+         * @param {CreateSingleScoreDto} createSingleScoreDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createSingleScore: async (courseId: number, courseTaskId: number, githubId: string, createSingleScoreDto: CreateSingleScoreDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('createSingleScore', 'courseId', courseId)
+            // verify required parameter 'courseTaskId' is not null or undefined
+            assertParamExists('createSingleScore', 'courseTaskId', courseTaskId)
+            // verify required parameter 'githubId' is not null or undefined
+            assertParamExists('createSingleScore', 'githubId', githubId)
+            // verify required parameter 'createSingleScoreDto' is not null or undefined
+            assertParamExists('createSingleScore', 'createSingleScoreDto', createSingleScoreDto)
+            const localVarPath = `/course/{courseId}/students/score/{githubId}/task/{courseTaskId}`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"courseTaskId"}}`, encodeURIComponent(String(courseTaskId)))
+                .replace(`{${"githubId"}}`, encodeURIComponent(String(githubId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createSingleScoreDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} activeOnly 
          * @param {'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate'} orderBy 
          * @param {'asc' | 'desc'} orderDirection 
@@ -19800,6 +19928,19 @@ export const StudentsScoreApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
+         * @param {string} githubId 
+         * @param {CreateSingleScoreDto} createSingleScoreDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createSingleScore(courseId: number, courseTaskId: number, githubId: string, createSingleScoreDto: CreateSingleScoreDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createSingleScore(courseId, courseTaskId, githubId, createSingleScoreDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {string} activeOnly 
          * @param {'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate'} orderBy 
          * @param {'asc' | 'desc'} orderDirection 
@@ -19840,6 +19981,18 @@ export const StudentsScoreApiFactory = function (configuration?: Configuration, 
     return {
         /**
          * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
+         * @param {string} githubId 
+         * @param {CreateSingleScoreDto} createSingleScoreDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createSingleScore(courseId: number, courseTaskId: number, githubId: string, createSingleScoreDto: CreateSingleScoreDto, options?: any): AxiosPromise<void> {
+            return localVarFp.createSingleScore(courseId, courseTaskId, githubId, createSingleScoreDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} activeOnly 
          * @param {'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate'} orderBy 
          * @param {'asc' | 'desc'} orderDirection 
@@ -19876,6 +20029,20 @@ export const StudentsScoreApiFactory = function (configuration?: Configuration, 
  * @extends {BaseAPI}
  */
 export class StudentsScoreApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {number} courseTaskId 
+     * @param {string} githubId 
+     * @param {CreateSingleScoreDto} createSingleScoreDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StudentsScoreApi
+     */
+    public createSingleScore(courseId: number, courseTaskId: number, githubId: string, createSingleScoreDto: CreateSingleScoreDto, options?: AxiosRequestConfig) {
+        return StudentsScoreApiFp(this.configuration).createSingleScore(courseId, courseTaskId, githubId, createSingleScoreDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {string} activeOnly 

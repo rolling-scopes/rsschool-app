@@ -182,7 +182,6 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   router.get('/student/:githubId/tasks/cross-mentors', courseGuard, ...validators, getCrossMentors(logger));
   router.get('/student/:githubId/tasks/verifications', courseGuard, ...validators, getStudentTaskVerifications(logger));
   router.get('/student/:githubId/interviews', courseGuard, ...validators, interviews.getStudentInterviews(logger));
-  router.post('/student/:githubId/task/:courseTaskId/result', courseGuard, score.createSingleScore(logger));
   router.post('/student/:githubId/interview/:courseTaskId/result', ...mentorValidators, createInterviewResult(logger));
 
   router.post('/student/:githubId/status', ...mentorOrDementorValidators, updateStudentStatus(logger));

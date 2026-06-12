@@ -229,7 +229,7 @@ export class CourseService {
   }
 
   async postStudentScore(githubId: string, courseTaskId: number, data: PostScore) {
-    await this.axios.post(`/student/${githubId}/task/${courseTaskId}/result`, data);
+    await studentsScoreApi.createSingleScore(this.courseId, courseTaskId, githubId, data);
   }
 
   async postMultipleScores(courseTaskId: number, data: unknown) {
