@@ -1106,6 +1106,35 @@
         "tags": ["students score"]
       }
     },
+    "/course/{courseId}/students/score/task/{courseTaskId}/multiple": {
+      "post": {
+        "operationId": "createMultipleScores",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "type": "array", "items": { "$ref": "#/components/schemas/CreateMultipleScoresItemDto" } }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/OperationResultDto" } }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": ["students score"]
+      }
+    },
     "/course/{courseId}/students/score/{githubId}": {
       "get": {
         "operationId": "getStudentScore",
@@ -2228,6 +2257,15 @@
         "responses": { "201": { "description": "" } },
         "summary": "",
         "tags": ["registry"]
+      }
+    },
+    "/certificate/templates": {
+      "get": {
+        "operationId": "getCertificateTemplates",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "summary": "",
+        "tags": ["certificate"]
       }
     },
     "/certificate/{publicId}": {
@@ -4223,6 +4261,22 @@
           "pagination": { "$ref": "#/components/schemas/PaginationMetaDto" }
         },
         "required": ["content", "pagination"]
+      },
+      "CreateMultipleScoresItemDto": {
+        "type": "object",
+        "properties": {
+          "studentGithubId": { "type": "string" },
+          "score": { "oneOf": [{ "type": "number" }, { "type": "string" }] },
+          "comment": { "type": "string" },
+          "githubPrUrl": { "type": "string" },
+          "mentorGithubId": { "type": "string" }
+        },
+        "required": ["studentGithubId", "score"]
+      },
+      "OperationResultDto": {
+        "type": "object",
+        "properties": { "status": { "type": "string" }, "value": { "type": "string" } },
+        "required": ["status"]
       },
       "SaveTaskSolutionDto": { "type": "object", "properties": { "url": { "type": "string" } }, "required": ["url"] },
       "TaskSolutionDto": {

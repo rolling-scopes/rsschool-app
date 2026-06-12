@@ -14,7 +14,6 @@ import {
   courseSupervisorOrMentorGuard,
   crossCheckGuard,
   guard,
-  taskOwnerGuard,
 } from '../guards';
 import { postCertificates, postStudentCertificate } from './certificates';
 import { getCourseEvent, getCourseEvents } from './events';
@@ -79,7 +78,6 @@ export function courseRoute(logger: ILogger) {
 
 function addScoreApi(router: Router<any, any>, logger: ILogger) {
   router.post('/scores/calculation', adminGuard, score.recalculateScore(logger));
-  router.post('/scores/:courseTaskId', taskOwnerGuard, score.createMultipleScores(logger));
 }
 
 function addInterviewsApi(router: Router<any, any>, logger: ILogger) {

@@ -37,6 +37,17 @@ export class ScoreService {
     readonly taskResultRepository: Repository<TaskResult>,
   ) {}
 
+  public async getStudentForScore(courseId: number, githubId: string) {
+    return this.studentRepository
+      .createQueryBuilder('student')
+      .innerJoinAndSelect('student.user', 'user')
+      .where('"user"."githubId" = :studentGithubId AND "student"."courseId" = :courseId', {
+        studentGithubId: githubId,
+        courseId,
+      })
+      .getOne();
+  }
+
   public async getScore({
     filter = defaultFilter,
     orderBy = defaultOrder,
