@@ -12,9 +12,3 @@ export const getCourseEvent = (_: ILogger) => async (ctx: Router.RouterContext) 
   setResponse(ctx, OK, data);
 };
 
-export const getCourseEvents = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const courseId: number = ctx.params.courseId;
-  const data = await courseService.getEvents(courseId);
-
-  setResponse(ctx, OK, data);
-};
