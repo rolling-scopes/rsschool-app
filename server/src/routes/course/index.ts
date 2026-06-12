@@ -16,7 +16,6 @@ import {
   guard,
   taskOwnerGuard,
 } from '../guards';
-import { postCertificates, postStudentCertificate } from './certificates';
 import { getCourseEvent, getCourseEvents } from './events';
 import {
   deleteMentor as postMentorStatusExpelled,
@@ -63,7 +62,6 @@ import * as tasks from './tasks';
 export function courseRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/course/:courseId' });
 
-  router.post('/certificates', courseManagerGuard, postCertificates(logger));
 
   addScoreApi(router, logger);
   addStageInterviewApi(router, logger);
@@ -188,7 +186,6 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   router.post('/student/:githubId/status', ...mentorOrDementorValidators, updateStudentStatus(logger));
   router.post('/student/:githubId/status-self', courseGuard, selfUpdateStudentStatus(logger));
   router.get('/student/:githubId/score', courseGuard, score.getScoreByStudent(logger));
-  router.post('/student/:githubId/certificate', courseManagerGuard, validateGithubId, postStudentCertificate(logger));
   router.post('/student/feedback', anyCourseMentorGuard, postFeedback(logger));
 
   router.get('/students', courseSupervisorGuard, getStudents(logger));

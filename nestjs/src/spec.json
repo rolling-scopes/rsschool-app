@@ -2230,6 +2230,62 @@
         "tags": ["registry"]
       }
     },
+    "/certificate/course/{courseId}/student/{githubId}": {
+      "post": {
+        "operationId": "createStudentCertificate",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/CreateStudentCertificateDto" } }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CertificateRequestDto" } } }
+          }
+        },
+        "summary": "",
+        "tags": ["certificate"]
+      }
+    },
+    "/certificate/course/{courseId}": {
+      "post": {
+        "operationId": "createCourseCertificates",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/CreateCourseCertificatesDto" } }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/CertificateRequestDto" } }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": ["certificate"]
+      }
+    },
+    "/certificate/templates": {
+      "get": {
+        "operationId": "getCertificateTemplates",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "summary": "",
+        "tags": ["certificate"]
+      }
+    },
     "/certificate/{publicId}": {
       "get": {
         "operationId": "getCertificate",
@@ -5136,6 +5192,45 @@
           "text": { "type": "string" }
         },
         "required": ["disciplines", "isMentor", "text"]
+      },
+      "CreateStudentCertificateDto": { "type": "object", "properties": { "templateId": { "type": "string" } } },
+      "CertificateRequestDto": {
+        "type": "object",
+        "properties": {
+          "courseId": { "type": "number" },
+          "courseName": { "type": "string" },
+          "coursePrimarySkill": { "type": "string", "nullable": true },
+          "certificateIssuer": { "type": "string", "nullable": true },
+          "studentId": { "type": "number" },
+          "studentName": { "type": "string" },
+          "timestamp": { "type": "number" },
+          "templateId": { "type": "string" }
+        },
+        "required": [
+          "courseId",
+          "courseName",
+          "coursePrimarySkill",
+          "certificateIssuer",
+          "studentId",
+          "studentName",
+          "timestamp",
+          "templateId"
+        ]
+      },
+      "CertificateCriteriaDto": {
+        "type": "object",
+        "properties": {
+          "courseTaskIds": { "type": "array", "items": { "type": "number" } },
+          "minScore": { "type": "number" },
+          "minTotalScore": { "type": "number" }
+        }
+      },
+      "CreateCourseCertificatesDto": {
+        "type": "object",
+        "properties": {
+          "criteria": { "$ref": "#/components/schemas/CertificateCriteriaDto" },
+          "templateId": { "type": "string" }
+        }
       },
       "SaveCertificateDto": {
         "type": "object",
