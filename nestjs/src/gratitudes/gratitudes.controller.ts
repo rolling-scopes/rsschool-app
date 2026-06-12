@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../auth';
-import { BadgeDto, CreateGratitudeDto, GratitudeDto, HeroesRadarQueryDto } from './dto';
+import { BadgeDto, CreateGratitudeDto, GetGratitudesDto, GetGratitudesQueryDto, GratitudeDto, HeroesRadarQueryDto } from './dto';
 import { GratitudesService } from './gratitudes.service';
 import { HeroesRadarDto } from './dto/heroes-radar.dto';
 import { CountryDto } from './dto/country.dto';
@@ -31,6 +31,14 @@ export class GratitudesController {
   @ApiOkResponse({ type: GratitudeDto })
   public async create(@Req() req: CurrentRequest, @Body() dto: CreateGratitudeDto) {
     await this.service.create(req.user, dto);
+  }
+
+  @Get('/')
+  @ApiOperation({ operationId: 'getGratitudes' })
+  @ApiOkResponse({ type: GetGratitudesDto })
+  public async getGratitudes(@Query() query: GetGratitudesQueryDto) {
+    const result = await this.service.getGratitudes(query);
+    return new GetGratitudesDto(result);
   }
 
   @Get('/badges/:courseId')
