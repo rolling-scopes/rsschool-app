@@ -4,6 +4,7 @@ import { ScoreOrder, ScoreTableFilters } from '@client/modules/Score/hooks/types
 import { IPaginationInfo } from '@client/shared/utils/pagination';
 
 import {
+  CourseMentorsApi,
   CoursesTasksApi,
   CoursesEventsApi,
   UpdateCourseEventDto,
@@ -123,6 +124,7 @@ const studentsScoreApi = new StudentsScoreApi();
 const studentsApi = new StudentsApi();
 const certificateApi = new CertificateApi();
 const coursesInterviewsApi = new CoursesInterviewsApi();
+const courseMentorsApi = new CourseMentorsApi();
 
 export class CourseService {
   private axios: AxiosInstance;
@@ -521,13 +523,12 @@ export class CourseService {
   async createMentor(
     githubId: string,
     data: {
-      students: string[];
+      students: number[];
       maxStudentsLimit: number;
       preferedStudentsLocation: MentorDetailsDtoStudentsPreferenceEnum;
     },
   ) {
-    const result = await this.axios.post(`/mentor/${githubId}`, data);
-    return result.data.data;
+    await courseMentorsApi.createMentor(this.courseId, githubId, data);
   }
 
   async updateStudent(githubId: string, data: { mentorGithuId: string | null }) {

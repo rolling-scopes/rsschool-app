@@ -1,7 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, ForbiddenException, Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, QueryFailedError, Repository } from 'typeorm';
 import { CourseTask, Mentor, TaskResult } from '@entities/index';
+import { Student } from '@entities/student';
+import { MentorRegistry } from '@entities/mentorRegistry';
+import { User } from '@entities/user';
+import { IUserSession, isAdmin, isManager, isSupervisor } from '@entities/session';
 import { MentorDetails } from '@common/models';
 import { UsersService } from '../../users/users.service';
 import { MentorsService } from '../mentors';
@@ -183,5 +187,66 @@ export class CourseMentorsService {
       });
     }
     return mentors;
+  }
+
+  public async createMentor(
+    session: IUserSession,
+    courseId: number,
+    githubId: string,
+    input: { maxStudentsLimit?: number; preferedStudentsLocation?: string; students: number[] },
+  ) {
+    const user = await this.dataSource.getRepository(User).findOne({ where: { githubId } });
+
+    if (user == null) {
+      throw new BadRequestException();
+    }
+
+    const { maxStudentsLimit, preferedStudentsLocation } = input;
+    const data = {
+      ...(maxStudentsLimit ? { maxStudentsLimit } : {}),
+      ...(preferedStudentsLocation ? { studentsPreference: preferedStudentsLocation as Mentor['studentsPreference'] } : {}),
+    };
+    const exist = await this.mentorsRepository.findOne({ where: { courseId, userId: user.id } });
+    let mentorId = exist?.id;
+    if (mentorId == null) {
+      const mentorRegistrationInfo = await this.dataSource
+        .getRepository(MentorRegistry)
+        .findOne({ where: { userId: user.id } });
+
+      const isMentorApproved = (mentorRegistrationInfo?.preselectedCourses ?? []).some(
+        approvedCourseId => courseId === +approvedCourseId,
+      );
+
+      const isPowerUserOrSupervisor =
+        isAdmin(session) || isManager(session, courseId) || isSupervisor(session, courseId);
+      if (!isMentorApproved && !isPowerUserOrSupervisor) {
+        throw new ForbiddenException();
+      }
+      try {
+        const {
+          identifiers: [identifier],
+        } = await this.mentorsRepository.insert({
+          courseId,
+          userId: user.id,
+          ...data,
+        });
+        mentorId = identifier?.['id'];
+      } catch (err) {
+        if (err instanceof QueryFailedError && (err as { driverError?: { code?: string } }).driverError?.code === '23505') {
+          throw new ConflictException('Mentor is already registered for this course (concurrent request).');
+        }
+        throw err;
+      }
+    } else {
+      await this.mentorsRepository.update(mentorId, data);
+    }
+
+    const studentRepository = this.dataSource.getRepository(Student);
+    if (input.students.length > 0) {
+      if (exist) {
+        await studentRepository.update({ mentorId }, { mentorId: null });
+      }
+      await studentRepository.update(input.students, { mentorId });
+    }
   }
 }
