@@ -21,7 +21,6 @@ import { getCourseEvent, getCourseEvents } from './events';
 import {
   deleteMentor as postMentorStatusExpelled,
   getMentorInterview,
-  getMentorStudents,
   postMentor,
   restoreExpelledMentor,
 } from './mentor';
@@ -139,7 +138,6 @@ function addMentorApi(router: Router<any, any>, logger: ILogger) {
 
   const mentorLogger = logger.child({ module: 'course/mentor' });
   router.post('/mentor/:githubId', guard, ...validators, postMentor(mentorLogger));
-  router.get('/mentor/:githubId/students', guard, ...validators, getMentorStudents(mentorLogger));
   router.get('/mentor/:githubId/interview/:courseTaskId', guard, ...validators, getMentorInterview(mentorLogger));
   router.get('/mentor/:githubId/interviews', guard, ...validators, interviews.getMentorInterviews(mentorLogger));
   router.post(
@@ -164,19 +162,7 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   router.get('/student/:githubId', courseSupervisorGuard, getStudent(logger));
   router.put('/student/:githubId', courseSupervisorOrMentorGuard, updateStudent(logger));
 
-  router.get(
-    '/student/:githubId/interview/stage',
-    courseGuard,
-    ...validators,
-    stageInterview.getInterviewStudent(logger),
-  );
 
-  router.get(
-    '/student/:githubId/interview/:courseTaskId',
-    courseGuard,
-    ...validators,
-    interviews.getInterviewStudent(logger),
-  );
 
   router.post('/student/:githubId/availability', courseManagerGuard, updateMentoringAvailability(logger));
   router.get('/student/:githubId/tasks/cross-mentors', courseGuard, ...validators, getCrossMentors(logger));

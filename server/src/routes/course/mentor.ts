@@ -1,23 +1,15 @@
 import Router from '@koa/router';
 import { BAD_REQUEST, NOT_FOUND, OK, StatusCodes } from 'http-status-codes';
-import { getCustomRepository, getRepository, QueryFailedError } from 'typeorm';
+import { getRepository, QueryFailedError } from 'typeorm';
 import { PreferredStudentsLocation } from '../../models/mentorRegistry';
 import { ILogger } from '../../logger';
 import { Mentor, MentorRegistry, Student } from '../../models';
-import { StudentRepository } from '../../repositories/student.repository';
 import { courseService } from '../../services';
 import { getUserByGithubId } from '../../services/user.service';
 import { userGuards } from '../guards';
 import { setResponse, isUniqueViolation } from '../utils';
 
 type Params = { courseId: number; githubId: string; courseTaskId: number };
-
-export const getMentorStudents = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { courseId, githubId } = ctx.params as Params;
-  const repository = getCustomRepository(StudentRepository);
-  const students = await repository.findByMentor(courseId, githubId);
-  setResponse(ctx, OK, students);
-};
 
 export const deleteMentor = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const courseId: number = ctx.params.courseId;
