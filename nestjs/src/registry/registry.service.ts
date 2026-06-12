@@ -252,4 +252,8 @@ export class RegistryService {
         }),
     );
   }
+
+  public async getOwnMentorRegistry(userId: number) {
+    return this.mentorsRegistryRepository.findOne({ where: { userId } });
+  }
 }
