@@ -1,9 +1,9 @@
-import { Body, Controller, Delete, ForbiddenException, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, ForbiddenException, Get, Param, Patch, Post, Req, UseGuards, NotFoundException } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { CoursesService } from 'src/courses/courses.service';
 import { CurrentRequest } from '../auth/auth.service';
-import { ProfileCourseDto, UpdateUserDto, UpdateProfileInfoDto } from './dto';
+import { ProfileCourseDto, UpdateUserDto, UpdateProfileInfoDto , MyProfileDto } from './dto';
 import { ProfileDto } from './dto/profile.dto';
 import { ProfileService } from './profile.service';
 import { PersonalProfileDto } from './dto/personal-profile.dto';
@@ -57,6 +57,18 @@ export class ProfileController {
     const { user } = req;
 
     await this.profileService.updateProfileFlat(user.id, dto);
+  }
+
+  @Get('me')
+  @ApiOperation({ operationId: 'getMyProfile' })
+  @ApiOkResponse({ type: MyProfileDto })
+  @UseGuards(DefaultGuard)
+  public async getMyProfile(@Req() req: CurrentRequest) {
+    const user = await this.profileService.getMyProfile(req.user.githubId);
+    if (user == null) {
+      throw new NotFoundException('User not found');
+    }
+    return new MyProfileDto(user);
   }
 
   @Get(':username')

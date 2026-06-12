@@ -80,8 +80,8 @@ export class UserService {
   }
 
   async getMyProfile() {
-    const response = await this.axios.get<{ data: UserFull }>(`/api/profile/me`);
-    return response.data.data;
+    const response = await profileApi.getMyProfile();
+    return response.data as unknown as UserFull;
   }
 
   async getProfileInfo(githubId?: string) {

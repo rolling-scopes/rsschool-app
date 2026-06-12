@@ -10,6 +10,7 @@ import { Course } from '@client/services/models';
 import { UserFull, UserService } from '@client/services/user';
 import { emailPattern, englishNamePattern } from '@client/services/validators';
 import { TYPES } from './../../configs/registry';
+import { ProfileApi } from '@client/api';
 import { Location } from '@common/models/profile';
 import { SessionProvider } from '@client/modules/Course/contexts';
 
@@ -17,6 +18,7 @@ const defaultColumnSizes = { xs: 18, sm: 10, md: 8, lg: 6 };
 const defaultRowGutter = 24;
 
 const courseAlias = 'epamlearningjs';
+const profileApi = new ProfileApi();
 
 type FormData = {
   firstName: string;
@@ -66,14 +68,9 @@ function EpamLearningJSPage() {
     };
 
     try {
-      const userResponse = await axios.post('/api/profile/me', userModel);
-      const githubId = userResponse && userResponse.data ? userResponse.data.data.githubId : '';
-      if (githubId) {
-        await axios.post('/api/registry', registryModel);
-        setSubmitted(true);
-      } else {
-        message.error('Invalid github id');
-      }
+      await profileApi.updateUser(userModel);
+      await axios.post('/api/registry', registryModel);
+      setSubmitted(true);
     } catch {
       message.error('An error occured. Please try later.');
     }
