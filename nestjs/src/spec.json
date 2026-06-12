@@ -1993,6 +1993,18 @@
         "responses": { "200": { "description": "" } },
         "summary": "",
         "tags": ["profile"]
+      },
+      "get": {
+        "operationId": "getFullProfileInfo",
+        "parameters": [{ "name": "githubId", "required": false, "in": "query", "schema": { "type": "string" } }],
+        "responses": {
+          "default": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ProfileInfoExtendedDto" } } }
+          }
+        },
+        "summary": "",
+        "tags": ["profile"]
       }
     },
     "/profile/{username}": {
@@ -2228,6 +2240,15 @@
         "responses": { "201": { "description": "" } },
         "summary": "",
         "tags": ["registry"]
+      }
+    },
+    "/certificate/templates": {
+      "get": {
+        "operationId": "getCertificateTemplates",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "summary": "",
+        "tags": ["certificate"]
       }
     },
     "/certificate/{publicId}": {
@@ -5004,6 +5025,19 @@
           "contactsNotes": { "type": "string", "nullable": true },
           "contactsLinkedIn": { "type": "string", "nullable": true },
           "discord": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/Discord" }] }
+        }
+      },
+      "ProfileInfoExtendedDto": {
+        "type": "object",
+        "properties": {
+          "permissionsSettings": { "type": "object" },
+          "generalInfo": { "type": "object" },
+          "contacts": { "type": "object" },
+          "discord": { "type": "object", "nullable": true },
+          "mentorStats": { "type": "array", "items": { "type": "object" } },
+          "publicFeedback": { "type": "array", "items": { "type": "object" } },
+          "stageInterviewFeedback": { "type": "array", "items": { "type": "object" } },
+          "studentStats": { "type": "array", "items": { "type": "object" } }
         }
       },
       "ProfileDto": {

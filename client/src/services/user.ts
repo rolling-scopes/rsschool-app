@@ -85,10 +85,8 @@ export class UserService {
   }
 
   async getProfileInfo(githubId?: string) {
-    const response = await this.axios.get<{ data: ProfileInfo }>(`/api/profile/info`, {
-      params: { githubId },
-    });
-    return response.data.data;
+    const response = await profileApi.getFullProfileInfo(githubId);
+    return response.data as ProfileInfo;
   }
 
   async sendEmailConfirmationLink() {
