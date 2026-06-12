@@ -6,6 +6,7 @@ import { UserNotificationsService } from 'src/users-notifications/users.notifica
 import { ApproveMentorDto } from './dto/approve-mentor.dto';
 import { MentorRegistryDto } from './dto/mentor-registry.dto';
 import { RegistryService } from './registry.service';
+import { RegistrationDto, UpdateRegistrationsDto, UpdateRegistrationsResponseDto } from './dto/registration.dto';
 import { CoursesService } from 'src/courses/courses.service';
 import { DisciplinesService } from 'src/disciplines/disciplines.service';
 import { CommentMentorRegistryDto } from './dto/comment-mentor-registry.dto';
@@ -29,6 +30,26 @@ export class RegistryController {
     private coursesService: CoursesService,
     private disciplinesService: DisciplinesService,
   ) {}
+
+  @Get('registrations')
+  @ApiOperation({ operationId: 'getRegistrations' })
+  @ApiQuery({ name: 'type', required: false, type: String })
+  @ApiQuery({ name: 'courseId', required: false, type: Number })
+  @ApiOkResponse({ type: [RegistrationDto] })
+  @RequiredRoles([Role.Admin])
+  public async getRegistrations(@Query('type') type?: string, @Query('courseId') courseId?: number) {
+    const registrations = await this.registryService.getRegistrations(type, courseId ? Number(courseId) : undefined);
+    return registrations.map(registry => new RegistrationDto(registry));
+  }
+
+  @Put('registrations')
+  @ApiOperation({ operationId: 'updateRegistrations' })
+  @ApiOkResponse({ type: UpdateRegistrationsResponseDto })
+  @RequiredRoles([Role.Admin])
+  public async updateRegistrations(@Body() dto: UpdateRegistrationsDto) {
+    const result = await this.registryService.updateRegistrations(dto.ids, dto.status);
+    return new UpdateRegistrationsResponseDto(result);
+  }
 
   @Put('mentor/:githubId')
   @ApiOperation({ operationId: 'approveMentor' })

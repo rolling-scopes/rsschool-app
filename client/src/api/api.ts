@@ -5478,6 +5478,92 @@ export interface QuestionDto {
 /**
  * 
  * @export
+ * @interface RegistrationDto
+ */
+export interface RegistrationDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof RegistrationDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegistrationDto
+     */
+    'type': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegistrationDto
+     */
+    'status': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof RegistrationDto
+     */
+    'userId': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof RegistrationDto
+     */
+    'courseId': number;
+    /**
+     * 
+     * @type {object}
+     * @memberof RegistrationDto
+     */
+    'attributes': object;
+    /**
+     * 
+     * @type {RegistrationUserDto}
+     * @memberof RegistrationDto
+     */
+    'user': RegistrationUserDto;
+}
+/**
+ * 
+ * @export
+ * @interface RegistrationUserDto
+ */
+export interface RegistrationUserDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof RegistrationUserDto
+     */
+    'githubId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegistrationUserDto
+     */
+    'firstName': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegistrationUserDto
+     */
+    'lastName': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegistrationUserDto
+     */
+    'contactsEpamEmail': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegistrationUserDto
+     */
+    'locationName': string | null;
+}
+/**
+ * 
+ * @export
  * @interface ResultDto
  */
 export interface ResultDto {
@@ -7660,6 +7746,48 @@ export interface UpdatePromptDto {
 /**
  * 
  * @export
+ * @interface UpdateRegistrationsDto
+ */
+export interface UpdateRegistrationsDto {
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof UpdateRegistrationsDto
+     */
+    'ids': Array<number>;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateRegistrationsDto
+     */
+    'status': UpdateRegistrationsDtoStatusEnum;
+}
+
+export const UpdateRegistrationsDtoStatusEnum = {
+    Inactive: 'inactive',
+    Pending: 'pending',
+    Approved: 'approved',
+    Rejected: 'rejected'
+} as const;
+
+export type UpdateRegistrationsDtoStatusEnum = typeof UpdateRegistrationsDtoStatusEnum[keyof typeof UpdateRegistrationsDtoStatusEnum];
+
+/**
+ * 
+ * @export
+ * @interface UpdateRegistrationsResponseDto
+ */
+export interface UpdateRegistrationsResponseDto {
+    /**
+     * 
+     * @type {Array<UpdatedRegistrationMentorDto>}
+     * @memberof UpdateRegistrationsResponseDto
+     */
+    'registries': Array<UpdatedRegistrationMentorDto>;
+}
+/**
+ * 
+ * @export
  * @interface UpdateStudentFeedbackDto
  */
 export interface UpdateStudentFeedbackDto {
@@ -8047,6 +8175,37 @@ export const UpdateUserGroupDtoRolesEnum = {
 
 export type UpdateUserGroupDtoRolesEnum = typeof UpdateUserGroupDtoRolesEnum[keyof typeof UpdateUserGroupDtoRolesEnum];
 
+/**
+ * 
+ * @export
+ * @interface UpdatedRegistrationMentorDto
+ */
+export interface UpdatedRegistrationMentorDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdatedRegistrationMentorDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdatedRegistrationMentorDto
+     */
+    'userId': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdatedRegistrationMentorDto
+     */
+    'courseId': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdatedRegistrationMentorDto
+     */
+    'maxStudentsLimit': number | null;
+}
 /**
  * 
  * @export
@@ -9534,6 +9693,35 @@ export const CertificateApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCertificateTemplates: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/certificate/templates`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {number} studentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9622,6 +9810,15 @@ export const CertificateApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCertificateTemplates(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCertificateTemplates(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {number} studentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9661,6 +9858,14 @@ export const CertificateApiFactory = function (configuration?: Configuration, ba
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCertificateTemplates(options?: any): AxiosPromise<void> {
+            return localVarFp.getCertificateTemplates(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {number} studentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9696,6 +9901,16 @@ export class CertificateApi extends BaseAPI {
      */
     public getCertificate(publicId: string, options?: AxiosRequestConfig) {
         return CertificateApiFp(this.configuration).getCertificate(publicId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CertificateApi
+     */
+    public getCertificateTemplates(options?: AxiosRequestConfig) {
+        return CertificateApiFp(this.configuration).getCertificateTemplates(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -18600,6 +18815,45 @@ export const RegistryApiAxiosParamCreator = function (configuration?: Configurat
         },
         /**
          * 
+         * @param {string} [type] 
+         * @param {number} [courseId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getRegistrations: async (type?: string, courseId?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/registry/registrations`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (type !== undefined) {
+                localVarQueryParameter['type'] = type;
+            }
+
+            if (courseId !== undefined) {
+                localVarQueryParameter['courseId'] = courseId;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {InviteMentorsDto} inviteMentorsDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -18627,6 +18881,41 @@ export const RegistryApiAxiosParamCreator = function (configuration?: Configurat
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(inviteMentorsDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {UpdateRegistrationsDto} updateRegistrationsDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateRegistrations: async (updateRegistrationsDto: UpdateRegistrationsDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateRegistrationsDto' is not null or undefined
+            assertParamExists('updateRegistrations', 'updateRegistrationsDto', updateRegistrationsDto)
+            const localVarPath = `/registry/registrations`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateRegistrationsDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -18694,12 +18983,33 @@ export const RegistryApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} [type] 
+         * @param {number} [courseId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getRegistrations(type?: string, courseId?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<RegistrationDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getRegistrations(type, courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {InviteMentorsDto} inviteMentorsDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         async inviteMentors(inviteMentorsDto: InviteMentorsDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.inviteMentors(inviteMentorsDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {UpdateRegistrationsDto} updateRegistrationsDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateRegistrations(updateRegistrationsDto: UpdateRegistrationsDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UpdateRegistrationsResponseDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateRegistrations(updateRegistrationsDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -18759,12 +19069,31 @@ export const RegistryApiFactory = function (configuration?: Configuration, baseP
         },
         /**
          * 
+         * @param {string} [type] 
+         * @param {number} [courseId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getRegistrations(type?: string, courseId?: number, options?: any): AxiosPromise<Array<RegistrationDto>> {
+            return localVarFp.getRegistrations(type, courseId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {InviteMentorsDto} inviteMentorsDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         inviteMentors(inviteMentorsDto: InviteMentorsDto, options?: any): AxiosPromise<void> {
             return localVarFp.inviteMentors(inviteMentorsDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {UpdateRegistrationsDto} updateRegistrationsDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateRegistrations(updateRegistrationsDto: UpdateRegistrationsDto, options?: any): AxiosPromise<UpdateRegistrationsResponseDto> {
+            return localVarFp.updateRegistrations(updateRegistrationsDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -18831,6 +19160,18 @@ export class RegistryApi extends BaseAPI {
 
     /**
      * 
+     * @param {string} [type] 
+     * @param {number} [courseId] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistryApi
+     */
+    public getRegistrations(type?: string, courseId?: number, options?: AxiosRequestConfig) {
+        return RegistryApiFp(this.configuration).getRegistrations(type, courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @param {InviteMentorsDto} inviteMentorsDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -18838,6 +19179,17 @@ export class RegistryApi extends BaseAPI {
      */
     public inviteMentors(inviteMentorsDto: InviteMentorsDto, options?: AxiosRequestConfig) {
         return RegistryApiFp(this.configuration).inviteMentors(inviteMentorsDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {UpdateRegistrationsDto} updateRegistrationsDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistryApi
+     */
+    public updateRegistrations(updateRegistrationsDto: UpdateRegistrationsDto, options?: AxiosRequestConfig) {
+        return RegistryApiFp(this.configuration).updateRegistrations(updateRegistrationsDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
