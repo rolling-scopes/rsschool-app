@@ -2,7 +2,6 @@ import * as courseService from './course.service';
 import { isDementor, IUserSession } from '../models';
 import { getCustomRepository } from 'typeorm';
 import { StageInterviewRepository } from '../repositories/stageInterview.repository';
-import { StudentRepository } from '../repositories/student.repository';
 
 export async function canChangeStatus(
   session: IUserSession,
@@ -40,8 +39,4 @@ export async function canChangeStatus(
     }
   }
   return { allow: true };
-}
-
-export async function updateRepositoryActivity(repositoryUrl: string) {
-  await getCustomRepository(StudentRepository).updateRepositoryActivityDate(repositoryUrl);
 }

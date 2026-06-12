@@ -25,13 +25,6 @@ export interface IConfig {
     password: string;
   };
   isDevMode: boolean;
-  github: {
-    org: string;
-    privateKey: string;
-    appId: string;
-    installationId: string;
-    hooksSecret: string;
-  };
   port: number;
   sessionKey: string;
   host: string;
@@ -55,13 +48,6 @@ export const config: IConfig = {
   admin: {
     username: process.env.RSSHCOOL_API_ADMIN_USERNAME || '',
     password: process.env.RSSHCOOL_API_ADMIN_PASSWORD || '',
-  },
-  github: {
-    org: 'rolling-scopes-school',
-    privateKey: process.env.RSSHCOOL_API_GITHUB_PRIVATE_KEY || '',
-    appId: process.env.RSSHCOOL_API_GITHUB_APP_ID || '',
-    installationId: process.env.RSSHCOOL_API_GITHUB_APP_INSTALL_ID || '',
-    hooksSecret: process.env.RSSHCOOL_API_GITHUB_HOOKS_SECRET || 'hooks_secret',
   },
   isDevMode: process.env.NODE_ENV !== 'production',
   aws: {

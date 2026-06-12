@@ -1,5 +1,5 @@
 import { PageLayout } from '@client/shared/components/PageLayout';
-import { useContext, useMemo } from 'react';
+import { useContext } from 'react';
 import Masonry from 'react-masonry-css';
 
 import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
@@ -9,11 +9,9 @@ import {
   MainStatsCard,
   MentorCard,
   NextEventCard,
-  RepositoryCard,
   TasksStatsCard,
   useDashboardData,
 } from '@client/modules/StudentDashboard';
-import { CourseService } from '@client/services/course';
 
 const gapSize = 24;
 
@@ -21,11 +19,9 @@ function Page() {
   const { githubId } = useContext(SessionContext);
   const { course } = useActiveCourseContext();
 
-  const { fullName, usePrivateRepositories, alias } = course;
+  const { fullName, alias } = course;
 
-  const courseService = useMemo(() => new CourseService(course.id), [course.id]);
-
-  const { data, loading, run } = useDashboardData(course.id, githubId);
+  const { data, loading } = useDashboardData(course.id, githubId);
 
   const studentPosition = data?.studentSummary?.rank ?? 0;
   const maxCourseScore = data?.maxCourseScore ?? 0;
@@ -50,14 +46,6 @@ function Page() {
       courseAlias={alias}
     />,
     <MentorCard key="mentor-card" courseId={course.id} mentor={data?.studentSummary?.mentor} />,
-    usePrivateRepositories && (
-      <RepositoryCard
-        githubId={githubId}
-        url={data?.studentSummary.repository ?? ''}
-        onSendInviteRepository={courseService.sendInviteRepository.bind(courseService)}
-        onUpdateUrl={() => run()}
-      />
-    ),
   ].filter(Boolean) as JSX.Element[];
 
   return (

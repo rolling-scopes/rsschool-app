@@ -91,9 +91,6 @@ export class Course {
   certificateIssuer: string;
 
   @Column({ default: true })
-  usePrivateRepositories: boolean;
-
-  @Column({ default: true })
   personalMentoring: boolean;
 
   @Column({ type: 'timestamptz', nullable: true })

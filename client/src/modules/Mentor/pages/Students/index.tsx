@@ -1,11 +1,4 @@
-import {
-  MessageOutlined,
-  MessageTwoTone,
-  InteractionTwoTone,
-  StarOutlined,
-  LockFilled,
-  TrophyOutlined,
-} from '@ant-design/icons';
+import { MessageOutlined, MessageTwoTone, InteractionTwoTone, StarOutlined, TrophyOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Empty, Row, Statistic, Typography } from 'antd';
 import { GithubUserLink } from '@client/shared/components/GithubUserLink';
 import { PageLayoutSimple } from '@client/shared/components/PageLayout';
@@ -44,14 +37,6 @@ export function Students() {
                     <GithubUserLink value={student.githubId} />
                   </div>
                   <Link href={`/profile?githubId=${student.githubId}`}>{student.name}</Link>
-                  {student.repoUrl && (
-                    <div>
-                      <LockFilled />{' '}
-                      <a href={student.repoUrl} target="_blank">
-                        {student.repoUrl.split('/').pop()}
-                      </a>
-                    </div>
-                  )}
                 </>
               }
               actions={[

@@ -62,11 +62,6 @@ export class CreateCourseDto {
   @ApiProperty({ required: false })
   discordServerId?: number;
 
-  @IsBoolean()
-  @IsOptional()
-  @ApiProperty({ required: false })
-  usePrivateRepositories?: boolean;
-
   @IsString()
   @IsOptional()
   @ApiProperty({ required: false })

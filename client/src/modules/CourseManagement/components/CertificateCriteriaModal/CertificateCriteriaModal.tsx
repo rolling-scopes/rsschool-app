@@ -1,11 +1,13 @@
 import { Alert, Button, Col, Form, InputNumber, Modal, Row, Space } from 'antd';
 import { useState } from 'react';
 import { SelectCourseTasks } from '@client/modules/CourseManagement/components';
+import { CertificateTemplatePicker } from '../CertificateTemplatePicker/CertificateTemplatePicker';
 
 export type FormValues = {
   courseTaskIds: number[];
   minScore: number;
   minTotalScore: number;
+  templateId: string;
 };
 
 type Criteria = Partial<FormValues>;
@@ -55,6 +57,11 @@ export function CertificateCriteriaModal({ courseId, onSubmit, onClose, isModalO
           <Col span={24}>
             <Form.Item name="minTotalScore" label="Minimum Total Score" style={{ marginBottom: 0 }}>
               <InputNumber style={{ width: '100%' }} type="number" min={0} placeholder="Enter minimum score" />
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+            <Form.Item name="templateId" label="Certificate Template" style={{ marginBottom: 0 }}>
+              <CertificateTemplatePicker />
             </Form.Item>
           </Col>
           <Col span={24}>

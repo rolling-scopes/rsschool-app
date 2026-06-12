@@ -1,4 +1,4 @@
-import { DownOutlined, FileExcelOutlined, SyncOutlined } from '@ant-design/icons';
+import { DownOutlined, FileExcelOutlined } from '@ant-design/icons';
 import { Button, Divider, Dropdown, MenuProps, Modal, Row, Space, Statistic, Table, message } from 'antd';
 import { CourseMentorsApi, CourseStatsApi, MentorDetailsDto } from '@client/api';
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
@@ -111,17 +111,6 @@ function Page() {
     }
   };
 
-  const syncWithGitHubTeams = async () => {
-    try {
-      setLoading(true);
-      await service.postSyncRepositoriesMentors();
-    } catch {
-      message.error('An error occured. Please try later.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleMenuClick = async (menuItem: { key: string }, mentor: MentorDetailsDto) => {
     switch (menuItem.key) {
       case 'student': {
@@ -164,9 +153,6 @@ function Page() {
       </div>
       <Divider dashed />
       <Row justify="end" style={{ marginBottom: 16, marginTop: 16 }}>
-        <Button icon={<SyncOutlined />} style={{ marginRight: 8 }} onClick={syncWithGitHubTeams}>
-          Sync with GitHub Teams
-        </Button>
         <Button icon={<FileExcelOutlined />} style={{ marginRight: 8 }} onClick={exportToCsv}>
           Export CSV
         </Button>

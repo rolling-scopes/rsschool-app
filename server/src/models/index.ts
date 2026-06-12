@@ -27,7 +27,6 @@ import { PrivateFeedback } from './privateFeedback';
 import { ProfilePermissions } from './profilePermissions';
 import { Prompt } from './prompt';
 import { Registry } from './registry';
-import { RepositoryEvent } from './repositoryEvent';
 import { Resume } from './resume';
 import { StageInterview } from './stageInterview';
 import { StageInterviewFeedback } from './stageInterviewFeedback';
@@ -82,7 +81,6 @@ export {
   ProfilePermissions,
   Prompt,
   Registry,
-  RepositoryEvent,
   Resume,
   StageInterview,
   StageInterviewFeedback,
@@ -135,7 +133,6 @@ export const models = [
   ProfilePermissions,
   Prompt,
   Registry,
-  RepositoryEvent,
   Resume,
   StageInterview,
   StageInterviewFeedback,

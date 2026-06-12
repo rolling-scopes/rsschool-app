@@ -21,6 +21,7 @@ import { CertificateCriteriaDto } from './dto/certificate-criteria.dto';
 import { CertificateIssuanceRequestDto } from './dto/certificate-issuance-request.dto';
 import { EligibleStudentsPreviewDto } from './dto/eligible-students-preview.dto';
 import { SaveCertificateDto } from './dto/save-certificate-dto';
+import { CERTIFICATE_TEMPLATES } from './templates/catalog';
 
 @Controller('certificate')
 @ApiTags('certificate')
@@ -30,6 +31,12 @@ export class CertificatesController {
     private notificationService: UserNotificationsService,
     private studentsService: StudentsService,
   ) {}
+
+  @Get('/templates')
+  @ApiOperation({ operationId: 'getCertificateTemplates' })
+  public getTemplates() {
+    return CERTIFICATE_TEMPLATES;
+  }
 
   /**
    * /certificate/abc - returns certificate in PDF format

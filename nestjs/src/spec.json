@@ -1132,8 +1132,7 @@
                 "name",
                 "cityName",
                 "mentor",
-                "totalScoreChangeDate",
-                "repositoryLastActivityDate"
+                "totalScoreChangeDate"
               ],
               "type": "string"
             }
@@ -3483,7 +3482,6 @@
           "planned": { "type": "boolean" },
           "inviteOnly": { "type": "boolean" },
           "certificateIssuer": { "type": "string" },
-          "usePrivateRepositories": { "type": "boolean" },
           "personalMentoring": { "type": "boolean" },
           "personalMentoringStartDate": { "type": "string", "nullable": true },
           "personalMentoringEndDate": { "type": "string", "nullable": true },
@@ -3515,7 +3513,6 @@
           "planned",
           "inviteOnly",
           "certificateIssuer",
-          "usePrivateRepositories",
           "personalMentoring",
           "personalMentoringStartDate",
           "personalMentoringEndDate",
@@ -3543,7 +3540,6 @@
           "descriptionUrl": { "type": "string" },
           "disciplineId": { "type": "number" },
           "discordServerId": { "type": "number" },
-          "usePrivateRepositories": { "type": "boolean" },
           "certificateIssuer": { "type": "string" },
           "personalMentoring": { "type": "boolean" },
           "personalMentoringStartDate": { "type": "string" },
@@ -3583,7 +3579,6 @@
           "planned": { "type": "boolean" },
           "inviteOnly": { "type": "boolean" },
           "certificateIssuer": { "type": "string" },
-          "usePrivateRepositories": { "type": "boolean" },
           "personalMentoring": { "type": "boolean" },
           "personalMentoringStartDate": { "type": "string", "nullable": true },
           "personalMentoringEndDate": { "type": "string", "nullable": true },
@@ -3740,21 +3735,9 @@
           "countryName": { "type": "string", "nullable": true },
           "totalScore": { "type": "number" },
           "rank": { "type": "number" },
-          "feedbacks": { "type": "array", "items": { "$ref": "#/components/schemas/StudentFeedbackDto" } },
-          "repoUrl": { "type": "string", "nullable": true }
+          "feedbacks": { "type": "array", "items": { "$ref": "#/components/schemas/StudentFeedbackDto" } }
         },
-        "required": [
-          "name",
-          "githubId",
-          "id",
-          "active",
-          "cityName",
-          "countryName",
-          "totalScore",
-          "rank",
-          "feedbacks",
-          "repoUrl"
-        ]
+        "required": ["name", "githubId", "id", "active", "cityName", "countryName", "totalScore", "rank", "feedbacks"]
       },
       "SolutionItemStatusEnum": { "type": "string", "enum": ["in-review", "done", "random-task"] },
       "MentorDashboardDto": {
@@ -4451,7 +4434,6 @@
           "mentor": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/MentorDto" }] },
           "totalScoreChangeDate": { "format": "date-time", "type": "string" },
           "crossCheckScore": { "type": "number" },
-          "repositoryLastActivityDate": { "format": "date-time", "type": "string" },
           "taskResults": { "type": "array", "items": { "$ref": "#/components/schemas/TaskResultsDto" } },
           "isActive": { "type": "boolean" },
           "contacts": { "$ref": "#/components/schemas/ContactsDto" }
@@ -4468,7 +4450,6 @@
           "mentor",
           "totalScoreChangeDate",
           "crossCheckScore",
-          "repositoryLastActivityDate",
           "taskResults",
           "isActive",
           "contacts"
@@ -4904,10 +4885,9 @@
           "results": { "type": "array", "items": { "$ref": "#/components/schemas/ResultDto" } },
           "isActive": { "type": "boolean" },
           "mentor": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/MentorStudentSummaryDto" }] },
-          "rank": { "type": "number" },
-          "repository": { "type": "string", "nullable": true }
+          "rank": { "type": "number" }
         },
-        "required": ["totalScore", "results", "isActive", "mentor", "rank", "repository"]
+        "required": ["totalScore", "results", "isActive", "mentor", "rank"]
       },
       "ExpelCriteriaDto": {
         "type": "object",
@@ -5175,7 +5155,6 @@
           "planned": { "type": "boolean" },
           "inviteOnly": { "type": "boolean" },
           "certificateIssuer": { "type": "string" },
-          "usePrivateRepositories": { "type": "boolean" },
           "personalMentoring": { "type": "boolean" },
           "personalMentoringStartDate": { "type": "string", "nullable": true },
           "personalMentoringEndDate": { "type": "string", "nullable": true },
@@ -5207,7 +5186,6 @@
           "planned",
           "inviteOnly",
           "certificateIssuer",
-          "usePrivateRepositories",
           "personalMentoring",
           "personalMentoringStartDate",
           "personalMentoringEndDate",

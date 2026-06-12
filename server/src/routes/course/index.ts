@@ -45,16 +45,8 @@ import {
   validateExpelledStudent,
   validateGithubId,
   validateGithubIdAndAccess,
-  validateGithubIdAndAccessForUserOrPowerUser,
 } from '../validators';
 import * as crossCheck from './crossCheck';
-import {
-  createRepositories,
-  createRepository,
-  inviteAllMentorsToTeam,
-  inviteMentorToTeam,
-  updateRepositories,
-} from './repository';
 import { getScheduleAsCsv, setScheduleFromCsv } from './schedule';
 import {
   createInterviewResult,
@@ -72,8 +64,6 @@ export function courseRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/course/:courseId' });
 
   router.post('/certificates', courseManagerGuard, postCertificates(logger));
-  router.post('/repositories', courseManagerGuard, createRepositories(logger));
-  router.put('/repositories', courseManagerGuard, updateRepositories(logger));
 
   addScoreApi(router, logger);
   addStageInterviewApi(router, logger);
@@ -149,8 +139,6 @@ function addMentorApi(router: Router<any, any>, logger: ILogger) {
 
   const mentorLogger = logger.child({ module: 'course/mentor' });
   router.post('/mentor/:githubId', guard, ...validators, postMentor(mentorLogger));
-  router.post('/repositories/mentor/:githubId', courseManagerGuard, ...validators, inviteMentorToTeam(mentorLogger));
-  router.post('/repositories/mentors', courseManagerGuard, inviteAllMentorsToTeam(mentorLogger));
   router.get('/mentor/:githubId/students', guard, ...validators, getMentorStudents(mentorLogger));
   router.get('/mentor/:githubId/interview/:courseTaskId', guard, ...validators, getMentorInterview(mentorLogger));
   router.get('/mentor/:githubId/interviews', guard, ...validators, interviews.getMentorInterviews(mentorLogger));
@@ -197,12 +185,6 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   router.post('/student/:githubId/task/:courseTaskId/result', courseGuard, score.createSingleScore(logger));
   router.post('/student/:githubId/interview/:courseTaskId/result', ...mentorValidators, createInterviewResult(logger));
 
-  router.post(
-    '/student/:githubId/repository',
-    guard,
-    validateGithubIdAndAccessForUserOrPowerUser,
-    createRepository(logger),
-  );
   router.post('/student/:githubId/status', ...mentorOrDementorValidators, updateStudentStatus(logger));
   router.post('/student/:githubId/status-self', courseGuard, selfUpdateStudentStatus(logger));
   router.get('/student/:githubId/score', courseGuard, score.getScoreByStudent(logger));

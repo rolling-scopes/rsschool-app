@@ -70,7 +70,6 @@ export interface Student {
   name: string;
   isExpelled: boolean;
   totalScore: number;
-  repoUrl?: string;
 }
 
 export interface MentorStats {
