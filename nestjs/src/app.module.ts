@@ -17,6 +17,8 @@ import config from './ormconfig';
 import { ProfileModule } from './profile';
 import { UsersModule } from './users';
 import { CertificatesModule } from './certificates/certificates.module';
+import { AuditLogModule } from './audit-log/audit-log.module';
+import { PersonalAccessTokensModule } from './personal-access-tokens/personal-access-tokens.module';
 import { DiscordServersModule } from './discord-servers/discord-servers.module';
 import { CrossCheckModule } from './cross-check/cross-check.module';
 import { OpportunitiesModule } from './opportunities/opportunities.module';
@@ -61,6 +63,8 @@ import { DevtoolsModule } from './devtools/devtools.module';
     NotificationsModule,
     RegistryModule,
     CertificatesModule,
+    PersonalAccessTokensModule,
+    AuditLogModule,
     DiscordServersModule,
     CrossCheckModule,
     OpportunitiesModule,

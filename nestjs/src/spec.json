@@ -52,7 +52,10 @@
     "/users/search": {
       "get": {
         "operationId": "searchUsers",
-        "parameters": [{ "name": "query", "required": true, "in": "query", "schema": { "type": "string" } }],
+        "parameters": [
+          { "name": "query", "required": true, "in": "query", "schema": { "type": "string" } },
+          { "name": "includeSystem", "required": false, "in": "query", "schema": { "type": "boolean" } }
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -65,6 +68,58 @@
         },
         "summary": "",
         "tags": ["users"]
+      }
+    },
+    "/users/system": {
+      "get": {
+        "operationId": "getSystemUsers",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/SystemUserDto" } }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": ["system-users"]
+      },
+      "post": {
+        "operationId": "createSystemUser",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateSystemUserDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SystemUserDto" } } }
+          }
+        },
+        "summary": "",
+        "tags": ["system-users"]
+      }
+    },
+    "/users/system/{id}": {
+      "patch": {
+        "operationId": "updateSystemUser",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateSystemUserDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SystemUserDto" } } }
+          }
+        },
+        "summary": "",
+        "tags": ["system-users"]
       }
     },
     "/alerts": {
@@ -1951,6 +2006,100 @@
         "tags": ["auth"]
       }
     },
+    "/personal-access-tokens": {
+      "get": {
+        "operationId": "getMyPersonalAccessTokens",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/PersonalAccessTokenDto" } }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": ["personal-access-tokens"]
+      },
+      "post": {
+        "operationId": "createMyPersonalAccessToken",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/CreatePersonalAccessTokenDto" } }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/CreatedPersonalAccessTokenDto" } }
+            }
+          }
+        },
+        "summary": "",
+        "tags": ["personal-access-tokens"]
+      }
+    },
+    "/personal-access-tokens/{id}": {
+      "delete": {
+        "operationId": "revokeMyPersonalAccessToken",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "" } },
+        "summary": "",
+        "tags": ["personal-access-tokens"]
+      }
+    },
+    "/personal-access-tokens/admin/users/{userId}": {
+      "get": {
+        "operationId": "getPersonalAccessTokensForUser",
+        "parameters": [{ "name": "userId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/PersonalAccessTokenDto" } }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": ["personal-access-tokens"]
+      },
+      "post": {
+        "operationId": "createPersonalAccessTokenForUser",
+        "parameters": [{ "name": "userId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/CreatePersonalAccessTokenDto" } }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/CreatedPersonalAccessTokenDto" } }
+            }
+          }
+        },
+        "summary": "",
+        "tags": ["personal-access-tokens"]
+      }
+    },
+    "/personal-access-tokens/admin/{id}": {
+      "delete": {
+        "operationId": "revokePersonalAccessTokenAsAdmin",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "" } },
+        "summary": "",
+        "tags": ["personal-access-tokens"]
+      }
+    },
     "/profile/{username}/courses": {
       "get": {
         "operationId": "getUserCourses",
@@ -2259,6 +2408,53 @@
         "responses": { "200": { "description": "" } },
         "summary": "",
         "tags": ["certificate"]
+      }
+    },
+    "/certificate/course/{courseId}/student/{githubId}": {
+      "post": {
+        "operationId": "issueCertificate",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/CertificateIssuanceRequestDto" } }
+            }
+          }
+        },
+        "summary": "",
+        "tags": ["certificate"]
+      }
+    },
+    "/audit-log": {
+      "get": {
+        "operationId": "getAuditLog",
+        "parameters": [
+          { "name": "userId", "required": false, "in": "query", "schema": { "type": "number" } },
+          { "name": "tokenId", "required": false, "in": "query", "schema": { "type": "string" } },
+          { "name": "action", "required": false, "in": "query", "schema": { "type": "string" } },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "description": "ISO date",
+            "schema": { "type": "string" }
+          },
+          { "name": "to", "required": false, "in": "query", "description": "ISO date", "schema": { "type": "string" } },
+          { "name": "page", "required": false, "in": "query", "schema": { "type": "number" } },
+          { "name": "pageSize", "required": false, "in": "query", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AuditLogListDto" } } }
+          }
+        },
+        "summary": "",
+        "tags": ["audit-log"]
       }
     },
     "/discord-servers": {
@@ -3017,6 +3213,23 @@
         "tags": ["mentors-hall-of-fame"]
       }
     },
+    "/repositories/event": {
+      "post": {
+        "operationId": "createRepositoryEvent",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "type": "array", "items": { "$ref": "#/components/schemas/CreateRepositoryEventDto" } }
+            }
+          }
+        },
+        "responses": { "200": { "description": "" } },
+        "summary": "",
+        "tags": ["repositories"]
+      }
+    },
     "/session": {
       "get": {
         "operationId": "getSession",
@@ -3125,6 +3338,32 @@
           "students"
         ]
       },
+      "SystemUserDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "githubId": { "type": "string" },
+          "name": { "type": "string" },
+          "createdDate": { "type": "string" }
+        },
+        "required": ["id", "githubId", "name", "createdDate"]
+      },
+      "CreateSystemUserDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Display name shown in admin lists and audit log",
+            "maxLength": 80
+          },
+          "githubId": {
+            "type": "string",
+            "description": "Reserved login of the form \"system:<slug>\". Generated if omitted."
+          }
+        },
+        "required": ["name"]
+      },
+      "UpdateSystemUserDto": { "type": "object", "properties": { "name": { "type": "string", "maxLength": 80 } } },
       "CreateAlertDto": {
         "type": "object",
         "properties": {
@@ -4851,6 +5090,48 @@
         "properties": { "channelId": { "type": "string" }, "externalId": { "type": "string" } },
         "required": ["channelId", "externalId"]
       },
+      "PersonalAccessTokenDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "userId": { "type": "number" },
+          "name": { "type": "string" },
+          "prefix": { "type": "string", "description": "First 8 characters of the token, safe to display" },
+          "expiresAt": { "type": "string" },
+          "lastUsedAt": { "type": "object", "nullable": true },
+          "revokedAt": { "type": "object", "nullable": true },
+          "createdAt": { "type": "string" }
+        },
+        "required": ["id", "userId", "name", "prefix", "expiresAt", "createdAt"]
+      },
+      "CreatePersonalAccessTokenDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "description": "Human-readable label shown to the user", "maxLength": 100 },
+          "expiresInDays": {
+            "type": "number",
+            "description": "Number of days until the token expires. Defaults to 90, capped at 365.",
+            "minimum": 1,
+            "maximum": 365
+          }
+        },
+        "required": ["name"]
+      },
+      "CreatedPersonalAccessTokenDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "userId": { "type": "number" },
+          "name": { "type": "string" },
+          "prefix": { "type": "string", "description": "First 8 characters of the token, safe to display" },
+          "expiresAt": { "type": "string" },
+          "lastUsedAt": { "type": "object", "nullable": true },
+          "revokedAt": { "type": "object", "nullable": true },
+          "createdAt": { "type": "string" },
+          "token": { "type": "string", "description": "The full token. Shown only once; cannot be retrieved later." }
+        },
+        "required": ["id", "userId", "name", "prefix", "expiresAt", "createdAt", "token"]
+      },
       "ProfileCourseDto": {
         "type": "object",
         "properties": {
@@ -5147,6 +5428,58 @@
           "issueDate": { "type": "string" }
         },
         "required": ["publicId", "studentId", "s3Bucket", "s3Key", "issueDate"]
+      },
+      "CertificateIssuanceRequestDto": {
+        "type": "object",
+        "properties": {
+          "courseId": { "type": "number" },
+          "courseName": { "type": "string" },
+          "coursePrimarySkill": { "type": "object", "nullable": true },
+          "certificateIssuer": { "type": "object", "nullable": true },
+          "studentId": { "type": "number" },
+          "studentName": { "type": "string" },
+          "timestamp": { "type": "number" }
+        },
+        "required": ["courseId", "courseName", "studentId", "studentName", "timestamp"]
+      },
+      "AuditLogEntryDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "userId": { "type": "number" },
+          "userGithubId": { "type": "object", "nullable": true },
+          "tokenId": { "type": "string" },
+          "tokenName": { "type": "object", "nullable": true },
+          "action": { "type": "string" },
+          "method": { "type": "string" },
+          "path": { "type": "string" },
+          "responseStatus": { "type": "number" },
+          "durationMs": { "type": "number" },
+          "ip": { "type": "object", "nullable": true },
+          "userAgent": { "type": "object", "nullable": true },
+          "requestPayload": { "type": "object", "nullable": true },
+          "createdAt": { "type": "string" }
+        },
+        "required": ["id", "userId", "tokenId", "action", "method", "path", "responseStatus", "durationMs", "createdAt"]
+      },
+      "AuditLogPaginationMetaDto": {
+        "type": "object",
+        "properties": {
+          "itemCount": { "type": "number" },
+          "total": { "type": "number" },
+          "pageSize": { "type": "number" },
+          "totalPages": { "type": "number" },
+          "current": { "type": "number" }
+        },
+        "required": ["itemCount", "total", "pageSize", "totalPages", "current"]
+      },
+      "AuditLogListDto": {
+        "type": "object",
+        "properties": {
+          "items": { "type": "array", "items": { "$ref": "#/components/schemas/AuditLogEntryDto" } },
+          "meta": { "$ref": "#/components/schemas/AuditLogPaginationMetaDto" }
+        },
+        "required": ["items", "meta"]
       },
       "CreateDiscordServerDto": {
         "type": "object",
@@ -5921,6 +6254,15 @@
           }
         },
         "required": ["rank", "githubId", "name", "totalStudents", "totalGratitudes", "courseStats"]
+      },
+      "CreateRepositoryEventDto": {
+        "type": "object",
+        "properties": {
+          "action": { "type": "string" },
+          "githubId": { "type": "string" },
+          "repositoryUrl": { "type": "string" }
+        },
+        "required": ["action", "githubId", "repositoryUrl"]
       },
       "AuthUserDto": {
         "type": "object",

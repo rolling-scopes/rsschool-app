@@ -1,6 +1,7 @@
 import { User } from '@entities/user';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { randomUUID } from 'node:crypto';
 import { Brackets, In, Repository } from 'typeorm';
 
 @Injectable()
@@ -58,7 +59,7 @@ export class UsersService {
     return result.join(' ');
   }
 
-  public async searchUsers(reqQuery?: string) {
+  public async searchUsers(reqQuery?: string, options?: { includeSystem?: boolean }) {
     if (!reqQuery) {
       return [];
     }
@@ -69,6 +70,11 @@ export class UsersService {
     const searchTerms = search.split(' ');
 
     const query = this.userRepository.createQueryBuilder().select(['id']).limit(20);
+    if (!options?.includeSystem) {
+      query.where('"isSystem" = false');
+    }
+
+    const numericQuery = /^\d+$/.test(reqQuery.trim()) ? Number(reqQuery.trim()) : null;
 
     searchTerms.forEach((term, index) => {
       query.andWhere(
@@ -79,6 +85,9 @@ export class UsersService {
             .orWhere(`CAST("discord" AS jsonb)->>'username' ILIKE :searchText${index}`, {
               [`searchText${index}`]: `%${term}%`,
             });
+          if (index === 0 && numericQuery !== null) {
+            qb.orWhere('"id" = :userIdQuery', { userIdQuery: numericQuery });
+          }
         }),
       );
     });
@@ -94,6 +103,49 @@ export class UsersService {
       where: { id: In(userIds.map(({ id }) => id)) },
       relations: ['mentors', 'students', 'mentors.course', 'students.course', 'students.certificate'],
     });
+  }
+
+  public async createSystemUser(params: { name: string; githubId?: string }): Promise<User> {
+    const githubId = (params.githubId ?? `system:${randomUUID()}`).toLowerCase();
+
+    const existing = await this.userRepository.findOne({ where: { githubId } });
+    if (existing) {
+      throw new Error(`User with githubId "${githubId}" already exists`);
+    }
+
+    const [firstName, ...rest] = params.name.trim().split(/\s+/);
+    return this.userRepository.save({
+      githubId,
+      firstName: firstName ?? params.name,
+      lastName: rest.join(' '),
+      isSystem: true,
+    } as Partial<User>);
+  }
+
+  public listSystemUsers(): Promise<User[]> {
+    return this.userRepository.find({
+      where: { isSystem: true },
+      order: { id: 'DESC' },
+    });
+  }
+
+  public async getSystemUser(id: number): Promise<User | null> {
+    return this.userRepository.findOne({ where: { id, isSystem: true } });
+  }
+
+  public async updateSystemUser(id: number, params: { name?: string }): Promise<User | null> {
+    const user = await this.getSystemUser(id);
+    if (!user) return null;
+
+    if (params.name !== undefined) {
+      const [firstName, ...rest] = params.name.trim().split(/\s+/);
+      await this.userRepository.update(id, {
+        firstName: firstName ?? params.name,
+        lastName: rest.join(' '),
+      });
+    }
+
+    return this.getSystemUser(id);
   }
 
   public static getPrimaryUserFields(modelName = 'user') {

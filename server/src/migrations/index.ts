@@ -63,6 +63,8 @@ import { CourseTaskInterviewCreatingPairs1747380525126 } from './1747380525126-C
 import { Course1746467689328 } from './1746467689328-Course';
 import { AddCourseLeaveSurveyResponse1760699701354 } from './1760699701354-AddCourseLeaveSurveyResponse';
 import { RemovePrivateRepositories1781107559480 } from './1781107559480-RemovePrivateRepositories';
+import { PersonalAccessTokenAndAuditLog1779465349517 } from './1779465349517-PersonalAccessTokenAndAuditLog';
+
 
 export const migrations = [
   UserMigration1630340371992,
@@ -130,4 +132,5 @@ export const migrations = [
   Course1746467689328,
   AddCourseLeaveSurveyResponse1760699701354,
   RemovePrivateRepositories1781107559480,
+  PersonalAccessTokenAndAuditLog1779465349517,
 ];

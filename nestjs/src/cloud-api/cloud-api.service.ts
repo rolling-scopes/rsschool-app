@@ -24,6 +24,10 @@ export class CloudApiService {
     return lastValueFrom(this.httpService.post(`${this.baseUrl}/task`, data, this.getHeaders()));
   }
 
+  public async requestCertificate<T>(data: T | T[]) {
+    return lastValueFrom(this.httpService.post(`${this.baseUrl}/certificate`, data, this.getHeaders()));
+  }
+
   private getHeaders() {
     return { headers: { 'x-api-key': this.apiKey } };
   }
