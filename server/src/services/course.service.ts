@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { getRepository, getManager, getCustomRepository } from 'typeorm';
+import { getRepository, getManager } from 'typeorm';
 import { MentorBasic, MentorDetails, StudentBasic } from '../../../common/models';
 import {
   Course,
@@ -21,7 +21,6 @@ import {
   isSupervisor,
 } from '../models';
 import { createName } from './user.service';
-import { StageInterviewRepository } from '../repositories/stageInterview.repository';
 import { getStageInterviewRating } from './stageInterview.service';
 
 export const getPrimaryUserFields = (modelName = 'user') => [
@@ -182,22 +181,6 @@ export async function getMentorByUserId(courseId: number, userId: number): Promi
     .andWhere('mentor."courseId" = :courseId', { courseId })
     .getOne();
   return record ?? null;
-}
-
-export async function expelMentor(courseId: number, githubId: string) {
-  const mentor = await queryMentorByGithubId(courseId, githubId);
-  if (mentor) {
-    await getRepository(Student).update({ mentorId: mentor.id }, { mentorId: null });
-    await getRepository(Mentor).update(mentor.id, { isExpelled: true });
-    await getCustomRepository(StageInterviewRepository).cancelByMentor(courseId, githubId);
-  }
-}
-
-export async function restoreMentor(courseId: number, githubId: string) {
-  const mentor = await queryMentorByGithubId(courseId, githubId);
-  if (mentor) {
-    await getRepository(Mentor).update(mentor.id, { isExpelled: false });
-  }
 }
 
 export async function getMentorByGithubId(courseId: number, githubId: string): Promise<MentorBasic | null> {

@@ -1601,6 +1601,30 @@
         "tags": ["course users"]
       }
     },
+    "/course/{courseId}/mentors/{githubId}/status/expelled": {
+      "post": {
+        "operationId": "expelMentor",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
+        "tags": ["course mentors"]
+      }
+    },
+    "/course/{courseId}/mentors/{githubId}/status/restore": {
+      "post": {
+        "operationId": "restoreMentor",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
+        "tags": ["course mentors"]
+      }
+    },
     "/course/{courseId}/mentors/details": {
       "get": {
         "operationId": "getMentorsDetails",
@@ -2228,6 +2252,15 @@
         "responses": { "201": { "description": "" } },
         "summary": "",
         "tags": ["registry"]
+      }
+    },
+    "/certificate/templates": {
+      "get": {
+        "operationId": "getCertificateTemplates",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "summary": "",
+        "tags": ["certificate"]
       }
     },
     "/certificate/{publicId}": {
