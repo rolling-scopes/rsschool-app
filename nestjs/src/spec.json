@@ -2230,6 +2230,15 @@
         "tags": ["registry"]
       }
     },
+    "/certificate/templates": {
+      "get": {
+        "operationId": "getCertificateTemplates",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "summary": "",
+        "tags": ["certificate"]
+      }
+    },
     "/certificate/{publicId}": {
       "get": {
         "operationId": "getCertificate",
@@ -2673,6 +2682,21 @@
         },
         "summary": "",
         "tags": ["gratitudes"]
+      }
+    },
+    "/files/upload": {
+      "post": {
+        "operationId": "uploadFile",
+        "parameters": [{ "name": "key", "required": false, "in": "query", "schema": { "type": "string" } }],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object" } } } },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/FileUploadResponseDto" } } }
+          }
+        },
+        "summary": "",
+        "tags": ["files"]
       }
     },
     "/events": {
@@ -5554,6 +5578,11 @@
         "type": "object",
         "properties": { "countryName": { "type": "string" } },
         "required": ["countryName"]
+      },
+      "FileUploadResponseDto": {
+        "type": "object",
+        "properties": { "s3Key": { "type": "string" } },
+        "required": ["s3Key"]
       },
       "EventDto": {
         "type": "object",

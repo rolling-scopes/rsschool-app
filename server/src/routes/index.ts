@@ -2,7 +2,6 @@ import Router from '@koa/router';
 
 import { courseRoute } from './course';
 import { feedbackRoute } from './feedback';
-import { filesRoute } from './file';
 import { errorHandlerMiddleware } from './logging';
 import { publicMeRouter } from './me';
 import { profileRoute } from './profile';
@@ -43,7 +42,6 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, profileRoute(logger));
   applyRouter(router, feedbackRoute(logger));
   applyRouter(router, checksRoute(logger));
-  applyRouter(router, filesRoute(logger));
 
   return { publicRouter: router };
 };

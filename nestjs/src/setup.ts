@@ -1,6 +1,7 @@
 import { BadRequestException, INestApplication, ValidationError, ValidationPipe } from '@nestjs/common';
 import * as Sentry from '@sentry/node';
 import cookieParser from 'cookie-parser';
+import { json } from 'express';
 import { Logger } from 'nestjs-pino';
 import { EntityNotFoundFilter, SentryFilter } from './core/filters';
 import { ValidationFilter } from './core/validation';
@@ -11,6 +12,8 @@ export function setupApp(app: INestApplication) {
   app.enableCors();
   app.useLogger(logger);
   app.use(cookieParser());
+  // legacy koa server allowed json payloads up to 20mb (jupyter notebook uploads)
+  app.use('/files/upload', json({ limit: '20mb' }));
 
   if (process.env.SENTRY_DSN) {
     const ignoredExceptions = ['UnauthorizedException', 'TokenExpiredError', 'NotFoundException'];

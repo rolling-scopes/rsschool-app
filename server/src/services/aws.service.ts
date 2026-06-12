@@ -24,17 +24,3 @@ export async function postTaskVerification(data: TaskVerificationEvent[]) {
   }
 }
 
-export async function uploadFileByGithubId(githubId: string, key: string, data: string) {
-  try {
-    // if (config.isDevMode) {
-    //   return;
-    // }
-    const response = await axios.post(`${config.aws.restApiUrl}/upload?key=${key}&githubId=${githubId}`, data, {
-      headers: { 'x-api-key': config.aws.restApiKey },
-    });
-    return response.data;
-  } catch (err) {
-    const error = err as AxiosError;
-    throw error.response?.data ?? error.message;
-  }
-}
