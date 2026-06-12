@@ -767,6 +767,24 @@
         "tags": ["courses interviews"]
       }
     },
+    "/courses/{courseId}/interviews/students/me": {
+      "get": {
+        "operationId": "getStudentInterviews",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": { "200": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
+        "tags": ["courses interviews"]
+      }
+    },
+    "/courses/{courseId}/interviews/mentors/me": {
+      "get": {
+        "operationId": "getMentorInterviews",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": { "200": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
+        "tags": ["courses interviews"]
+      }
+    },
     "/courses/{courseId}/interviews/{interviewId}/{type}/feedback": {
       "get": {
         "operationId": "getInterviewFeedback",
@@ -2228,6 +2246,15 @@
         "responses": { "201": { "description": "" } },
         "summary": "",
         "tags": ["registry"]
+      }
+    },
+    "/certificate/templates": {
+      "get": {
+        "operationId": "getCertificateTemplates",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "summary": "",
+        "tags": ["certificate"]
       }
     },
     "/certificate/{publicId}": {
