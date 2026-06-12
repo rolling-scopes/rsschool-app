@@ -1717,6 +1717,15 @@
         "tags": ["mentor-reviews"]
       }
     },
+    "/courses/{courseId}/student-verifications": {
+      "get": {
+        "operationId": "getStudentTaskVerifications",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": { "200": { "description": "" }, "400": { "description": "" } },
+        "summary": "",
+        "tags": ["course task verifications"]
+      }
+    },
     "/users/notifications": {
       "get": {
         "operationId": "getUserNotifications",
@@ -2228,6 +2237,15 @@
         "responses": { "201": { "description": "" } },
         "summary": "",
         "tags": ["registry"]
+      }
+    },
+    "/certificate/templates": {
+      "get": {
+        "operationId": "getCertificateTemplates",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "summary": "",
+        "tags": ["certificate"]
       }
     },
     "/certificate/{publicId}": {
