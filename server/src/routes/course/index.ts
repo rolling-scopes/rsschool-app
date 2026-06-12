@@ -11,7 +11,6 @@ import {
   courseMentorOrDementorGuard,
   courseSupervisorGuard,
   courseSupervisorOrDementorGuard,
-  courseSupervisorOrMentorGuard,
   crossCheckGuard,
   guard,
   taskOwnerGuard,
@@ -55,7 +54,6 @@ import {
   postFeedback,
   selfUpdateStudentStatus,
   updateMentoringAvailability,
-  updateStudent,
   updateStudentStatus,
 } from './student';
 import * as tasks from './tasks';
@@ -162,7 +160,6 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   const mentorOrDementorValidators = [courseMentorOrDementorGuard, validateGithubId];
 
   router.get('/student/:githubId', courseSupervisorGuard, getStudent(logger));
-  router.put('/student/:githubId', courseSupervisorOrMentorGuard, updateStudent(logger));
 
   router.get(
     '/student/:githubId/interview/stage',
