@@ -42,11 +42,14 @@ export function DashboardDetails(props: Props) {
         <div className={styles.studentDetailsActions}>
           {props.courseManagerOrSupervisor && (
             <>
-              <Popconfirm title="Are you sure you want to issue the certificate?" onConfirm={props.onIssueCertificate}>
-                <Button disabled={!details.isActive} icon={<SolutionOutlined />} loading={props.isLoading}>
-                  Issue Certificate
-                </Button>
-              </Popconfirm>
+              <Button
+                disabled={!details.isActive}
+                icon={<SolutionOutlined />}
+                loading={props.isLoading}
+                onClick={props.onIssueCertificate}
+              >
+                Issue Certificate
+              </Button>
               {props.isAdmin && (
                 <Popconfirm
                   title="Are you sure you want to remove the certificate?"

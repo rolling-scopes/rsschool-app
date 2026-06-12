@@ -277,8 +277,11 @@ export class CourseService {
     });
   }
 
-  async postCertificateStudents(criteria: { courseTaskIds?: number[]; minScore?: number; minTotalScore?: number }) {
-    await this.axios.post(`/certificates`, { criteria });
+  async postCertificateStudents(
+    criteria: { courseTaskIds?: number[]; minScore?: number; minTotalScore?: number },
+    templateId?: string,
+  ) {
+    await this.axios.post(`/certificates`, { criteria, templateId });
   }
 
   async restoreStudent(githubId: string) {
@@ -501,8 +504,8 @@ export class CourseService {
     return result.data.data as InterviewDetails[];
   }
 
-  async createCertificate(githubId: string) {
-    const result = await this.axios.post(`/student/${githubId}/certificate`);
+  async createCertificate(githubId: string, templateId?: string) {
+    const result = await this.axios.post(`/student/${githubId}/certificate`, { templateId });
     return result.data.data;
   }
 
