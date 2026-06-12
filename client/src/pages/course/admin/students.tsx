@@ -16,11 +16,7 @@ import { isAdmin, isCourseManager, isCourseSupervisor } from '@client/domain/use
 import { useMessage } from '@client/hooks';
 import keys from 'lodash/keys';
 import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
-import {
-  CertificateCriteriaModal,
-  ExpelCriteriaModal,
-  IssueCertificateModal,
-} from '@client/modules/CourseManagement/components';
+import { CertificateCriteriaModal, ExpelCriteriaModal } from '@client/modules/CourseManagement/components';
 import { useContext, useMemo, useState } from 'react';
 import { useAsync, useToggle } from 'react-use';
 import { CourseService, StudentDetails } from '@client/services/course';
@@ -61,23 +57,17 @@ function Page() {
   const [details, setDetails] = useState<StudentDetails | null>(null);
   const [isExpelModalOpen, toggleExpelModal] = useToggle(false);
   const [isCertificateModalOpen, toggleCertificateModal] = useToggle(false);
-  const [isIssueModalOpen, setIssueModalOpen] = useState(false);
 
   useAsync(withLoading(loadStudents), [activeOnly, details]);
 
-  const openIssueCertificate = () => {
-    if (details?.githubId != null) {
-      setIssueModalOpen(true);
-    }
-  };
-
   const issueCertificate = withLoading(async (templateId: string) => {
     const githubId = details?.githubId;
-    if (githubId != null) {
-      await courseService.createCertificate(githubId, templateId);
-      setIssueModalOpen(false);
-      message.info('The certificate has been requested.');
+    if (githubId == null) {
+      return false;
     }
+    await courseService.createCertificate(githubId, templateId);
+    message.info('The certificate has been requested.');
+    return true;
   });
 
   const removeCertificate = withLoading(async () => {
@@ -157,7 +147,7 @@ function Page() {
           isAdmin={hasAdminRole}
           onUpdateMentor={updateMentor}
           onRestoreStudent={restoreStudent}
-          onIssueCertificate={openIssueCertificate}
+          onIssueCertificate={issueCertificate}
           onRemoveCertificate={removeCertificate}
           onExpelStudent={expelStudent}
           onClose={() => {
@@ -179,12 +169,6 @@ function Page() {
           onClose={toggleCertificateModal}
           onSubmit={issueCertificates}
           isModalOpen={isCertificateModalOpen}
-        />
-        <IssueCertificateModal
-          open={isIssueModalOpen}
-          studentName={details?.name}
-          onCancel={() => setIssueModalOpen(false)}
-          onSubmit={issueCertificate}
         />
       </AdminPageLayout>
     );
