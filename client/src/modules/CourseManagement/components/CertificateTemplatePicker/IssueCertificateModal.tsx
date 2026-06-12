@@ -6,7 +6,7 @@ type Props = {
   open: boolean;
   studentName?: string;
   onCancel: () => void;
-  onSubmit: (templateId: string) => void;
+  onSubmit: (templateId: string) => void | Promise<unknown>;
 };
 
 export function IssueCertificateModal({ open, studentName, onCancel, onSubmit }: Props) {

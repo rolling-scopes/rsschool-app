@@ -62,10 +62,12 @@ function Page() {
 
   const issueCertificate = withLoading(async (templateId: string) => {
     const githubId = details?.githubId;
-    if (githubId != null) {
-      await courseService.createCertificate(githubId, templateId);
-      message.info('The certificate has been requested.');
+    if (githubId == null) {
+      return false;
     }
+    await courseService.createCertificate(githubId, templateId);
+    message.info('The certificate has been requested.');
+    return true;
   });
 
   const removeCertificate = withLoading(async () => {
