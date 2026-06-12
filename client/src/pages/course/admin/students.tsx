@@ -1,4 +1,4 @@
-import { BranchesOutlined, CheckCircleTwoTone, ClockCircleTwoTone, MinusCircleOutlined } from '@ant-design/icons';
+import { CheckCircleTwoTone, ClockCircleTwoTone, MinusCircleOutlined } from '@ant-design/icons';
 import { Button, Row, Space, Statistic, Switch, Table, Typography } from 'antd';
 import { ColumnProps } from 'antd/lib/table/Column';
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
@@ -78,15 +78,6 @@ function Page() {
     }
   });
 
-  const createRepository = withLoading(async () => {
-    const githubId = details?.githubId;
-    if (githubId != null) {
-      const { repository } = await courseService.createRepository(githubId);
-      const newStudents = students.map(s => (s.githubId === githubId ? { ...s, repository: repository } : s));
-      setStudents(newStudents);
-    }
-  });
-
   const expelStudent = withLoading(async (text: string) => {
     const githubId = details?.githubId;
     if (githubId != null) {
@@ -159,7 +150,6 @@ function Page() {
           onIssueCertificate={issueCertificate}
           onRemoveCertificate={removeCertificate}
           onExpelStudent={expelStudent}
-          onCreateRepository={createRepository}
           onClose={() => {
             setDetails(null);
             loadStudents();
@@ -264,12 +254,6 @@ function Page() {
           }
           return <ClockCircleTwoTone title="Assigned" />;
         },
-      },
-      {
-        title: <BranchesOutlined />,
-        dataIndex: 'repository',
-        width: 80,
-        render: (value: string) => (value ? <a href={value}>Link</a> : null),
       },
       {
         title: 'Total',

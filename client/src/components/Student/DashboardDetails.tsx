@@ -1,10 +1,4 @@
-import {
-  BranchesOutlined,
-  CloseCircleOutlined,
-  FileExcelOutlined,
-  SolutionOutlined,
-  UndoOutlined,
-} from '@ant-design/icons';
+import { CloseCircleOutlined, FileExcelOutlined, SolutionOutlined, UndoOutlined } from '@ant-design/icons';
 import { Button, Descriptions, Drawer, Popconfirm, theme } from 'antd';
 import { MentorBasic } from '@common/models';
 import { CommentModal } from '@client/shared/components/CommentModal';
@@ -20,7 +14,6 @@ type Props = {
   isLoading: boolean;
   isAdmin: boolean;
   onClose: () => void;
-  onCreateRepository: () => void;
   onRestoreStudent: () => void;
   onExpelStudent: (comment: string) => void;
   onIssueCertificate: (templateId: string) => Promise<boolean | void>;
@@ -59,13 +52,6 @@ export function DashboardDetails(props: Props) {
         <div className={styles.studentDetailsActions}>
           {props.courseManagerOrSupervisor && (
             <>
-              <Button
-                disabled={!details.isActive || !!details.repository}
-                icon={<BranchesOutlined />}
-                onClick={props.onCreateRepository}
-              >
-                Create Repository
-              </Button>
               <Button
                 disabled={!details.isActive}
                 icon={<SolutionOutlined />}

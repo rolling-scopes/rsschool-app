@@ -8,7 +8,6 @@ export interface StudentSummary {
   isActive: boolean;
   mentor: Mentor | null;
   rank?: number;
-  repository: string | null;
 }
 
 export class StudentSummaryDto {
@@ -18,7 +17,6 @@ export class StudentSummaryDto {
     this.isActive = studentSummary.isActive;
     this.mentor = studentSummary.mentor;
     this.rank = studentSummary.rank ?? 999999;
-    this.repository = studentSummary.repository;
   }
 
   @ApiProperty()
@@ -35,7 +33,4 @@ export class StudentSummaryDto {
 
   @ApiProperty({ type: Number })
   rank: number;
-
-  @ApiProperty({ type: String, nullable: true })
-  repository: string | null;
 }

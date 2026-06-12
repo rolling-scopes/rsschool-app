@@ -20,7 +20,6 @@ export class CourseDto {
     this.locationName = course.locationName;
     this.discordServerId = course.discordServerId;
     this.inviteOnly = course.inviteOnly;
-    this.usePrivateRepositories = course.usePrivateRepositories;
     this.registrationEndDate = course.registrationEndDate?.toISOString() ?? null;
     this.personalMentoring = course.personalMentoring;
     this.personalMentoringStartDate = course.personalMentoringStartDate?.toISOString() ?? null;
@@ -92,9 +91,6 @@ export class CourseDto {
 
   @ApiProperty()
   certificateIssuer: string;
-
-  @ApiProperty()
-  usePrivateRepositories: boolean;
 
   @ApiProperty()
   personalMentoring: boolean;

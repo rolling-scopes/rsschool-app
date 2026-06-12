@@ -68,7 +68,6 @@ export interface StudentDetails extends StudentBasic {
   countryName: string;
   totalScore: number;
   interviews: { id: number; isCompleted: boolean; interviewer?: { githubId: string } }[];
-  repository: string;
   assignedChecks: { name: string; id: number }[];
 }
 
@@ -130,7 +129,6 @@ export function convertToStudentDetails(student: Student): StudentDetails {
           id: i.id,
           isCompleted: i.isCompleted,
         })),
-    repository: student.repository,
     assignedChecks: checks,
   };
 }

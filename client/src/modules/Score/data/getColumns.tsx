@@ -94,13 +94,6 @@ export function getColumns(props: Props): ColumnType<ScoreStudentDto>[] {
       render: dateRenderer,
     },
     {
-      title: 'Last Commit Date',
-      dataIndex: 'repositoryLastActivityDate',
-      width: 80,
-      sorter: 'repositoryLastActivityDate',
-      render: dateRenderer,
-    },
-    {
       title: 'Mentor',
       dataIndex: ['mentor', 'githubId'],
       width: 150,
