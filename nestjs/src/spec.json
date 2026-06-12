@@ -983,6 +983,50 @@
         "tags": ["course stats"]
       }
     },
+    "/courses/{courseId}/cross-checks/{courseTaskId}/max-score-checkers": {
+      "get": {
+        "operationId": "getMaxScoreCheckers",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/MaxScoreCheckerDto" } }
+              }
+            }
+          },
+          "403": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["courses tasks"]
+      }
+    },
+    "/courses/{courseId}/cross-checks/{courseTaskId}/bad-comments": {
+      "get": {
+        "operationId": "getBadCommentCheckers",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/BadCommentCheckerDto" } }
+              }
+            }
+          },
+          "403": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["courses tasks"]
+      }
+    },
     "/courses/{courseId}/cross-checks/pairs": {
       "get": {
         "operationId": "getCrossCheckPairs",
@@ -2228,6 +2272,15 @@
         "responses": { "201": { "description": "" } },
         "summary": "",
         "tags": ["registry"]
+      }
+    },
+    "/certificate/templates": {
+      "get": {
+        "operationId": "getCertificateTemplates",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "summary": "",
+        "tags": ["certificate"]
       }
     },
     "/certificate/{publicId}": {
@@ -4029,6 +4082,39 @@
           "exceptionalAchievement",
           "perfectScores"
         ]
+      },
+      "MaxScoreCheckerDto": {
+        "type": "object",
+        "properties": {
+          "taskName": { "type": "string" },
+          "checkerGithubId": { "type": "string" },
+          "studentGithubId": { "type": "string" },
+          "studentAverageScoreExcludeChecker": { "type": "string", "nullable": true },
+          "checkerScore": { "type": "number" },
+          "studentAvgScore": { "type": "number" },
+          "key": { "type": "string" }
+        },
+        "required": [
+          "taskName",
+          "checkerGithubId",
+          "studentGithubId",
+          "studentAverageScoreExcludeChecker",
+          "checkerScore",
+          "studentAvgScore",
+          "key"
+        ]
+      },
+      "BadCommentCheckerDto": {
+        "type": "object",
+        "properties": {
+          "taskName": { "type": "string" },
+          "checkerGithubId": { "type": "string" },
+          "studentGithubId": { "type": "string" },
+          "checkerScore": { "type": "number" },
+          "comment": { "type": "string", "nullable": true },
+          "key": { "type": "string" }
+        },
+        "required": ["taskName", "checkerGithubId", "studentGithubId", "checkerScore", "comment", "key"]
       },
       "CrossCheckCriteriaDataDto": {
         "type": "object",

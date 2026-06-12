@@ -11,7 +11,7 @@ interface IBadReviewControllersProps {
 
 export interface IBadReview {
   checkerScore: number;
-  comment?: string;
+  comment?: string | null;
   taskName: string;
   checkerGithubId: string;
   studentGithubId: string;
