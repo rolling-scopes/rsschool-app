@@ -5478,6 +5478,43 @@ export interface QuestionDto {
 /**
  * 
  * @export
+ * @interface RegisterMentorDto
+ */
+export interface RegisterMentorDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof RegisterMentorDto
+     */
+    'maxStudentsLimit'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegisterMentorDto
+     */
+    'preferedStudentsLocation'?: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof RegisterMentorDto
+     */
+    'preferedCourses'?: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof RegisterMentorDto
+     */
+    'technicalMentoring'?: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof RegisterMentorDto
+     */
+    'languagesMentoring'?: Array<string>;
+}
+/**
+ * 
+ * @export
  * @interface ResultDto
  */
 export interface ResultDto {
@@ -9534,6 +9571,35 @@ export const CertificateApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCertificateTemplates: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/certificate/templates`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {number} studentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9622,6 +9688,15 @@ export const CertificateApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCertificateTemplates(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCertificateTemplates(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {number} studentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9661,6 +9736,14 @@ export const CertificateApiFactory = function (configuration?: Configuration, ba
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCertificateTemplates(options?: any): AxiosPromise<void> {
+            return localVarFp.getCertificateTemplates(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {number} studentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9696,6 +9779,16 @@ export class CertificateApi extends BaseAPI {
      */
     public getCertificate(publicId: string, options?: AxiosRequestConfig) {
         return CertificateApiFp(this.configuration).getCertificate(publicId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CertificateApi
+     */
+    public getCertificateTemplates(options?: AxiosRequestConfig) {
+        return CertificateApiFp(this.configuration).getCertificateTemplates(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -18633,6 +18726,41 @@ export const RegistryApiAxiosParamCreator = function (configuration?: Configurat
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {RegisterMentorDto} registerMentorDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registerMentor: async (registerMentorDto: RegisterMentorDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'registerMentorDto' is not null or undefined
+            assertParamExists('registerMentor', 'registerMentorDto', registerMentorDto)
+            const localVarPath = `/registry/mentor`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(registerMentorDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -18702,6 +18830,16 @@ export const RegistryApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.inviteMentors(inviteMentorsDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {RegisterMentorDto} registerMentorDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async registerMentor(registerMentorDto: RegisterMentorDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.registerMentor(registerMentorDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -18765,6 +18903,15 @@ export const RegistryApiFactory = function (configuration?: Configuration, baseP
          */
         inviteMentors(inviteMentorsDto: InviteMentorsDto, options?: any): AxiosPromise<void> {
             return localVarFp.inviteMentors(inviteMentorsDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {RegisterMentorDto} registerMentorDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registerMentor(registerMentorDto: RegisterMentorDto, options?: any): AxiosPromise<void> {
+            return localVarFp.registerMentor(registerMentorDto, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -18838,6 +18985,17 @@ export class RegistryApi extends BaseAPI {
      */
     public inviteMentors(inviteMentorsDto: InviteMentorsDto, options?: AxiosRequestConfig) {
         return RegistryApiFp(this.configuration).inviteMentors(inviteMentorsDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {RegisterMentorDto} registerMentorDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistryApi
+     */
+    public registerMentor(registerMentorDto: RegisterMentorDto, options?: AxiosRequestConfig) {
+        return RegistryApiFp(this.configuration).registerMentor(registerMentorDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

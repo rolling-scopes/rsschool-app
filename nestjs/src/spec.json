@@ -2139,6 +2139,19 @@
         "tags": ["disciplines"]
       }
     },
+    "/registry/mentor": {
+      "post": {
+        "operationId": "registerMentor",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RegisterMentorDto" } } }
+        },
+        "responses": { "200": { "description": "" } },
+        "summary": "",
+        "tags": ["registry"]
+      }
+    },
     "/registry/mentor/{githubId}": {
       "put": {
         "operationId": "approveMentor",
@@ -2228,6 +2241,15 @@
         "responses": { "201": { "description": "" } },
         "summary": "",
         "tags": ["registry"]
+      }
+    },
+    "/certificate/templates": {
+      "get": {
+        "operationId": "getCertificateTemplates",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "summary": "",
+        "tags": ["certificate"]
       }
     },
     "/certificate/{publicId}": {
@@ -5067,6 +5089,16 @@
         "required": ["ids"]
       },
       "UpdateDisciplineDto": { "type": "object", "properties": { "name": { "type": "string" } }, "required": ["name"] },
+      "RegisterMentorDto": {
+        "type": "object",
+        "properties": {
+          "maxStudentsLimit": { "type": "number" },
+          "preferedStudentsLocation": { "type": "string" },
+          "preferedCourses": { "type": "array", "items": { "type": "string" } },
+          "technicalMentoring": { "type": "array", "items": { "type": "string" } },
+          "languagesMentoring": { "type": "array", "items": { "type": "string" } }
+        }
+      },
       "ApproveMentorDto": {
         "type": "object",
         "properties": { "preselectedCourses": { "type": "array", "items": { "type": "string" } } },
