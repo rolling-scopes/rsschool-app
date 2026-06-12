@@ -9,6 +9,7 @@ import { Button, Descriptions, Drawer, Popconfirm, theme } from 'antd';
 import { MentorBasic } from '@common/models';
 import { CommentModal } from '@client/shared/components/CommentModal';
 import { MentorSearch } from '@client/shared/components/MentorSearch';
+import { IssueCertificateModal } from '@client/modules/CourseManagement/components';
 import { useState } from 'react';
 import { StudentDetails } from '@client/services/course';
 import styles from './DashboardDetails.module.css';
@@ -22,7 +23,7 @@ type Props = {
   onCreateRepository: () => void;
   onRestoreStudent: () => void;
   onExpelStudent: (comment: string) => void;
-  onIssueCertificate: () => void;
+  onIssueCertificate: (templateId: string) => void;
   onRemoveCertificate: () => void;
   onUpdateMentor: (githubId: string) => void;
   courseManagerOrSupervisor: boolean;
@@ -30,6 +31,7 @@ type Props = {
 
 export function DashboardDetails(props: Props) {
   const [expelMode, setExpelMode] = useState(false);
+  const [issueOpen, setIssueOpen] = useState(false);
   const { details } = props;
   const { token } = theme.useToken();
   if (details == null) {
@@ -60,7 +62,7 @@ export function DashboardDetails(props: Props) {
                 disabled={!details.isActive}
                 icon={<SolutionOutlined />}
                 loading={props.isLoading}
-                onClick={props.onIssueCertificate}
+                onClick={() => setIssueOpen(true)}
               >
                 Issue Certificate
               </Button>
@@ -107,6 +109,15 @@ export function DashboardDetails(props: Props) {
             </Descriptions>
           )}
         </div>
+        <IssueCertificateModal
+          open={issueOpen}
+          studentName={details.name}
+          onCancel={() => setIssueOpen(false)}
+          onSubmit={templateId => {
+            props.onIssueCertificate(templateId);
+            setIssueOpen(false);
+          }}
+        />
       </Drawer>
       <CommentModal
         title="Expelling Reason"
