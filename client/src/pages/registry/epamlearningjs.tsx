@@ -12,11 +12,13 @@ import { emailPattern, englishNamePattern } from '@client/services/validators';
 import { TYPES } from './../../configs/registry';
 import { Location } from '@common/models/profile';
 import { SessionProvider } from '@client/modules/Course/contexts';
+import { CreateRegistrationDtoTypeEnum, RegistryApi } from '@client/api';
 
 const defaultColumnSizes = { xs: 18, sm: 10, md: 8, lg: 6 };
 const defaultRowGutter = 24;
 
 const courseAlias = 'epamlearningjs';
+const registryApi = new RegistryApi();
 
 type FormData = {
   firstName: string;
@@ -54,7 +56,7 @@ function EpamLearningJSPage() {
   const handleSubmit = async (model: FormData) => {
     const { location } = model;
     const registryModel = {
-      type: TYPES.STUDENT,
+      type: TYPES.STUDENT as CreateRegistrationDtoTypeEnum,
       courseId: activeCourse!.id,
     };
     const userModel = {
@@ -69,7 +71,7 @@ function EpamLearningJSPage() {
       const userResponse = await axios.post('/api/profile/me', userModel);
       const githubId = userResponse && userResponse.data ? userResponse.data.data.githubId : '';
       if (githubId) {
-        await axios.post('/api/registry', registryModel);
+        await registryApi.createRegistration(registryModel);
         setSubmitted(true);
       } else {
         message.error('Invalid github id');

@@ -9,6 +9,9 @@ import { paginate } from 'src/core/paginate';
 import { InviteMentorsDto } from './dto/invite-mentors.dto';
 import { NotificationsService } from 'src/notifications/notifications.service';
 import { Student } from '@entities/student';
+import { Registry } from '@entities/registry';
+import { Mentor } from '@entities/mentor';
+import { Course } from '@entities/course';
 import { MentorRegistryTabsMode } from './registry.controller';
 
 @Injectable()
@@ -20,6 +23,14 @@ export class RegistryService {
     private mentorsRegistryRepository: Repository<MentorRegistry>,
     @InjectRepository(Student)
     readonly studentRepository: Repository<Student>,
+    @InjectRepository(Registry)
+    private registryRepository: Repository<Registry>,
+    @InjectRepository(Mentor)
+    private mentorRepository: Repository<Mentor>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+    @InjectRepository(Course)
+    private courseRepository: Repository<Course>,
     private usersService: UsersService,
     private coursesService: CoursesService,
     private notificationsService: NotificationsService,
@@ -251,5 +262,58 @@ export class RegistryService {
           }
         }),
     );
+  }
+
+  public async createRegistration(
+    authUser: { id: number; githubId: string },
+    payload: { courseId: number; type: 'student' | 'mentor'; maxStudentsLimit?: number; experienceInYears?: string },
+  ) {
+    const { courseId, type, maxStudentsLimit, experienceInYears } = payload;
+
+    if (!authUser.githubId || !courseId || !type) {
+      throw new BadRequestException('Wrong payload: githubId courseId & type are required');
+    }
+
+    if (type === 'mentor' && (maxStudentsLimit == null || isNaN(maxStudentsLimit) || maxStudentsLimit < 2)) {
+      throw new BadRequestException('Incorrect maxStudentsLimit');
+    }
+
+    const [user, course, existingRegistry] = await Promise.all([
+      this.userRepository.findOne({ where: { githubId: authUser.githubId }, relations: ['mentors', 'students'] }),
+      this.courseRepository.findOneBy({ id: Number(courseId) }),
+      this.registryRepository.findOne({ where: { userId: authUser.id, courseId: Number(courseId) } }),
+    ]);
+
+    if (existingRegistry && existingRegistry.userId === authUser.id) {
+      return existingRegistry;
+    }
+
+    let registryPayload: Partial<Registry> = {
+      type,
+      user: user!,
+      course: course!,
+      status: 'pending',
+    };
+
+    if (type === 'student') {
+      registryPayload.status = 'approved';
+      if ((user?.students || []).every(s => s.courseId !== courseId)) {
+        await this.studentRepository.save({ userId: user!.id, courseId: course!.id, startDate: new Date() });
+      }
+    } else if (type === 'mentor') {
+      registryPayload = {
+        ...registryPayload,
+        attributes: {
+          maxStudentsLimit,
+          experienceInYears,
+        } as Registry['attributes'],
+      };
+      if ((user?.mentors || []).length > 0) {
+        registryPayload.status = 'approved';
+        await this.mentorRepository.save({ userId: user!.id, courseId: course!.id, maxStudentsLimit });
+      }
+    }
+
+    return this.registryRepository.save(registryPayload);
   }
 }
