@@ -1,17 +1,22 @@
 import {
   BadRequestException,
+  Body,
   Controller,
   DefaultValuePipe,
   Get,
   Param,
   ParseEnumPipe,
   ParseIntPipe,
+  Post,
   Query,
   Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { ApiForbiddenResponse, ApiOperation, ApiResponse, ApiTags, ApiQuery } from '@nestjs/swagger';
+import { ApiBody, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags, ApiQuery } from '@nestjs/swagger';
+import { CrossCheckStatus } from '@entities/courseTask';
+import { ConfigService } from 'src/config';
+import { UserNotificationsService } from 'src/users-notifications';
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
 import { CourseTasksService } from '../course-tasks';
 import { OrderField, OrderDirection, CourseCrossCheckService } from './course-cross-checks.service';
@@ -29,6 +34,8 @@ export class CourseCrossCheckController {
   constructor(
     private courseCrossCheckService: CourseCrossCheckService,
     private courseTasksService: CourseTasksService,
+    private userNotificationsService: UserNotificationsService,
+    private configService: ConfigService,
   ) {}
 
   @Get('/pairs')
@@ -103,6 +110,97 @@ export class CourseCrossCheckController {
     res.setHeader('Content-disposition', `filename=${courseTask.task.name}.csv`);
 
     res.end(parsedData);
+  }
+
+  @Post(':courseTaskId/results/:githubId')
+  @ApiOperation({ operationId: 'createCrossCheckResult' })
+  @ApiForbiddenResponse()
+  @ApiBody({ schema: { type: 'object' } })
+  @ApiOkResponse()
+  public async createCrossCheckResult(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+    @Param('githubId') githubIdParam: string,
+    @Body()
+    inputData: {
+      score: number;
+      comment: string;
+      anonymous: boolean;
+      review: unknown;
+      comments: unknown;
+      criteria: unknown;
+    },
+  ) {
+    const githubId = githubIdParam === 'me' ? req.user.githubId : githubIdParam.toLowerCase();
+
+    const [student, checker, courseTask] = await Promise.all([
+      this.courseCrossCheckService.queryStudentByGithubId(courseId, githubId),
+      this.courseCrossCheckService.queryStudentByGithubId(courseId, req.user.githubId),
+      this.courseCrossCheckService.getCourseTaskWithCourse(courseTaskId),
+    ]);
+
+    if (courseTask?.crossCheckStatus !== CrossCheckStatus.Distributed) {
+      throw new BadRequestException("task review can't be submitted");
+    }
+
+    if (student == null || courseTask == null || checker == null) {
+      throw new BadRequestException('not valid student or course task');
+    }
+    if (!CourseCrossCheckService.isCrossCheckTask(courseTask)) {
+      throw new BadRequestException('task solution is supported for this task');
+    }
+
+    const taskChecker = await this.courseCrossCheckService.getTaskSolutionChecker(
+      student.id,
+      checker.id,
+      courseTaskId,
+    );
+    if (taskChecker == null) {
+      throw new BadRequestException('no assigned cross-check');
+    }
+
+    const data = {
+      score: Math.round(Number(inputData.score)),
+      comment: inputData.comment || '',
+      anonymous: inputData.anonymous !== false,
+      review: (Array.isArray(inputData.review) ? inputData.review : []) as never[],
+    };
+
+    if (data.score > courseTask.maxScore) {
+      throw new BadRequestException('score provided is greater than max score for the task');
+    }
+
+    if (isNaN(data.score) || data.score < 0) {
+      throw new BadRequestException('no score provided');
+    }
+
+    const previousScore = await this.courseCrossCheckService.saveResult(
+      courseTaskId,
+      taskChecker.studentId,
+      taskChecker.checkerId,
+      data,
+      { userId: req.user.id, criteria: inputData.criteria as never[] },
+    );
+
+    await this.courseCrossCheckService.saveSolutionComments(taskChecker.studentId, courseTaskId, {
+      comments: (inputData.comments ?? []) as never[],
+      authorId: taskChecker.checkerId,
+      authorGithubId: req.user.githubId,
+      recipientId: taskChecker.studentId,
+    });
+
+    await this.userNotificationsService.sendEventNotification({
+      userId: student.userId,
+      notificationId: 'taskGrade',
+      data: {
+        previousScore,
+        courseTask,
+        score: data.score,
+        comment: data.comment,
+        resultLink: `${this.configService.host}/course/student/cross-check-submit?course=${courseTask.course.alias}&taskId=${courseTaskId}`,
+      },
+    });
   }
 
   @Get(':courseTaskId/feedbacks/my')

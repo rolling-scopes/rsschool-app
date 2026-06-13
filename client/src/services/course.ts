@@ -324,7 +324,7 @@ export class CourseService {
       criteria: CrossCheckCriteriaDataDto[];
     },
   ) {
-    await this.axios.post(`/student/${githubId}/task/${courseTaskId}/cross-check/result`, data);
+    await courseTasksApi.createCrossCheckResult(this.courseId, courseTaskId, githubId, data);
   }
 
   async getTaskSolutionResult(githubId: string, courseTaskId: number) {
