@@ -103,7 +103,49 @@ export class CourseCrossCheckService {
     private readonly taskSolutionRepository: Repository<TaskSolution>,
     @InjectRepository(TaskSolutionResult)
     private readonly TaskSolutionResultRepository: Repository<TaskSolutionResult>,
+    @InjectRepository(CourseTask)
+    private readonly courseTaskRepository: Repository<CourseTask>,
+    @InjectRepository(Student)
+    private readonly studentRepository: Repository<Student>,
   ) {}
+
+  public async getCourseTask(courseTaskId: number) {
+    return this.courseTaskRepository
+      .createQueryBuilder('courseTask')
+      .innerJoinAndSelect('courseTask.task', 'task')
+      .where('courseTask.id = :courseTaskId', { courseTaskId })
+      .getOne();
+  }
+
+  public async queryStudentByGithubId(courseId: number, githubId: string) {
+    const record = await this.studentRepository
+      .createQueryBuilder('student')
+      .innerJoin('student.user', 'user')
+      .addSelect(['user.firstName', 'user.lastName', 'user.githubId', 'user.id'])
+      .where('user.githubId = :githubId', { githubId })
+      .andWhere('student.courseId = :courseId', { courseId })
+      .getOne();
+    if (record == null) {
+      return null;
+    }
+    return {
+      id: record.id,
+      name: CourseCrossCheckService.buildName(record.user),
+      githubId: record.user.githubId,
+      userId: record.user.id,
+    };
+  }
+
+  private static buildName({ firstName, lastName }: { firstName?: string | null; lastName?: string | null }) {
+    const result = [];
+    if (firstName) {
+      result.push(firstName.trim());
+    }
+    if (lastName) {
+      result.push(lastName.trim());
+    }
+    return result.join(' ');
+  }
 
   public async findPairs(
     courseId: number,

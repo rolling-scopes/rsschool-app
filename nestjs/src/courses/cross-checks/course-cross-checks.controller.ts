@@ -3,6 +3,7 @@ import {
   Controller,
   DefaultValuePipe,
   Get,
+  NotFoundException,
   Param,
   ParseEnumPipe,
   ParseIntPipe,
@@ -11,11 +12,11 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { ApiForbiddenResponse, ApiOperation, ApiResponse, ApiTags, ApiQuery } from '@nestjs/swagger';
+import { ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags, ApiQuery } from '@nestjs/swagger';
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
 import { CourseTasksService } from '../course-tasks';
 import { OrderField, OrderDirection, CourseCrossCheckService } from './course-cross-checks.service';
-import { CrossCheckFeedbackDto, CrossCheckPairResponseDto } from './dto';
+import { CrossCheckFeedbackDto, CrossCheckPairResponseDto, CrossCheckSolutionDto } from './dto';
 import { AvailableReviewStatsDto } from './dto/available-review-stats.dto';
 import { parseAsync } from 'json2csv';
 import { Response } from 'express';
@@ -103,6 +104,45 @@ export class CourseCrossCheckController {
     res.setHeader('Content-disposition', `filename=${courseTask.task.name}.csv`);
 
     res.end(parsedData);
+  }
+
+  @Get(':courseTaskId/solutions/:githubId')
+  @ApiOperation({ operationId: 'getCrossCheckTaskSolution' })
+  @ApiForbiddenResponse()
+  @ApiOkResponse({ type: CrossCheckSolutionDto })
+  public async getCrossCheckTaskSolution(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+    @Param('githubId') githubIdParam: string,
+  ) {
+    const githubId = githubIdParam === 'me' ? req.user.githubId : githubIdParam.toLowerCase();
+
+    const [student, courseTask] = await Promise.all([
+      this.courseCrossCheckService.queryStudentByGithubId(courseId, githubId),
+      this.courseCrossCheckService.getCourseTask(courseTaskId),
+    ]);
+
+    if (student == null || courseTask == null) {
+      throw new BadRequestException('not valid student or course task');
+    }
+
+    const result = await this.courseCrossCheckService.getTaskSolution(student.id, courseTask.id);
+
+    if (result == null) {
+      throw new NotFoundException('solution is not found ');
+    }
+
+    const { updatedDate, id, url, review, comments } = result;
+
+    return new CrossCheckSolutionDto({
+      updatedDate,
+      id,
+      url,
+      review,
+      studentId: student.id,
+      comments: comments.filter(c => c.authorId == student.id && c.recipientId == null),
+    });
   }
 
   @Get(':courseTaskId/feedbacks/my')
