@@ -10,7 +10,6 @@ import {
   courseMentorGuard,
   courseMentorOrDementorGuard,
   courseSupervisorGuard,
-  courseSupervisorOrDementorGuard,
   courseSupervisorOrMentorGuard,
   crossCheckGuard,
   guard,
@@ -25,16 +24,10 @@ import {
   postMentor,
   restoreExpelledMentor,
 } from './mentor';
+import { postStudents, updateStatuses } from './students';
 import * as score from './score';
 import * as stageInterview from './stageInterview';
-import {
-  getStudents,
-  getStudentsCsv,
-  getStudentsWithDetails,
-  postStudents,
-  searchStudent,
-  updateStatuses,
-} from './students';
+
 import { postTaskArtefact } from './taskArtefact';
 import { getCourseTasksVerifications, getStudentTaskVerifications } from './taskVerifications';
 
@@ -191,14 +184,10 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   router.post('/student/:githubId/certificate', courseManagerGuard, validateGithubId, postStudentCertificate(logger));
   router.post('/student/feedback', anyCourseMentorGuard, postFeedback(logger));
 
-  router.get('/students', courseSupervisorGuard, getStudents(logger));
-  router.get('/students/csv', courseSupervisorGuard, getStudentsCsv(logger));
   router.post('/students/status', courseManagerGuard, updateStatuses(logger));
   router.post('/students', adminGuard, postStudents(logger));
-  router.get('/students/details', courseSupervisorOrDementorGuard, getStudentsWithDetails(logger));
   router.get('/students/score/csv', courseSupervisorGuard, score.getScoreCsv(logger));
 
-  router.get('/students/search/:searchText', guard, searchStudent(logger));
 }
 
 function addStudentCrossCheckApi(router: Router<any, any>, logger: ILogger) {

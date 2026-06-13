@@ -1,6 +1,8 @@
-import { Body, Controller, Get, NotFoundException, Param, Post, UseGuards } from '@nestjs/common';
+import { Controller, Get, NotFoundException, Param, ParseIntPipe, Post, Query, Res, UseGuards, Body } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CourseRole, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
+import { Response } from 'express';
+import { parseAsync } from 'json2csv';
 import { StudentSummaryDto } from './dto/student-summary.dto';
 import { CourseStudentsService } from './course-students.service';
 import { ExpelStatusDto } from './dto/student-status.dto';
@@ -36,6 +38,54 @@ export class CourseStudentsController {
       isActive: !student?.isExpelled && !student?.isFailed,
       mentor,
     });
+  }
+
+  @Get('/details')
+  @ApiOperation({ operationId: 'getCourseStudentsWithDetails' })
+  @ApiOkResponse({ schema: { type: 'array', items: { type: 'object' } } })
+  @ApiForbiddenResponse()
+  @UseGuards(RoleGuard)
+  @RequiredRoles(
+    [CourseRole.Supervisor, CourseRole.Manager, CourseRole.Dementor, Role.Admin],
+    true,
+  )
+  public async getCourseStudentsWithDetails(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Query('status') status?: string,
+  ) {
+    return this.courseStudentService.getStudentsWithDetails(courseId, status === 'active');
+  }
+
+  @Get('/search/:searchText')
+  @ApiOperation({ operationId: 'searchCourseStudents' })
+  @ApiOkResponse({ schema: { type: 'array', items: { type: 'object' } } })
+  public async searchCourseStudents(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('searchText') searchText: string,
+    @Query('onlyStudentsWithoutMentorShown') onlyStudentsWithoutMentorShown?: string,
+  ) {
+    return this.courseStudentService.searchCourseStudents(
+      courseId,
+      searchText,
+      onlyStudentsWithoutMentorShown === 'true',
+    );
+  }
+
+  @Get('/csv')
+  @ApiOperation({ operationId: 'getCourseStudentsCsv' })
+  @ApiForbiddenResponse()
+  @UseGuards(RoleGuard)
+  @RequiredRoles([CourseRole.Supervisor, CourseRole.Manager, Role.Admin], true)
+  public async getCourseStudentsCsv(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Res() res: Response,
+    @Query('status') status?: string,
+  ) {
+    const students = await this.courseStudentService.getStudentsForCsv(courseId, status === 'active');
+    const csv = await parseAsync(students);
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', 'attachment; filename=students.csv');
+    res.end(csv);
   }
 
   @Post('expel')

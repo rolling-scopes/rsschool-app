@@ -175,18 +175,9 @@ export class CourseService {
     await courseEventsApi.deleteCourseEvent(courseTaskId, this.courseId);
   }
 
-  async getCourseStudents(activeOnly?: boolean) {
-    const result = await this.axios.get<{ data: StudentDetails[] }>(
-      `/students?status=${activeOnly ? 'active' : 'all'}`,
-    );
-    return result.data.data;
-  }
-
   async getCourseStudentsWithDetails(activeOnly?: boolean) {
-    const result = await this.axios.get<{ data: StudentDetails[] }>(
-      `/students/details?status=${activeOnly ? 'active' : 'all'}`,
-    );
-    return result.data.data;
+    const result = await studentsApi.getCourseStudentsWithDetails(this.courseId, activeOnly ? 'active' : 'all');
+    return result.data as unknown as StudentDetails[];
   }
 
   async searchStudents(query: string | null, onlyStudentsWithoutMentorShown = false) {
@@ -194,10 +185,8 @@ export class CourseService {
       if (!query) {
         return [];
       }
-      const response = await this.axios.get<{ data: SearchStudent[] }>(`/students/search/${query}`, {
-        params: { onlyStudentsWithoutMentorShown },
-      });
-      return response.data.data;
+      const response = await studentsApi.searchCourseStudents(this.courseId, query, String(onlyStudentsWithoutMentorShown));
+      return response.data as unknown as SearchStudent[];
     } catch {
       return [];
     }
@@ -563,7 +552,7 @@ export class CourseService {
   }
 
   exportStudentsCsv(activeOnly?: boolean) {
-    window.open(`${this.axios.defaults.baseURL}/students/csv?status=${activeOnly ? 'active' : ''}`, '_blank');
+    window.open(`/api/v2/courses/${this.courseId}/students/csv?status=${activeOnly ? 'active' : ''}`, '_blank');
   }
 }
 
