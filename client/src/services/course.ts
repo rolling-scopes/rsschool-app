@@ -467,8 +467,9 @@ export class CourseService {
   }
 
   async createCrossCheckDistribution(courseTaskId: number) {
-    const result = await this.axios.post(`/task/${courseTaskId}/cross-check/distribution`);
-    return result.data;
+    const result = await courseTasksApi.createCrossCheckDistribution(this.courseId, courseTaskId);
+    // preserve the legacy axios envelope shape ({ data: { crossCheckPairs } }) for the caller
+    return { data: result.data as { crossCheckPairs: unknown[] } };
   }
 
   async createInterviewDistribution(courseTaskId: number) {
@@ -485,7 +486,7 @@ export class CourseService {
   }
 
   async createCrossCheckCompletion(courseTaskId: number) {
-    const result = await this.axios.post(`/task/${courseTaskId}/cross-check/completion`);
+    const result = await courseTasksApi.createCrossCheckCompletion(this.courseId, courseTaskId);
     return result.data;
   }
 

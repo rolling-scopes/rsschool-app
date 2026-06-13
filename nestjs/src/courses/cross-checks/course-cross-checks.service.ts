@@ -12,11 +12,13 @@ import {
   ScoreRecord,
   TaskSolutionResult,
 } from '@entities/taskSolutionResult';
-import { CourseTask } from '@entities/courseTask';
+import { CourseTask, CrossCheckStatus } from '@entities/courseTask';
+import { DataSource } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
 import { PersonDto } from 'src/core/dto';
 import { CrossCheckCriteriaDataDto, CrossCheckMessageDto } from './dto';
 import { Discord } from 'src/profile/dto';
+import { CrossCheckDistributionService } from './cross-check-distribution';
 
 export type CrossCheckPair = {
   id: number;
@@ -96,6 +98,8 @@ export type CrossCheckSolutionReview = {
 
 @Injectable()
 export class CourseCrossCheckService {
+  private readonly crossCheckDistributionService = new CrossCheckDistributionService();
+
   constructor(
     @InjectRepository(TaskSolutionChecker)
     private readonly taskSolutionCheckerRepository: Repository<TaskSolutionChecker>,
@@ -103,7 +107,114 @@ export class CourseCrossCheckService {
     private readonly taskSolutionRepository: Repository<TaskSolution>,
     @InjectRepository(TaskSolutionResult)
     private readonly TaskSolutionResultRepository: Repository<TaskSolutionResult>,
+    @InjectRepository(CourseTask)
+    private readonly courseTaskRepository: Repository<CourseTask>,
+    private readonly dataSource: DataSource,
   ) {}
+
+  public async getCourseTask(courseTaskId: number) {
+    return this.courseTaskRepository
+      .createQueryBuilder('courseTask')
+      .innerJoinAndSelect('courseTask.task', 'task')
+      .where('courseTask.id = :courseTaskId', { courseTaskId })
+      .getOne();
+  }
+
+  public static isSubmissionDeadlinePassed({ studentEndDate }: CourseTask) {
+    const currentTimestamp = Date.now();
+    if (!studentEndDate) return false;
+    const submitDeadlineTimestamp = new Date(studentEndDate).getTime();
+    return currentTimestamp > submitDeadlineTimestamp;
+  }
+
+  public async changeCourseTaskStatus(courseTask: CourseTask, crossCheckStatus: CrossCheckStatus) {
+    await this.courseTaskRepository.save({ ...courseTask, crossCheckStatus });
+  }
+
+  public async getTaskSolutionsWithoutChecker(courseTaskId: number) {
+    return this.taskSolutionRepository
+      .createQueryBuilder('ts')
+      .leftJoin('student', 's', 's."id" = ts.studentId')
+      .leftJoin('task_solution_checker', 'tsc', 'tsc."taskSolutionId" = ts.id')
+      .where(`ts."courseTaskId" = :courseTaskId`, { courseTaskId })
+      .andWhere('tsc.id IS NULL')
+      .andWhere('s.isExpelled = false')
+      .getMany();
+  }
+
+  public async distributeCrossCheck(courseTask: CourseTask, courseTaskId: number) {
+    const solutions = await this.getTaskSolutionsWithoutChecker(courseTaskId);
+    const solutionsMap = new Map<number, number>();
+
+    await this.changeCourseTaskStatus(courseTask, CrossCheckStatus.Distributed);
+
+    for (const solution of solutions) {
+      solutionsMap.set(solution.studentId, solution.id);
+    }
+
+    const students = Array.from(solutionsMap.keys());
+
+    if (students.length === 0) {
+      return { crossCheckPairs: [] as unknown[] };
+    }
+
+    const pairs = this.crossCheckDistributionService.distribute(students, courseTask.pairsCount ?? undefined);
+    const crossCheckPairs = pairs
+      .filter(pair => solutionsMap.has(pair.studentId))
+      .map(pair => ({
+        ...pair,
+        courseTaskId,
+        taskSolutionId: solutionsMap.get(pair.studentId),
+      }));
+
+    await this.taskSolutionCheckerRepository.save(crossCheckPairs);
+
+    return { crossCheckPairs };
+  }
+
+  public async getTaskSolutionCheckers(courseTaskId: number, minCheckedCount: number) {
+    const query = this.dataSource
+      .createQueryBuilder()
+      .select(['ROUND(AVG("score")) as "score"', '"studentId" '])
+      .from(qb => {
+        // do sub query to select only top X scores
+        const query = qb
+          .from(TaskSolutionResult, 'tsr')
+          .select([
+            'tsr.studentId as "studentId"',
+            'tsr.score as "score"',
+            'row_number() OVER (PARTITION by tsr.studentId ORDER BY tsr.score desc) as "rownum"',
+          ])
+          .where(qb => {
+            // query students who checked enough tasks
+            const query = qb
+              .subQuery()
+              .select('r."checkerId"')
+              .from(TaskSolutionChecker, 'c')
+              .leftJoin(
+                'task_solution_result',
+                'r',
+                ['r."checkerId" = c."checkerId"', 'r."studentId" = c."studentId"'].join(' AND '),
+              )
+              .where(`c."courseTaskId" = :courseTaskId`, { courseTaskId })
+              .andWhere('r.id IS NOT NULL')
+              .groupBy('r."checkerId"')
+              .having(`COUNT(c.id) >= :count`, { count: minCheckedCount })
+              .getQuery();
+            return `"studentId" IN ${query}`;
+          })
+          .andWhere('tsr."courseTaskId" = :courseTaskId', { courseTaskId })
+          .orderBy('tsr.studentId')
+          .orderBy('tsr.score', 'DESC');
+        return query;
+      }, 's')
+      .where('rownum <= :count', { count: minCheckedCount })
+      .groupBy('"studentId"');
+
+    const records = await query.getRawMany();
+
+    return records.map(record => ({ studentId: record.studentId, score: Number(record.score) }));
+  }
 
   public async findPairs(
     courseId: number,

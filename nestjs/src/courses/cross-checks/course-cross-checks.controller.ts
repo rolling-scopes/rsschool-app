@@ -6,14 +6,17 @@ import {
   Param,
   ParseEnumPipe,
   ParseIntPipe,
+  Post,
   Query,
   Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { ApiForbiddenResponse, ApiOperation, ApiResponse, ApiTags, ApiQuery } from '@nestjs/swagger';
+import { ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags, ApiQuery } from '@nestjs/swagger';
+import { CrossCheckStatus } from '@entities/courseTask';
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
 import { CourseTasksService } from '../course-tasks';
+import { WriteScoreService } from '../score';
 import { OrderField, OrderDirection, CourseCrossCheckService } from './course-cross-checks.service';
 import { CrossCheckFeedbackDto, CrossCheckPairResponseDto } from './dto';
 import { AvailableReviewStatsDto } from './dto/available-review-stats.dto';
@@ -29,7 +32,68 @@ export class CourseCrossCheckController {
   constructor(
     private courseCrossCheckService: CourseCrossCheckService,
     private courseTasksService: CourseTasksService,
+    private writeScoreService: WriteScoreService,
   ) {}
+
+  private static readonly DEFAULT_PAIRS_COUNT = 4;
+
+  @Post(':courseTaskId/distribution')
+  @ApiOperation({ operationId: 'createCrossCheckDistribution' })
+  @ApiForbiddenResponse()
+  @ApiOkResponse({ schema: { type: 'object' } })
+  @RequiredRoles([CourseRole.Manager, Role.Admin])
+  @UseGuards(DefaultGuard, RoleGuard)
+  public async createCrossCheckDistribution(
+    @Param('courseId', ParseIntPipe) _courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+  ) {
+    const courseTask = await this.courseCrossCheckService.getCourseTask(courseTaskId);
+
+    if (courseTask == null) {
+      throw new BadRequestException();
+    }
+    if (!CourseCrossCheckService.isSubmissionDeadlinePassed(courseTask)) {
+      throw new BadRequestException();
+    }
+
+    return this.courseCrossCheckService.distributeCrossCheck(courseTask, courseTaskId);
+  }
+
+  @Post(':courseTaskId/completion')
+  @ApiOperation({ operationId: 'createCrossCheckCompletion' })
+  @ApiForbiddenResponse()
+  @ApiOkResponse()
+  @RequiredRoles([CourseRole.Manager, Role.Admin])
+  @UseGuards(DefaultGuard, RoleGuard)
+  public async createCrossCheckCompletion(
+    @Param('courseId', ParseIntPipe) _courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+  ) {
+    const courseTask = await this.courseCrossCheckService.getCourseTask(courseTaskId);
+
+    if (courseTask == null) {
+      throw new BadRequestException();
+    }
+    if (
+      !CourseCrossCheckService.isSubmissionDeadlinePassed(courseTask) ||
+      courseTask.crossCheckStatus === CrossCheckStatus.Initial
+    ) {
+      throw new BadRequestException();
+    }
+
+    const pairsCount = Math.max(
+      (courseTask.pairsCount ?? CourseCrossCheckController.DEFAULT_PAIRS_COUNT) - 1,
+      1,
+    );
+    const studentScores = await this.courseCrossCheckService.getTaskSolutionCheckers(courseTaskId, pairsCount);
+
+    for (const studentScore of studentScores) {
+      const data = { authorId: -1, comment: 'Cross-Check score', score: studentScore.score };
+      await this.writeScoreService.saveScore(studentScore.studentId, courseTaskId, data);
+    }
+
+    await this.courseCrossCheckService.changeCourseTaskStatus(courseTask, CrossCheckStatus.Completed);
+  }
 
   @Get('/pairs')
   @ApiOperation({ operationId: 'getCrossCheckPairs' })

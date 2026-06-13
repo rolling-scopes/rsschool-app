@@ -983,6 +983,33 @@
         "tags": ["course stats"]
       }
     },
+    "/courses/{courseId}/cross-checks/{courseTaskId}/distribution": {
+      "post": {
+        "operationId": "createCrossCheckDistribution",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "type": "object" } } } },
+          "403": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["courses tasks"]
+      }
+    },
+    "/courses/{courseId}/cross-checks/{courseTaskId}/completion": {
+      "post": {
+        "operationId": "createCrossCheckCompletion",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": { "200": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
+        "tags": ["courses tasks"]
+      }
+    },
     "/courses/{courseId}/cross-checks/pairs": {
       "get": {
         "operationId": "getCrossCheckPairs",
@@ -2228,6 +2255,15 @@
         "responses": { "201": { "description": "" } },
         "summary": "",
         "tags": ["registry"]
+      }
+    },
+    "/certificate/templates": {
+      "get": {
+        "operationId": "getCertificateTemplates",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "summary": "",
+        "tags": ["certificate"]
       }
     },
     "/certificate/{publicId}": {
