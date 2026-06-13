@@ -103,7 +103,112 @@ export class CourseCrossCheckService {
     private readonly taskSolutionRepository: Repository<TaskSolution>,
     @InjectRepository(TaskSolutionResult)
     private readonly TaskSolutionResultRepository: Repository<TaskSolutionResult>,
+    @InjectRepository(CourseTask)
+    private readonly courseTaskRepository: Repository<CourseTask>,
+    @InjectRepository(Student)
+    private readonly studentRepository: Repository<Student>,
   ) {}
+
+  public async getCourseTaskWithCourse(courseTaskId: number) {
+    return this.courseTaskRepository
+      .createQueryBuilder('courseTask')
+      .innerJoinAndSelect('courseTask.task', 'task')
+      .innerJoinAndSelect('courseTask.course', 'course')
+      .where('courseTask.id = :courseTaskId', { courseTaskId })
+      .getOne();
+  }
+
+  public async queryStudentByGithubId(courseId: number, githubId: string) {
+    const record = await this.studentRepository
+      .createQueryBuilder('student')
+      .innerJoin('student.user', 'user')
+      .addSelect(['user.firstName', 'user.lastName', 'user.githubId', 'user.id'])
+      .where('user.githubId = :githubId', { githubId })
+      .andWhere('student.courseId = :courseId', { courseId })
+      .getOne();
+    if (record == null) {
+      return null;
+    }
+    return {
+      id: record.id,
+      name: CourseCrossCheckService.buildName(record.user),
+      githubId: record.user.githubId,
+      userId: record.user.id,
+    };
+  }
+
+  public async getTaskSolutionResultById(id: number) {
+    return this.TaskSolutionResultRepository.createQueryBuilder('taskSolutionResult')
+      .where('"taskSolutionResult"."id" = :id', { id })
+      .getOne();
+  }
+
+  public async saveMessage(
+    taskSolutionResultId: number,
+    data: { content: string; role: CrossCheckMessageAuthorRole },
+    params: { user: { id: number; githubId: string } },
+  ) {
+    const { user } = params;
+
+    const message: CrossCheckMessage = {
+      ...data,
+      timestamp: new Date().toISOString(),
+      author: {
+        id: user.id,
+        githubId: user.githubId,
+      },
+      isReviewerRead: data.role === CrossCheckMessageAuthorRole.Reviewer,
+      isStudentRead: data.role === CrossCheckMessageAuthorRole.Student,
+    };
+
+    const taskSolutionResultById = await this.getTaskSolutionResultById(taskSolutionResultId);
+
+    if (taskSolutionResultById) {
+      const { messages } = taskSolutionResultById;
+
+      messages.push(message);
+      await this.TaskSolutionResultRepository.update(taskSolutionResultById.id, { messages });
+    }
+  }
+
+  public async updateMessage(taskSolutionResultId: number, data: { role: CrossCheckMessageAuthorRole }) {
+    const { role } = data;
+
+    const taskSolutionResultById = await this.getTaskSolutionResultById(taskSolutionResultId);
+
+    if (taskSolutionResultById) {
+      const { messages } = taskSolutionResultById;
+
+      const updatedMessages = messages.map(message => ({
+        ...message,
+        isReviewerRead: CrossCheckMessageAuthorRole.Reviewer === role ? true : message.isReviewerRead,
+        isStudentRead: CrossCheckMessageAuthorRole.Student === role ? true : message.isStudentRead,
+      }));
+
+      await this.TaskSolutionResultRepository.update(taskSolutionResultById.id, { messages: updatedMessages });
+    }
+  }
+
+  public async getMessageRecipientId(studentId: number, checkerId: number, role: CrossCheckMessageAuthorRole) {
+    if (role === CrossCheckMessageAuthorRole.Reviewer) {
+      return studentId;
+    }
+
+    const checker = await this.studentRepository.findOne({ where: { id: checkerId } });
+
+    return checker?.userId;
+  }
+
+  private static buildName({ firstName, lastName }: { firstName?: string | null; lastName?: string | null }) {
+    const result = [];
+    if (firstName) {
+      result.push(firstName.trim());
+    }
+    if (lastName) {
+      result.push(lastName.trim());
+    }
+    return result.join(' ');
+  }
 
   public async findPairs(
     courseId: number,

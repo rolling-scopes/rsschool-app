@@ -1,9 +1,9 @@
 import { getCustomRepository, getRepository } from 'typeorm';
-import { TaskSolution, CourseTask, TaskSolutionResult, IUserSession } from '../models';
+import { TaskSolution, CourseTask, TaskSolutionResult } from '../models';
 import { TaskSolutionComment, TaskSolutionReview } from '../models/taskSolution';
-import { CrossCheckMessage, CrossCheckMessageAuthorRole } from '../models/taskSolutionResult';
+import { CrossCheckMessage } from '../models/taskSolutionResult';
 import { Discord } from '../../../common/models';
-import { getTaskSolution, getTaskSolutionResult, getTaskSolutionResultById } from './taskResults.service';
+import { getTaskSolution, getTaskSolutionResult } from './taskResults.service';
 import { getCourseTask } from './tasks.service';
 import { queryStudentByGithubId } from './course.service';
 import { createName, getUserByGithubId } from './user.service';
@@ -217,53 +217,5 @@ export class CrossCheckService {
       historicalScores: reviewResult.historicalScores ?? [],
       messages: reviewResult.messages,
     };
-  }
-
-  public async saveMessage(
-    taskSolutionResultId: number,
-    data: { content: string; role: CrossCheckMessageAuthorRole },
-    params: { user: IUserSession },
-  ) {
-    const { user } = params;
-
-    const message: CrossCheckMessage = {
-      ...data,
-      timestamp: new Date().toISOString(),
-      author: {
-        id: user.id,
-        githubId: user.githubId,
-      },
-      isReviewerRead: data.role === CrossCheckMessageAuthorRole.Reviewer,
-      isStudentRead: data.role === CrossCheckMessageAuthorRole.Student,
-    };
-
-    const repository = getRepository(TaskSolutionResult);
-    const taskSolutionResultById = await getTaskSolutionResultById(taskSolutionResultId);
-
-    if (taskSolutionResultById) {
-      const { messages } = taskSolutionResultById;
-
-      messages.push(message);
-      await repository.update(taskSolutionResultById.id, { messages });
-    }
-  }
-
-  public async updateMessage(taskSolutionResultId: number, data: { role: CrossCheckMessageAuthorRole }) {
-    const { role } = data;
-
-    const repository = getRepository(TaskSolutionResult);
-    const taskSolutionResultById = await getTaskSolutionResultById(taskSolutionResultId);
-
-    if (taskSolutionResultById) {
-      const { messages } = taskSolutionResultById;
-
-      const updatedMessages = messages.map(message => ({
-        ...message,
-        isReviewerRead: CrossCheckMessageAuthorRole.Reviewer === role ? true : message.isReviewerRead,
-        isStudentRead: CrossCheckMessageAuthorRole.Student === role ? true : message.isStudentRead,
-      }));
-
-      await repository.update(taskSolutionResultById.id, { messages: updatedMessages });
-    }
   }
 }
