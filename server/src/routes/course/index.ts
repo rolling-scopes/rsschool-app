@@ -110,16 +110,6 @@ function addTaskApi(router: Router<any, any>, logger: ILogger) {
 }
 
 function addStageInterviewApi(router: Router<any, any>, logger: ILogger) {
-  router.post(
-    '/interview/stage/interviewer/:githubId/student/:studentGithubId/',
-    courseMentorGuard,
-    stageInterview.createInterview(logger),
-  );
-  router.get(
-    '/interview/stage/interviewer/:githubId/students',
-    courseMentorGuard,
-    stageInterview.getInterviewerStudents(logger),
-  );
 
   /**
    * @deprecated. should be removed after feedbacks are migrated to new template
@@ -127,11 +117,7 @@ function addStageInterviewApi(router: Router<any, any>, logger: ILogger) {
   router.get('/interview/stage/:interviewId/feedback', courseMentorGuard, stageInterview.getFeedback(logger));
   router.post('/interview/stage/:interviewId/feedback', courseMentorGuard, stageInterview.createFeedback(logger));
 
-  router.put('/interview/stage/:interviewId', courseMentorGuard, stageInterview.updateInterview(logger));
-  router.delete('/interview/stage/:interviewId', courseMentorGuard, stageInterview.cancelInterview(logger));
 
-  router.post('/interviews/stage', courseManagerGuard, stageInterview.createInterviews(logger));
-  router.get('/interviews/stage', courseMentorGuard, stageInterview.getInterviews(logger));
 }
 
 function addMentorApi(router: Router<any, any>, logger: ILogger) {
