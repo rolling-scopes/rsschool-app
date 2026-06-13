@@ -1,8 +1,10 @@
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Controller, Get, Param, ParseIntPipe, Query, UseGuards, UseInterceptors } from '@nestjs/common';
+import { ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Param, ParseIntPipe, Query, Req, Res, UseGuards, UseInterceptors } from '@nestjs/common';
 import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
+import { Response } from 'express';
+import { parseAsync, transforms } from 'json2csv';
 
-import { CourseGuard, DefaultGuard } from 'src/auth';
+import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { DEFAULT_CACHE_TTL } from 'src/constants';
 
 import { ScoreQueryDto, OrderDirection, OrderField } from './dto/score-query.dto';
@@ -35,6 +37,40 @@ export class ScoreController {
     });
 
     return score;
+  }
+
+  @Get('/csv')
+  @UseGuards(DefaultGuard, RoleGuard)
+  @RequiredRoles([CourseRole.Supervisor, CourseRole.Manager, Role.Admin], true)
+  @ApiOperation({ operationId: 'getScoreCsv' })
+  @ApiForbiddenResponse()
+  @ApiQuery({ name: 'cityName', required: false, type: String })
+  @ApiQuery({ name: 'mentor.githubId', required: false, type: String })
+  public async getScoreCsv(
+    @Req() req: CurrentRequest,
+    @Res() res: Response,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Query('cityName') cityName?: string,
+    @Query('mentor.githubId') mentor?: string,
+  ) {
+    const user = req.user;
+    const isCourseManager = user.courses[courseId]?.roles?.includes(CourseRole.Manager);
+
+    const filters = {
+      activeOnly: false,
+      cityName,
+      'mentor.githubId': mentor,
+    };
+
+    const result = await this.scoreService.getStudentsScoreForExport(courseId, filters, {
+      includeContacts: (user.isAdmin || user.isHirer) ?? false,
+      includeCertificate: (user.isAdmin || user.isHirer || isCourseManager) ?? false,
+    });
+    const csv = await parseAsync(result, { transforms: [transforms.flatten()] });
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-disposition', `filename="score.csv"`);
+    res.end(csv);
   }
 
   @Get('/:githubId')

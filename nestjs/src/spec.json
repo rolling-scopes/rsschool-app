@@ -1106,6 +1106,19 @@
         "tags": ["students score"]
       }
     },
+    "/course/{courseId}/students/score/csv": {
+      "get": {
+        "operationId": "getScoreCsv",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "cityName", "required": false, "in": "query", "schema": { "type": "string" } },
+          { "name": "mentor.githubId", "required": false, "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": { "403": { "description": "" } },
+        "summary": "",
+        "tags": ["students score"]
+      }
+    },
     "/course/{courseId}/students/score/{githubId}": {
       "get": {
         "operationId": "getStudentScore",
@@ -2228,6 +2241,15 @@
         "responses": { "201": { "description": "" } },
         "summary": "",
         "tags": ["registry"]
+      }
+    },
+    "/certificate/templates": {
+      "get": {
+        "operationId": "getCertificateTemplates",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "summary": "",
+        "tags": ["certificate"]
       }
     },
     "/certificate/{publicId}": {
