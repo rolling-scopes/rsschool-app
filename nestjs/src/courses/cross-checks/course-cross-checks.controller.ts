@@ -1,17 +1,30 @@
 import {
   BadRequestException,
+  Body,
   Controller,
   DefaultValuePipe,
+  Delete,
+  ForbiddenException,
   Get,
   Param,
   ParseEnumPipe,
   ParseIntPipe,
+  Post,
   Query,
   Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { ApiForbiddenResponse, ApiOperation, ApiResponse, ApiTags, ApiQuery } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiForbiddenResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+  ApiQuery,
+} from '@nestjs/swagger';
+import { TaskSolution } from '@entities/taskSolution';
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
 import { CourseTasksService } from '../course-tasks';
 import { OrderField, OrderDirection, CourseCrossCheckService } from './course-cross-checks.service';
@@ -103,6 +116,94 @@ export class CourseCrossCheckController {
     res.setHeader('Content-disposition', `filename=${courseTask.task.name}.csv`);
 
     res.end(parsedData);
+  }
+
+  @Post(':courseTaskId/solutions/:githubId')
+  @ApiOperation({ operationId: 'createCrossCheckSolution' })
+  @ApiForbiddenResponse()
+  @ApiBody({ schema: { type: 'object' } })
+  @ApiOkResponse()
+  public async createCrossCheckSolution(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+    @Param('githubId') githubIdParam: string,
+    @Body() body: Partial<TaskSolution>,
+  ) {
+    const githubId = this.resolveGithubId(req, githubIdParam);
+    if (req.user.courses[courseId]?.isExpelled) {
+      throw new ForbiddenException();
+    }
+    await this.validateCrossCheckExpirationDate(courseTaskId);
+
+    const [student, courseTask] = await Promise.all([
+      this.courseCrossCheckService.queryStudentByGithubId(courseId, githubId),
+      this.courseCrossCheckService.getCourseTask(courseTaskId),
+    ]);
+
+    if (student == null || courseTask == null) {
+      throw new BadRequestException('not valid student or course task');
+    }
+    if (!CourseCrossCheckService.isCrossCheckTask(courseTask)) {
+      throw new BadRequestException('task solution is not supported for this task');
+    }
+
+    const { review, url, comments } = body ?? {};
+    const taskSolution = {
+      review,
+      url,
+      comments: comments?.map(c => ({ ...c, authorId: student.id })),
+    };
+    if (!CourseCrossCheckService.isValidTaskSolution(taskSolution)) {
+      throw new BadRequestException('not valid request payload');
+    }
+
+    await this.courseCrossCheckService.saveSolution(student.id, courseTaskId, taskSolution);
+  }
+
+  @Delete(':courseTaskId/solutions/:githubId')
+  @ApiOperation({ operationId: 'deleteCrossCheckSolution' })
+  @ApiForbiddenResponse()
+  @ApiOkResponse()
+  public async deleteCrossCheckSolution(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+    @Param('githubId') githubIdParam: string,
+  ) {
+    const githubId = this.resolveGithubId(req, githubIdParam);
+    await this.validateCrossCheckExpirationDate(courseTaskId);
+
+    const [student, courseTask] = await Promise.all([
+      this.courseCrossCheckService.queryStudentByGithubId(courseId, githubId),
+      this.courseCrossCheckService.getCourseTask(courseTaskId),
+    ]);
+
+    if (student == null || courseTask == null) {
+      throw new BadRequestException('not valid student or course task');
+    }
+    if (!CourseCrossCheckService.isCrossCheckTask(courseTask)) {
+      throw new BadRequestException('task solution is not supported for this task');
+    }
+
+    await this.courseCrossCheckService.deleteSolution(student.id, courseTaskId);
+  }
+
+  // legacy validateGithubIdAndAccess: me alias, lowercase, self or admin
+  private resolveGithubId(req: CurrentRequest, githubIdParam: string) {
+    const githubId = githubIdParam === 'me' ? req.user.githubId : githubIdParam.toLowerCase();
+    if (!req.user.isAdmin && req.user.githubId !== githubId) {
+      throw new ForbiddenException();
+    }
+    return githubId;
+  }
+
+  // legacy validateCrossCheckExpirationDate
+  private async validateCrossCheckExpirationDate(courseTaskId: number) {
+    const task = await this.courseCrossCheckService.getCourseTask(courseTaskId);
+    if (!task || (task.studentEndDate && new Date() > new Date(task.studentEndDate))) {
+      throw new BadRequestException('Cross Check deadline has expired');
+    }
   }
 
   @Get(':courseTaskId/feedbacks/my')

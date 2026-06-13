@@ -103,7 +103,90 @@ export class CourseCrossCheckService {
     private readonly taskSolutionRepository: Repository<TaskSolution>,
     @InjectRepository(TaskSolutionResult)
     private readonly TaskSolutionResultRepository: Repository<TaskSolutionResult>,
+    @InjectRepository(CourseTask)
+    private readonly courseTaskRepository: Repository<CourseTask>,
+    @InjectRepository(Student)
+    private readonly studentRepository: Repository<Student>,
   ) {}
+
+  public static isCrossCheckTask(courseTask: Partial<CourseTask>) {
+    return courseTask.checker === 'crossCheck';
+  }
+
+  public static isValidTaskSolution(data: Partial<TaskSolution>) {
+    if (!data.url) {
+      return false;
+    }
+    if (data.comments && !Array.isArray(data.comments)) {
+      return false;
+    }
+    if (data.review && !Array.isArray(data.review)) {
+      return false;
+    }
+    return true;
+  }
+
+  public async getCourseTask(courseTaskId: number) {
+    return this.courseTaskRepository
+      .createQueryBuilder('courseTask')
+      .innerJoinAndSelect('courseTask.task', 'task')
+      .where('courseTask.id = :courseTaskId', { courseTaskId })
+      .getOne();
+  }
+
+  public async queryStudentByGithubId(courseId: number, githubId: string) {
+    const record = await this.studentRepository
+      .createQueryBuilder('student')
+      .innerJoin('student.user', 'user')
+      .addSelect(['user.firstName', 'user.lastName', 'user.githubId', 'user.id'])
+      .where('user.githubId = :githubId', { githubId })
+      .andWhere('student.courseId = :courseId', { courseId })
+      .getOne();
+    if (record == null) {
+      return null;
+    }
+    return {
+      id: record.id,
+      name: CourseCrossCheckService.buildName(record.user),
+      githubId: record.user.githubId,
+      userId: record.user.id,
+    };
+  }
+
+  public async saveSolution(studentId: number, courseTaskId: number, data: Partial<TaskSolution>) {
+    const existingResult = await this.getTaskSolution(studentId, courseTaskId);
+    if (existingResult != null) {
+      await this.taskSolutionRepository.save({
+        ...existingResult,
+        ...data,
+        comments: existingResult.comments.concat(data.comments ?? []),
+      });
+      return;
+    }
+
+    await this.taskSolutionRepository.save({
+      studentId,
+      courseTaskId,
+      url: data.url,
+      review: data.review,
+      comments: data.comments,
+    });
+  }
+
+  public async deleteSolution(studentId: number, courseTaskId: number) {
+    await this.taskSolutionRepository.delete({ studentId, courseTaskId });
+  }
+
+  private static buildName({ firstName, lastName }: { firstName?: string | null; lastName?: string | null }) {
+    const result = [];
+    if (firstName) {
+      result.push(firstName.trim());
+    }
+    if (lastName) {
+      result.push(lastName.trim());
+    }
+    return result.join(' ');
+  }
 
   public async findPairs(
     courseId: number,

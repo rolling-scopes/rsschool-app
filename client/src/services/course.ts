@@ -295,7 +295,7 @@ export class CourseService {
     review?: CrossCheckReview[],
     comments?: CrossCheckComment[],
   ) {
-    await this.axios.post(`/student/${githubId}/task/${courseTaskId}/cross-check/solution`, {
+    await courseTasksApi.createCrossCheckSolution(this.courseId, courseTaskId, githubId, {
       url,
       review,
       comments,
@@ -303,7 +303,7 @@ export class CourseService {
   }
 
   async deleteTaskSolution(githubId: string, courseTaskId: number) {
-    await this.axios.delete(`/student/${githubId}/task/${courseTaskId}/cross-check/solution`);
+    await courseTasksApi.deleteCrossCheckSolution(this.courseId, courseTaskId, githubId);
   }
 
   async getCrossCheckTaskSolution(githubId: string, courseTaskId: number) {

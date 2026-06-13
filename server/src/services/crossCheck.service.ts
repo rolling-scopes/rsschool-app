@@ -5,7 +5,6 @@ import { CrossCheckMessage, CrossCheckMessageAuthorRole } from '../models/taskSo
 import { Discord } from '../../../common/models';
 import { getTaskSolution, getTaskSolutionResult, getTaskSolutionResultById } from './taskResults.service';
 import { getCourseTask } from './tasks.service';
-import { queryStudentByGithubId } from './course.service';
 import { createName, getUserByGithubId } from './user.service';
 import { CrossCheckRepository } from '../repositories/crossCheck.repository';
 import { UserRepository } from '../repositories/user.repository';
@@ -40,56 +39,11 @@ export class CrossCheckService {
     return courseTask.checker === 'crossCheck';
   }
 
-  public static isValidTaskSolution(data: Partial<TaskSolution>) {
-    if (!data.url) {
-      return false;
-    }
-    if (data.comments && !Array.isArray(data.comments)) {
-      return false;
-    }
-    if (data.review && !Array.isArray(data.review)) {
-      return false;
-    }
-    return true;
-  }
-
-  public async getStudentAndTask(courseId: number, githubId: string) {
-    const [student, courseTask] = await Promise.all([
-      queryStudentByGithubId(courseId, githubId),
-      getCourseTask(this.courseTaskId),
-    ]);
-    return { student, courseTask };
-  }
-
   public async getTaskDetails() {
     const courseTask = await getCourseTask(this.courseTaskId);
     const studentEndDate = courseTask?.studentEndDate;
     const criteria = courseTask?.task?.attributes?.criteria ?? [];
     return { criteria, studentEndDate };
-  }
-
-  public async saveSolution(studentId: number, data: Partial<TaskSolution>) {
-    const existingResult = await getTaskSolution(studentId, this.courseTaskId);
-    if (existingResult != null) {
-      await getRepository(TaskSolution).save({
-        ...existingResult,
-        ...data,
-        comments: existingResult.comments.concat(data.comments ?? []),
-      });
-      return;
-    }
-
-    await getRepository(TaskSolution).save({
-      studentId,
-      courseTaskId: this.courseTaskId,
-      url: data.url,
-      review: data.review,
-      comments: data.comments,
-    });
-  }
-
-  public async deleteSolution(studentId: number) {
-    await getRepository(TaskSolution).delete({ studentId, courseTaskId: this.courseTaskId });
   }
 
   public async saveSolutionComments(
