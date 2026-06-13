@@ -50,7 +50,6 @@ import * as crossCheck from './crossCheck';
 import { getScheduleAsCsv, setScheduleFromCsv } from './schedule';
 import {
   createInterviewResult,
-  getCrossMentors,
   getStudent,
   postFeedback,
   selfUpdateStudentStatus,
@@ -179,7 +178,6 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   );
 
   router.post('/student/:githubId/availability', courseManagerGuard, updateMentoringAvailability(logger));
-  router.get('/student/:githubId/tasks/cross-mentors', courseGuard, ...validators, getCrossMentors(logger));
   router.get('/student/:githubId/tasks/verifications', courseGuard, ...validators, getStudentTaskVerifications(logger));
   router.get('/student/:githubId/interviews', courseGuard, ...validators, interviews.getStudentInterviews(logger));
   router.post('/student/:githubId/task/:courseTaskId/result', courseGuard, score.createSingleScore(logger));

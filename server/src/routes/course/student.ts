@@ -197,17 +197,6 @@ export const createInterviewResult = (_: ILogger) => async (ctx: Router.RouterCo
   setResponse(ctx, OK, result);
 };
 
-export const getCrossMentors = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { githubId, courseId } = ctx.params as {
-    githubId: string;
-    courseId: number;
-  };
-
-  const taskCheckers = await courseService.getCrossMentorsByStudent(courseId, githubId);
-
-  setResponse(ctx, OK, taskCheckers);
-};
-
 export const updateMentoringAvailability = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, githubId } = ctx.params;
   const student = await courseService.queryStudentByGithubId(courseId, githubId);
