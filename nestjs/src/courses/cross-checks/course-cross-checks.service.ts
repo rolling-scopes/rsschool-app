@@ -103,7 +103,21 @@ export class CourseCrossCheckService {
     private readonly taskSolutionRepository: Repository<TaskSolution>,
     @InjectRepository(TaskSolutionResult)
     private readonly TaskSolutionResultRepository: Repository<TaskSolutionResult>,
+    @InjectRepository(CourseTask)
+    private readonly courseTaskRepository: Repository<CourseTask>,
   ) {}
+
+  public async getTaskDetails(courseTaskId: number) {
+    const courseTask = await this.courseTaskRepository
+      .createQueryBuilder('courseTask')
+      .innerJoinAndSelect('courseTask.task', 'task')
+      .where('courseTask.id = :courseTaskId', { courseTaskId })
+      .getOne();
+
+    const studentEndDate = courseTask?.studentEndDate;
+    const criteria = courseTask?.task?.attributes?.criteria ?? [];
+    return { criteria, studentEndDate };
+  }
 
   public async findPairs(
     courseId: number,

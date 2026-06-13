@@ -11,11 +11,11 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { ApiForbiddenResponse, ApiOperation, ApiResponse, ApiTags, ApiQuery } from '@nestjs/swagger';
+import { ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags, ApiQuery } from '@nestjs/swagger';
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
 import { CourseTasksService } from '../course-tasks';
 import { OrderField, OrderDirection, CourseCrossCheckService } from './course-cross-checks.service';
-import { CrossCheckFeedbackDto, CrossCheckPairResponseDto } from './dto';
+import { CrossCheckFeedbackDto, CrossCheckPairResponseDto, CrossCheckTaskDetailsDto } from './dto';
 import { AvailableReviewStatsDto } from './dto/available-review-stats.dto';
 import { parseAsync } from 'json2csv';
 import { Response } from 'express';
@@ -103,6 +103,18 @@ export class CourseCrossCheckController {
     res.setHeader('Content-disposition', `filename=${courseTask.task.name}.csv`);
 
     res.end(parsedData);
+  }
+
+  @Get(':courseTaskId/details')
+  @ApiOperation({ operationId: 'getCrossCheckTaskDetails' })
+  @ApiForbiddenResponse()
+  @ApiOkResponse({ type: CrossCheckTaskDetailsDto })
+  public async getTaskDetails(
+    @Param('courseId', ParseIntPipe) _courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+  ) {
+    const data = await this.courseCrossCheckService.getTaskDetails(courseTaskId);
+    return new CrossCheckTaskDetailsDto(data);
   }
 
   @Get(':courseTaskId/feedbacks/my')
