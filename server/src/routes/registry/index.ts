@@ -1,13 +1,12 @@
 import Router from '@koa/router';
 import { BAD_REQUEST, NOT_FOUND, OK } from 'http-status-codes';
 import { getCustomRepository, getRepository } from 'typeorm';
-import { parseAsync } from 'json2csv';
 import { ILogger } from '../../logger';
 import { Course, Mentor, MentorRegistry, Registry, Student, User } from '../../models';
 import { IUserSession } from '../../models';
 import { createGetRoute } from '../common';
-import { adminGuard, anyCoursePowerUserGuard } from '../guards';
-import { setResponse, setCsvResponse } from '../utils';
+import { adminGuard } from '../guards';
+import { setResponse } from '../utils';
 import { MentorRegistryRepository } from '../../repositories/mentorRegistry.repository';
 import { sendNotification } from '../../services/notification.service';
 
@@ -68,23 +67,6 @@ export function registryRouter(logger?: ILogger) {
       preferredCourses: mentorRegistry.preferedCourses.map(c => Number(c)),
     };
     setResponse(ctx, OK, result);
-  });
-
-  router.get('/mentors/csv', anyCoursePowerUserGuard, async (ctx: Router.RouterContext) => {
-    const data = await repository.findAll();
-    const courses = await getRepository(Course).find({ select: ['id', 'name'] });
-
-    const csv = await parseAsync(
-      data.map(d => ({
-        ...d,
-        preferedCourses: d.preferedCourses.map(id => courses.find(c => Number(id) === c.id)?.name).filter(Boolean),
-        preselectedCourses: d.preselectedCourses
-          .map(id => courses.find(c => Number(id) === c.id)?.name)
-          .filter(Boolean),
-        courses: d.courses?.map(id => courses.find(c => Number(id) === c.id)?.name).filter(Boolean),
-      })),
-    );
-    setCsvResponse(ctx, OK, csv, 'mentors');
   });
 
   router.get('/:id', adminGuard, createGetRoute(Registry, logger));

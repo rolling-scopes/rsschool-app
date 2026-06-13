@@ -2217,6 +2217,15 @@
         "tags": ["registry"]
       }
     },
+    "/registry/mentors/csv": {
+      "get": {
+        "operationId": "getMentorRegistriesCsv",
+        "parameters": [],
+        "responses": { "403": { "description": "" } },
+        "summary": "",
+        "tags": ["registry"]
+      }
+    },
     "/registry/mentors/invite": {
       "post": {
         "operationId": "inviteMentors",
@@ -2228,6 +2237,15 @@
         "responses": { "201": { "description": "" } },
         "summary": "",
         "tags": ["registry"]
+      }
+    },
+    "/certificate/templates": {
+      "get": {
+        "operationId": "getCertificateTemplates",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "summary": "",
+        "tags": ["certificate"]
       }
     },
     "/certificate/{publicId}": {
