@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Controller,
   DefaultValuePipe,
+  ForbiddenException,
   Get,
   Param,
   ParseEnumPipe,
@@ -11,7 +12,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { ApiForbiddenResponse, ApiOperation, ApiResponse, ApiTags, ApiQuery } from '@nestjs/swagger';
+import { ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags, ApiQuery } from '@nestjs/swagger';
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
 import { CourseTasksService } from '../course-tasks';
 import { OrderField, OrderDirection, CourseCrossCheckService } from './course-cross-checks.service';
@@ -103,6 +104,40 @@ export class CourseCrossCheckController {
     res.setHeader('Content-disposition', `filename=${courseTask.task.name}.csv`);
 
     res.end(parsedData);
+  }
+
+  @Get(':courseTaskId/assignments/:githubId')
+  @ApiOperation({ operationId: 'getCrossCheckAssignments' })
+  @ApiForbiddenResponse()
+  @ApiOkResponse({ schema: { type: 'array', items: { type: 'object' } } })
+  public async getCrossCheckAssignments(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+    @Param('githubId') githubIdParam: string,
+  ) {
+    const githubId = githubIdParam === 'me' ? req.user.githubId : githubIdParam.toLowerCase();
+    if (!req.user.isAdmin && req.user.githubId !== githubId) {
+      throw new ForbiddenException();
+    }
+
+    const [student, courseTask] = await Promise.all([
+      this.courseCrossCheckService.queryStudentByGithubId(courseId, githubId),
+      this.courseCrossCheckService.getCourseTask(courseTaskId),
+    ]);
+
+    if (student == null || courseTask == null) {
+      throw new BadRequestException('not valid student or course task');
+    }
+    if (courseTask.checker !== 'crossCheck') {
+      throw new BadRequestException('not supported task');
+    }
+
+    const records = await this.courseCrossCheckService.getTaskSolutionAssignments(student.id, courseTaskId);
+    return records.map(r => ({
+      student: CourseCrossCheckService.convertToStudentBasic(r.student),
+      url: r.taskSolution.url,
+    }));
   }
 
   @Get(':courseTaskId/feedbacks/my')

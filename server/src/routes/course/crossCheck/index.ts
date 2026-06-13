@@ -5,7 +5,6 @@ export * from './createSolution';
 export * from './createMessage';
 export * from './updateMessage';
 export * from './deleteSolution';
-export * from './getAssignments';
 export * from './getResult';
 export * from './getSolution';
 export * from './getTaskDetails';

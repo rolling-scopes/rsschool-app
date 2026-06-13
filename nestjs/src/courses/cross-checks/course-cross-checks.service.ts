@@ -103,7 +103,78 @@ export class CourseCrossCheckService {
     private readonly taskSolutionRepository: Repository<TaskSolution>,
     @InjectRepository(TaskSolutionResult)
     private readonly TaskSolutionResultRepository: Repository<TaskSolutionResult>,
+    @InjectRepository(CourseTask)
+    private readonly courseTaskRepository: Repository<CourseTask>,
+    @InjectRepository(Student)
+    private readonly studentRepository: Repository<Student>,
   ) {}
+
+  public async getCourseTask(courseTaskId: number) {
+    return this.courseTaskRepository
+      .createQueryBuilder('courseTask')
+      .innerJoinAndSelect('courseTask.task', 'task')
+      .where('courseTask.id = :courseTaskId', { courseTaskId })
+      .getOne();
+  }
+
+  public async queryStudentByGithubId(courseId: number, githubId: string) {
+    const record = await this.studentRepository
+      .createQueryBuilder('student')
+      .innerJoin('student.user', 'user')
+      .addSelect(['user.firstName', 'user.lastName', 'user.githubId', 'user.id'])
+      .where('user.githubId = :githubId', { githubId })
+      .andWhere('student.courseId = :courseId', { courseId })
+      .getOne();
+    if (record == null) {
+      return null;
+    }
+    return {
+      id: record.id,
+      name: CourseCrossCheckService.buildName(record.user),
+      githubId: record.user.githubId,
+      userId: record.user.id,
+    };
+  }
+
+  public async getTaskSolutionAssignments(checkerId: number, courseTaskId: number) {
+    return this.taskSolutionCheckerRepository
+      .createQueryBuilder('taskSolutionChecker')
+      .innerJoinAndSelect('taskSolutionChecker.taskSolution', 'taskSolution')
+      .innerJoinAndSelect('taskSolutionChecker.student', 'student')
+      .innerJoin('student.user', 'user')
+      .addSelect(UsersService.getPrimaryUserFields())
+      .where('"taskSolutionChecker"."checkerId" = :checkerId', { checkerId })
+      .andWhere('"taskSolutionChecker"."courseTaskId" = :courseTaskId', { courseTaskId })
+      .getMany();
+  }
+
+  // the assignments query never selects student.mentor, so the legacy convertToStudentBasic
+  // always resolved mentor to null on this path
+  public static convertToStudentBasic(student: Student) {
+    const user = student.user;
+    return {
+      name: CourseCrossCheckService.buildName(user),
+      isActive: !student.isExpelled && !student.isFailed,
+      id: student.id,
+      githubId: user.githubId,
+      mentor: null,
+      cityName: user.cityName ?? '',
+      countryName: user.countryName ?? '',
+      discord: user.discord,
+      totalScore: student.totalScore,
+    };
+  }
+
+  private static buildName({ firstName, lastName }: { firstName?: string | null; lastName?: string | null }) {
+    const result = [];
+    if (firstName) {
+      result.push(firstName.trim());
+    }
+    if (lastName) {
+      result.push(lastName.trim());
+    }
+    return result.join(' ');
+  }
 
   public async findPairs(
     courseId: number,

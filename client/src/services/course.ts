@@ -457,13 +457,11 @@ export class CourseService {
   }
 
   async getCrossCheckAssignments(githubId: string, courseTaskId: number) {
-    const result = await this.axios.get<{
-      data: {
-        student: StudentBasic;
-        url: string;
-      }[];
-    }>(`/student/${githubId}/task/${courseTaskId}/cross-check/assignments`);
-    return result.data.data;
+    const result = await courseTasksApi.getCrossCheckAssignments(this.courseId, courseTaskId, githubId);
+    return result.data as unknown as {
+      student: StudentBasic;
+      url: string;
+    }[];
   }
 
   async createCrossCheckDistribution(courseTaskId: number) {
