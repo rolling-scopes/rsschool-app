@@ -47,7 +47,6 @@ import {
   validateGithubIdAndAccess,
 } from '../validators';
 import * as crossCheck from './crossCheck';
-import { getScheduleAsCsv, setScheduleFromCsv } from './schedule';
 import {
   createInterviewResult,
   getCrossMentors,
@@ -73,7 +72,6 @@ export function courseRoute(logger: ILogger) {
   addMentorApi(router, logger);
   addStudentApi(router, logger);
   addStudentCrossCheckApi(router, logger);
-  addScheduleApi(router, logger);
   return router;
 }
 
@@ -234,9 +232,4 @@ function addStudentCrossCheckApi(router: Router<any, any>, logger: ILogger) {
     courseGuard,
     crossCheck.updateMessage(logger),
   );
-}
-
-function addScheduleApi(router: Router<any, any>, logger: ILogger) {
-  router.get('/schedule/csv/:timeZone', courseSupervisorGuard, getScheduleAsCsv(logger));
-  router.post('/schedule/csv/:timeZone', courseSupervisorGuard, setScheduleFromCsv(logger));
 }

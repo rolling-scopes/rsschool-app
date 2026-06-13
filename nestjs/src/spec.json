@@ -1164,6 +1164,18 @@
         "tags": ["courses schedule"]
       }
     },
+    "/courses/{courseId}/schedule/csv/{timeZone}": {
+      "get": {
+        "operationId": "getScheduleAsCsv",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "timeZone", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "403": { "description": "" } },
+        "summary": "",
+        "tags": ["courses schedule"]
+      }
+    },
     "/courses/{courseId}/schedule/copy": {
       "post": {
         "operationId": "copySchedule",
@@ -2228,6 +2240,15 @@
         "responses": { "201": { "description": "" } },
         "summary": "",
         "tags": ["registry"]
+      }
+    },
+    "/certificate/templates": {
+      "get": {
+        "operationId": "getCertificateTemplates",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "summary": "",
+        "tags": ["certificate"]
       }
     },
     "/certificate/{publicId}": {
