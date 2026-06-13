@@ -38,6 +38,48 @@ export class TaskVerificationsService {
     readonly seflEducationService: SelfEducationService,
   ) {}
 
+  public async getCourseTasksVerifications(courseId: number) {
+    const verifications = await this.taskVerificationsRepository
+      .createQueryBuilder('v')
+      .select(['v.id', 'v.status', 'v.courseTaskId'])
+      .innerJoin('v.courseTask', 'courseTask')
+      .innerJoin('courseTask.task', 'task')
+      .innerJoin('v.student', 'student')
+      .innerJoin('student.user', 'user')
+      .addSelect([
+        'student.id',
+        'user.githubId',
+        'task.name',
+        'task.githubRepoName',
+        'task.sourceGithubRepoUrl',
+        'task.attributes',
+        'courseTask.id',
+      ])
+      .where('courseTask.courseId = :courseId', { courseId })
+      .andWhere('courseTask.disabled = :disabled', { disabled: false })
+      .andWhere("v.status = 'pending' ")
+      .orderBy('v.createdDate', 'ASC')
+      .getMany();
+
+    return verifications.map(verification => ({
+      courseId: Number(courseId),
+      id: verification.id,
+      githubId: verification.student.user.githubId,
+      courseTaskId: verification.courseTaskId,
+      taskName: verification.courseTask.task.name,
+      sourceGithubRepoUrl: verification.courseTask.task.sourceGithubRepoUrl,
+      githubRepoName: verification.courseTask.task.githubRepoName,
+      attributes: verification.courseTask.task.attributes,
+    }));
+  }
+
+  public async updateVerification(id: number, data: { score: number; details: string; status: string }) {
+    const score = Math.round(Number(data.score));
+    await this.taskVerificationsRepository.save({ ...data, score, id } as Partial<TaskVerification>);
+
+    return this.taskVerificationsRepository.findOneByOrFail({ id });
+  }
+
   public async getAnswersByAttempts(courseTaskId: number, studentId: number): Promise<TaskVerificationAttemptDto[]> {
     const courseTask = await this.courseTasksRepository.findOneByOrFail({ id: courseTaskId });
 

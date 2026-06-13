@@ -1551,6 +1551,30 @@
         "tags": ["course task verifications"]
       }
     },
+    "/course/{courseId}/tasks/verifications": {
+      "get": {
+        "operationId": "getCourseTasksVerifications",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "type": "object" } } } }
+        },
+        "summary": "",
+        "tags": ["course task verifications"]
+      }
+    },
+    "/task/verification/{id}": {
+      "put": {
+        "operationId": "updateTaskVerification",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object" } } } },
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "type": "object" } } } },
+          "400": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["course task verifications"]
+      }
+    },
     "/courses/{courseId}/users": {
       "get": {
         "operationId": "getCourseUsers",
@@ -2228,6 +2252,15 @@
         "responses": { "201": { "description": "" } },
         "summary": "",
         "tags": ["registry"]
+      }
+    },
+    "/certificate/templates": {
+      "get": {
+        "operationId": "getCertificateTemplates",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "summary": "",
+        "tags": ["certificate"]
       }
     },
     "/certificate/{publicId}": {
