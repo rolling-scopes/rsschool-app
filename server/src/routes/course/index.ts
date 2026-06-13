@@ -5,7 +5,6 @@ import {
   anyCourseMentorGuard,
   basicAuthAws,
   courseGuard,
-  courseInterviewGuard,
   courseManagerGuard,
   courseMentorGuard,
   courseMentorOrDementorGuard,
@@ -83,13 +82,7 @@ function addScoreApi(router: Router<any, any>, logger: ILogger) {
 }
 
 function addInterviewsApi(router: Router<any, any>, logger: ILogger) {
-  router.post(
-    '/interview/:courseTaskId/interviewer/:githubId/student/:studentGithubId/',
-    courseInterviewGuard,
-    interviews.createInterview(logger),
-  );
   router.post('/interviews/:courseTaskId', courseManagerGuard, interviews.createInterviews(logger));
-  router.delete('/interviews/:courseTaskId/:id', courseManagerGuard, interviews.cancelInterview(logger));
 }
 
 function addEventApi(router: Router<any, any>, logger: ILogger) {

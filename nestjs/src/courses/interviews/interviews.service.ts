@@ -374,4 +374,80 @@ export class InterviewsService {
 
     return taskCheckPairs;
   }
+
+  public async isInterviewStarted(courseTaskId: number) {
+    const courseTask = await this.courseTaskRepository.findOne({
+      where: { id: courseTaskId },
+      select: ['studentStartDate'],
+    });
+    return courseTask?.studentStartDate ? new Date(courseTask.studentStartDate).getTime() < Date.now() : false;
+  }
+
+  public async addInterviewPair(
+    courseId: number,
+    courseTaskId: number,
+    interviewerGithubId: string,
+    studentGithubId: string,
+  ) {
+    const [interviewer, student] = await Promise.all([
+      this.mentorRepository
+        .createQueryBuilder('mentor')
+        .innerJoin('mentor.user', 'user')
+        .addSelect(['user.id', 'user.firstName', 'user.lastName', 'user.githubId'])
+        .where('user.githubId = :githubId', { githubId: interviewerGithubId })
+        .andWhere('mentor.courseId = :courseId', { courseId })
+        .getOne(),
+      this.studentRepository
+        .createQueryBuilder('student')
+        .innerJoin('student.user', 'user')
+        .addSelect(['user.id', 'user.firstName', 'user.lastName', 'user.githubId'])
+        .where('user.githubId = :githubId', { githubId: studentGithubId })
+        .andWhere('student.courseId = :courseId', { courseId })
+        .getOne(),
+    ]);
+    if (!interviewer || !student) {
+      return null;
+    }
+
+    const record = {
+      courseTaskId,
+      studentId: student.id,
+      mentorId: interviewer.id,
+    };
+    const current = await this.taskCheckerRepository.findOne({ where: record });
+    let pairId: number;
+    if (!current) {
+      const {
+        identifiers: [identifier],
+      } = await this.taskCheckerRepository.insert(record);
+      pairId = Number(identifier?.['id']);
+    } else {
+      pairId = current.id;
+    }
+
+    return {
+      id: pairId,
+      interviewer: {
+        id: interviewer.id,
+        name: InterviewsService.createName(interviewer.user),
+        githubId: interviewer.user.githubId,
+      },
+      studentUserId: student.user.id,
+    };
+  }
+
+  public cancelInterviewPair(pairId: number) {
+    return this.taskCheckerRepository.delete(pairId);
+  }
+
+  private static createName({ firstName, lastName }: { firstName?: string | null; lastName?: string | null }) {
+    const result = [];
+    if (firstName) {
+      result.push(firstName.trim());
+    }
+    if (lastName) {
+      result.push(lastName.trim());
+    }
+    return result.join(' ');
+  }
 }

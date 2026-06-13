@@ -14,6 +14,7 @@ import {
   Req,
   UseGuards,
   UseInterceptors,
+  Delete,
 } from '@nestjs/common';
 import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 import {
@@ -30,7 +31,9 @@ import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, R
 import { DEFAULT_CACHE_TTL } from '../../constants';
 import { InterviewDto } from './dto';
 import { AvailableStudentDto } from './dto/available-student.dto';
+import { isAdmin, isManager, isMentor } from '@entities/session';
 import { InterviewsService } from './interviews.service';
+import { UserNotificationsService } from 'src/users-notifications';
 import { TaskType } from '@entities/task';
 import { InterviewFeedbackService } from './interviewFeedback.service';
 import { InterviewFeedbackDto } from './dto/get-interview-feedback.dto';
@@ -49,6 +52,7 @@ export class InterviewsController {
     private interviewsService: InterviewsService,
     private interviewFeedbackService: InterviewFeedbackService,
     private courseTasksService: CourseTasksService,
+    private userNotificationsService: UserNotificationsService,
   ) {}
 
   @Get()
@@ -218,6 +222,63 @@ export class InterviewsController {
     }
 
     throw new BadRequestException('Invalid interview id');
+  }
+
+  @Post('/:courseTaskId/interviewer/:interviewerGithubId/student/:studentGithubId')
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  @ApiOperation({ operationId: 'addInterviewPair' })
+  @RequiredRoles([CourseRole.Mentor, CourseRole.Manager, Role.Admin], true)
+  public async addInterviewPair(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+    @Param('interviewerGithubId') interviewerGithubId: string,
+    @Param('studentGithubId') studentGithubId: string,
+  ) {
+    const user = req.user;
+    const isPowerUser = isAdmin(user) || isManager(user, courseId);
+    if (isMentor(user, courseId) && !isPowerUser) {
+      const isStarted = await this.interviewsService.isInterviewStarted(courseTaskId);
+      if (!isStarted) {
+        throw new ForbiddenException();
+      }
+    }
+
+    const result = await this.interviewsService.addInterviewPair(
+      courseId,
+      courseTaskId,
+      interviewerGithubId,
+      studentGithubId,
+    );
+
+    if (result) {
+      try {
+        await this.userNotificationsService.sendEventNotification({
+          userId: result.studentUserId,
+          notificationId: 'interviewerAssigned',
+          data: { interviewer: result.interviewer },
+        });
+      } catch {
+        // ignore notification failures, same as legacy
+      }
+    }
+
+    return { id: result?.id };
+  }
+
+  @Delete('/:courseTaskId/pairs/:pairId')
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  @ApiOperation({ operationId: 'cancelInterviewPair' })
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  public async cancelInterviewPair(
+    @Param('courseId', ParseIntPipe) _courseId: number,
+    @Param('courseTaskId', ParseIntPipe) _courseTaskId: number,
+    @Param('pairId', ParseIntPipe) pairId: number,
+  ) {
+    await this.interviewsService.cancelInterviewPair(pairId);
+    return {};
   }
 
   // use `type` as a way to differentiate between stage-interview and interview.

@@ -551,15 +551,18 @@ export class CourseService {
   }
 
   async cancelInterviewPair(interviewId: string, pairId: string) {
-    const result = await this.axios.delete(`/interviews/${interviewId}/${pairId}`);
-    return result.data.data;
+    const result = await coursesInterviewsApi.cancelInterviewPair(this.courseId, Number(interviewId), Number(pairId));
+    return result.data;
   }
 
   async addInterviewPair(interviewId: string, interviewerGithubId: string, studentGithubId: string) {
-    const result = await this.axios.post(
-      `/interview/${interviewId}/interviewer/${interviewerGithubId}/student/${studentGithubId}`,
+    const result = await coursesInterviewsApi.addInterviewPair(
+      this.courseId,
+      Number(interviewId),
+      interviewerGithubId,
+      studentGithubId,
     );
-    return result.data.data as { id: string };
+    return result.data as unknown as { id: string };
   }
 
   exportStudentsCsv(activeOnly?: boolean) {
