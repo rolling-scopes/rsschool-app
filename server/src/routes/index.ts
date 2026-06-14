@@ -7,7 +7,6 @@ import { errorHandlerMiddleware } from './logging';
 import { publicMeRouter } from './me';
 import { profileRoute } from './profile';
 import { registryRouter } from './registry';
-import { repositoryRoute } from './repository';
 import { taskRoute } from './task';
 import { tasksRoute } from './tasks';
 import { taskVerification } from './taskVerification';
@@ -45,7 +44,6 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, feedbackRoute(logger));
   applyRouter(router, checksRoute(logger));
   applyRouter(router, filesRoute(logger));
-  applyRouter(router, repositoryRoute(logger));
 
   return { publicRouter: router };
 };

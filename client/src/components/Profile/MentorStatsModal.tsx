@@ -1,7 +1,7 @@
 import { MentorStats } from '@common/models/profile';
 import { Card, Flex, Modal, Space } from 'antd';
 import { GithubAvatar } from '@client/shared/components/GithubAvatar';
-import { GithubOutlined, LockFilled } from '@ant-design/icons';
+import { GithubOutlined } from '@ant-design/icons';
 import { ScoreWidget } from '@client/components/Profile/ui';
 
 type Props = {
@@ -16,7 +16,7 @@ const MentorStatsModal = ({ stats, isVisible, onHide }: Props) => {
   return (
     <Modal title={`${courseName} statistics`} open={isVisible} onCancel={onHide} footer={null} width={'80%'}>
       <Flex gap={16} wrap="wrap" justify="center">
-        {students?.map(({ name, githubId, totalScore, repoUrl }) => {
+        {students?.map(({ name, githubId, totalScore }) => {
           const profile = `/profile?githubId=${githubId}`;
           const githubLink = `https://github.com/${githubId}`;
 
@@ -32,12 +32,6 @@ const MentorStatsModal = ({ stats, isVisible, onHide }: Props) => {
                       <GithubOutlined />
                       <a href={githubLink} target="_blank">
                         {githubId}
-                      </a>
-                    </Space>
-                    <Space>
-                      <LockFilled />
-                      <a href={repoUrl} target="_blank">
-                        {repoUrl?.split('/').pop()}
                       </a>
                     </Space>
                   </Flex>

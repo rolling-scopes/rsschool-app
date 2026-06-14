@@ -77,11 +77,6 @@ export class UpdateCourseDto {
   @IsBoolean()
   @IsOptional()
   @ApiPropertyOptional()
-  usePrivateRepositories?: boolean;
-
-  @IsBoolean()
-  @IsOptional()
-  @ApiPropertyOptional()
   personalMentoring?: boolean;
 
   @IsString()

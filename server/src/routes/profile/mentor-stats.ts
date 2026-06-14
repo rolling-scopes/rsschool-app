@@ -2,13 +2,11 @@ import { getRepository } from 'typeorm';
 import { MentorStats } from '../../../../common/models/profile';
 import { getFullName } from '../../rules';
 import { User, Mentor, Student, Course } from '../../models';
-import { RepositoryService } from '../../services';
 
 export const getMentorStats = async (githubId: string): Promise<MentorStats[]> => {
   const rawData = await getRepository(Mentor)
     .createQueryBuilder('mentor')
     .select('"course"."name" AS "courseName"')
-    .addSelect('"course"."alias" AS "courseAlias"')
     .addSelect('"course"."id" AS "courseId"')
     .addSelect('"course"."locationName" AS "courseLocationName"')
     .addSelect('ARRAY_AGG ("userStudent"."githubId") AS "studentGithubIds"')
@@ -27,7 +25,6 @@ export const getMentorStats = async (githubId: string): Promise<MentorStats[]> =
   return rawData.map(
     ({
       courseName,
-      courseAlias,
       courseLocationName,
       studentGithubIds,
       studentFirstNames,
@@ -41,9 +38,6 @@ export const getMentorStats = async (githubId: string): Promise<MentorStats[]> =
             name: getFullName(studentFirstNames[idx], studentLastNames[idx], githubId),
             isExpelled: studentIsExpelledStatuses[idx],
             totalScore: studentTotalScores[idx],
-            repoUrl: `https://github.com/rolling-scopes-school/${RepositoryService.getRepoName(githubId, {
-              alias: courseAlias,
-            })}`,
           }))
         : undefined;
       return { courseLocationName, courseName, students };

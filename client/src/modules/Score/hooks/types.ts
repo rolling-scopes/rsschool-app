@@ -14,8 +14,7 @@ export type ScoreOrderField =
   | 'name'
   | 'cityName'
   | 'mentor'
-  | 'totalScoreChangeDate'
-  | 'repositoryLastActivityDate';
+  | 'totalScoreChangeDate';
 
 export type ScoreOrder = {
   field: ScoreOrderField;

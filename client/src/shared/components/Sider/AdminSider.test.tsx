@@ -39,7 +39,6 @@ describe('AdminSider', () => {
       locationName: 'Test Location',
       discordServerId: 123,
       certificateIssuer: 'Test Issuer',
-      usePrivateRepositories: false,
       personalMentoring: false,
       personalMentoringStartDate: null,
       personalMentoringEndDate: null,

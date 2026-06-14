@@ -12,7 +12,6 @@ describe('MentorStatsModal', () => {
         name: 'Alex Petrov',
         isExpelled: false,
         totalScore: 3453,
-        repoUrl: 'https://github.com/rolling-scopes-school/alex-RS2018Q1',
       },
       {
         githubId: 'vasya',
@@ -37,9 +36,6 @@ describe('MentorStatsModal', () => {
 
     expect(screen.getByRole('link', { name: 'alex' })).toHaveAttribute('href', 'https://github.com/alex');
     expect(screen.getByRole('link', { name: 'vasya' })).toHaveAttribute('href', 'https://github.com/vasya');
-
-    const repoLink = screen.getByRole('link', { name: 'alex-RS2018Q1' });
-    expect(repoLink).toHaveAttribute('href', 'https://github.com/rolling-scopes-school/alex-RS2018Q1');
   });
 
   it('calls onHide when close button is clicked', () => {
