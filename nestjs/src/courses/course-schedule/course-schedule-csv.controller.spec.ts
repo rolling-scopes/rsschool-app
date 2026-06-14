@@ -85,9 +85,7 @@ describe('CourseScheduleController.getScheduleAsCsv', () => {
 
     const module = await Test.createTestingModule({
       controllers: [CourseScheduleController],
-      providers: [
-        { provide: CourseScheduleService, useValue: { getScheduleAsCsvRows: mockGetScheduleAsCsvRows } },
-      ],
+      providers: [{ provide: CourseScheduleService, useValue: { getScheduleAsCsvRows: mockGetScheduleAsCsvRows } }],
     }).compile();
 
     controller = module.get(CourseScheduleController);
