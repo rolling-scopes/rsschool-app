@@ -18,7 +18,11 @@ import { StudentsService } from '../courses/students';
 import { UserNotificationsService } from 'src/users-notifications/users.notifications.service';
 import { CertificationsService } from './certificates.service';
 import { SaveCertificateDto } from './dto/save-certificate-dto';
-import { CertificateRequestDto, CreateCourseCertificatesDto, CreateStudentCertificateDto } from './dto/create-certificate.dto';
+import {
+  CertificateRequestDto,
+  CreateCourseCertificatesDto,
+  CreateStudentCertificateDto,
+} from './dto/create-certificate.dto';
 import { CERTIFICATE_TEMPLATES } from './templates/catalog';
 
 @Controller('certificate')

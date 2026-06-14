@@ -91,11 +91,9 @@ describe('certificate requests', () => {
         timestamp: expect.any(Number),
         templateId: 'bootcamp_13_weeks',
       };
-      expect(mockPost).toHaveBeenCalledWith(
-        'https://aws.example.com/certificate',
-        expect.objectContaining(expected),
-        { headers: { 'x-api-key': 'secret-key' } },
-      );
+      expect(mockPost).toHaveBeenCalledWith('https://aws.example.com/certificate', expect.objectContaining(expected), {
+        headers: { 'x-api-key': 'secret-key' },
+      });
       expect(result).toEqual(expect.objectContaining(expected));
     });
 

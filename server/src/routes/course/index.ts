@@ -62,7 +62,6 @@ import * as tasks from './tasks';
 export function courseRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/course/:courseId' });
 
-
   addScoreApi(router, logger);
   addStageInterviewApi(router, logger);
   addInterviewsApi(router, logger);

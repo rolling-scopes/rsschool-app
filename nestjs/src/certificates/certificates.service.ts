@@ -204,9 +204,11 @@ export class CertificationsService {
 
   public async requestCertificates(payload: object | object[]) {
     const { restApiUrl, restApiKey } = this.configService.awsServices;
-    await lastValueFrom(this.httpService.post(`${restApiUrl}/certificate`, payload, {
-      headers: { 'x-api-key': restApiKey },
-    }));
+    await lastValueFrom(
+      this.httpService.post(`${restApiUrl}/certificate`, payload, {
+        headers: { 'x-api-key': restApiKey },
+      }),
+    );
   }
 
   private async findStudentIdsByCriteria(
