@@ -176,9 +176,9 @@ describe('CourseCrossCheckController solution write endpoints', () => {
   });
 
   it('responds 400 when the payload has no url', async () => {
-    await expect(
-      controller.createCrossCheckSolution(req, 11, 15, 'john-doe', { review: [] } as never),
-    ).rejects.toThrow('not valid request payload');
+    await expect(controller.createCrossCheckSolution(req, 11, 15, 'john-doe', { review: [] } as never)).rejects.toThrow(
+      'not valid request payload',
+    );
     expect(mockSaveSolution).not.toHaveBeenCalled();
   });
 

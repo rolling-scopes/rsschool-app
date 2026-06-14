@@ -44,4 +44,3 @@ export const validateGithubId = async (ctx: Router.RouterContext, next: Next) =>
   ctx.params.githubId = githubId;
   await next();
 };
-

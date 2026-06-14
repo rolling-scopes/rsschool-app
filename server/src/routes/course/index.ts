@@ -40,10 +40,7 @@ import { getCourseTasksVerifications, getStudentTaskVerifications } from './task
 
 import * as interviews from './interviews';
 
-import {
-  validateGithubId,
-  validateGithubIdAndAccess,
-} from '../validators';
+import { validateGithubId, validateGithubIdAndAccess } from '../validators';
 import * as crossCheck from './crossCheck';
 import { getScheduleAsCsv, setScheduleFromCsv } from './schedule';
 import {
