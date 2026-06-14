@@ -215,7 +215,17 @@ describe('ScoreService.getStudentsScoreForExport', () => {
       [['ct.disabled', 'ct.id']],
       [['tir.id', 'tir.score', 'tir.courseTaskId', 'tr.studentId', 'tir.updatedDate']],
       [primaryUserFields('mu')],
-      [['sif.stageInterviewId', 'sif.json', 'sif.updatedDate', 'si.isCompleted', 'si.id', 'si.courseTaskId', 'si.score']],
+      [
+        [
+          'sif.stageInterviewId',
+          'sif.json',
+          'sif.updatedDate',
+          'si.isCompleted',
+          'si.id',
+          'si.courseTaskId',
+          'si.score',
+        ],
+      ],
       ['certificate.id'],
     ]);
     expect(calls.leftJoin).toEqual([
