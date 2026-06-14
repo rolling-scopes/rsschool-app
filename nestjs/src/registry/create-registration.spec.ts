@@ -23,7 +23,11 @@ const registryRepository = { findOne: vi.fn(), save: vi.fn(), find: vi.fn() };
 const studentRepository = { save: vi.fn() };
 const mentorRepository = { save: vi.fn(), findOne: vi.fn() };
 
-const setupRepos = ({ user = { ...mockUser }, course = { ...mockCourse }, existingRegistry = null as unknown } = {}) => {
+const setupRepos = ({
+  user = { ...mockUser },
+  course = { ...mockCourse },
+  existingRegistry = null as unknown,
+} = {}) => {
   userRepository.findOne.mockResolvedValue(user);
   courseRepository.findOneBy.mockResolvedValue(course);
   registryRepository.findOne.mockResolvedValue(existingRegistry);
@@ -142,6 +146,8 @@ describe('RegistryService.createRegistration', () => {
     });
 
     expect(mentorRepository.save).not.toHaveBeenCalled();
-    expect(registryRepository.save).toHaveBeenCalledWith(expect.objectContaining({ type: 'mentor', status: 'pending' }));
+    expect(registryRepository.save).toHaveBeenCalledWith(
+      expect.objectContaining({ type: 'mentor', status: 'pending' }),
+    );
   });
 });
