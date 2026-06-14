@@ -51,5 +51,3 @@ export const searchStudent = (_: ILogger) => async (ctx: Router.RouterContext) =
 
   setResponse(ctx, OK, result);
 };
-
-

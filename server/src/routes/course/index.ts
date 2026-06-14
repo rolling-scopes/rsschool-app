@@ -25,12 +25,7 @@ import {
 } from './mentor';
 import * as score from './score';
 import * as stageInterview from './stageInterview';
-import {
-  getStudents,
-  getStudentsCsv,
-  getStudentsWithDetails,
-  searchStudent,
-} from './students';
+import { getStudents, getStudentsCsv, getStudentsWithDetails, searchStudent } from './students';
 import { getCourseTasksVerifications, getStudentTaskVerifications } from './taskVerifications';
 
 import * as interviews from './interviews';
@@ -85,7 +80,6 @@ function addInterviewsApi(router: Router<any, any>, logger: ILogger) {
 }
 
 function addEventApi(router: Router<any, any>, logger: ILogger) {
-
   router.get('/events', courseGuard, getCourseEvents(logger));
 }
 
