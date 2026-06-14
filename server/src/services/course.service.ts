@@ -601,5 +601,4 @@ export async function getInterviewStudentsByMentorId(courseTaskId: number, mento
   return students;
 }
 
-
 const timeout = async (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
