@@ -130,11 +130,7 @@ export class CourseCrossCheckController {
       throw new BadRequestException('task solution is supported for this task');
     }
 
-    const taskChecker = await this.courseCrossCheckService.getTaskSolutionChecker(
-      student.id,
-      checker.id,
-      courseTaskId,
-    );
+    const taskChecker = await this.courseCrossCheckService.getTaskSolutionChecker(student.id, checker.id, courseTaskId);
     if (taskChecker == null) {
       throw new BadRequestException('no assigned cross-check');
     }

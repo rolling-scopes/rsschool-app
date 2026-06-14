@@ -150,9 +150,7 @@ describe('CourseCrossCheckController.getCrossCheckTaskResult', () => {
   beforeEach(async () => {
     mockQueryStudentByGithubId
       .mockReset()
-      .mockImplementation(async (_courseId: number, githubId: string) =>
-        githubId === 'john-doe' ? student : checker,
-      );
+      .mockImplementation(async (_courseId: number, githubId: string) => (githubId === 'john-doe' ? student : checker));
     mockGetCourseTask.mockReset().mockResolvedValue(courseTask);
     mockGetTaskSolutionChecker.mockReset().mockResolvedValue(taskChecker);
     mockGetResult.mockReset().mockResolvedValue(reviewResult);
