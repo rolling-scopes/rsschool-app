@@ -11,4 +11,3 @@ export const getCourseEvent = (_: ILogger) => async (ctx: Router.RouterContext) 
 
   setResponse(ctx, OK, data);
 };
-
