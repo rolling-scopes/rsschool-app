@@ -145,4 +145,3 @@ export const createInterviews = (logger: ILogger) => async (ctx: Router.RouterCo
     await taskService.changeCourseTaskProcessing(courseTaskId, false);
   }
 };
-
