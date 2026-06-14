@@ -23,4 +23,3 @@ export async function postTaskVerification(data: TaskVerificationEvent[]) {
     throw error.response?.data ?? error.message;
   }
 }
-
