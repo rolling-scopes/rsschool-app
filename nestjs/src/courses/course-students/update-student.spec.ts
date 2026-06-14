@@ -48,9 +48,9 @@ describe('updateStudent route', () => {
     ).rejects.toThrow(BadRequestException);
 
     service.getStudentByGithubId.mockResolvedValue(mockStudent);
-    await expect(
-      controller.updateStudent({ user: powerUser } as never, 5, 'john-doe', {} as never),
-    ).rejects.toThrow(BadRequestException);
+    await expect(controller.updateStudent({ user: powerUser } as never, 5, 'john-doe', {} as never)).rejects.toThrow(
+      BadRequestException,
+    );
   });
 
   it('forbids a course mentor updating a non-mentee without self-assign', async () => {

@@ -1,4 +1,17 @@
-import { BadRequestException, Body, Controller, ForbiddenException, Get, NotFoundException, Param, ParseIntPipe, Post, Put, Req, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  ForbiddenException,
+  Get,
+  NotFoundException,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBadRequestResponse, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
 import { isAdmin, isManager, isMentor, isSupervisor } from '@entities/session';
@@ -62,8 +75,7 @@ export class CourseStudentsController {
       throw new BadRequestException();
     }
     const user = req.user;
-    const isPowerUserOrSupervisor =
-      isAdmin(user) || isManager(user, courseId) || isSupervisor(user, courseId);
+    const isPowerUserOrSupervisor = isAdmin(user) || isManager(user, courseId) || isSupervisor(user, courseId);
     if (!isPowerUserOrSupervisor && isMentor(user, courseId)) {
       const menteeGithubIds = await this.courseStudentService.getMenteeGithubIds(courseId, user.githubId);
       const isUpdatedStudentMenteeOfRequestor = menteeGithubIds.includes(githubId);
