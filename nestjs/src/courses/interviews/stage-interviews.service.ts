@@ -192,7 +192,9 @@ export class StageInterviewsService {
     const [courseTask] = courseTasks;
     const mentors = await this.getMentorsWithStudents(courseId);
 
-    const students = noRegistration ? await this.getActiveStudents(courseId) : await this.findRegisteredStudents(courseId);
+    const students = noRegistration
+      ? await this.getActiveStudents(courseId)
+      : await this.findRegisteredStudents(courseId);
     const interviews = await this.findMany(courseId);
 
     const distibution = createInterviews(mentors, students, interviews);

@@ -119,8 +119,12 @@ describe('StageInterviewsService', () => {
     repos.courseTask.find.mockResolvedValue([{ id: 7 }]);
     repos.stageInterview.save.mockResolvedValue([{ mentorId: 8, studentId: 42 }]);
     (vi.spyOn(service as never, 'getMentorsWithStudents' as never) as ReturnType<typeof vi.fn>).mockResolvedValue([]);
-    const findRegistered = (vi.spyOn(service as never, 'findRegisteredStudents' as never) as ReturnType<typeof vi.fn>).mockResolvedValue([]);
-    const getActive = (vi.spyOn(service as never, 'getActiveStudents' as never) as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+    const findRegistered = (
+      vi.spyOn(service as never, 'findRegisteredStudents' as never) as ReturnType<typeof vi.fn>
+    ).mockResolvedValue([]);
+    const getActive = (
+      vi.spyOn(service as never, 'getActiveStudents' as never) as ReturnType<typeof vi.fn>
+    ).mockResolvedValue([]);
     vi.spyOn(service, 'findMany').mockResolvedValue([] as never);
 
     await service.createAutomatically(5, false);
