@@ -162,8 +162,6 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   router.get('/student/:githubId', courseSupervisorGuard, getStudent(logger));
   router.put('/student/:githubId', courseSupervisorOrMentorGuard, updateStudent(logger));
 
-
-
   router.post('/student/:githubId/availability', courseManagerGuard, updateMentoringAvailability(logger));
   router.get('/student/:githubId/tasks/cross-mentors', courseGuard, ...validators, getCrossMentors(logger));
   router.get('/student/:githubId/tasks/verifications', courseGuard, ...validators, getStudentTaskVerifications(logger));
