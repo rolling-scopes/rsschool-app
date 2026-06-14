@@ -159,4 +159,3 @@ export const updateMentoringAvailability = (_: ILogger) => async (ctx: Router.Ro
   await studentRepository.updateMentoringAvailability(student.id, mentoring);
   setResponse(ctx, OK, {});
 };
-

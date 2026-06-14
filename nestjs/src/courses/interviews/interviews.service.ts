@@ -380,7 +380,11 @@ export class InterviewsService {
     courseTaskId: number,
     githubId: string,
     userId: number,
-    inputData: { score: number | string; comment?: string; formAnswers?: { questionId: string; questionText: string; answer: string }[] },
+    inputData: {
+      score: number | string;
+      comment?: string;
+      formAnswers?: { questionId: string; questionText: string; answer: string }[];
+    },
   ): Promise<{ ok: boolean; message?: string }> {
     if (inputData.score == null) {
       return { ok: false, message: 'no score' };
