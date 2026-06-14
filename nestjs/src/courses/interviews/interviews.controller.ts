@@ -230,7 +230,11 @@ export class InterviewsController {
     @Param('courseId', ParseIntPipe) courseId: number,
     @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
   ) {
-    const students = await this.interviewsService.getInterviewStudentsByMentor(courseId, courseTaskId, req.user.githubId);
+    const students = await this.interviewsService.getInterviewStudentsByMentor(
+      courseId,
+      courseTaskId,
+      req.user.githubId,
+    );
     if (students == null) {
       throw new NotFoundException('Mentor not found');
     }

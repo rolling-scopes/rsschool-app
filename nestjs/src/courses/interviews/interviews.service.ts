@@ -405,7 +405,10 @@ export class InterviewsService {
       .getMany();
 
     return records.map(record => ({
-      name: [record.user.firstName, record.user.lastName].filter(Boolean).map(s => s.trim()).join(' '),
+      name: [record.user.firstName, record.user.lastName]
+        .filter(Boolean)
+        .map(s => s.trim())
+        .join(' '),
       isActive: !record.isExpelled && !record.isFailed,
       id: record.id,
       githubId: record.user.githubId,
