@@ -13,7 +13,15 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBody, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags, ApiQuery } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiForbiddenResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+  ApiQuery,
+} from '@nestjs/swagger';
 import { CrossCheckStatus } from '@entities/courseTask';
 import { ConfigService } from 'src/config';
 import { UserNotificationsService } from 'src/users-notifications';
@@ -151,11 +159,7 @@ export class CourseCrossCheckController {
       throw new BadRequestException('task solution is supported for this task');
     }
 
-    const taskChecker = await this.courseCrossCheckService.getTaskSolutionChecker(
-      student.id,
-      checker.id,
-      courseTaskId,
-    );
+    const taskChecker = await this.courseCrossCheckService.getTaskSolutionChecker(student.id, checker.id, courseTaskId);
     if (taskChecker == null) {
       throw new BadRequestException('no assigned cross-check');
     }

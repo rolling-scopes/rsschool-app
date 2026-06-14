@@ -173,9 +173,7 @@ describe('CourseCrossCheckController.createCrossCheckResult', () => {
   beforeEach(async () => {
     mockQueryStudentByGithubId
       .mockReset()
-      .mockImplementation(async (_courseId: number, githubId: string) =>
-        githubId === 'john-doe' ? student : checker,
-      );
+      .mockImplementation(async (_courseId: number, githubId: string) => (githubId === 'john-doe' ? student : checker));
     mockGetCourseTaskWithCourse.mockReset().mockResolvedValue(courseTask);
     mockGetTaskSolutionChecker.mockReset().mockResolvedValue(taskChecker);
     mockSaveResult.mockReset().mockResolvedValue(previousScore);
@@ -251,7 +249,7 @@ describe('CourseCrossCheckController.createCrossCheckResult', () => {
     );
   });
 
-  it("responds 400 when the task is not distributed", async () => {
+  it('responds 400 when the task is not distributed', async () => {
     mockGetCourseTaskWithCourse.mockResolvedValue({ ...courseTask, crossCheckStatus: 'initial' });
 
     await expect(controller.createCrossCheckResult(req, 11, 15, 'john-doe', body as never)).rejects.toThrow(
