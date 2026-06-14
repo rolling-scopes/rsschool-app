@@ -135,7 +135,10 @@ describe('CourseCrossCheckController messages endpoints', () => {
   });
 
   it('saves a student message and notifies the resolved recipient', async () => {
-    await controller.createCrossCheckMessage(studentReq, 11, 15, 71, { content: 'hi reviewer', role: 'student' as never });
+    await controller.createCrossCheckMessage(studentReq, 11, 15, 71, {
+      content: 'hi reviewer',
+      role: 'student' as never,
+    });
 
     expect(mockSaveMessage).toHaveBeenCalledWith(
       71,
@@ -204,8 +207,8 @@ describe('CourseCrossCheckController messages endpoints', () => {
   });
 
   it('update responds 400 for an incorrect role', async () => {
-    await expect(
-      controller.updateCrossCheckMessage(studentReq, 11, 15, 71, { role: 'nope' as never }),
-    ).rejects.toThrow('incorrect message role');
+    await expect(controller.updateCrossCheckMessage(studentReq, 11, 15, 71, { role: 'nope' as never })).rejects.toThrow(
+      'incorrect message role',
+    );
   });
 });
