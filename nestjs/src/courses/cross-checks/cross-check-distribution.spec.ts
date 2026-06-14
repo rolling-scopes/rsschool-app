@@ -28,7 +28,12 @@ describe('CrossCheckDistributionService.distribute', () => {
   });
 });
 
-const pastTask = { id: 15, pairsCount: 3, crossCheckStatus: CrossCheckStatus.Distributed, studentEndDate: '2000-01-01' };
+const pastTask = {
+  id: 15,
+  pairsCount: 3,
+  crossCheckStatus: CrossCheckStatus.Distributed,
+  studentEndDate: '2000-01-01',
+};
 
 describe('CourseCrossCheckController distribution/completion', () => {
   const mockGetCourseTask = vi.fn();

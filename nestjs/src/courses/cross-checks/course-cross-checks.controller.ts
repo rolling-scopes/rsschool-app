@@ -81,10 +81,7 @@ export class CourseCrossCheckController {
       throw new BadRequestException();
     }
 
-    const pairsCount = Math.max(
-      (courseTask.pairsCount ?? CourseCrossCheckController.DEFAULT_PAIRS_COUNT) - 1,
-      1,
-    );
+    const pairsCount = Math.max((courseTask.pairsCount ?? CourseCrossCheckController.DEFAULT_PAIRS_COUNT) - 1, 1);
     const studentScores = await this.courseCrossCheckService.getTaskSolutionCheckers(courseTaskId, pairsCount);
 
     for (const studentScore of studentScores) {
