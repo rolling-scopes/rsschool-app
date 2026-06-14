@@ -58,7 +58,10 @@ import { TeamDistributionController } from './team-distribution/team-distributio
 import { TeamDistributionService } from './team-distribution/team-distribution.service';
 import { TeamService } from './team-distribution/team.service';
 import { TeamController } from './team-distribution/team.controller';
-import { StudentTaskVerificationsController, TaskVerificationsController } from './task-verifications/task-verifications.controller';
+import {
+  StudentTaskVerificationsController,
+  TaskVerificationsController,
+} from './task-verifications/task-verifications.controller';
 import { TaskVerificationsService } from './task-verifications/task-verifications.service';
 import { TeamDistributionStudentService } from './team-distribution/team-distribution-student.service';
 import { DistributeStudentsService } from './team-distribution/distribute-students.service';
