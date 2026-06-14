@@ -39,4 +39,3 @@ export const getMentorInterview = (_: ILogger) => async (ctx: Router.RouterConte
   const students = await courseService.getInterviewStudentsByMentorId(courseTaskId, mentor.id);
   setResponse(ctx, OK, students);
 };
-

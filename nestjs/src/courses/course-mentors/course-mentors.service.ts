@@ -204,7 +204,9 @@ export class CourseMentorsService {
     const { maxStudentsLimit, preferedStudentsLocation } = input;
     const data = {
       ...(maxStudentsLimit ? { maxStudentsLimit } : {}),
-      ...(preferedStudentsLocation ? { studentsPreference: preferedStudentsLocation as Mentor['studentsPreference'] } : {}),
+      ...(preferedStudentsLocation
+        ? { studentsPreference: preferedStudentsLocation as Mentor['studentsPreference'] }
+        : {}),
     };
     const exist = await this.mentorsRepository.findOne({ where: { courseId, userId: user.id } });
     let mentorId = exist?.id;
@@ -232,7 +234,10 @@ export class CourseMentorsService {
         });
         mentorId = identifier?.['id'];
       } catch (err) {
-        if (err instanceof QueryFailedError && (err as { driverError?: { code?: string } }).driverError?.code === '23505') {
+        if (
+          err instanceof QueryFailedError &&
+          (err as { driverError?: { code?: string } }).driverError?.code === '23505'
+        ) {
           throw new ConflictException('Mentor is already registered for this course (concurrent request).');
         }
         throw err;
