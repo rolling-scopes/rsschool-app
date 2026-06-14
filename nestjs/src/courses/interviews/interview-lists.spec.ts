@@ -46,8 +46,9 @@ describe('InterviewsService.getUserInterviewDetails', () => {
 
     const studentResult = await service.getUserInterviewDetails(5, 'john-doe', 'student');
     expect(studentResult).toEqual([...stage, ...regular]);
-    expect((service as never as { getRegularInterviewDetails: ReturnType<typeof vi.fn> }).getRegularInterviewDetails)
-      .toHaveBeenCalledWith(5, 'john-doe', 'student');
+    expect(
+      (service as never as { getRegularInterviewDetails: ReturnType<typeof vi.fn> }).getRegularInterviewDetails,
+    ).toHaveBeenCalledWith(5, 'john-doe', 'student');
 
     const mentorResult = await service.getUserInterviewDetails(5, 'john-doe', 'mentor');
     expect(mentorResult).toEqual([...stage, ...regular]);
