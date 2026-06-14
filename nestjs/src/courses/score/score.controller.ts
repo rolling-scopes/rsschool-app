@@ -1,5 +1,18 @@
 import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Body, Controller, Get, Logger, Param, ParseArrayPipe, ParseIntPipe, Post, Query, Req, UseGuards, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Logger,
+  Param,
+  ParseArrayPipe,
+  ParseIntPipe,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
@@ -81,16 +94,12 @@ export class ScoreController {
 
         const authorId = req.user?.id ?? 0;
 
-        const { created } = await this.writeScoreService.saveScoreWithStatus(
-          Number(student.id),
-          Number(courseTaskId),
-          {
-            authorId,
-            comment: data.comment,
-            score: data.score,
-            githubPrUrl: data.githubPrUrl,
-          },
-        );
+        const { created } = await this.writeScoreService.saveScoreWithStatus(Number(student.id), Number(courseTaskId), {
+          authorId,
+          comment: data.comment,
+          score: data.score,
+          githubPrUrl: data.githubPrUrl,
+        });
 
         if (created) {
           result.push({ status: 'created', value: undefined });
