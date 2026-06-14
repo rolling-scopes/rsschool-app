@@ -45,5 +45,4 @@ export class MentorRegistryRepository extends AbstractRepository<MentorRegistry>
     }
     await getRepository(MentorRegistry).update({ userId: user.id }, data);
   }
-
 }
