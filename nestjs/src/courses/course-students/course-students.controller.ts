@@ -1,4 +1,15 @@
-import { Controller, Get, NotFoundException, Param, ParseIntPipe, Post, Query, Res, UseGuards, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+  Res,
+  UseGuards,
+  Body,
+} from '@nestjs/common';
 import { ApiBadRequestResponse, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CourseRole, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
 import { Response } from 'express';
@@ -45,10 +56,7 @@ export class CourseStudentsController {
   @ApiOkResponse({ schema: { type: 'array', items: { type: 'object' } } })
   @ApiForbiddenResponse()
   @UseGuards(RoleGuard)
-  @RequiredRoles(
-    [CourseRole.Supervisor, CourseRole.Manager, CourseRole.Dementor, Role.Admin],
-    true,
-  )
+  @RequiredRoles([CourseRole.Supervisor, CourseRole.Manager, CourseRole.Dementor, Role.Admin], true)
   public async getCourseStudentsWithDetails(
     @Param('courseId', ParseIntPipe) courseId: number,
     @Query('status') status?: string,

@@ -187,7 +187,6 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   router.post('/students/status', courseManagerGuard, updateStatuses(logger));
   router.post('/students', adminGuard, postStudents(logger));
   router.get('/students/score/csv', courseSupervisorGuard, score.getScoreCsv(logger));
-
 }
 
 function addStudentCrossCheckApi(router: Router<any, any>, logger: ILogger) {

@@ -185,7 +185,11 @@ export class CourseService {
       if (!query) {
         return [];
       }
-      const response = await studentsApi.searchCourseStudents(this.courseId, query, String(onlyStudentsWithoutMentorShown));
+      const response = await studentsApi.searchCourseStudents(
+        this.courseId,
+        query,
+        String(onlyStudentsWithoutMentorShown),
+      );
       return response.data as unknown as SearchStudent[];
     } catch {
       return [];
