@@ -179,9 +179,7 @@ describe('CourseCrossCheckController.getCrossCheckAssignments', () => {
   it('responds 400 when the student is not found', async () => {
     mockQueryStudentByGithubId.mockResolvedValue(null);
 
-    await expect(controller.getCrossCheckAssignments(req, 11, 15, 'kate-checker')).rejects.toThrow(
-      BadRequestException,
-    );
+    await expect(controller.getCrossCheckAssignments(req, 11, 15, 'kate-checker')).rejects.toThrow(BadRequestException);
   });
 
   it('responds 400 when the task is not a cross-check task', async () => {
