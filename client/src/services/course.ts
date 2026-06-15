@@ -143,8 +143,16 @@ export class CourseService {
   }
 
   async getCourseEvents() {
-    const result = await this.axios.get<{ data: CourseEvent[] }>(`/events`);
-    return result.data.data;
+    const { data } = await courseEventsApi.getCourseEvents(this.courseId);
+    return data.map(
+      ({ eventId, name, type, description, descriptionUrl, disciplineId, organizer, ...rest }) =>
+        ({
+          ...rest,
+          eventId,
+          event: { id: eventId, name, type, description, descriptionUrl, disciplineId },
+          organizer,
+        }) as CourseEvent,
+    );
   }
 
   async createCourseEvent(data: CreateCourseEventDto) {
