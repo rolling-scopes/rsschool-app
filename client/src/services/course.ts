@@ -138,14 +138,21 @@ export class CourseService {
   }
 
   async getCourseTasksDetails() {
-    type Response = { data: CourseTaskDetails[] };
-    const result = await this.axios.get<Response>('/tasks/details');
-    return result.data.data.sort(sortTasksByEndDate);
+    const { data } = await courseTasksApi.getCourseTasksDetailed(this.courseId);
+    return data.sort(sortTasksByEndDate);
   }
 
   async getCourseEvents() {
-    const result = await this.axios.get<{ data: CourseEvent[] }>(`/events`);
-    return result.data.data;
+    const { data } = await courseEventsApi.getCourseEvents(this.courseId);
+    return data.map(
+      ({ eventId, name, type, description, descriptionUrl, disciplineId, organizer, ...rest }) =>
+        ({
+          ...rest,
+          eventId,
+          event: { id: eventId, name, type, description, descriptionUrl, disciplineId },
+          organizer,
+        }) as CourseEvent,
+    );
   }
 
   async createCourseEvent(data: CreateCourseEventDto) {
@@ -503,11 +510,6 @@ export class CourseService {
     return result.data as StudentSummaryDto;
   }
 
-  async getStudentScore(githubId: string) {
-    const result = await this.axios.get(`/student/${githubId}/score`);
-    return result.data.data as { totalScore: number; results: { courseTaskId: number; score: number }[] };
-  }
-
   async getStudentInterviews(githubId: string) {
     const result = await this.axios.get(`/student/${githubId}/interviews`);
     return result.data.data as InterviewDetails[];
@@ -614,7 +616,7 @@ export interface IAddCriteriaForCrossCheck {
   onCreate: (data: CriteriaDto) => void;
 }
 
-const sortTasksByEndDate = (a: CourseTaskDetails, b: CourseTaskDetails) => {
+const sortTasksByEndDate = (a: Pick<CourseTaskDto, 'studentEndDate'>, b: Pick<CourseTaskDto, 'studentEndDate'>) => {
   if (!b.studentEndDate && a.studentEndDate) {
     return -1;
   }

@@ -14,15 +14,12 @@ import {
   TaskChecker,
   TaskSolutionResult,
   IUserSession,
-  TaskResult,
-  TaskInterviewResult,
   isAdmin,
   isManager,
   isSupervisor,
 } from '../models';
 import { createName } from './user.service';
 import { StageInterviewRepository } from '../repositories/stageInterview.repository';
-import { getStageInterviewRating } from './stageInterview.service';
 
 export const getPrimaryUserFields = (modelName = 'user') => [
   `${modelName}.id`,
@@ -385,63 +382,6 @@ export async function getStudents(courseId: number, activeOnly: boolean) {
 
   const students = records.map(convertToStudentDetails);
   return students;
-}
-
-export async function getStudentScore(studentId: number) {
-  const student = await getRepository(Student)
-    .createQueryBuilder('student')
-    .leftJoinAndSelect('student.taskResults', 'taskResults')
-    .leftJoin('taskResults.courseTask', 'courseTask')
-    .addSelect(['courseTask.disabled', 'courseTask.id'])
-    .leftJoinAndSelect('student.taskInterviewResults', 'taskInterviewResults')
-    .leftJoin('student.stageInterviews', 'si')
-    .leftJoin('si.stageInterviewFeedbacks', 'sif')
-    .addSelect([
-      'sif.stageInterviewId',
-      'sif.json',
-      'si.isCompleted',
-      'si.id',
-      'si.courseTaskId',
-      'si.score',
-      'sif.version',
-    ])
-    .where('student.id = :studentId', { studentId })
-    .getOne();
-
-  if (!student) return null;
-
-  const { taskResults, taskInterviewResults, stageInterviews } = student;
-
-  const toTaskScore = ({ courseTaskId, score = 0 }: TaskResult | TaskInterviewResult) => ({ courseTaskId, score });
-
-  const results = [];
-
-  if (taskResults?.length) {
-    results.push(...(taskResults.filter(taskResult => !taskResult.courseTask.disabled).map(toTaskScore) ?? []));
-  }
-
-  if (taskInterviewResults?.length) {
-    results.push(...taskInterviewResults.map(toTaskScore));
-  }
-
-  // we have a case when technical screening score are set as task result.
-  if (stageInterviews?.length && !results.find(tr => tr.courseTaskId === stageInterviews[0].courseTaskId)) {
-    const feedbackVersion = stageInterviews[0].stageInterviewFeedbacks[0]?.version;
-    const score = !feedbackVersion
-      ? Math.floor(getStageInterviewRating(stageInterviews) ?? 0)
-      : stageInterviews[0].score;
-
-    results.push({
-      score,
-      courseTaskId: stageInterviews[0].courseTaskId,
-    });
-  }
-
-  return {
-    totalScore: student.totalScore ?? 0,
-    rank: student.rank ?? 999999,
-    results,
-  };
 }
 
 export async function getCourseTask(taskId: number) {

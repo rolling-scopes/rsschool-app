@@ -562,6 +562,24 @@
       }
     },
     "/courses/{courseId}/events": {
+      "get": {
+        "operationId": "getCourseEvents",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/CourseEventDto" } }
+              }
+            }
+          },
+          "400": { "description": "" },
+          "403": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["courses events"]
+      },
       "post": {
         "operationId": "createCourseEvent",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
@@ -2230,6 +2248,15 @@
         "tags": ["registry"]
       }
     },
+    "/certificate/templates": {
+      "get": {
+        "operationId": "getCertificateTemplates",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "summary": "",
+        "tags": ["certificate"]
+      }
+    },
     "/certificate/{publicId}": {
       "get": {
         "operationId": "getCertificate",
@@ -3737,28 +3764,11 @@
         },
         "required": ["studentStartDate", "studentEndDate", "submitText", "validations"]
       },
-      "Organizer": { "type": "object", "properties": { "id": { "type": "number" } }, "required": ["id"] },
-      "CreateCourseEventDto": {
-        "type": "object",
-        "properties": {
-          "eventId": { "type": "number" },
-          "special": { "type": "string" },
-          "dateTime": { "type": "string" },
-          "endTime": { "type": "string" },
-          "duration": { "type": "number" },
-          "place": { "type": "string" },
-          "organizer": { "$ref": "#/components/schemas/Organizer" },
-          "organizerId": { "type": "number" },
-          "broadcastUrl": { "type": "string" },
-          "coordinator": { "type": "string" },
-          "comment": { "type": "string" }
-        },
-        "required": ["eventId"]
-      },
       "CourseEventDto": {
         "type": "object",
         "properties": {
           "id": { "type": "number" },
+          "eventId": { "type": "number" },
           "name": { "type": "string" },
           "type": {
             "type": "string",
@@ -3778,11 +3788,47 @@
           },
           "description": { "type": "string" },
           "descriptionUrl": { "type": "string" },
+          "dateTime": { "type": "string", "nullable": true },
+          "endTime": { "type": "string", "nullable": true },
+          "place": { "type": "string", "nullable": true },
+          "comment": { "type": "string", "nullable": true },
+          "special": { "type": "string" },
+          "disciplineId": { "type": "number", "nullable": true },
+          "organizer": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/PersonDto" }] }
+        },
+        "required": [
+          "id",
+          "eventId",
+          "name",
+          "type",
+          "description",
+          "descriptionUrl",
+          "dateTime",
+          "endTime",
+          "place",
+          "comment",
+          "special",
+          "disciplineId",
+          "organizer"
+        ]
+      },
+      "Organizer": { "type": "object", "properties": { "id": { "type": "number" } }, "required": ["id"] },
+      "CreateCourseEventDto": {
+        "type": "object",
+        "properties": {
+          "eventId": { "type": "number" },
+          "special": { "type": "string" },
           "dateTime": { "type": "string" },
           "endTime": { "type": "string" },
-          "organizer": { "$ref": "#/components/schemas/PersonDto" }
+          "duration": { "type": "number" },
+          "place": { "type": "string" },
+          "organizer": { "$ref": "#/components/schemas/Organizer" },
+          "organizerId": { "type": "number" },
+          "broadcastUrl": { "type": "string" },
+          "coordinator": { "type": "string" },
+          "comment": { "type": "string" }
         },
-        "required": ["id", "name", "type", "description", "descriptionUrl", "dateTime", "endTime", "organizer"]
+        "required": ["eventId"]
       },
       "UpdateCourseEventDto": {
         "type": "object",
