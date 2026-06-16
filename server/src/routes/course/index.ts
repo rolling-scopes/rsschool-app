@@ -183,7 +183,6 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
 
   router.post('/student/:githubId/status', ...mentorOrDementorValidators, updateStudentStatus(logger));
   router.post('/student/:githubId/status-self', courseGuard, selfUpdateStudentStatus(logger));
-  router.get('/student/:githubId/score', courseGuard, score.getScoreByStudent(logger));
   router.post('/student/:githubId/certificate', courseManagerGuard, validateGithubId, postStudentCertificate(logger));
   router.post('/student/feedback', anyCourseMentorGuard, postFeedback(logger));
 
