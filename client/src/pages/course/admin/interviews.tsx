@@ -86,13 +86,14 @@ function Page() {
               <Popconfirm
                 onConfirm={() => createInterviews()}
                 title="Do you want to create interview pairs for not distributed students?"
+                disabled={!selected}
               >
-                <Button>Create Interview Pairs</Button>
+                <Button disabled={!selected}>Create Interview Pairs</Button>
               </Popconfirm>
             </div>
           ) : null}
         </Row>
-        <Button type="primary" onClick={() => setModal(true)}>
+        <Button type="primary" disabled={!selected} onClick={() => setModal(true)}>
           Create
         </Button>
       </Row>
@@ -150,7 +151,10 @@ function Page() {
 
       <StudentMentorModal
         onOk={withLoading(async (studentGithubId, mentorGithubId) => {
-          await courseService.addInterviewPair(selected!, mentorGithubId, studentGithubId);
+          if (!selected) {
+            return;
+          }
+          await courseService.addInterviewPair(selected, mentorGithubId, studentGithubId);
           await loadData();
           setModal(false);
         })}
