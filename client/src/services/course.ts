@@ -502,11 +502,6 @@ export class CourseService {
     return result.data as StudentSummaryDto;
   }
 
-  async getStudentScore(githubId: string) {
-    const result = await this.axios.get(`/student/${githubId}/score`);
-    return result.data.data as { totalScore: number; results: { courseTaskId: number; score: number }[] };
-  }
-
   async getStudentInterviews(githubId: string) {
     const result = await this.axios.get(`/student/${githubId}/interviews`);
     return result.data.data as InterviewDetails[];
