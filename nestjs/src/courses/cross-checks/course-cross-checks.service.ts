@@ -129,7 +129,6 @@ export class CourseCrossCheckService {
         'tsr."courseTaskId" = tsc."courseTaskId" AND tsr."studentId" = tsc."studentId" AND tsr."checkerId" = tsc."checkerId"',
       )
       .addSelect(['tsr.score', 'tsr.comment', 'tsr.updatedDate', 'tsr.historicalScores', 'tsr.messages'])
-      .addSelect(['st.repository'])
       .addSelect(['stu.githubId', 'stu.id', 'stu.firstName', 'stu.lastName'])
       .addSelect(['chu.githubId', 'chu.id', 'chu.firstName', 'chu.lastName'])
       .addSelect(['ts.url', 'ts.updatedDate'])
