@@ -17,7 +17,7 @@ import {
   taskOwnerGuard,
 } from '../guards';
 import { postCertificates, postStudentCertificate } from './certificates';
-import { getCourseEvent, getCourseEvents } from './events';
+import { getCourseEvent } from './events';
 import {
   deleteMentor as postMentorStatusExpelled,
   getMentorInterview,
@@ -94,8 +94,6 @@ function addInterviewsApi(router: Router<any, any>, logger: ILogger) {
 
 function addEventApi(router: Router<any, any>, logger: ILogger) {
   router.get('/event/:id', courseGuard, getCourseEvent(logger));
-
-  router.get('/events', courseGuard, getCourseEvents(logger));
 }
 
 function addTaskApi(router: Router<any, any>, logger: ILogger) {

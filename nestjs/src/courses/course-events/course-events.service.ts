@@ -16,6 +16,17 @@ export class CourseEventsService {
     readonly courseEventRepository: Repository<CourseEvent>,
   ) {}
 
+  public async getCourseEvents(courseId: number) {
+    return this.courseEventRepository
+      .createQueryBuilder('courseEvent')
+      .innerJoinAndSelect('courseEvent.event', 'event')
+      .leftJoin('courseEvent.organizer', 'organizer')
+      .addSelect(['organizer.id', 'organizer.firstName', 'organizer.lastName', 'organizer.githubId'])
+      .where('courseEvent.courseId = :courseId', { courseId })
+      .orderBy('courseEvent.dateTime')
+      .getMany();
+  }
+
   public async createCourseEvent(courseEvent: Partial<Omit<CourseEvent, 'organizer'> & { organizer: { id: number } }>) {
     const { id } = await this.courseEventRepository.save(courseEvent);
     return this.courseEventRepository.findOneOrFail({ where: { id }, relations: ['organizer', 'event'] });
