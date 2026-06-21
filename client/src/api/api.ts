@@ -1212,6 +1212,12 @@ export interface CourseEventDto {
     'id': number;
     /**
      * 
+     * @type {number}
+     * @memberof CourseEventDto
+     */
+    'eventId': number;
+    /**
+     * 
      * @type {string}
      * @memberof CourseEventDto
      */
@@ -1239,19 +1245,43 @@ export interface CourseEventDto {
      * @type {string}
      * @memberof CourseEventDto
      */
-    'dateTime': string;
+    'dateTime': string | null;
     /**
      * 
      * @type {string}
      * @memberof CourseEventDto
      */
-    'endTime': string;
+    'endTime': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseEventDto
+     */
+    'place': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseEventDto
+     */
+    'comment': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseEventDto
+     */
+    'special': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseEventDto
+     */
+    'disciplineId': number | null;
     /**
      * 
      * @type {PersonDto}
      * @memberof CourseEventDto
      */
-    'organizer': PersonDto;
+    'organizer': PersonDto | null;
 }
 
 export const CourseEventDtoTypeEnum = {
@@ -12104,6 +12134,39 @@ export const CoursesEventsApiAxiosParamCreator = function (configuration?: Confi
         /**
          * 
          * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCourseEvents: async (courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getCourseEvents', 'courseId', courseId)
+            const localVarPath = `/courses/{courseId}/events`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
          * @param {number} courseEventId 
          * @param {UpdateCourseEventDto} updateCourseEventDto 
          * @param {*} [options] Override http request option.
@@ -12179,6 +12242,16 @@ export const CoursesEventsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCourseEvents(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CourseEventDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCourseEvents(courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
          * @param {number} courseEventId 
          * @param {UpdateCourseEventDto} updateCourseEventDto 
          * @param {*} [options] Override http request option.
@@ -12217,6 +12290,15 @@ export const CoursesEventsApiFactory = function (configuration?: Configuration, 
          */
         deleteCourseEvent(courseEventId: number, courseId: any, options?: any): AxiosPromise<void> {
             return localVarFp.deleteCourseEvent(courseEventId, courseId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCourseEvents(courseId: number, options?: any): AxiosPromise<Array<CourseEventDto>> {
+            return localVarFp.getCourseEvents(courseId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -12261,6 +12343,17 @@ export class CoursesEventsApi extends BaseAPI {
      */
     public deleteCourseEvent(courseEventId: number, courseId: any, options?: AxiosRequestConfig) {
         return CoursesEventsApiFp(this.configuration).deleteCourseEvent(courseEventId, courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesEventsApi
+     */
+    public getCourseEvents(courseId: number, options?: AxiosRequestConfig) {
+        return CoursesEventsApiFp(this.configuration).getCourseEvents(courseId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

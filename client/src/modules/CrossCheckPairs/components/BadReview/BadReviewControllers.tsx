@@ -1,11 +1,11 @@
 import { Button, Col, Modal, Row, Select, Spin } from 'antd';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CheckService } from '@client/services/check';
-import { CourseTaskDetails } from '@client/services/course';
+import { CourseTaskDetailedDto } from '@client/api';
 import { BadReviewTable } from './BadReviewTable';
 
 interface IBadReviewControllersProps {
-  courseTasks: CourseTaskDetails[];
+  courseTasks: CourseTaskDetailedDto[];
   courseId: number;
 }
 
