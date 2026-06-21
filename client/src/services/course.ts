@@ -1,5 +1,5 @@
 import globalAxios, { AxiosInstance } from 'axios';
-import { UserBasic, MentorBasic, StudentBasic, InterviewDetails, InterviewPair } from '@common/models';
+import { UserBasic, MentorBasic, StudentBasic, InterviewDetails } from '@common/models';
 import { ScoreOrder, ScoreTableFilters } from '@client/modules/Score/hooks/types';
 import { IPaginationInfo } from '@client/shared/utils/pagination';
 
@@ -20,6 +20,7 @@ import {
   CertificateApi,
   CoursesInterviewsApi,
   MentorDetailsDtoStudentsPreferenceEnum,
+  TaskDtoTypeEnum,
 } from '@client/api';
 import { optionalQueryString } from '@client/utils/optionalQueryString';
 import { Decision } from '@client/data/interviews/technical-screening';
@@ -436,17 +437,25 @@ export class CourseService {
     interviewId: number,
     data: { json: unknown; githubId: string; isGoodCandidate: boolean; isCompleted: boolean; decision: string },
   ) {
-    const result = await this.axios.post(`/interview/stage/${interviewId}/feedback`, data);
-    return result.data.data;
+    await coursesInterviewsApi.createInterviewFeedback(this.courseId, interviewId, TaskDtoTypeEnum.StageInterview, {
+      version: 0,
+      json: data.json as object,
+      decision: data.decision,
+      isGoodCandidate: data.isGoodCandidate,
+      isCompleted: data.isCompleted,
+    });
   }
 
   /**
    * @deprecated. should be removed after feedbacks are migrated to new template
    */
   async getStageInterviewFeedback(interviewId: number) {
-    const result = await this.axios.get(`/interview/stage/${interviewId}/feedback`);
-
-    return result.data.data;
+    const { data } = await coursesInterviewsApi.getInterviewFeedback(
+      this.courseId,
+      interviewId,
+      TaskDtoTypeEnum.StageInterview,
+    );
+    return (data.json ?? {}) as Record<string, unknown>;
   }
 
   async expelMentor(githubId: string) {
@@ -539,11 +548,6 @@ export class CourseService {
   async getInterviewStudent(githubId: string, interviewId: string) {
     const result = await this.axios.get(`/student/${githubId}/interview/${interviewId}`);
     return result.data.data as { id: number } | null;
-  }
-
-  async getInterviewPairs(interviewId: string) {
-    const result = await this.axios.get(`/interviews/${interviewId}`);
-    return result.data.data as InterviewPair[];
   }
 
   async cancelInterviewPair(interviewId: string, pairId: string) {
