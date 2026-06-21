@@ -67,6 +67,24 @@
         "tags": ["users"]
       }
     },
+    "/users/search/basic": {
+      "get": {
+        "operationId": "searchUsersBasic",
+        "parameters": [{ "name": "query", "required": true, "in": "query", "schema": { "type": "string" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/UserSearchBasicDto" } }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": ["users"]
+      }
+    },
     "/alerts": {
       "post": {
         "operationId": "createAlert",
@@ -3151,6 +3169,16 @@
           "mentors",
           "students"
         ]
+      },
+      "UserSearchBasicDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "githubId": { "type": "string" },
+          "name": { "type": "string" },
+          "discord": { "type": "string", "nullable": true }
+        },
+        "required": ["id", "githubId", "name", "discord"]
       },
       "CreateAlertDto": {
         "type": "object",
