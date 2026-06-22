@@ -1,5 +1,5 @@
 import { CacheTTL } from '@nestjs/cache-manager';
-import { Controller, Get, Param, ParseIntPipe, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Post, Res, UseGuards } from '@nestjs/common';
 import { ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { parseAsync, transforms } from 'json2csv';
@@ -13,6 +13,26 @@ import { SearchMentorDto } from './dto/search-mentor.dto';
 @ApiTags('course mentors')
 export class CourseMentorsController {
   constructor(private readonly courseMentorsService: CourseMentorsService) {}
+
+  @Post('/:githubId/status/expelled')
+  @ApiOperation({ operationId: 'expelMentor' })
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  @UseGuards(DefaultGuard, CourseGuard, RoleGuard)
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  public async expelMentor(@Param('courseId', ParseIntPipe) courseId: number, @Param('githubId') githubId: string) {
+    await this.courseMentorsService.expelMentor(courseId, githubId);
+  }
+
+  @Post('/:githubId/status/restore')
+  @ApiOperation({ operationId: 'restoreMentor' })
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  @UseGuards(DefaultGuard, CourseGuard, RoleGuard)
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  public async restoreMentor(@Param('courseId', ParseIntPipe) courseId: number, @Param('githubId') githubId: string) {
+    await this.courseMentorsService.restoreMentor(courseId, githubId);
+  }
 
   @Get('details')
   @ApiOperation({ operationId: 'getMentorsDetails' })
