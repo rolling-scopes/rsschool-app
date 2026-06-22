@@ -612,6 +612,49 @@ export interface AvailableStudentDto {
 /**
  * 
  * @export
+ * @interface BadCommentCheckerDto
+ */
+export interface BadCommentCheckerDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof BadCommentCheckerDto
+     */
+    'taskName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BadCommentCheckerDto
+     */
+    'checkerGithubId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BadCommentCheckerDto
+     */
+    'studentGithubId': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof BadCommentCheckerDto
+     */
+    'checkerScore': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof BadCommentCheckerDto
+     */
+    'comment': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof BadCommentCheckerDto
+     */
+    'key': string;
+}
+/**
+ * 
+ * @export
  * @interface BadgeDto
  */
 export interface BadgeDto {
@@ -4362,6 +4405,55 @@ export interface LeaveCourseRequestDto {
      * @memberof LeaveCourseRequestDto
      */
     'otherComment'?: string;
+}
+/**
+ * 
+ * @export
+ * @interface MaxScoreCheckerDto
+ */
+export interface MaxScoreCheckerDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof MaxScoreCheckerDto
+     */
+    'taskName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MaxScoreCheckerDto
+     */
+    'checkerGithubId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MaxScoreCheckerDto
+     */
+    'studentGithubId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MaxScoreCheckerDto
+     */
+    'studentAverageScoreExcludeChecker': string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof MaxScoreCheckerDto
+     */
+    'checkerScore': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof MaxScoreCheckerDto
+     */
+    'studentAvgScore': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof MaxScoreCheckerDto
+     */
+    'key': string;
 }
 /**
  * 
@@ -13789,6 +13881,43 @@ export const CoursesTasksApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        getBadCommentCheckers: async (courseId: number, courseTaskId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getBadCommentCheckers', 'courseId', courseId)
+            // verify required parameter 'courseTaskId' is not null or undefined
+            assertParamExists('getBadCommentCheckers', 'courseTaskId', courseTaskId)
+            const localVarPath = `/courses/{courseId}/cross-checks/{courseTaskId}/bad-comments`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"courseTaskId"}}`, encodeURIComponent(String(courseTaskId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         getCourseTask: async (courseId: number, courseTaskId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('getCourseTask', 'courseId', courseId)
@@ -14054,6 +14183,43 @@ export const CoursesTasksApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        getMaxScoreCheckers: async (courseId: number, courseTaskId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getMaxScoreCheckers', 'courseId', courseId)
+            // verify required parameter 'courseTaskId' is not null or undefined
+            assertParamExists('getMaxScoreCheckers', 'courseTaskId', courseTaskId)
+            const localVarPath = `/courses/{courseId}/cross-checks/{courseTaskId}/max-score-checkers`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"courseTaskId"}}`, encodeURIComponent(String(courseTaskId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         getMyCrossCheckFeedbacks: async (courseId: number, courseTaskId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('getMyCrossCheckFeedbacks', 'courseId', courseId)
@@ -14211,6 +14377,17 @@ export const CoursesTasksApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        async getBadCommentCheckers(courseId: number, courseTaskId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BadCommentCheckerDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getBadCommentCheckers(courseId, courseTaskId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         async getCourseTask(courseId: number, courseTaskId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseTaskDetailedDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getCourseTask(courseId, courseTaskId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
@@ -14275,6 +14452,17 @@ export const CoursesTasksApiFp = function(configuration?: Configuration) {
          */
         async getCrossCheckPairs(courseId: number, pageSize: number, current: number, orderBy?: string, orderDirection?: string, checker?: string, student?: string, url?: string, task?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CrossCheckPairResponseDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getCrossCheckPairs(courseId, pageSize, current, orderBy, orderDirection, checker, student, url, task, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMaxScoreCheckers(courseId: number, courseTaskId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MaxScoreCheckerDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMaxScoreCheckers(courseId, courseTaskId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -14356,6 +14544,16 @@ export const CoursesTasksApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        getBadCommentCheckers(courseId: number, courseTaskId: number, options?: any): AxiosPromise<Array<BadCommentCheckerDto>> {
+            return localVarFp.getBadCommentCheckers(courseId, courseTaskId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         getCourseTask(courseId: number, courseTaskId: number, options?: any): AxiosPromise<CourseTaskDetailedDto> {
             return localVarFp.getCourseTask(courseId, courseTaskId, options).then((request) => request(axios, basePath));
         },
@@ -14415,6 +14613,16 @@ export const CoursesTasksApiFactory = function (configuration?: Configuration, b
          */
         getCrossCheckPairs(courseId: number, pageSize: number, current: number, orderBy?: string, orderDirection?: string, checker?: string, student?: string, url?: string, task?: string, options?: any): AxiosPromise<CrossCheckPairResponseDto> {
             return localVarFp.getCrossCheckPairs(courseId, pageSize, current, orderBy, orderDirection, checker, student, url, task, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMaxScoreCheckers(courseId: number, courseTaskId: number, options?: any): AxiosPromise<Array<MaxScoreCheckerDto>> {
+            return localVarFp.getMaxScoreCheckers(courseId, courseTaskId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -14499,6 +14707,18 @@ export class CoursesTasksApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof CoursesTasksApi
      */
+    public getBadCommentCheckers(courseId: number, courseTaskId: number, options?: AxiosRequestConfig) {
+        return CoursesTasksApiFp(this.configuration).getBadCommentCheckers(courseId, courseTaskId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {number} courseTaskId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesTasksApi
+     */
     public getCourseTask(courseId: number, courseTaskId: number, options?: AxiosRequestConfig) {
         return CoursesTasksApiFp(this.configuration).getCourseTask(courseId, courseTaskId, options).then((request) => request(this.axios, this.basePath));
     }
@@ -14568,6 +14788,18 @@ export class CoursesTasksApi extends BaseAPI {
      */
     public getCrossCheckPairs(courseId: number, pageSize: number, current: number, orderBy?: string, orderDirection?: string, checker?: string, student?: string, url?: string, task?: string, options?: AxiosRequestConfig) {
         return CoursesTasksApiFp(this.configuration).getCrossCheckPairs(courseId, pageSize, current, orderBy, orderDirection, checker, student, url, task, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {number} courseTaskId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesTasksApi
+     */
+    public getMaxScoreCheckers(courseId: number, courseTaskId: number, options?: AxiosRequestConfig) {
+        return CoursesTasksApiFp(this.configuration).getMaxScoreCheckers(courseId, courseTaskId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

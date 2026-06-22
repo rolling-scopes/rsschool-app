@@ -10,7 +10,6 @@ import { taskRoute } from './task';
 import { usersRoute } from './users';
 
 import { ILogger } from '../logger';
-import { checksRoute } from './checks';
 import { courseMiddleware, userRolesMiddleware } from './middlewares';
 
 export * from './logging';
@@ -36,7 +35,6 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, usersRoute(logger));
   applyRouter(router, taskRoute(logger));
   applyRouter(router, profileRoute(logger));
-  applyRouter(router, checksRoute(logger));
   applyRouter(router, filesRoute(logger));
 
   return { publicRouter: router };
