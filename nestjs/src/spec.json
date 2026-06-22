@@ -67,6 +67,24 @@
         "tags": ["users"]
       }
     },
+    "/users/search/basic": {
+      "get": {
+        "operationId": "searchUsersBasic",
+        "parameters": [{ "name": "query", "required": true, "in": "query", "schema": { "type": "string" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/UserSearchBasicDto" } }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": ["users"]
+      }
+    },
     "/alerts": {
       "post": {
         "operationId": "createAlert",
@@ -562,6 +580,24 @@
       }
     },
     "/courses/{courseId}/events": {
+      "get": {
+        "operationId": "getCourseEvents",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/CourseEventDto" } }
+              }
+            }
+          },
+          "400": { "description": "" },
+          "403": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["courses events"]
+      },
       "post": {
         "operationId": "createCourseEvent",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
@@ -981,6 +1017,50 @@
         },
         "summary": "",
         "tags": ["course stats"]
+      }
+    },
+    "/courses/{courseId}/cross-checks/{courseTaskId}/max-score-checkers": {
+      "get": {
+        "operationId": "getMaxScoreCheckers",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/MaxScoreCheckerDto" } }
+              }
+            }
+          },
+          "403": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["courses tasks"]
+      }
+    },
+    "/courses/{courseId}/cross-checks/{courseTaskId}/bad-comments": {
+      "get": {
+        "operationId": "getBadCommentCheckers",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/BadCommentCheckerDto" } }
+              }
+            }
+          },
+          "403": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["courses tasks"]
       }
     },
     "/courses/{courseId}/cross-checks/pairs": {
@@ -2596,6 +2676,24 @@
         },
         "summary": "",
         "tags": ["gratitudes"]
+      },
+      "get": {
+        "operationId": "getGratitudes",
+        "parameters": [
+          { "name": "name", "required": false, "in": "query", "schema": { "type": "string" } },
+          { "name": "githubId", "required": false, "in": "query", "schema": { "type": "string" } },
+          { "name": "courseId", "required": false, "in": "query", "schema": { "type": "number" } },
+          { "name": "pageSize", "required": false, "in": "query", "schema": { "type": "number" } },
+          { "name": "current", "required": false, "in": "query", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/GetGratitudesDto" } } }
+          }
+        },
+        "summary": "",
+        "tags": ["gratitudes"]
       }
     },
     "/gratitudes/badges/{courseId}": {
@@ -3148,6 +3246,16 @@
           "mentors",
           "students"
         ]
+      },
+      "UserSearchBasicDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "githubId": { "type": "string" },
+          "name": { "type": "string" },
+          "discord": { "type": "string", "nullable": true }
+        },
+        "required": ["id", "githubId", "name", "discord"]
       },
       "CreateAlertDto": {
         "type": "object",
@@ -3761,28 +3869,11 @@
         },
         "required": ["studentStartDate", "studentEndDate", "submitText", "validations"]
       },
-      "Organizer": { "type": "object", "properties": { "id": { "type": "number" } }, "required": ["id"] },
-      "CreateCourseEventDto": {
-        "type": "object",
-        "properties": {
-          "eventId": { "type": "number" },
-          "special": { "type": "string" },
-          "dateTime": { "type": "string" },
-          "endTime": { "type": "string" },
-          "duration": { "type": "number" },
-          "place": { "type": "string" },
-          "organizer": { "$ref": "#/components/schemas/Organizer" },
-          "organizerId": { "type": "number" },
-          "broadcastUrl": { "type": "string" },
-          "coordinator": { "type": "string" },
-          "comment": { "type": "string" }
-        },
-        "required": ["eventId"]
-      },
       "CourseEventDto": {
         "type": "object",
         "properties": {
           "id": { "type": "number" },
+          "eventId": { "type": "number" },
           "name": { "type": "string" },
           "type": {
             "type": "string",
@@ -3802,11 +3893,47 @@
           },
           "description": { "type": "string" },
           "descriptionUrl": { "type": "string" },
+          "dateTime": { "type": "string", "nullable": true },
+          "endTime": { "type": "string", "nullable": true },
+          "place": { "type": "string", "nullable": true },
+          "comment": { "type": "string", "nullable": true },
+          "special": { "type": "string" },
+          "disciplineId": { "type": "number", "nullable": true },
+          "organizer": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/PersonDto" }] }
+        },
+        "required": [
+          "id",
+          "eventId",
+          "name",
+          "type",
+          "description",
+          "descriptionUrl",
+          "dateTime",
+          "endTime",
+          "place",
+          "comment",
+          "special",
+          "disciplineId",
+          "organizer"
+        ]
+      },
+      "Organizer": { "type": "object", "properties": { "id": { "type": "number" } }, "required": ["id"] },
+      "CreateCourseEventDto": {
+        "type": "object",
+        "properties": {
+          "eventId": { "type": "number" },
+          "special": { "type": "string" },
           "dateTime": { "type": "string" },
           "endTime": { "type": "string" },
-          "organizer": { "$ref": "#/components/schemas/PersonDto" }
+          "duration": { "type": "number" },
+          "place": { "type": "string" },
+          "organizer": { "$ref": "#/components/schemas/Organizer" },
+          "organizerId": { "type": "number" },
+          "broadcastUrl": { "type": "string" },
+          "coordinator": { "type": "string" },
+          "comment": { "type": "string" }
         },
-        "required": ["id", "name", "type", "description", "descriptionUrl", "dateTime", "endTime", "organizer"]
+        "required": ["eventId"]
       },
       "UpdateCourseEventDto": {
         "type": "object",
@@ -4053,6 +4180,39 @@
           "exceptionalAchievement",
           "perfectScores"
         ]
+      },
+      "MaxScoreCheckerDto": {
+        "type": "object",
+        "properties": {
+          "taskName": { "type": "string" },
+          "checkerGithubId": { "type": "string" },
+          "studentGithubId": { "type": "string" },
+          "studentAverageScoreExcludeChecker": { "type": "string", "nullable": true },
+          "checkerScore": { "type": "number" },
+          "studentAvgScore": { "type": "number" },
+          "key": { "type": "string" }
+        },
+        "required": [
+          "taskName",
+          "checkerGithubId",
+          "studentGithubId",
+          "studentAverageScoreExcludeChecker",
+          "checkerScore",
+          "studentAvgScore",
+          "key"
+        ]
+      },
+      "BadCommentCheckerDto": {
+        "type": "object",
+        "properties": {
+          "taskName": { "type": "string" },
+          "checkerGithubId": { "type": "string" },
+          "studentGithubId": { "type": "string" },
+          "checkerScore": { "type": "number" },
+          "comment": { "type": "string", "nullable": true },
+          "key": { "type": "string" }
+        },
+        "required": ["taskName", "checkerGithubId", "studentGithubId", "checkerScore", "comment", "key"]
       },
       "CrossCheckCriteriaDataDto": {
         "type": "object",
@@ -5536,6 +5696,54 @@
           "Coordinator",
           "Thanks"
         ]
+      },
+      "GratitudeFromUserDto": {
+        "type": "object",
+        "properties": {
+          "githubId": { "type": "string" },
+          "firstName": { "type": "string", "nullable": true },
+          "lastName": { "type": "string", "nullable": true }
+        },
+        "required": ["githubId", "firstName", "lastName"]
+      },
+      "GratitudeItemDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "badgeId": { "type": "string" },
+          "date": { "type": "string" },
+          "comment": { "type": "string", "nullable": true },
+          "githubId": { "type": "string" },
+          "firstName": { "type": "string", "nullable": true },
+          "lastName": { "type": "string", "nullable": true },
+          "countryName": { "type": "string", "nullable": true },
+          "cityName": { "type": "string", "nullable": true },
+          "activist": { "type": "boolean" },
+          "user_id": { "type": "number" },
+          "from": { "$ref": "#/components/schemas/GratitudeFromUserDto" }
+        },
+        "required": [
+          "id",
+          "badgeId",
+          "date",
+          "comment",
+          "githubId",
+          "firstName",
+          "lastName",
+          "countryName",
+          "cityName",
+          "activist",
+          "user_id",
+          "from"
+        ]
+      },
+      "GetGratitudesDto": {
+        "type": "object",
+        "properties": {
+          "content": { "type": "array", "items": { "$ref": "#/components/schemas/GratitudeItemDto" } },
+          "count": { "type": "number" }
+        },
+        "required": ["content", "count"]
       },
       "BadgeDto": {
         "type": "object",
