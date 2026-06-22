@@ -1774,6 +1774,24 @@
         "tags": ["students"]
       }
     },
+    "/courses/{courseId}/students/{githubId}/availability": {
+      "post": {
+        "operationId": "updateMentoringAvailability",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/UpdateMentoringAvailabilityDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" }, "400": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
+        "tags": ["students"]
+      }
+    },
     "/courses/{courseId}/students/expel": {
       "post": {
         "operationId": "expelStudents",
@@ -4965,6 +4983,10 @@
           "rank": { "type": "number" }
         },
         "required": ["totalScore", "results", "isActive", "mentor", "rank"]
+      },
+      "UpdateMentoringAvailabilityDto": {
+        "type": "object",
+        "properties": { "mentoring": { "type": "boolean", "default": false } }
       },
       "ExpelCriteriaDto": {
         "type": "object",

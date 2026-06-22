@@ -410,8 +410,7 @@ export class CourseService {
   }
 
   async updateMentoringAvailability(githubId: string, mentoring: boolean) {
-    const result = await this.axios.post(`/student/${githubId}/availability`, { mentoring });
-    return result.data.data;
+    await studentsApi.updateMentoringAvailability(this.courseId, githubId, { mentoring });
   }
 
   async deleteStageInterview(interviewId: number) {

@@ -20,6 +20,10 @@ export class CourseStudentsService {
     readonly mentorRepository: Repository<Mentor>,
   ) {}
 
+  public async updateMentoringAvailability(studentId: number, mentoring: boolean) {
+    await this.studentRepository.update(studentId, { mentoring });
+  }
+
   async getStudentByGithubId(courseId: number, githubId: string): Promise<Student | null> {
     const record = await this.studentRepository.findOne({
       where: {

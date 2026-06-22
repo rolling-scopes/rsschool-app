@@ -1,9 +1,20 @@
-import { Body, Controller, Get, NotFoundException, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  ParseIntPipe,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBadRequestResponse, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CourseRole, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
 import { StudentSummaryDto } from './dto/student-summary.dto';
 import { CourseStudentsService } from './course-students.service';
 import { ExpelStatusDto } from './dto/student-status.dto';
+import { UpdateMentoringAvailabilityDto } from './dto/update-mentoring-availability.dto';
 
 @Controller('courses/:courseId/students')
 @ApiTags('students')
@@ -36,6 +47,25 @@ export class CourseStudentsController {
       isActive: !student?.isExpelled && !student?.isFailed,
       mentor,
     });
+  }
+
+  @Post(':githubId/availability')
+  @ApiOperation({ operationId: 'updateMentoringAvailability' })
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  @ApiBadRequestResponse()
+  @UseGuards(RoleGuard)
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  public async updateMentoringAvailability(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('githubId') githubId: string,
+    @Body() dto: UpdateMentoringAvailabilityDto,
+  ) {
+    const student = await this.courseStudentService.getStudentByGithubId(courseId, githubId);
+    if (student == null) {
+      throw new BadRequestException('Student not found');
+    }
+    await this.courseStudentService.updateMentoringAvailability(student.id, dto.mentoring ?? false);
   }
 
   @Post('expel')
