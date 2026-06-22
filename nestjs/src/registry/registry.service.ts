@@ -301,4 +301,8 @@ export class RegistryService {
 
     return { registries: result };
   }
+
+  public async getOwnMentorRegistry(userId: number) {
+    return this.mentorsRegistryRepository.findOne({ where: { userId } });
+  }
 }

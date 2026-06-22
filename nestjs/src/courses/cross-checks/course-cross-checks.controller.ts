@@ -11,11 +11,11 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { ApiForbiddenResponse, ApiOperation, ApiResponse, ApiTags, ApiQuery } from '@nestjs/swagger';
+import { ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags, ApiQuery } from '@nestjs/swagger';
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
 import { CourseTasksService } from '../course-tasks';
 import { OrderField, OrderDirection, CourseCrossCheckService } from './course-cross-checks.service';
-import { CrossCheckFeedbackDto, CrossCheckPairResponseDto } from './dto';
+import { BadCommentCheckerDto, CrossCheckFeedbackDto, CrossCheckPairResponseDto, MaxScoreCheckerDto } from './dto';
 import { AvailableReviewStatsDto } from './dto/available-review-stats.dto';
 import { parseAsync } from 'json2csv';
 import { Response } from 'express';
@@ -30,6 +30,32 @@ export class CourseCrossCheckController {
     private courseCrossCheckService: CourseCrossCheckService,
     private courseTasksService: CourseTasksService,
   ) {}
+
+  @Get('/:courseTaskId/max-score-checkers')
+  @ApiOperation({ operationId: 'getMaxScoreCheckers' })
+  @ApiOkResponse({ type: [MaxScoreCheckerDto] })
+  @ApiForbiddenResponse()
+  @RequiredRoles([CourseRole.Manager, CourseRole.Supervisor, CourseRole.Dementor, Role.Admin], true)
+  @UseGuards(DefaultGuard, RoleGuard)
+  public async getMaxScoreCheckers(
+    @Param('courseId', ParseIntPipe) _courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+  ) {
+    return this.courseCrossCheckService.getCheckersWithMaxScore(courseTaskId);
+  }
+
+  @Get('/:courseTaskId/bad-comments')
+  @ApiOperation({ operationId: 'getBadCommentCheckers' })
+  @ApiOkResponse({ type: [BadCommentCheckerDto] })
+  @ApiForbiddenResponse()
+  @RequiredRoles([CourseRole.Manager, CourseRole.Supervisor, CourseRole.Dementor, Role.Admin], true)
+  @UseGuards(DefaultGuard, RoleGuard)
+  public async getBadCommentCheckers(
+    @Param('courseId', ParseIntPipe) _courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+  ) {
+    return this.courseCrossCheckService.getCheckersWithoutComments(courseTaskId);
+  }
 
   @Get('/pairs')
   @ApiOperation({ operationId: 'getCrossCheckPairs' })
