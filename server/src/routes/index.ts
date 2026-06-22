@@ -1,19 +1,14 @@
 import Router from '@koa/router';
 
 import { courseRoute } from './course';
-import { feedbackRoute } from './feedback';
-import { filesRoute } from './file';
 import { errorHandlerMiddleware } from './logging';
 import { publicMeRouter } from './me';
 import { profileRoute } from './profile';
 import { registryRouter } from './registry';
 import { taskRoute } from './task';
-import { tasksRoute } from './tasks';
-import { taskVerification } from './taskVerification';
 import { usersRoute } from './users';
 
 import { ILogger } from '../logger';
-import { checksRoute } from './checks';
 import { courseMiddleware, userRolesMiddleware } from './middlewares';
 
 export * from './logging';
@@ -38,12 +33,7 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, courseRoute(logger));
   applyRouter(router, usersRoute(logger));
   applyRouter(router, taskRoute(logger));
-  applyRouter(router, tasksRoute(logger));
-  applyRouter(router, taskVerification(logger));
   applyRouter(router, profileRoute(logger));
-  applyRouter(router, feedbackRoute(logger));
-  applyRouter(router, checksRoute(logger));
-  applyRouter(router, filesRoute(logger));
 
   return { publicRouter: router };
 };

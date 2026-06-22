@@ -1,5 +1,5 @@
 import { EnglishLevel } from '@common/models';
-import { ProfileApi, ProfileDto, UsersNotificationsApi, UpdateUserDtoLanguagesEnum } from '@client/api';
+import { ProfileApi, ProfileDto, UsersApi, UsersNotificationsApi, UpdateUserDtoLanguagesEnum } from '@client/api';
 import discordIntegration from '../configs/discord-integration';
 import type {
   ConfigurableProfilePermissions,
@@ -21,9 +21,8 @@ export interface UserBasic {
   id: number;
 }
 
-type SearchResponse = { data: UserBasic[] };
-
 const profileApi = new ProfileApi();
+const searchApi = new UsersApi();
 const usersApi = new UsersNotificationsApi();
 
 export class UserService {
@@ -72,8 +71,8 @@ export class UserService {
       if (!query) {
         return [];
       }
-      const response = await this.axios.get<SearchResponse>(`/api/users/search/${query}`);
-      return response.data.data;
+      const response = await searchApi.searchUsersBasic(query);
+      return response.data;
     } catch {
       return [];
     }

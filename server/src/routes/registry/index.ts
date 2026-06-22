@@ -5,7 +5,6 @@ import { parseAsync } from 'json2csv';
 import { ILogger } from '../../logger';
 import { Course, Mentor, Registry, Student, User } from '../../models';
 import { IUserSession } from '../../models';
-import { createGetRoute } from '../common';
 import { adminGuard, anyCoursePowerUserGuard } from '../guards';
 import { setResponse, setCsvResponse } from '../utils';
 import { MentorRegistryRepository } from '../../repositories/mentorRegistry.repository';
@@ -63,8 +62,6 @@ export function registryRouter(logger?: ILogger) {
     );
     setCsvResponse(ctx, OK, csv, 'mentors');
   });
-
-  router.get('/:id', adminGuard, createGetRoute(Registry, logger));
 
   router.post('/', async (ctx: Router.RouterContext) => {
     if (!ctx.state.user) {
