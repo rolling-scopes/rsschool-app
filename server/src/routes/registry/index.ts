@@ -1,11 +1,11 @@
 import Router from '@koa/router';
-import { BAD_REQUEST, NOT_FOUND, OK } from 'http-status-codes';
+import { BAD_REQUEST, OK } from 'http-status-codes';
 import { getCustomRepository, getRepository } from 'typeorm';
 import { parseAsync } from 'json2csv';
 import { ILogger } from '../../logger';
 import { Course, Mentor, Registry, Student, User } from '../../models';
 import { IUserSession } from '../../models';
-import { adminGuard, anyCoursePowerUserGuard } from '../guards';
+import { anyCoursePowerUserGuard } from '../guards';
 import { setResponse, setCsvResponse } from '../utils';
 import { MentorRegistryRepository } from '../../repositories/mentorRegistry.repository';
 import { sendNotification } from '../../services/notification.service';
@@ -13,24 +13,6 @@ import { sendNotification } from '../../services/notification.service';
 export function registryRouter(logger?: ILogger) {
   const router = new Router<any, any>({ prefix: '/registry' });
   const repository = getCustomRepository(MentorRegistryRepository);
-
-  router.get('/', adminGuard, async (ctx: Router.RouterContext) => {
-    const { type, courseId } = ctx.query;
-    const registries = await getRepository(Registry).find({
-      skip: 0,
-      take: 1000,
-      order: { id: 'ASC' },
-      relations: ['user', 'course'],
-      where: [{ type: type || 'mentor', course: { id: courseId } }],
-    });
-
-    if (registries === undefined) {
-      setResponse(ctx, NOT_FOUND);
-      return;
-    }
-
-    setResponse(ctx, OK, registries);
-  });
 
   router.post('/mentor', async (ctx: Router.RouterContext) => {
     if (!ctx.state.user) {
@@ -128,39 +110,6 @@ export function registryRouter(logger?: ILogger) {
     } catch (e) {
       handleError({ logger, errorMsg: (e as Error).message, ctx });
     }
-  });
-
-  router.put('/', adminGuard, async (ctx: Router.RouterContext) => {
-    const ids = ctx.request.body.ids as number[];
-    const status = ctx.request.body.status;
-
-    const result = [];
-
-    for await (const id of ids) {
-      const oldRegistry = await getRepository(Registry).findOne({ where: { id: Number(id) }, relations: ['course'] });
-      if (!oldRegistry) {
-        continue;
-      }
-      const registryPayload = { ...oldRegistry, status };
-      const { userId, course, attributes } = registryPayload;
-      await getRepository(Registry).save(registryPayload);
-
-      if (status === 'approved') {
-        const existingMentor = await getRepository(Mentor).findOne({ where: { userId, courseId: course.id } });
-        if (existingMentor == null) {
-          const newMentor = await getRepository(Mentor).save({
-            userId,
-            courseId: course.id,
-            maxStudentsLimit: attributes.maxStudentsLimit,
-          });
-          result.push(newMentor);
-        } else {
-          result.push(existingMentor);
-        }
-      }
-    }
-
-    setResponse(ctx, OK, { registries: result });
   });
 
   return router;

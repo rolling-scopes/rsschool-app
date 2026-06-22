@@ -2219,6 +2219,45 @@
         "tags": ["disciplines"]
       }
     },
+    "/registry/registrations": {
+      "get": {
+        "operationId": "getRegistrations",
+        "parameters": [
+          { "name": "type", "required": false, "in": "query", "schema": { "type": "string" } },
+          { "name": "courseId", "required": false, "in": "query", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/RegistrationDto" } }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": ["registry"]
+      },
+      "put": {
+        "operationId": "updateRegistrations",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateRegistrationsDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/UpdateRegistrationsResponseDto" } }
+            }
+          }
+        },
+        "summary": "",
+        "tags": ["registry"]
+      }
+    },
     "/registry/mentor": {
       "get": {
         "operationId": "getOwnMentorRegistry",
@@ -5265,6 +5304,55 @@
         "required": ["ids"]
       },
       "UpdateDisciplineDto": { "type": "object", "properties": { "name": { "type": "string" } }, "required": ["name"] },
+      "RegistrationUserDto": {
+        "type": "object",
+        "properties": {
+          "githubId": { "type": "string" },
+          "firstName": { "type": "string", "nullable": true },
+          "lastName": { "type": "string", "nullable": true },
+          "contactsEpamEmail": { "type": "string", "nullable": true },
+          "locationName": { "type": "string", "nullable": true }
+        },
+        "required": ["githubId", "firstName", "lastName", "contactsEpamEmail", "locationName"]
+      },
+      "RegistrationDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "type": { "type": "string" },
+          "status": { "type": "string" },
+          "userId": { "type": "number" },
+          "courseId": { "type": "number" },
+          "attributes": { "type": "object" },
+          "user": { "$ref": "#/components/schemas/RegistrationUserDto" }
+        },
+        "required": ["id", "type", "status", "userId", "courseId", "attributes", "user"]
+      },
+      "UpdateRegistrationsDto": {
+        "type": "object",
+        "properties": {
+          "ids": { "type": "array", "items": { "type": "number" } },
+          "status": { "type": "string", "enum": ["inactive", "pending", "approved", "rejected"] }
+        },
+        "required": ["ids", "status"]
+      },
+      "UpdatedRegistrationMentorDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "userId": { "type": "number" },
+          "courseId": { "type": "number" },
+          "maxStudentsLimit": { "type": "number", "nullable": true }
+        },
+        "required": ["id", "userId", "courseId", "maxStudentsLimit"]
+      },
+      "UpdateRegistrationsResponseDto": {
+        "type": "object",
+        "properties": {
+          "registries": { "type": "array", "items": { "$ref": "#/components/schemas/UpdatedRegistrationMentorDto" } }
+        },
+        "required": ["registries"]
+      },
       "OwnMentorRegistryDto": {
         "type": "object",
         "properties": {
