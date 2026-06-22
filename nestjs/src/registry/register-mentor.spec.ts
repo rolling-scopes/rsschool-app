@@ -2,6 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { MentorRegistry } from '@entities/mentorRegistry';
 import { Student } from '@entities/student';
+import { Registry } from '@entities/registry';
+import { Mentor } from '@entities/mentor';
+import { User } from '@entities/user';
+import { Course } from '@entities/course';
 import { RegistryController } from './registry.controller';
 import { RegistryService } from './registry.service';
 import { UsersService } from 'src/users/users.service';
@@ -46,6 +50,10 @@ describe('registerMentor', () => {
         RegistryService,
         { provide: getRepositoryToken(MentorRegistry), useValue: mentorRegistryRepository },
         { provide: getRepositoryToken(Student), useValue: {} },
+        { provide: getRepositoryToken(Registry), useValue: {} },
+        { provide: getRepositoryToken(Mentor), useValue: {} },
+        { provide: getRepositoryToken(User), useValue: {} },
+        { provide: getRepositoryToken(Course), useValue: {} },
         { provide: UsersService, useValue: { getByGithubId: mockGetByGithubId } },
         { provide: CoursesService, useValue: {} },
         { provide: NotificationsService, useValue: {} },

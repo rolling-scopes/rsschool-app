@@ -19,8 +19,8 @@ export class CdnService {
   }
 
   public async registerStudent(payload: unknown) {
-    const result = await this.client.post<CoursesResponse>(`/api/registry`, payload);
-    return result.data.data;
+    const result = await this.client.post<CoursesResponse>(`/api/v2/registry`, payload);
+    return result.data;
   }
 
   public async registerMentor(payload: unknown) {

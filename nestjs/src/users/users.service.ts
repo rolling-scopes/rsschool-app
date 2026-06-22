@@ -58,6 +58,22 @@ export class UsersService {
     return result.join(' ');
   }
 
+  public async searchUsersBasic(searchText?: string) {
+    if (!searchText) {
+      return [];
+    }
+
+    return this.userRepository
+      .createQueryBuilder('user')
+      .where(
+        "user.githubId like :text OR user.firstName ilike :text OR user.lastName ilike :text OR CONCAT(user.firstName, ' ', user.lastName) ilike :text",
+        { text: searchText.toLowerCase() + '%' },
+      )
+      .orWhere(`CAST(user.discord AS jsonb)->>'username' ILIKE :search`, { search: `${searchText}%` })
+      .limit(20)
+      .getMany();
+  }
+
   public async searchUsers(reqQuery?: string) {
     if (!reqQuery) {
       return [];
