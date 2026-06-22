@@ -29,7 +29,7 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   // public routes
 
   applyRouter(router, publicMeRouter(logger));
-  applyRouter(router, registryRouter(logger));
+  applyRouter(router, registryRouter());
   applyRouter(router, courseRoute(logger));
   applyRouter(router, usersRoute(logger));
   applyRouter(router, taskRoute(logger));

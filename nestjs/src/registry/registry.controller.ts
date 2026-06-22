@@ -20,6 +20,7 @@ import { ApproveMentorDto } from './dto/approve-mentor.dto';
 import { MentorRegistryDto } from './dto/mentor-registry.dto';
 import { OwnMentorRegistryDto } from './dto/own-mentor-registry.dto';
 import { RegistryService } from './registry.service';
+import { CreateRegistrationDto, RegistrationResultDto } from './dto/create-registration.dto';
 import { RegistrationDto, UpdateRegistrationsDto, UpdateRegistrationsResponseDto } from './dto/registration.dto';
 import { CoursesService } from 'src/courses/courses.service';
 import { DisciplinesService } from 'src/disciplines/disciplines.service';
@@ -44,6 +45,17 @@ export class RegistryController {
     private coursesService: CoursesService,
     private disciplinesService: DisciplinesService,
   ) {}
+
+  @Post('/')
+  @ApiOperation({ operationId: 'createRegistration' })
+  @ApiOkResponse({ type: RegistrationResultDto })
+  public async createRegistration(@Req() req: CurrentRequest, @Body() dto: CreateRegistrationDto) {
+    const registry = await this.registryService.createRegistration(
+      { id: req.user.id, githubId: req.user.githubId },
+      dto,
+    );
+    return new RegistrationResultDto(registry);
+  }
 
   @Get('registrations')
   @ApiOperation({ operationId: 'getRegistrations' })

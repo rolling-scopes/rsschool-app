@@ -2483,6 +2483,45 @@ export interface CreatePromptDto {
 /**
  * 
  * @export
+ * @interface CreateRegistrationDto
+ */
+export interface CreateRegistrationDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateRegistrationDto
+     */
+    'courseId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateRegistrationDto
+     */
+    'type': CreateRegistrationDtoTypeEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateRegistrationDto
+     */
+    'maxStudentsLimit'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateRegistrationDto
+     */
+    'experienceInYears'?: string;
+}
+
+export const CreateRegistrationDtoTypeEnum = {
+    Student: 'student',
+    Mentor: 'mentor'
+} as const;
+
+export type CreateRegistrationDtoTypeEnum = typeof CreateRegistrationDtoTypeEnum[keyof typeof CreateRegistrationDtoTypeEnum];
+
+/**
+ * 
+ * @export
  * @interface CreateStudentFeedbackDto
  */
 export interface CreateStudentFeedbackDto {
@@ -5812,6 +5851,49 @@ export interface RegistrationDto {
      * @memberof RegistrationDto
      */
     'user': RegistrationUserDto;
+}
+/**
+ * 
+ * @export
+ * @interface RegistrationResultDto
+ */
+export interface RegistrationResultDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof RegistrationResultDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegistrationResultDto
+     */
+    'type': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegistrationResultDto
+     */
+    'status': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof RegistrationResultDto
+     */
+    'userId': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof RegistrationResultDto
+     */
+    'courseId': number;
+    /**
+     * 
+     * @type {object}
+     * @memberof RegistrationResultDto
+     */
+    'attributes': object;
 }
 /**
  * 
@@ -19476,6 +19558,41 @@ export const RegistryApiAxiosParamCreator = function (configuration?: Configurat
         },
         /**
          * 
+         * @param {CreateRegistrationDto} createRegistrationDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createRegistration: async (createRegistrationDto: CreateRegistrationDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createRegistrationDto' is not null or undefined
+            assertParamExists('createRegistration', 'createRegistrationDto', createRegistrationDto)
+            const localVarPath = `/registry`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createRegistrationDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {'new' | 'all'} [status] 
          * @param {number} [pageSize] 
          * @param {number} [currentPage] 
@@ -19725,6 +19842,16 @@ export const RegistryApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {CreateRegistrationDto} createRegistrationDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createRegistration(createRegistrationDto: CreateRegistrationDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RegistrationResultDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createRegistration(createRegistrationDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {'new' | 'all'} [status] 
          * @param {number} [pageSize] 
          * @param {number} [currentPage] 
@@ -19821,6 +19948,15 @@ export const RegistryApiFactory = function (configuration?: Configuration, baseP
         },
         /**
          * 
+         * @param {CreateRegistrationDto} createRegistrationDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createRegistration(createRegistrationDto: CreateRegistrationDto, options?: any): AxiosPromise<RegistrationResultDto> {
+            return localVarFp.createRegistration(createRegistrationDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {'new' | 'all'} [status] 
          * @param {number} [pageSize] 
          * @param {number} [currentPage] 
@@ -19914,6 +20050,17 @@ export class RegistryApi extends BaseAPI {
      */
     public commentMentorRegistry(githubId: string, commentMentorRegistryDto: CommentMentorRegistryDto, options?: AxiosRequestConfig) {
         return RegistryApiFp(this.configuration).commentMentorRegistry(githubId, commentMentorRegistryDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {CreateRegistrationDto} createRegistrationDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistryApi
+     */
+    public createRegistration(createRegistrationDto: CreateRegistrationDto, options?: AxiosRequestConfig) {
+        return RegistryApiFp(this.configuration).createRegistration(createRegistrationDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

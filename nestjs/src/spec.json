@@ -2219,6 +2219,24 @@
         "tags": ["disciplines"]
       }
     },
+    "/registry": {
+      "post": {
+        "operationId": "createRegistration",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateRegistrationDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RegistrationResultDto" } } }
+          }
+        },
+        "summary": "",
+        "tags": ["registry"]
+      }
+    },
     "/registry/registrations": {
       "get": {
         "operationId": "getRegistrations",
@@ -5304,6 +5322,28 @@
         "required": ["ids"]
       },
       "UpdateDisciplineDto": { "type": "object", "properties": { "name": { "type": "string" } }, "required": ["name"] },
+      "CreateRegistrationDto": {
+        "type": "object",
+        "properties": {
+          "courseId": { "type": "number" },
+          "type": { "type": "string", "enum": ["student", "mentor"] },
+          "maxStudentsLimit": { "type": "number" },
+          "experienceInYears": { "type": "string" }
+        },
+        "required": ["courseId", "type"]
+      },
+      "RegistrationResultDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "type": { "type": "string" },
+          "status": { "type": "string" },
+          "userId": { "type": "number" },
+          "courseId": { "type": "number" },
+          "attributes": { "type": "object" }
+        },
+        "required": ["id", "type", "status", "userId", "courseId", "attributes"]
+      },
       "RegistrationUserDto": {
         "type": "object",
         "properties": {

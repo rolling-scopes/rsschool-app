@@ -4,6 +4,8 @@ import { MentorRegistry } from '@entities/mentorRegistry';
 import { Student } from '@entities/student';
 import { Registry } from '@entities/registry';
 import { Mentor } from '@entities/mentor';
+import { User } from '@entities/user';
+import { Course } from '@entities/course';
 import { RegistryService } from './registry.service';
 import { UsersService } from 'src/users/users.service';
 import { CoursesService } from 'src/courses/courses.service';
@@ -39,6 +41,8 @@ describe('registrations', () => {
         { provide: getRepositoryToken(Student), useValue: {} },
         { provide: getRepositoryToken(Registry), useValue: registryRepository },
         { provide: getRepositoryToken(Mentor), useValue: mentorRepository },
+        { provide: getRepositoryToken(User), useValue: {} },
+        { provide: getRepositoryToken(Course), useValue: {} },
         { provide: UsersService, useValue: {} },
         { provide: CoursesService, useValue: {} },
         { provide: NotificationsService, useValue: {} },
