@@ -33,7 +33,7 @@ export const routesMiddleware: RoutesMiddleware = (logger: ILogger) => {
   applyRouter(router, courseRoute(logger));
   applyRouter(router, usersRoute(logger));
   applyRouter(router, taskRoute(logger));
-  applyRouter(router, profileRoute(logger));
+  applyRouter(router, profileRoute());
 
   return { publicRouter: router };
 };

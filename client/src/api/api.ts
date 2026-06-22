@@ -5809,6 +5809,61 @@ export interface ProfileDto {
 /**
  * 
  * @export
+ * @interface ProfileInfoExtendedDto
+ */
+export interface ProfileInfoExtendedDto {
+    /**
+     * 
+     * @type {object}
+     * @memberof ProfileInfoExtendedDto
+     */
+    'permissionsSettings'?: object;
+    /**
+     * 
+     * @type {object}
+     * @memberof ProfileInfoExtendedDto
+     */
+    'generalInfo'?: object;
+    /**
+     * 
+     * @type {object}
+     * @memberof ProfileInfoExtendedDto
+     */
+    'contacts'?: object;
+    /**
+     * 
+     * @type {object}
+     * @memberof ProfileInfoExtendedDto
+     */
+    'discord'?: object | null;
+    /**
+     * 
+     * @type {Array<object>}
+     * @memberof ProfileInfoExtendedDto
+     */
+    'mentorStats'?: Array<object>;
+    /**
+     * 
+     * @type {Array<object>}
+     * @memberof ProfileInfoExtendedDto
+     */
+    'publicFeedback'?: Array<object>;
+    /**
+     * 
+     * @type {Array<object>}
+     * @memberof ProfileInfoExtendedDto
+     */
+    'stageInterviewFeedback'?: Array<object>;
+    /**
+     * 
+     * @type {Array<object>}
+     * @memberof ProfileInfoExtendedDto
+     */
+    'studentStats'?: Array<object>;
+}
+/**
+ * 
+ * @export
  * @interface PromptDto
  */
 export interface PromptDto {
@@ -18861,6 +18916,40 @@ export const ProfileApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @param {string} [githubId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getFullProfileInfo: async (githubId?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/profile/info`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (githubId !== undefined) {
+                localVarQueryParameter['githubId'] = githubId;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -19122,6 +19211,16 @@ export const ProfileApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} [githubId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getFullProfileInfo(githubId?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProfileInfoExtendedDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getFullProfileInfo(githubId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -19219,6 +19318,15 @@ export const ProfileApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @param {string} [githubId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getFullProfileInfo(githubId?: string, options?: any): AxiosPromise<ProfileInfoExtendedDto> {
+            return localVarFp.getFullProfileInfo(githubId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -19309,6 +19417,17 @@ export class ProfileApi extends BaseAPI {
      */
     public getEndorsementData(username: string, options?: AxiosRequestConfig) {
         return ProfileApiFp(this.configuration).getEndorsementData(username, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} [githubId] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProfileApi
+     */
+    public getFullProfileInfo(githubId?: string, options?: AxiosRequestConfig) {
+        return ProfileApiFp(this.configuration).getFullProfileInfo(githubId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
