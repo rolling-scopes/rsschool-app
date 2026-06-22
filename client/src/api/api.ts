@@ -5139,6 +5139,157 @@ export interface MentorStudentSummaryDto {
 /**
  * 
  * @export
+ * @interface MyProfileDto
+ */
+export interface MyProfileDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof MyProfileDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof MyProfileDto
+     */
+    'githubId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MyProfileDto
+     */
+    'firstName': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof MyProfileDto
+     */
+    'lastName': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof MyProfileDto
+     */
+    'primaryEmail': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof MyProfileDto
+     */
+    'contactsEpamEmail': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof MyProfileDto
+     */
+    'contactsEmail': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof MyProfileDto
+     */
+    'contactsPhone': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof MyProfileDto
+     */
+    'contactsTelegram': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof MyProfileDto
+     */
+    'contactsSkype': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof MyProfileDto
+     */
+    'contactsWhatsApp': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof MyProfileDto
+     */
+    'contactsNotes': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof MyProfileDto
+     */
+    'cityName': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof MyProfileDto
+     */
+    'countryName': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof MyProfileDto
+     */
+    'locationId': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof MyProfileDto
+     */
+    'locationName': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof MyProfileDto
+     */
+    'aboutMyself': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof MyProfileDto
+     */
+    'tshirtSize': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof MyProfileDto
+     */
+    'englishLevel': string | null;
+    /**
+     * 
+     * @type {Array<object>}
+     * @memberof MyProfileDto
+     */
+    'educationHistory': Array<object>;
+    /**
+     * 
+     * @type {Array<object>}
+     * @memberof MyProfileDto
+     */
+    'employmentHistory': Array<object>;
+    /**
+     * 
+     * @type {Array<object>}
+     * @memberof MyProfileDto
+     */
+    'externalAccounts': Array<object>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof MyProfileDto
+     */
+    'languages': Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof MyProfileDto
+     */
+    'discord': string | null;
+}
+/**
+ * 
+ * @export
  * @interface NotificationConnectionDto
  */
 export interface NotificationConnectionDto {
@@ -18710,6 +18861,35 @@ export const ProfileApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMyProfile: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/profile/me`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} username 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -18942,6 +19122,15 @@ export const ProfileApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMyProfile(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MyProfileDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMyProfile(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {string} username 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -19030,6 +19219,14 @@ export const ProfileApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMyProfile(options?: any): AxiosPromise<MyProfileDto> {
+            return localVarFp.getMyProfile(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} username 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -19112,6 +19309,16 @@ export class ProfileApi extends BaseAPI {
      */
     public getEndorsementData(username: string, options?: AxiosRequestConfig) {
         return ProfileApiFp(this.configuration).getEndorsementData(username, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProfileApi
+     */
+    public getMyProfile(options?: AxiosRequestConfig) {
+        return ProfileApiFp(this.configuration).getMyProfile(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
