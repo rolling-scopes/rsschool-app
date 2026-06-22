@@ -10,12 +10,13 @@ import {
   Req,
   UseGuards,
   Query,
+  NotFoundException,
 } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { CoursesService } from 'src/courses/courses.service';
 import { CurrentRequest } from '../auth/auth.service';
-import { ProfileCourseDto, UpdateUserDto, UpdateProfileInfoDto, ProfileInfoExtendedDto } from './dto';
+import { ProfileCourseDto, UpdateUserDto, UpdateProfileInfoDto, ProfileInfoExtendedDto, MyProfileDto } from './dto';
 import { ProfileDto } from './dto/profile.dto';
 import { ProfileService } from './profile.service';
 import { ProfileInfoService } from './profile-info/profile-info.service';
@@ -81,6 +82,18 @@ export class ProfileController {
   public async getFullProfileInfo(@Req() req: CurrentRequest, @Query('githubId') githubId?: string) {
     const profileInfo = await this.profileInfoService.getProfileInfo(req.user, githubId);
     return new ProfileInfoExtendedDto(profileInfo);
+  }
+
+  @Get('me')
+  @ApiOperation({ operationId: 'getMyProfile' })
+  @ApiOkResponse({ type: MyProfileDto })
+  @UseGuards(DefaultGuard)
+  public async getMyProfile(@Req() req: CurrentRequest) {
+    const user = await this.profileService.getMyProfile(req.user.githubId);
+    if (user == null) {
+      throw new NotFoundException('User not found');
+    }
+    return new MyProfileDto(user);
   }
 
   @Get(':username')

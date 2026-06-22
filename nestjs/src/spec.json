@@ -2087,6 +2087,20 @@
         "tags": ["profile"]
       }
     },
+    "/profile/me": {
+      "get": {
+        "operationId": "getMyProfile",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/MyProfileDto" } } }
+          }
+        },
+        "summary": "",
+        "tags": ["profile"]
+      }
+    },
     "/profile/{username}": {
       "get": {
         "operationId": "getProfile",
@@ -5296,6 +5310,61 @@
           "stageInterviewFeedback": { "type": "array", "items": { "type": "object" } },
           "studentStats": { "type": "array", "items": { "type": "object" } }
         }
+      },
+      "MyProfileDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "githubId": { "type": "string" },
+          "firstName": { "type": "string", "nullable": true },
+          "lastName": { "type": "string", "nullable": true },
+          "primaryEmail": { "type": "string", "nullable": true },
+          "contactsEpamEmail": { "type": "string", "nullable": true },
+          "contactsEmail": { "type": "string", "nullable": true },
+          "contactsPhone": { "type": "string", "nullable": true },
+          "contactsTelegram": { "type": "string", "nullable": true },
+          "contactsSkype": { "type": "string", "nullable": true },
+          "contactsWhatsApp": { "type": "string", "nullable": true },
+          "contactsNotes": { "type": "string", "nullable": true },
+          "cityName": { "type": "string", "nullable": true },
+          "countryName": { "type": "string", "nullable": true },
+          "locationId": { "type": "string", "nullable": true },
+          "locationName": { "type": "string", "nullable": true },
+          "aboutMyself": { "type": "string", "nullable": true },
+          "tshirtSize": { "type": "string", "nullable": true },
+          "englishLevel": { "type": "string", "nullable": true },
+          "educationHistory": { "type": "array", "items": { "type": "object" } },
+          "employmentHistory": { "type": "array", "items": { "type": "object" } },
+          "externalAccounts": { "type": "array", "items": { "type": "object" } },
+          "languages": { "type": "array", "items": { "type": "string" } },
+          "discord": { "type": "string", "nullable": true }
+        },
+        "required": [
+          "id",
+          "githubId",
+          "firstName",
+          "lastName",
+          "primaryEmail",
+          "contactsEpamEmail",
+          "contactsEmail",
+          "contactsPhone",
+          "contactsTelegram",
+          "contactsSkype",
+          "contactsWhatsApp",
+          "contactsNotes",
+          "cityName",
+          "countryName",
+          "locationId",
+          "locationName",
+          "aboutMyself",
+          "tshirtSize",
+          "englishLevel",
+          "educationHistory",
+          "employmentHistory",
+          "externalAccounts",
+          "languages",
+          "discord"
+        ]
       },
       "ProfileDto": {
         "type": "object",

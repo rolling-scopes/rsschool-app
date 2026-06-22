@@ -1,5 +1,4 @@
 import { Button, Col, Form, Input, message, Result, Row, Typography } from 'antd';
-import axios from 'axios';
 import { PageLayout } from '@client/shared/components/PageLayout';
 import { GdprCheckbox, LocationSelect } from '@client/shared/components/Forms';
 import { withGoogleMaps } from '@client/components/withGoogleMaps';
@@ -10,6 +9,7 @@ import { Course } from '@client/services/models';
 import { UserFull, UserService } from '@client/services/user';
 import { emailPattern, englishNamePattern } from '@client/services/validators';
 import { TYPES } from './../../configs/registry';
+import { ProfileApi } from '@client/api';
 import { Location } from '@common/models/profile';
 import { SessionProvider } from '@client/modules/Course/contexts';
 import { CreateRegistrationDtoTypeEnum, RegistryApi } from '@client/api';
@@ -18,6 +18,7 @@ const defaultColumnSizes = { xs: 18, sm: 10, md: 8, lg: 6 };
 const defaultRowGutter = 24;
 
 const courseAlias = 'epamlearningjs';
+const profileApi = new ProfileApi();
 const registryApi = new RegistryApi();
 
 type FormData = {
@@ -68,14 +69,9 @@ function EpamLearningJSPage() {
     };
 
     try {
-      const userResponse = await axios.post('/api/profile/me', userModel);
-      const githubId = userResponse && userResponse.data ? userResponse.data.data.githubId : '';
-      if (githubId) {
-        await registryApi.createRegistration(registryModel);
-        setSubmitted(true);
-      } else {
-        message.error('Invalid github id');
-      }
+      await profileApi.updateUser(userModel);
+      await registryApi.createRegistration(registryModel);
+      setSubmitted(true);
     } catch {
       message.error('An error occured. Please try later.');
     }
