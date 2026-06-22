@@ -3769,6 +3769,25 @@ export type FormDataDtoMilitaryServiceEnum = typeof FormDataDtoMilitaryServiceEn
 /**
  * 
  * @export
+ * @interface GetGratitudesDto
+ */
+export interface GetGratitudesDto {
+    /**
+     * 
+     * @type {Array<GratitudeItemDto>}
+     * @memberof GetGratitudesDto
+     */
+    'content': Array<GratitudeItemDto>;
+    /**
+     * 
+     * @type {number}
+     * @memberof GetGratitudesDto
+     */
+    'count': number;
+}
+/**
+ * 
+ * @export
  * @interface GiveConsentDto
  */
 export interface GiveConsentDto {
@@ -3827,6 +3846,110 @@ export interface GratitudeDto {
      * @memberof GratitudeDto
      */
     'date': string;
+}
+/**
+ * 
+ * @export
+ * @interface GratitudeFromUserDto
+ */
+export interface GratitudeFromUserDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof GratitudeFromUserDto
+     */
+    'githubId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GratitudeFromUserDto
+     */
+    'firstName': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof GratitudeFromUserDto
+     */
+    'lastName': string | null;
+}
+/**
+ * 
+ * @export
+ * @interface GratitudeItemDto
+ */
+export interface GratitudeItemDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof GratitudeItemDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GratitudeItemDto
+     */
+    'badgeId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GratitudeItemDto
+     */
+    'date': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GratitudeItemDto
+     */
+    'comment': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof GratitudeItemDto
+     */
+    'githubId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GratitudeItemDto
+     */
+    'firstName': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof GratitudeItemDto
+     */
+    'lastName': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof GratitudeItemDto
+     */
+    'countryName': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof GratitudeItemDto
+     */
+    'cityName': string | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GratitudeItemDto
+     */
+    'activist': boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof GratitudeItemDto
+     */
+    'user_id': number;
+    /**
+     * 
+     * @type {GratitudeFromUserDto}
+     * @memberof GratitudeItemDto
+     */
+    'from': GratitudeFromUserDto;
 }
 /**
  * 
@@ -15791,6 +15914,60 @@ export const GratitudesApiAxiosParamCreator = function (configuration?: Configur
         },
         /**
          * 
+         * @param {string} [name] 
+         * @param {string} [githubId] 
+         * @param {number} [courseId] 
+         * @param {number} [pageSize] 
+         * @param {number} [current] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getGratitudes: async (name?: string, githubId?: string, courseId?: number, pageSize?: number, current?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/gratitudes`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (name !== undefined) {
+                localVarQueryParameter['name'] = name;
+            }
+
+            if (githubId !== undefined) {
+                localVarQueryParameter['githubId'] = githubId;
+            }
+
+            if (courseId !== undefined) {
+                localVarQueryParameter['courseId'] = courseId;
+            }
+
+            if (pageSize !== undefined) {
+                localVarQueryParameter['pageSize'] = pageSize;
+            }
+
+            if (current !== undefined) {
+                localVarQueryParameter['current'] = current;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -15994,6 +16171,20 @@ export const GratitudesApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} [name] 
+         * @param {string} [githubId] 
+         * @param {number} [courseId] 
+         * @param {number} [pageSize] 
+         * @param {number} [current] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getGratitudes(name?: string, githubId?: string, courseId?: number, pageSize?: number, current?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetGratitudesDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getGratitudes(name, githubId, courseId, pageSize, current, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -16063,6 +16254,19 @@ export const GratitudesApiFactory = function (configuration?: Configuration, bas
         },
         /**
          * 
+         * @param {string} [name] 
+         * @param {string} [githubId] 
+         * @param {number} [courseId] 
+         * @param {number} [pageSize] 
+         * @param {number} [current] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getGratitudes(name?: string, githubId?: string, courseId?: number, pageSize?: number, current?: number, options?: any): AxiosPromise<GetGratitudesDto> {
+            return localVarFp.getGratitudes(name, githubId, courseId, pageSize, current, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -16129,6 +16333,21 @@ export class GratitudesApi extends BaseAPI {
      */
     public getBadges(courseId: number, options?: AxiosRequestConfig) {
         return GratitudesApiFp(this.configuration).getBadges(courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} [name] 
+     * @param {string} [githubId] 
+     * @param {number} [courseId] 
+     * @param {number} [pageSize] 
+     * @param {number} [current] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GratitudesApi
+     */
+    public getGratitudes(name?: string, githubId?: string, courseId?: number, pageSize?: number, current?: number, options?: AxiosRequestConfig) {
+        return GratitudesApiFp(this.configuration).getGratitudes(name, githubId, courseId, pageSize, current, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

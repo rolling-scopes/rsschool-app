@@ -2632,6 +2632,24 @@
         },
         "summary": "",
         "tags": ["gratitudes"]
+      },
+      "get": {
+        "operationId": "getGratitudes",
+        "parameters": [
+          { "name": "name", "required": false, "in": "query", "schema": { "type": "string" } },
+          { "name": "githubId", "required": false, "in": "query", "schema": { "type": "string" } },
+          { "name": "courseId", "required": false, "in": "query", "schema": { "type": "number" } },
+          { "name": "pageSize", "required": false, "in": "query", "schema": { "type": "number" } },
+          { "name": "current", "required": false, "in": "query", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/GetGratitudesDto" } } }
+          }
+        },
+        "summary": "",
+        "tags": ["gratitudes"]
       }
     },
     "/gratitudes/badges/{courseId}": {
@@ -5586,6 +5604,54 @@
           "Coordinator",
           "Thanks"
         ]
+      },
+      "GratitudeFromUserDto": {
+        "type": "object",
+        "properties": {
+          "githubId": { "type": "string" },
+          "firstName": { "type": "string", "nullable": true },
+          "lastName": { "type": "string", "nullable": true }
+        },
+        "required": ["githubId", "firstName", "lastName"]
+      },
+      "GratitudeItemDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "badgeId": { "type": "string" },
+          "date": { "type": "string" },
+          "comment": { "type": "string", "nullable": true },
+          "githubId": { "type": "string" },
+          "firstName": { "type": "string", "nullable": true },
+          "lastName": { "type": "string", "nullable": true },
+          "countryName": { "type": "string", "nullable": true },
+          "cityName": { "type": "string", "nullable": true },
+          "activist": { "type": "boolean" },
+          "user_id": { "type": "number" },
+          "from": { "$ref": "#/components/schemas/GratitudeFromUserDto" }
+        },
+        "required": [
+          "id",
+          "badgeId",
+          "date",
+          "comment",
+          "githubId",
+          "firstName",
+          "lastName",
+          "countryName",
+          "cityName",
+          "activist",
+          "user_id",
+          "from"
+        ]
+      },
+      "GetGratitudesDto": {
+        "type": "object",
+        "properties": {
+          "content": { "type": "array", "items": { "$ref": "#/components/schemas/GratitudeItemDto" } },
+          "count": { "type": "number" }
+        },
+        "required": ["content", "count"]
       },
       "BadgeDto": {
         "type": "object",
