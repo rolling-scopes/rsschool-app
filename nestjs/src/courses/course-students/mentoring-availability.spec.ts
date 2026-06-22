@@ -1,6 +1,7 @@
 import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 import { Student } from '@entities/student';
 import { Mentor } from '@entities/mentor';
 import { CourseStudentsController } from './course-students.controller';
@@ -22,6 +23,7 @@ describe('updateMentoringAvailability', () => {
         CourseStudentsService,
         { provide: getRepositoryToken(Student), useValue: { update: mockUpdate } },
         { provide: getRepositoryToken(Mentor), useValue: {} },
+        { provide: DataSource, useValue: { getRepository: () => ({}) } },
       ],
     }).compile();
     service = module.get(CourseStudentsService);

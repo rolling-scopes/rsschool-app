@@ -6,7 +6,6 @@ import {
   courseInterviewGuard,
   courseManagerGuard,
   courseMentorGuard,
-  courseMentorOrDementorGuard,
   courseSupervisorGuard,
   courseSupervisorOrDementorGuard,
   courseSupervisorOrMentorGuard,
@@ -32,14 +31,7 @@ import {
 } from '../validators';
 import * as crossCheck from './crossCheck';
 import { getScheduleAsCsv, setScheduleFromCsv } from './schedule';
-import {
-  createInterviewResult,
-  getCrossMentors,
-  getStudent,
-  selfUpdateStudentStatus,
-  updateStudent,
-  updateStudentStatus,
-} from './student';
+import { createInterviewResult, getCrossMentors, getStudent, updateStudent } from './student';
 import * as tasks from './tasks';
 
 export function courseRoute(logger: ILogger) {
@@ -120,7 +112,6 @@ function addMentorApi(router: Router<any, any>, logger: ILogger) {
 function addStudentApi(router: Router<any, any>, logger: ILogger) {
   const validators = [validateGithubIdAndAccess];
   const mentorValidators = [courseMentorGuard, validateGithubId];
-  const mentorOrDementorValidators = [courseMentorOrDementorGuard, validateGithubId];
 
   router.get('/student/:githubId', courseSupervisorGuard, getStudent(logger));
   router.put('/student/:githubId', courseSupervisorOrMentorGuard, updateStudent(logger));
@@ -145,8 +136,6 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   router.post('/student/:githubId/task/:courseTaskId/result', courseGuard, score.createSingleScore(logger));
   router.post('/student/:githubId/interview/:courseTaskId/result', ...mentorValidators, createInterviewResult(logger));
 
-  router.post('/student/:githubId/status', ...mentorOrDementorValidators, updateStudentStatus(logger));
-  router.post('/student/:githubId/status-self', courseGuard, selfUpdateStudentStatus(logger));
   router.post('/student/:githubId/certificate', courseManagerGuard, validateGithubId, postStudentCertificate(logger));
 
   router.get('/students', courseSupervisorGuard, getStudents(logger));

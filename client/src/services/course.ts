@@ -258,15 +258,15 @@ export class CourseService {
   }
 
   async expelStudent(githubId: string, comment = '') {
-    await this.axios.post(`/student/${githubId}/status`, { comment, status: 'expelled' });
+    await studentsApi.updateStudentStatus(this.courseId, githubId, { comment, status: 'expelled' });
   }
 
   async setSelfStudy(githubId: string, comment = '') {
-    await this.axios.post(`/student/${githubId}/status`, { comment, status: 'self-study' });
+    await studentsApi.updateStudentStatus(this.courseId, githubId, { comment, status: 'self-study' });
   }
 
   async selfSetSelfStudy(githubId: string, comment = '') {
-    await this.axios.post(`/student/${githubId}/status-self`, { comment, status: 'self-study' });
+    await studentsApi.selfUpdateStudentStatus(this.courseId, githubId, { comment, status: 'self-study' });
   }
 
   async expelStudents(
@@ -289,7 +289,7 @@ export class CourseService {
   }
 
   async restoreStudent(githubId: string) {
-    await this.axios.post(`/student/${githubId}/status`, { status: 'active' });
+    await studentsApi.updateStudentStatus(this.courseId, githubId, { status: 'active' });
   }
 
   async postTaskSolution(

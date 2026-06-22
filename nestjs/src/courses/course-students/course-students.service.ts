@@ -1,11 +1,12 @@
 import { User } from '@entities/user';
+import { IUserSession, isAdmin, isManager, isSupervisor, isDementor } from '@entities/session';
 import { StageInterview, StageInterviewFeedback, Mentor, Student } from '@entities/index';
 
 import { TaskInterviewResult } from '@entities/taskInterviewResult';
 import { TaskResult } from '@entities/taskResult';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { Mentor as MentorWithContacts } from './dto/mentor-student-summary.dto';
 import { MentorBasic, StageInterviewFeedbackJson } from '@common/models';
 import { ExpelStatusDto } from './dto/student-status.dto';
@@ -18,7 +19,96 @@ export class CourseStudentsService {
 
     @InjectRepository(Mentor)
     readonly mentorRepository: Repository<Mentor>,
+    private readonly dataSource: DataSource,
   ) {}
+
+  public async canChangeStatus(
+    session: IUserSession,
+    courseId: number,
+    githubId: string,
+  ): Promise<{ allow: boolean; message?: string }> {
+    const student = await this.getStudentByGithubId(courseId, githubId);
+    if (student == null) {
+      return {
+        allow: false,
+        message: 'not valid student',
+      };
+    }
+    const isPowerUser = isAdmin(session) || isManager(session, courseId) || isSupervisor(session, courseId);
+    if (isPowerUser || isDementor(session, courseId)) {
+      return { allow: true };
+    }
+
+    const [interviewerGithubIds, mentor] = await Promise.all([
+      this.getStudentStageInterviewerGithubIds(student.id),
+      this.mentorRepository.findOne({ where: { courseId, userId: session.id } }),
+    ]);
+    if (mentor == null) {
+      return {
+        allow: false,
+        message: 'not valid mentor',
+      };
+    }
+    if (!interviewerGithubIds.includes(session.githubId) && student.mentorId !== mentor.id) {
+      return {
+        allow: false,
+        message: 'incorrect mentor-student relation',
+      };
+    }
+    return { allow: true };
+  }
+
+  public async expelStudent(courseId: number, githubId: string, comment = '') {
+    const student = await this.getStudentByGithubId(courseId, githubId);
+    if (student == null) {
+      return;
+    }
+    await this.studentRepository.update(student.id, {
+      mentorId: null,
+      isExpelled: true,
+      expellingReason: comment || '',
+      endDate: new Date(),
+    });
+    await this.dataSource
+      .getRepository(StageInterview)
+      .update({ studentId: student.id, isCompleted: false }, { isCanceled: true });
+  }
+
+  public async setSelfStudy(courseId: number, githubId: string, comment = '') {
+    const student = await this.getStudentByGithubId(courseId, githubId);
+    if (student == null) {
+      return;
+    }
+    await this.studentRepository.update(student.id, {
+      mentorId: null,
+      mentoring: false,
+      expellingReason: comment || '',
+    });
+  }
+
+  public async restoreStudent(courseId: number, githubId: string) {
+    const student = await this.getStudentByGithubId(courseId, githubId);
+    if (student == null) {
+      return;
+    }
+    await this.studentRepository.update(student.id, {
+      isExpelled: false,
+      expellingReason: '',
+      endDate: null,
+    });
+  }
+
+  private async getStudentStageInterviewerGithubIds(studentId: number): Promise<string[]> {
+    const interviews = await this.dataSource
+      .getRepository(StageInterview)
+      .createQueryBuilder('stageInterview')
+      .innerJoin('stageInterview.mentor', 'mentor')
+      .innerJoin('mentor.user', 'mUser')
+      .addSelect(['mentor.id', 'mUser.githubId'])
+      .where('stageInterview.studentId = :studentId', { studentId })
+      .getMany();
+    return interviews.map(it => it.mentor.user.githubId);
+  }
 
   public async updateMentoringAvailability(studentId: number, mentoring: boolean) {
     await this.studentRepository.update(studentId, { mentoring });
