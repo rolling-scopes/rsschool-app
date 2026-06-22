@@ -1,5 +1,4 @@
 import { Button, Col, Form, Input, message, Result, Row, Typography } from 'antd';
-import axios from 'axios';
 import { PageLayout } from '@client/shared/components/PageLayout';
 import { GdprCheckbox, LocationSelect } from '@client/shared/components/Forms';
 import { withGoogleMaps } from '@client/components/withGoogleMaps';
@@ -13,12 +12,14 @@ import { TYPES } from './../../configs/registry';
 import { ProfileApi } from '@client/api';
 import { Location } from '@common/models/profile';
 import { SessionProvider } from '@client/modules/Course/contexts';
+import { CreateRegistrationDtoTypeEnum, RegistryApi } from '@client/api';
 
 const defaultColumnSizes = { xs: 18, sm: 10, md: 8, lg: 6 };
 const defaultRowGutter = 24;
 
 const courseAlias = 'epamlearningjs';
 const profileApi = new ProfileApi();
+const registryApi = new RegistryApi();
 
 type FormData = {
   firstName: string;
@@ -56,7 +57,7 @@ function EpamLearningJSPage() {
   const handleSubmit = async (model: FormData) => {
     const { location } = model;
     const registryModel = {
-      type: TYPES.STUDENT,
+      type: TYPES.STUDENT as CreateRegistrationDtoTypeEnum,
       courseId: activeCourse!.id,
     };
     const userModel = {
@@ -69,7 +70,7 @@ function EpamLearningJSPage() {
 
     try {
       await profileApi.updateUser(userModel);
-      await axios.post('/api/registry', registryModel);
+      await registryApi.createRegistration(registryModel);
       setSubmitted(true);
     } catch {
       message.error('An error occured. Please try later.');
