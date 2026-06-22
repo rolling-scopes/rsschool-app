@@ -9,7 +9,7 @@ import { paginate } from 'src/core/paginate';
 import { InviteMentorsDto } from './dto/invite-mentors.dto';
 import { NotificationsService } from 'src/notifications/notifications.service';
 import { Student } from '@entities/student';
-import { Registry } from '@entities/registry';
+import { Registry, RegistryStatus } from '@entities/registry';
 import { Mentor } from '@entities/mentor';
 import { Course } from '@entities/course';
 import { MentorRegistryTabsMode } from './registry.controller';
@@ -315,5 +315,52 @@ export class RegistryService {
     }
 
     return this.registryRepository.save(registryPayload);
+  }
+
+  public async getRegistrations(type: string | undefined, courseId: number | undefined) {
+    return this.registryRepository.find({
+      skip: 0,
+      take: 1000,
+      order: { id: 'ASC' },
+      relations: ['user', 'course'],
+      where: [{ type: (type || 'mentor') as Registry['type'], course: { id: courseId } }],
+    });
+  }
+
+  public async updateRegistrations(ids: number[], status: RegistryStatus) {
+    const result: Mentor[] = [];
+
+    for (const id of ids) {
+      const oldRegistry = await this.registryRepository.findOne({
+        where: { id: Number(id) },
+        relations: ['course'],
+      });
+      if (!oldRegistry) {
+        continue;
+      }
+      const registryPayload = { ...oldRegistry, status };
+      const { userId, course, attributes } = registryPayload;
+      await this.registryRepository.save(registryPayload);
+
+      if (status === 'approved') {
+        const existingMentor = await this.mentorRepository.findOne({ where: { userId, courseId: course.id } });
+        if (existingMentor == null) {
+          const newMentor = await this.mentorRepository.save({
+            userId,
+            courseId: course.id,
+            maxStudentsLimit: attributes.maxStudentsLimit,
+          });
+          result.push(newMentor);
+        } else {
+          result.push(existingMentor);
+        }
+      }
+    }
+
+    return { registries: result };
+  }
+
+  public async getOwnMentorRegistry(userId: number) {
+    return this.mentorsRegistryRepository.findOne({ where: { userId } });
   }
 }

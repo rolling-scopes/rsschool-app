@@ -1,12 +1,27 @@
-import { Body, Controller, Delete, Get, Param, Put, Req, UseGuards, Query, ParseArrayPipe, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  Put,
+  Req,
+  UseGuards,
+  Query,
+  ParseArrayPipe,
+  Post,
+} from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { uniq } from 'lodash';
 import { CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { UserNotificationsService } from 'src/users-notifications/users.notifications.service';
 import { ApproveMentorDto } from './dto/approve-mentor.dto';
 import { MentorRegistryDto } from './dto/mentor-registry.dto';
+import { OwnMentorRegistryDto } from './dto/own-mentor-registry.dto';
 import { RegistryService } from './registry.service';
 import { CreateRegistrationDto, RegistrationResultDto } from './dto/create-registration.dto';
+import { RegistrationDto, UpdateRegistrationsDto, UpdateRegistrationsResponseDto } from './dto/registration.dto';
 import { CoursesService } from 'src/courses/courses.service';
 import { DisciplinesService } from 'src/disciplines/disciplines.service';
 import { CommentMentorRegistryDto } from './dto/comment-mentor-registry.dto';
@@ -40,6 +55,37 @@ export class RegistryController {
       dto,
     );
     return new RegistrationResultDto(registry);
+  }
+
+  @Get('registrations')
+  @ApiOperation({ operationId: 'getRegistrations' })
+  @ApiQuery({ name: 'type', required: false, type: String })
+  @ApiQuery({ name: 'courseId', required: false, type: Number })
+  @ApiOkResponse({ type: [RegistrationDto] })
+  @RequiredRoles([Role.Admin])
+  public async getRegistrations(@Query('type') type?: string, @Query('courseId') courseId?: number) {
+    const registrations = await this.registryService.getRegistrations(type, courseId ? Number(courseId) : undefined);
+    return registrations.map(registry => new RegistrationDto(registry));
+  }
+
+  @Put('registrations')
+  @ApiOperation({ operationId: 'updateRegistrations' })
+  @ApiOkResponse({ type: UpdateRegistrationsResponseDto })
+  @RequiredRoles([Role.Admin])
+  public async updateRegistrations(@Body() dto: UpdateRegistrationsDto) {
+    const result = await this.registryService.updateRegistrations(dto.ids, dto.status);
+    return new UpdateRegistrationsResponseDto(result);
+  }
+
+  @Get('mentor')
+  @ApiOperation({ operationId: 'getOwnMentorRegistry' })
+  @ApiOkResponse({ type: OwnMentorRegistryDto })
+  public async getOwnMentorRegistry(@Req() req: CurrentRequest) {
+    const mentorRegistry = await this.registryService.getOwnMentorRegistry(req.user.id);
+    if (mentorRegistry == null) {
+      throw new NotFoundException('Mentor registry record not found');
+    }
+    return new OwnMentorRegistryDto(mentorRegistry);
   }
 
   @Put('mentor/:githubId')
