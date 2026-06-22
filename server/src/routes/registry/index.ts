@@ -1,11 +1,11 @@
 import Router from '@koa/router';
-import { BAD_REQUEST, NOT_FOUND, OK } from 'http-status-codes';
+import { BAD_REQUEST, OK } from 'http-status-codes';
 import { getCustomRepository, getRepository } from 'typeorm';
 import { parseAsync } from 'json2csv';
 import { ILogger } from '../../logger';
 import { Course, Mentor, Registry, Student, User } from '../../models';
 import { IUserSession } from '../../models';
-import { adminGuard, anyCoursePowerUserGuard } from '../guards';
+import { anyCoursePowerUserGuard } from '../guards';
 import { setResponse, setCsvResponse } from '../utils';
 import { MentorRegistryRepository } from '../../repositories/mentorRegistry.repository';
 import { sendNotification } from '../../services/notification.service';

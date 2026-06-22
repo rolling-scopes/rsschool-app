@@ -12,8 +12,11 @@ export function setupApp(app: INestApplication) {
   app.enableCors();
   app.useLogger(logger);
   app.use(cookieParser());
-  // legacy koa server allowed json payloads up to 20mb (jupyter notebook uploads)
-  app.use('/files/upload', json({ limit: '20mb' }));
+  // Register a global JSON body parser. NestJS skips registering its own default
+  // body parsers once any json middleware is applied, so this must be global —
+  // a path-scoped json() would leave every other route without a parsed JSON body.
+  // 20mb limit matches the legacy koa server (jupyter notebook uploads to /files/upload).
+  app.use(json({ limit: '20mb' }));
 
   if (process.env.SENTRY_DSN) {
     const ignoredExceptions = ['UnauthorizedException', 'TokenExpiredError', 'NotFoundException'];
