@@ -47,6 +47,10 @@ export class ProfileService {
     });
   }
 
+  public getMyProfile(githubId: string) {
+    return this.userRepository.findOne({ where: { githubId } });
+  }
+
   public async updateUser(userId: number, userDto: UpdateUserDto) {
     const {
       firstName,
@@ -63,6 +67,7 @@ export class ProfileService {
       contactsEpamEmail,
       aboutMyself,
       languages,
+      primaryEmail,
     } = userDto;
 
     await this.userRepository
@@ -83,6 +88,7 @@ export class ProfileService {
         contactsEpamEmail,
         aboutMyself,
         languages,
+        primaryEmail,
       })
       .returning('*')
       .where('id = :id', { id: userId })

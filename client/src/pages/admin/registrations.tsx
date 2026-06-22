@@ -1,6 +1,6 @@
 import { DislikeOutlined, HourglassOutlined, LikeOutlined } from '@ant-design/icons';
 import { Button, Col, Row, Select, Statistic, Table, Typography } from 'antd';
-import axios from 'axios';
+import { RegistryApi, UpdateRegistrationsDtoStatusEnum } from '@client/api';
 import { GithubUserLink } from '@client/shared/components/GithubUserLink';
 import { stringSorter } from '@client/shared/components/Table';
 import { useState } from 'react';
@@ -11,6 +11,7 @@ import { SessionProvider, useActiveCourseContext } from '@client/modules/Course/
 
 const defaultRowGutter = 24;
 const PAGINATION = 200;
+const registryApi = new RegistryApi();
 const DEFAULT_STATISTICS = { approved: 0, rejected: 0, pending: 0 };
 
 type Stats = {
@@ -35,7 +36,7 @@ function Page() {
   const [activeCourses] = useState((courses || []).filter((course: Course) => !course.completed && !course.inviteOnly));
   const [selectedIds, setSelectedIds] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any[]>([]);
   const [stats, setStats] = useState(DEFAULT_STATISTICS as Stats);
   const [courseId, setCourseId] = useState(null as number | null);
 
@@ -47,10 +48,7 @@ function Page() {
     const courseId = Number(id);
     setCourseId(courseId);
 
-    const url = `/api/registry?type=mentor&courseId=${courseId}`;
-    const {
-      data: { data: registrations },
-    } = await axios.get(url);
+    const { data: registrations } = await registryApi.getRegistrations('mentor', courseId);
     const statistics = { ...DEFAULT_STATISTICS };
 
     for (const registration of registrations) {
@@ -103,11 +101,11 @@ function Page() {
     setStats(statistics);
   };
 
-  const handleSubmit = async (_: any, status: string) => {
+  const handleSubmit = async (_: any, status: UpdateRegistrationsDtoStatusEnum) => {
     if (selectedIds.length) {
       try {
         setLoading(true);
-        await axios.put('/api/registry', { ids: selectedIds, status });
+        await registryApi.updateRegistrations({ ids: selectedIds, status });
         await handleCourseChange(courseId as number);
       } catch (e) {
         console.error(e);
