@@ -13,7 +13,6 @@ import type {
   StudentStats,
 } from '@common/models/profile';
 import { Rule } from 'antd/lib/form';
-import axios, { AxiosInstance } from 'axios';
 
 export interface UserBasic {
   name: string;
@@ -26,11 +25,7 @@ const searchApi = new UsersApi();
 const usersApi = new UsersNotificationsApi();
 
 export class UserService {
-  private axios: AxiosInstance;
-
-  constructor() {
-    this.axios = axios.create();
-  }
+  constructor() {}
 
   async getDiscordIds() {
     const fragment = new URLSearchParams(window.location.hash.slice(1));
