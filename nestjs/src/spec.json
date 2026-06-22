@@ -2219,6 +2219,20 @@
         "tags": ["disciplines"]
       }
     },
+    "/registry/mentor": {
+      "get": {
+        "operationId": "getOwnMentorRegistry",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/OwnMentorRegistryDto" } } }
+          }
+        },
+        "summary": "",
+        "tags": ["registry"]
+      }
+    },
     "/registry/mentor/{githubId}": {
       "put": {
         "operationId": "approveMentor",
@@ -5251,6 +5265,16 @@
         "required": ["ids"]
       },
       "UpdateDisciplineDto": { "type": "object", "properties": { "name": { "type": "string" } }, "required": ["name"] },
+      "OwnMentorRegistryDto": {
+        "type": "object",
+        "properties": {
+          "maxStudentsLimit": { "type": "number" },
+          "preferedStudentsLocation": { "type": "string" },
+          "preselectedCourses": { "type": "array", "items": { "type": "number" } },
+          "preferredCourses": { "type": "array", "items": { "type": "number" } }
+        },
+        "required": ["maxStudentsLimit", "preferedStudentsLocation", "preselectedCourses", "preferredCourses"]
+      },
       "ApproveMentorDto": {
         "type": "object",
         "properties": { "preselectedCourses": { "type": "array", "items": { "type": "string" } } },

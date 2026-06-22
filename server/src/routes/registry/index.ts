@@ -3,7 +3,7 @@ import { BAD_REQUEST, NOT_FOUND, OK } from 'http-status-codes';
 import { getCustomRepository, getRepository } from 'typeorm';
 import { parseAsync } from 'json2csv';
 import { ILogger } from '../../logger';
-import { Course, Mentor, MentorRegistry, Registry, Student, User } from '../../models';
+import { Course, Mentor, Registry, Student, User } from '../../models';
 import { IUserSession } from '../../models';
 import { adminGuard, anyCoursePowerUserGuard } from '../guards';
 import { setResponse, setCsvResponse } from '../utils';
@@ -44,29 +44,6 @@ export function registryRouter(logger?: ILogger) {
       userId: id,
     });
     setResponse(ctx, OK);
-  });
-
-  router.get('/mentor', async (ctx: Router.RouterContext) => {
-    if (!ctx.state.user) {
-      setResponse(ctx, BAD_REQUEST);
-      return;
-    }
-
-    const { id: userId } = ctx.state.user as IUserSession;
-
-    const mentorRegistry = await getRepository(MentorRegistry).findOne({ where: { userId } });
-    if (mentorRegistry == null) {
-      setResponse(ctx, NOT_FOUND);
-      return;
-    }
-
-    const result = {
-      maxStudentsLimit: mentorRegistry.maxStudentsLimit,
-      preferedStudentsLocation: mentorRegistry.preferedStudentsLocation,
-      preselectedCourses: mentorRegistry.preselectedCourses.map(c => Number(c)),
-      preferredCourses: mentorRegistry.preferedCourses.map(c => Number(c)),
-    };
-    setResponse(ctx, OK, result);
   });
 
   router.get('/mentors/csv', anyCoursePowerUserGuard, async (ctx: Router.RouterContext) => {
