@@ -4,6 +4,7 @@ import { ScoreOrder, ScoreTableFilters } from '@client/modules/Score/hooks/types
 import { IPaginationInfo } from '@client/shared/utils/pagination';
 
 import {
+  CourseMentorsApi,
   CoursesTasksApi,
   CoursesEventsApi,
   UpdateCourseEventDto,
@@ -124,6 +125,7 @@ const studentsScoreApi = new StudentsScoreApi();
 const studentsApi = new StudentsApi();
 const certificateApi = new CertificateApi();
 const coursesInterviewsApi = new CoursesInterviewsApi();
+const courseMentorsApi = new CourseMentorsApi();
 
 export class CourseService {
   private axios: AxiosInstance;
@@ -459,11 +461,11 @@ export class CourseService {
   }
 
   async expelMentor(githubId: string) {
-    await this.axios.post(`/mentor/${githubId}/status/expelled`);
+    await courseMentorsApi.expelMentor(this.courseId, githubId);
   }
 
   async restoreMentor(githubId: string) {
-    await this.axios.post(`/mentor/${githubId}/status/restore`);
+    await courseMentorsApi.restoreMentor(this.courseId, githubId);
   }
 
   async getCrossCheckAssignments(githubId: string, courseTaskId: number) {

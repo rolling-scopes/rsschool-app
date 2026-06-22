@@ -16,13 +16,7 @@ import {
 } from '../guards';
 import { postCertificates, postStudentCertificate } from './certificates';
 import { getCourseEvents } from './events';
-import {
-  deleteMentor as postMentorStatusExpelled,
-  getMentorInterview,
-  getMentorStudents,
-  postMentor,
-  restoreExpelledMentor,
-} from './mentor';
+import { getMentorInterview, getMentorStudents, postMentor } from './mentor';
 import * as score from './score';
 import * as stageInterview from './stageInterview';
 import { getStudents, getStudentsCsv, getStudentsWithDetails, searchStudent } from './students';
@@ -122,18 +116,6 @@ function addMentorApi(router: Router<any, any>, logger: ILogger) {
   router.get('/mentor/:githubId/students', guard, ...validators, getMentorStudents(mentorLogger));
   router.get('/mentor/:githubId/interview/:courseTaskId', guard, ...validators, getMentorInterview(mentorLogger));
   router.get('/mentor/:githubId/interviews', guard, ...validators, interviews.getMentorInterviews(mentorLogger));
-  router.post(
-    '/mentor/:githubId/status/expelled',
-    courseManagerGuard,
-    validateGithubId,
-    postMentorStatusExpelled(mentorLogger),
-  );
-  router.post(
-    '/mentor/:githubId/status/restore',
-    courseManagerGuard,
-    validateGithubId,
-    restoreExpelledMentor(mentorLogger),
-  );
 }
 
 function addStudentApi(router: Router<any, any>, logger: ILogger) {

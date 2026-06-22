@@ -10948,6 +10948,43 @@ export const CourseMentorsApiAxiosParamCreator = function (configuration?: Confi
         /**
          * 
          * @param {number} courseId 
+         * @param {string} githubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        expelMentor: async (courseId: number, githubId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('expelMentor', 'courseId', courseId)
+            // verify required parameter 'githubId' is not null or undefined
+            assertParamExists('expelMentor', 'githubId', githubId)
+            const localVarPath = `/course/{courseId}/mentors/{githubId}/status/expelled`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"githubId"}}`, encodeURIComponent(String(githubId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -11014,6 +11051,43 @@ export const CourseMentorsApiAxiosParamCreator = function (configuration?: Confi
         /**
          * 
          * @param {number} courseId 
+         * @param {string} githubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        restoreMentor: async (courseId: number, githubId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('restoreMentor', 'courseId', courseId)
+            // verify required parameter 'githubId' is not null or undefined
+            assertParamExists('restoreMentor', 'githubId', githubId)
+            const localVarPath = `/course/{courseId}/mentors/{githubId}/status/restore`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"githubId"}}`, encodeURIComponent(String(githubId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
          * @param {string} searchText 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11061,6 +11135,17 @@ export const CourseMentorsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} courseId 
+         * @param {string} githubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async expelMentor(courseId: number, githubId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.expelMentor(courseId, githubId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -11076,6 +11161,17 @@ export const CourseMentorsApiFp = function(configuration?: Configuration) {
          */
         async getMentorsDetailsCsv(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getMentorsDetailsCsv(courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} githubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async restoreMentor(courseId: number, githubId: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.restoreMentor(courseId, githubId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -11102,6 +11198,16 @@ export const CourseMentorsApiFactory = function (configuration?: Configuration, 
         /**
          * 
          * @param {number} courseId 
+         * @param {string} githubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        expelMentor(courseId: number, githubId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.expelMentor(courseId, githubId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -11116,6 +11222,16 @@ export const CourseMentorsApiFactory = function (configuration?: Configuration, 
          */
         getMentorsDetailsCsv(courseId: number, options?: any): AxiosPromise<void> {
             return localVarFp.getMentorsDetailsCsv(courseId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} githubId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        restoreMentor(courseId: number, githubId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.restoreMentor(courseId, githubId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -11140,6 +11256,18 @@ export class CourseMentorsApi extends BaseAPI {
     /**
      * 
      * @param {number} courseId 
+     * @param {string} githubId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CourseMentorsApi
+     */
+    public expelMentor(courseId: number, githubId: string, options?: AxiosRequestConfig) {
+        return CourseMentorsApiFp(this.configuration).expelMentor(courseId, githubId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CourseMentorsApi
@@ -11157,6 +11285,18 @@ export class CourseMentorsApi extends BaseAPI {
      */
     public getMentorsDetailsCsv(courseId: number, options?: AxiosRequestConfig) {
         return CourseMentorsApiFp(this.configuration).getMentorsDetailsCsv(courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {string} githubId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CourseMentorsApi
+     */
+    public restoreMentor(courseId: number, githubId: string, options?: AxiosRequestConfig) {
+        return CourseMentorsApiFp(this.configuration).restoreMentor(courseId, githubId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
