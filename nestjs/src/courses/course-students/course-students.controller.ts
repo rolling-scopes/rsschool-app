@@ -16,6 +16,7 @@ import { StudentSummaryDto } from './dto/student-summary.dto';
 import { CourseStudentsService } from './course-students.service';
 import { ExpelStatusDto } from './dto/student-status.dto';
 import { SelfStudentStatusDto, UpdateStudentStatusDto } from './dto/update-student-status.dto';
+import { UpdateMentoringAvailabilityDto } from './dto/update-mentoring-availability.dto';
 
 @Controller('courses/:courseId/students')
 @ApiTags('students')
@@ -100,6 +101,25 @@ export class CourseStudentsController {
       throw new BadRequestException('access denied');
     }
     await this.courseStudentService.setSelfStudy(courseId, githubId);
+  }
+
+  @Post(':githubId/availability')
+  @ApiOperation({ operationId: 'updateMentoringAvailability' })
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  @ApiBadRequestResponse()
+  @UseGuards(RoleGuard)
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  public async updateMentoringAvailability(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('githubId') githubId: string,
+    @Body() dto: UpdateMentoringAvailabilityDto,
+  ) {
+    const student = await this.courseStudentService.getStudentByGithubId(courseId, githubId);
+    if (student == null) {
+      throw new BadRequestException('Student not found');
+    }
+    await this.courseStudentService.updateMentoringAvailability(student.id, dto.mentoring ?? false);
   }
 
   @Post('expel')

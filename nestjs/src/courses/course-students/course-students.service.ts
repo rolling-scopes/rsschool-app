@@ -110,6 +110,10 @@ export class CourseStudentsService {
     return interviews.map(it => it.mentor.user.githubId);
   }
 
+  public async updateMentoringAvailability(studentId: number, mentoring: boolean) {
+    await this.studentRepository.update(studentId, { mentoring });
+  }
+
   async getStudentByGithubId(courseId: number, githubId: string): Promise<Student | null> {
     const record = await this.studentRepository.findOne({
       where: {

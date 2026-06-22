@@ -1,5 +1,6 @@
-import { CourseRole, IUserSession } from '../../../models';
-import { getPermissions, defineRole, getProfilePermissionsSettings } from '../permissions';
+import { CourseRole, IUserSession } from '@entities/session';
+// Mirrored from server/src/routes/profile/__test__/permissions.test.ts to prove business-logic equivalence
+import { getPermissions, defineRole, getProfilePermissionsSettings } from './permissions';
 
 const mockSession = {
   id: 1,

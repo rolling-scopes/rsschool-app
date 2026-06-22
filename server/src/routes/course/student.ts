@@ -2,32 +2,13 @@ import { BAD_REQUEST, OK, FORBIDDEN, StatusCodes } from 'http-status-codes';
 import Router from '@koa/router';
 import { getRepository, getCustomRepository } from 'typeorm';
 import { ILogger } from '../../logger';
-import { Feedback, TaskInterviewResult } from '../../models';
+import { TaskInterviewResult } from '../../models';
 import { courseService, taskService } from '../../services';
 import { setResponse } from '../utils';
 import { StudentRepository } from '../../repositories/student.repository';
 import { userGuards } from '../guards';
 import { sendNotification } from '../../services/notification.service';
 import { MentorBasic } from '../../../../common/models';
-
-type FeedbackInput = { toUserId: number; comment: string };
-
-export const postFeedback = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const courseId: number = ctx.params.courseId;
-  const data: FeedbackInput = ctx.request.body;
-  const id = ctx.state.user.id;
-
-  const feedback: Partial<Feedback> = {
-    comment: data.comment,
-    courseId,
-    fromUser: id,
-    toUserId: data.toUserId,
-  };
-  const result = await getRepository(Feedback).save(feedback);
-
-  setResponse(ctx, OK, result);
-  return;
-};
 
 export const updateStudent = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, githubId } = ctx.params;
@@ -159,19 +140,6 @@ export const getCrossMentors = (_: ILogger) => async (ctx: Router.RouterContext)
   const taskCheckers = await courseService.getCrossMentorsByStudent(courseId, githubId);
 
   setResponse(ctx, OK, taskCheckers);
-};
-
-export const updateMentoringAvailability = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { courseId, githubId } = ctx.params;
-  const student = await courseService.queryStudentByGithubId(courseId, githubId);
-  const { mentoring = false } = ctx.request.body as { mentoring: boolean };
-  if (student == null || mentoring === undefined) {
-    setResponse(ctx, BAD_REQUEST, null);
-    return;
-  }
-  const studentRepository = getCustomRepository(StudentRepository);
-  await studentRepository.updateMentoringAvailability(student.id, mentoring);
-  setResponse(ctx, OK, {});
 };
 
 type InterviewResultInput = {
