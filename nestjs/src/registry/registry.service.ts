@@ -264,6 +264,44 @@ export class RegistryService {
     );
   }
 
+  public async registerMentor(
+    githubId: string,
+    dto: {
+      maxStudentsLimit?: number;
+      preferedStudentsLocation?: string;
+      preferedCourses?: string[];
+      technicalMentoring?: string[];
+      languagesMentoring?: string[];
+    },
+  ) {
+    const user = await this.usersService.getByGithubId(githubId);
+
+    if (user == null) {
+      return null;
+    }
+    const { maxStudentsLimit, technicalMentoring, preferedStudentsLocation, preferedCourses } = dto;
+    const languagesMentoring = dto.languagesMentoring ?? [];
+
+    const mentorData: Partial<MentorRegistry> = {
+      maxStudentsLimit,
+      preferedStudentsLocation: preferedStudentsLocation as MentorRegistry['preferedStudentsLocation'],
+      englishMentoring: languagesMentoring.some(language => language === 'EN'),
+      languagesMentoring,
+      preferedCourses,
+      technicalMentoring,
+      canceled: false,
+    };
+
+    const mentorRegistry = await this.mentorsRegistryRepository.findOne({ where: { userId: user.id } });
+    if (mentorRegistry == null) {
+      await this.mentorsRegistryRepository.insert({ userId: user.id, ...mentorData });
+    } else {
+      await this.mentorsRegistryRepository.update(mentorRegistry.id, { ...mentorData, preselectedCourses: [] });
+    }
+
+    return user;
+  }
+
   public async createRegistration(
     authUser: { id: number; githubId: string },
     payload: { courseId: number; type: 'student' | 'mentor'; maxStudentsLimit?: number; experienceInYears?: string },

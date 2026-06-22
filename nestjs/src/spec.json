@@ -2219,6 +2219,31 @@
         "tags": ["disciplines"]
       }
     },
+    "/registry/mentor": {
+      "post": {
+        "operationId": "registerMentor",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RegisterMentorDto" } } }
+        },
+        "responses": { "200": { "description": "" } },
+        "summary": "",
+        "tags": ["registry"]
+      },
+      "get": {
+        "operationId": "getOwnMentorRegistry",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/OwnMentorRegistryDto" } } }
+          }
+        },
+        "summary": "",
+        "tags": ["registry"]
+      }
+    },
     "/registry": {
       "post": {
         "operationId": "createRegistration",
@@ -2270,20 +2295,6 @@
             "content": {
               "application/json": { "schema": { "$ref": "#/components/schemas/UpdateRegistrationsResponseDto" } }
             }
-          }
-        },
-        "summary": "",
-        "tags": ["registry"]
-      }
-    },
-    "/registry/mentor": {
-      "get": {
-        "operationId": "getOwnMentorRegistry",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/OwnMentorRegistryDto" } } }
           }
         },
         "summary": "",
@@ -5322,6 +5333,16 @@
         "required": ["ids"]
       },
       "UpdateDisciplineDto": { "type": "object", "properties": { "name": { "type": "string" } }, "required": ["name"] },
+      "RegisterMentorDto": {
+        "type": "object",
+        "properties": {
+          "maxStudentsLimit": { "type": "number" },
+          "preferedStudentsLocation": { "type": "string" },
+          "preferedCourses": { "type": "array", "items": { "type": "string" } },
+          "technicalMentoring": { "type": "array", "items": { "type": "string" } },
+          "languagesMentoring": { "type": "array", "items": { "type": "string" } }
+        }
+      },
       "CreateRegistrationDto": {
         "type": "object",
         "properties": {

@@ -24,7 +24,7 @@ export class CdnService {
   }
 
   public async registerMentor(payload: unknown) {
-    const result = await this.client.post<CoursesResponse>(`/api/registry/mentor`, payload);
-    return result.data.data;
+    const result = await this.client.post<CoursesResponse>(`/api/v2/registry/mentor`, payload);
+    return result.data;
   }
 }
