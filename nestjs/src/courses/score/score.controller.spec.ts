@@ -3,6 +3,9 @@ import { Test } from '@nestjs/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ScoreController } from './score.controller';
 import { ScoreService } from './score.service';
+import { WriteScoreService } from './write-score.service';
+import { UserNotificationsService } from 'src/users-notifications/users.notifications.service';
+import { ConfigService } from 'src/config';
 
 const exportRows = [
   { githubId: 'john-doe', name: 'John Doe', contacts: { email: 'john@example.com' }, 'Task A': 10 },
@@ -30,6 +33,9 @@ describe('ScoreController.getScoreCsv', () => {
       controllers: [ScoreController],
       providers: [
         { provide: ScoreService, useValue: { getStudentsScoreForExport: mockGetStudentsScoreForExport } },
+        { provide: WriteScoreService, useValue: {} },
+        { provide: UserNotificationsService, useValue: {} },
+        { provide: ConfigService, useValue: {} },
         { provide: CACHE_MANAGER, useValue: {} },
       ],
     }).compile();

@@ -15,6 +15,7 @@ import { orderByFieldMapping, OrderDirection, OrderField, ScoreQueryDto } from '
 import { InterviewsService } from '../interviews';
 import { ScoreDto, ScoreStudentDto } from './dto/score.dto';
 import { TaskResult } from '@entities/taskResult';
+import { Mentor } from '@entities/mentor';
 import { UsersService } from 'src/users/users.service';
 
 const defaultFilter: Partial<ScoreQueryDto> = {
@@ -232,6 +233,35 @@ export class ScoreService {
       result.push(lastName.trim());
     }
     return result.join(' ');
+  }
+
+  public async getStudentForScore(courseId: number, githubId: string) {
+    return this.studentRepository
+      .createQueryBuilder('student')
+      .innerJoin('student.user', 'user')
+      .addSelect(['user.firstName', 'user.lastName', 'user.githubId', 'user.id'])
+      .where('user.githubId = :githubId', { githubId })
+      .andWhere('student.courseId = :courseId', { courseId })
+      .getOne();
+  }
+
+  public async getCourseTaskWithCourse(courseTaskId: number) {
+    return this.dataSource
+      .getRepository(CourseTask)
+      .createQueryBuilder('courseTask')
+      .innerJoinAndSelect('courseTask.task', 'task')
+      .innerJoinAndSelect('courseTask.course', 'course')
+      .where('courseTask.id = :courseTaskId', { courseTaskId })
+      .getOne();
+  }
+
+  public async getMentorByUserId(courseId: number, userId: number) {
+    return this.dataSource
+      .getRepository(Mentor)
+      .createQueryBuilder('mentor')
+      .where('mentor."userId" = :userId', { userId })
+      .andWhere('mentor."courseId" = :courseId', { courseId })
+      .getOne();
   }
 
   public async getScore({
