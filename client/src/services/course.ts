@@ -255,8 +255,7 @@ export class CourseService {
   }
 
   async postStudentInterviewResult(githubId: string, courseTaskId: number, data: unknown) {
-    const result = await this.axios.post(`/student/${githubId}/interview/${courseTaskId}/result`, data);
-    return result.data.data;
+    await coursesInterviewsApi.createInterviewResult(this.courseId, courseTaskId, githubId, data as never);
   }
 
   async expelStudent(githubId: string, comment = '') {

@@ -819,6 +819,23 @@
         "tags": ["courses interviews"]
       }
     },
+    "/courses/{courseId}/interviews/{courseTaskId}/students/{githubId}/result": {
+      "post": {
+        "operationId": "createInterviewResult",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateInterviewResultDto" } } }
+        },
+        "responses": { "200": { "description": "" }, "400": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
+        "tags": ["courses interviews"]
+      }
+    },
     "/courses/{courseId}/interviews/{interviewId}/{type}/feedback": {
       "get": {
         "operationId": "getInterviewFeedback",
@@ -4378,6 +4395,24 @@
           "maxScore",
           "feedbackVersion"
         ]
+      },
+      "InterviewFormAnswerDto": {
+        "type": "object",
+        "properties": {
+          "questionId": { "type": "string" },
+          "questionText": { "type": "string" },
+          "answer": { "type": "string" }
+        },
+        "required": ["questionId", "questionText", "answer"]
+      },
+      "CreateInterviewResultDto": {
+        "type": "object",
+        "properties": {
+          "score": { "oneOf": [{ "type": "number" }, { "type": "string" }] },
+          "comment": { "type": "string" },
+          "formAnswers": { "type": "array", "items": { "$ref": "#/components/schemas/InterviewFormAnswerDto" } }
+        },
+        "required": ["score"]
       },
       "InterviewFeedbackDto": {
         "type": "object",

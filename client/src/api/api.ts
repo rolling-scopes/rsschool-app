@@ -2557,6 +2557,31 @@ export interface CreateGratitudeDto {
 /**
  * 
  * @export
+ * @interface CreateInterviewResultDto
+ */
+export interface CreateInterviewResultDto {
+    /**
+     * 
+     * @type {number | string}
+     * @memberof CreateInterviewResultDto
+     */
+    'score': number | string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateInterviewResultDto
+     */
+    'comment'?: string;
+    /**
+     * 
+     * @type {Array<InterviewFormAnswerDto>}
+     * @memberof CreateInterviewResultDto
+     */
+    'formAnswers'?: Array<InterviewFormAnswerDto>;
+}
+/**
+ * 
+ * @export
  * @interface CreateMentorDto
  */
 export interface CreateMentorDto {
@@ -4561,6 +4586,31 @@ export interface InterviewFeedbackDto {
      * @memberof InterviewFeedbackDto
      */
     'maxScore': number;
+}
+/**
+ * 
+ * @export
+ * @interface InterviewFormAnswerDto
+ */
+export interface InterviewFormAnswerDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof InterviewFormAnswerDto
+     */
+    'questionId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InterviewFormAnswerDto
+     */
+    'questionText': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InterviewFormAnswerDto
+     */
+    'answer': string;
 }
 /**
  * 
@@ -13921,6 +13971,53 @@ export const CoursesInterviewsApiAxiosParamCreator = function (configuration?: C
          * 
          * @param {number} courseId 
          * @param {number} courseTaskId 
+         * @param {string} githubId 
+         * @param {CreateInterviewResultDto} createInterviewResultDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createInterviewResult: async (courseId: number, courseTaskId: number, githubId: string, createInterviewResultDto: CreateInterviewResultDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('createInterviewResult', 'courseId', courseId)
+            // verify required parameter 'courseTaskId' is not null or undefined
+            assertParamExists('createInterviewResult', 'courseTaskId', courseTaskId)
+            // verify required parameter 'githubId' is not null or undefined
+            assertParamExists('createInterviewResult', 'githubId', githubId)
+            // verify required parameter 'createInterviewResultDto' is not null or undefined
+            assertParamExists('createInterviewResult', 'createInterviewResultDto', createInterviewResultDto)
+            const localVarPath = `/courses/{courseId}/interviews/{courseTaskId}/students/{githubId}/result`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"courseTaskId"}}`, encodeURIComponent(String(courseTaskId)))
+                .replace(`{${"githubId"}}`, encodeURIComponent(String(githubId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createInterviewResultDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
          * @param {InterviewDistributeDto} interviewDistributeDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14252,6 +14349,19 @@ export const CoursesInterviewsApiFp = function(configuration?: Configuration) {
          * 
          * @param {number} courseId 
          * @param {number} courseTaskId 
+         * @param {string} githubId 
+         * @param {CreateInterviewResultDto} createInterviewResultDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createInterviewResult(courseId: number, courseTaskId: number, githubId: string, createInterviewResultDto: CreateInterviewResultDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createInterviewResult(courseId, courseTaskId, githubId, createInterviewResultDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
          * @param {InterviewDistributeDto} interviewDistributeDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14364,6 +14474,18 @@ export const CoursesInterviewsApiFactory = function (configuration?: Configurati
          * 
          * @param {number} courseId 
          * @param {number} courseTaskId 
+         * @param {string} githubId 
+         * @param {CreateInterviewResultDto} createInterviewResultDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createInterviewResult(courseId: number, courseTaskId: number, githubId: string, createInterviewResultDto: CreateInterviewResultDto, options?: any): AxiosPromise<void> {
+            return localVarFp.createInterviewResult(courseId, courseTaskId, githubId, createInterviewResultDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
          * @param {InterviewDistributeDto} interviewDistributeDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -14464,6 +14586,20 @@ export class CoursesInterviewsApi extends BaseAPI {
      */
     public createInterviewFeedback(courseId: number, interviewId: number, type: string, putInterviewFeedbackDto: PutInterviewFeedbackDto, options?: AxiosRequestConfig) {
         return CoursesInterviewsApiFp(this.configuration).createInterviewFeedback(courseId, interviewId, type, putInterviewFeedbackDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {number} courseTaskId 
+     * @param {string} githubId 
+     * @param {CreateInterviewResultDto} createInterviewResultDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesInterviewsApi
+     */
+    public createInterviewResult(courseId: number, courseTaskId: number, githubId: string, createInterviewResultDto: CreateInterviewResultDto, options?: AxiosRequestConfig) {
+        return CoursesInterviewsApiFp(this.configuration).createInterviewResult(courseId, courseTaskId, githubId, createInterviewResultDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

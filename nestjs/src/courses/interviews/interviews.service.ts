@@ -374,4 +374,72 @@ export class InterviewsService {
 
     return taskCheckPairs;
   }
+
+  public async createInterviewResult(
+    courseId: number,
+    courseTaskId: number,
+    githubId: string,
+    userId: number,
+    inputData: {
+      score: number | string;
+      comment?: string;
+      formAnswers?: { questionId: string; questionText: string; answer: string }[];
+    },
+  ): Promise<{ ok: boolean; message?: string }> {
+    if (inputData.score == null) {
+      return { ok: false, message: 'no score' };
+    }
+
+    const [student, mentor] = await Promise.all([
+      this.studentRepository
+        .createQueryBuilder('student')
+        .innerJoin('student.user', 'user')
+        .where('user.githubId = :githubId', { githubId })
+        .andWhere('student.courseId = :courseId', { courseId })
+        .getOne(),
+      this.mentorRepository
+        .createQueryBuilder('mentor')
+        .where('mentor."courseId" = :courseId AND mentor."userId" = :userId', { userId, courseId })
+        .getOne(),
+    ]);
+
+    if (student == null || mentor == null) {
+      return { ok: false, message: 'not valid student or mentor' };
+    }
+
+    const courseTask = await this.courseTaskRepository
+      .createQueryBuilder('courseTask')
+      .where('courseTask.id = :courseTaskId', { courseTaskId: Number(courseTaskId) })
+      .getOne();
+    if (courseTask == null) {
+      return { ok: false, message: 'not valid course task' };
+    }
+
+    const repository = this.taskInterviewResultRepository;
+    const existingResult = await repository
+      .createQueryBuilder('taskInterviewResult')
+      .where('"taskInterviewResult"."studentId" = :studentId', { studentId: student.id })
+      .andWhere('"taskInterviewResult"."courseTaskId" = :courseTaskId', { courseTaskId: courseTask.id })
+      .andWhere('"taskInterviewResult"."mentorId" = :mentorId', { mentorId: mentor.id })
+      .getOne();
+
+    if (existingResult != null) {
+      await repository.update(existingResult.id, {
+        formAnswers: inputData.formAnswers,
+        score: Math.round(Number(inputData.score)),
+        comment: inputData.comment || '',
+      });
+      return { ok: true };
+    }
+
+    await repository.insert({
+      mentorId: mentor.id,
+      studentId: student.id,
+      formAnswers: inputData.formAnswers,
+      score: Math.round(Number(inputData.score)),
+      comment: inputData.comment || '',
+      courseTaskId: courseTask.id,
+    });
+    return { ok: true };
+  }
 }
