@@ -2582,6 +2582,43 @@ export interface CreateMentorDto {
 /**
  * 
  * @export
+ * @interface CreateMultipleScoresItemDto
+ */
+export interface CreateMultipleScoresItemDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateMultipleScoresItemDto
+     */
+    'studentGithubId': string;
+    /**
+     * 
+     * @type {number | string}
+     * @memberof CreateMultipleScoresItemDto
+     */
+    'score': number | string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateMultipleScoresItemDto
+     */
+    'comment'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateMultipleScoresItemDto
+     */
+    'githubPrUrl'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateMultipleScoresItemDto
+     */
+    'mentorGithubId'?: string;
+}
+/**
+ * 
+ * @export
  * @interface CreatePromptDto
  */
 export interface CreatePromptDto {
@@ -5605,6 +5642,25 @@ export interface NotificationUserSettingsDto {
      * @memberof NotificationUserSettingsDto
      */
     'settings': object;
+}
+/**
+ * 
+ * @export
+ * @interface OperationResultDto
+ */
+export interface OperationResultDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof OperationResultDto
+     */
+    'status': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OperationResultDto
+     */
+    'value'?: string;
 }
 /**
  * 
@@ -22314,6 +22370,49 @@ export const StudentsScoreApiAxiosParamCreator = function (configuration?: Confi
          * 
          * @param {number} courseId 
          * @param {number} courseTaskId 
+         * @param {Array<CreateMultipleScoresItemDto>} createMultipleScoresItemDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createMultipleScores: async (courseId: number, courseTaskId: number, createMultipleScoresItemDto: Array<CreateMultipleScoresItemDto>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('createMultipleScores', 'courseId', courseId)
+            // verify required parameter 'courseTaskId' is not null or undefined
+            assertParamExists('createMultipleScores', 'courseTaskId', courseTaskId)
+            // verify required parameter 'createMultipleScoresItemDto' is not null or undefined
+            assertParamExists('createMultipleScores', 'createMultipleScoresItemDto', createMultipleScoresItemDto)
+            const localVarPath = `/course/{courseId}/students/score/task/{courseTaskId}/multiple`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"courseTaskId"}}`, encodeURIComponent(String(courseTaskId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createMultipleScoresItemDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
          * @param {string} githubId 
          * @param {CreateSingleScoreDto} createSingleScoreDto 
          * @param {*} [options] Override http request option.
@@ -22496,6 +22595,18 @@ export const StudentsScoreApiFp = function(configuration?: Configuration) {
          * 
          * @param {number} courseId 
          * @param {number} courseTaskId 
+         * @param {Array<CreateMultipleScoresItemDto>} createMultipleScoresItemDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createMultipleScores(courseId: number, courseTaskId: number, createMultipleScoresItemDto: Array<CreateMultipleScoresItemDto>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<OperationResultDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createMultipleScores(courseId, courseTaskId, createMultipleScoresItemDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
          * @param {string} githubId 
          * @param {CreateSingleScoreDto} createSingleScoreDto 
          * @param {*} [options] Override http request option.
@@ -22549,6 +22660,17 @@ export const StudentsScoreApiFactory = function (configuration?: Configuration, 
          * 
          * @param {number} courseId 
          * @param {number} courseTaskId 
+         * @param {Array<CreateMultipleScoresItemDto>} createMultipleScoresItemDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createMultipleScores(courseId: number, courseTaskId: number, createMultipleScoresItemDto: Array<CreateMultipleScoresItemDto>, options?: any): AxiosPromise<Array<OperationResultDto>> {
+            return localVarFp.createMultipleScores(courseId, courseTaskId, createMultipleScoresItemDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {number} courseTaskId 
          * @param {string} githubId 
          * @param {CreateSingleScoreDto} createSingleScoreDto 
          * @param {*} [options] Override http request option.
@@ -22595,6 +22717,19 @@ export const StudentsScoreApiFactory = function (configuration?: Configuration, 
  * @extends {BaseAPI}
  */
 export class StudentsScoreApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {number} courseTaskId 
+     * @param {Array<CreateMultipleScoresItemDto>} createMultipleScoresItemDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StudentsScoreApi
+     */
+    public createMultipleScores(courseId: number, courseTaskId: number, createMultipleScoresItemDto: Array<CreateMultipleScoresItemDto>, options?: AxiosRequestConfig) {
+        return StudentsScoreApiFp(this.configuration).createMultipleScores(courseId, courseTaskId, createMultipleScoresItemDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {number} courseId 

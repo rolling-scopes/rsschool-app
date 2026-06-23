@@ -6,6 +6,7 @@ import {
   Get,
   Logger,
   Param,
+  ParseArrayPipe,
   ParseIntPipe,
   Post,
   Query,
@@ -15,11 +16,12 @@ import {
 } from '@nestjs/common';
 import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 
-import { CourseGuard, CurrentRequest, DefaultGuard } from 'src/auth';
+import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { isAdmin, isManager, isTaskOwner } from '@entities/session';
 import { WriteScoreService } from './write-score.service';
 import { UserNotificationsService } from 'src/users-notifications/users.notifications.service';
 import { ConfigService } from 'src/config';
+import { CreateMultipleScoresItemDto, OperationResultDto } from './dto/create-multiple-scores.dto';
 import { CreateSingleScoreDto } from './dto/create-single-score.dto';
 import { DEFAULT_CACHE_TTL } from 'src/constants';
 
@@ -60,6 +62,63 @@ export class ScoreController {
     });
 
     return score;
+  }
+
+  @Post('/task/:courseTaskId/multiple')
+  @UseGuards(DefaultGuard, CourseGuard, RoleGuard)
+  @RequiredRoles([CourseRole.TaskOwner, CourseRole.Mentor, CourseRole.Manager, Role.Admin], true)
+  @ApiOperation({ operationId: 'createMultipleScores' })
+  @ApiBody({ type: [CreateMultipleScoresItemDto] })
+  @ApiOkResponse({ type: [OperationResultDto] })
+  public async createMultipleScores(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+    @Body(new ParseArrayPipe({ items: CreateMultipleScoresItemDto })) inputData: CreateMultipleScoresItemDto[],
+  ): Promise<OperationResultDto[]> {
+    const result: OperationResultDto[] = [];
+
+    for (const item of inputData) {
+      try {
+        this.logger.log(item.studentGithubId);
+
+        const data = {
+          studentGithubId: item.studentGithubId,
+          courseTaskId,
+          score: Math.round(Number(item.score)),
+          comment: (item.comment || '').substring(0, 8 * 1024),
+          githubPrUrl: item.githubPrUrl || '',
+        };
+
+        const { studentGithubId } = data;
+
+        const student = await this.scoreService.getStudentForScore(courseId, studentGithubId);
+
+        if (student == null) {
+          result.push({ status: 'skipped', value: `no student: ${studentGithubId}` });
+          continue;
+        }
+
+        const authorId = req.user?.id ?? 0;
+
+        const { created } = await this.writeScoreService.saveScoreWithStatus(Number(student.id), Number(courseTaskId), {
+          authorId,
+          comment: data.comment,
+          score: data.score,
+          githubPrUrl: data.githubPrUrl,
+        });
+
+        if (created) {
+          result.push({ status: 'created', value: undefined });
+        } else {
+          result.push({ status: 'updated', value: undefined });
+        }
+      } catch (e) {
+        result.push({ status: 'failed', value: (e as Error).message });
+      }
+    }
+
+    return result;
   }
 
   @Post('/:githubId/task/:courseTaskId')

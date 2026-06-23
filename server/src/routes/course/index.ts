@@ -10,7 +10,6 @@ import {
   courseSupervisorOrDementorGuard,
   crossCheckGuard,
   guard,
-  taskOwnerGuard,
 } from '../guards';
 import { getCourseEvents } from './events';
 import { getMentorInterview, getMentorStudents } from './mentor';
@@ -35,7 +34,6 @@ import * as tasks from './tasks';
 export function courseRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/course/:courseId' });
 
-  addScoreApi(router, logger);
   addStageInterviewApi(router, logger);
   addInterviewsApi(router, logger);
   addEventApi(router, logger);
@@ -45,10 +43,6 @@ export function courseRoute(logger: ILogger) {
   addStudentCrossCheckApi(router, logger);
   addScheduleApi(router, logger);
   return router;
-}
-
-function addScoreApi(router: Router<any, any>, logger: ILogger) {
-  router.post('/scores/:courseTaskId', taskOwnerGuard, score.createMultipleScores(logger));
 }
 
 function addInterviewsApi(router: Router<any, any>, logger: ILogger) {

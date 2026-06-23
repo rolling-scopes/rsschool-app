@@ -243,8 +243,8 @@ export class CourseService {
   }
 
   async postMultipleScores(courseTaskId: number, data: unknown) {
-    const result = await this.axios.post(`/scores/${courseTaskId}`, data);
-    return result.data.data;
+    const result = await studentsScoreApi.createMultipleScores(this.courseId, courseTaskId, data as never);
+    return result.data;
   }
 
   async getInterviewStudents(courseTaskId: number) {
