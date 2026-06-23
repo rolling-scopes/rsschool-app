@@ -111,6 +111,23 @@ export class CourseCrossCheckService {
     private readonly userRepository: Repository<User>,
   ) {}
 
+  public static isCrossCheckTask(courseTask: Partial<CourseTask>) {
+    return courseTask.checker === 'crossCheck';
+  }
+
+  public static isValidTaskSolution(data: Partial<TaskSolution>) {
+    if (!data.url) {
+      return false;
+    }
+    if (data.comments && !Array.isArray(data.comments)) {
+      return false;
+    }
+    if (data.review && !Array.isArray(data.review)) {
+      return false;
+    }
+    return true;
+  }
+
   public async getCourseTask(courseTaskId: number) {
     return this.courseTaskRepository
       .createQueryBuilder('courseTask')
@@ -148,6 +165,30 @@ export class CourseCrossCheckService {
       githubId: record.user.githubId,
       userId: record.user.id,
     };
+  }
+
+  public async saveSolution(studentId: number, courseTaskId: number, data: Partial<TaskSolution>) {
+    const existingResult = await this.getTaskSolution(studentId, courseTaskId);
+    if (existingResult != null) {
+      await this.taskSolutionRepository.save({
+        ...existingResult,
+        ...data,
+        comments: existingResult.comments.concat(data.comments ?? []),
+      });
+      return;
+    }
+
+    await this.taskSolutionRepository.save({
+      studentId,
+      courseTaskId,
+      url: data.url,
+      review: data.review,
+      comments: data.comments,
+    });
+  }
+
+  public async deleteSolution(studentId: number, courseTaskId: number) {
+    await this.taskSolutionRepository.delete({ studentId, courseTaskId });
   }
 
   public async getTaskSolutionAssignments(checkerId: number, courseTaskId: number) {

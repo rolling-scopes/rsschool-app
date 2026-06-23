@@ -5,12 +5,7 @@ import { getCourseEvents } from './events';
 import { getMentorStudents } from './mentor';
 import { getCourseTasksVerifications } from './taskVerifications';
 
-import {
-  validateCrossCheckExpirationDate,
-  validateExpelledStudent,
-  validateGithubId,
-  validateGithubIdAndAccess,
-} from '../validators';
+import { validateGithubId, validateGithubIdAndAccess } from '../validators';
 import * as crossCheck from './crossCheck';
 import { getStudent } from './student';
 
@@ -47,24 +42,8 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
 }
 
 function addStudentCrossCheckApi(router: Router<any, any>, logger: ILogger) {
-  const validators = [validateGithubIdAndAccess];
-  const activeStudentValidators = [validateGithubIdAndAccess, validateExpelledStudent];
   const baseUrl = `/student/:githubId/task/:courseTaskId`;
 
-  router.post(
-    `${baseUrl}/cross-check/solution`,
-    courseGuard,
-    ...activeStudentValidators,
-    validateCrossCheckExpirationDate,
-    crossCheck.createSolution(logger),
-  );
-  router.delete(
-    `${baseUrl}/cross-check/solution`,
-    courseGuard,
-    ...validators,
-    validateCrossCheckExpirationDate,
-    crossCheck.deleteSolution(logger),
-  );
   router.post(`${baseUrl}/cross-check/result`, courseGuard, validateGithubId, crossCheck.createResult(logger));
   router.post(
     `/taskSolutionResult/:taskSolutionResultId/task/:courseTaskId/cross-check/messages`,

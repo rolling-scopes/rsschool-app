@@ -1,7 +1,5 @@
 export * from './createCompletion';
 export * from './createDistribution';
 export * from './createResult';
-export * from './createSolution';
 export * from './createMessage';
 export * from './updateMessage';
-export * from './deleteSolution';
