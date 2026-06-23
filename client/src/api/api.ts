@@ -745,6 +745,86 @@ export interface BasicAutoTestTaskDto {
 /**
  * 
  * @export
+ * @interface CertificateCriteriaDto
+ */
+export interface CertificateCriteriaDto {
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof CertificateCriteriaDto
+     */
+    'courseTaskIds'?: Array<number>;
+    /**
+     * 
+     * @type {number}
+     * @memberof CertificateCriteriaDto
+     */
+    'minScore'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CertificateCriteriaDto
+     */
+    'minTotalScore'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface CertificateRequestDto
+ */
+export interface CertificateRequestDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof CertificateRequestDto
+     */
+    'courseId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CertificateRequestDto
+     */
+    'courseName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CertificateRequestDto
+     */
+    'coursePrimarySkill': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof CertificateRequestDto
+     */
+    'certificateIssuer': string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof CertificateRequestDto
+     */
+    'studentId': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CertificateRequestDto
+     */
+    'studentName': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CertificateRequestDto
+     */
+    'timestamp': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CertificateRequestDto
+     */
+    'templateId': string;
+}
+/**
+ * 
+ * @export
  * @interface ChannelSettings
  */
 export interface ChannelSettings {
@@ -2036,6 +2116,25 @@ export interface CreateContributorDto {
 /**
  * 
  * @export
+ * @interface CreateCourseCertificatesDto
+ */
+export interface CreateCourseCertificatesDto {
+    /**
+     * 
+     * @type {CertificateCriteriaDto}
+     * @memberof CreateCourseCertificatesDto
+     */
+    'criteria'?: CertificateCriteriaDto;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateCourseCertificatesDto
+     */
+    'templateId'?: string;
+}
+/**
+ * 
+ * @export
  * @interface CreateCourseDto
  */
 export interface CreateCourseDto {
@@ -2519,6 +2618,19 @@ export const CreateRegistrationDtoTypeEnum = {
 
 export type CreateRegistrationDtoTypeEnum = typeof CreateRegistrationDtoTypeEnum[keyof typeof CreateRegistrationDtoTypeEnum];
 
+/**
+ * 
+ * @export
+ * @interface CreateStudentCertificateDto
+ */
+export interface CreateStudentCertificateDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateStudentCertificateDto
+     */
+    'templateId'?: string;
+}
 /**
  * 
  * @export
@@ -10391,6 +10503,88 @@ export const CertificateApiAxiosParamCreator = function (configuration?: Configu
     return {
         /**
          * 
+         * @param {number} courseId 
+         * @param {CreateCourseCertificatesDto} createCourseCertificatesDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createCourseCertificates: async (courseId: number, createCourseCertificatesDto: CreateCourseCertificatesDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('createCourseCertificates', 'courseId', courseId)
+            // verify required parameter 'createCourseCertificatesDto' is not null or undefined
+            assertParamExists('createCourseCertificates', 'createCourseCertificatesDto', createCourseCertificatesDto)
+            const localVarPath = `/certificate/course/{courseId}`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createCourseCertificatesDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} githubId 
+         * @param {CreateStudentCertificateDto} createStudentCertificateDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createStudentCertificate: async (courseId: number, githubId: string, createStudentCertificateDto: CreateStudentCertificateDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('createStudentCertificate', 'courseId', courseId)
+            // verify required parameter 'githubId' is not null or undefined
+            assertParamExists('createStudentCertificate', 'githubId', githubId)
+            // verify required parameter 'createStudentCertificateDto' is not null or undefined
+            assertParamExists('createStudentCertificate', 'createStudentCertificateDto', createStudentCertificateDto)
+            const localVarPath = `/certificate/course/{courseId}/student/{githubId}`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"githubId"}}`, encodeURIComponent(String(githubId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createStudentCertificateDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} publicId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10531,6 +10725,29 @@ export const CertificateApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {number} courseId 
+         * @param {CreateCourseCertificatesDto} createCourseCertificatesDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createCourseCertificates(courseId: number, createCourseCertificatesDto: CreateCourseCertificatesDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CertificateRequestDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createCourseCertificates(courseId, createCourseCertificatesDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} githubId 
+         * @param {CreateStudentCertificateDto} createStudentCertificateDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createStudentCertificate(courseId: number, githubId: string, createStudentCertificateDto: CreateStudentCertificateDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CertificateRequestDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createStudentCertificate(courseId, githubId, createStudentCertificateDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {string} publicId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10580,6 +10797,27 @@ export const CertificateApiFactory = function (configuration?: Configuration, ba
     return {
         /**
          * 
+         * @param {number} courseId 
+         * @param {CreateCourseCertificatesDto} createCourseCertificatesDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createCourseCertificates(courseId: number, createCourseCertificatesDto: CreateCourseCertificatesDto, options?: any): AxiosPromise<Array<CertificateRequestDto>> {
+            return localVarFp.createCourseCertificates(courseId, createCourseCertificatesDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} githubId 
+         * @param {CreateStudentCertificateDto} createStudentCertificateDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createStudentCertificate(courseId: number, githubId: string, createStudentCertificateDto: CreateStudentCertificateDto, options?: any): AxiosPromise<CertificateRequestDto> {
+            return localVarFp.createStudentCertificate(courseId, githubId, createStudentCertificateDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} publicId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10623,6 +10861,31 @@ export const CertificateApiFactory = function (configuration?: Configuration, ba
  * @extends {BaseAPI}
  */
 export class CertificateApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {CreateCourseCertificatesDto} createCourseCertificatesDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CertificateApi
+     */
+    public createCourseCertificates(courseId: number, createCourseCertificatesDto: CreateCourseCertificatesDto, options?: AxiosRequestConfig) {
+        return CertificateApiFp(this.configuration).createCourseCertificates(courseId, createCourseCertificatesDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {string} githubId 
+     * @param {CreateStudentCertificateDto} createStudentCertificateDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CertificateApi
+     */
+    public createStudentCertificate(courseId: number, githubId: string, createStudentCertificateDto: CreateStudentCertificateDto, options?: AxiosRequestConfig) {
+        return CertificateApiFp(this.configuration).createStudentCertificate(courseId, githubId, createStudentCertificateDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {string} publicId 

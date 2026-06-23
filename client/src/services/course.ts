@@ -285,7 +285,7 @@ export class CourseService {
     criteria: { courseTaskIds?: number[]; minScore?: number; minTotalScore?: number },
     templateId?: string,
   ) {
-    await this.axios.post(`/certificates`, { criteria, templateId });
+    await certificateApi.createCourseCertificates(this.courseId, { criteria, templateId });
   }
 
   async restoreStudent(githubId: string) {
@@ -511,8 +511,8 @@ export class CourseService {
   }
 
   async createCertificate(githubId: string, templateId?: string) {
-    const result = await this.axios.post(`/student/${githubId}/certificate`, { templateId });
-    return result.data.data;
+    const result = await certificateApi.createStudentCertificate(this.courseId, githubId, { templateId });
+    return result.data;
   }
 
   async removeCertificate(studentId: number) {

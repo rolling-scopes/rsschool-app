@@ -12,7 +12,6 @@ import {
   guard,
   taskOwnerGuard,
 } from '../guards';
-import { postCertificates, postStudentCertificate } from './certificates';
 import { getCourseEvents } from './events';
 import { getMentorInterview, getMentorStudents, postMentor } from './mentor';
 import * as score from './score';
@@ -35,8 +34,6 @@ import * as tasks from './tasks';
 
 export function courseRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/course/:courseId' });
-
-  router.post('/certificates', courseManagerGuard, postCertificates(logger));
 
   addScoreApi(router, logger);
   addStageInterviewApi(router, logger);
@@ -133,8 +130,6 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   router.get('/student/:githubId/interviews', courseGuard, ...validators, interviews.getStudentInterviews(logger));
   router.post('/student/:githubId/task/:courseTaskId/result', courseGuard, score.createSingleScore(logger));
   router.post('/student/:githubId/interview/:courseTaskId/result', ...mentorValidators, createInterviewResult(logger));
-
-  router.post('/student/:githubId/certificate', courseManagerGuard, validateGithubId, postStudentCertificate(logger));
 
   router.get('/students', courseSupervisorGuard, getStudents(logger));
   router.get('/students/csv', courseSupervisorGuard, getStudentsCsv(logger));
