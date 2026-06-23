@@ -26,6 +26,7 @@ import { ActivityModule } from './activity/activity.module';
 import { UsersNotificationsModule } from './users-notifications';
 import { GratitudesModule } from './gratitudes';
 import { CloudApiModule } from './cloud-api/cloud-api.module';
+import { FilesModule } from './files/files.module';
 import { EventsModule } from './events/events.module';
 import { TasksModule } from './tasks/tasks.module';
 import { PromptsModule } from './prompts/prompts.module';
@@ -69,6 +70,7 @@ import { DevtoolsModule } from './devtools/devtools.module';
     UsersNotificationsModule,
     GratitudesModule,
     CloudApiModule,
+    FilesModule,
     EventsModule,
     TasksModule,
     PromptsModule,

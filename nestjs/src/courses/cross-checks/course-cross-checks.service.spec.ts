@@ -6,6 +6,7 @@ import { TaskSolution } from '@entities/taskSolution';
 import { TaskSolutionResult } from '@entities/taskSolutionResult';
 import { CourseTask } from '@entities/courseTask';
 import { Student } from '@entities/student';
+import { User } from '@entities/user';
 
 const mockRawData = [
   {
@@ -58,6 +59,10 @@ describe('CourseCrossCheckService', () => {
         },
         {
           provide: getRepositoryToken(Student),
+          useValue: {},
+        },
+        {
+          provide: getRepositoryToken(User),
           useValue: {},
         },
       ],
