@@ -377,6 +377,32 @@ export class InterviewsService {
     return taskCheckPairs;
   }
 
+  public async getRegisteredInterviewStudent(
+    courseId: number,
+    githubId: string,
+    interviewId: string,
+  ): Promise<{ id: number } | null | undefined> {
+    const student = await this.studentRepository
+      .createQueryBuilder('student')
+      .innerJoin('student.user', 'user')
+      .where('user.githubId = :githubId', { githubId })
+      .andWhere('student.courseId = :courseId', { courseId })
+      .getOne();
+    if (student == null) {
+      return undefined;
+    }
+    if (interviewId === 'stage') {
+      const record = await this.stageInterviewStudentRepository.findOne({
+        where: { courseId, studentId: student.id },
+      });
+      return record ? { id: record.id } : null;
+    }
+    const record = await this.taskInterviewStudentRepository.findOne({
+      where: { courseId, studentId: student.id, courseTaskId: Number(interviewId) },
+    });
+    return record ? { id: record.id } : null;
+  }
+
   public async getUserInterviewDetails(courseId: number, githubId: string, type: 'student' | 'mentor') {
     const [interviews, stageInterviews] = await Promise.all([
       this.getRegularInterviewDetails(courseId, githubId, type),

@@ -819,6 +819,18 @@
         "tags": ["courses interviews"]
       }
     },
+    "/courses/{courseId}/interviews/{interviewId}/students/me/registration": {
+      "get": {
+        "operationId": "getInterviewRegistration",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "interviewId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" }, "400": { "description": "" } },
+        "summary": "",
+        "tags": ["courses interviews"]
+      }
+    },
     "/courses/{courseId}/interviews/students/me": {
       "get": {
         "operationId": "getStudentInterviews",

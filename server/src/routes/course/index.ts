@@ -99,20 +99,6 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
 
   router.get('/student/:githubId', courseSupervisorGuard, getStudent(logger));
 
-  router.get(
-    '/student/:githubId/interview/stage',
-    courseGuard,
-    ...validators,
-    stageInterview.getInterviewStudent(logger),
-  );
-
-  router.get(
-    '/student/:githubId/interview/:courseTaskId',
-    courseGuard,
-    ...validators,
-    interviews.getInterviewStudent(logger),
-  );
-
   router.get('/student/:githubId/tasks/cross-mentors', courseGuard, ...validators, getCrossMentors(logger));
 
   router.get('/students', courseSupervisorGuard, getStudents(logger));

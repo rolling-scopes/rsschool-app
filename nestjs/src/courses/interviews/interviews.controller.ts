@@ -221,6 +221,23 @@ export class InterviewsController {
     throw new BadRequestException('Invalid interview id');
   }
 
+  @Get('/:interviewId/students/me/registration')
+  @ApiOkResponse()
+  @ApiBadRequestResponse()
+  @ApiOperation({ operationId: 'getInterviewRegistration' })
+  @UseGuards(DefaultGuard, CourseGuard)
+  public async getInterviewRegistration(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('interviewId') interviewId: string,
+  ) {
+    const result = await this.interviewsService.getRegisteredInterviewStudent(courseId, req.user.githubId, interviewId);
+    if (result === undefined) {
+      throw new BadRequestException();
+    }
+    return result;
+  }
+
   @Get('/students/me')
   @ApiOkResponse()
   @ApiForbiddenResponse()

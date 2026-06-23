@@ -546,9 +546,9 @@ export class CourseService {
     return result.data;
   }
 
-  async getInterviewStudent(githubId: string, interviewId: string) {
-    const result = await this.axios.get(`/student/${githubId}/interview/${interviewId}`);
-    return result.data.data as { id: number } | null;
+  async getInterviewStudent(_githubId: string, interviewId: string) {
+    const result = await coursesInterviewsApi.getInterviewRegistration(this.courseId, interviewId);
+    return result.data as unknown as { id: number } | null;
   }
 
   async cancelInterviewPair(interviewId: string, pairId: string) {
