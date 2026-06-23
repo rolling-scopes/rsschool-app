@@ -1,1 +1,0 @@
-export { getCourseTasksDetails } from './getCourseTasksDetails';
