@@ -19,7 +19,7 @@ import {
   ApiTags,
   ApiTooManyRequestsResponse,
 } from '@nestjs/swagger';
-import { CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, RoleGuard } from '../../auth';
+import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, RoleGuard } from '../../auth';
 import { CreateTaskVerificationDto } from './dto/create-task-verification.dto';
 import { TaskVerificationAttemptDto } from './dto/task-verifications-attempts.dto';
 import { TaskVerificationsService } from './task-verifications.service';
@@ -71,5 +71,27 @@ export class TaskVerificationsController {
 
     const githubId = req.user.githubId;
     return this.taskVerificationsService.createTaskVerification(courseTaskId, studentId, { githubId, body });
+  }
+}
+
+@Controller('courses/:courseId/student-verifications')
+@ApiTags('course task verifications')
+export class StudentTaskVerificationsController {
+  constructor(private taskVerificationsService: TaskVerificationsService) {}
+
+  @Get('/')
+  @ApiOperation({ operationId: 'getStudentTaskVerifications' })
+  @ApiOkResponse()
+  @ApiBadRequestResponse()
+  @UseGuards(DefaultGuard, CourseGuard)
+  public async getStudentTaskVerifications(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+  ) {
+    const verifications = await this.taskVerificationsService.getStudentVerifications(courseId, req.user.githubId);
+    if (verifications == null) {
+      throw new BadRequestException();
+    }
+    return verifications;
   }
 }
