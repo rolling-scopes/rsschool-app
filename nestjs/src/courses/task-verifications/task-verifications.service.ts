@@ -174,4 +174,26 @@ export class TaskVerificationsService {
 
     return { id };
   }
+
+  public async getStudentVerifications(courseId: number, githubId: string) {
+    const student = await this.studentsRepository
+      .createQueryBuilder('student')
+      .innerJoin('student.user', 'user')
+      .where('user.githubId = :githubId', { githubId })
+      .andWhere('student.courseId = :courseId', { courseId })
+      .getOne();
+    if (student == null) {
+      return null;
+    }
+
+    return this.taskVerificationsRepository
+      .createQueryBuilder('v')
+      .innerJoin('v.courseTask', 'courseTask')
+      .innerJoin('courseTask.task', 'task')
+      .addSelect(['task.name', 'courseTask.id', 'courseTask.type'])
+      .where('v.studentId = :id', { id: student.id })
+      .andWhere('courseTask.disabled = :disabled', { disabled: false })
+      .orderBy('v.updatedDate', 'DESC')
+      .getMany();
+  }
 }
