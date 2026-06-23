@@ -6,6 +6,7 @@ import { Student } from '@entities/student';
 import { MentorRegistry } from '@entities/mentorRegistry';
 import { User } from '@entities/user';
 import { IUserSession, isAdmin, isManager, isSupervisor } from '@entities/session';
+import { StageInterview } from '@entities/stageInterview';
 import { MentorDetails } from '@common/models';
 import { UsersService } from '../../users/users.service';
 import { MentorsService } from '../mentors';
@@ -252,6 +253,50 @@ export class CourseMentorsService {
         await studentRepository.update({ mentorId }, { mentorId: null });
       }
       await studentRepository.update(input.students, { mentorId });
+    }
+  }
+
+  public async expelMentor(courseId: number, githubId: string) {
+    const mentor = await this.findMentorByGithubId(courseId, githubId);
+    if (mentor) {
+      await this.dataSource.getRepository(Student).update({ mentorId: mentor.id }, { mentorId: null });
+      await this.mentorsRepository.update(mentor.id, { isExpelled: true });
+      await this.cancelPendingStageInterviews(mentor.id);
+    }
+  }
+
+  public async restoreMentor(courseId: number, githubId: string) {
+    const mentor = await this.findMentorByGithubId(courseId, githubId);
+    if (mentor) {
+      await this.mentorsRepository.update(mentor.id, { isExpelled: false });
+    }
+  }
+
+  private findMentorByGithubId(courseId: number, githubId: string) {
+    return this.mentorsRepository
+      .createQueryBuilder('mentor')
+      .innerJoin('mentor.user', 'user')
+      .addSelect(['user.firstName', 'user.lastName', 'user.githubId'])
+      .where('user.githubId = :githubId', { githubId })
+      .andWhere('mentor.courseId = :courseId', { courseId })
+      .getOne();
+  }
+
+  private async cancelPendingStageInterviews(mentorId: number) {
+    const stageInterviewRepository = this.dataSource.getRepository(StageInterview);
+    const interviews = await stageInterviewRepository
+      .createQueryBuilder('s')
+      .select(['s.id'])
+      .leftJoin('s.stageInterviewFeedbacks', 'f')
+      .addSelect(['f.id'])
+      .where('f.id IS NULL')
+      .andWhere('s.mentorId = :mentorId', { mentorId })
+      .getMany();
+    if (interviews.length > 0) {
+      await stageInterviewRepository.update(
+        interviews.map(i => i.id),
+        { isCanceled: true },
+      );
     }
   }
 }

@@ -44,6 +44,26 @@ export class CourseMentorsController {
     await this.courseMentorsService.createMentor(req.user, courseId, githubId, dto);
   }
 
+  @Post('/:githubId/status/expelled')
+  @ApiOperation({ operationId: 'expelMentor' })
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  @UseGuards(DefaultGuard, CourseGuard, RoleGuard)
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  public async expelMentor(@Param('courseId', ParseIntPipe) courseId: number, @Param('githubId') githubId: string) {
+    await this.courseMentorsService.expelMentor(courseId, githubId);
+  }
+
+  @Post('/:githubId/status/restore')
+  @ApiOperation({ operationId: 'restoreMentor' })
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  @UseGuards(DefaultGuard, CourseGuard, RoleGuard)
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  public async restoreMentor(@Param('courseId', ParseIntPipe) courseId: number, @Param('githubId') githubId: string) {
+    await this.courseMentorsService.restoreMentor(courseId, githubId);
+  }
+
   @Get('details')
   @ApiOperation({ operationId: 'getMentorsDetails' })
   @ApiOkResponse({ type: [MentorDetailsDto] })
