@@ -5,12 +5,14 @@ import { SUCCESS_MESSAGE } from './SubmitReviewModal';
 
 const { mockAxios } = vi.hoisted(() => {
   const post = vi.fn();
+  const request = vi.fn();
   const instance = {
     get: vi.fn(),
     post,
     put: vi.fn(),
     patch: vi.fn(),
     delete: vi.fn(),
+    request,
     interceptors: {
       request: { use: vi.fn(), eject: vi.fn() },
       response: { use: vi.fn(), eject: vi.fn() },
@@ -23,6 +25,7 @@ const { mockAxios } = vi.hoisted(() => {
       defaults: { headers: { common: {} } },
       reset() {
         post.mockReset();
+        request.mockReset();
       },
     },
   };
@@ -88,7 +91,7 @@ describe('SubmitReviewModal', () => {
   });
 
   it('should render success message on submit', async () => {
-    mockAxios.post.mockResolvedValueOnce({ data: true });
+    mockAxios.request.mockResolvedValueOnce({ data: true });
     render(<SubmitReviewModal {...PROPS_MOCK} />);
     const scoreInput = screen.getByRole('spinbutton', { name: /score \(max 100 points\)/i });
     fireEvent.change(scoreInput, { target: { value: 10 } });
@@ -102,7 +105,7 @@ describe('SubmitReviewModal', () => {
 
   it('should render error message when error has occurred on submit', async () => {
     const errorMessage = 'Network error';
-    mockAxios.post.mockRejectedValueOnce(new Error(errorMessage));
+    mockAxios.request.mockRejectedValueOnce(new Error(errorMessage));
     render(<SubmitReviewModal {...PROPS_MOCK} />);
     const scoreInput = screen.getByRole('spinbutton', { name: /score \(max 100 points\)/i });
     fireEvent.change(scoreInput, { target: { value: 10 } });

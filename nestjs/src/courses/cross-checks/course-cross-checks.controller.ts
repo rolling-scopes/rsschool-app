@@ -3,6 +3,7 @@ import {
   Controller,
   DefaultValuePipe,
   Get,
+  NotFoundException,
   Param,
   ParseEnumPipe,
   ParseIntPipe,
@@ -15,7 +16,14 @@ import { ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
 import { CourseTasksService } from '../course-tasks';
 import { OrderField, OrderDirection, CourseCrossCheckService } from './course-cross-checks.service';
-import { CrossCheckFeedbackDto, CrossCheckPairResponseDto } from './dto';
+import {
+  BadCommentCheckerDto,
+  CrossCheckFeedbackDto,
+  CrossCheckPairResponseDto,
+  CrossCheckSolutionDto,
+  CrossCheckTaskDetailsDto,
+  MaxScoreCheckerDto,
+} from './dto';
 import { AvailableReviewStatsDto } from './dto/available-review-stats.dto';
 import { parseAsync } from 'json2csv';
 import { Response } from 'express';
@@ -30,6 +38,32 @@ export class CourseCrossCheckController {
     private courseCrossCheckService: CourseCrossCheckService,
     private courseTasksService: CourseTasksService,
   ) {}
+
+  @Get('/:courseTaskId/max-score-checkers')
+  @ApiOperation({ operationId: 'getMaxScoreCheckers' })
+  @ApiOkResponse({ type: [MaxScoreCheckerDto] })
+  @ApiForbiddenResponse()
+  @RequiredRoles([CourseRole.Manager, CourseRole.Supervisor, CourseRole.Dementor, Role.Admin], true)
+  @UseGuards(DefaultGuard, RoleGuard)
+  public async getMaxScoreCheckers(
+    @Param('courseId', ParseIntPipe) _courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+  ) {
+    return this.courseCrossCheckService.getCheckersWithMaxScore(courseTaskId);
+  }
+
+  @Get('/:courseTaskId/bad-comments')
+  @ApiOperation({ operationId: 'getBadCommentCheckers' })
+  @ApiOkResponse({ type: [BadCommentCheckerDto] })
+  @ApiForbiddenResponse()
+  @RequiredRoles([CourseRole.Manager, CourseRole.Supervisor, CourseRole.Dementor, Role.Admin], true)
+  @UseGuards(DefaultGuard, RoleGuard)
+  public async getBadCommentCheckers(
+    @Param('courseId', ParseIntPipe) _courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+  ) {
+    return this.courseCrossCheckService.getCheckersWithoutComments(courseTaskId);
+  }
 
   @Get('/pairs')
   @ApiOperation({ operationId: 'getCrossCheckPairs' })
@@ -136,6 +170,57 @@ export class CourseCrossCheckController {
     }
 
     return this.courseCrossCheckService.getResult(courseTaskId, student.id, checker.id, checker.githubId);
+  }
+
+  @Get(':courseTaskId/solutions/:githubId')
+  @ApiOperation({ operationId: 'getCrossCheckTaskSolution' })
+  @ApiForbiddenResponse()
+  @ApiOkResponse({ type: CrossCheckSolutionDto })
+  public async getCrossCheckTaskSolution(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+    @Param('githubId') githubIdParam: string,
+  ) {
+    const githubId = githubIdParam === 'me' ? req.user.githubId : githubIdParam.toLowerCase();
+
+    const [student, courseTask] = await Promise.all([
+      this.courseCrossCheckService.queryStudentByGithubId(courseId, githubId),
+      this.courseCrossCheckService.getCourseTask(courseTaskId),
+    ]);
+
+    if (student == null || courseTask == null) {
+      throw new BadRequestException('not valid student or course task');
+    }
+
+    const result = await this.courseCrossCheckService.getTaskSolution(student.id, courseTask.id);
+
+    if (result == null) {
+      throw new NotFoundException('solution is not found ');
+    }
+
+    const { updatedDate, id, url, review, comments } = result;
+
+    return new CrossCheckSolutionDto({
+      updatedDate,
+      id,
+      url,
+      review,
+      studentId: student.id,
+      comments: comments.filter(c => c.authorId == student.id && c.recipientId == null),
+    });
+  }
+
+  @Get(':courseTaskId/details')
+  @ApiOperation({ operationId: 'getCrossCheckTaskDetails' })
+  @ApiForbiddenResponse()
+  @ApiOkResponse({ type: CrossCheckTaskDetailsDto })
+  public async getTaskDetails(
+    @Param('courseId', ParseIntPipe) _courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+  ) {
+    const data = await this.courseCrossCheckService.getTaskDetails(courseTaskId);
+    return new CrossCheckTaskDetailsDto(data);
   }
 
   @Get(':courseTaskId/feedbacks/my')

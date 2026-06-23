@@ -54,13 +54,6 @@ export class CrossCheckService {
     return { student, courseTask };
   }
 
-  public async getTaskDetails() {
-    const courseTask = await getCourseTask(this.courseTaskId);
-    const studentEndDate = courseTask?.studentEndDate;
-    const criteria = courseTask?.task?.attributes?.criteria ?? [];
-    return { criteria, studentEndDate };
-  }
-
   public async saveSolution(studentId: number, data: Partial<TaskSolution>) {
     const existingResult = await getTaskSolution(studentId, this.courseTaskId);
     if (existingResult != null) {

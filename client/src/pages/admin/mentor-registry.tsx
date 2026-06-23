@@ -259,7 +259,7 @@ function Page() {
           onChange={handleTabChange}
         />
         <Space style={{ alignSelf: 'center' }}>
-          <Button icon={<FileExcelOutlined />} onClick={() => (window.location.href = `/api/registry/mentors/csv`)}>
+          <Button icon={<FileExcelOutlined />} onClick={() => (window.location.href = `/api/v2/registry/mentors/csv`)}>
             Export CSV
           </Button>
           {session.isAdmin && (
