@@ -3,7 +3,3 @@ export * from './createDistribution';
 export * from './createResult';
 export * from './createMessage';
 export * from './updateMessage';
-export * from './getAssignments';
-export * from './getResult';
-export * from './getSolution';
-export * from './getTaskDetails';
