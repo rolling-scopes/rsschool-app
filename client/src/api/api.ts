@@ -23941,6 +23941,49 @@ export const StudentsScoreApiAxiosParamCreator = function (configuration?: Confi
         /**
          * 
          * @param {number} courseId 
+         * @param {string} [cityName] 
+         * @param {string} [mentorGithubId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getScoreCsv: async (courseId: number, cityName?: string, mentorGithubId?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getScoreCsv', 'courseId', courseId)
+            const localVarPath = `/course/{courseId}/students/score/csv`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (cityName !== undefined) {
+                localVarQueryParameter['cityName'] = cityName;
+            }
+
+            if (mentorGithubId !== undefined) {
+                localVarQueryParameter['mentor.githubId'] = mentorGithubId;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
          * @param {string} githubId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -24032,6 +24075,18 @@ export const StudentsScoreApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} courseId 
+         * @param {string} [cityName] 
+         * @param {string} [mentorGithubId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getScoreCsv(courseId: number, cityName?: string, mentorGithubId?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getScoreCsv(courseId, cityName, mentorGithubId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
          * @param {string} githubId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -24090,6 +24145,17 @@ export const StudentsScoreApiFactory = function (configuration?: Configuration, 
          */
         getScore(activeOnly: string, orderBy: 'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate', orderDirection: 'asc' | 'desc', current: string, pageSize: string, courseId: number, githubId?: string, name?: string, mentorGithubId?: string, cityName?: string, options?: any): AxiosPromise<ScoreDto> {
             return localVarFp.getScore(activeOnly, orderBy, orderDirection, current, pageSize, courseId, githubId, name, mentorGithubId, cityName, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} [cityName] 
+         * @param {string} [mentorGithubId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getScoreCsv(courseId: number, cityName?: string, mentorGithubId?: string, options?: any): AxiosPromise<void> {
+            return localVarFp.getScoreCsv(courseId, cityName, mentorGithubId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -24156,6 +24222,19 @@ export class StudentsScoreApi extends BaseAPI {
      */
     public getScore(activeOnly: string, orderBy: 'rank' | 'totalScore' | 'crossCheckScore' | 'githubId' | 'name' | 'cityName' | 'mentor' | 'totalScoreChangeDate', orderDirection: 'asc' | 'desc', current: string, pageSize: string, courseId: number, githubId?: string, name?: string, mentorGithubId?: string, cityName?: string, options?: AxiosRequestConfig) {
         return StudentsScoreApiFp(this.configuration).getScore(activeOnly, orderBy, orderDirection, current, pageSize, courseId, githubId, name, mentorGithubId, cityName, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {string} [cityName] 
+     * @param {string} [mentorGithubId] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StudentsScoreApi
+     */
+    public getScoreCsv(courseId: number, cityName?: string, mentorGithubId?: string, options?: AxiosRequestConfig) {
+        return StudentsScoreApiFp(this.configuration).getScoreCsv(courseId, cityName, mentorGithubId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

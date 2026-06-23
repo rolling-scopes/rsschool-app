@@ -4,6 +4,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as _ from 'lodash';
 
 import { Student } from '@entities/student';
+import { CourseTask } from '@entities/courseTask';
+import { ConfigService } from 'src/config';
+import { exportStageInterviewRating } from './export-helpers';
 
 import { paginate } from '../../core/paginate';
 import { MentorsService } from '../../courses/mentors';
@@ -12,7 +15,6 @@ import { orderByFieldMapping, OrderDirection, OrderField, ScoreQueryDto } from '
 import { InterviewsService } from '../interviews';
 import { ScoreDto, ScoreStudentDto } from './dto/score.dto';
 import { TaskResult } from '@entities/taskResult';
-import { CourseTask } from '@entities/courseTask';
 import { Mentor } from '@entities/mentor';
 import { UsersService } from 'src/users/users.service';
 
@@ -38,7 +40,200 @@ export class ScoreService {
     @InjectRepository(TaskResult)
     readonly taskResultRepository: Repository<TaskResult>,
     private readonly dataSource: DataSource,
+    private readonly configService: ConfigService,
   ) {}
+
+  public async getStudentsScoreForExport(
+    courseId: number,
+    filters: { activeOnly: boolean; cityName?: string; 'mentor.githubId'?: string },
+    options: { includeContacts: boolean; includeCertificate: boolean },
+  ) {
+    const students = await this.getStudentsScoreRaw(courseId, filters, options);
+    const courseTasks = await this.dataSource
+      .getRepository(CourseTask)
+      .createQueryBuilder('courseTask')
+      .innerJoinAndSelect('courseTask.task', 'task')
+      .where('courseTask.courseId = :courseId', { courseId })
+      .andWhere('courseTask.disabled = :disabled', { disabled: false })
+      .getMany();
+
+    return students.map(student => {
+      return {
+        githubId: student.githubId,
+        name: student.name,
+        cvLink: student.cvLink,
+        locationName: student.cityName,
+        countryName: student.countryName || 'Other',
+        mentorGithubId: student.mentor ? student.mentor.githubId : '',
+        totalScore: student.totalScore,
+        isActive: student.isActive,
+        contacts: student.contacts,
+        hasCertificate: student.hasCertificate,
+        ...ScoreService.getTasksResults(student.taskResults, courseTasks),
+      };
+    });
+  }
+
+  private async getStudentsScoreRaw(
+    courseId: number,
+    filter: { activeOnly: boolean; cityName?: string; 'mentor.githubId'?: string; name?: string; githubId?: string },
+    options: { includeContacts: boolean; includeCertificate: boolean },
+  ) {
+    let query = this.studentRepository
+      .createQueryBuilder('student')
+      .innerJoin('student.user', 'user')
+      .addSelect(
+        ScoreService.getExportPrimaryUserFields().concat(
+          options.includeContacts ? ScoreService.getExportContactsUserFields() : [],
+        ),
+      )
+      .leftJoin('student.mentor', 'mentor', 'mentor."isExpelled" = FALSE')
+      .leftJoin('user.resume', 'resume')
+      .addSelect(['resume.uuid', 'resume.userId'])
+      .addSelect(['mentor.id', 'mentor.userId'])
+      .leftJoin('student.taskResults', 'tr')
+      .addSelect(['tr.id', 'tr.score', 'tr.courseTaskId', 'tr.studentId', 'tr.courseTask'])
+      .leftJoin('tr.courseTask', 'ct')
+      .addSelect(['ct.disabled', 'ct.id'])
+      .leftJoin('student.taskInterviewResults', 'tir')
+      .addSelect(['tir.id', 'tir.score', 'tir.courseTaskId', 'tr.studentId', 'tir.updatedDate'])
+      .leftJoin('mentor.user', 'mu')
+      .addSelect(ScoreService.getExportPrimaryUserFields('mu'))
+      .leftJoin('student.stageInterviews', 'si')
+      .leftJoin('si.stageInterviewFeedbacks', 'sif')
+      .addSelect([
+        'sif.stageInterviewId',
+        'sif.json',
+        'sif.updatedDate',
+        'si.isCompleted',
+        'si.id',
+        'si.courseTaskId',
+        'si.score',
+      ])
+      .where('student."courseId" = :courseId', { courseId });
+
+    if (options.includeCertificate) {
+      query = query.leftJoin('student.certificate', 'certificate').addSelect('certificate.id');
+    }
+    if (filter.activeOnly) {
+      query = query.andWhere('student."isFailed" = false').andWhere('student."isExpelled" = false');
+    }
+
+    if (filter.cityName) {
+      query = query.andWhere('"user"."cityName" ILIKE :searchCityNameText', {
+        searchCityNameText: `%${filter.cityName}%`,
+      });
+    }
+
+    if (filter['mentor.githubId']) {
+      query = query.andWhere('"mu"."githubId" ILIKE :searchMentorGithubIdText', {
+        searchMentorGithubIdText: `%${filter['mentor.githubId']}%`,
+      });
+    }
+
+    const content = await query.orderBy('student.rank', 'ASC').getMany();
+
+    return content.map(student => {
+      const stageInterviews = student.stageInterviews ?? [];
+      const preScreeningScore = Math.floor(exportStageInterviewRating(stageInterviews) ?? 0);
+      const preScreningInterviews = stageInterviews.length
+        ? [{ score: preScreeningScore, courseTaskId: stageInterviews[0]!.courseTaskId }]
+        : [];
+
+      const user = student.user;
+
+      const resumeUuid = student.user.resume?.find(r => r.userId === user.id)?.uuid;
+      const cvLink = resumeUuid ? `${this.configService.host}/cv/${resumeUuid}` : '';
+
+      const interviews = _.values(_.groupBy(student.taskInterviewResults ?? [], 'courseTaskId'))
+        .map(arr => _.first(_.orderBy(arr, 'updatedDate', 'desc'))!)
+        .map(({ courseTaskId, score = 0 }) => ({ courseTaskId, score }));
+
+      let taskResults =
+        student.taskResults
+          ?.filter(({ courseTask: { disabled } }) => !disabled)
+          .map(({ courseTaskId, score }) => ({ courseTaskId, score }))
+          .concat(interviews) ?? [];
+
+      // we have a case when technical screening score are set as task result.
+      taskResults = taskResults.concat(
+        preScreningInterviews.filter(i => !taskResults.find(tr => tr.courseTaskId === i.courseTaskId)),
+      );
+
+      const mentorUser = student.mentor?.user;
+      return {
+        id: student.id,
+        rank: student.rank,
+        cvLink,
+        mentor: mentorUser
+          ? { githubId: mentorUser.githubId, name: ScoreService.buildExportName(mentorUser) }
+          : undefined,
+        name: ScoreService.buildExportName(user),
+        githubId: user.githubId,
+        totalScore: student.totalScore,
+        cityName: user.cityName ?? '',
+        countryName: user.countryName ?? 'Other',
+        taskResults,
+        isActive: !student.isExpelled && !student.isFailed,
+        contacts: options.includeContacts
+          ? {
+              epamEmail: user.contactsEpamEmail,
+              email: user.primaryEmail || user.contactsEmail,
+              linkedIn: user.contactsLinkedIn,
+              telegram: user.contactsTelegram,
+            }
+          : null,
+        hasCertificate: options.includeCertificate ? !!student.certificate?.id : undefined,
+      };
+    });
+  }
+
+  private static getTasksResults(results: { courseTaskId: number; score: number }[], courseTasks: CourseTask[]) {
+    return courseTasks.reduce(
+      (acc, courseTask) => {
+        const result = results.find(r => r.courseTaskId === courseTask.id);
+        const { name } = courseTask.task;
+        acc[name] = result?.score ?? 0;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
+  }
+
+  private static getExportPrimaryUserFields(modelName = 'user') {
+    return [
+      `${modelName}.id`,
+      `${modelName}.firstName`,
+      `${modelName}.lastName`,
+      `${modelName}.githubId`,
+      `${modelName}.cityName`,
+      `${modelName}.countryName`,
+      `${modelName}.discord`,
+    ];
+  }
+
+  private static getExportContactsUserFields(modelName = 'user') {
+    return [
+      `${modelName}.primaryEmail`,
+      `${modelName}.contactsPhone`,
+      `${modelName}.contactsEmail`,
+      `${modelName}.contactsTelegram`,
+      `${modelName}.contactsLinkedIn`,
+      `${modelName}.contactsSkype`,
+      `${modelName}.contactsEpamEmail`,
+    ];
+  }
+
+  private static buildExportName({ firstName, lastName }: { firstName?: string | null; lastName?: string | null }) {
+    const result = [];
+    if (firstName) {
+      result.push(firstName.trim());
+    }
+    if (lastName) {
+      result.push(lastName.trim());
+    }
+    return result.join(' ');
+  }
 
   public async getStudentForScore(courseId: number, githubId: string) {
     return this.studentRepository

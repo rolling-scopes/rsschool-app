@@ -3,7 +3,6 @@ import { ILogger } from '../../logger';
 import { basicAuthAws, courseGuard, courseSupervisorGuard, crossCheckGuard, guard } from '../guards';
 import { getCourseEvents } from './events';
 import { getMentorStudents } from './mentor';
-import * as score from './score';
 import { getCourseTasksVerifications } from './taskVerifications';
 
 import {
@@ -48,8 +47,6 @@ function addMentorApi(router: Router<any, any>, logger: ILogger) {
 
 function addStudentApi(router: Router<any, any>, logger: ILogger) {
   router.get('/student/:githubId', courseSupervisorGuard, getStudent(logger));
-
-  router.get('/students/score/csv', courseSupervisorGuard, score.getScoreCsv(logger));
 }
 
 function addStudentCrossCheckApi(router: Router<any, any>, logger: ILogger) {
