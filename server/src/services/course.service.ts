@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { getRepository, getManager, getCustomRepository } from 'typeorm';
+import { getRepository, getManager } from 'typeorm';
 import { MentorBasic, MentorDetails, StudentBasic } from '../../../common/models';
 import {
   Course,
@@ -19,7 +19,6 @@ import {
   isSupervisor,
 } from '../models';
 import { createName } from './user.service';
-import { StageInterviewRepository } from '../repositories/stageInterview.repository';
 
 export const getPrimaryUserFields = (modelName = 'user') => [
   `${modelName}.id`,
@@ -179,22 +178,6 @@ export async function getMentorByUserId(courseId: number, userId: number): Promi
     .andWhere('mentor."courseId" = :courseId', { courseId })
     .getOne();
   return record ?? null;
-}
-
-export async function expelMentor(courseId: number, githubId: string) {
-  const mentor = await queryMentorByGithubId(courseId, githubId);
-  if (mentor) {
-    await getRepository(Student).update({ mentorId: mentor.id }, { mentorId: null });
-    await getRepository(Mentor).update(mentor.id, { isExpelled: true });
-    await getCustomRepository(StageInterviewRepository).cancelByMentor(courseId, githubId);
-  }
-}
-
-export async function restoreMentor(courseId: number, githubId: string) {
-  const mentor = await queryMentorByGithubId(courseId, githubId);
-  if (mentor) {
-    await getRepository(Mentor).update(mentor.id, { isExpelled: false });
-  }
 }
 
 export async function getMentorByGithubId(courseId: number, githubId: string): Promise<MentorBasic | null> {
@@ -430,17 +413,6 @@ export function isPowerUser(courseId: number, session: IUserSession) {
   return isAdmin(session) || isManager(session, courseId) || isSupervisor(session, courseId);
 }
 
-export async function getEvent(eventId: number) {
-  const answer = await getRepository(CourseEvent)
-    .createQueryBuilder('courseEvent')
-    .innerJoinAndSelect('courseEvent.event', 'event')
-    .leftJoin('courseEvent.organizer', 'organizer')
-    .addSelect(['organizer.id', 'organizer.firstName', 'organizer.lastName', 'organizer.githubId'])
-    .where('courseEvent.id = :id', { id: eventId })
-    .getOne();
-  return answer;
-}
-
 export async function getEvents(courseId: number) {
   return getRepository(CourseEvent)
     .createQueryBuilder('courseEvent')
@@ -525,20 +497,6 @@ export async function getTaskSolutionCheckers(courseTaskId: number, minCheckedCo
   const records = await query.getRawMany();
 
   return records.map(record => ({ studentId: record.studentId, score: Number(record.score) }));
-}
-
-export async function getInterviewStudentsByMentorId(courseTaskId: number, mentorId: number) {
-  const records = await getRepository(Student)
-    .createQueryBuilder('student')
-    .innerJoin('student.user', 'user')
-    .innerJoin('student.taskChecker', 'taskChecker')
-    .addSelect(getPrimaryUserFields())
-    .where('"taskChecker"."courseTaskId" = :courseTaskId', { courseTaskId })
-    .andWhere('"taskChecker"."mentorId" = :mentorId', { mentorId })
-    .getMany();
-
-  const students = records.map(record => convertToStudentBasic(record));
-  return students;
 }
 
 export type StudentCrossMentor = {
