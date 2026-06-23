@@ -22,6 +22,161 @@ export class CourseStudentsService {
     private readonly dataSource: DataSource,
   ) {}
 
+  public async getStudentsWithDetails(courseId: number, activeOnly: boolean) {
+    const records = await this.studentRepository
+      .createQueryBuilder('student')
+      .innerJoin('student.user', 'user')
+      .addSelect(CourseStudentsService.getPrimaryUserFields())
+      .innerJoin('student.course', 'course')
+      .leftJoinAndSelect('student.mentor', 'mentor', 'mentor."isExpelled" = FALSE')
+      .leftJoin('mentor.user', 'mentorUser')
+      .leftJoin('student.stageInterviews', 'stageInterviews')
+      .leftJoin('student.taskChecker', 'taskChecker')
+      .leftJoin('taskChecker.courseTask', 'courseTask')
+      .leftJoin('courseTask.task', 'task')
+      .addSelect(CourseStudentsService.getPrimaryUserFields('mentorUser'))
+      .addSelect(['stageInterviews.id', 'stageInterviews.isCompleted'])
+      .addSelect(['taskChecker.id', 'courseTask.id', 'task.id', 'task.name'])
+      .where(`course.id = :courseId ${activeOnly ? 'AND student."isExpelled" = false' : ''}`, { courseId })
+      .orderBy('student.totalScore', 'DESC')
+      .getMany();
+
+    return records.map(record => CourseStudentsService.convertToStudentDetails(record));
+  }
+
+  public async getStudentsForCsv(courseId: number, activeOnly: boolean) {
+    const records = await this.studentRepository
+      .createQueryBuilder('student')
+      .innerJoin('student.user', 'user')
+      .addSelect(CourseStudentsService.getPrimaryUserFields())
+      .innerJoin('student.course', 'course')
+      .leftJoinAndSelect('student.mentor', 'mentor')
+      .leftJoin('mentor.user', 'mentorUser')
+      .addSelect(CourseStudentsService.getPrimaryUserFields('mentorUser'))
+      .where(`course.id = :courseId ${activeOnly ? 'AND student."isExpelled" = false' : ''}`, { courseId })
+      .orderBy('student.totalScore', 'DESC')
+      .getMany();
+
+    return records.map(student => {
+      const mentor = student.mentor?.user
+        ? {
+            name: CourseStudentsService.buildName(student.mentor.user),
+            githubId: student.mentor.user.githubId,
+          }
+        : null;
+      return {
+        id: student.id,
+        githubId: student.user.githubId,
+        name: CourseStudentsService.buildName(student.user),
+        isActive: !student.isExpelled && !student.isFailed,
+        mentorName: mentor?.name,
+        mentorGithubId: mentor?.githubId,
+        totalScore: student.totalScore,
+        city: student.user.cityName ?? 'Unknown',
+        country: student.user.countryName ?? 'Unknown',
+      };
+    });
+  }
+
+  public async searchCourseStudents(courseId: number, searchText: string, onlyStudentsWithoutMentorShown: boolean) {
+    const searchQuery = `${searchText}%`;
+
+    const query = this.studentRepository
+      .createQueryBuilder('student')
+      .select([`student.id`, 'mentor.id'])
+      .addSelect(CourseStudentsService.getBasicUserFields('user'))
+      .addSelect(CourseStudentsService.getBasicUserFields('mUser'))
+      .leftJoin('student.user', 'user')
+      .leftJoin('student.mentor', 'mentor')
+      .leftJoin('mentor.user', 'mUser')
+      .where('student.courseId = :courseId')
+      .andWhere('student.isExpelled = false')
+      .andWhere(
+        `(
+          user.githubId ILIKE :searchQuery OR
+          user.firstName ILIKE :searchQuery OR
+          user.lastName ILIKE :searchQuery
+        )`,
+        { courseId, searchQuery },
+      );
+
+    if (onlyStudentsWithoutMentorShown) {
+      query.andWhere('mentor.id IS NULL');
+    }
+
+    const entities = await query.limit(20).getMany();
+
+    return entities.map(entity => ({
+      id: entity.id,
+      githubId: entity.user.githubId,
+      name: CourseStudentsService.buildName(entity.user),
+      mentor: entity.mentor?.user
+        ? {
+            id: entity.mentor.id,
+            githubId: entity.mentor.user.githubId,
+            name: CourseStudentsService.buildName(entity.mentor.user),
+          }
+        : null,
+    }));
+  }
+
+  private static convertToStudentDetails(student: Student) {
+    const user = student.user;
+    const checkers = student.taskChecker ?? [];
+    const checks = checkers.map(({ courseTask: { id, task } }) => ({ id, name: task.name })) ?? [];
+    const mentor = student.mentor
+      ? {
+          isActive: !student.mentor.isExpelled,
+          name: student.mentor.user ? CourseStudentsService.buildName(student.mentor.user) : '',
+          id: student.mentor.id,
+          githubId: student.mentor.user?.githubId,
+          students: [],
+          cityName: student.mentor.user?.cityName ?? '',
+          countryName: student.mentor.user?.countryName ?? '',
+        }
+      : null;
+    return {
+      name: CourseStudentsService.buildName(user),
+      isActive: !student.isExpelled && !student.isFailed,
+      id: student.id,
+      githubId: user.githubId,
+      mentor,
+      cityName: user.cityName || 'Other',
+      countryName: user.countryName || 'Other',
+      discord: user.discord,
+      totalScore: student.totalScore,
+      interviews: (student.stageInterviews ?? []).map(i => ({ id: i.id, isCompleted: i.isCompleted })),
+      assignedChecks: checks,
+    };
+  }
+
+  private static getPrimaryUserFields(modelName = 'user') {
+    return [
+      `${modelName}.id`,
+      `${modelName}.firstName`,
+      `${modelName}.lastName`,
+      `${modelName}.githubId`,
+      `${modelName}.cityName`,
+      `${modelName}.countryName`,
+      `${modelName}.discord`,
+    ];
+  }
+
+  private static getBasicUserFields(modelName = 'user') {
+    return [`${modelName}.id`, `${modelName}.firstName`, `${modelName}.lastName`, `${modelName}.githubId`];
+  }
+
+  private static buildName({ firstName, lastName }: { firstName?: string | null; lastName?: string | null }) {
+    const result = [];
+    if (firstName) {
+      result.push(firstName.trim());
+    }
+    if (lastName) {
+      result.push(lastName.trim());
+    }
+    return result.join(' ');
+  }
+
   public async setStudentMentor(studentId: number, mentorId: number | null) {
     await this.studentRepository.update(studentId, { mentorId });
   }

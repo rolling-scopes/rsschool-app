@@ -1,17 +1,9 @@
 import Router from '@koa/router';
 import { ILogger } from '../../logger';
-import {
-  basicAuthAws,
-  courseGuard,
-  courseSupervisorGuard,
-  courseSupervisorOrDementorGuard,
-  crossCheckGuard,
-  guard,
-} from '../guards';
+import { basicAuthAws, courseGuard, courseSupervisorGuard, crossCheckGuard, guard } from '../guards';
 import { getCourseEvents } from './events';
 import { getMentorStudents } from './mentor';
 import * as score from './score';
-import { getStudents, getStudentsCsv, getStudentsWithDetails, searchStudent } from './students';
 import { getCourseTasksVerifications } from './taskVerifications';
 
 import {
@@ -57,12 +49,7 @@ function addMentorApi(router: Router<any, any>, logger: ILogger) {
 function addStudentApi(router: Router<any, any>, logger: ILogger) {
   router.get('/student/:githubId', courseSupervisorGuard, getStudent(logger));
 
-  router.get('/students', courseSupervisorGuard, getStudents(logger));
-  router.get('/students/csv', courseSupervisorGuard, getStudentsCsv(logger));
-  router.get('/students/details', courseSupervisorOrDementorGuard, getStudentsWithDetails(logger));
   router.get('/students/score/csv', courseSupervisorGuard, score.getScoreCsv(logger));
-
-  router.get('/students/search/:searchText', guard, searchStudent(logger));
 }
 
 function addStudentCrossCheckApi(router: Router<any, any>, logger: ILogger) {

@@ -2027,6 +2027,54 @@
         "tags": ["students"]
       }
     },
+    "/courses/{courseId}/students/details": {
+      "get": {
+        "operationId": "getCourseStudentsWithDetails",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "status", "required": true, "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "type": "array", "items": { "type": "object" } } } }
+          },
+          "403": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["students"]
+      }
+    },
+    "/courses/{courseId}/students/search/{searchText}": {
+      "get": {
+        "operationId": "searchCourseStudents",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "searchText", "required": true, "in": "path", "schema": { "type": "string" } },
+          { "name": "onlyStudentsWithoutMentorShown", "required": true, "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "type": "array", "items": { "type": "object" } } } }
+          }
+        },
+        "summary": "",
+        "tags": ["students"]
+      }
+    },
+    "/courses/{courseId}/students/csv": {
+      "get": {
+        "operationId": "getCourseStudentsCsv",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "status", "required": true, "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": { "403": { "description": "" } },
+        "summary": "",
+        "tags": ["students"]
+      }
+    },
     "/courses/{courseId}/students/{githubId}": {
       "put": {
         "operationId": "updateStudent",
