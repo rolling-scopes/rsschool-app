@@ -29,7 +29,6 @@ import {
 import * as crossCheck from './crossCheck';
 import { getScheduleAsCsv, setScheduleFromCsv } from './schedule';
 import { createInterviewResult, getCrossMentors, getStudent } from './student';
-import * as tasks from './tasks';
 
 export function courseRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/course/:courseId' });
@@ -60,7 +59,6 @@ function addEventApi(router: Router<any, any>, logger: ILogger) {
 
 function addTaskApi(router: Router<any, any>, logger: ILogger) {
   router.get('/tasks/verifications', basicAuthAws, getCourseTasksVerifications(logger));
-  router.post('/task/:courseTaskId/distribution', courseManagerGuard, tasks.createCourseTaskDistribution(logger));
   router.post('/task/:courseTaskId/cross-check/distribution', crossCheckGuard, crossCheck.createDistribution(logger));
   router.get(`/task/:courseTaskId/cross-check/details`, courseGuard, crossCheck.getTaskDetails(logger));
   router.post('/task/:courseTaskId/cross-check/completion', crossCheckGuard, crossCheck.createCompletion(logger));

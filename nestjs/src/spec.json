@@ -509,6 +509,22 @@
         "tags": ["courses tasks"]
       }
     },
+    "/courses/{courseId}/tasks/{courseTaskId}/distribution": {
+      "post": {
+        "operationId": "createTaskDistribution",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateTaskDistributionDto" } } }
+        },
+        "responses": { "200": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
+        "tags": ["courses tasks"]
+      }
+    },
     "/courses/{courseId}/tasks/detailed": {
       "get": {
         "operationId": "getCourseTasksDetailed",
@@ -4033,6 +4049,7 @@
           "validations"
         ]
       },
+      "CreateTaskDistributionDto": { "type": "object", "properties": { "clean": { "type": "boolean" } } },
       "CourseTaskDetailedDto": {
         "type": "object",
         "properties": {
