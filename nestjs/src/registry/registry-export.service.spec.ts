@@ -124,11 +124,15 @@ describe('RegistryService.getMentorRegistriesForExport', () => {
     const { qb, calls } = createFakeQueryBuilder(content);
     const mockGetAll = vi.fn().mockResolvedValue(fixtureCourses);
     const service = new RegistryService(
-      { createQueryBuilder: vi.fn(() => qb) } as never,
-      {} as never,
-      {} as never,
-      { getAll: mockGetAll } as never,
-      {} as never,
+      { createQueryBuilder: vi.fn(() => qb) } as never, // mentorsRegistryRepository
+      {} as never, // studentRepository
+      {} as never, // registryRepository
+      {} as never, // mentorRepository
+      {} as never, // userRepository
+      {} as never, // courseRepository
+      {} as never, // usersService
+      { getAll: mockGetAll } as never, // coursesService
+      {} as never, // notificationsService
     );
     return { service, calls, mockGetAll };
   }

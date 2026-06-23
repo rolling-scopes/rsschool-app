@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { getRepository } from 'typeorm';
-import { Course, CourseTask, Student, TaskResult } from '../../models';
+import { Course, Student, TaskResult } from '../../models';
 import { createName } from '../user.service';
 import { getPrimaryUserFields, convertToMentorBasic, getContactsUserFields } from '../course.service';
 import { getCourseTasks, updateScoreStudents, getCourses } from '../course.service';
@@ -238,27 +238,6 @@ export class ScoreService {
     return students;
   }
 
-  public async getStudentsScoreForExport(filters: any) {
-    const students = await this.getStudentsScore(filters);
-    const courseTasks = await getCourseTasks(this.courseId);
-
-    return students.map(student => {
-      return {
-        githubId: student.githubId,
-        name: student.name,
-        cvLink: student.cvLink,
-        locationName: student.cityName,
-        countryName: student.countryName || 'Other',
-        mentorGithubId: student.mentor ? student.mentor.githubId : '',
-        totalScore: student.totalScore,
-        isActive: student.isActive,
-        contacts: student.contacts,
-        hasCertificate: student.hasCertificate,
-        ...this.getTasksResults(student.taskResults, courseTasks),
-      };
-    });
-  }
-
   public async saveScore(
     studentId: number,
     courseTaskId: number,
@@ -350,18 +329,6 @@ export class ScoreService {
 
   private trimComment(comment: string): string {
     return comment.substr(0, 8 * KB);
-  }
-
-  private getTasksResults(results: { courseTaskId: number; score: number }[], courseTasks: CourseTask[]) {
-    return courseTasks.reduce(
-      (acc, courseTask) => {
-        const result = results.find(r => r.courseTaskId === courseTask.id);
-        const { name } = courseTask.task;
-        acc[name] = result?.score ?? 0;
-        return acc;
-      },
-      {} as Record<string, number>,
-    );
   }
 }
 

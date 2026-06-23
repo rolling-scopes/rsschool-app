@@ -1,6 +1,7 @@
 import { BadRequestException, INestApplication, ValidationError, ValidationPipe } from '@nestjs/common';
 import * as Sentry from '@sentry/node';
 import cookieParser from 'cookie-parser';
+import { json } from 'express';
 import { Logger } from 'nestjs-pino';
 import { EntityNotFoundFilter, SentryFilter } from './core/filters';
 import { ValidationFilter } from './core/validation';
@@ -11,6 +12,11 @@ export function setupApp(app: INestApplication) {
   app.enableCors();
   app.useLogger(logger);
   app.use(cookieParser());
+  // Register a global JSON body parser. NestJS skips registering its own default
+  // body parsers once any json middleware is applied, so this must be global —
+  // a path-scoped json() would leave every other route without a parsed JSON body.
+  // 20mb limit matches the legacy koa server (jupyter notebook uploads to /files/upload).
+  app.use(json({ limit: '20mb' }));
 
   if (process.env.SENTRY_DSN) {
     const ignoredExceptions = ['UnauthorizedException', 'TokenExpiredError', 'NotFoundException'];
