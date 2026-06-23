@@ -1,4 +1,4 @@
-import { In, Repository } from 'typeorm';
+import { In, Repository, Brackets } from 'typeorm';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InterviewPair, InterviewStatus, StageInterviewFeedbackJson } from '@common/models';
@@ -32,6 +32,8 @@ export class InterviewsService {
     readonly stageInterviewStudentRepository: Repository<StageInterviewStudent>,
     @InjectRepository(Mentor)
     readonly mentorRepository: Repository<Mentor>,
+    @InjectRepository(StageInterview)
+    readonly stageInterviewRepository: Repository<StageInterview>,
     @InjectRepository(TaskInterviewStudent)
     readonly interviewRepository: Repository<TaskInterviewStudent>,
     private crossMentorService: CrossMentorDistributionService,
@@ -373,6 +375,180 @@ export class InterviewsService {
     }
 
     return taskCheckPairs;
+  }
+
+  public async getUserInterviewDetails(courseId: number, githubId: string, type: 'student' | 'mentor') {
+    const [interviews, stageInterviews] = await Promise.all([
+      this.getRegularInterviewDetails(courseId, githubId, type),
+      this.getStageInterviewDetails(courseId, githubId, type),
+    ]);
+    return (stageInterviews as object[]).concat(interviews);
+  }
+
+  private async getRegularInterviewDetails(courseId: number, githubId: string, type: 'student' | 'mentor') {
+    const person =
+      type === 'mentor'
+        ? await this.mentorRepository
+            .createQueryBuilder('mentor')
+            .innerJoin('mentor.user', 'user')
+            .where('user.githubId = :githubId', { githubId })
+            .andWhere('mentor.courseId = :courseId', { courseId })
+            .getOne()
+        : await this.studentRepository
+            .createQueryBuilder('student')
+            .innerJoin('student.user', 'user')
+            .where('user.githubId = :githubId', { githubId })
+            .andWhere('student.courseId = :courseId', { courseId })
+            .getOne();
+
+    if (person == null) {
+      return [];
+    }
+
+    const interviews = await this.taskCheckerRepository
+      .createQueryBuilder('taskChecker')
+      .innerJoin('taskChecker.courseTask', 'courseTask')
+      .innerJoin('courseTask.task', 'task')
+      .innerJoin('taskChecker.mentor', 'mentor')
+      .innerJoin('mentor.user', 'mUser')
+      .innerJoin('taskChecker.student', 'student')
+      .innerJoin('student.user', 'sUser')
+      .addSelect([
+        'courseTask.id',
+        'courseTask.studentStartDate',
+        'courseTask.studentEndDate',
+        'mentor.id',
+        'student.id',
+        'task.id',
+        'task.name',
+        'task.descriptionUrl',
+        'task.attributes',
+        ...InterviewsService.getPrimaryUserFields('mUser'),
+        ...InterviewsService.getPrimaryUserFields('sUser'),
+      ])
+      .where(`taskChecker.${type === 'mentor' ? 'mentorId' : 'studentId'} = :id`, { id: person.id })
+      .andWhere('task.type = :type', { type: 'interview' })
+      .getMany();
+
+    if (interviews.length === 0) {
+      return [];
+    }
+
+    const taskResults = await this.taskInterviewResultRepository
+      .createQueryBuilder('tir')
+      .where(
+        new Brackets(qb => {
+          interviews.forEach((i, index) => {
+            qb.orWhere(`(tir.courseTaskId = :courseTaskId${index} AND tir.mentorId = :mentorId${index})`, {
+              [`courseTaskId${index}`]: i.courseTaskId,
+              [`mentorId${index}`]: i.mentor.id,
+            });
+          });
+        }),
+      )
+      .getMany();
+
+    return interviews.map(record => {
+      const { courseTask } = record;
+      const taskResult = taskResults.find(
+        taskResult => taskResult.courseTaskId === record.courseTaskId && record.student.id === taskResult.studentId,
+      );
+      return {
+        id: courseTask.id,
+        name: courseTask.task.name,
+        descriptionUrl: courseTask.task.descriptionUrl,
+        startDate: courseTask.studentStartDate as string,
+        endDate: courseTask.studentEndDate as string,
+        completed: !!taskResult,
+        status: taskResult ? InterviewStatus.Completed : InterviewStatus.NotCompleted,
+        interviewer: {
+          githubId: record.mentor.user.githubId,
+          name: InterviewsService.createName(record.mentor.user),
+        },
+        student: {
+          id: record.student.id,
+          githubId: record.student.user.githubId,
+          name: InterviewsService.createName(record.student.user),
+        },
+        result: taskResult?.score?.toString() ?? null,
+      };
+    });
+  }
+
+  private async getStageInterviewDetails(courseId: number, githubId: string, userType: 'student' | 'mentor') {
+    const userKey = userType === 'student' ? 'sUser' : 'mUser';
+
+    const stageInterviews = await this.stageInterviewRepository
+      .createQueryBuilder('stageInterview')
+      .innerJoin('stageInterview.courseTask', 'courseTask')
+      .innerJoin('courseTask.task', 'task')
+      .innerJoin('stageInterview.mentor', 'mentor')
+      .innerJoin('stageInterview.student', 'student')
+      .innerJoin('mentor.user', 'mUser')
+      .innerJoin('student.user', 'sUser')
+      .addSelect([
+        'courseTask.id',
+        'task.id',
+        'task.name',
+        'task.descriptionUrl',
+        'courseTask.studentStartDate',
+        'courseTask.studentEndDate',
+        'student.id',
+        'mentor.id',
+        ...InterviewsService.getPrimaryUserFields('mUser'),
+        ...InterviewsService.getPrimaryUserFields('sUser'),
+      ])
+      .where(`stageInterview.courseId = :courseId AND ${userKey}.githubId = :githubId`, { courseId, githubId })
+      .andWhere(`stageInterview.isCanceled <> :canceled`, { canceled: true })
+      .andWhere(`${userType === 'student' ? 'mentor' : 'student'}.isExpelled = false`)
+      .getMany();
+
+    return stageInterviews.map(it => {
+      return {
+        id: it.id,
+        name: it.courseTask.task.name,
+        completed: it.isCompleted,
+        status: it.isCompleted
+          ? InterviewStatus.Completed
+          : it.isCanceled
+            ? InterviewStatus.Canceled
+            : InterviewStatus.NotCompleted,
+        descriptionUrl: it.courseTask.task.descriptionUrl,
+        startDate: it.courseTask.studentStartDate,
+        endDate: it.courseTask.studentEndDate,
+        result: it.decision ?? null,
+        interviewer: { githubId: it.mentor.user.githubId, name: InterviewsService.createName(it.mentor.user) },
+        decision: it.decision,
+        student: {
+          id: it.student.id,
+          githubId: it.student.user.githubId,
+          name: InterviewsService.createName(it.student.user),
+        },
+      };
+    });
+  }
+
+  private static getPrimaryUserFields(modelName = 'user') {
+    return [
+      `${modelName}.id`,
+      `${modelName}.firstName`,
+      `${modelName}.lastName`,
+      `${modelName}.githubId`,
+      `${modelName}.cityName`,
+      `${modelName}.countryName`,
+      `${modelName}.discord`,
+    ];
+  }
+
+  private static createName({ firstName, lastName }: { firstName?: string | null; lastName?: string | null }) {
+    const result = [];
+    if (firstName) {
+      result.push(firstName.trim());
+    }
+    if (lastName) {
+      result.push(lastName.trim());
+    }
+    return result.join(' ');
   }
 
   public async getInterviewStudentsByMentor(courseId: number, courseTaskId: number, mentorGithubId: string) {

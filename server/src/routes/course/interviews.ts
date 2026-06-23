@@ -5,35 +5,7 @@ import { ILogger } from '../../logger';
 import { courseService, InterviewService, notificationService } from '../../services';
 import { setResponse } from '../utils';
 import { InterviewRepository } from '../../repositories/interview.repository';
-import { StageInterviewRepository } from '../../repositories/stageInterview.repository';
 import { userGuards } from '../guards';
-
-type Params = { courseId: number; githubId: string; courseTaskId: number };
-
-export const getStudentInterviews = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { courseId, githubId } = ctx.params;
-  const interviewRepository = getCustomRepository(InterviewRepository);
-  const stageInterviewRepository = getCustomRepository(StageInterviewRepository);
-  const [interviews, stageInterviews] = await Promise.all([
-    interviewRepository.findByStudent(courseId, githubId),
-    stageInterviewRepository.findByStudent(courseId, githubId),
-  ]);
-  const result = stageInterviews.concat(interviews);
-
-  setResponse(ctx, StatusCodes.OK, result);
-};
-
-export const getMentorInterviews = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { courseId, githubId } = ctx.params as Params;
-  const interviewRepository = getCustomRepository(InterviewRepository);
-  const stageInterviewRepository = getCustomRepository(StageInterviewRepository);
-  const [interviews, stageInterviews] = await Promise.all([
-    interviewRepository.findByInterviewer(courseId, githubId),
-    stageInterviewRepository.findByInterviewer(courseId, githubId),
-  ]);
-  const result = stageInterviews.concat(interviews);
-  setResponse(ctx, StatusCodes.OK, result);
-};
 
 export const getInterviewStudent = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId, githubId, courseTaskId } = ctx.params;

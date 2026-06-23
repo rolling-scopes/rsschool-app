@@ -92,7 +92,6 @@ function addMentorApi(router: Router<any, any>, logger: ILogger) {
 
   const mentorLogger = logger.child({ module: 'course/mentor' });
   router.get('/mentor/:githubId/students', guard, ...validators, getMentorStudents(mentorLogger));
-  router.get('/mentor/:githubId/interviews', guard, ...validators, interviews.getMentorInterviews(mentorLogger));
 }
 
 function addStudentApi(router: Router<any, any>, logger: ILogger) {
@@ -115,7 +114,6 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   );
 
   router.get('/student/:githubId/tasks/cross-mentors', courseGuard, ...validators, getCrossMentors(logger));
-  router.get('/student/:githubId/interviews', courseGuard, ...validators, interviews.getStudentInterviews(logger));
 
   router.get('/students', courseSupervisorGuard, getStudents(logger));
   router.get('/students/csv', courseSupervisorGuard, getStudentsCsv(logger));

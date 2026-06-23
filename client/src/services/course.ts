@@ -506,9 +506,9 @@ export class CourseService {
     return result.data as StudentSummaryDto;
   }
 
-  async getStudentInterviews(githubId: string) {
-    const result = await this.axios.get(`/student/${githubId}/interviews`);
-    return result.data.data as InterviewDetails[];
+  async getStudentInterviews(_githubId: string) {
+    const result = await coursesInterviewsApi.getStudentInterviews(this.courseId);
+    return result.data as unknown as InterviewDetails[];
   }
 
   async createCertificate(githubId: string, templateId?: string) {
@@ -520,9 +520,9 @@ export class CourseService {
     await certificateApi.removeCertificate(studentId);
   }
 
-  async getMentorInterviews(githubId: string) {
-    const result = await this.axios.get<{ data: MentorInterview[] }>(`/mentor/${githubId}/interviews`);
-    return result.data.data;
+  async getMentorInterviews(_githubId: string) {
+    const result = await coursesInterviewsApi.getMentorInterviews(this.courseId);
+    return result.data as unknown as MentorInterview[];
   }
 
   async createMentor(

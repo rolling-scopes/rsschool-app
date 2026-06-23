@@ -221,6 +221,24 @@ export class InterviewsController {
     throw new BadRequestException('Invalid interview id');
   }
 
+  @Get('/students/me')
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  @ApiOperation({ operationId: 'getStudentInterviews' })
+  @UseGuards(DefaultGuard, CourseGuard)
+  public async getStudentInterviews(@Req() req: CurrentRequest, @Param('courseId', ParseIntPipe) courseId: number) {
+    return this.interviewsService.getUserInterviewDetails(courseId, req.user.githubId, 'student');
+  }
+
+  @Get('/mentors/me')
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  @ApiOperation({ operationId: 'getMentorInterviews' })
+  @UseGuards(DefaultGuard, CourseGuard)
+  public async getMentorInterviews(@Req() req: CurrentRequest, @Param('courseId', ParseIntPipe) courseId: number) {
+    return this.interviewsService.getUserInterviewDetails(courseId, req.user.githubId, 'mentor');
+  }
+
   @Get('/:courseTaskId/interviewer/me/students')
   @ApiOkResponse()
   @ApiForbiddenResponse()
