@@ -499,20 +499,6 @@ export async function getTaskSolutionCheckers(courseTaskId: number, minCheckedCo
   return records.map(record => ({ studentId: record.studentId, score: Number(record.score) }));
 }
 
-export async function getInterviewStudentsByMentorId(courseTaskId: number, mentorId: number) {
-  const records = await getRepository(Student)
-    .createQueryBuilder('student')
-    .innerJoin('student.user', 'user')
-    .innerJoin('student.taskChecker', 'taskChecker')
-    .addSelect(getPrimaryUserFields())
-    .where('"taskChecker"."courseTaskId" = :courseTaskId', { courseTaskId })
-    .andWhere('"taskChecker"."mentorId" = :mentorId', { mentorId })
-    .getMany();
-
-  const students = records.map(record => convertToStudentBasic(record));
-  return students;
-}
-
 export type StudentCrossMentor = {
   name: string;
   mentor: {

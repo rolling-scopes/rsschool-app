@@ -250,8 +250,8 @@ export class CourseService {
   }
 
   async getInterviewStudents(courseTaskId: number) {
-    const result = await this.axios.get<{ data: StudentBasic[] }>(`/mentor/me/interview/${courseTaskId}`);
-    return result.data.data;
+    const result = await coursesInterviewsApi.getInterviewerStudents(this.courseId, courseTaskId);
+    return result.data as unknown as StudentBasic[];
   }
 
   async postStudentInterviewResult(githubId: string, courseTaskId: number, data: unknown) {

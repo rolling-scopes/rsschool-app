@@ -819,6 +819,18 @@
         "tags": ["courses interviews"]
       }
     },
+    "/courses/{courseId}/interviews/{courseTaskId}/interviewer/me/students": {
+      "get": {
+        "operationId": "getInterviewerStudents",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": { "200": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
+        "tags": ["courses interviews"]
+      }
+    },
     "/courses/{courseId}/interviews/{courseTaskId}/students/{githubId}/result": {
       "post": {
         "operationId": "createInterviewResult",

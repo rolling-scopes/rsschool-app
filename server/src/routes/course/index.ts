@@ -12,7 +12,7 @@ import {
   guard,
 } from '../guards';
 import { getCourseEvents } from './events';
-import { getMentorInterview, getMentorStudents } from './mentor';
+import { getMentorStudents } from './mentor';
 import * as score from './score';
 import * as stageInterview from './stageInterview';
 import { getStudents, getStudentsCsv, getStudentsWithDetails, searchStudent } from './students';
@@ -92,7 +92,6 @@ function addMentorApi(router: Router<any, any>, logger: ILogger) {
 
   const mentorLogger = logger.child({ module: 'course/mentor' });
   router.get('/mentor/:githubId/students', guard, ...validators, getMentorStudents(mentorLogger));
-  router.get('/mentor/:githubId/interview/:courseTaskId', guard, ...validators, getMentorInterview(mentorLogger));
   router.get('/mentor/:githubId/interviews', guard, ...validators, interviews.getMentorInterviews(mentorLogger));
 }
 
