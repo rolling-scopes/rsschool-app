@@ -3,6 +3,8 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { ScoreController } from './score.controller';
 import { ScoreService } from './score.service';
 import { WriteScoreService } from './write-score.service';
+import { UserNotificationsService } from 'src/users-notifications/users.notifications.service';
+import { ConfigService } from 'src/config';
 
 // Fixtures mirrored from server/src/routes/course/__test__/createMultipleScores.test.ts to prove business-logic equivalence
 const mockStudent = { id: 42, user: { githubId: 'john-doe' } };
@@ -21,6 +23,8 @@ describe('createMultipleScores route', () => {
       providers: [
         { provide: ScoreService, useValue: scoreService },
         { provide: WriteScoreService, useValue: { saveScoreWithStatus: mockSaveScoreWithStatus } },
+        { provide: UserNotificationsService, useValue: { sendEventNotification: vi.fn() } },
+        { provide: ConfigService, useValue: { host: 'https://app.rs.school' } },
         { provide: CACHE_MANAGER, useValue: {} },
       ],
     }).compile();

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Repository, DataSource } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as _ from 'lodash';
 
@@ -12,6 +12,8 @@ import { orderByFieldMapping, OrderDirection, OrderField, ScoreQueryDto } from '
 import { InterviewsService } from '../interviews';
 import { ScoreDto, ScoreStudentDto } from './dto/score.dto';
 import { TaskResult } from '@entities/taskResult';
+import { CourseTask } from '@entities/courseTask';
+import { Mentor } from '@entities/mentor';
 import { UsersService } from 'src/users/users.service';
 
 const defaultFilter: Partial<ScoreQueryDto> = {
@@ -35,16 +37,35 @@ export class ScoreService {
 
     @InjectRepository(TaskResult)
     readonly taskResultRepository: Repository<TaskResult>,
+    private readonly dataSource: DataSource,
   ) {}
 
   public async getStudentForScore(courseId: number, githubId: string) {
     return this.studentRepository
       .createQueryBuilder('student')
-      .innerJoinAndSelect('student.user', 'user')
-      .where('"user"."githubId" = :studentGithubId AND "student"."courseId" = :courseId', {
-        studentGithubId: githubId,
-        courseId,
-      })
+      .innerJoin('student.user', 'user')
+      .addSelect(['user.firstName', 'user.lastName', 'user.githubId', 'user.id'])
+      .where('user.githubId = :githubId', { githubId })
+      .andWhere('student.courseId = :courseId', { courseId })
+      .getOne();
+  }
+
+  public async getCourseTaskWithCourse(courseTaskId: number) {
+    return this.dataSource
+      .getRepository(CourseTask)
+      .createQueryBuilder('courseTask')
+      .innerJoinAndSelect('courseTask.task', 'task')
+      .innerJoinAndSelect('courseTask.course', 'course')
+      .where('courseTask.id = :courseTaskId', { courseTaskId })
+      .getOne();
+  }
+
+  public async getMentorByUserId(courseId: number, userId: number) {
+    return this.dataSource
+      .getRepository(Mentor)
+      .createQueryBuilder('mentor')
+      .where('mentor."userId" = :userId', { userId })
+      .andWhere('mentor."courseId" = :courseId', { courseId })
       .getOne();
   }
 
