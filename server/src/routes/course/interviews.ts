@@ -1,30 +1,5 @@
-import { StatusCodes } from 'http-status-codes';
-import Router from '@koa/router';
 import { ILogger } from '../../logger';
-import { courseService, InterviewService, notificationService } from '../../services';
-import { setResponse } from '../utils';
-import { userGuards } from '../guards';
-
-export const createInterview = (logger: ILogger) => async (ctx: Router.RouterContext) => {
-  const user = ctx.state.user;
-  const guard = userGuards(user);
-  const { courseId, courseTaskId, studentGithubId, githubId: interviewerGithubId } = ctx.params;
-  const interviewService = new InterviewService(courseId, logger);
-
-  if (guard.isMentor(courseId) && !guard.isPowerUser(courseId)) {
-    const isStarted = await interviewService.isInterviewStarted(courseTaskId);
-    if (!isStarted) {
-      setResponse(ctx, StatusCodes.FORBIDDEN);
-      return;
-    }
-  }
-
-  const result = await interviewService.createInterview(courseTaskId, interviewerGithubId, studentGithubId);
-
-  await sendInteviewerAssignedNotification(logger, courseId, { interviewerGithubId, studentGithubId });
-
-  setResponse(ctx, StatusCodes.OK, { id: result?.id });
-};
+import { courseService, notificationService } from '../../services';
 
 export async function sendInteviewerAssignedNotification(
   logger: ILogger,
@@ -69,16 +44,3 @@ export async function sendInteviewerAssignedNotification(
     logger.error(`sendInteviewerAssignedNotification: ${(e as Error).message}`);
   }
 }
-
-export const cancelInterview = (logger: ILogger) => async (ctx: Router.RouterContext) => {
-  const courseId: number = Number(ctx.params.courseId);
-  const pairId: number = Number(ctx.params.id);
-
-  try {
-    const interviewService = new InterviewService(courseId, logger);
-    await interviewService.cancelInterviewPair(pairId);
-    setResponse(ctx, StatusCodes.OK, {});
-  } catch (e) {
-    setResponse(ctx, StatusCodes.BAD_REQUEST, { message: (e as Error).message });
-  }
-};

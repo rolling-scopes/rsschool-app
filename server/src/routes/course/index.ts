@@ -3,7 +3,6 @@ import { ILogger } from '../../logger';
 import {
   basicAuthAws,
   courseGuard,
-  courseInterviewGuard,
   courseManagerGuard,
   courseMentorGuard,
   courseSupervisorGuard,
@@ -17,8 +16,6 @@ import * as score from './score';
 import * as stageInterview from './stageInterview';
 import { getStudents, getStudentsCsv, getStudentsWithDetails, searchStudent } from './students';
 import { getCourseTasksVerifications } from './taskVerifications';
-
-import * as interviews from './interviews';
 
 import {
   validateCrossCheckExpirationDate,
@@ -34,7 +31,6 @@ export function courseRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/course/:courseId' });
 
   addStageInterviewApi(router, logger);
-  addInterviewsApi(router, logger);
   addEventApi(router, logger);
   addTaskApi(router, logger);
   addMentorApi(router, logger);
@@ -42,15 +38,6 @@ export function courseRoute(logger: ILogger) {
   addStudentCrossCheckApi(router, logger);
   addScheduleApi(router, logger);
   return router;
-}
-
-function addInterviewsApi(router: Router<any, any>, logger: ILogger) {
-  router.post(
-    '/interview/:courseTaskId/interviewer/:githubId/student/:studentGithubId/',
-    courseInterviewGuard,
-    interviews.createInterview(logger),
-  );
-  router.delete('/interviews/:courseTaskId/:id', courseManagerGuard, interviews.cancelInterview(logger));
 }
 
 function addEventApi(router: Router<any, any>, logger: ILogger) {

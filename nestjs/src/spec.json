@@ -819,6 +819,33 @@
         "tags": ["courses interviews"]
       }
     },
+    "/courses/{courseId}/interviews/{courseTaskId}/interviewer/{interviewerGithubId}/student/{studentGithubId}": {
+      "post": {
+        "operationId": "addInterviewPair",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "interviewerGithubId", "required": true, "in": "path", "schema": { "type": "string" } },
+          { "name": "studentGithubId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
+        "tags": ["courses interviews"]
+      }
+    },
+    "/courses/{courseId}/interviews/{courseTaskId}/pairs/{pairId}": {
+      "delete": {
+        "operationId": "cancelInterviewPair",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "pairId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": { "200": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
+        "tags": ["courses interviews"]
+      }
+    },
     "/courses/{courseId}/interviews/{interviewId}/students/me/registration": {
       "get": {
         "operationId": "getInterviewRegistration",
