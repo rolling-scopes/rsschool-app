@@ -21940,6 +21940,35 @@ export const RegistryApiAxiosParamCreator = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        getMentorRegistriesCsv: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/registry/mentors/csv`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         getOwnMentorRegistry: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/registry/mentor`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -22182,6 +22211,15 @@ export const RegistryApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        async getMentorRegistriesCsv(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMentorRegistriesCsv(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         async getOwnMentorRegistry(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OwnMentorRegistryDto>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getOwnMentorRegistry(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
@@ -22290,6 +22328,14 @@ export const RegistryApiFactory = function (configuration?: Configuration, baseP
          */
         getMentorRegistries(status?: 'new' | 'all', pageSize?: number, currentPage?: number, githubId?: string, cityName?: string, preferedCourses?: Array<number>, preselectedCourses?: Array<number>, technicalMentoring?: Array<string>, options?: any): AxiosPromise<FilterMentorRegistryResponse> {
             return localVarFp.getMentorRegistries(status, pageSize, currentPage, githubId, cityName, preferedCourses, preselectedCourses, technicalMentoring, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMentorRegistriesCsv(options?: any): AxiosPromise<void> {
+            return localVarFp.getMentorRegistriesCsv(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -22408,6 +22454,16 @@ export class RegistryApi extends BaseAPI {
      */
     public getMentorRegistries(status?: 'new' | 'all', pageSize?: number, currentPage?: number, githubId?: string, cityName?: string, preferedCourses?: Array<number>, preselectedCourses?: Array<number>, technicalMentoring?: Array<string>, options?: AxiosRequestConfig) {
         return RegistryApiFp(this.configuration).getMentorRegistries(status, pageSize, currentPage, githubId, cityName, preferedCourses, preselectedCourses, technicalMentoring, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistryApi
+     */
+    public getMentorRegistriesCsv(options?: AxiosRequestConfig) {
+        return RegistryApiFp(this.configuration).getMentorRegistriesCsv(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

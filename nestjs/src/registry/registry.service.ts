@@ -82,6 +82,40 @@ export class RegistryService {
     return mentorRegistries;
   }
 
+  public async getMentorRegistriesForExport() {
+    const data = (await this.findAllMentorRegistries()).map(RegistryService.transformMentorRegistry);
+    const courses = await this.coursesService.getAll();
+
+    return data.map(d => ({
+      ...d,
+      preferedCourses: d.preferedCourses.map(id => courses.find(c => Number(id) === c.id)?.name).filter(Boolean),
+      preselectedCourses: d.preselectedCourses.map(id => courses.find(c => Number(id) === c.id)?.name).filter(Boolean),
+      courses: d.courses?.map(id => courses.find(c => Number(id) === c.id)?.name).filter(Boolean),
+    }));
+  }
+
+  private static transformMentorRegistry(mentorRegistry: MentorRegistry) {
+    const user = mentorRegistry.user;
+    return {
+      id: mentorRegistry.id,
+      englishMentoring: mentorRegistry.englishMentoring,
+      languagesMentoring: mentorRegistry.languagesMentoring,
+      githubId: user.githubId,
+      primaryEmail: user.primaryEmail,
+      contactsEpamEmail: user.contactsEpamEmail,
+      cityName: user.cityName,
+      maxStudentsLimit: mentorRegistry.maxStudentsLimit,
+      name: `${user.firstName} ${user.lastName}`,
+      preferedCourses: mentorRegistry.preferedCourses?.map(id => Number(id)),
+      preselectedCourses: mentorRegistry.preselectedCourses?.map(id => Number(id)),
+      preferedStudentsLocation: mentorRegistry.preferedStudentsLocation,
+      technicalMentoring: mentorRegistry.technicalMentoring,
+      updatedDate: mentorRegistry.updatedDate,
+      courses: mentorRegistry.user.mentors?.map(m => m.courseId),
+      hasCertificate: mentorRegistry.user.students?.some(s => s.certificate?.id),
+    };
+  }
+
   public async buildMentorApprovalData(preselectedCourses: string[]) {
     const courses = await this.coursesService.getByIds(preselectedCourses.map(id => parseInt(id)));
 

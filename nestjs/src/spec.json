@@ -2830,6 +2830,15 @@
         "tags": ["registry"]
       }
     },
+    "/registry/mentors/csv": {
+      "get": {
+        "operationId": "getMentorRegistriesCsv",
+        "parameters": [],
+        "responses": { "403": { "description": "" } },
+        "summary": "",
+        "tags": ["registry"]
+      }
+    },
     "/registry/mentors/invite": {
       "post": {
         "operationId": "inviteMentors",
