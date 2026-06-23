@@ -7,6 +7,7 @@ import { TaskInterviewResult } from '@entities/taskInterviewResult';
 import { Student } from '@entities/student';
 import { Mentor } from '@entities/mentor';
 import { StageInterviewStudent } from '@entities/stageInterviewStudent';
+import { StageInterview } from '@entities/stageInterview';
 import { TaskChecker } from '@entities/taskChecker';
 import { User } from '@entities/user';
 import { InterviewsController } from './interviews.controller';
@@ -70,6 +71,7 @@ describe('interview pair management', () => {
         { provide: getRepositoryToken(Student), useValue: repos.student },
         { provide: getRepositoryToken(Mentor), useValue: repos.mentor },
         { provide: getRepositoryToken(StageInterviewStudent), useValue: {} },
+        { provide: getRepositoryToken(StageInterview), useValue: {} },
         { provide: getRepositoryToken(TaskChecker), useValue: repos.taskChecker },
         { provide: getRepositoryToken(User), useValue: {} },
         { provide: CrossMentorDistributionService, useValue: {} },

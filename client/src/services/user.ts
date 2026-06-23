@@ -1,5 +1,5 @@
 import { EnglishLevel } from '@common/models';
-import { ProfileApi, ProfileDto, UsersNotificationsApi, UpdateUserDtoLanguagesEnum } from '@client/api';
+import { ProfileApi, ProfileDto, UsersApi, UsersNotificationsApi, UpdateUserDtoLanguagesEnum } from '@client/api';
 import discordIntegration from '../configs/discord-integration';
 import type {
   ConfigurableProfilePermissions,
@@ -13,7 +13,6 @@ import type {
   StudentStats,
 } from '@common/models/profile';
 import { Rule } from 'antd/lib/form';
-import axios, { AxiosInstance } from 'axios';
 
 export interface UserBasic {
   name: string;
@@ -21,17 +20,12 @@ export interface UserBasic {
   id: number;
 }
 
-type SearchResponse = { data: UserBasic[] };
-
 const profileApi = new ProfileApi();
+const searchApi = new UsersApi();
 const usersApi = new UsersNotificationsApi();
 
 export class UserService {
-  private axios: AxiosInstance;
-
-  constructor() {
-    this.axios = axios.create();
-  }
+  constructor() {}
 
   async getDiscordIds() {
     const fragment = new URLSearchParams(window.location.hash.slice(1));
@@ -72,23 +66,21 @@ export class UserService {
       if (!query) {
         return [];
       }
-      const response = await this.axios.get<SearchResponse>(`/api/users/search/${query}`);
-      return response.data.data;
+      const response = await searchApi.searchUsersBasic(query);
+      return response.data;
     } catch {
       return [];
     }
   }
 
   async getMyProfile() {
-    const response = await this.axios.get<{ data: UserFull }>(`/api/profile/me`);
-    return response.data.data;
+    const response = await profileApi.getMyProfile();
+    return response.data as unknown as UserFull;
   }
 
   async getProfileInfo(githubId?: string) {
-    const response = await this.axios.get<{ data: ProfileInfo }>(`/api/profile/info`, {
-      params: { githubId },
-    });
-    return response.data.data;
+    const response = await profileApi.getFullProfileInfo(githubId);
+    return response.data as ProfileInfo;
   }
 
   async sendEmailConfirmationLink() {
