@@ -22,6 +22,106 @@ export class CourseStudentsService {
     private readonly dataSource: DataSource,
   ) {}
 
+  public async setStudentMentor(studentId: number, mentorId: number | null) {
+    await this.studentRepository.update(studentId, { mentorId });
+  }
+
+  public async getMenteeGithubIds(courseId: number, mentorGithubId: string): Promise<string[]> {
+    const records = await this.studentRepository
+      .createQueryBuilder('student')
+      .select(['student.id'])
+      .innerJoin('student.user', 'sUser')
+      .leftJoin('student.mentor', 'mentor')
+      .leftJoin('mentor.user', 'mUser')
+      .addSelect(['mentor.id', 'sUser.githubId', 'mUser.githubId'])
+      .where('mUser.githubId = :githubId', { githubId: mentorGithubId })
+      .andWhere('student.isExpelled = false')
+      .andWhere('student.courseId = :courseId ', { courseId })
+      .getMany();
+    return records.map(record => record.user.githubId);
+  }
+
+  public async getMentorBasicByGithubId(courseId: number, githubId: string) {
+    const record = await this.mentorRepository
+      .createQueryBuilder('mentor')
+      .innerJoin('mentor.user', 'user')
+      .addSelect(['user.id', 'user.firstName', 'user.lastName', 'user.githubId', 'user.cityName', 'user.countryName'])
+      .where('user.githubId = :githubId', { githubId })
+      .andWhere('mentor."courseId" = :courseId', { courseId })
+      .getOne();
+    if (record == null) {
+      return null;
+    }
+    const user = record.user;
+    return {
+      isActive: !record.isExpelled,
+      name: createName({ firstName: user.firstName, lastName: user.lastName }),
+      id: record.id,
+      githubId: user.githubId,
+      students: [],
+      cityName: user.cityName ?? '',
+      countryName: user.countryName ?? '',
+    };
+  }
+
+  public async getStudentWithMentor(courseId: number, githubId: string) {
+    const record = await this.studentRepository
+      .createQueryBuilder('student')
+      .select(['student.id', 'student.isExpelled', 'student.mentorId', 'student.isFailed', 'student.totalScore'])
+      .innerJoin('student.user', 'sUser')
+      .leftJoin('student.mentor', 'mentor')
+      .leftJoin('mentor.user', 'mUser')
+      .addSelect([
+        'mentor.id',
+        'mentor.isExpelled',
+        'mentor.userId',
+        'sUser.id',
+        'sUser.firstName',
+        'sUser.lastName',
+        'sUser.githubId',
+        'sUser.cityName',
+        'sUser.countryName',
+        'sUser.discord',
+        'mUser.id',
+        'mUser.firstName',
+        'mUser.lastName',
+        'mUser.githubId',
+        'mUser.cityName',
+        'mUser.countryName',
+      ])
+      .where('sUser.githubId = :githubId', { githubId })
+      .andWhere('student.courseId = :courseId', { courseId })
+      .getOne();
+
+    if (record == null) {
+      return null;
+    }
+
+    return {
+      id: record.id,
+      name: createName({ firstName: record.user.firstName, lastName: record.user.lastName }),
+      githubId: record.user.githubId,
+      cityName: record.user.cityName ?? 'Unknown',
+      countryName: record.user.countryName ?? 'Unknown',
+      isActive: !record.isExpelled && !record.isFailed,
+      discord: record.user.discord,
+      totalScore: record.totalScore,
+      mentor: record.mentor
+        ? {
+            id: record.mentor.id,
+            name: createName({
+              firstName: record.mentor.user.firstName,
+              lastName: record.mentor.user.lastName,
+            }),
+            githubId: record.mentor.user.githubId,
+            cityName: record.mentor.user.cityName ?? undefined,
+            countryName: record.mentor.user.countryName ?? undefined,
+            isActive: !record.mentor.isExpelled,
+          }
+        : null,
+    };
+  }
+
   public async canChangeStatus(
     session: IUserSession,
     courseId: number,

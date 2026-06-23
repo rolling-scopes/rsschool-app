@@ -6,6 +6,7 @@ import { Student } from '@entities/student';
 import { Mentor } from '@entities/mentor';
 import { CourseStudentsController } from './course-students.controller';
 import { CourseStudentsService } from './course-students.service';
+import { UserNotificationsService } from 'src/users-notifications/users.notifications.service';
 
 // Fixtures mirrored from server/src/routes/course/__test__/studentStatus.test.ts to prove business-logic equivalence
 const session = { id: 1, githubId: 'viewer', isAdmin: false, courses: {} } as never;
@@ -52,7 +53,10 @@ describe('student status', () => {
 
     const controllerModule: TestingModule = await Test.createTestingModule({
       controllers: [CourseStudentsController],
-      providers: [{ provide: CourseStudentsService, useValue: service }],
+      providers: [
+        { provide: CourseStudentsService, useValue: service },
+        { provide: UserNotificationsService, useValue: {} },
+      ],
     }).compile();
     controller = controllerModule.get(CourseStudentsController);
   });

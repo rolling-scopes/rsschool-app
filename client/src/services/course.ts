@@ -537,13 +537,13 @@ export class CourseService {
   }
 
   async updateStudent(githubId: string, data: { mentorGithuId: string | null }) {
-    const result = await this.axios.put(`/student/${githubId}`, data);
-    return result.data.data as StudentBasic;
+    const result = await studentsApi.updateStudent(this.courseId, githubId, data);
+    return result.data as unknown as StudentBasic;
   }
 
   async unassignStudentFromMentor(githubId: string, data: { mentorGithuId: null; unassigningComment: string }) {
-    const result = await this.axios.put(`/student/${githubId}`, data);
-    return result.data.data;
+    const result = await studentsApi.updateStudent(this.courseId, githubId, data);
+    return result.data;
   }
 
   async getInterviewStudent(githubId: string, interviewId: string) {

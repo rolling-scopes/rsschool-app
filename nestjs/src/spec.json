@@ -1774,6 +1774,22 @@
         "tags": ["students"]
       }
     },
+    "/courses/{courseId}/students/{githubId}": {
+      "put": {
+        "operationId": "updateStudent",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateStudentDto" } } }
+        },
+        "responses": { "200": { "description": "" }, "400": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
+        "tags": ["students"]
+      }
+    },
     "/courses/{courseId}/students/{githubId}/status": {
       "post": {
         "operationId": "updateStudentStatus",
@@ -5015,6 +5031,14 @@
           "rank": { "type": "number" }
         },
         "required": ["totalScore", "results", "isActive", "mentor", "rank"]
+      },
+      "UpdateStudentDto": {
+        "type": "object",
+        "properties": {
+          "mentorGithuId": { "type": "string", "nullable": true },
+          "unassigningComment": { "type": "string", "nullable": true }
+        },
+        "required": ["mentorGithuId"]
       },
       "UpdateStudentStatusDto": {
         "type": "object",

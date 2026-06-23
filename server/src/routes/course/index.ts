@@ -8,7 +8,6 @@ import {
   courseMentorGuard,
   courseSupervisorGuard,
   courseSupervisorOrDementorGuard,
-  courseSupervisorOrMentorGuard,
   crossCheckGuard,
   guard,
   taskOwnerGuard,
@@ -31,7 +30,7 @@ import {
 } from '../validators';
 import * as crossCheck from './crossCheck';
 import { getScheduleAsCsv, setScheduleFromCsv } from './schedule';
-import { createInterviewResult, getCrossMentors, getStudent, updateStudent } from './student';
+import { createInterviewResult, getCrossMentors, getStudent } from './student';
 import * as tasks from './tasks';
 
 export function courseRoute(logger: ILogger) {
@@ -114,7 +113,6 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   const mentorValidators = [courseMentorGuard, validateGithubId];
 
   router.get('/student/:githubId', courseSupervisorGuard, getStudent(logger));
-  router.put('/student/:githubId', courseSupervisorOrMentorGuard, updateStudent(logger));
 
   router.get(
     '/student/:githubId/interview/stage',
