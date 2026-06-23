@@ -12,6 +12,7 @@ import {
   Query,
   Req,
   UseGuards,
+  NotFoundException,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -23,6 +24,7 @@ import {
 } from '@nestjs/swagger';
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
 import { CourseTasksService, Status } from './course-tasks.service';
+import { CreateTaskDistributionDto } from './dto/create-task-distribution.dto';
 import { CourseTaskDetailedDto, CourseTaskDto } from './dto';
 import { CreateCourseTaskDto } from './dto/create-course-task.dto';
 import { UpdateCourseTaskDto } from './dto/update-course-task.dto';
@@ -71,6 +73,24 @@ export class CourseTasksController {
     }
     const data = await this.courseTasksService.getAllWithStudentSolution(courseId, studentId, status, isStudent);
     return data.map(item => new CourseTaskDto(item));
+  }
+
+  @Post('/:courseTaskId/distribution')
+  @ApiOperation({ operationId: 'createTaskDistribution' })
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  @UseGuards(CourseGuard, RoleGuard)
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  public async createTaskDistribution(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+    @Body() dto: CreateTaskDistributionDto,
+  ) {
+    const result = await this.courseTasksService.createTaskDistribution(courseId, courseTaskId, dto.clean);
+    if (result == null) {
+      throw new NotFoundException('Course task not found');
+    }
+    return result;
   }
 
   @Get('/detailed')
