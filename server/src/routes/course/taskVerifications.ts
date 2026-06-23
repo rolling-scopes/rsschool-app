@@ -1,34 +1,11 @@
-import { OK, BAD_REQUEST } from 'http-status-codes';
+import { OK } from 'http-status-codes';
 import Router from '@koa/router';
 import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { TaskVerification } from '../../models';
 import { setResponse } from '../utils';
-import { getStudentByGithubId } from '../../services/course.service';
 
 type Params = { courseId: number; githubId: string };
-
-export const getStudentTaskVerifications = (_: ILogger) => async (ctx: Router.RouterContext) => {
-  const { courseId, githubId } = ctx.params as Params;
-
-  const student = await getStudentByGithubId(courseId, githubId);
-  if (student == null) {
-    setResponse(ctx, BAD_REQUEST, {});
-    return;
-  }
-
-  const verifications = await getRepository(TaskVerification)
-    .createQueryBuilder('v')
-    .innerJoin('v.courseTask', 'courseTask')
-    .innerJoin('courseTask.task', 'task')
-    .addSelect(['task.name', 'courseTask.id', 'courseTask.type'])
-    .where('v.studentId = :id', { id: student.id })
-    .andWhere('courseTask.disabled = :disabled', { disabled: false })
-    .orderBy('v.updatedDate', 'DESC')
-    .getMany();
-
-  setResponse(ctx, OK, verifications);
-};
 
 export const getCourseTasksVerifications = (_: ILogger) => async (ctx: Router.RouterContext) => {
   const { courseId } = ctx.params as Params;

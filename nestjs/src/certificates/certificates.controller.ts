@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -10,13 +11,18 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
-import { DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
+import { CourseRole, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { StudentsService } from '../courses/students';
 import { UserNotificationsService } from 'src/users-notifications/users.notifications.service';
 import { CertificationsService } from './certificates.service';
 import { SaveCertificateDto } from './dto/save-certificate-dto';
+import {
+  CertificateRequestDto,
+  CreateCourseCertificatesDto,
+  CreateStudentCertificateDto,
+} from './dto/create-certificate.dto';
 import { CERTIFICATE_TEMPLATES } from './templates/catalog';
 
 @Controller('certificate')
@@ -27,6 +33,40 @@ export class CertificatesController {
     private notificationService: UserNotificationsService,
     private studentsService: StudentsService,
   ) {}
+
+  @Post('/course/:courseId/student/:githubId')
+  @ApiOperation({ operationId: 'createStudentCertificate' })
+  @ApiOkResponse({ type: CertificateRequestDto })
+  @UseGuards(DefaultGuard, RoleGuard)
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  public async createStudentCertificate(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('githubId') githubId: string,
+    @Body() dto: CreateStudentCertificateDto,
+  ) {
+    const request = await this.certificatesService.buildStudentCertificateRequest(courseId, githubId, dto.templateId);
+    if (request == null) {
+      throw new BadRequestException('No student');
+    }
+    await this.certificatesService.requestCertificates(request);
+    return request;
+  }
+
+  @Post('/course/:courseId')
+  @ApiOperation({ operationId: 'createCourseCertificates' })
+  @ApiOkResponse({ type: [CertificateRequestDto] })
+  @UseGuards(DefaultGuard, RoleGuard)
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  public async createCourseCertificates(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Body() dto: CreateCourseCertificatesDto,
+  ) {
+    const { requests, shortCircuit } = await this.certificatesService.buildCourseCertificateRequests(courseId, dto);
+    if (!shortCircuit) {
+      await this.certificatesService.requestCertificates(requests);
+    }
+    return requests;
+  }
 
   @Get('/templates')
   @ApiOperation({ operationId: 'getCertificateTemplates' })

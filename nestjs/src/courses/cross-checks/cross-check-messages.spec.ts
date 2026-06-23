@@ -4,6 +4,7 @@ import { CourseCrossCheckController } from './course-cross-checks.controller';
 import { CourseCrossCheckService } from './course-cross-checks.service';
 import { CourseTasksService } from '../course-tasks';
 import { UserNotificationsService } from 'src/users-notifications';
+import { ConfigService } from 'src/config';
 
 const student = { id: 31, name: 'John', githubId: 'john-doe', userId: 101 };
 const courseTask = { id: 15, course: { alias: 'js-2024' }, task: { name: 'JS Task' } };
@@ -128,6 +129,7 @@ describe('CourseCrossCheckController messages endpoints', () => {
         },
         { provide: CourseTasksService, useValue: {} },
         { provide: UserNotificationsService, useValue: { sendEventNotification: mockSendEventNotification } },
+        { provide: ConfigService, useValue: {} },
       ],
     }).compile();
 
