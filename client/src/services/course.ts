@@ -396,18 +396,18 @@ export class CourseService {
   }
 
   async getStageInterviews() {
-    const result = await this.axios.get(`/interviews/stage`);
-    return result.data.data;
+    const result = await coursesInterviewsApi.getStageInterviews(this.courseId);
+    return result.data;
   }
 
   async createStageInterviews(params: { noRegistration: boolean }) {
-    const result = await this.axios.post(`/interviews/stage`, params);
-    return result.data.data;
+    const result = await coursesInterviewsApi.createStageInterviews(this.courseId, params);
+    return result.data;
   }
 
   async createInterview(githubId: string, mentorGithubId: string) {
-    const result = await this.axios.post(`/interview/stage/interviewer/${mentorGithubId}/student/${githubId}`);
-    return result.data.data;
+    const result = await coursesInterviewsApi.createStageInterviewPair(this.courseId, mentorGithubId, githubId);
+    return result.data;
   }
 
   async updateMentoringAvailability(githubId: string, mentoring: boolean) {
@@ -415,21 +415,21 @@ export class CourseService {
   }
 
   async deleteStageInterview(interviewId: number) {
-    const result = await this.axios.delete(`/interview/stage/${interviewId}`);
-    return result.data.data;
+    const result = await coursesInterviewsApi.cancelStageInterviewPair(this.courseId, interviewId);
+    return result.data;
   }
 
   async updateStageInterview(interviewId: number, data: { githubId: string }) {
-    const result = await this.axios.put(`/interview/stage/${interviewId}`, data);
-    return result.data.data;
+    const result = await coursesInterviewsApi.updateStageInterviewPair(this.courseId, interviewId, data);
+    return result.data;
   }
 
   /**
    * @deprecated. should be removed after feedbacks are migrated to new template
    */
-  async getInterviewerStageInterviews(githubId: string) {
-    const result = await this.axios.get(`/interview/stage/interviewer/${githubId}/students`);
-    return result.data.data as { id: number; completed: boolean; student: StudentBasic }[];
+  async getInterviewerStageInterviews(_githubId: string) {
+    const result = await coursesInterviewsApi.getStageInterviewerStudents(this.courseId);
+    return result.data as unknown as { id: number; completed: boolean; student: StudentBasic }[];
   }
 
   /**

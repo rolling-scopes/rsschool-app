@@ -3,8 +3,6 @@ import { ILogger } from '../../logger';
 import {
   basicAuthAws,
   courseGuard,
-  courseManagerGuard,
-  courseMentorGuard,
   courseSupervisorGuard,
   courseSupervisorOrDementorGuard,
   crossCheckGuard,
@@ -13,7 +11,6 @@ import {
 import { getCourseEvents } from './events';
 import { getMentorStudents } from './mentor';
 import * as score from './score';
-import * as stageInterview from './stageInterview';
 import { getStudents, getStudentsCsv, getStudentsWithDetails, searchStudent } from './students';
 import { getCourseTasksVerifications } from './taskVerifications';
 
@@ -30,7 +27,6 @@ import { getCrossMentors, getStudent } from './student';
 export function courseRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/course/:courseId' });
 
-  addStageInterviewApi(router, logger);
   addEventApi(router, logger);
   addTaskApi(router, logger);
   addMentorApi(router, logger);
@@ -49,29 +45,6 @@ function addTaskApi(router: Router<any, any>, logger: ILogger) {
   router.post('/task/:courseTaskId/cross-check/distribution', crossCheckGuard, crossCheck.createDistribution(logger));
   router.get(`/task/:courseTaskId/cross-check/details`, courseGuard, crossCheck.getTaskDetails(logger));
   router.post('/task/:courseTaskId/cross-check/completion', crossCheckGuard, crossCheck.createCompletion(logger));
-}
-
-function addStageInterviewApi(router: Router<any, any>, logger: ILogger) {
-  router.post(
-    '/interview/stage/interviewer/:githubId/student/:studentGithubId/',
-    courseMentorGuard,
-    stageInterview.createInterview(logger),
-  );
-  router.get(
-    '/interview/stage/interviewer/:githubId/students',
-    courseMentorGuard,
-    stageInterview.getInterviewerStudents(logger),
-  );
-
-  /**
-   * @deprecated. should be removed after feedbacks are migrated to new template
-   */
-
-  router.put('/interview/stage/:interviewId', courseMentorGuard, stageInterview.updateInterview(logger));
-  router.delete('/interview/stage/:interviewId', courseMentorGuard, stageInterview.cancelInterview(logger));
-
-  router.post('/interviews/stage', courseManagerGuard, stageInterview.createInterviews(logger));
-  router.get('/interviews/stage', courseMentorGuard, stageInterview.getInterviews(logger));
 }
 
 function addMentorApi(router: Router<any, any>, logger: ILogger) {

@@ -711,6 +711,95 @@
         "tags": ["courses interviews"]
       }
     },
+    "/courses/{courseId}/interviews/stage": {
+      "get": {
+        "operationId": "getStageInterviews",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "type": "array", "items": { "type": "object" } } } }
+          },
+          "403": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["courses interviews"]
+      },
+      "post": {
+        "operationId": "createStageInterviews",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateStageInterviewsDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "type": "array", "items": { "type": "object" } } } }
+          },
+          "400": { "description": "" },
+          "403": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["courses interviews"]
+      }
+    },
+    "/courses/{courseId}/interviews/stage/interviewer/me/students": {
+      "get": {
+        "operationId": "getStageInterviewerStudents",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "type": "array", "items": { "type": "object" } } } }
+          },
+          "403": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["courses interviews"]
+      }
+    },
+    "/courses/{courseId}/interviews/stage/interviewer/{interviewerGithubId}/student/{studentGithubId}": {
+      "post": {
+        "operationId": "createStageInterviewPair",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "interviewerGithubId", "required": true, "in": "path", "schema": { "type": "string" } },
+          { "name": "studentGithubId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
+        "tags": ["courses interviews"]
+      }
+    },
+    "/courses/{courseId}/interviews/stage/pairs/{interviewId}": {
+      "put": {
+        "operationId": "updateStageInterviewPair",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "interviewId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/UpdateStageInterviewPairDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" }, "400": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
+        "tags": ["courses interviews"]
+      },
+      "delete": {
+        "operationId": "cancelStageInterviewPair",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "interviewId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": { "200": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
+        "tags": ["courses interviews"]
+      }
+    },
     "/courses/{courseId}/interviews/{interviewId}": {
       "get": {
         "operationId": "getInterview",
@@ -4403,6 +4492,15 @@
         "type": "object",
         "properties": { "id": { "type": "number" }, "commentToStudent": { "type": "string", "nullable": true } },
         "required": ["id", "commentToStudent"]
+      },
+      "CreateStageInterviewsDto": {
+        "type": "object",
+        "properties": { "noRegistration": { "type": "boolean", "default": false } }
+      },
+      "UpdateStageInterviewPairDto": {
+        "type": "object",
+        "properties": { "githubId": { "type": "string" } },
+        "required": ["githubId"]
       },
       "InterviewStatus": { "type": "number", "enum": [1, 0] },
       "InterviewPairDto": {
