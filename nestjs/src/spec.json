@@ -1965,6 +1965,15 @@
         "tags": ["mentor-reviews"]
       }
     },
+    "/courses/{courseId}/student-verifications": {
+      "get": {
+        "operationId": "getStudentTaskVerifications",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": { "200": { "description": "" }, "400": { "description": "" } },
+        "summary": "",
+        "tags": ["course task verifications"]
+      }
+    },
     "/users/notifications": {
       "get": {
         "operationId": "getUserNotifications",

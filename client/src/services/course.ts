@@ -4,6 +4,7 @@ import { ScoreOrder, ScoreTableFilters } from '@client/modules/Score/hooks/types
 import { IPaginationInfo } from '@client/shared/utils/pagination';
 
 import {
+  CourseTaskVerificationsApi,
   CourseMentorsApi,
   CoursesTasksApi,
   CoursesEventsApi,
@@ -125,6 +126,7 @@ const studentsScoreApi = new StudentsScoreApi();
 const studentsApi = new StudentsApi();
 const certificateApi = new CertificateApi();
 const coursesInterviewsApi = new CoursesInterviewsApi();
+const courseTaskVerificationsApi = new CourseTaskVerificationsApi();
 const courseMentorsApi = new CourseMentorsApi();
 
 export class CourseService {
@@ -390,8 +392,8 @@ export class CourseService {
   }
 
   async getTaskVerifications() {
-    const result = await this.axios.get(`/student/me/tasks/verifications`);
-    return result.data.data;
+    const result = await courseTaskVerificationsApi.getStudentTaskVerifications(this.courseId);
+    return result.data;
   }
 
   async getStageInterviews() {

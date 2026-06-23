@@ -16,7 +16,7 @@ import { getMentorInterview, getMentorStudents } from './mentor';
 import * as score from './score';
 import * as stageInterview from './stageInterview';
 import { getStudents, getStudentsCsv, getStudentsWithDetails, searchStudent } from './students';
-import { getCourseTasksVerifications, getStudentTaskVerifications } from './taskVerifications';
+import { getCourseTasksVerifications } from './taskVerifications';
 
 import * as interviews from './interviews';
 
@@ -117,7 +117,6 @@ function addStudentApi(router: Router<any, any>, logger: ILogger) {
   );
 
   router.get('/student/:githubId/tasks/cross-mentors', courseGuard, ...validators, getCrossMentors(logger));
-  router.get('/student/:githubId/tasks/verifications', courseGuard, ...validators, getStudentTaskVerifications(logger));
   router.get('/student/:githubId/interviews', courseGuard, ...validators, interviews.getStudentInterviews(logger));
   router.post('/student/:githubId/interview/:courseTaskId/result', ...mentorValidators, createInterviewResult(logger));
 
