@@ -376,8 +376,8 @@ export class CourseService {
   }
 
   async getCrossCheckTaskDetails(courseTaskId: number) {
-    const result = await this.axios.get(`/task/${courseTaskId}/cross-check/details`);
-    return result.data.data as {
+    const result = await courseTasksApi.getCrossCheckTaskDetails(this.courseId, courseTaskId);
+    return result.data as unknown as {
       criteria: CrossCheckCriteria[];
       studentEndDate: string | undefined;
     } | null;

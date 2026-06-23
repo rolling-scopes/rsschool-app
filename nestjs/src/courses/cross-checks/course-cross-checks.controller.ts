@@ -15,7 +15,13 @@ import { ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
 import { CourseTasksService } from '../course-tasks';
 import { OrderField, OrderDirection, CourseCrossCheckService } from './course-cross-checks.service';
-import { BadCommentCheckerDto, CrossCheckFeedbackDto, CrossCheckPairResponseDto, MaxScoreCheckerDto } from './dto';
+import {
+  BadCommentCheckerDto,
+  CrossCheckFeedbackDto,
+  CrossCheckPairResponseDto,
+  CrossCheckTaskDetailsDto,
+  MaxScoreCheckerDto,
+} from './dto';
 import { AvailableReviewStatsDto } from './dto/available-review-stats.dto';
 import { parseAsync } from 'json2csv';
 import { Response } from 'express';
@@ -129,6 +135,18 @@ export class CourseCrossCheckController {
     res.setHeader('Content-disposition', `filename=${courseTask.task.name}.csv`);
 
     res.end(parsedData);
+  }
+
+  @Get(':courseTaskId/details')
+  @ApiOperation({ operationId: 'getCrossCheckTaskDetails' })
+  @ApiForbiddenResponse()
+  @ApiOkResponse({ type: CrossCheckTaskDetailsDto })
+  public async getTaskDetails(
+    @Param('courseId', ParseIntPipe) _courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+  ) {
+    const data = await this.courseCrossCheckService.getTaskDetails(courseTaskId);
+    return new CrossCheckTaskDetailsDto(data);
   }
 
   @Get(':courseTaskId/feedbacks/my')

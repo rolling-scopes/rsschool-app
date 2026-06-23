@@ -61,6 +61,7 @@ describe('CourseCrossCheckService checkers queries', () => {
         { provide: getRepositoryToken(TaskSolutionChecker), useValue: {} },
         { provide: getRepositoryToken(TaskSolution), useValue: {} },
         { provide: getRepositoryToken(TaskSolutionResult), useValue: { createQueryBuilder: mockCreateQueryBuilder } },
+        { provide: getRepositoryToken(CourseTask), useValue: {} },
       ],
     }).compile();
 
