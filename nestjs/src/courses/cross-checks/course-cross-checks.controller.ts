@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Controller,
   DefaultValuePipe,
+  ForbiddenException,
   Get,
   NotFoundException,
   Param,
@@ -209,6 +210,40 @@ export class CourseCrossCheckController {
       studentId: student.id,
       comments: comments.filter(c => c.authorId == student.id && c.recipientId == null),
     });
+  }
+
+  @Get(':courseTaskId/assignments/:githubId')
+  @ApiOperation({ operationId: 'getCrossCheckAssignments' })
+  @ApiForbiddenResponse()
+  @ApiOkResponse({ schema: { type: 'array', items: { type: 'object' } } })
+  public async getCrossCheckAssignments(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+    @Param('githubId') githubIdParam: string,
+  ) {
+    const githubId = githubIdParam === 'me' ? req.user.githubId : githubIdParam.toLowerCase();
+    if (!req.user.isAdmin && req.user.githubId !== githubId) {
+      throw new ForbiddenException();
+    }
+
+    const [student, courseTask] = await Promise.all([
+      this.courseCrossCheckService.queryStudentByGithubId(courseId, githubId),
+      this.courseCrossCheckService.getCourseTask(courseTaskId),
+    ]);
+
+    if (student == null || courseTask == null) {
+      throw new BadRequestException('not valid student or course task');
+    }
+    if (courseTask.checker !== 'crossCheck') {
+      throw new BadRequestException('not supported task');
+    }
+
+    const records = await this.courseCrossCheckService.getTaskSolutionAssignments(student.id, courseTaskId);
+    return records.map(r => ({
+      student: CourseCrossCheckService.convertToStudentBasic(r.student),
+      url: r.taskSolution.url,
+    }));
   }
 
   @Get(':courseTaskId/details')

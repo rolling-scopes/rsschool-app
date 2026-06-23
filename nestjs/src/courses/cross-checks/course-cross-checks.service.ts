@@ -150,6 +150,35 @@ export class CourseCrossCheckService {
     };
   }
 
+  public async getTaskSolutionAssignments(checkerId: number, courseTaskId: number) {
+    return this.taskSolutionCheckerRepository
+      .createQueryBuilder('taskSolutionChecker')
+      .innerJoinAndSelect('taskSolutionChecker.taskSolution', 'taskSolution')
+      .innerJoinAndSelect('taskSolutionChecker.student', 'student')
+      .innerJoin('student.user', 'user')
+      .addSelect(UsersService.getPrimaryUserFields())
+      .where('"taskSolutionChecker"."checkerId" = :checkerId', { checkerId })
+      .andWhere('"taskSolutionChecker"."courseTaskId" = :courseTaskId', { courseTaskId })
+      .getMany();
+  }
+
+  // the assignments query never selects student.mentor, so the legacy convertToStudentBasic
+  // always resolved mentor to null on this path
+  public static convertToStudentBasic(student: Student) {
+    const user = student.user;
+    return {
+      name: CourseCrossCheckService.buildName(user),
+      isActive: !student.isExpelled && !student.isFailed,
+      id: student.id,
+      githubId: user.githubId,
+      mentor: null,
+      cityName: user.cityName ?? '',
+      countryName: user.countryName ?? '',
+      discord: user.discord,
+      totalScore: student.totalScore,
+    };
+  }
+
   public async getTaskSolutionChecker(studentId: number, checkerId: number, courseTaskId: number) {
     return this.taskSolutionCheckerRepository
       .createQueryBuilder('taskSolutionChecker')

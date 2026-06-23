@@ -9,7 +9,6 @@ import {
   User,
 } from '../models';
 import { getRepository } from 'typeorm';
-import { getPrimaryUserFields } from './course.service';
 
 export async function getTaskResult(studentId: number, courseTaskId: number) {
   return getRepository(TaskResult)
@@ -42,18 +41,6 @@ export async function getTaskSolutionChecker(studentId: number, checkerId: numbe
     .andWhere('"taskSolutionChecker"."checkerId" = :checkerId', { checkerId })
     .andWhere('"taskSolutionChecker"."courseTaskId" = :courseTaskId', { courseTaskId })
     .getOne();
-}
-
-export async function getTaskSolutionAssignments(checkerId: number, courseTaskId: number) {
-  return getRepository(TaskSolutionChecker)
-    .createQueryBuilder('taskSolutionChecker')
-    .innerJoinAndSelect('taskSolutionChecker.taskSolution', 'taskSolution')
-    .innerJoinAndSelect('taskSolutionChecker.student', 'student')
-    .innerJoin('student.user', 'user')
-    .addSelect(getPrimaryUserFields())
-    .where('"taskSolutionChecker"."checkerId" = :checkerId', { checkerId })
-    .andWhere('"taskSolutionChecker"."courseTaskId" = :courseTaskId', { courseTaskId })
-    .getMany();
 }
 
 export async function getTaskSolutionResult(studentId: number, checkerId: number, courseTaskId: number) {

@@ -1347,6 +1347,25 @@
         "tags": ["courses tasks"]
       }
     },
+    "/courses/{courseId}/cross-checks/{courseTaskId}/assignments/{githubId}": {
+      "get": {
+        "operationId": "getCrossCheckAssignments",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "type": "array", "items": { "type": "object" } } } }
+          },
+          "403": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["courses tasks"]
+      }
+    },
     "/courses/{courseId}/cross-checks/{courseTaskId}/details": {
       "get": {
         "operationId": "getCrossCheckTaskDetails",
