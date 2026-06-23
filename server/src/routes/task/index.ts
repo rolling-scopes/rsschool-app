@@ -4,8 +4,7 @@ import { getRepository } from 'typeorm';
 import { ILogger } from '../../logger';
 import { TaskVerification } from '../../models';
 import { ScoreService } from '../../services/score';
-import { createPostRoute } from '../common';
-import { adminGuard, basicAuthAws } from '../guards';
+import { basicAuthAws } from '../guards';
 import { setResponse } from '../utils';
 
 const validateTaskId = async (ctx: Router.RouterContext, next: any) => {
@@ -51,7 +50,6 @@ const updateVerification = (logger?: ILogger) => async (ctx: Router.RouterContex
 export function taskRoute(logger: ILogger) {
   const router = new Router<any, any>({ prefix: '/task' });
 
-  router.post('/verification', adminGuard, createPostRoute(TaskVerification, logger));
   router.put('/verification/:id', basicAuthAws, validateTaskId, updateVerification(logger));
 
   return router;
