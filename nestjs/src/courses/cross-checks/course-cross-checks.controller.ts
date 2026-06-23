@@ -139,6 +139,39 @@ export class CourseCrossCheckController {
     res.end(parsedData);
   }
 
+  @Get(':courseTaskId/results/:githubId')
+  @ApiOperation({ operationId: 'getCrossCheckTaskResult' })
+  @ApiForbiddenResponse()
+  @ApiOkResponse({ schema: { type: 'object' } })
+  public async getCrossCheckTaskResult(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+    @Param('githubId') githubIdParam: string,
+  ) {
+    const githubId = githubIdParam === 'me' ? req.user.githubId : githubIdParam.toLowerCase();
+
+    const [student, checker, courseTask] = await Promise.all([
+      this.courseCrossCheckService.queryStudentByGithubId(courseId, githubId),
+      this.courseCrossCheckService.queryStudentByGithubId(courseId, req.user.githubId),
+      this.courseCrossCheckService.getCourseTask(courseTaskId),
+    ]);
+
+    if (student == null || courseTask == null || checker == null) {
+      throw new BadRequestException('not valid student or course task');
+    }
+    if (courseTask.checker !== 'crossCheck') {
+      throw new BadRequestException('task solution is supported for this task');
+    }
+
+    const taskChecker = await this.courseCrossCheckService.getTaskSolutionChecker(student.id, checker.id, courseTaskId);
+    if (taskChecker == null) {
+      throw new BadRequestException('no assigned cross-check');
+    }
+
+    return this.courseCrossCheckService.getResult(courseTaskId, student.id, checker.id, checker.githubId);
+  }
+
   @Get(':courseTaskId/solutions/:githubId')
   @ApiOperation({ operationId: 'getCrossCheckTaskSolution' })
   @ApiForbiddenResponse()

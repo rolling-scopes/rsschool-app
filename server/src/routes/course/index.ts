@@ -66,7 +66,6 @@ function addStudentCrossCheckApi(router: Router<any, any>, logger: ILogger) {
     crossCheck.deleteSolution(logger),
   );
   router.post(`${baseUrl}/cross-check/result`, courseGuard, validateGithubId, crossCheck.createResult(logger));
-  router.get(`${baseUrl}/cross-check/result`, courseGuard, validateGithubId, crossCheck.getResult(logger));
   router.get(`${baseUrl}/cross-check/assignments`, courseGuard, ...validators, crossCheck.getAssignments(logger));
   router.post(
     `/taskSolutionResult/:taskSolutionResultId/task/:courseTaskId/cross-check/messages`,

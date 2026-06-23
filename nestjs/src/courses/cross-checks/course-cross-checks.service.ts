@@ -107,6 +107,8 @@ export class CourseCrossCheckService {
     private readonly courseTaskRepository: Repository<CourseTask>,
     @InjectRepository(Student)
     private readonly studentRepository: Repository<Student>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
   public async getCourseTask(courseTaskId: number) {
@@ -146,6 +148,114 @@ export class CourseCrossCheckService {
       githubId: record.user.githubId,
       userId: record.user.id,
     };
+  }
+
+  public async getTaskSolutionChecker(studentId: number, checkerId: number, courseTaskId: number) {
+    return this.taskSolutionCheckerRepository
+      .createQueryBuilder('taskSolutionChecker')
+      .where('"taskSolutionChecker"."studentId" = :studentId', { studentId })
+      .andWhere('"taskSolutionChecker"."checkerId" = :checkerId', { checkerId })
+      .andWhere('"taskSolutionChecker"."courseTaskId" = :courseTaskId', { courseTaskId })
+      .getOne();
+  }
+
+  public async getResult(courseTaskId: number, studentId: number, checkerId: number, checkerGithubId: string) {
+    const [reviewResult, solution] = await Promise.all([
+      this.findReviewResult(courseTaskId, studentId, checkerId),
+      this.findSolution(courseTaskId, studentId),
+    ]);
+    if (reviewResult == null || solution == null) {
+      return null;
+    }
+
+    let comments: Array<{
+      text: string;
+      timestamp: number;
+      criteriaId: string;
+      authorId: number;
+      authorGithubId?: string | null;
+    }> =
+      solution.comments
+        ?.filter(c => c.recipientId == null || c.authorId === checkerId || c.recipientId === checkerId)
+        .map(c => ({
+          text: c.text,
+          timestamp: c.timestamp,
+          criteriaId: c.criteriaId,
+          authorId: c.authorId,
+        })) ?? [];
+
+    const data = await this.findByStudentIds(comments.map(c => c.authorId).filter(c => c));
+
+    const checkerData = await this.getUserByGithubId(checkerGithubId);
+
+    comments = comments.map(c => ({
+      ...c,
+      authorGithubId:
+        !reviewResult.anonymous || c.authorId === solution.studentId || c.authorId === checkerId
+          ? data.find(d => d.studentId === c.authorId)?.githubId
+          : null,
+    }));
+    return {
+      id: reviewResult.id,
+      score: reviewResult.score,
+      comment: reviewResult.comment ?? '',
+      anonymous: reviewResult.anonymous,
+      review: reviewResult.review,
+      checkerId,
+      studentId,
+      author: {
+        id: checkerData?.id ?? 0,
+        name: CourseCrossCheckService.buildName({
+          firstName: checkerData?.firstName ?? '',
+          lastName: checkerData?.lastName ?? '',
+        }),
+        githubId: checkerGithubId,
+        discord: checkerData?.discord ?? null,
+      },
+      comments,
+      historicalScores: reviewResult.historicalScores ?? [],
+      messages: reviewResult.messages,
+    };
+  }
+
+  private async findReviewResult(courseTaskId: number, studentId: number, checkerId: number) {
+    const item = await this.TaskSolutionResultRepository.createQueryBuilder('result')
+      .where('result."studentId" = :studentId', { studentId })
+      .andWhere('result."checkerId" = :checkerId', { checkerId })
+      .andWhere('result."courseTaskId" = :courseTaskId', { courseTaskId })
+      .getOne();
+    return item;
+  }
+
+  private async findSolution(courseTaskId: number, studentId: number) {
+    const item = await this.taskSolutionRepository
+      .createQueryBuilder('solution')
+      .where('solution."studentId" = :studentId', { studentId })
+      .andWhere('solution."courseTaskId" = :courseTaskId', { courseTaskId })
+      .getOne();
+    return item;
+  }
+
+  private async findByStudentIds(studentIds: number[]): Promise<{ studentId: number; githubId: string }[]> {
+    if (!studentIds || studentIds.length === 0) {
+      return [];
+    }
+    const data = await this.studentRepository
+      .createQueryBuilder('s')
+      .innerJoin('s.user', 'u')
+      .addSelect(['s.id', 'u.githubId'])
+      .where('s.id IN (:...ids)', { ids: studentIds })
+      .getMany();
+
+    return data.map(s => ({
+      studentId: s.id,
+      githubId: s.user.githubId,
+    }));
+  }
+
+  private getUserByGithubId(id: string) {
+    const githubId = id.toLowerCase();
+    return this.userRepository.findOne({ where: { githubId } });
   }
 
   private static buildName({ firstName, lastName }: { firstName?: string | null; lastName?: string | null }) {
