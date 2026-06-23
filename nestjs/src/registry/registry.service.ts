@@ -9,6 +9,9 @@ import { paginate } from 'src/core/paginate';
 import { InviteMentorsDto } from './dto/invite-mentors.dto';
 import { NotificationsService } from 'src/notifications/notifications.service';
 import { Student } from '@entities/student';
+import { Registry, RegistryStatus } from '@entities/registry';
+import { Mentor } from '@entities/mentor';
+import { Course } from '@entities/course';
 import { MentorRegistryTabsMode } from './registry.controller';
 
 @Injectable()
@@ -20,6 +23,14 @@ export class RegistryService {
     private mentorsRegistryRepository: Repository<MentorRegistry>,
     @InjectRepository(Student)
     readonly studentRepository: Repository<Student>,
+    @InjectRepository(Registry)
+    private registryRepository: Repository<Registry>,
+    @InjectRepository(Mentor)
+    private mentorRepository: Repository<Mentor>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+    @InjectRepository(Course)
+    private courseRepository: Repository<Course>,
     private usersService: UsersService,
     private coursesService: CoursesService,
     private notificationsService: NotificationsService,
@@ -69,6 +80,40 @@ export class RegistryService {
       .getMany();
 
     return mentorRegistries;
+  }
+
+  public async getMentorRegistriesForExport() {
+    const data = (await this.findAllMentorRegistries()).map(RegistryService.transformMentorRegistry);
+    const courses = await this.coursesService.getAll();
+
+    return data.map(d => ({
+      ...d,
+      preferedCourses: d.preferedCourses.map(id => courses.find(c => Number(id) === c.id)?.name).filter(Boolean),
+      preselectedCourses: d.preselectedCourses.map(id => courses.find(c => Number(id) === c.id)?.name).filter(Boolean),
+      courses: d.courses?.map(id => courses.find(c => Number(id) === c.id)?.name).filter(Boolean),
+    }));
+  }
+
+  private static transformMentorRegistry(mentorRegistry: MentorRegistry) {
+    const user = mentorRegistry.user;
+    return {
+      id: mentorRegistry.id,
+      englishMentoring: mentorRegistry.englishMentoring,
+      languagesMentoring: mentorRegistry.languagesMentoring,
+      githubId: user.githubId,
+      primaryEmail: user.primaryEmail,
+      contactsEpamEmail: user.contactsEpamEmail,
+      cityName: user.cityName,
+      maxStudentsLimit: mentorRegistry.maxStudentsLimit,
+      name: `${user.firstName} ${user.lastName}`,
+      preferedCourses: mentorRegistry.preferedCourses?.map(id => Number(id)),
+      preselectedCourses: mentorRegistry.preselectedCourses?.map(id => Number(id)),
+      preferedStudentsLocation: mentorRegistry.preferedStudentsLocation,
+      technicalMentoring: mentorRegistry.technicalMentoring,
+      updatedDate: mentorRegistry.updatedDate,
+      courses: mentorRegistry.user.mentors?.map(m => m.courseId),
+      hasCertificate: mentorRegistry.user.students?.some(s => s.certificate?.id),
+    };
   }
 
   public async buildMentorApprovalData(preselectedCourses: string[]) {
@@ -251,5 +296,143 @@ export class RegistryService {
           }
         }),
     );
+  }
+
+  public async registerMentor(
+    githubId: string,
+    dto: {
+      maxStudentsLimit?: number;
+      preferedStudentsLocation?: string;
+      preferedCourses?: string[];
+      technicalMentoring?: string[];
+      languagesMentoring?: string[];
+    },
+  ) {
+    const user = await this.usersService.getByGithubId(githubId);
+
+    if (user == null) {
+      return null;
+    }
+    const { maxStudentsLimit, technicalMentoring, preferedStudentsLocation, preferedCourses } = dto;
+    const languagesMentoring = dto.languagesMentoring ?? [];
+
+    const mentorData: Partial<MentorRegistry> = {
+      maxStudentsLimit,
+      preferedStudentsLocation: preferedStudentsLocation as MentorRegistry['preferedStudentsLocation'],
+      englishMentoring: languagesMentoring.some(language => language === 'EN'),
+      languagesMentoring,
+      preferedCourses,
+      technicalMentoring,
+      canceled: false,
+    };
+
+    const mentorRegistry = await this.mentorsRegistryRepository.findOne({ where: { userId: user.id } });
+    if (mentorRegistry == null) {
+      await this.mentorsRegistryRepository.insert({ userId: user.id, ...mentorData });
+    } else {
+      await this.mentorsRegistryRepository.update(mentorRegistry.id, { ...mentorData, preselectedCourses: [] });
+    }
+
+    return user;
+  }
+
+  public async createRegistration(
+    authUser: { id: number; githubId: string },
+    payload: { courseId: number; type: 'student' | 'mentor'; maxStudentsLimit?: number; experienceInYears?: string },
+  ) {
+    const { courseId, type, maxStudentsLimit, experienceInYears } = payload;
+
+    if (!authUser.githubId || !courseId || !type) {
+      throw new BadRequestException('Wrong payload: githubId courseId & type are required');
+    }
+
+    if (type === 'mentor' && (maxStudentsLimit == null || isNaN(maxStudentsLimit) || maxStudentsLimit < 2)) {
+      throw new BadRequestException('Incorrect maxStudentsLimit');
+    }
+
+    const [user, course, existingRegistry] = await Promise.all([
+      this.userRepository.findOne({ where: { githubId: authUser.githubId }, relations: ['mentors', 'students'] }),
+      this.courseRepository.findOneBy({ id: Number(courseId) }),
+      this.registryRepository.findOne({ where: { userId: authUser.id, courseId: Number(courseId) } }),
+    ]);
+
+    if (existingRegistry && existingRegistry.userId === authUser.id) {
+      return existingRegistry;
+    }
+
+    let registryPayload: Partial<Registry> = {
+      type,
+      user: user!,
+      course: course!,
+      status: 'pending',
+    };
+
+    if (type === 'student') {
+      registryPayload.status = 'approved';
+      if ((user?.students || []).every(s => s.courseId !== courseId)) {
+        await this.studentRepository.save({ userId: user!.id, courseId: course!.id, startDate: new Date() });
+      }
+    } else if (type === 'mentor') {
+      registryPayload = {
+        ...registryPayload,
+        attributes: {
+          maxStudentsLimit,
+          experienceInYears,
+        } as Registry['attributes'],
+      };
+      if ((user?.mentors || []).length > 0) {
+        registryPayload.status = 'approved';
+        await this.mentorRepository.save({ userId: user!.id, courseId: course!.id, maxStudentsLimit });
+      }
+    }
+
+    return this.registryRepository.save(registryPayload);
+  }
+
+  public async getRegistrations(type: string | undefined, courseId: number | undefined) {
+    return this.registryRepository.find({
+      skip: 0,
+      take: 1000,
+      order: { id: 'ASC' },
+      relations: ['user', 'course'],
+      where: [{ type: (type || 'mentor') as Registry['type'], course: { id: courseId } }],
+    });
+  }
+
+  public async updateRegistrations(ids: number[], status: RegistryStatus) {
+    const result: Mentor[] = [];
+
+    for (const id of ids) {
+      const oldRegistry = await this.registryRepository.findOne({
+        where: { id: Number(id) },
+        relations: ['course'],
+      });
+      if (!oldRegistry) {
+        continue;
+      }
+      const registryPayload = { ...oldRegistry, status };
+      const { userId, course, attributes } = registryPayload;
+      await this.registryRepository.save(registryPayload);
+
+      if (status === 'approved') {
+        const existingMentor = await this.mentorRepository.findOne({ where: { userId, courseId: course.id } });
+        if (existingMentor == null) {
+          const newMentor = await this.mentorRepository.save({
+            userId,
+            courseId: course.id,
+            maxStudentsLimit: attributes.maxStudentsLimit,
+          });
+          result.push(newMentor);
+        } else {
+          result.push(existingMentor);
+        }
+      }
+    }
+
+    return { registries: result };
+  }
+
+  public async getOwnMentorRegistry(userId: number) {
+    return this.mentorsRegistryRepository.findOne({ where: { userId } });
   }
 }

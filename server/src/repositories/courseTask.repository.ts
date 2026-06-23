@@ -12,60 +12,6 @@ import {
 type Status = 'started' | 'inprogress' | 'finished';
 @EntityRepository(CourseTask)
 export class CourseTaskRepository extends AbstractRepository<CourseTask> {
-  public async findWithDetails(courseId: number) {
-    const courseTasks = await getRepository(CourseTask)
-      .createQueryBuilder('ct')
-      .addSelect('COUNT(tr.id)', 'taskResultCount')
-      .addSelect('COUNT(tir.id)', 'taskInterviewResultCount')
-      .innerJoinAndSelect('ct.task', 'task')
-      .leftJoin(TaskResult, 'tr', 'tr.courseTaskId = ct.id')
-      .leftJoin(TaskInterviewResult, 'tir', 'tir.courseTaskId = ct.id')
-      .leftJoin('ct.taskOwner', 'to')
-      .addSelect(['to.githubId', 'to.id', 'to.firstName', 'to.lastName'])
-      .where(`ct.courseId = :courseId`, { courseId })
-      .andWhere('ct.disabled = :disabled', { disabled: false })
-      .groupBy('ct.id')
-      .addGroupBy('task.id')
-      .addGroupBy('to.id')
-      .getRawAndEntities();
-
-    const data = courseTasks.entities.map(item => {
-      const raw = courseTasks.raw.find(t => t.ct_id === item.id);
-      return {
-        id: item.id,
-        courseTaskId: item.id,
-        taskId: (item.task as Task).id,
-        name: (item.task as Task).name,
-        maxScore: item.maxScore,
-        scoreWeight: item.scoreWeight,
-        githubPrRequired: !!(item.task as Task).githubPrRequired,
-        description: (item.task as Task).description,
-        descriptionUrl: (item.task as Task).descriptionUrl,
-        studentStartDate: item.studentStartDate,
-        studentEndDate: item.studentEndDate,
-        crossCheckEndDate: item.crossCheckEndDate,
-        crossCheckStatus: item.crossCheckStatus,
-        resultsCount: raw ? Number(raw.taskResultCount) || Number(raw.taskInterviewResultCount) : 0,
-        allowStudentArtefacts: (item.task as Task).allowStudentArtefacts,
-        checker: item.checker,
-        taskOwner: item.taskOwner
-          ? {
-              id: item.taskOwner.id,
-              githubId: item.taskOwner.githubId,
-              name: `${item.taskOwner.firstName} ${item.taskOwner.lastName}`,
-            }
-          : null,
-        taskCheckers: [],
-        githubRepoName: (item.task as Task).githubRepoName,
-        sourceGithubRepoUrl: (item.task as Task).sourceGithubRepoUrl,
-        type: item.type || (item.task as Task).type,
-        pairsCount: item.pairsCount,
-      };
-    });
-
-    return data;
-  }
-
   public async findForSchedule(courseId: number, userId: number) {
     const student = await getRepository(Student)
       .createQueryBuilder('student')

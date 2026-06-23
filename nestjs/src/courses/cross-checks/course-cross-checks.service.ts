@@ -117,6 +117,18 @@ export class CourseCrossCheckService {
       .getOne();
   }
 
+  public async getTaskDetails(courseTaskId: number) {
+    const courseTask = await this.courseTaskRepository
+      .createQueryBuilder('courseTask')
+      .innerJoinAndSelect('courseTask.task', 'task')
+      .where('courseTask.id = :courseTaskId', { courseTaskId })
+      .getOne();
+
+    const studentEndDate = courseTask?.studentEndDate;
+    const criteria = courseTask?.task?.attributes?.criteria ?? [];
+    return { criteria, studentEndDate };
+  }
+
   public async queryStudentByGithubId(courseId: number, githubId: string) {
     const record = await this.studentRepository
       .createQueryBuilder('student')
@@ -171,7 +183,6 @@ export class CourseCrossCheckService {
         'tsr."courseTaskId" = tsc."courseTaskId" AND tsr."studentId" = tsc."studentId" AND tsr."checkerId" = tsc."checkerId"',
       )
       .addSelect(['tsr.score', 'tsr.comment', 'tsr.updatedDate', 'tsr.historicalScores', 'tsr.messages'])
-      .addSelect(['st.repository'])
       .addSelect(['stu.githubId', 'stu.id', 'stu.firstName', 'stu.lastName'])
       .addSelect(['chu.githubId', 'chu.id', 'chu.firstName', 'chu.lastName'])
       .addSelect(['ts.url', 'ts.updatedDate'])
@@ -372,5 +383,101 @@ export class CourseCrossCheckService {
       .getOne();
 
     return taskSolution;
+  }
+
+  private static readonly LOW_ERROR_RATE = 0.9;
+  private static readonly HIGH_ERROR_RATE = 1.1;
+  private static readonly MIN_LENGTH_MESSAGE = 70;
+
+  /* Get checkers who passed max score for everyone and maybe didn't review task */
+  public async getCheckersWithMaxScore(taskId: number) {
+    const data = await this.TaskSolutionResultRepository.createQueryBuilder('ts')
+      .select('t.name', 'taskName')
+      .addSelect('"checkerUser"."githubId"', 'checkerGithubId')
+      .addSelect('"studentUser"."githubId"', 'studentGithubId')
+
+      // Get students whose work has been checked by at least 3 checkers and
+      // calculate the average score using the leave-one-out strategy.
+
+      .addSelect(
+        `
+      CASE
+        WHEN "studentScoreSumCnt"."cnt" >= 3
+        THEN ROUND(("studentScoreSumCnt"."sum" - ts."score") / ("studentScoreSumCnt"."cnt" - 1), 1)
+        ELSE NULL
+      END
+    `,
+        'studentAverageScoreExcludeChecker',
+      )
+      .addSelect('ts.score', 'checkerScore')
+      .innerJoin(
+        qb =>
+          qb
+            .subQuery()
+            .select('tsr."studentId"')
+            .addSelect('SUM(tsr.score)', 'sum')
+            .addSelect('COUNT(*)', 'cnt')
+            .from(TaskSolutionResult, 'tsr')
+            .where('tsr."courseTaskId" = :taskId', { taskId })
+            .groupBy('tsr."studentId"'),
+        'studentScoreSumCnt',
+        'ts."studentId" = "studentScoreSumCnt"."studentId"',
+      )
+      .innerJoin(CourseTask, 'ct', 'ts."courseTaskId" = ct.id')
+      .innerJoin(Task, 't', 'ct."taskId" = t.id')
+      .innerJoin(Student, 'checker', 'ts."checkerId" = checker.id ')
+      .innerJoin(User, 'checkerUser', 'checker."userId" = "checkerUser".id')
+      .innerJoin(Student, 'student', 'ts."studentId" = student.id ')
+      .innerJoin(User, 'studentUser', 'student."userId" = "studentUser".id')
+      .where('ts."courseTaskId" = :taskId', { taskId })
+
+      // Get students whose work has been checked by at least 3 checkers and
+      // verify that the score given by the checker does not exceed +/- 10% of the average score.
+
+      .andWhere(
+        `
+      "studentScoreSumCnt"."cnt" >= 3
+      AND ts."score" NOT BETWEEN
+        (("studentScoreSumCnt"."sum" - ts."score")::numeric / ("studentScoreSumCnt"."cnt" - 1)) * (:low)::numeric
+        AND (("studentScoreSumCnt"."sum" - ts."score")::numeric / ("studentScoreSumCnt"."cnt" - 1)) * (:high)::numeric
+    `,
+        { low: CourseCrossCheckService.LOW_ERROR_RATE, high: CourseCrossCheckService.HIGH_ERROR_RATE },
+      )
+      .orderBy('"checkerUser"."githubId"')
+      .getRawMany();
+
+    return data.map(e => {
+      return {
+        ...e,
+        studentAvgScore: Number(e.studentAverageScoreExcludeChecker),
+        key: `${e.checkerGithubId}.${e.studentGithubId}.${e.taskName}`,
+      };
+    });
+  }
+
+  /* Get checkers who passed not max score with short comment */
+  public async getCheckersWithoutComments(taskId: number) {
+    const data = await this.TaskSolutionResultRepository.createQueryBuilder('ts')
+      .select('t.name', 'taskName')
+      .addSelect('"checkerUser"."githubId"', 'checkerGithubId')
+      .addSelect('"studentUser"."githubId"', 'studentGithubId')
+      .addSelect('ts.score', 'checkerScore')
+      .addSelect('ts.comment', 'comment')
+      .innerJoin(CourseTask, 'ct', 'ts."courseTaskId" = ct.id')
+      .innerJoin(Task, 't', 'ct."taskId" = t.id')
+      .innerJoin(Student, 'checker', 'ts."checkerId" = checker.id ')
+      .innerJoin(User, 'checkerUser', 'checker."userId" = "checkerUser".id')
+      .innerJoin(Student, 'student', 'ts."studentId" = student.id ')
+      .innerJoin(User, 'studentUser', 'student."userId" = "studentUser".id')
+      .where('LENGTH(ts.comment) < :length', { length: CourseCrossCheckService.MIN_LENGTH_MESSAGE })
+      .andWhere('ts.score < ct."maxScore"')
+      .andWhere('ts."courseTaskId" = :taskId', { taskId })
+      .andWhere('json_array_length(ts."historicalScores") < 2')
+      .orderBy('"checkerUser"."githubId"')
+      .getRawMany();
+
+    return data.map(e => {
+      return { ...e, key: `${e.checkerGithubId}.${e.studentGithubId}.${e.taskName}` };
+    });
   }
 }
