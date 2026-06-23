@@ -305,9 +305,8 @@ export class CourseService {
   }
 
   async getCrossCheckTaskSolution(githubId: string, courseTaskId: number) {
-    const apiUrl = `/student/${githubId}/task/${courseTaskId}/cross-check/solution`;
-    const result = await this.axios.get(apiUrl);
-    return result.data.data as TaskSolution;
+    const result = await courseTasksApi.getCrossCheckTaskSolution(this.courseId, courseTaskId, githubId);
+    return result.data as unknown as TaskSolution;
   }
 
   async postTaskSolutionResult(

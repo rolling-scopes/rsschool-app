@@ -1312,6 +1312,25 @@
         "tags": ["courses tasks"]
       }
     },
+    "/courses/{courseId}/cross-checks/{courseTaskId}/solutions/{githubId}": {
+      "get": {
+        "operationId": "getCrossCheckTaskSolution",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CrossCheckSolutionDto" } } }
+          },
+          "403": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["courses tasks"]
+      }
+    },
     "/courses/{courseId}/cross-checks/{courseTaskId}/details": {
       "get": {
         "operationId": "getCrossCheckTaskDetails",
@@ -4945,6 +4964,18 @@
           "completedChecksCount": { "type": "number" }
         },
         "required": ["name", "id", "checksCount", "completedChecksCount"]
+      },
+      "CrossCheckSolutionDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "updatedDate": { "type": "string" },
+          "url": { "type": "string" },
+          "review": { "type": "array", "items": { "type": "object" } },
+          "studentId": { "type": "number" },
+          "comments": { "type": "array", "items": { "type": "object" } }
+        },
+        "required": ["id", "updatedDate", "url", "review", "studentId", "comments"]
       },
       "CrossCheckTaskDetailsDto": {
         "type": "object",

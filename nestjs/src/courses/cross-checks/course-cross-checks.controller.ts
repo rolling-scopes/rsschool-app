@@ -3,6 +3,7 @@ import {
   Controller,
   DefaultValuePipe,
   Get,
+  NotFoundException,
   Param,
   ParseEnumPipe,
   ParseIntPipe,
@@ -19,6 +20,7 @@ import {
   BadCommentCheckerDto,
   CrossCheckFeedbackDto,
   CrossCheckPairResponseDto,
+  CrossCheckSolutionDto,
   CrossCheckTaskDetailsDto,
   MaxScoreCheckerDto,
 } from './dto';
@@ -135,6 +137,45 @@ export class CourseCrossCheckController {
     res.setHeader('Content-disposition', `filename=${courseTask.task.name}.csv`);
 
     res.end(parsedData);
+  }
+
+  @Get(':courseTaskId/solutions/:githubId')
+  @ApiOperation({ operationId: 'getCrossCheckTaskSolution' })
+  @ApiForbiddenResponse()
+  @ApiOkResponse({ type: CrossCheckSolutionDto })
+  public async getCrossCheckTaskSolution(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+    @Param('githubId') githubIdParam: string,
+  ) {
+    const githubId = githubIdParam === 'me' ? req.user.githubId : githubIdParam.toLowerCase();
+
+    const [student, courseTask] = await Promise.all([
+      this.courseCrossCheckService.queryStudentByGithubId(courseId, githubId),
+      this.courseCrossCheckService.getCourseTask(courseTaskId),
+    ]);
+
+    if (student == null || courseTask == null) {
+      throw new BadRequestException('not valid student or course task');
+    }
+
+    const result = await this.courseCrossCheckService.getTaskSolution(student.id, courseTask.id);
+
+    if (result == null) {
+      throw new NotFoundException('solution is not found ');
+    }
+
+    const { updatedDate, id, url, review, comments } = result;
+
+    return new CrossCheckSolutionDto({
+      updatedDate,
+      id,
+      url,
+      review,
+      studentId: student.id,
+      comments: comments.filter(c => c.authorId == student.id && c.recipientId == null),
+    });
   }
 
   @Get(':courseTaskId/details')
