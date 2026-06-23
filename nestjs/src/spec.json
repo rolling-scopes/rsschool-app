@@ -1186,6 +1186,23 @@
         "tags": ["students score"]
       }
     },
+    "/course/{courseId}/students/score/{githubId}/task/{courseTaskId}": {
+      "post": {
+        "operationId": "createSingleScore",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateSingleScoreDto" } } }
+        },
+        "responses": { "200": { "description": "" } },
+        "summary": "",
+        "tags": ["students score"]
+      }
+    },
     "/course/{courseId}/students/score/{githubId}": {
       "get": {
         "operationId": "getStudentScore",
@@ -4668,6 +4685,15 @@
           "pagination": { "$ref": "#/components/schemas/PaginationMetaDto" }
         },
         "required": ["content", "pagination"]
+      },
+      "CreateSingleScoreDto": {
+        "type": "object",
+        "properties": {
+          "score": { "oneOf": [{ "type": "number" }, { "type": "string" }] },
+          "comment": { "type": "string" },
+          "githubPrUrl": { "type": "string" }
+        },
+        "required": ["score"]
       },
       "SaveTaskSolutionDto": { "type": "object", "properties": { "url": { "type": "string" } }, "required": ["url"] },
       "TaskSolutionDto": {
