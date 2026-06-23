@@ -527,13 +527,12 @@ export class CourseService {
   async createMentor(
     githubId: string,
     data: {
-      students: string[];
+      students: number[];
       maxStudentsLimit: number;
       preferedStudentsLocation: MentorDetailsDtoStudentsPreferenceEnum;
     },
   ) {
-    const result = await this.axios.post(`/mentor/${githubId}`, data);
-    return result.data.data;
+    await courseMentorsApi.createMentor(this.courseId, githubId, data);
   }
 
   async updateStudent(githubId: string, data: { mentorGithuId: string | null }) {

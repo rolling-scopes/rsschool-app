@@ -2557,6 +2557,31 @@ export interface CreateGratitudeDto {
 /**
  * 
  * @export
+ * @interface CreateMentorDto
+ */
+export interface CreateMentorDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof CreateMentorDto
+     */
+    'maxStudentsLimit'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateMentorDto
+     */
+    'preferedStudentsLocation'?: string;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof CreateMentorDto
+     */
+    'students': Array<number>;
+}
+/**
+ * 
+ * @export
  * @interface CreatePromptDto
  */
 export interface CreatePromptDto {
@@ -11298,6 +11323,49 @@ export const CourseMentorsApiAxiosParamCreator = function (configuration?: Confi
          * 
          * @param {number} courseId 
          * @param {string} githubId 
+         * @param {CreateMentorDto} createMentorDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createMentor: async (courseId: number, githubId: string, createMentorDto: CreateMentorDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('createMentor', 'courseId', courseId)
+            // verify required parameter 'githubId' is not null or undefined
+            assertParamExists('createMentor', 'githubId', githubId)
+            // verify required parameter 'createMentorDto' is not null or undefined
+            assertParamExists('createMentor', 'createMentorDto', createMentorDto)
+            const localVarPath = `/course/{courseId}/mentors/{githubId}`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)))
+                .replace(`{${"githubId"}}`, encodeURIComponent(String(githubId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createMentorDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} githubId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -11485,6 +11553,18 @@ export const CourseMentorsApiFp = function(configuration?: Configuration) {
          * 
          * @param {number} courseId 
          * @param {string} githubId 
+         * @param {CreateMentorDto} createMentorDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createMentor(courseId: number, githubId: string, createMentorDto: CreateMentorDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createMentor(courseId, githubId, createMentorDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} githubId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -11548,6 +11628,17 @@ export const CourseMentorsApiFactory = function (configuration?: Configuration, 
          * 
          * @param {number} courseId 
          * @param {string} githubId 
+         * @param {CreateMentorDto} createMentorDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createMentor(courseId: number, githubId: string, createMentorDto: CreateMentorDto, options?: any): AxiosPromise<void> {
+            return localVarFp.createMentor(courseId, githubId, createMentorDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {string} githubId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -11602,6 +11693,19 @@ export const CourseMentorsApiFactory = function (configuration?: Configuration, 
  * @extends {BaseAPI}
  */
 export class CourseMentorsApi extends BaseAPI {
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {string} githubId 
+     * @param {CreateMentorDto} createMentorDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CourseMentorsApi
+     */
+    public createMentor(courseId: number, githubId: string, createMentorDto: CreateMentorDto, options?: AxiosRequestConfig) {
+        return CourseMentorsApiFp(this.configuration).createMentor(courseId, githubId, createMentorDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {number} courseId 

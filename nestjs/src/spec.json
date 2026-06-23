@@ -1681,6 +1681,22 @@
         "tags": ["course users"]
       }
     },
+    "/course/{courseId}/mentors/{githubId}": {
+      "post": {
+        "operationId": "createMentor",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateMentorDto" } } }
+        },
+        "responses": { "200": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
+        "tags": ["course mentors"]
+      }
+    },
     "/course/{courseId}/mentors/{githubId}/status/expelled": {
       "post": {
         "operationId": "expelMentor",
@@ -4993,6 +5009,15 @@
           "isActivist": { "type": "boolean" }
         },
         "required": ["isManager", "isSupervisor", "isDementor", "isActivist"]
+      },
+      "CreateMentorDto": {
+        "type": "object",
+        "properties": {
+          "maxStudentsLimit": { "type": "number" },
+          "preferedStudentsLocation": { "type": "string" },
+          "students": { "type": "array", "items": { "type": "number" } }
+        },
+        "required": ["students"]
       },
       "StudentId": { "type": "object", "properties": { "id": { "type": "number" } }, "required": ["id"] },
       "MentorDetailsDto": {
