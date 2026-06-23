@@ -9,6 +9,10 @@ import { RegistryService } from './registry.service';
 import { DisciplinesModule } from 'src/disciplines';
 import { NotificationsModule } from 'src/notifications/notifications.module';
 import { Student } from '@entities/student';
+import { Registry } from '@entities/registry';
+import { Mentor } from '@entities/mentor';
+import { User } from '@entities/user';
+import { Course } from '@entities/course';
 
 @Module({
   imports: [
@@ -19,6 +23,7 @@ import { Student } from '@entities/student';
     DisciplinesModule,
     NotificationsModule,
     TypeOrmModule.forFeature([Student]),
+    TypeOrmModule.forFeature([Registry, Mentor, User, Course]),
   ],
   controllers: [RegistryController],
   providers: [RegistryService],
