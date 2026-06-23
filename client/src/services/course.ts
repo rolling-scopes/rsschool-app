@@ -1,9 +1,10 @@
 import globalAxios, { AxiosInstance } from 'axios';
-import { UserBasic, MentorBasic, StudentBasic, InterviewDetails, InterviewPair } from '@common/models';
+import { UserBasic, MentorBasic, StudentBasic, InterviewDetails } from '@common/models';
 import { ScoreOrder, ScoreTableFilters } from '@client/modules/Score/hooks/types';
 import { IPaginationInfo } from '@client/shared/utils/pagination';
 
 import {
+  CourseMentorsApi,
   CoursesTasksApi,
   CoursesEventsApi,
   UpdateCourseEventDto,
@@ -20,6 +21,7 @@ import {
   CertificateApi,
   CoursesInterviewsApi,
   MentorDetailsDtoStudentsPreferenceEnum,
+  TaskDtoTypeEnum,
 } from '@client/api';
 import { optionalQueryString } from '@client/utils/optionalQueryString';
 import { Decision } from '@client/data/interviews/technical-screening';
@@ -123,6 +125,7 @@ const studentsScoreApi = new StudentsScoreApi();
 const studentsApi = new StudentsApi();
 const certificateApi = new CertificateApi();
 const coursesInterviewsApi = new CoursesInterviewsApi();
+const courseMentorsApi = new CourseMentorsApi();
 
 export class CourseService {
   private axios: AxiosInstance;
@@ -137,14 +140,21 @@ export class CourseService {
   }
 
   async getCourseTasksDetails() {
-    type Response = { data: CourseTaskDetails[] };
-    const result = await this.axios.get<Response>('/tasks/details');
-    return result.data.data.sort(sortTasksByEndDate);
+    const { data } = await courseTasksApi.getCourseTasksDetailed(this.courseId);
+    return data.sort(sortTasksByEndDate);
   }
 
   async getCourseEvents() {
-    const result = await this.axios.get<{ data: CourseEvent[] }>(`/events`);
-    return result.data.data;
+    const { data } = await courseEventsApi.getCourseEvents(this.courseId);
+    return data.map(
+      ({ eventId, name, type, description, descriptionUrl, disciplineId, organizer, ...rest }) =>
+        ({
+          ...rest,
+          eventId,
+          event: { id: eventId, name, type, description, descriptionUrl, disciplineId },
+          organizer,
+        }) as CourseEvent,
+    );
   }
 
   async createCourseEvent(data: CreateCourseEventDto) {
@@ -247,22 +257,16 @@ export class CourseService {
     return result.data.data;
   }
 
-  async postPublicFeedback(data: { toUserId: number; badgeId?: string; comment: string }) {
-    type Response = { data: { heroesUrl: string } };
-    const result = await this.axios.post<Response>(`/feedback`, data);
-    return result.data.data;
-  }
-
   async expelStudent(githubId: string, comment = '') {
-    await this.axios.post(`/student/${githubId}/status`, { comment, status: 'expelled' });
+    await studentsApi.updateStudentStatus(this.courseId, githubId, { comment, status: 'expelled' });
   }
 
   async setSelfStudy(githubId: string, comment = '') {
-    await this.axios.post(`/student/${githubId}/status`, { comment, status: 'self-study' });
+    await studentsApi.updateStudentStatus(this.courseId, githubId, { comment, status: 'self-study' });
   }
 
   async selfSetSelfStudy(githubId: string, comment = '') {
-    await this.axios.post(`/student/${githubId}/status-self`, { comment, status: 'self-study' });
+    await studentsApi.selfUpdateStudentStatus(this.courseId, githubId, { comment, status: 'self-study' });
   }
 
   async expelStudents(
@@ -281,11 +285,11 @@ export class CourseService {
     criteria: { courseTaskIds?: number[]; minScore?: number; minTotalScore?: number },
     templateId?: string,
   ) {
-    await this.axios.post(`/certificates`, { criteria, templateId });
+    await certificateApi.createCourseCertificates(this.courseId, { criteria, templateId });
   }
 
   async restoreStudent(githubId: string) {
-    await this.axios.post(`/student/${githubId}/status`, { status: 'active' });
+    await studentsApi.updateStudentStatus(this.courseId, githubId, { status: 'active' });
   }
 
   async postTaskSolution(
@@ -406,8 +410,7 @@ export class CourseService {
   }
 
   async updateMentoringAvailability(githubId: string, mentoring: boolean) {
-    const result = await this.axios.post(`/student/${githubId}/availability`, { mentoring });
-    return result.data.data;
+    await studentsApi.updateMentoringAvailability(this.courseId, githubId, { mentoring });
   }
 
   async deleteStageInterview(interviewId: number) {
@@ -435,25 +438,33 @@ export class CourseService {
     interviewId: number,
     data: { json: unknown; githubId: string; isGoodCandidate: boolean; isCompleted: boolean; decision: string },
   ) {
-    const result = await this.axios.post(`/interview/stage/${interviewId}/feedback`, data);
-    return result.data.data;
+    await coursesInterviewsApi.createInterviewFeedback(this.courseId, interviewId, TaskDtoTypeEnum.StageInterview, {
+      version: 0,
+      json: data.json as object,
+      decision: data.decision,
+      isGoodCandidate: data.isGoodCandidate,
+      isCompleted: data.isCompleted,
+    });
   }
 
   /**
    * @deprecated. should be removed after feedbacks are migrated to new template
    */
   async getStageInterviewFeedback(interviewId: number) {
-    const result = await this.axios.get(`/interview/stage/${interviewId}/feedback`);
-
-    return result.data.data;
+    const { data } = await coursesInterviewsApi.getInterviewFeedback(
+      this.courseId,
+      interviewId,
+      TaskDtoTypeEnum.StageInterview,
+    );
+    return (data.json ?? {}) as Record<string, unknown>;
   }
 
   async expelMentor(githubId: string) {
-    await this.axios.post(`/mentor/${githubId}/status/expelled`);
+    await courseMentorsApi.expelMentor(this.courseId, githubId);
   }
 
   async restoreMentor(githubId: string) {
-    await this.axios.post(`/mentor/${githubId}/status/restore`);
+    await courseMentorsApi.restoreMentor(this.courseId, githubId);
   }
 
   async getCrossCheckAssignments(githubId: string, courseTaskId: number) {
@@ -494,19 +505,14 @@ export class CourseService {
     return result.data as StudentSummaryDto;
   }
 
-  async getStudentScore(githubId: string) {
-    const result = await this.axios.get(`/student/${githubId}/score`);
-    return result.data.data as { totalScore: number; results: { courseTaskId: number; score: number }[] };
-  }
-
   async getStudentInterviews(githubId: string) {
     const result = await this.axios.get(`/student/${githubId}/interviews`);
     return result.data.data as InterviewDetails[];
   }
 
   async createCertificate(githubId: string, templateId?: string) {
-    const result = await this.axios.post(`/student/${githubId}/certificate`, { templateId });
-    return result.data.data;
+    const result = await certificateApi.createStudentCertificate(this.courseId, githubId, { templateId });
+    return result.data;
   }
 
   async removeCertificate(studentId: number) {
@@ -521,33 +527,27 @@ export class CourseService {
   async createMentor(
     githubId: string,
     data: {
-      students: string[];
+      students: number[];
       maxStudentsLimit: number;
       preferedStudentsLocation: MentorDetailsDtoStudentsPreferenceEnum;
     },
   ) {
-    const result = await this.axios.post(`/mentor/${githubId}`, data);
-    return result.data.data;
+    await courseMentorsApi.createMentor(this.courseId, githubId, data);
   }
 
   async updateStudent(githubId: string, data: { mentorGithuId: string | null }) {
-    const result = await this.axios.put(`/student/${githubId}`, data);
-    return result.data.data as StudentBasic;
+    const result = await studentsApi.updateStudent(this.courseId, githubId, data);
+    return result.data as unknown as StudentBasic;
   }
 
   async unassignStudentFromMentor(githubId: string, data: { mentorGithuId: null; unassigningComment: string }) {
-    const result = await this.axios.put(`/student/${githubId}`, data);
-    return result.data.data;
+    const result = await studentsApi.updateStudent(this.courseId, githubId, data);
+    return result.data;
   }
 
   async getInterviewStudent(githubId: string, interviewId: string) {
     const result = await this.axios.get(`/student/${githubId}/interview/${interviewId}`);
     return result.data.data as { id: number } | null;
-  }
-
-  async getInterviewPairs(interviewId: string) {
-    const result = await this.axios.get(`/interviews/${interviewId}`);
-    return result.data.data as InterviewPair[];
   }
 
   async cancelInterviewPair(interviewId: string, pairId: string) {
@@ -610,7 +610,7 @@ export interface IAddCriteriaForCrossCheck {
   onCreate: (data: CriteriaDto) => void;
 }
 
-const sortTasksByEndDate = (a: CourseTaskDetails, b: CourseTaskDetails) => {
+const sortTasksByEndDate = (a: Pick<CourseTaskDto, 'studentEndDate'>, b: Pick<CourseTaskDto, 'studentEndDate'>) => {
   if (!b.studentEndDate && a.studentEndDate) {
     return -1;
   }
