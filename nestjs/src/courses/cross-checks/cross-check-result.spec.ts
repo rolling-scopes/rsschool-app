@@ -4,6 +4,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { CourseCrossCheckController } from './course-cross-checks.controller';
 import { CourseCrossCheckService } from './course-cross-checks.service';
 import { CourseTasksService } from '../course-tasks';
+import { UserNotificationsService } from 'src/users-notifications';
+import { ConfigService } from 'src/config';
 
 const student = { id: 31, name: 'John Doe', githubId: 'john-doe', userId: 101 };
 const checker = { id: 32, name: 'Kate Checker', githubId: 'kate-checker', userId: 102 };
@@ -168,6 +170,8 @@ describe('CourseCrossCheckController.getCrossCheckTaskResult', () => {
           },
         },
         { provide: CourseTasksService, useValue: {} },
+        { provide: UserNotificationsService, useValue: {} },
+        { provide: ConfigService, useValue: {} },
       ],
     }).compile();
 

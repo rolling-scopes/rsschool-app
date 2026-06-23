@@ -3,6 +3,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { CourseCrossCheckController } from './course-cross-checks.controller';
 import { CourseCrossCheckService } from './course-cross-checks.service';
 import { CourseTasksService } from '../course-tasks';
+import { UserNotificationsService } from 'src/users-notifications';
+import { ConfigService } from 'src/config';
 
 const criteria = [
   { key: 'c1', max: 10, text: 'Code quality', type: 'subtask' },
@@ -81,6 +83,8 @@ describe('CourseCrossCheckController.getTaskDetails', () => {
       providers: [
         { provide: CourseCrossCheckService, useValue: { getTaskDetails: mockGetTaskDetails } },
         { provide: CourseTasksService, useValue: {} },
+        { provide: UserNotificationsService, useValue: {} },
+        { provide: ConfigService, useValue: {} },
       ],
     }).compile();
 
