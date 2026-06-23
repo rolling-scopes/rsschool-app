@@ -1,4 +1,3 @@
-import globalAxios, { AxiosInstance } from 'axios';
 import { UserBasic, MentorBasic, StudentBasic, InterviewDetails } from '@common/models';
 import { ScoreOrder, ScoreTableFilters } from '@client/modules/Score/hooks/types';
 import { IPaginationInfo } from '@client/shared/utils/pagination';
@@ -130,11 +129,7 @@ const courseTaskVerificationsApi = new CourseTaskVerificationsApi();
 const courseMentorsApi = new CourseMentorsApi();
 
 export class CourseService {
-  private axios: AxiosInstance;
-
-  constructor(private courseId: number) {
-    this.axios = globalAxios.create({ baseURL: `/api/course/${this.courseId}` });
-  }
+  constructor(private courseId: number) {}
 
   async getCourseCrossCheckTasks(status?: 'started' | 'inprogress' | 'finished') {
     const { data } = await courseTasksApi.getCourseTasks(this.courseId, status);
