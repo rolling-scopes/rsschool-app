@@ -177,6 +177,68 @@ export class CourseCrossCheckService {
     };
   }
 
+  public async getTaskSolutionResultById(id: number) {
+    return this.TaskSolutionResultRepository.createQueryBuilder('taskSolutionResult')
+      .where('"taskSolutionResult"."id" = :id', { id })
+      .getOne();
+  }
+
+  public async saveMessage(
+    taskSolutionResultId: number,
+    data: { content: string; role: CrossCheckMessageAuthorRole },
+    params: { user: { id: number; githubId: string } },
+  ) {
+    const { user } = params;
+
+    const message: CrossCheckMessage = {
+      ...data,
+      timestamp: new Date().toISOString(),
+      author: {
+        id: user.id,
+        githubId: user.githubId,
+      },
+      isReviewerRead: data.role === CrossCheckMessageAuthorRole.Reviewer,
+      isStudentRead: data.role === CrossCheckMessageAuthorRole.Student,
+    };
+
+    const taskSolutionResultById = await this.getTaskSolutionResultById(taskSolutionResultId);
+
+    if (taskSolutionResultById) {
+      const { messages } = taskSolutionResultById;
+
+      messages.push(message);
+      await this.TaskSolutionResultRepository.update(taskSolutionResultById.id, { messages });
+    }
+  }
+
+  public async updateMessage(taskSolutionResultId: number, data: { role: CrossCheckMessageAuthorRole }) {
+    const { role } = data;
+
+    const taskSolutionResultById = await this.getTaskSolutionResultById(taskSolutionResultId);
+
+    if (taskSolutionResultById) {
+      const { messages } = taskSolutionResultById;
+
+      const updatedMessages = messages.map(message => ({
+        ...message,
+        isReviewerRead: CrossCheckMessageAuthorRole.Reviewer === role ? true : message.isReviewerRead,
+        isStudentRead: CrossCheckMessageAuthorRole.Student === role ? true : message.isStudentRead,
+      }));
+
+      await this.TaskSolutionResultRepository.update(taskSolutionResultById.id, { messages: updatedMessages });
+    }
+  }
+
+  public async getMessageRecipientId(studentId: number, checkerId: number, role: CrossCheckMessageAuthorRole) {
+    if (role === CrossCheckMessageAuthorRole.Reviewer) {
+      return studentId;
+    }
+
+    const checker = await this.studentRepository.findOne({ where: { id: checkerId } });
+
+    return checker?.userId;
+  }
+
   public async saveSolution(studentId: number, courseTaskId: number, data: Partial<TaskSolution>) {
     const existingResult = await this.getTaskSolution(studentId, courseTaskId);
     if (existingResult != null) {

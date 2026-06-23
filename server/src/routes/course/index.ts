@@ -16,7 +16,6 @@ export function courseRoute(logger: ILogger) {
   addTaskApi(router, logger);
   addMentorApi(router, logger);
   addStudentApi(router, logger);
-  addStudentCrossCheckApi(router, logger);
   return router;
 }
 
@@ -39,17 +38,4 @@ function addMentorApi(router: Router<any, any>, logger: ILogger) {
 
 function addStudentApi(router: Router<any, any>, logger: ILogger) {
   router.get('/student/:githubId', courseSupervisorGuard, getStudent(logger));
-}
-
-function addStudentCrossCheckApi(router: Router<any, any>, logger: ILogger) {
-  router.post(
-    `/taskSolutionResult/:taskSolutionResultId/task/:courseTaskId/cross-check/messages`,
-    courseGuard,
-    crossCheck.createMessage(logger),
-  );
-  router.put(
-    `/taskSolutionResult/:taskSolutionResultId/task/:courseTaskId/cross-check/messages`,
-    courseGuard,
-    crossCheck.updateMessage(logger),
-  );
 }

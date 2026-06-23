@@ -11,6 +11,7 @@ import {
   ParseEnumPipe,
   ParseIntPipe,
   Post,
+  Put,
   Query,
   Req,
   Res,
@@ -25,6 +26,7 @@ import {
   ApiTags,
   ApiQuery,
 } from '@nestjs/swagger';
+import { CrossCheckMessageAuthorRole } from '@entities/taskSolutionResult';
 import { CrossCheckStatus } from '@entities/courseTask';
 import { ConfigService } from 'src/config';
 import { UserNotificationsService } from 'src/users-notifications';
@@ -155,6 +157,119 @@ export class CourseCrossCheckController {
     res.setHeader('Content-disposition', `filename=${courseTask.task.name}.csv`);
 
     res.end(parsedData);
+  }
+
+  @Post(':courseTaskId/messages/:taskSolutionResultId')
+  @ApiOperation({ operationId: 'createCrossCheckMessage' })
+  @ApiForbiddenResponse()
+  @ApiBody({ schema: { type: 'object' } })
+  @ApiOkResponse()
+  public async createCrossCheckMessage(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+    @Param('taskSolutionResultId', ParseIntPipe) taskSolutionResultId: number,
+    @Body() inputData: { content: string; role: CrossCheckMessageAuthorRole },
+  ) {
+    const [student, taskSolutionResult, courseTask] = await Promise.all([
+      this.courseCrossCheckService.queryStudentByGithubId(courseId, req.user.githubId),
+      this.courseCrossCheckService.getTaskSolutionResultById(taskSolutionResultId),
+      this.courseCrossCheckService.getCourseTaskWithCourse(courseTaskId),
+    ]);
+
+    if (!student) {
+      throw new BadRequestException('not valid student or course');
+    }
+    if (!courseTask) {
+      throw new BadRequestException('not valid task');
+    }
+    if (!taskSolutionResult) {
+      throw new BadRequestException('task solution result is not exist');
+    }
+
+    this.validateMessageRole(inputData.role, student.id, taskSolutionResult);
+
+    const data = {
+      content: inputData.content ?? '',
+      role: inputData.role,
+    };
+
+    await this.courseCrossCheckService.saveMessage(taskSolutionResultId, data, { user: req.user });
+
+    const userId = await this.courseCrossCheckService.getMessageRecipientId(
+      student.id,
+      taskSolutionResult.checkerId,
+      inputData.role,
+    );
+    if (!userId) {
+      throw new BadRequestException('user not found');
+    }
+
+    await this.userNotificationsService
+      .sendEventNotification({
+        userId,
+        notificationId: 'messages',
+        data: {
+          isReviewerMessage: inputData.role === CrossCheckMessageAuthorRole.Reviewer,
+          courseAlias: courseTask.course.alias,
+          courseTaskId,
+          taskName: courseTask.task.name,
+          studentGithubId: student.githubId,
+        },
+      })
+      .catch(() => null);
+  }
+
+  @Put(':courseTaskId/messages/:taskSolutionResultId')
+  @ApiOperation({ operationId: 'updateCrossCheckMessage' })
+  @ApiForbiddenResponse()
+  @ApiBody({ schema: { type: 'object' } })
+  @ApiOkResponse()
+  public async updateCrossCheckMessage(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('courseTaskId', ParseIntPipe) _courseTaskId: number,
+    @Param('taskSolutionResultId', ParseIntPipe) taskSolutionResultId: number,
+    @Body() inputData: { role: CrossCheckMessageAuthorRole },
+  ) {
+    const student = await this.courseCrossCheckService.queryStudentByGithubId(courseId, req.user.githubId);
+
+    if (!student) {
+      throw new BadRequestException('not valid student or course');
+    }
+
+    const taskSolutionResult = await this.courseCrossCheckService.getTaskSolutionResultById(taskSolutionResultId);
+
+    if (!taskSolutionResult) {
+      throw new BadRequestException('task solution result is not exist');
+    }
+
+    this.validateMessageRole(inputData.role, student.id, taskSolutionResult);
+
+    await this.courseCrossCheckService.updateMessage(taskSolutionResultId, { role: inputData.role });
+  }
+
+  private validateMessageRole(
+    role: CrossCheckMessageAuthorRole,
+    studentId: number,
+    taskSolutionResult: { studentId: number; checkerId: number },
+  ) {
+    switch (role) {
+      case CrossCheckMessageAuthorRole.Reviewer:
+        if (studentId !== taskSolutionResult.checkerId) {
+          throw new BadRequestException('user is not checker');
+        }
+        break;
+
+      case CrossCheckMessageAuthorRole.Student:
+        if (studentId !== taskSolutionResult.studentId) {
+          throw new BadRequestException('user is not student');
+        }
+        break;
+
+      default:
+        throw new BadRequestException('incorrect message role');
+    }
   }
 
   @Get(':courseTaskId/results/:githubId')

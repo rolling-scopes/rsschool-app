@@ -358,10 +358,7 @@ export class CourseService {
       role: string;
     },
   ) {
-    await this.axios.post(
-      `/taskSolutionResult/${taskSolutionResultId}/task/${courseTaskId}/cross-check/messages`,
-      data,
-    );
+    await courseTasksApi.createCrossCheckMessage(this.courseId, courseTaskId, taskSolutionResultId, data);
   }
 
   async updateTaskSolutionResultMessages(
@@ -371,7 +368,7 @@ export class CourseService {
       role: string;
     },
   ) {
-    await this.axios.put(`/taskSolutionResult/${taskSolutionResultId}/task/${courseTaskId}/cross-check/messages`, data);
+    await courseTasksApi.updateCrossCheckMessage(this.courseId, courseTaskId, taskSolutionResultId, data);
   }
 
   async getCrossCheckTaskDetails(courseTaskId: number) {
