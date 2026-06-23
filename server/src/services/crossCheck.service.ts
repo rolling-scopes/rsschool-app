@@ -1,14 +1,8 @@
-import { getCustomRepository, getRepository } from 'typeorm';
-import { TaskSolution, CourseTask, TaskSolutionResult, IUserSession } from '../models';
+import { getRepository } from 'typeorm';
+import { CourseTask, TaskSolutionResult, IUserSession } from '../models';
 import { TaskSolutionComment, TaskSolutionReview } from '../models/taskSolution';
 import { CrossCheckMessage, CrossCheckMessageAuthorRole } from '../models/taskSolutionResult';
-import { Discord } from '../../../common/models';
-import { getTaskSolution, getTaskSolutionResultById } from './taskResults.service';
-import { getCourseTask } from './tasks.service';
-import { queryStudentByGithubId } from './course.service';
-import { createName, getUserByGithubId } from './user.service';
-import { CrossCheckRepository } from '../repositories/crossCheck.repository';
-import { UserRepository } from '../repositories/user.repository';
+import { getTaskSolutionResultById } from './taskResults.service';
 
 export interface CrossCheckSolution {
   url: string;
@@ -30,136 +24,10 @@ export interface CrossCheckSubmitResult {
 }
 
 export class CrossCheckService {
-  constructor(
-    private courseTaskId: number,
-    private repository = getCustomRepository(CrossCheckRepository),
-  ) {}
+  constructor(_courseTaskId: number) {}
 
   public static isCrossCheckTask(courseTask: Partial<CourseTask>) {
     return courseTask.checker === 'crossCheck';
-  }
-
-  public static isValidTaskSolution(data: Partial<TaskSolution>) {
-    if (!data.url) {
-      return false;
-    }
-    if (data.comments && !Array.isArray(data.comments)) {
-      return false;
-    }
-    if (data.review && !Array.isArray(data.review)) {
-      return false;
-    }
-    return true;
-  }
-
-  public async getStudentAndTask(courseId: number, githubId: string) {
-    const [student, courseTask] = await Promise.all([
-      queryStudentByGithubId(courseId, githubId),
-      getCourseTask(this.courseTaskId),
-    ]);
-    return { student, courseTask };
-  }
-
-  public async getTaskDetails() {
-    const courseTask = await getCourseTask(this.courseTaskId);
-    const studentEndDate = courseTask?.studentEndDate;
-    const criteria = courseTask?.task?.attributes?.criteria ?? [];
-    return { criteria, studentEndDate };
-  }
-
-  public async saveSolution(studentId: number, data: Partial<TaskSolution>) {
-    const existingResult = await getTaskSolution(studentId, this.courseTaskId);
-    if (existingResult != null) {
-      await getRepository(TaskSolution).save({
-        ...existingResult,
-        ...data,
-        comments: existingResult.comments.concat(data.comments ?? []),
-      });
-      return;
-    }
-
-    await getRepository(TaskSolution).save({
-      studentId,
-      courseTaskId: this.courseTaskId,
-      url: data.url,
-      review: data.review,
-      comments: data.comments,
-    });
-  }
-
-  public async deleteSolution(studentId: number) {
-    await getRepository(TaskSolution).delete({ studentId, courseTaskId: this.courseTaskId });
-  }
-
-  public async getResult(
-    studentId: number,
-    checkerId: number,
-    checkerGithubId: string,
-  ): Promise<
-    | (CrossCheckReviewResult & {
-        author: {
-          id: number;
-          name: string;
-          discord: Discord | null;
-          githubId: string;
-        };
-        comments?: TaskSolutionComment[];
-        historicalScores: TaskSolutionResult['historicalScores'];
-        messages: CrossCheckMessage[];
-      })
-    | null
-  > {
-    const [reviewResult, solution] = await Promise.all([
-      this.repository.findReviewResult(this.courseTaskId, studentId, checkerId),
-      this.repository.findSolution(this.courseTaskId, studentId),
-    ]);
-    if (reviewResult == null || solution == null) {
-      return null;
-    }
-    let comments =
-      solution.comments
-        ?.filter(c => c.recipientId == null || c.authorId === checkerId || c.recipientId === checkerId)
-        .map(c => ({
-          text: c.text,
-          timestamp: c.timestamp,
-          criteriaId: c.criteriaId,
-          authorId: c.authorId,
-        })) ?? [];
-
-    const data = await getCustomRepository(UserRepository).findByStudentIds(
-      comments.map(c => c.authorId).filter(c => c),
-    );
-
-    const checkerData = await getUserByGithubId(checkerGithubId);
-
-    comments = comments.map(c => ({
-      ...c,
-      authorGithubId:
-        !reviewResult.anonymous || c.authorId === solution.studentId || c.authorId === checkerId
-          ? data.find(d => d.studentId === c.authorId)?.githubId
-          : null,
-    }));
-    return {
-      id: reviewResult.id,
-      score: reviewResult.score,
-      comment: reviewResult.comment ?? '',
-      anonymous: reviewResult.anonymous,
-      review: reviewResult.review,
-      checkerId,
-      studentId,
-      author: {
-        id: checkerData?.id ?? 0,
-        name: createName({
-          firstName: checkerData?.firstName ?? '',
-          lastName: checkerData?.lastName ?? '',
-        }),
-        githubId: checkerGithubId,
-        discord: checkerData?.discord ?? null,
-      },
-      comments,
-      historicalScores: reviewResult.historicalScores ?? [],
-      messages: reviewResult.messages,
-    };
   }
 
   public async saveMessage(
