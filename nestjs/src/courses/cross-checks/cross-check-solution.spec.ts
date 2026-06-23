@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { CourseCrossCheckController } from './course-cross-checks.controller';
 import { CourseCrossCheckService } from './course-cross-checks.service';
 import { CourseTasksService } from '../course-tasks';
+import { WriteScoreService } from '../score';
 import { UserNotificationsService } from 'src/users-notifications';
 import { ConfigService } from 'src/config';
 
@@ -113,6 +114,7 @@ describe('CourseCrossCheckController.getCrossCheckTaskSolution', () => {
           },
         },
         { provide: CourseTasksService, useValue: {} },
+        { provide: WriteScoreService, useValue: {} },
         { provide: UserNotificationsService, useValue: {} },
         { provide: ConfigService, useValue: {} },
       ],

@@ -1,4 +1,3 @@
-import globalAxios, { AxiosInstance } from 'axios';
 import { UserBasic, MentorBasic, StudentBasic, InterviewDetails } from '@common/models';
 import { ScoreOrder, ScoreTableFilters } from '@client/modules/Score/hooks/types';
 import { IPaginationInfo } from '@client/shared/utils/pagination';
@@ -130,11 +129,7 @@ const courseTaskVerificationsApi = new CourseTaskVerificationsApi();
 const courseMentorsApi = new CourseMentorsApi();
 
 export class CourseService {
-  private axios: AxiosInstance;
-
-  constructor(private courseId: number) {
-    this.axios = globalAxios.create({ baseURL: `/api/course/${this.courseId}` });
-  }
+  constructor(private courseId: number) {}
 
   async getCourseCrossCheckTasks(status?: 'started' | 'inprogress' | 'finished') {
     const { data } = await courseTasksApi.getCourseTasks(this.courseId, status);
@@ -466,8 +461,9 @@ export class CourseService {
   }
 
   async createCrossCheckDistribution(courseTaskId: number) {
-    const result = await this.axios.post(`/task/${courseTaskId}/cross-check/distribution`);
-    return result.data;
+    const result = await courseTasksApi.createCrossCheckDistribution(this.courseId, courseTaskId);
+    // preserve the legacy axios envelope shape ({ data: { crossCheckPairs } }) for the caller
+    return { data: result.data as { crossCheckPairs: unknown[] } };
   }
 
   async createInterviewDistribution(courseTaskId: number) {
@@ -484,7 +480,7 @@ export class CourseService {
   }
 
   async createCrossCheckCompletion(courseTaskId: number) {
-    const result = await this.axios.post(`/task/${courseTaskId}/cross-check/completion`);
+    const result = await courseTasksApi.createCrossCheckCompletion(this.courseId, courseTaskId);
     return result.data;
   }
 

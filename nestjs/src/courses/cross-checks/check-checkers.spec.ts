@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 import { TaskSolutionChecker } from '@entities/taskSolutionChecker';
 import { TaskSolution } from '@entities/taskSolution';
 import { TaskSolutionResult } from '@entities/taskSolutionResult';
@@ -64,6 +65,7 @@ describe('CourseCrossCheckService checkers queries', () => {
         { provide: getRepositoryToken(CourseTask), useValue: {} },
         { provide: getRepositoryToken(Student), useValue: {} },
         { provide: getRepositoryToken(User), useValue: {} },
+        { provide: DataSource, useValue: {} },
       ],
     }).compile();
 

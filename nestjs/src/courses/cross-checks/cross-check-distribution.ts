@@ -1,3 +1,5 @@
+// Verbatim copy of server/src/services/distribution/crossCheckDistribution.service.ts
+// to preserve the exact cross-check pair distribution algorithm during the migration.
 type CrossCheckPair = {
   checkerId: number;
   studentId: number;
@@ -14,7 +16,7 @@ export class CrossCheckDistributionService {
 
     shuffledStudentsIds.forEach((studentId, index) => {
       for (let i = 0; i < checkersNumber; i++) {
-        const checkerId = shuffledStudentsIds[(index + shifts[i]) % studentsNumber];
+        const checkerId = shuffledStudentsIds[(index + shifts[i]!) % studentsNumber]!;
         pairs.push({ checkerId, studentId });
       }
     });
@@ -30,7 +32,7 @@ export class CrossCheckDistributionService {
 
     for (let i = arrcopy.length - 1; i > 0; i -= 1) {
       const j = Math.floor(Math.random() * (i + 1));
-      [arrcopy[i], arrcopy[j]] = [arrcopy[j], arrcopy[i]];
+      [arrcopy[i], arrcopy[j]] = [arrcopy[j]!, arrcopy[i]!];
     }
     return arrcopy;
   }

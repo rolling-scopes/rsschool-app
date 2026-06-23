@@ -5,6 +5,7 @@ import { CourseCrossCheckService } from './course-cross-checks.service';
 import { TaskSolution } from '@entities/taskSolution';
 import { TaskSolutionResult } from '@entities/taskSolutionResult';
 import { CourseTask } from '@entities/courseTask';
+import { DataSource } from 'typeorm';
 import { Student } from '@entities/student';
 import { User } from '@entities/user';
 
@@ -63,6 +64,10 @@ describe('CourseCrossCheckService', () => {
         },
         {
           provide: getRepositoryToken(User),
+          useValue: {},
+        },
+        {
+          provide: DataSource,
           useValue: {},
         },
       ],
