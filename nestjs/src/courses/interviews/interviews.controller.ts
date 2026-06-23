@@ -31,6 +31,7 @@ import { DEFAULT_CACHE_TTL } from '../../constants';
 import { InterviewDto } from './dto';
 import { AvailableStudentDto } from './dto/available-student.dto';
 import { InterviewsService } from './interviews.service';
+import { CreateInterviewResultDto } from './dto/create-interview-result.dto';
 import { TaskType } from '@entities/task';
 import { InterviewFeedbackService } from './interviewFeedback.service';
 import { InterviewFeedbackDto } from './dto/get-interview-feedback.dto';
@@ -236,6 +237,53 @@ export class InterviewsController {
   @UseGuards(DefaultGuard, CourseGuard)
   public async getMentorInterviews(@Req() req: CurrentRequest, @Param('courseId', ParseIntPipe) courseId: number) {
     return this.interviewsService.getUserInterviewDetails(courseId, req.user.githubId, 'mentor');
+  }
+
+  @Get('/:courseTaskId/interviewer/me/students')
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  @ApiOperation({ operationId: 'getInterviewerStudents' })
+  @RequiredRoles([CourseRole.Mentor, Role.Admin], true)
+  public async getInterviewerStudents(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+  ) {
+    const students = await this.interviewsService.getInterviewStudentsByMentor(
+      courseId,
+      courseTaskId,
+      req.user.githubId,
+    );
+    if (students == null) {
+      throw new NotFoundException('Mentor not found');
+    }
+    return students;
+  }
+
+  @Post('/:courseTaskId/students/:githubId/result')
+  @ApiOkResponse()
+  @ApiBadRequestResponse()
+  @ApiForbiddenResponse()
+  @ApiOperation({ operationId: 'createInterviewResult' })
+  @RequiredRoles([CourseRole.Mentor, Role.Admin], true)
+  public async createInterviewResult(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+    @Param('githubId') githubIdParam: string,
+    @Body() dto: CreateInterviewResultDto,
+  ) {
+    const githubId = githubIdParam === 'me' ? req.user.githubId : githubIdParam.toLowerCase();
+    const { ok, message } = await this.interviewsService.createInterviewResult(
+      courseId,
+      courseTaskId,
+      githubId,
+      req.user.id,
+      dto,
+    );
+    if (!ok) {
+      throw new BadRequestException(message);
+    }
   }
 
   // use `type` as a way to differentiate between stage-interview and interview.

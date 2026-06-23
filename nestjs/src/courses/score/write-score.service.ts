@@ -22,6 +22,15 @@ export class WriteScoreService {
     courseTaskId: number,
     data: SaveScoreInput,
   ): Promise<TaskResult | undefined> {
+    const { previousScore } = await this.saveScoreWithStatus(studentId, courseTaskId, data);
+    return previousScore;
+  }
+
+  public async saveScoreWithStatus(
+    studentId: number,
+    courseTaskId: number,
+    data: SaveScoreInput,
+  ): Promise<{ created: boolean; previousScore?: TaskResult }> {
     const { authorId = 0, githubPrUrl = null } = data;
 
     const comment = this.trimComment(data.comment ?? '');
@@ -41,12 +50,12 @@ export class WriteScoreService {
         lastCheckerId: authorId > 0 ? authorId : undefined,
         githubPrUrl: data.githubPrUrl,
       });
-      return;
+      return { created: true };
     }
 
     // if nothing changed, do nothing
     if (current.githubRepoUrl === githubPrUrl && current.comment === comment && current.score === score) {
-      return;
+      return { created: true };
     }
 
     let previousScore: TaskResult | undefined;
@@ -77,7 +86,7 @@ export class WriteScoreService {
       historicalScores: current.historicalScores,
       lastCheckerId: current.lastCheckerId,
     });
-    return previousScore;
+    return { created: false, previousScore };
   }
 
   private createHistoricalRecord(data: Pick<SaveScoreInput, 'authorId' | 'comment' | 'score'>) {
