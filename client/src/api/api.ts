@@ -12827,6 +12827,39 @@ export const CourseTaskVerificationsApiAxiosParamCreator = function (configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        getCourseTasksVerifications: async (courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('getCourseTasksVerifications', 'courseId', courseId)
+            const localVarPath = `/courses/{courseId}/task-verifications`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         getStudentTaskVerifications: async (courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('getStudentTaskVerifications', 'courseId', courseId)
@@ -12848,6 +12881,45 @@ export const CourseTaskVerificationsApiAxiosParamCreator = function (configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateTaskVerification: async (id: number, body: object, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('updateTaskVerification', 'id', id)
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('updateTaskVerification', 'body', body)
+            const localVarPath = `/task-verifications/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -12893,8 +12965,29 @@ export const CourseTaskVerificationsApiFp = function(configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        async getCourseTasksVerifications(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCourseTasksVerifications(courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         async getStudentTaskVerifications(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getStudentTaskVerifications(courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateTaskVerification(id: number, body: object, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateTaskVerification(id, body, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -12934,8 +13027,27 @@ export const CourseTaskVerificationsApiFactory = function (configuration?: Confi
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        getCourseTasksVerifications(courseId: number, options?: any): AxiosPromise<object> {
+            return localVarFp.getCourseTasksVerifications(courseId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} courseId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         getStudentTaskVerifications(courseId: number, options?: any): AxiosPromise<void> {
             return localVarFp.getStudentTaskVerifications(courseId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateTaskVerification(id: number, body: object, options?: any): AxiosPromise<object> {
+            return localVarFp.updateTaskVerification(id, body, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -12979,8 +13091,31 @@ export class CourseTaskVerificationsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof CourseTaskVerificationsApi
      */
+    public getCourseTasksVerifications(courseId: number, options?: AxiosRequestConfig) {
+        return CourseTaskVerificationsApiFp(this.configuration).getCourseTasksVerifications(courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} courseId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CourseTaskVerificationsApi
+     */
     public getStudentTaskVerifications(courseId: number, options?: AxiosRequestConfig) {
         return CourseTaskVerificationsApiFp(this.configuration).getStudentTaskVerifications(courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {object} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CourseTaskVerificationsApi
+     */
+    public updateTaskVerification(id: number, body: object, options?: AxiosRequestConfig) {
+        return CourseTaskVerificationsApiFp(this.configuration).updateTaskVerification(id, body, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

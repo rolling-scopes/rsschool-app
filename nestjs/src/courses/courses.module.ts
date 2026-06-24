@@ -63,6 +63,7 @@ import {
   StudentTaskVerificationsController,
   TaskVerificationsController,
 } from './task-verifications/task-verifications.controller';
+import { TaskVerificationsAwsController } from './task-verifications/task-verifications-aws.controller';
 import { TaskVerificationsService } from './task-verifications/task-verifications.service';
 import { TeamDistributionStudentService } from './team-distribution/team-distribution-student.service';
 import { DistributeStudentsService } from './team-distribution/distribute-students.service';
@@ -131,6 +132,7 @@ import { CourseLeaveSurveyResponse } from '@entities/index';
     TeamDistributionController,
     TeamController,
     TaskVerificationsController,
+    TaskVerificationsAwsController,
     CourseUsersController,
     CourseMentorsController,
     CourseStudentsController,
