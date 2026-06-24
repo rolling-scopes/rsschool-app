@@ -18,6 +18,9 @@ export default mergeConfig(
     },
     test: {
       include: ['src/**/*.test.ts'],
+      // All route handlers/services have been migrated to NestJS; the Koa app retains only
+      // bootstrap + cron code with no unit tests, so an empty run must not fail CI.
+      passWithNoTests: true,
       env: {
         NODE_ENV: 'test',
       },
