@@ -9,7 +9,6 @@ import * as notificationService from './notification.service';
 export { InterviewService } from './interview.service';
 export { CrossCheckService } from './crossCheck.service';
 
-export * from './operationResult';
 export {
   userService,
   taskService,

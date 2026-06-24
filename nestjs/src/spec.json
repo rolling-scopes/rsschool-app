@@ -85,6 +85,45 @@
         "tags": ["users"]
       }
     },
+    "/users": {
+      "post": {
+        "operationId": "createUsers",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "type": "array", "items": { "$ref": "#/components/schemas/UpsertUserDto" } }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/OperationResultDto" } }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": ["users"]
+      }
+    },
+    "/users/{userId}/activist": {
+      "post": {
+        "operationId": "updateUserActivist",
+        "parameters": [{ "name": "userId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateActivistDto" } } }
+        },
+        "responses": { "200": { "description": "" } },
+        "summary": "",
+        "tags": ["users"]
+      }
+    },
     "/alerts": {
       "post": {
         "operationId": "createAlert",
@@ -4006,6 +4045,28 @@
         },
         "required": ["id", "githubId", "name", "discord"]
       },
+      "UpsertUserDto": {
+        "type": "object",
+        "properties": {
+          "githubId": { "type": "string" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "primaryEmail": { "type": "string" },
+          "cityName": { "type": "string" },
+          "countryName": { "type": "string" }
+        },
+        "required": ["githubId"]
+      },
+      "OperationResultDto": {
+        "type": "object",
+        "properties": { "status": { "type": "string" }, "value": { "type": "string" } },
+        "required": ["status"]
+      },
+      "UpdateActivistDto": {
+        "type": "object",
+        "properties": { "activist": { "type": "boolean" } },
+        "required": ["activist"]
+      },
       "CreateAlertDto": {
         "type": "object",
         "properties": {
@@ -5215,11 +5276,6 @@
           "mentorGithubId": { "type": "string" }
         },
         "required": ["studentGithubId", "score"]
-      },
-      "OperationResultDto": {
-        "type": "object",
-        "properties": { "status": { "type": "string" }, "value": { "type": "string" } },
-        "required": ["status"]
       },
       "CreateSingleScoreDto": {
         "type": "object",
