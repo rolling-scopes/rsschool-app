@@ -2092,6 +2092,30 @@
         "tags": ["course task verifications"]
       }
     },
+    "/courses/{courseId}/tasks/verifications": {
+      "get": {
+        "operationId": "getCourseTasksVerifications",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "type": "object" } } } }
+        },
+        "summary": "",
+        "tags": ["course task verifications"]
+      }
+    },
+    "/task-verifications/{id}": {
+      "put": {
+        "operationId": "updateTaskVerification",
+        "parameters": [{ "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object" } } } },
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "type": "object" } } } },
+          "400": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["course task verifications"]
+      }
+    },
     "/courses/{courseId}/users": {
       "get": {
         "operationId": "getCourseUsers",
