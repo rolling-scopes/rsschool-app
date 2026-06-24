@@ -2092,7 +2092,7 @@
         "tags": ["course task verifications"]
       }
     },
-    "/courses/{courseId}/tasks/verifications": {
+    "/courses/{courseId}/task-verifications": {
       "get": {
         "operationId": "getCourseTasksVerifications",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],

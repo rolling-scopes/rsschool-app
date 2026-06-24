@@ -15,7 +15,7 @@ export class TaskVerificationsAwsController {
     private writeScoreService: WriteScoreService,
   ) {}
 
-  @Get('courses/:courseId/tasks/verifications')
+  @Get('courses/:courseId/task-verifications')
   @ApiOperation({ operationId: 'getCourseTasksVerifications' })
   @ApiOkResponse({ schema: { type: 'object' } })
   public async getCourseTasksVerifications(@Param('courseId', ParseIntPipe) courseId: number) {

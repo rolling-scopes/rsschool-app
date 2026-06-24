@@ -12830,7 +12830,7 @@ export const CourseTaskVerificationsApiAxiosParamCreator = function (configurati
         getCourseTasksVerifications: async (courseId: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('getCourseTasksVerifications', 'courseId', courseId)
-            const localVarPath = `/courses/{courseId}/tasks/verifications`
+            const localVarPath = `/courses/{courseId}/task-verifications`
                 .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
