@@ -8,7 +8,6 @@ import { config } from './config';
 import { ILogger, loggerMiddleware, createDefaultLogger } from './logger';
 
 import { routesMiddleware, routeLoggerMiddleware } from './routes';
-import { startBackgroundJobs } from './schedule';
 import { dataSourceOptions } from './dataSourceOptions';
 import { createConnection } from 'typeorm';
 
@@ -59,12 +58,5 @@ export class App {
     logger.info('Migrations executed successfully');
 
     return true;
-  }
-
-  public async startBackgroundJobs() {
-    if (process.env.NODE_ENV !== 'production') {
-      return Promise.resolve();
-    }
-    return startBackgroundJobs(this.appLogger.child({ module: 'schedule' }));
   }
 }
