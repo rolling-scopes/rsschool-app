@@ -1,4 +1,4 @@
-import { CourseTask, CrossCheckStatus } from '../models/courseTask';
+import { CourseTask } from '../models/courseTask';
 import { getRepository } from 'typeorm';
 
 export async function getCourseTask(courseTaskId: number, selectCourse = false) {
@@ -19,17 +19,6 @@ export async function getCourseTaskOnly(courseTaskId: number): Promise<{ id: num
     .getOne();
 }
 
-export async function changeCourseTaskStatus(courseTask: CourseTask, crossCheckStatus: CrossCheckStatus) {
-  await getRepository(CourseTask).save({ ...courseTask, crossCheckStatus });
-}
-
 export async function changeCourseTaskProcessing(courseTaskId: number, isCreatingInterviewPairs: boolean) {
   await getRepository(CourseTask).update(courseTaskId, { isCreatingInterviewPairs });
-}
-
-export function isSubmissionDeadlinePassed({ studentEndDate }: CourseTask) {
-  const currentTimestamp = Date.now();
-  if (!studentEndDate) return false;
-  const submitDeadlineTimestamp = new Date(studentEndDate).getTime();
-  return currentTimestamp > submitDeadlineTimestamp;
 }

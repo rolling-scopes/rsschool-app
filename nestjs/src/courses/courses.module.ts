@@ -40,6 +40,7 @@ import { CourseAccessService } from './course-access.service';
 import { CourseTasksController, CourseTasksService } from './course-tasks';
 import { InterviewsController, InterviewsService, InterviewFeedbackService } from './interviews';
 import { CrossMentorDistributionService } from './interviews/cross-mentor-distribution.service';
+import { StageInterviewsService } from './interviews/stage-interviews.service';
 import { TasksController } from './tasks/tasks.controller';
 import { TasksService } from './tasks/tasks.service';
 import { CourseStatsController, CourseStatsService } from './stats';
@@ -148,6 +149,7 @@ import { CourseLeaveSurveyResponse } from '@entities/index';
     InterviewsService,
     InterviewFeedbackService,
     CrossMentorDistributionService,
+    StageInterviewsService,
     TasksService,
     CourseStatsService,
     CourseCrossCheckService,
@@ -167,6 +169,13 @@ import { CourseLeaveSurveyResponse } from '@entities/index';
     MentorReviewsService,
     ExpelledStatsService,
   ],
-  exports: [CourseTasksService, CourseUsersService, CoursesService, StudentsService, ExpelledStatsService],
+  exports: [
+    CourseTasksService,
+    CourseUsersService,
+    CoursesService,
+    StudentsService,
+    ExpelledStatsService,
+    CourseCrossCheckService,
+  ],
 })
 export class CoursesModule {}

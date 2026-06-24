@@ -85,6 +85,45 @@
         "tags": ["users"]
       }
     },
+    "/users": {
+      "post": {
+        "operationId": "createUsers",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "type": "array", "items": { "$ref": "#/components/schemas/UpsertUserDto" } }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/OperationResultDto" } }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": ["users"]
+      }
+    },
+    "/users/{userId}/activist": {
+      "post": {
+        "operationId": "updateUserActivist",
+        "parameters": [{ "name": "userId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateActivistDto" } } }
+        },
+        "responses": { "200": { "description": "" } },
+        "summary": "",
+        "tags": ["users"]
+      }
+    },
     "/alerts": {
       "post": {
         "operationId": "createAlert",
@@ -711,6 +750,95 @@
         "tags": ["courses interviews"]
       }
     },
+    "/courses/{courseId}/interviews/stage": {
+      "get": {
+        "operationId": "getStageInterviews",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "type": "array", "items": { "type": "object" } } } }
+          },
+          "403": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["courses interviews"]
+      },
+      "post": {
+        "operationId": "createStageInterviews",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateStageInterviewsDto" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "type": "array", "items": { "type": "object" } } } }
+          },
+          "400": { "description": "" },
+          "403": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["courses interviews"]
+      }
+    },
+    "/courses/{courseId}/interviews/stage/interviewer/me/students": {
+      "get": {
+        "operationId": "getStageInterviewerStudents",
+        "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "type": "array", "items": { "type": "object" } } } }
+          },
+          "403": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["courses interviews"]
+      }
+    },
+    "/courses/{courseId}/interviews/stage/interviewer/{interviewerGithubId}/student/{studentGithubId}": {
+      "post": {
+        "operationId": "createStageInterviewPair",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "interviewerGithubId", "required": true, "in": "path", "schema": { "type": "string" } },
+          { "name": "studentGithubId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
+        "tags": ["courses interviews"]
+      }
+    },
+    "/courses/{courseId}/interviews/stage/pairs/{interviewId}": {
+      "put": {
+        "operationId": "updateStageInterviewPair",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "interviewId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/UpdateStageInterviewPairDto" } }
+          }
+        },
+        "responses": { "200": { "description": "" }, "400": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
+        "tags": ["courses interviews"]
+      },
+      "delete": {
+        "operationId": "cancelStageInterviewPair",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "interviewId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": { "200": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
+        "tags": ["courses interviews"]
+      }
+    },
     "/courses/{courseId}/interviews/{interviewId}": {
       "get": {
         "operationId": "getInterview",
@@ -1121,6 +1249,33 @@
         "tags": ["course stats"]
       }
     },
+    "/courses/{courseId}/cross-checks/{courseTaskId}/distribution": {
+      "post": {
+        "operationId": "createCrossCheckDistribution",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "type": "object" } } } },
+          "403": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["courses tasks"]
+      }
+    },
+    "/courses/{courseId}/cross-checks/{courseTaskId}/completion": {
+      "post": {
+        "operationId": "createCrossCheckCompletion",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": { "200": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
+        "tags": ["courses tasks"]
+      }
+    },
     "/courses/{courseId}/cross-checks/{courseTaskId}/max-score-checkers": {
       "get": {
         "operationId": "getMaxScoreCheckers",
@@ -1223,6 +1378,139 @@
         "tags": ["courses tasks"]
       }
     },
+    "/courses/{courseId}/cross-checks/{courseTaskId}/messages/{taskSolutionResultId}": {
+      "post": {
+        "operationId": "createCrossCheckMessage",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "taskSolutionResultId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object" } } } },
+        "responses": { "200": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
+        "tags": ["courses tasks"]
+      },
+      "put": {
+        "operationId": "updateCrossCheckMessage",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "taskSolutionResultId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object" } } } },
+        "responses": { "200": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
+        "tags": ["courses tasks"]
+      }
+    },
+    "/courses/{courseId}/cross-checks/{courseTaskId}/results/{githubId}": {
+      "get": {
+        "operationId": "getCrossCheckTaskResult",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "", "content": { "application/json": { "schema": { "type": "object" } } } },
+          "403": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["courses tasks"]
+      },
+      "post": {
+        "operationId": "createCrossCheckResult",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object" } } } },
+        "responses": { "200": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
+        "tags": ["courses tasks"]
+      }
+    },
+    "/courses/{courseId}/cross-checks/{courseTaskId}/solutions/{githubId}": {
+      "get": {
+        "operationId": "getCrossCheckTaskSolution",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CrossCheckSolutionDto" } } }
+          },
+          "403": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["courses tasks"]
+      },
+      "post": {
+        "operationId": "createCrossCheckSolution",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object" } } } },
+        "responses": { "200": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
+        "tags": ["courses tasks"]
+      },
+      "delete": {
+        "operationId": "deleteCrossCheckSolution",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "" }, "403": { "description": "" } },
+        "summary": "",
+        "tags": ["courses tasks"]
+      }
+    },
+    "/courses/{courseId}/cross-checks/{courseTaskId}/assignments/{githubId}": {
+      "get": {
+        "operationId": "getCrossCheckAssignments",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "githubId", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "type": "array", "items": { "type": "object" } } } }
+          },
+          "403": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["courses tasks"]
+      }
+    },
+    "/courses/{courseId}/cross-checks/{courseTaskId}/details": {
+      "get": {
+        "operationId": "getCrossCheckTaskDetails",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "courseTaskId", "required": true, "in": "path", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CrossCheckTaskDetailsDto" } } }
+          },
+          "403": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["courses tasks"]
+      }
+    },
     "/courses/{courseId}/cross-checks/{courseTaskId}/feedbacks/my": {
       "get": {
         "operationId": "getMyCrossCheckFeedbacks",
@@ -1284,6 +1572,19 @@
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ScoreDto" } } }
           }
         },
+        "summary": "",
+        "tags": ["students score"]
+      }
+    },
+    "/course/{courseId}/students/score/csv": {
+      "get": {
+        "operationId": "getScoreCsv",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "cityName", "required": false, "in": "query", "schema": { "type": "string" } },
+          { "name": "mentor.githubId", "required": false, "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": { "403": { "description": "" } },
         "summary": "",
         "tags": ["students score"]
       }
@@ -1388,6 +1689,18 @@
             }
           }
         },
+        "summary": "",
+        "tags": ["courses schedule"]
+      }
+    },
+    "/courses/{courseId}/schedule/csv/{timeZone}": {
+      "get": {
+        "operationId": "getScheduleAsCsv",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "timeZone", "required": true, "in": "path", "schema": { "type": "string" } }
+        ],
+        "responses": { "403": { "description": "" } },
         "summary": "",
         "tags": ["courses schedule"]
       }
@@ -1934,6 +2247,54 @@
           "400": { "description": "" },
           "403": { "description": "" }
         },
+        "summary": "",
+        "tags": ["students"]
+      }
+    },
+    "/courses/{courseId}/students/details": {
+      "get": {
+        "operationId": "getCourseStudentsWithDetails",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "status", "required": true, "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "type": "array", "items": { "type": "object" } } } }
+          },
+          "403": { "description": "" }
+        },
+        "summary": "",
+        "tags": ["students"]
+      }
+    },
+    "/courses/{courseId}/students/search/{searchText}": {
+      "get": {
+        "operationId": "searchCourseStudents",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "searchText", "required": true, "in": "path", "schema": { "type": "string" } },
+          { "name": "onlyStudentsWithoutMentorShown", "required": true, "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": { "application/json": { "schema": { "type": "array", "items": { "type": "object" } } } }
+          }
+        },
+        "summary": "",
+        "tags": ["students"]
+      }
+    },
+    "/courses/{courseId}/students/csv": {
+      "get": {
+        "operationId": "getCourseStudentsCsv",
+        "parameters": [
+          { "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } },
+          { "name": "status", "required": true, "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": { "403": { "description": "" } },
         "summary": "",
         "tags": ["students"]
       }
@@ -2664,6 +3025,15 @@
             }
           }
         },
+        "summary": "",
+        "tags": ["registry"]
+      }
+    },
+    "/registry/mentors/csv": {
+      "get": {
+        "operationId": "getMentorRegistriesCsv",
+        "parameters": [],
+        "responses": { "403": { "description": "" } },
         "summary": "",
         "tags": ["registry"]
       }
@@ -3675,6 +4045,28 @@
         },
         "required": ["id", "githubId", "name", "discord"]
       },
+      "UpsertUserDto": {
+        "type": "object",
+        "properties": {
+          "githubId": { "type": "string" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "primaryEmail": { "type": "string" },
+          "cityName": { "type": "string" },
+          "countryName": { "type": "string" }
+        },
+        "required": ["githubId"]
+      },
+      "OperationResultDto": {
+        "type": "object",
+        "properties": { "status": { "type": "string" }, "value": { "type": "string" } },
+        "required": ["status"]
+      },
+      "UpdateActivistDto": {
+        "type": "object",
+        "properties": { "activist": { "type": "boolean" } },
+        "required": ["activist"]
+      },
       "CreateAlertDto": {
         "type": "object",
         "properties": {
@@ -4404,6 +4796,15 @@
         "properties": { "id": { "type": "number" }, "commentToStudent": { "type": "string", "nullable": true } },
         "required": ["id", "commentToStudent"]
       },
+      "CreateStageInterviewsDto": {
+        "type": "object",
+        "properties": { "noRegistration": { "type": "boolean", "default": false } }
+      },
+      "UpdateStageInterviewPairDto": {
+        "type": "object",
+        "properties": { "githubId": { "type": "string" } },
+        "required": ["githubId"]
+      },
       "InterviewStatus": { "type": "number", "enum": [1, 0] },
       "InterviewPairDto": {
         "type": "object",
@@ -4748,6 +5149,26 @@
         },
         "required": ["name", "id", "checksCount", "completedChecksCount"]
       },
+      "CrossCheckSolutionDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "updatedDate": { "type": "string" },
+          "url": { "type": "string" },
+          "review": { "type": "array", "items": { "type": "object" } },
+          "studentId": { "type": "number" },
+          "comments": { "type": "array", "items": { "type": "object" } }
+        },
+        "required": ["id", "updatedDate", "url", "review", "studentId", "comments"]
+      },
+      "CrossCheckTaskDetailsDto": {
+        "type": "object",
+        "properties": {
+          "criteria": { "type": "array", "items": { "$ref": "#/components/schemas/CrossCheckCriteriaDataDto" } },
+          "studentEndDate": { "type": "string" }
+        },
+        "required": ["criteria"]
+      },
       "CrossCheckAuthorDto": {
         "type": "object",
         "properties": {
@@ -4855,11 +5276,6 @@
           "mentorGithubId": { "type": "string" }
         },
         "required": ["studentGithubId", "score"]
-      },
-      "OperationResultDto": {
-        "type": "object",
-        "properties": { "status": { "type": "string" }, "value": { "type": "string" } },
-        "required": ["status"]
       },
       "CreateSingleScoreDto": {
         "type": "object",

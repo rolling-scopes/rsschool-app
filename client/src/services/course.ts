@@ -1,4 +1,3 @@
-import globalAxios, { AxiosInstance } from 'axios';
 import { UserBasic, MentorBasic, StudentBasic, InterviewDetails } from '@common/models';
 import { ScoreOrder, ScoreTableFilters } from '@client/modules/Score/hooks/types';
 import { IPaginationInfo } from '@client/shared/utils/pagination';
@@ -130,11 +129,7 @@ const courseTaskVerificationsApi = new CourseTaskVerificationsApi();
 const courseMentorsApi = new CourseMentorsApi();
 
 export class CourseService {
-  private axios: AxiosInstance;
-
-  constructor(private courseId: number) {
-    this.axios = globalAxios.create({ baseURL: `/api/course/${this.courseId}` });
-  }
+  constructor(private courseId: number) {}
 
   async getCourseCrossCheckTasks(status?: 'started' | 'inprogress' | 'finished') {
     const { data } = await courseTasksApi.getCourseTasks(this.courseId, status);
@@ -187,18 +182,9 @@ export class CourseService {
     await courseEventsApi.deleteCourseEvent(courseTaskId, this.courseId);
   }
 
-  async getCourseStudents(activeOnly?: boolean) {
-    const result = await this.axios.get<{ data: StudentDetails[] }>(
-      `/students?status=${activeOnly ? 'active' : 'all'}`,
-    );
-    return result.data.data;
-  }
-
   async getCourseStudentsWithDetails(activeOnly?: boolean) {
-    const result = await this.axios.get<{ data: StudentDetails[] }>(
-      `/students/details?status=${activeOnly ? 'active' : 'all'}`,
-    );
-    return result.data.data;
+    const result = await studentsApi.getCourseStudentsWithDetails(this.courseId, activeOnly ? 'active' : 'all');
+    return result.data as unknown as StudentDetails[];
   }
 
   async searchStudents(query: string | null, onlyStudentsWithoutMentorShown = false) {
@@ -206,10 +192,12 @@ export class CourseService {
       if (!query) {
         return [];
       }
-      const response = await this.axios.get<{ data: SearchStudent[] }>(`/students/search/${query}`, {
-        params: { onlyStudentsWithoutMentorShown },
-      });
-      return response.data.data;
+      const response = await studentsApi.searchCourseStudents(
+        this.courseId,
+        query,
+        String(onlyStudentsWithoutMentorShown),
+      );
+      return response.data as unknown as SearchStudent[];
     } catch {
       return [];
     }
@@ -300,7 +288,7 @@ export class CourseService {
     review?: CrossCheckReview[],
     comments?: CrossCheckComment[],
   ) {
-    await this.axios.post(`/student/${githubId}/task/${courseTaskId}/cross-check/solution`, {
+    await courseTasksApi.createCrossCheckSolution(this.courseId, courseTaskId, githubId, {
       url,
       review,
       comments,
@@ -308,13 +296,12 @@ export class CourseService {
   }
 
   async deleteTaskSolution(githubId: string, courseTaskId: number) {
-    await this.axios.delete(`/student/${githubId}/task/${courseTaskId}/cross-check/solution`);
+    await courseTasksApi.deleteCrossCheckSolution(this.courseId, courseTaskId, githubId);
   }
 
   async getCrossCheckTaskSolution(githubId: string, courseTaskId: number) {
-    const apiUrl = `/student/${githubId}/task/${courseTaskId}/cross-check/solution`;
-    const result = await this.axios.get(apiUrl);
-    return result.data.data as TaskSolution;
+    const result = await courseTasksApi.getCrossCheckTaskSolution(this.courseId, courseTaskId, githubId);
+    return result.data as unknown as TaskSolution;
   }
 
   async postTaskSolutionResult(
@@ -329,12 +316,12 @@ export class CourseService {
       criteria: CrossCheckCriteriaDataDto[];
     },
   ) {
-    await this.axios.post(`/student/${githubId}/task/${courseTaskId}/cross-check/result`, data);
+    await courseTasksApi.createCrossCheckResult(this.courseId, courseTaskId, githubId, data);
   }
 
   async getTaskSolutionResult(githubId: string, courseTaskId: number) {
-    const result = await this.axios.get(`/student/${githubId}/task/${courseTaskId}/cross-check/result`);
-    return result.data.data as {
+    const result = await courseTasksApi.getCrossCheckTaskResult(this.courseId, courseTaskId, githubId);
+    return (result.data || null) as {
       id: number;
       comments: CrossCheckComment[];
       review: CrossCheckReview[];
@@ -366,10 +353,7 @@ export class CourseService {
       role: string;
     },
   ) {
-    await this.axios.post(
-      `/taskSolutionResult/${taskSolutionResultId}/task/${courseTaskId}/cross-check/messages`,
-      data,
-    );
+    await courseTasksApi.createCrossCheckMessage(this.courseId, courseTaskId, taskSolutionResultId, data);
   }
 
   async updateTaskSolutionResultMessages(
@@ -379,12 +363,12 @@ export class CourseService {
       role: string;
     },
   ) {
-    await this.axios.put(`/taskSolutionResult/${taskSolutionResultId}/task/${courseTaskId}/cross-check/messages`, data);
+    await courseTasksApi.updateCrossCheckMessage(this.courseId, courseTaskId, taskSolutionResultId, data);
   }
 
   async getCrossCheckTaskDetails(courseTaskId: number) {
-    const result = await this.axios.get(`/task/${courseTaskId}/cross-check/details`);
-    return result.data.data as {
+    const result = await courseTasksApi.getCrossCheckTaskDetails(this.courseId, courseTaskId);
+    return result.data as unknown as {
       criteria: CrossCheckCriteria[];
       studentEndDate: string | undefined;
     } | null;
@@ -396,18 +380,18 @@ export class CourseService {
   }
 
   async getStageInterviews() {
-    const result = await this.axios.get(`/interviews/stage`);
-    return result.data.data;
+    const result = await coursesInterviewsApi.getStageInterviews(this.courseId);
+    return result.data;
   }
 
   async createStageInterviews(params: { noRegistration: boolean }) {
-    const result = await this.axios.post(`/interviews/stage`, params);
-    return result.data.data;
+    const result = await coursesInterviewsApi.createStageInterviews(this.courseId, params);
+    return result.data;
   }
 
   async createInterview(githubId: string, mentorGithubId: string) {
-    const result = await this.axios.post(`/interview/stage/interviewer/${mentorGithubId}/student/${githubId}`);
-    return result.data.data;
+    const result = await coursesInterviewsApi.createStageInterviewPair(this.courseId, mentorGithubId, githubId);
+    return result.data;
   }
 
   async updateMentoringAvailability(githubId: string, mentoring: boolean) {
@@ -415,21 +399,21 @@ export class CourseService {
   }
 
   async deleteStageInterview(interviewId: number) {
-    const result = await this.axios.delete(`/interview/stage/${interviewId}`);
-    return result.data.data;
+    const result = await coursesInterviewsApi.cancelStageInterviewPair(this.courseId, interviewId);
+    return result.data;
   }
 
   async updateStageInterview(interviewId: number, data: { githubId: string }) {
-    const result = await this.axios.put(`/interview/stage/${interviewId}`, data);
-    return result.data.data;
+    const result = await coursesInterviewsApi.updateStageInterviewPair(this.courseId, interviewId, data);
+    return result.data;
   }
 
   /**
    * @deprecated. should be removed after feedbacks are migrated to new template
    */
-  async getInterviewerStageInterviews(githubId: string) {
-    const result = await this.axios.get(`/interview/stage/interviewer/${githubId}/students`);
-    return result.data.data as { id: number; completed: boolean; student: StudentBasic }[];
+  async getInterviewerStageInterviews(_githubId: string) {
+    const result = await coursesInterviewsApi.getStageInterviewerStudents(this.courseId);
+    return result.data as unknown as { id: number; completed: boolean; student: StudentBasic }[];
   }
 
   /**
@@ -469,18 +453,17 @@ export class CourseService {
   }
 
   async getCrossCheckAssignments(githubId: string, courseTaskId: number) {
-    const result = await this.axios.get<{
-      data: {
-        student: StudentBasic;
-        url: string;
-      }[];
-    }>(`/student/${githubId}/task/${courseTaskId}/cross-check/assignments`);
-    return result.data.data;
+    const result = await courseTasksApi.getCrossCheckAssignments(this.courseId, courseTaskId, githubId);
+    return result.data as unknown as {
+      student: StudentBasic;
+      url: string;
+    }[];
   }
 
   async createCrossCheckDistribution(courseTaskId: number) {
-    const result = await this.axios.post(`/task/${courseTaskId}/cross-check/distribution`);
-    return result.data;
+    const result = await courseTasksApi.createCrossCheckDistribution(this.courseId, courseTaskId);
+    // preserve the legacy axios envelope shape ({ data: { crossCheckPairs } }) for the caller
+    return { data: result.data as { crossCheckPairs: unknown[] } };
   }
 
   async createInterviewDistribution(courseTaskId: number) {
@@ -497,7 +480,7 @@ export class CourseService {
   }
 
   async createCrossCheckCompletion(courseTaskId: number) {
-    const result = await this.axios.post(`/task/${courseTaskId}/cross-check/completion`);
+    const result = await courseTasksApi.createCrossCheckCompletion(this.courseId, courseTaskId);
     return result.data;
   }
 
@@ -567,7 +550,7 @@ export class CourseService {
   }
 
   exportStudentsCsv(activeOnly?: boolean) {
-    window.open(`${this.axios.defaults.baseURL}/students/csv?status=${activeOnly ? 'active' : ''}`, '_blank');
+    window.open(`/api/v2/courses/${this.courseId}/students/csv?status=${activeOnly ? 'active' : ''}`, '_blank');
   }
 }
 

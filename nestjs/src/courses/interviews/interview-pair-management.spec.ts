@@ -14,6 +14,7 @@ import { InterviewsController } from './interviews.controller';
 import { InterviewsService } from './interviews.service';
 import { InterviewFeedbackService } from './interviewFeedback.service';
 import { CourseTasksService } from '../course-tasks';
+import { StageInterviewsService } from './stage-interviews.service';
 import { CrossMentorDistributionService } from './cross-mentor-distribution.service';
 import { UserNotificationsService } from 'src/users-notifications';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
@@ -75,6 +76,7 @@ describe('interview pair management', () => {
         { provide: getRepositoryToken(TaskChecker), useValue: repos.taskChecker },
         { provide: getRepositoryToken(User), useValue: {} },
         { provide: CrossMentorDistributionService, useValue: {} },
+        { provide: StageInterviewsService, useValue: {} },
         { provide: InterviewFeedbackService, useValue: {} },
         { provide: CourseTasksService, useValue: {} },
         { provide: UserNotificationsService, useValue: { sendEventNotification: mockSendEventNotification } },
