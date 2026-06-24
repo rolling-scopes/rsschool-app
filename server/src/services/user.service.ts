@@ -29,14 +29,6 @@ export function getFullUserById(id: number) {
   });
 }
 
-export function getUserById(id: number) {
-  return getRepository(User).findOne({ where: { id } });
-}
-
-export function saveUser(user: Partial<User>) {
-  return getRepository(User).save(user);
-}
-
 export function getUsersByGithubIds(githubIds: string[]) {
   return getRepository(User).find({
     where: { githubId: In(githubIds) },

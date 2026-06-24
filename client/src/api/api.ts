@@ -8075,6 +8075,19 @@ export interface TopMentorDto {
 /**
  * 
  * @export
+ * @interface UpdateActivistDto
+ */
+export interface UpdateActivistDto {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateActivistDto
+     */
+    'activist': boolean;
+}
+/**
+ * 
+ * @export
  * @interface UpdateContributorDto
  */
 export interface UpdateContributorDto {
@@ -9305,6 +9318,49 @@ export interface UpsertNotificationConnectionDto {
      * @memberof UpsertNotificationConnectionDto
      */
     'enabled': boolean;
+}
+/**
+ * 
+ * @export
+ * @interface UpsertUserDto
+ */
+export interface UpsertUserDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpsertUserDto
+     */
+    'githubId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpsertUserDto
+     */
+    'firstName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpsertUserDto
+     */
+    'lastName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpsertUserDto
+     */
+    'primaryEmail'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpsertUserDto
+     */
+    'cityName'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpsertUserDto
+     */
+    'countryName'?: string;
 }
 /**
  * 
@@ -27618,6 +27674,41 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
     return {
         /**
          * 
+         * @param {Array<UpsertUserDto>} upsertUserDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createUsers: async (upsertUserDto: Array<UpsertUserDto>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'upsertUserDto' is not null or undefined
+            assertParamExists('createUsers', 'upsertUserDto', upsertUserDto)
+            const localVarPath = `/users`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(upsertUserDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} query 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -27688,6 +27779,45 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {number} userId 
+         * @param {UpdateActivistDto} updateActivistDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateUserActivist: async (userId: number, updateActivistDto: UpdateActivistDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'userId' is not null or undefined
+            assertParamExists('updateUserActivist', 'userId', userId)
+            // verify required parameter 'updateActivistDto' is not null or undefined
+            assertParamExists('updateUserActivist', 'updateActivistDto', updateActivistDto)
+            const localVarPath = `/users/{userId}/activist`
+                .replace(`{${"userId"}}`, encodeURIComponent(String(userId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateActivistDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -27698,6 +27828,16 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
 export const UsersApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = UsersApiAxiosParamCreator(configuration)
     return {
+        /**
+         * 
+         * @param {Array<UpsertUserDto>} upsertUserDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createUsers(upsertUserDto: Array<UpsertUserDto>, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<OperationResultDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createUsers(upsertUserDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
         /**
          * 
          * @param {string} query 
@@ -27718,6 +27858,17 @@ export const UsersApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.searchUsersBasic(query, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {number} userId 
+         * @param {UpdateActivistDto} updateActivistDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateUserActivist(userId: number, updateActivistDto: UpdateActivistDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateUserActivist(userId, updateActivistDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -27728,6 +27879,15 @@ export const UsersApiFp = function(configuration?: Configuration) {
 export const UsersApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = UsersApiFp(configuration)
     return {
+        /**
+         * 
+         * @param {Array<UpsertUserDto>} upsertUserDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createUsers(upsertUserDto: Array<UpsertUserDto>, options?: any): AxiosPromise<Array<OperationResultDto>> {
+            return localVarFp.createUsers(upsertUserDto, options).then((request) => request(axios, basePath));
+        },
         /**
          * 
          * @param {string} query 
@@ -27746,6 +27906,16 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
         searchUsersBasic(query: string, options?: any): AxiosPromise<Array<UserSearchBasicDto>> {
             return localVarFp.searchUsersBasic(query, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {number} userId 
+         * @param {UpdateActivistDto} updateActivistDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateUserActivist(userId: number, updateActivistDto: UpdateActivistDto, options?: any): AxiosPromise<void> {
+            return localVarFp.updateUserActivist(userId, updateActivistDto, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -27756,6 +27926,17 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
  * @extends {BaseAPI}
  */
 export class UsersApi extends BaseAPI {
+    /**
+     * 
+     * @param {Array<UpsertUserDto>} upsertUserDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public createUsers(upsertUserDto: Array<UpsertUserDto>, options?: AxiosRequestConfig) {
+        return UsersApiFp(this.configuration).createUsers(upsertUserDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {string} query 
@@ -27776,6 +27957,18 @@ export class UsersApi extends BaseAPI {
      */
     public searchUsersBasic(query: string, options?: AxiosRequestConfig) {
         return UsersApiFp(this.configuration).searchUsersBasic(query, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} userId 
+     * @param {UpdateActivistDto} updateActivistDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public updateUserActivist(userId: number, updateActivistDto: UpdateActivistDto, options?: AxiosRequestConfig) {
+        return UsersApiFp(this.configuration).updateUserActivist(userId, updateActivistDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

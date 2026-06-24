@@ -31,6 +31,40 @@ export class UsersService {
     return this.userRepository.save(user);
   }
 
+  // Admin bulk upsert by githubId (mirrors legacy POST /users).
+  public async upsertUsers(items: Partial<User>[]): Promise<{ status: string; value: string }[]> {
+    const result: { status: string; value: string }[] = [];
+
+    for (const item of items) {
+      try {
+        const entity = await this.userRepository.findOne({ where: { githubId: item.githubId!.toLowerCase() } });
+
+        if (entity == null) {
+          const user = await this.userRepository.save(item);
+          result.push({ status: 'created', value: `GithubId: ${item.githubId}, UserId: ${user.id}` });
+        } else {
+          const user = await this.userRepository.save({ ...entity, ...item });
+          result.push({ status: 'updated', value: `GithubId: ${item.githubId}, UserId: ${user.id}` });
+        }
+      } catch (e) {
+        result.push({ status: 'failed', value: `GithubId: ${item.githubId}. Error: ${(e as Error).message}` });
+      }
+    }
+
+    return result;
+  }
+
+  // Admin toggle of the activist flag (mirrors legacy POST /users/:userId/activist). Returns false when the user is absent.
+  // Uses a partial update (not save) to avoid rewriting unrelated columns / triggering entity update hooks.
+  public async setActivist(userId: number, activist: boolean): Promise<boolean> {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (user == null) {
+      return false;
+    }
+    await this.userRepository.update(userId, { activist });
+    return true;
+  }
+
   public async updateUser(id: number, user: Partial<Omit<User, 'id' | 'githubId'>>) {
     await this.userRepository.update(id, user);
   }
