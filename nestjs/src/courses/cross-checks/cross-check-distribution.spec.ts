@@ -1,13 +1,7 @@
 import { BadRequestException } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { CrossCheckStatus } from '@entities/courseTask';
-import { CourseCrossCheckController } from './course-cross-checks.controller';
 import { CourseCrossCheckService } from './course-cross-checks.service';
-import { CourseTasksService } from '../course-tasks';
-import { WriteScoreService } from '../score';
-import { UserNotificationsService } from 'src/users-notifications';
-import { ConfigService } from 'src/config';
 import { CrossCheckDistributionService } from './cross-check-distribution';
 
 describe('CrossCheckDistributionService.distribute', () => {
@@ -37,91 +31,82 @@ const pastTask = {
   studentEndDate: '2000-01-01',
 };
 
-describe('CourseCrossCheckController distribution/completion', () => {
-  const mockGetCourseTask = vi.fn();
-  const mockDistributeCrossCheck = vi.fn();
-  const mockGetTaskSolutionCheckers = vi.fn();
-  const mockChangeCourseTaskStatus = vi.fn();
+// Orchestration lives in CourseCrossCheckService (shared by the controller endpoints and the daily cron).
+describe('CourseCrossCheckService runDistribution/runCompletion', () => {
+  let service: CourseCrossCheckService;
   const mockSaveScore = vi.fn();
-  let controller: CourseCrossCheckController;
 
-  beforeEach(async () => {
-    mockGetCourseTask.mockReset().mockResolvedValue(pastTask);
-    mockDistributeCrossCheck.mockReset().mockResolvedValue({ crossCheckPairs: [{ studentId: 31, checkerId: 32 }] });
-    mockGetTaskSolutionCheckers.mockReset().mockResolvedValue([
+  beforeEach(() => {
+    service = new CourseCrossCheckService(
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      { saveScore: mockSaveScore } as never,
+    );
+    vi.spyOn(service, 'getCourseTask').mockResolvedValue(pastTask as never);
+    vi.spyOn(service, 'distributeCrossCheck').mockResolvedValue({
+      crossCheckPairs: [{ studentId: 31, checkerId: 32 }],
+    } as never);
+    vi.spyOn(service, 'getTaskSolutionCheckers').mockResolvedValue([
       { studentId: 31, score: 80 },
       { studentId: 32, score: 60 },
     ]);
-    mockChangeCourseTaskStatus.mockReset();
+    vi.spyOn(service, 'changeCourseTaskStatus').mockResolvedValue(undefined as never);
     mockSaveScore.mockReset();
-
-    const module = await Test.createTestingModule({
-      controllers: [CourseCrossCheckController],
-      providers: [
-        {
-          provide: CourseCrossCheckService,
-          useValue: {
-            getCourseTask: mockGetCourseTask,
-            distributeCrossCheck: mockDistributeCrossCheck,
-            getTaskSolutionCheckers: mockGetTaskSolutionCheckers,
-            changeCourseTaskStatus: mockChangeCourseTaskStatus,
-          },
-        },
-        { provide: CourseTasksService, useValue: {} },
-        { provide: WriteScoreService, useValue: { saveScore: mockSaveScore } },
-        { provide: UserNotificationsService, useValue: {} },
-        { provide: ConfigService, useValue: {} },
-      ],
-    }).compile();
-
-    controller = module.get(CourseCrossCheckController);
   });
 
   it('distributes when the deadline has passed', async () => {
-    const result = await controller.createCrossCheckDistribution(11, 15);
+    const result = await service.runDistribution(15);
 
-    expect(mockDistributeCrossCheck).toHaveBeenCalledWith(pastTask, 15);
+    expect(service.distributeCrossCheck).toHaveBeenCalledWith(pastTask, 15);
     expect(result).toEqual({ crossCheckPairs: [{ studentId: 31, checkerId: 32 }] });
   });
 
   it('distribution responds 400 when the task is missing', async () => {
-    mockGetCourseTask.mockResolvedValue(null);
-    await expect(controller.createCrossCheckDistribution(11, 15)).rejects.toThrow(BadRequestException);
+    vi.spyOn(service, 'getCourseTask').mockResolvedValue(null as never);
+    await expect(service.runDistribution(15)).rejects.toThrow(BadRequestException);
   });
 
   it('distribution responds 400 when the deadline has not passed', async () => {
-    mockGetCourseTask.mockResolvedValue({ ...pastTask, studentEndDate: '2999-01-01' });
-    await expect(controller.createCrossCheckDistribution(11, 15)).rejects.toThrow(BadRequestException);
-    expect(mockDistributeCrossCheck).not.toHaveBeenCalled();
+    vi.spyOn(service, 'getCourseTask').mockResolvedValue({ ...pastTask, studentEndDate: '2999-01-01' } as never);
+    await expect(service.runDistribution(15)).rejects.toThrow(BadRequestException);
+    expect(service.distributeCrossCheck).not.toHaveBeenCalled();
   });
 
   it('writes averaged cross-check scores and completes the task', async () => {
-    await controller.createCrossCheckCompletion(11, 15);
+    await service.runCompletion(15);
 
     // pairsCount = max(3 - 1, 1) = 2
-    expect(mockGetTaskSolutionCheckers).toHaveBeenCalledWith(15, 2);
+    expect(service.getTaskSolutionCheckers).toHaveBeenCalledWith(15, 2);
     expect(mockSaveScore).toHaveBeenCalledWith(31, 15, { authorId: -1, comment: 'Cross-Check score', score: 80 });
     expect(mockSaveScore).toHaveBeenCalledWith(32, 15, { authorId: -1, comment: 'Cross-Check score', score: 60 });
-    expect(mockChangeCourseTaskStatus).toHaveBeenCalledWith(pastTask, CrossCheckStatus.Completed);
+    expect(service.changeCourseTaskStatus).toHaveBeenCalledWith(pastTask, CrossCheckStatus.Completed);
   });
 
   it('completion defaults pairsCount to 4 (minCheckedCount 3) when not set', async () => {
-    mockGetCourseTask.mockResolvedValue({ ...pastTask, pairsCount: null });
-    mockGetTaskSolutionCheckers.mockResolvedValue([]);
+    vi.spyOn(service, 'getCourseTask').mockResolvedValue({ ...pastTask, pairsCount: null } as never);
+    vi.spyOn(service, 'getTaskSolutionCheckers').mockResolvedValue([]);
 
-    await controller.createCrossCheckCompletion(11, 15);
+    await service.runCompletion(15);
 
-    expect(mockGetTaskSolutionCheckers).toHaveBeenCalledWith(15, 3);
+    expect(service.getTaskSolutionCheckers).toHaveBeenCalledWith(15, 3);
   });
 
   it('completion responds 400 when status is initial', async () => {
-    mockGetCourseTask.mockResolvedValue({ ...pastTask, crossCheckStatus: CrossCheckStatus.Initial });
-    await expect(controller.createCrossCheckCompletion(11, 15)).rejects.toThrow(BadRequestException);
-    expect(mockChangeCourseTaskStatus).not.toHaveBeenCalled();
+    vi.spyOn(service, 'getCourseTask').mockResolvedValue({
+      ...pastTask,
+      crossCheckStatus: CrossCheckStatus.Initial,
+    } as never);
+    await expect(service.runCompletion(15)).rejects.toThrow(BadRequestException);
+    expect(service.changeCourseTaskStatus).not.toHaveBeenCalled();
   });
 
   it('completion responds 400 when the deadline has not passed', async () => {
-    mockGetCourseTask.mockResolvedValue({ ...pastTask, studentEndDate: '2999-01-01' });
-    await expect(controller.createCrossCheckCompletion(11, 15)).rejects.toThrow(BadRequestException);
+    vi.spyOn(service, 'getCourseTask').mockResolvedValue({ ...pastTask, studentEndDate: '2999-01-01' } as never);
+    await expect(service.runCompletion(15)).rejects.toThrow(BadRequestException);
   });
 });

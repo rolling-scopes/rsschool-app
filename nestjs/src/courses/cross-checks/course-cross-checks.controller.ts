@@ -33,7 +33,6 @@ import { UserNotificationsService } from 'src/users-notifications';
 import { TaskSolution } from '@entities/taskSolution';
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
 import { CourseTasksService } from '../course-tasks';
-import { WriteScoreService } from '../score';
 import { OrderField, OrderDirection, CourseCrossCheckService } from './course-cross-checks.service';
 import {
   BadCommentCheckerDto,
@@ -56,12 +55,9 @@ export class CourseCrossCheckController {
   constructor(
     private courseCrossCheckService: CourseCrossCheckService,
     private courseTasksService: CourseTasksService,
-    private writeScoreService: WriteScoreService,
     private userNotificationsService: UserNotificationsService,
     private configService: ConfigService,
   ) {}
-
-  private static readonly DEFAULT_PAIRS_COUNT = 4;
 
   @Post(':courseTaskId/distribution')
   @ApiOperation({ operationId: 'createCrossCheckDistribution' })
@@ -73,16 +69,7 @@ export class CourseCrossCheckController {
     @Param('courseId', ParseIntPipe) _courseId: number,
     @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
   ) {
-    const courseTask = await this.courseCrossCheckService.getCourseTask(courseTaskId);
-
-    if (courseTask == null) {
-      throw new BadRequestException();
-    }
-    if (!CourseCrossCheckService.isSubmissionDeadlinePassed(courseTask)) {
-      throw new BadRequestException();
-    }
-
-    return this.courseCrossCheckService.distributeCrossCheck(courseTask, courseTaskId);
+    return this.courseCrossCheckService.runDistribution(courseTaskId);
   }
 
   @Post(':courseTaskId/completion')
@@ -95,27 +82,7 @@ export class CourseCrossCheckController {
     @Param('courseId', ParseIntPipe) _courseId: number,
     @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
   ) {
-    const courseTask = await this.courseCrossCheckService.getCourseTask(courseTaskId);
-
-    if (courseTask == null) {
-      throw new BadRequestException();
-    }
-    if (
-      !CourseCrossCheckService.isSubmissionDeadlinePassed(courseTask) ||
-      courseTask.crossCheckStatus === CrossCheckStatus.Initial
-    ) {
-      throw new BadRequestException();
-    }
-
-    const pairsCount = Math.max((courseTask.pairsCount ?? CourseCrossCheckController.DEFAULT_PAIRS_COUNT) - 1, 1);
-    const studentScores = await this.courseCrossCheckService.getTaskSolutionCheckers(courseTaskId, pairsCount);
-
-    for (const studentScore of studentScores) {
-      const data = { authorId: -1, comment: 'Cross-Check score', score: studentScore.score };
-      await this.writeScoreService.saveScore(studentScore.studentId, courseTaskId, data);
-    }
-
-    await this.courseCrossCheckService.changeCourseTaskStatus(courseTask, CrossCheckStatus.Completed);
+    await this.courseCrossCheckService.runCompletion(courseTaskId);
   }
 
   @Get('/:courseTaskId/max-score-checkers')

@@ -8,6 +8,7 @@ import { CourseTask } from '@entities/courseTask';
 import { DataSource } from 'typeorm';
 import { Student } from '@entities/student';
 import { User } from '@entities/user';
+import { WriteScoreService } from '../score/write-score.service';
 
 const mockRawData = [
   {
@@ -68,6 +69,10 @@ describe('CourseCrossCheckService', () => {
         },
         {
           provide: DataSource,
+          useValue: {},
+        },
+        {
+          provide: WriteScoreService,
           useValue: {},
         },
       ],

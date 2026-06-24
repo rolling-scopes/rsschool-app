@@ -9,6 +9,7 @@ import { Task } from '@entities/task';
 import { Student } from '@entities/student';
 import { User } from '@entities/user';
 import { CourseCrossCheckService } from './course-cross-checks.service';
+import { WriteScoreService } from '../score/write-score.service';
 
 // Fixtures mirrored from server/src/services/__test__/check.service.test.ts to prove business-logic equivalence
 const maxScoreRows = [
@@ -66,6 +67,7 @@ describe('CourseCrossCheckService checkers queries', () => {
         { provide: getRepositoryToken(Student), useValue: {} },
         { provide: getRepositoryToken(User), useValue: {} },
         { provide: DataSource, useValue: {} },
+        { provide: WriteScoreService, useValue: {} },
       ],
     }).compile();
 

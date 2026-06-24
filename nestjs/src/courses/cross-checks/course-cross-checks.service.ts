@@ -19,6 +19,7 @@ import { UsersService } from 'src/users/users.service';
 import { PersonDto } from 'src/core/dto';
 import { CrossCheckCriteriaDataDto, CrossCheckMessageDto } from './dto';
 import { Discord } from 'src/profile/dto';
+import { WriteScoreService } from '../score/write-score.service';
 import { CrossCheckDistributionService } from './cross-check-distribution';
 
 export type CrossCheckPair = {
@@ -115,10 +116,52 @@ export class CourseCrossCheckService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly dataSource: DataSource,
+    private readonly writeScoreService: WriteScoreService,
   ) {}
+
+  private static readonly DEFAULT_PAIRS_COUNT = 4;
 
   public static isCrossCheckTask(courseTask: Partial<CourseTask>) {
     return courseTask.checker === 'crossCheck';
+  }
+
+  // Orchestrates cross-check distribution; shared by the controller endpoint and the daily cron.
+  public async runDistribution(courseTaskId: number) {
+    const courseTask = await this.getCourseTask(courseTaskId);
+
+    if (courseTask == null) {
+      throw new BadRequestException();
+    }
+    if (!CourseCrossCheckService.isSubmissionDeadlinePassed(courseTask)) {
+      throw new BadRequestException();
+    }
+
+    return this.distributeCrossCheck(courseTask, courseTaskId);
+  }
+
+  // Orchestrates cross-check completion (scoring + status change); shared by the controller endpoint and the daily cron.
+  public async runCompletion(courseTaskId: number) {
+    const courseTask = await this.getCourseTask(courseTaskId);
+
+    if (courseTask == null) {
+      throw new BadRequestException();
+    }
+    if (
+      !CourseCrossCheckService.isSubmissionDeadlinePassed(courseTask) ||
+      courseTask.crossCheckStatus === CrossCheckStatus.Initial
+    ) {
+      throw new BadRequestException();
+    }
+
+    const pairsCount = Math.max((courseTask.pairsCount ?? CourseCrossCheckService.DEFAULT_PAIRS_COUNT) - 1, 1);
+    const studentScores = await this.getTaskSolutionCheckers(courseTaskId, pairsCount);
+
+    for (const studentScore of studentScores) {
+      const data = { authorId: -1, comment: 'Cross-Check score', score: studentScore.score };
+      await this.writeScoreService.saveScore(studentScore.studentId, courseTaskId, data);
+    }
+
+    await this.changeCourseTaskStatus(courseTask, CrossCheckStatus.Completed);
   }
 
   public async getCourseTaskWithCourse(courseTaskId: number) {
