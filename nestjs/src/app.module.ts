@@ -22,6 +22,7 @@ import { CrossCheckModule } from './cross-check/cross-check.module';
 import { OpportunitiesModule } from './opportunities/opportunities.module';
 import { UserGroupsModule } from './user-groups/user-groups.module';
 import { ScheduleModule } from './schedule/schedule.module';
+import { CronModule } from './cron/cron.module';
 import { ActivityModule } from './activity/activity.module';
 import { UsersNotificationsModule } from './users-notifications';
 import { GratitudesModule } from './gratitudes';
@@ -67,6 +68,7 @@ import { DevtoolsModule } from './devtools/devtools.module';
     OpportunitiesModule,
     UserGroupsModule,
     ScheduleModule,
+    CronModule,
     UsersNotificationsModule,
     GratitudesModule,
     CloudApiModule,

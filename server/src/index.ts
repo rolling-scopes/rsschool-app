@@ -5,5 +5,4 @@ const app = new App();
 app
   .pgConnect()
   .then(() => app.start(true))
-  .then(() => app.startBackgroundJobs())
   .catch(e => console.error(e));
