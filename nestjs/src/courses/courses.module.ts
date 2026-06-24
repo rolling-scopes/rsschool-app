@@ -169,6 +169,13 @@ import { CourseLeaveSurveyResponse } from '@entities/index';
     MentorReviewsService,
     ExpelledStatsService,
   ],
-  exports: [CourseTasksService, CourseUsersService, CoursesService, StudentsService, ExpelledStatsService],
+  exports: [
+    CourseTasksService,
+    CourseUsersService,
+    CoursesService,
+    StudentsService,
+    ExpelledStatsService,
+    CourseCrossCheckService,
+  ],
 })
 export class CoursesModule {}

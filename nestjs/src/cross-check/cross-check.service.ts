@@ -1,12 +1,10 @@
 import { Repository } from 'typeorm';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { HttpService } from '@nestjs/axios';
 import { Cron } from '@nestjs/schedule';
-import { ConfigService } from '../config';
 import { isTaskNeededToStart, isTaskNeededToFinish } from './tasks-filtering';
 import { Checker, CourseTask } from '@entities/courseTask';
-import { from, catchError, mergeMap, EMPTY, toArray, lastValueFrom } from 'rxjs';
+import { CourseCrossCheckService } from '../courses/cross-checks';
 
 const ONCE_A_DAY_AT_00_05 = '5 0 * * *';
 
@@ -17,8 +15,7 @@ export class CrossCheckService {
   constructor(
     @InjectRepository(CourseTask)
     private readonly courseTaskRepository: Repository<CourseTask>,
-    private readonly httpService: HttpService,
-    private readonly conf: ConfigService,
+    private readonly courseCrossCheckService: CourseCrossCheckService,
   ) {}
 
   @Cron(ONCE_A_DAY_AT_00_05, { timeZone: 'UTC' })
@@ -28,46 +25,21 @@ export class CrossCheckService {
     await this.initCrossCheckAction(tasksToFinish, 'completion');
   }
 
-  private getInitialDataForRequest() {
-    const { username, password } = this.conf.users.root;
-    const host = this.conf.host;
-
-    return {
-      host,
-      auth: {
-        username,
-        password,
-      },
-    };
-  }
-
-  private makeCrossCheckRequest(url: string, auth: { username: string; password: string }) {
-    return this.httpService.post(url, null, {
-      auth,
-    });
-  }
-
   private async initCrossCheckAction(courseTasks: CourseTask[], action: 'distribution' | 'completion') {
-    const { host, auth } = this.getInitialDataForRequest();
-    const baseurl = `${host}/api/course`;
-
-    const courseTaskRequests$ = from(courseTasks).pipe(
-      mergeMap(({ id, courseId }) => {
-        const requestUrl = `${baseurl}/${courseId}/task/${id}/cross-check/${action}`;
-        return this.makeCrossCheckRequest(requestUrl, auth).pipe(
-          catchError(err => {
-            this.logger.error({
-              message: `Cross-Check ${action} failed for task with id ${id}!`,
-              reason: err,
-            });
-            return EMPTY;
-          }),
-        );
-      }),
-      toArray(),
-    );
-
-    await lastValueFrom(courseTaskRequests$);
+    for (const { id } of courseTasks) {
+      try {
+        if (action === 'distribution') {
+          await this.courseCrossCheckService.runDistribution(id);
+        } else {
+          await this.courseCrossCheckService.runCompletion(id);
+        }
+      } catch (err) {
+        this.logger.error({
+          message: `Cross-Check ${action} failed for task with id ${id}!`,
+          reason: err,
+        });
+      }
+    }
   }
 
   private async getCrossCheckTasks() {
