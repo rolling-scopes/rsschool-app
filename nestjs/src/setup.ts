@@ -6,10 +6,19 @@ import { Logger } from 'nestjs-pino';
 import { EntityNotFoundFilter, SentryFilter } from './core/filters';
 import { ValidationFilter } from './core/validation';
 import { HttpAdapterHost } from '@nestjs/core';
+import { ConfigService } from './config';
 
 export function setupApp(app: INestApplication) {
   const logger = app.get(Logger);
-  app.enableCors();
+  const config = app.get(ConfigService);
+  // Scope CORS to the app origin and allow credentials. The registry endpoint is
+  // called cross-origin (app.rs.school -> cdn.rs.school) with the auth-token cookie,
+  // so a wildcard `Access-Control-Allow-Origin: *` (the bare enableCors() default) is
+  // rejected by the browser. Mirrors the legacy koa config: origin = RSSHCOOL_HOST.
+  app.enableCors({
+    origin: config.host || 'http://localhost:3000',
+    credentials: true,
+  });
   app.useLogger(logger);
   app.use(cookieParser());
   // Register a global JSON body parser. NestJS skips registering its own default
