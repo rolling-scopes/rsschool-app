@@ -56,15 +56,6 @@ export class RsSchoolAppStack extends cdk.Stack {
       },
     });
 
-    const serverApi = new DockerFunction(this, 'ServerApi', {
-      ...defaultProps,
-      basePath: '/api/{proxy+}',
-      variables: {
-        NODE_ENV: 'development',
-      },
-      repository: Repository.fromRepositoryName(this, 'ServerRepository', 'rsschool-server'),
-    });
-
     const nestjsApi = new DockerFunction(this, 'NestjsApi', {
       ...defaultProps,
       basePath: '/api/v2/{proxy+}',
@@ -104,7 +95,6 @@ export class RsSchoolAppStack extends cdk.Stack {
       certificate: acm.Certificate.fromCertificateArn(this, 'Certificate', certificateArn),
       defaultBehavior: createBehavior(nextApp.domainName),
       additionalBehaviors: {
-        '/api/*': createBehavior(serverApi.domainName),
         '/api/v2/*': createBehavior(nestjsApi.domainName),
       },
     });
