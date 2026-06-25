@@ -149,7 +149,7 @@ jobs:
             ${{ runner.os }}-${{ env.cache-name }}-
 
       - name: Generate isolated subworkspace for Nest.js
-        run: npx turbo@${{ env.TURBO_VERSION }} prune --scope=server --scope=nestjs --docker
+        run: npx turbo@${{ env.TURBO_VERSION }} prune --scope=nestjs --docker
 
       - name: Add lockfile and package.json's and source of isolated subworkspace
         run: |

@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Course, User } from '../../../server/src/models';
+import { Course, User } from '.';
 
 @Entity('course_leave_survey_responses')
 export class CourseLeaveSurveyResponse {
