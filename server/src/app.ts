@@ -8,8 +8,6 @@ import { config } from './config';
 import { ILogger, loggerMiddleware, createDefaultLogger } from './logger';
 
 import { routesMiddleware, routeLoggerMiddleware } from './routes';
-import { dataSourceOptions } from './dataSourceOptions';
-import { createConnection } from 'typeorm';
 
 export class App {
   public koa = new Koa();
@@ -46,17 +44,5 @@ export class App {
       this.appLogger.info(`Service is running on ${config.port} port`);
     }
     return this.koa;
-  }
-
-  public async pgConnect(): Promise<boolean> {
-    const logger = this.appLogger.child({ module: 'db' });
-    const connection = await createConnection(dataSourceOptions);
-    logger.info('Connected to Postgres');
-
-    logger.info('Executing migrations...');
-    await connection.runMigrations();
-    logger.info('Migrations executed successfully');
-
-    return true;
   }
 }
