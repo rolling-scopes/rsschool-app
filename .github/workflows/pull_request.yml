@@ -50,11 +50,6 @@ jobs:
         if: success() || failure()
         working-directory: client
 
-      - name: Test (server)
-        run: npm run test:ci
-        if: success() || failure()
-        working-directory: server
-
       - name: Test (nestjs)
         run: npm run test:ci
         if: success() || failure()

@@ -12,7 +12,7 @@ New features should be implemented in `nestjs`. If changes need to be made to fu
 
 | Alias         | Resolves To           | Used In |
 | ------------- | --------------------- | ------- |
-| `@entities/*` | `server/src/models/*` | nestjs  |
+| `@entities/*` | `nestjs/src/models/*` | nestjs  |
 | `@client/*`   | `client/src/*`        | client  |
 
 ### File Naming
@@ -153,7 +153,7 @@ nestjs/src/<domain>/
 
 ## TypeORM Entities
 
-All entities live in `server/src/models/`. NestJS imports via `@entities/*` alias.
+All entities live in `nestjs/src/models/`. NestJS imports via `@entities/*` alias.
 
 ### Relations
 
@@ -162,7 +162,7 @@ All entities live in `server/src/models/`. NestJS imports via `@entities/*` alia
 ### Migrations
 
 - Register migrations in `nestjs/src/migrations/index.ts`
-- Export all entities from `server/src/models/index.ts`
+- Export all entities from `nestjs/src/models/index.ts`
 
 ## Testing
 

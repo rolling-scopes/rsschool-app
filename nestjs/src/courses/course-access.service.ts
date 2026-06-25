@@ -4,7 +4,7 @@ import { Between, FindOptionsWhere, In, Repository } from 'typeorm';
 import { AuthUser, CourseRole, Role } from '../auth';
 import { ExpelledStatsService } from './expelled-stats.service';
 import { LeaveCourseRequestDto } from './dto';
-import { Course, Student } from '../../../server/src/models';
+import { Course, Student } from '@entities/index';
 
 // use this as a mark for identifying self-expelled students.
 const SELF_EXPELLED_MARK = 'Self expelled from the course';

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CrossCheckService } from './cross-check.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { CourseTask } from '../../../server/src/models/courseTask';
+import { CourseTask } from '@entities/courseTask';
 import { CourseCrossCheckService } from '../courses/cross-checks';
 
 const MOCK_CURRENT_TIMESTAMP = new Date('2022-03-22 00:05 UTC').getTime();

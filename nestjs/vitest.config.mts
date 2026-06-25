@@ -13,7 +13,7 @@ export default mergeConfig(
     ],
     resolve: {
       alias: {
-        '@entities': path.resolve(import.meta.dirname, '../server/src/models'),
+        '@entities': path.resolve(import.meta.dirname, 'src/models'),
         src: path.resolve(import.meta.dirname, 'src'),
       },
     },
