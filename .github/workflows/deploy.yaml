@@ -121,67 +121,6 @@ jobs:
       - name: Publish "client" container
         run: docker push ghcr.io/rolling-scopes/rsschool-app-client:master
 
-  build_server:
-    name: Build (Server)
-    concurrency:
-      group: deploy-build-server
-      cancel-in-progress: true
-    needs: [checks]
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Restore npm cache
-        uses: actions/cache@v4
-        env:
-          cache-name: cache-npm
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ env.cache-name }}-
-
-      - name: Generate isolated subworkspace for Server
-        run: npx turbo@${{ env.TURBO_VERSION }} prune --scope=server --docker
-
-      - name: Add lockfile and package.json's and source of isolated subworkspace
-        run: |
-          mkdir -p app
-          cp -r out/json/. app
-          cp -r out/full/. app
-          cp -r out/package-lock.json app
-          cp -r common app/common
-
-      - name: Install dependencies
-        run: npm ci
-        working-directory: ./app
-
-      - name: Build (npm run build)
-        env:
-          NODE_ENV: production
-        run: npm run build
-        working-directory: ./app
-
-      - name: Build container
-        run: docker build -t ghcr.io/rolling-scopes/rsschool-app-server:master -f server/Dockerfile ./app
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Publish "server" container
-        run: docker push ghcr.io/rolling-scopes/rsschool-app-server:master
-
   build_nestjs:
     name: Build (Nest.js)
     concurrency:
@@ -248,7 +187,7 @@ jobs:
     concurrency:
       group: deploy-aws
       cancel-in-progress: false
-    needs: [build_client, build_server, build_nestjs]
+    needs: [build_client, build_nestjs]
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
