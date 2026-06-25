@@ -12,10 +12,7 @@
     "test": "vitest run",
     "test:ci": "vitest run",
     "test-watch": "vitest watch",
-    "coverage": "vitest run --coverage",
-    "typeorm": "typeorm-ts-node-commonjs",
-    "typeorm:migration:generate": "npm run migration",
-    "migration": "typeorm-ts-node-commonjs migration:generate -d src/dataSource.ts"
+    "coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@apalchys/pino-cloudwatch": "0.9.0",

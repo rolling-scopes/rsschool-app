@@ -161,7 +161,7 @@ All entities live in `server/src/models/`. NestJS imports via `@entities/*` alia
 
 ### Migrations
 
-- Register migrations in `server/src/migrations/index.ts`
+- Register migrations in `nestjs/src/migrations/index.ts`
 - Export all entities from `server/src/models/index.ts`
 
 ## Testing
