@@ -17,11 +17,44 @@ export default mergeConfig(
       environment: 'jsdom',
       include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
       setupFiles: ['src/setupTests.ts'],
-      testTimeout: 30000,
+      // antd v6 in jsdom is CPU-heavy; under coverage instrumentation + parallelism
+      // the slowest Table/Form-validation tests can exceed 30s on busy/CI runners.
+      testTimeout: 60000,
+      hookTimeout: 60000,
       env: {
         TZ: 'UTC',
       },
       css: false,
+      coverage: {
+        include: ['src/**/*.{ts,tsx}'],
+        // Measure real component/hook/service logic — exclude generated, route
+        // shims, static, presentational-only and test/support files.
+        exclude: [
+          'src/**/*.test.{ts,tsx}',
+          'src/__tests__/**',
+          'src/__mocks__/**',
+          'src/api/**', // generated OpenAPI client
+          'src/pages/**', // Next.js route shims (module-level */pages/* components stay)
+          'src/data/**',
+          'src/configs/**',
+          'src/styles/**',
+          'src/shared/components/Icons/**',
+          'src/**/*.stories.tsx',
+          'src/**/index.ts', // barrel re-exports
+          'src/**/*.d.ts',
+          'src/setupTests.ts',
+        ],
+        reportsDirectory: './coverage',
+        // Ratcheted floor enforced in CI via `test:ci`: starts just below the
+        // post-exclude baseline so this config-only change passes, then bumps up
+        // as each test tier lands, ending at a flat 90% (free above 90, fail below).
+        thresholds: {
+          statements: 34,
+          branches: 33,
+          functions: 30,
+          lines: 34,
+        },
+      },
       deps: {
         optimizer: {
           web: {

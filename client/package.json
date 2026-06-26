@@ -13,7 +13,7 @@
     "prod": "next start -p 8080",
     "lint": "eslint src",
     "test": "vitest run",
-    "test:ci": "vitest run",
+    "test:ci": "vitest run --coverage",
     "test:watch": "vitest",
     "test:e2e": "npx playwright test",
     "coverage": "vitest run --coverage"
