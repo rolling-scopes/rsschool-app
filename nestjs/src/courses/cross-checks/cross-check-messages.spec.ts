@@ -215,4 +215,48 @@ describe('CourseCrossCheckController messages endpoints', () => {
       'incorrect message role',
     );
   });
+
+  it('saves a reviewer message when the requester is the checker and flags it as a reviewer message', async () => {
+    mockQueryStudentByGithubId.mockResolvedValue({ ...student, id: 32 });
+
+    await controller.createCrossCheckMessage(studentReq, 11, 15, 71, {
+      content: 'hi student',
+      role: 'reviewer' as never,
+    });
+
+    expect(mockSaveMessage).toHaveBeenCalledWith(71, { content: 'hi student', role: 'reviewer' }, expect.anything());
+    expect(mockSendEventNotification).toHaveBeenCalledWith(
+      expect.objectContaining({ data: expect.objectContaining({ isReviewerMessage: true }) }),
+    );
+  });
+
+  it('responds 400 when a reviewer-role user is not the checker', async () => {
+    await expect(
+      controller.createCrossCheckMessage(studentReq, 11, 15, 71, { content: 'x', role: 'reviewer' as never }),
+    ).rejects.toThrow('user is not checker');
+  });
+
+  it('swallows notification delivery failures', async () => {
+    mockSendEventNotification.mockRejectedValue(new Error('smtp down'));
+
+    await expect(
+      controller.createCrossCheckMessage(studentReq, 11, 15, 71, { content: 'hi', role: 'student' as never }),
+    ).resolves.toBeUndefined();
+  });
+
+  it('update responds 400 when the student is not found', async () => {
+    mockQueryStudentByGithubId.mockResolvedValue(null);
+
+    await expect(
+      controller.updateCrossCheckMessage(studentReq, 11, 15, 71, { role: 'student' as never }),
+    ).rejects.toThrow('not valid student or course');
+  });
+
+  it('update responds 400 when the task solution result does not exist', async () => {
+    mockGetTaskSolutionResultById.mockResolvedValue(null);
+
+    await expect(
+      controller.updateCrossCheckMessage(studentReq, 11, 15, 71, { role: 'student' as never }),
+    ).rejects.toThrow('task solution result is not exist');
+  });
 });

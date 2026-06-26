@@ -76,15 +76,23 @@ const createQueryBuilderMock = (result: CourseEvent[]) => {
 describe('CourseEventsService', () => {
   let service: CourseEventsService;
   const mockCreateQueryBuilder = vi.fn();
+  const repo = {
+    createQueryBuilder: mockCreateQueryBuilder,
+    save: vi.fn(),
+    findOneOrFail: vi.fn(),
+    update: vi.fn(),
+    findOneByOrFail: vi.fn(),
+    remove: vi.fn(),
+  };
 
   beforeEach(async () => {
-    mockCreateQueryBuilder.mockReset();
+    Object.values(repo).forEach(fn => fn.mockReset());
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         CourseEventsService,
         {
           provide: getRepositoryToken(CourseEvent),
-          useValue: { createQueryBuilder: mockCreateQueryBuilder },
+          useValue: repo,
         },
       ],
     }).compile();
@@ -120,6 +128,50 @@ describe('CourseEventsService', () => {
       const result = await service.getCourseEvents(mockCourseId);
 
       expect(result).toEqual([]);
+    });
+  });
+
+  describe('createCourseEvent', () => {
+    it('saves the event then reloads it with organizer and event relations', async () => {
+      const input = { courseId: mockCourseId, eventId: 1, organizer: { id: 10 } };
+      repo.save.mockResolvedValue({ id: 101 });
+      repo.findOneOrFail.mockResolvedValue(mockCourseEvents[0]);
+
+      const result = await service.createCourseEvent(input);
+
+      expect(repo.save).toHaveBeenCalledWith(input);
+      expect(repo.findOneOrFail).toHaveBeenCalledWith({
+        where: { id: 101 },
+        relations: ['organizer', 'event'],
+      });
+      expect(result).toBe(mockCourseEvents[0]);
+    });
+  });
+
+  describe('updateCourseEvent', () => {
+    it('updates by id and returns the reloaded entity', async () => {
+      const patch = { courseId: mockCourseId, id: 101, place: 'Offline' };
+      repo.update.mockResolvedValue({ affected: 1 });
+      repo.findOneByOrFail.mockResolvedValue(mockCourseEvents[0]);
+
+      const result = await service.updateCourseEvent(101, patch);
+
+      expect(repo.update).toHaveBeenCalledWith(101, patch);
+      expect(repo.findOneByOrFail).toHaveBeenCalledWith({ id: 101 });
+      expect(result).toBe(mockCourseEvents[0]);
+    });
+  });
+
+  describe('deleteCourseEvent', () => {
+    it('loads the entity by id then removes it', async () => {
+      repo.findOneByOrFail.mockResolvedValue(mockCourseEvents[0]);
+      repo.remove.mockResolvedValue(mockCourseEvents[0]);
+
+      const result = await service.deleteCourseEvent(101);
+
+      expect(repo.findOneByOrFail).toHaveBeenCalledWith({ id: 101 });
+      expect(repo.remove).toHaveBeenCalledWith(mockCourseEvents[0]);
+      expect(result).toBe(mockCourseEvents[0]);
     });
   });
 });

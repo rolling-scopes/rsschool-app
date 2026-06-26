@@ -103,4 +103,21 @@ describe('InterviewsService.getInterviewStudentsByMentor', () => {
       },
     ]);
   });
+
+  it('defaults missing city/country to empty strings and marks expelled/failed students inactive', async () => {
+    mentorRepository.createQueryBuilder.mockReturnValue(createQb('getOne', { id: 8 }));
+    const expelled = {
+      ...mockStudentRecord,
+      isExpelled: true,
+      isFailed: false,
+      user: { ...mockStudentRecord.user, cityName: null, countryName: null },
+    };
+    studentRepository.createQueryBuilder.mockReturnValue(createQb('getMany', [expelled]));
+
+    const [student] = await service.getInterviewStudentsByMentor(5, 7, 'mentor-x');
+
+    expect(student.cityName).toBe('');
+    expect(student.countryName).toBe('');
+    expect(student.isActive).toBe(false);
+  });
 });

@@ -80,4 +80,16 @@ describe('InterviewsService.getRegisteredInterviewStudent', () => {
     });
     expect(result).toEqual({ id: 77 });
   });
+
+  it('returns null when the student is known but has no regular interview registration', async () => {
+    taskInterviewStudentRepository.findOne.mockResolvedValue(null);
+
+    expect(await service.getRegisteredInterviewStudent(5, 'john-doe', '7')).toBeNull();
+  });
+
+  it('returns null when the student is known but has no stage interview registration', async () => {
+    stageInterviewStudentRepository.findOne.mockResolvedValue(null);
+
+    expect(await service.getRegisteredInterviewStudent(5, 'john-doe', 'stage')).toBeNull();
+  });
 });

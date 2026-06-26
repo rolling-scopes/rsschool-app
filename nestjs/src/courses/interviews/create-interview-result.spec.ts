@@ -101,6 +101,15 @@ describe('InterviewsService.createInterviewResult', () => {
     expect(result).toEqual({ ok: true });
   });
 
+  it('defaults the comment to an empty string when updating without one', async () => {
+    repos.taskInterviewResult.createQueryBuilder.mockReturnValue(createGetOneQb({ id: 99 }));
+
+    const result = await service.createInterviewResult(5, 7, 'john-doe', 1, { score: 7, formAnswers });
+
+    expect(repos.taskInterviewResult.update).toHaveBeenCalledWith(99, { formAnswers, score: 7, comment: '' });
+    expect(result).toEqual({ ok: true });
+  });
+
   it('inserts a new interview result with rounded score and defaulted comment', async () => {
     const result = await service.createInterviewResult(5, 7, 'john-doe', 1, { score: 8.2, formAnswers });
 

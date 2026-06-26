@@ -278,4 +278,22 @@ describe('CourseCrossCheckController.createCrossCheckResult', () => {
       controller.createCrossCheckResult(req, 11, 15, 'john-doe', { ...body, score: 'abc' } as never),
     ).rejects.toThrow('no score provided');
   });
+
+  it('responds 400 when the resolved student does not exist', async () => {
+    mockQueryStudentByGithubId.mockImplementation(async (_courseId: number, githubId: string) =>
+      githubId === 'john-doe' ? null : checker,
+    );
+
+    await expect(controller.createCrossCheckResult(req, 11, 15, 'john-doe', body as never)).rejects.toThrow(
+      'not valid student or course task',
+    );
+  });
+
+  it('responds 400 when the task is not a cross-check task', async () => {
+    mockGetCourseTaskWithCourse.mockResolvedValue({ ...courseTask, checker: 'auto-test' });
+
+    await expect(controller.createCrossCheckResult(req, 11, 15, 'john-doe', body as never)).rejects.toThrow(
+      'task solution is supported for this task',
+    );
+  });
 });
