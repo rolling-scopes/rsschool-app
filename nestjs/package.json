@@ -14,7 +14,7 @@
     "start:prod": "node dist/nestjs/src/main.js",
     "lint": "eslint src",
     "test": "vitest run --passWithNoTests",
-    "test:ci": "vitest run",
+    "test:ci": "vitest run --coverage",
     "test:watch": "vitest watch",
     "test:cov": "vitest run --coverage",
     "test:debug": "vitest run --inspect-brk --no-file-parallelism",
