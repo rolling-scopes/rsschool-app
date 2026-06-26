@@ -19,6 +19,9 @@ export default mergeConfig(
     },
     test: {
       include: ['src/**/*.spec.ts', 'src/**/*.test.ts'],
+      // Pin the timezone so date/calendar assertions are deterministic and match
+      // CI (GitHub runners are UTC); otherwise tests bake in the dev's local TZ.
+      env: { TZ: 'UTC' },
       coverage: {
         include: ['src/**/*.(t|j)s'],
         // Exclude non-logic files so coverage measures real branching logic.
@@ -48,10 +51,10 @@ export default mergeConfig(
         // baseline so this config-only change passes, then bumps up as each
         // unit-test tier lands so coverage can only move up, never regress.
         thresholds: {
-          statements: 37,
-          branches: 35,
-          functions: 29,
-          lines: 37,
+          statements: 63,
+          branches: 66,
+          functions: 57,
+          lines: 63,
         },
       },
       deps: {

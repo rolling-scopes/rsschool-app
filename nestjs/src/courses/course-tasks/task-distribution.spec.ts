@@ -91,6 +91,16 @@ describe('CourseTasksService.createTaskDistribution', () => {
     expect(result).toEqual([{ courseTaskId: 7, mentorId: 1, studentId: 12 }]);
   });
 
+  it('treats a distributed mentor without a students array as contributing no pairs', async () => {
+    mockDistribute.mockReturnValue({ mentors: [{ id: 1 }, { id: 2, students: [{ id: 12 }] }] });
+
+    const result = await service.createTaskDistribution(5, 7, undefined);
+
+    // mentor 1 has no students -> ?? [] fallback; only mentor 2 produces a pair
+    expect(checkerRepository.insert).toHaveBeenCalledWith([{ courseTaskId: 7, mentorId: 2, studentId: 12 }]);
+    expect(result).toEqual([{ courseTaskId: 7, mentorId: 2, studentId: 12 }]);
+  });
+
   it('keeps existing pairs when clean is not requested', async () => {
     checkerRepository.findBy.mockResolvedValue([{ studentId: 11, mentorId: 1 }]);
     mockDistribute.mockReturnValue({ mentors: [] });

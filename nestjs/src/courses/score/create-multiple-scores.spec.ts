@@ -60,6 +60,15 @@ describe('createMultipleScores route', () => {
     ]);
   });
 
+  it('defaults the author id to 0 when the request has no user', async () => {
+    scoreService.getStudentForScore.mockResolvedValue(mockStudent);
+    mockSaveScoreWithStatus.mockResolvedValue({ created: true });
+
+    await controller.createMultipleScores({} as never, 5, 7, [{ studentGithubId: 'john-doe', score: 10 }]);
+
+    expect(mockSaveScoreWithStatus).toHaveBeenCalledWith(42, 7, expect.objectContaining({ authorId: 0 }));
+  });
+
   it('skips unknown students and reports failures per item', async () => {
     scoreService.getStudentForScore.mockResolvedValueOnce(null).mockResolvedValueOnce(mockStudent);
     mockSaveScoreWithStatus.mockRejectedValueOnce(new Error('boom'));
