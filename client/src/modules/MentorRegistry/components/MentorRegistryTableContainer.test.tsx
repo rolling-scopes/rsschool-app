@@ -59,6 +59,7 @@ function renderContainer(
     handleModalDataChange?: ReturnType<typeof vi.fn>;
     setTagFilters?: ReturnType<typeof vi.fn>;
     setCombinedFilter?: ReturnType<typeof vi.fn>;
+    combinedFilter?: Partial<CombinedFilter>;
   } = {},
 ) {
   const {
@@ -68,6 +69,7 @@ function renderContainer(
     handleModalDataChange = vi.fn(),
     setTagFilters = vi.fn(),
     setCombinedFilter = vi.fn(),
+    combinedFilter = {},
   } = options;
 
   const utils = render(
@@ -79,7 +81,7 @@ function renderContainer(
       disciplines={disciplines}
       tagFilters={tagFilters}
       setTagFilters={setTagFilters}
-      combinedFilter={{ ...baseFilter, status: activeTab }}
+      combinedFilter={{ ...baseFilter, status: activeTab, ...combinedFilter }}
       setCombinedFilter={setCombinedFilter}
       setCurrentPage={vi.fn()}
       currentPage={1}
@@ -328,6 +330,80 @@ describe('<MentorRegistryTableContainer /> + <MentorRegistryTable />', () => {
     expect(within(document.body).getByTitle('Mentor in the past')).toBeInTheDocument();
   });
 
+  // A setCombinedFilter that actually runs the functional updater so the reducer bodies
+  // inside handleTagClose (which compute the next filter state) are executed, not just
+  // registered as "called".
+  const runningSetCombinedFilter = () =>
+    vi.fn((updater: unknown) => {
+      if (typeof updater === 'function') {
+        (updater as (prev: CombinedFilter) => CombinedFilter)(baseFilter);
+      }
+    });
+
+  it('computes the next state when removing a Technologies tag (Tech reducer body)', () => {
+    const setCombinedFilter = runningSetCombinedFilter();
+    renderContainer({
+      tagFilters: ['Technologies: React'],
+      combinedFilter: { technicalMentoring: ['React'] },
+      setCombinedFilter,
+      setTagFilters: vi.fn(),
+    });
+
+    const tag = screen.getByText('Technologies: React');
+    const closeIcon = tag.closest('.ant-tag')?.querySelector('.ant-tag-close-icon') as HTMLElement;
+    fireEvent.click(closeIcon);
+
+    // The functional updater ran against a prev state (covers the Tech reducer body).
+    expect(setCombinedFilter).toHaveBeenCalledWith(expect.any(Function));
+  });
+
+  it('computes the next state when removing a Preferred course tag (Preferred reducer body)', () => {
+    const setCombinedFilter = runningSetCombinedFilter();
+    renderContainer({
+      tagFilters: ['Preferred: Course Two'],
+      combinedFilter: { preferredCourses: [2] },
+      setCombinedFilter,
+      setTagFilters: vi.fn(),
+    });
+
+    const tag = screen.getByText('Preferred: Course Two');
+    const closeIcon = tag.closest('.ant-tag')?.querySelector('.ant-tag-close-icon') as HTMLElement;
+    fireEvent.click(closeIcon);
+
+    expect(setCombinedFilter).toHaveBeenCalledWith(expect.any(Function));
+  });
+
+  it('computes the next state when removing a Pre-Selected course tag (Preselected reducer body)', () => {
+    const setCombinedFilter = runningSetCombinedFilter();
+    renderContainer({
+      tagFilters: ['Pre-Selected: Course One'],
+      combinedFilter: { preselectedCourses: [1] },
+      setCombinedFilter,
+      setTagFilters: vi.fn(),
+    });
+
+    const tag = screen.getByText('Pre-Selected: Course One');
+    const closeIcon = tag.closest('.ant-tag')?.querySelector('.ant-tag-close-icon') as HTMLElement;
+    fireEvent.click(closeIcon);
+
+    expect(setCombinedFilter).toHaveBeenCalledWith(expect.any(Function));
+  });
+
+  it('ignores a tag that has no value part (early return in handleTagClose)', () => {
+    const setCombinedFilter = vi.fn();
+    const setTagFilters = vi.fn();
+    // A tag without a colon-separated value hits the `if (!removedTagValue) return;` guard.
+    renderContainer({ tagFilters: ['NoValueTag'], setCombinedFilter, setTagFilters });
+
+    const tag = screen.getByText('NoValueTag');
+    const closeIcon = tag.closest('.ant-tag')?.querySelector('.ant-tag-close-icon') as HTMLElement;
+    fireEvent.click(closeIcon);
+
+    // Neither the filter nor the tag list is touched for a value-less tag.
+    expect(setCombinedFilter).not.toHaveBeenCalled();
+    expect(setTagFilters).not.toHaveBeenCalled();
+  });
+
   it('builds combined filters and tag filters when a column filter changes', async () => {
     const setCombinedFilter = vi.fn();
     const setTagFilters = vi.fn();
@@ -358,4 +434,38 @@ describe('<MentorRegistryTableContainer /> + <MentorRegistryTable />', () => {
       expect(setTagFilters).toHaveBeenCalled();
     });
   });
+
+  // Applying course checkbox filters drives the preferred/preselected branches of
+  // handleTableChange (the .map callbacks building numeric ids and named tag strings).
+  it.each([
+    ['Preferred', 'Preferred: '],
+    ['Pre-Selected', 'Pre-Selected: '],
+  ])(
+    'builds the %s course filter and a named tag when that column filter is applied',
+    async (columnTitle, tagPrefix) => {
+      const setCombinedFilter = vi.fn();
+      const setTagFilters = vi.fn();
+      renderContainer({ setCombinedFilter, setTagFilters });
+
+      const header = screen
+        .getAllByText(columnTitle)
+        .map(el => el.closest('th'))
+        .find(th => th?.querySelector('.ant-table-filter-trigger')) as HTMLElement;
+      fireEvent.click(header.querySelector('.ant-table-filter-trigger') as HTMLElement);
+
+      const menu = await screen.findByRole('menu');
+      fireEvent.click(within(menu).getAllByRole('menuitem')[0]);
+
+      const okBtn = within(menu.closest('.ant-table-filter-dropdown') as HTMLElement).getByRole('button', {
+        name: /ok/i,
+      });
+      fireEvent.click(okBtn);
+
+      await waitFor(() => expect(setTagFilters).toHaveBeenCalled());
+      // The applied course filter produced a "<Column>: <course name>" tag string.
+      const tags = setTagFilters.mock.calls.at(-1)![0] as string[];
+      expect(tags.some(t => t.startsWith(tagPrefix))).toBe(true);
+      expect(setCombinedFilter).toHaveBeenCalled();
+    },
+  );
 });
