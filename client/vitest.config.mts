@@ -52,10 +52,10 @@ export default mergeConfig(
         // post-exclude baseline so this config-only change passes, then bumps up
         // as each test tier lands, ending at a flat 90% (free above 90, fail below).
         thresholds: {
-          statements: 40,
-          branches: 39,
-          functions: 36,
-          lines: 40,
+          statements: 50,
+          branches: 46,
+          functions: 47,
+          lines: 50,
         },
       },
       deps: {
