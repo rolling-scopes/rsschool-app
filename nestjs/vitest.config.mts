@@ -48,10 +48,10 @@ export default mergeConfig(
         // baseline so this config-only change passes, then bumps up as each
         // unit-test tier lands so coverage can only move up, never regress.
         thresholds: {
-          statements: 34,
-          branches: 32,
-          functions: 27,
-          lines: 34,
+          statements: 37,
+          branches: 35,
+          functions: 29,
+          lines: 37,
         },
       },
       deps: {

@@ -1,6 +1,6 @@
 import { CourseRole, IUserSession } from '@entities/session';
 // Mirrored from server/src/routes/profile/__test__/permissions.test.ts to prove business-logic equivalence
-import { getPermissions, defineRole, getProfilePermissionsSettings } from './permissions';
+import { getPermissions, defineRole, getProfilePermissionsSettings, getFullName } from './permissions';
 
 const mockSession = {
   id: 1,
@@ -233,6 +233,38 @@ describe('getPermissions', () => {
           isExpellingReasonVisible: true,
         });
       });
+      it('"role" is "coursesupervisor" makes profile and contacts visible (no "permissions" passed)', () => {
+        // Covers the `role === 'coursesupervisor' && permission === 'isProfileVisible'` branch
+        // in getPermissions plus the coursesupervisor branch of accessToContacts.
+        expect(
+          getPermissions({
+            isProfileOwner: false,
+            isAdmin: false,
+            role: 'coursesupervisor',
+          }),
+        ).toEqual({
+          isProfileVisible: true,
+          isAboutVisible: false,
+          isEducationVisible: false,
+          isEnglishVisible: true,
+          isEmailVisible: true,
+          isTelegramVisible: true,
+          isWhatsAppVisible: true,
+          isSkypeVisible: true,
+          isPhoneVisible: true,
+          // NOTE: stays false because accessToContacts checks the typo'd key
+          // 'isContactsNodesVisible' (should be 'isContactsNotesVisible').
+          isContactsNotesVisible: false,
+          isLinkedInVisible: false,
+          isPublicFeedbackVisible: false,
+          isMentorStatsVisible: false,
+          isStudentStatsVisible: false,
+          isStageInterviewFeedbackVisible: false,
+          isCoreJsFeedbackVisible: false,
+          isConsentsVisible: false,
+          isExpellingReasonVisible: false,
+        });
+      });
     });
     describe('if "isProfileOwner" is "true"', () => {
       it('"role" is "all" and all "permissions" set with "all" = "false"', () => {
@@ -397,6 +429,64 @@ describe('defineRole', () => {
         }),
       ).toBe('coursemanager');
     });
+    it('"coursesupervisor", if user is a supervisor on a registry course', () => {
+      expect(
+        defineRole({
+          relationsRoles: null,
+          registryCourses: [{ courseId: 1 }],
+          studentCourses: null,
+          session: {
+            courses: { 1: { roles: [CourseRole.Supervisor] } },
+          } as unknown as IUserSession,
+          userGithubId: 'denis',
+        }),
+      ).toBe('coursesupervisor');
+    });
+    it('"coursemanager", if user is a manager on a student course', () => {
+      expect(
+        defineRole({
+          relationsRoles: null,
+          registryCourses: null,
+          studentCourses: [{ courseId: 1 }],
+          session: {
+            courses: { 1: { roles: [CourseRole.Manager] } },
+          } as unknown as IUserSession,
+          userGithubId: 'denis',
+        }),
+      ).toBe('coursemanager');
+    });
+    it('"coursemanager", if user is a supervisor on a student course', () => {
+      // NOTE: the supervisor-on-student-course branch returns 'coursemanager', not 'coursesupervisor'.
+      expect(
+        defineRole({
+          relationsRoles: null,
+          registryCourses: null,
+          studentCourses: [{ courseId: 1 }],
+          session: {
+            courses: { 1: { roles: [CourseRole.Supervisor] } },
+          } as unknown as IUserSession,
+          userGithubId: 'denis',
+        }),
+      ).toBe('coursemanager');
+    });
+    it('"all", if user has relations but is neither the student nor any kind of mentor', () => {
+      // Covers the false branch of the mentor-set membership check in defineRole.
+      expect(
+        defineRole({
+          relationsRoles: {
+            student: 'dima',
+            mentors: ['andrey', 'dasha'],
+            interviewers: ['sasha', 'max'],
+            stageInterviewers: ['alex'],
+            checkers: ['masha', 'ivan'],
+          },
+          registryCourses: null,
+          studentCourses: null,
+          session: mockSession,
+          userGithubId: 'stranger',
+        }),
+      ).toBe('all');
+    });
     it('"all", if user is not a mentor at the same course where requested user is a student', () => {
       expect(
         defineRole({
@@ -460,5 +550,28 @@ describe('getProfilePermissionsSettings', () => {
       isMentorStatsVisible: { all: false, mentor: false, student: false },
       isStudentStatsVisible: { all: false, student: false },
     });
+  });
+});
+
+describe('getFullName', () => {
+  it('Should be an instance of Function', () => {
+    expect(getFullName).toBeInstanceOf(Function);
+  });
+
+  it('joins first and last name with a space', () => {
+    expect(getFullName('John', 'Doe', 'githubId')).toBe('John Doe');
+  });
+
+  it('omits an empty last name', () => {
+    expect(getFullName('John', '', 'githubId')).toBe('John');
+  });
+
+  it('omits an empty first name', () => {
+    expect(getFullName('', 'Doe', 'githubId')).toBe('Doe');
+  });
+
+  it('falls back to githubId when both names are empty', () => {
+    // Covers the `|| githubId` fallback branch.
+    expect(getFullName('', '', 'githubId')).toBe('githubId');
   });
 });
