@@ -47,14 +47,17 @@ export default mergeConfig(
           'src/constants.ts',
         ],
         reportsDirectory: './coverage',
-        // Ratcheted floor enforced in CI: starts just below the post-exclude
-        // baseline so this config-only change passes, then bumps up as each
-        // unit-test tier lands so coverage can only move up, never regress.
+        // Coverage floor: a flat 90% — the project's quality bar, NOT pinned to
+        // the current ~99.6%. Intent: coverage may move freely as long as it
+        // stays >= 90% (a refactor that drops 99.6% -> 92% is fine and won't
+        // fail CI); only dropping below 90% fails. We deliberately avoid
+        // vitest's `autoUpdate` ratchet, which would keep raising the floor
+        // toward 100% and then fail on any dip below the new high-water mark.
         thresholds: {
-          statements: 63,
-          branches: 66,
-          functions: 57,
-          lines: 63,
+          statements: 90,
+          branches: 90,
+          functions: 90,
+          lines: 90,
         },
       },
       deps: {
