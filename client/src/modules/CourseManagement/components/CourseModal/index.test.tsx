@@ -390,4 +390,134 @@ describe('<CourseModal />', () => {
 
     expect(props.onClose).toHaveBeenCalled();
   });
+
+  it('prefills and rebuilds a richly-populated planned course (registration date, certificates, mentoring, WAC URL)', async () => {
+    const user = userEvent.setup();
+    getCourse.mockResolvedValue({
+      data: {
+        ...editCourse,
+        planned: true,
+        completed: false,
+        registrationEndDate: '2024-02-01T00:00:00.000Z',
+        certificateDisciplines: [11, 22],
+        personalMentoring: true,
+        personalMentoringStartDate: '2024-03-01T00:00:00.000Z',
+        personalMentoringEndDate: '2024-04-01T00:00:00.000Z',
+        wearecommunityUrl: 'https://wearecommunity.io/events/some-event',
+      },
+    });
+    const props = makeProps({ courseId: 7 });
+    render(<CourseModal {...props} />);
+
+    expect(await screen.findByDisplayValue('JS Course')).toBeInTheDocument();
+    // Planned state radio is preselected from getInitialValues.
+    expect((screen.getByRole('radio', { name: /planned/i }) as HTMLInputElement).checked).toBe(true);
+
+    await user.click(screen.getByRole('button', { name: /save/i }));
+
+    await waitFor(() => expect(updateCourse).toHaveBeenCalled());
+    const [, record] = updateCourse.mock.calls[0];
+    expect(record.planned).toBe(true);
+    expect(record.completed).toBe(false);
+    expect(record.registrationEndDate).not.toBeNull();
+    // certificateDisciplines present + anyCertificate false => mapped to strings
+    expect(record.certificateDisciplines).toEqual(['11', '22']);
+    expect(record.personalMentoring).toBe(true);
+    expect(record.personalMentoringStartDate).not.toBeNull();
+    // explicit wearecommunityUrl is kept (the `||` left side)
+    expect(record.wearecommunityUrl).toBe('https://wearecommunity.io/events/some-event');
+  });
+
+  it('treats an empty certificateDisciplines list as "Any course" and clears the list on save', async () => {
+    const user = userEvent.setup();
+    getCourse.mockResolvedValue({
+      data: { ...editCourse, certificateDisciplines: [] },
+    });
+    const props = makeProps({ courseId: 7 });
+    render(<CourseModal {...props} />);
+
+    expect(await screen.findByDisplayValue('JS Course')).toBeInTheDocument();
+    // anyCertificate is derived as true when the saved list is empty.
+    expect((screen.getByRole('checkbox', { name: /any course/i }) as HTMLInputElement).checked).toBe(true);
+
+    await user.click(screen.getByRole('button', { name: /save/i }));
+
+    await waitFor(() => expect(updateCourse).toHaveBeenCalled());
+    const [, record] = updateCourse.mock.calls[0];
+    // anyCertificate => certificateDisciplines becomes []
+    expect(record.certificateDisciplines).toEqual([]);
+  });
+
+  it('falls back to the RS APP registry URL when no WeAreCommunity URL is provided', async () => {
+    const user = userEvent.setup();
+    const props = makeProps();
+    render(<CourseModal {...props} />);
+
+    await screen.findByText('Add Course');
+    await fillCreateForm();
+    // leave the WeAreCommunity URL empty => createRecord uses buildRSAppStudentRegistryURL(alias)
+
+    await user.click(screen.getByRole('button', { name: /save/i }));
+
+    await waitFor(() => expect(createCourse).toHaveBeenCalled());
+    const [record] = createCourse.mock.calls[0];
+    expect(record.wearecommunityUrl).toBe('https://app.rs.school/registry/student?course=newc');
+  });
+
+  it('submits the custom description URL when "Custom" is selected', async () => {
+    const user = userEvent.setup();
+    const props = makeProps();
+    render(<CourseModal {...props} />);
+
+    await screen.findByText('Add Course');
+
+    // Fill required text + selects, but pick "Custom" for the description URL.
+    fireEvent.change(screen.getByLabelText('Course Name'), { target: { value: 'New Course' } });
+    fireEvent.change(screen.getByLabelText('Full Course Name'), { target: { value: 'New Full Course' } });
+    fireEvent.change(screen.getByLabelText('Alias'), { target: { value: 'newc' } });
+
+    const discord = screen.getByLabelText('Discord/Telegram channel');
+    fireEvent.mouseDown(discord);
+    fireEvent.click(await within(document.body).findByText('RS Discord'));
+
+    const disc = screen.getByLabelText('Disciplines');
+    fireEvent.mouseDown(disc);
+    const fe = await within(document.body).findAllByText('Frontend');
+    fireEvent.click(fe[fe.length - 1]);
+
+    fireEvent.change(screen.getByTestId('range-start'), { target: { value: '2024-01-01' } });
+    fireEvent.change(screen.getByTestId('range-end'), { target: { value: '2024-06-01' } });
+
+    // Close any dropdown left open by the previous selects so descUrl's list is the only one.
+    fireEvent.keyDown(document.body, { key: 'Escape', code: 'Escape' });
+
+    // Description URL -> "Custom" (scroll the virtualized list so the trailing option mounts).
+    const descUrlSelect = screen.getByLabelText('Description Url');
+    fireEvent.mouseDown(descUrlSelect);
+    await waitFor(() => expect(document.querySelectorAll('.rc-virtual-list-holder').length).toBeGreaterThan(0));
+    const holders = document.querySelectorAll('.rc-virtual-list-holder');
+    const holder = holders[holders.length - 1];
+    fireEvent.scroll(holder, { target: { scrollTop: 2000 } });
+    fireEvent.click(await within(document.body).findByText('Custom'));
+
+    const customUrl = await screen.findByLabelText('Custom Url');
+    fireEvent.change(customUrl, { target: { value: 'https://example.com/custom-course' } });
+
+    await user.click(screen.getByRole('button', { name: /save/i }));
+
+    await waitFor(() => expect(createCourse).toHaveBeenCalled());
+    const [record] = createCourse.mock.calls[0];
+    expect(record.descriptionUrl).toBe('https://example.com/custom-course');
+  });
+
+  it('seeds an empty date range when the edited course has no start/end dates', async () => {
+    getCourse.mockResolvedValue({
+      data: { ...editCourse, startDate: undefined, endDate: undefined },
+    });
+    render(<CourseModal {...makeProps({ courseId: 7 })} />);
+
+    // getDateRange returns null (no dates) => the RangePicker renders empty.
+    expect(await screen.findByDisplayValue('JS Course')).toBeInTheDocument();
+    expect(screen.getByTestId('range-start')).toHaveValue('');
+  });
 });

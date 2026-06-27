@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { UserSearch } from './UserSearch';
 import type { SearchStudent } from '@client/services/course';
@@ -97,6 +97,36 @@ describe('UserSearch', () => {
 
     expect(onChange).toHaveBeenCalled();
     expect(onChange.mock.calls[0][0]).toBe('alice');
+  });
+
+  it('restores default values when the query is cleared to whitespace', async () => {
+    // First a real query surfaces a unique result, then a whitespace query trims to ''
+    // and the debounced handler takes the `else` branch: setData(props.defaultValues ?? []).
+    // The unique search result disappearing (replaced by default values) proves the
+    // else branch ran rather than the mount effect.
+    const searchFn = vi.fn().mockResolvedValue([{ id: 9, githubId: 'zoe', name: 'Zoe Z' }]);
+    render(<UserSearch searchFn={searchFn} defaultValues={PEOPLE} />);
+
+    const combobox = openSelect();
+    fireEvent.change(combobox, { target: { value: 'zoe' } });
+    expect(await screen.findByText(/Zoe Z/)).toBeInTheDocument();
+
+    fireEvent.change(combobox, { target: { value: '   ' } });
+
+    // The unique searchFn result is gone and the default values are shown instead.
+    await waitFor(() => expect(screen.queryByText(/Zoe Z/)).not.toBeInTheDocument(), { timeout: 2000 });
+    expect(screen.getByText(/Alice A/)).toBeInTheDocument();
+  });
+
+  it('returns no matches from the built-in search when there are no default values', async () => {
+    // No searchFn and no defaultValues: defaultSearch's `defaultValues?.filter(...) ?? []`
+    // takes the nullish fallback (line 75).
+    render(<UserSearch />);
+
+    const combobox = openSelect();
+    fireEvent.change(combobox, { target: { value: 'abc' } });
+
+    await waitFor(() => expect(screen.queryByText(/Alice A/)).not.toBeInTheDocument(), { timeout: 2000 });
   });
 
   it('does not call searchFn for a whitespace-only query (falls back to default values)', async () => {

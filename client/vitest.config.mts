@@ -51,15 +51,15 @@ export default mergeConfig(
         ],
         reportsDirectory: './coverage',
         // Coverage floor enforced in CI via `test:ci`. Actual coverage is
-        // ~90.8% stmts / 84.7% branches / 90.2% funcs / 91.0% lines. Statements,
-        // functions and lines hit the flat-90 goal; branches sit ~85 because UI
-        // components carry many defensive/unreachable branches (jsdom-impossible
-        // guards, antd internals, dead `?? []` fallbacks). Floors sit just below
-        // actual so a real regression fails CI while tolerating retry variance.
+        // ~95.8% stmts / 93.4% branches / 95.7% funcs / 95.8% lines — all four
+        // metrics clear the flat-90 goal with margin. Floor is a flat 90 (free
+        // above 90, fail below); remaining uncovered branches are genuinely
+        // unreachable defensive code (jsdom-impossible guards, antd internals,
+        // dead `?? []`/`|| ''` fallbacks).
         thresholds: {
           statements: 90,
-          branches: 83,
-          functions: 89,
+          branches: 90,
+          functions: 90,
           lines: 90,
         },
       },

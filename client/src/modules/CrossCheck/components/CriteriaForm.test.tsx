@@ -158,4 +158,47 @@ describe('<CriteriaForm />', () => {
 
     expect(screen.getByText('Looks good')).toBeInTheDocument();
   });
+
+  it('renders a dash for an existing comment with empty text', () => {
+    const comments: CrossCheckComment[] = [
+      { text: '', criteriaId: 'c1', timestamp: 1700000000000, authorGithubId: 'someone' },
+    ];
+    render(<CriteriaForm {...makeProps({ comments })} />);
+
+    // Empty comment text → the `c.text || '-'` fallback renders a dash.
+    const firstCard = screen.getByText('Has tests').closest('.ant-card') as HTMLElement;
+    expect(within(firstCard).getByText('-')).toBeInTheDocument();
+  });
+
+  it('emits a zero percentage when the reviewer picks the lowest rating', async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    // Start with a non-zero rating so re-selecting the first star is a real change to 0.
+    render(<CriteriaForm {...makeProps({ onChange, value: [{ criteriaId: 'c1', percentage: 1 }] })} />);
+
+    const firstCard = screen.getByText('Has tests').closest('.ant-card') as HTMLElement;
+    const stars = within(firstCard).getAllByRole('radio');
+    // First star → value 1 → convertValueToPercentage returns 0.
+    await user.click(stars[0]);
+
+    expect(onChange).toHaveBeenCalledWith(
+      expect.arrayContaining([expect.objectContaining({ criteriaId: 'c1', percentage: 0 })]),
+      [],
+    );
+  });
+
+  it('emits comments with an empty review value when no value prop is provided', async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    // value is omitted → `value ?? []` falls back to [] in onReviewCommentChange.
+    render(<CriteriaForm {...makeProps({ onChange, value: undefined })} />);
+
+    const firstCard = screen.getByText('Has tests').closest('.ant-card') as HTMLElement;
+    await user.type(within(firstCard).getByRole('textbox'), 'Z');
+
+    expect(onChange).toHaveBeenLastCalledWith(
+      [],
+      expect.arrayContaining([expect.objectContaining({ criteriaId: 'c1', text: 'Z' })]),
+    );
+  });
 });

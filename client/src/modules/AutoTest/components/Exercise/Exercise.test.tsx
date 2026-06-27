@@ -19,7 +19,7 @@ vi.mock('@client/modules/AutoTest/hooks', () => ({
   },
 }));
 
-function renderExercise(type: CourseTaskDetailedDtoTypeEnum) {
+function renderExercise(type: CourseTaskDetailedDtoTypeEnum, multiple = false) {
   const courseTask = {
     name: 'Course Task',
     studentStartDate: '2022-09-10 12:00',
@@ -31,7 +31,7 @@ function renderExercise(type: CourseTaskDetailedDtoTypeEnum) {
     type,
     publicAttributes: {
       maxAttemptsNumber: 2,
-      questions: [{ question: 'Q1', answers: ['a', 'b'], multiple: false }],
+      questions: [{ question: 'Q1', answers: ['a', 'b'], multiple }],
       numberOfQuestions: 1,
     },
   } as CourseTaskVerifications;
@@ -100,6 +100,37 @@ describe('Exercise', () => {
     await user.click(screen.getByRole('button', { name: /submit/i }));
 
     // onFinishFailed fires because the required answer field is empty.
+    expect(
+      await screen.findByText(/Form has validation errors! Check that all required fields are filled!/i),
+    ).toBeInTheDocument();
+  });
+
+  it('should clear the validation error once every required field is filled and valid', async () => {
+    const user = userEvent.setup();
+    renderExercise(CourseTaskDetailedDtoTypeEnum.Selfeducation);
+
+    // pick a valid answer so all watched values become truthy and validateFields resolves,
+    // hitting the success callback that sets validationError back to false.
+    await user.click(screen.getAllByRole('radio')[0] as HTMLElement);
+
+    await waitFor(() => {
+      expect(
+        screen.queryByText(/Form has validation errors! Check that all required fields are filled!/i),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  it('should set a validation error when a watched field is truthy but fails validation', async () => {
+    const user = userEvent.setup();
+    // Checkbox.Group value is an array; toggling on then off leaves `[]`, which is
+    // truthy (passing the every(Boolean) guard) yet fails the `required` rule —
+    // exercising the validateFields rejection callback.
+    renderExercise(CourseTaskDetailedDtoTypeEnum.Selfeducation, true);
+
+    const checkbox = screen.getAllByRole('checkbox')[0] as HTMLElement;
+    await user.click(checkbox);
+    await user.click(checkbox);
+
     expect(
       await screen.findByText(/Form has validation errors! Check that all required fields are filled!/i),
     ).toBeInTheDocument();

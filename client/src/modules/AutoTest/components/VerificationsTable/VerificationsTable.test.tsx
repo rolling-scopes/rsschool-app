@@ -1,6 +1,13 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { VerificationsTable, VerificationsTableProps } from '..';
 import { Verification } from '@client/services/course';
+
+function resizeWindow(width: number) {
+  (window as unknown as { innerWidth: number }).innerWidth = width;
+  act(() => {
+    window.dispatchEvent(new Event('resize'));
+  });
+}
 
 const PROPS_MOCK: VerificationsTableProps = {
   maxScore: 100,
@@ -96,5 +103,35 @@ describe('VerificationsTable', () => {
 
     expect(screen.getByText('first line')).toBeInTheDocument();
     expect(screen.getByText('second line')).toBeInTheDocument();
+  });
+
+  it('should default a missing score to 0 in the score column', () => {
+    const verification = {
+      id: 1,
+      score: undefined as unknown as number,
+      createdDate: '2022-12-10T00:00:00.000Z',
+      details: 'no score',
+    } as Verification;
+    render(<VerificationsTable {...PROPS_MOCK} verifications={[verification]} />);
+
+    expect(screen.getByText('0 / 100')).toBeInTheDocument();
+  });
+
+  it('should render the consolidated mobile row at the xs breakpoint', () => {
+    resizeWindow(400);
+    try {
+      const verification = {
+        id: 1,
+        score: 20,
+        createdDate: '2022-12-10T00:00:00.000Z',
+        details: 'mobile details',
+      } as Verification;
+      render(<VerificationsTable {...PROPS_MOCK} verifications={[verification]} />);
+
+      expect(screen.getByText('mobile details')).toBeInTheDocument();
+      expect(screen.getByText('20 / 100')).toBeInTheDocument();
+    } finally {
+      resizeWindow(1024);
+    }
   });
 });

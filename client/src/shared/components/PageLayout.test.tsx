@@ -46,6 +46,20 @@ describe('PageLayout', () => {
 
     expect(container.querySelector('.ant-spin-spinning')).toBeInTheDocument();
   });
+
+  it('applies the provided background and removes the content margin when withMargin is false', () => {
+    // background prop -> `props.background ? props.background : token...` true branch;
+    // withMargin={false} -> `withMargin ? { margin: 16 } : undefined` false branch.
+    const { container } = render(
+      <PageLayout loading={false} background="rgb(255, 0, 0)" withMargin={false}>
+        <div>Body content</div>
+      </PageLayout>,
+    );
+
+    const layout = container.querySelector('.ant-layout') as HTMLElement;
+    expect(layout).toHaveStyle({ background: 'rgb(255, 0, 0)' });
+    expect(screen.getByText('Body content')).toBeInTheDocument();
+  });
 });
 
 describe('PageLayoutSimple', () => {
@@ -69,6 +83,18 @@ describe('PageLayoutSimple', () => {
 
     expect(screen.getByText('no data')).toBeInTheDocument();
     expect(screen.queryByText('Simple body')).not.toBeInTheDocument();
+  });
+
+  it('applies the provided background', () => {
+    // background prop -> the true branch of `props.background ? ... : token...`.
+    const { container } = render(
+      <PageLayoutSimple loading={false} background="rgb(0, 0, 255)">
+        <div>Simple body</div>
+      </PageLayoutSimple>,
+    );
+
+    const layout = container.querySelector('.ant-layout') as HTMLElement;
+    expect(layout).toHaveStyle({ background: 'rgb(0, 0, 255)' });
   });
 });
 

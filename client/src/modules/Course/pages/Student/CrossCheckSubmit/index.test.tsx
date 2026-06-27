@@ -267,4 +267,85 @@ describe('<CrossCheckSubmit />', () => {
     fireEvent.change(screen.getByLabelText('task'), { target: { value: '7' } });
     expect(replace).toHaveBeenCalledWith(expect.stringContaining('taskId=7'));
   });
+
+  it('does nothing while the tasks are still loading even if a task id is queued', () => {
+    // loading=true → the effect early-returns before calling handleTaskChange.
+    setTasks([startedTask], true);
+    setQueryTaskId(7);
+    render(<CrossCheckSubmit />);
+
+    expect(getCrossCheckTaskDetails).not.toHaveBeenCalled();
+    expect(getMyCrossCheckFeedbacks).not.toHaveBeenCalled();
+  });
+
+  it('ignores a queued task id that is not in the loaded tasks list', async () => {
+    // queryTaskId=999 is absent from [startedTask] → courseTask == null → handleTaskChange returns early.
+    setQueryTaskId(999);
+    render(<CrossCheckSubmit />);
+
+    expect(await screen.findByRole('heading', { name: /cross-check submit/i })).toBeInTheDocument();
+    expect(getCrossCheckTaskDetails).not.toHaveBeenCalled();
+    expect(getMyCrossCheckFeedbacks).not.toHaveBeenCalled();
+  });
+
+  it('treats a task without studentEndDate as past the submit deadline (no submit form)', async () => {
+    getCrossCheckTaskDetails.mockResolvedValueOnce({ criteria: [] }); // no studentEndDate -> endDate null -> deadline passed
+    setQueryTaskId(7);
+    render(<CrossCheckSubmit />);
+
+    await waitFor(() => expect(getCrossCheckTaskDetails).toHaveBeenCalledWith(7));
+    // deadline passed → submit form is hidden.
+    await waitFor(() => expect(screen.queryByRole('button', { name: /^submit$/i })).not.toBeInTheDocument());
+  });
+
+  it('adds the github-id and github-PR validation rules and renders the submit hint', async () => {
+    setTasks([
+      {
+        ...startedTask,
+        submitText: 'Read the rules before submitting',
+        validations: { githubIdInUrl: true, githubPrInUrl: true },
+      },
+    ]);
+    setQueryTaskId(7);
+    render(<CrossCheckSubmit />);
+
+    await screen.findByRole('button', { name: /^submit$/i });
+    // submitText → Alert is rendered.
+    expect(screen.getByText('Read the rules before submitting')).toBeInTheDocument();
+
+    // Submitting an invalid (non-PR) URL surfaces the PR-specific rule message.
+    fireEvent.change(screen.getByPlaceholderText(/link in the form of/i), {
+      target: { value: 'https://example.com/not-a-pr' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /^submit$/i }));
+
+    expect(await screen.findByText(/valid GitHub Pull Request URL/i)).toBeInTheDocument();
+    expect(postTaskSolution).not.toHaveBeenCalled();
+  });
+
+  it('rejects a private RS School repo url with a dedicated validation message', async () => {
+    setQueryTaskId(7);
+    render(<CrossCheckSubmit />);
+    await screen.findByRole('button', { name: /^submit$/i });
+
+    fireEvent.change(screen.getByPlaceholderText(/link in the form of/i), {
+      target: { value: 'https://github.com/rolling-scopes-school/private-repo/pull/1' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /^submit$/i }));
+
+    expect(await screen.findByText(/Students can't see Pull Requests of private RS School repos/i)).toBeInTheDocument();
+    expect(postTaskSolution).not.toHaveBeenCalled();
+  });
+
+  it('shows the "completed, no one checked" result with an appeal link when cross-check is completed', async () => {
+    setTasks([{ ...startedTask, crossCheckStatus: 'completed' }]);
+    getCrossCheckTaskSolution.mockResolvedValueOnce({ url: 'https://x', review: [], comments: [], studentId: 9 });
+    getMyCrossCheckFeedbacks.mockResolvedValueOnce({ data: { reviews: [] } });
+    setQueryTaskId(7);
+    render(<CrossCheckSubmit />);
+
+    expect(await screen.findByText('No one has checked your work.')).toBeInTheDocument();
+    // The appeal link is rendered only for the completed status.
+    expect(screen.getByRole('link', { name: /eligible to appeal/i })).toBeInTheDocument();
+  });
 });

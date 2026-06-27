@@ -32,10 +32,17 @@ vi.mock('@client/services/course', () => ({
 
 // useScorePaging returns [getPagedData]; ScoreTable calls it on pagination/filter/sort
 // changes. Assert it receives the right pagination/filter/order arguments.
-const { getPagedData } = vi.hoisted(() => ({ getPagedData: vi.fn() }));
+// `noPaging.value` lets a test make the hook return [undefined] (the !getPagedData guard).
+const { getPagedData, noPaging } = vi.hoisted(() => ({ getPagedData: vi.fn(), noPaging: { value: false } }));
 
 vi.mock('@client/modules/Score/hooks/useScorePaging', () => ({
-  useScorePaging: () => [getPagedData],
+  useScorePaging: () => [noPaging.value ? undefined : getPagedData],
+}));
+
+// useWindowDimensions drives the fixed-column logic; `windowWidth.value` controls it per test.
+const { windowWidth } = vi.hoisted(() => ({ windowWidth: { value: 1200 } }));
+vi.mock('@client/shared/hooks/useWindowDimensions', () => ({
+  default: () => ({ width: windowWidth.value, height: 800 }),
 }));
 
 // --- Fixtures --------------------------------------------------------------
@@ -109,6 +116,8 @@ function makeProps(over: Partial<Parameters<typeof ScoreTable>[0]> = {}) {
 beforeEach(() => {
   vi.clearAllMocks();
   localStorage.clear();
+  noPaging.value = false;
+  windowWidth.value = 1200;
   getCourseTasks.mockResolvedValue({ data: courseTasks });
   getCourseScore.mockResolvedValue(page(twoStudents));
   getStudentCourseScore.mockResolvedValue(studentScore);
@@ -302,6 +311,64 @@ describe('<ScoreTable />', () => {
       name: 'Alice',
       ['mentor.githubId']: 'mentor1',
     });
+  });
+
+  it('keeps a task without a student end date when the course is completed', async () => {
+    // task.studentEndDate null + course.completed → `!!studentEndDate || course.completed` keeps it.
+    getCourseTasks.mockResolvedValue({
+      data: [{ id: 303, name: 'No-Deadline Task', studentEndDate: null, maxScore: 10, scoreWeight: 1 }],
+    });
+    render(<ScoreTable {...makeProps({ course: { id: 42, name: 'C', completed: true } as never })} />);
+
+    await screen.findAllByText('alice');
+    expect(within(mainTable()).getByText('No-Deadline Task')).toBeInTheDocument();
+  });
+
+  it('marks inactive students with the disabled row class', async () => {
+    getCourseScore.mockResolvedValue(page([makeStudent({ name: 'Inactive', githubId: 'ghost', isActive: false })]));
+    render(<ScoreTable {...makeProps()} />);
+
+    await screen.findAllByText('ghost');
+    // rowClassName returns 'rs-table-row-disabled' for inactive rows.
+    expect(document.querySelector('.rs-table-row-disabled')).toBeInTheDocument();
+  });
+
+  it('unfixes the GitHub column on narrow viewports', async () => {
+    windowWidth.value = 320; // < 400 → setFixedColumn(false) → githubColumn.fixed = false.
+    render(<ScoreTable {...makeProps()} />);
+
+    await screen.findAllByText('alice');
+    // The render completes without a fixed-left GitHub column (no crash); rows still present.
+    expect(within(mainTable()).getByText('alice')).toBeInTheDocument();
+  });
+
+  it('selects a row when the row is clicked', async () => {
+    render(<ScoreTable {...makeProps()} />);
+
+    await screen.findAllByText('alice');
+    const row = within(mainTable()).getByText('alice').closest('tr')!;
+    fireEvent.click(row);
+
+    // onRow's onClick runs setState([githubId]); antd marks the row selected.
+    await waitFor(() => expect(row).toHaveClass('ant-table-row-selected'));
+  });
+
+  it('does nothing on table change when the paging getter is unavailable', async () => {
+    noPaging.value = true; // useScorePaging returns [undefined] → getCourseScore early-returns.
+    getCourseScore.mockResolvedValue({
+      content: twoStudents,
+      pagination: { current: 1, pageSize: 1, total: 2, totalPages: 2 },
+    });
+    render(<ScoreTable {...makeProps()} />);
+
+    await screen.findAllByText('alice');
+    getPagedData.mockClear();
+
+    // Trigger a pagination change → getCourseScore hits `if (!getPagedData) return`.
+    fireEvent.click(screen.getByTitle('2').querySelector('a')!);
+
+    await waitFor(() => expect(getStudentCourseScore).toHaveBeenCalledTimes(2));
+    expect(getPagedData).not.toHaveBeenCalled();
   });
 });
 

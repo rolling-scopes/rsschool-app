@@ -144,4 +144,34 @@ describe('AdminSider', () => {
     expect(screen.getByText('Admin Area')).toBeInTheDocument();
     expect(screen.getByText('Course Management')).toBeInTheDocument();
   });
+
+  it('renders neither section when there are no admin or course-management items', () => {
+    // Empty menu lists drive the false branches of both `if (...length)` guards.
+    vi.mocked(getAdminMenuItems).mockReturnValue([]);
+    vi.mocked(getCourseManagementMenuItems).mockReturnValue([]);
+
+    renderComponent();
+
+    expect(screen.queryByText('Admin Area')).not.toBeInTheDocument();
+    expect(screen.queryByText('Course Management')).not.toBeInTheDocument();
+  });
+
+  it('shows the unfold icon when the sider is collapsed', () => {
+    // isSiderCollapsed=true selects the MenuUnfoldOutlined icon.
+    vi.mocked(useLocalStorage).mockImplementation(key => {
+      if (key === 'isSiderCollapsed') return [true, vi.fn()];
+      return [[], vi.fn()];
+    });
+
+    renderComponent();
+
+    expect(screen.getByRole('img', { name: 'menu-unfold' })).toBeInTheDocument();
+  });
+
+  it('prefers the activeCourse prop when provided', () => {
+    // Passing activeCourse exercises the left side of `props.activeCourse ?? activeCourse`.
+    renderComponent({ activeCourse: mockCourses[0] });
+
+    expect(getCourseManagementMenuItems).toHaveBeenCalledWith(mockSession, mockCourses[0]);
+  });
 });

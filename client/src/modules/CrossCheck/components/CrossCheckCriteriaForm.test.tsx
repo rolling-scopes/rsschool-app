@@ -36,9 +36,10 @@ function Harness({
   initialData,
   maxScore = 100,
 }: {
-  initialCriteria: CrossCheckCriteriaDataDto[];
+  initialCriteria: CrossCheckCriteriaDataDto[] | undefined;
   initialData?: CrossCheckSolutionReviewDto;
-  maxScore?: number;
+  // `null` is mapped to an undefined maxScore prop (distinct from the 100 default).
+  maxScore?: number | null;
 }) {
   const [criteriaData, setCriteriaData] = useState(initialCriteria);
   const [score, setScore] = useState(0);
@@ -49,7 +50,7 @@ function Harness({
       <div data-testid="score-value">{score}</div>
       <div data-testid="skipped-value">{String(isSkipped)}</div>
       <CrossCheckCriteriaForm
-        maxScore={maxScore}
+        maxScore={maxScore ?? undefined}
         score={score}
         setScore={setScore}
         criteriaData={criteriaData}
@@ -151,5 +152,50 @@ describe('<CrossCheckCriteriaForm />', () => {
     render(<Harness initialCriteria={[]} />);
 
     expect(screen.queryByRole('button', { name: /cross check form/ })).not.toBeInTheDocument();
+  });
+
+  it('defaults the max score to 100 when maxScore is undefined', () => {
+    render(<Harness initialCriteria={[]} maxScore={null} />);
+
+    // maxScore undefined → `maxScore ?? 100` → label shows the 100 default.
+    expect(screen.getByRole('heading', { name: '(Max 100 points)' })).toBeInTheDocument();
+  });
+
+  it('renders an empty max-score label when maxScore is 0', () => {
+    render(<Harness initialCriteria={[]} maxScore={0} />);
+
+    // maxScoreValue 0 is falsy → the label is an empty string (no "(Max … points)" text).
+    expect(screen.queryByText(/Max .* points/)).not.toBeInTheDocument();
+  });
+
+  // NOTE: `criteriaData` is typed as a required array; passing `undefined` crashes the
+  // useEffect at `[...criteriaData]` (L46), so the `criteriaData?.filter(...) ?? []` guard on
+  // L41 is defensive against a contract violation that the component cannot actually survive.
+  // unreachable: L41 `?? []` requires undefined criteriaData, which crashes the effect.
+
+  it('falls back to a 0 score when the saved review has no score and criteria match', () => {
+    const criteria = makeCriteria();
+    // initialData has matching criteria but NO score → `initialData?.score ?? 0` → 0.
+    const initialData = {
+      criteria: criteria.map(c => ({ ...c })),
+    } as CrossCheckSolutionReviewDto;
+
+    render(<Harness initialCriteria={criteria} initialData={initialData} />);
+
+    expect(screen.getByTestId('score-value')).toHaveTextContent('0');
+  });
+
+  it('sorts unordered initial and current criteria before comparing them', () => {
+    // Provide criteria in descending key order so both sort comparators take the `a.key > b.key`
+    // (return 1) branch while still matching after sorting → uses the saved score (35).
+    const desc = [...makeCriteria()].reverse();
+    const initialData = {
+      score: 35,
+      criteria: [...makeCriteria()].reverse().map(c => ({ ...c })),
+    } as CrossCheckSolutionReviewDto;
+
+    render(<Harness initialCriteria={desc} initialData={initialData} />);
+
+    expect(screen.getByTestId('score-value')).toHaveTextContent('35');
   });
 });

@@ -32,4 +32,13 @@ describe('PreparedComment', () => {
     expect(container).toBeInTheDocument();
     expect(screen.queryByTestId('markdown')).not.toBeInTheDocument();
   });
+
+  it('falls back to an empty string when text is null/undefined', () => {
+    // Exercises the `useState(text ?? '')` nullish fallback and the falsy guard
+    // in the effect (`text && ...`) — no markdown branch, no crash.
+    const { container } = render(<PreparedComment text={undefined as unknown as string} />);
+
+    expect(container).toBeInTheDocument();
+    expect(screen.queryByTestId('markdown')).not.toBeInTheDocument();
+  });
 });

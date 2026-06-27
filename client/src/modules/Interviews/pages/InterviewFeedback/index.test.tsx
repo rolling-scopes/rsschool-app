@@ -40,6 +40,20 @@ vi.mock('@client/data/interviews', () => {
           },
         ],
       },
+      // A minimal template WITHOUT descriptionHtml and with a category that has NO
+      // description — exercises the `descriptionHtml ?? ''` and `category.description ? … : null`
+      // fallback branches.
+      bare: {
+        name: 'Bare Track',
+        examplesUrl: 'https://example.com/bare',
+        categories: [
+          {
+            id: 2,
+            name: 'No Description Category',
+            questions: [{ id: 201, name: 'Only checkbox' }],
+          },
+        ],
+      },
     },
   };
 });
@@ -186,5 +200,37 @@ describe('<InterviewFeedback />', () => {
 
     await user.click(screen.getByRole('button', { name: /^Back$/i }));
     expect(back).toHaveBeenCalledTimes(1);
+  });
+
+  it('renders a template without descriptionHtml and a category without a description', () => {
+    render(<InterviewFeedback {...makeProps({ type: 'bare' as FeedbackProps['type'] })} />);
+
+    expect(screen.getByRole('heading', { name: /Bare Track: Interview Feedback/i })).toBeInTheDocument();
+    expect(screen.getByText('No Description Category')).toBeInTheDocument();
+    // The category has no description → the level-5 sub-title is not rendered (`? … : null`).
+    expect(screen.queryByText('10 points')).not.toBeInTheDocument();
+    expect(screen.getByRole('checkbox', { name: /Only checkbox/i })).toBeInTheDocument();
+  });
+
+  it('renders the student avatar without a githubId (nullish coalescing fallback)', () => {
+    render(<InterviewFeedback {...makeProps({ githubId: undefined as unknown as string })} />);
+
+    // GithubAvatar receives `githubId ?? undefined` → the mock renders an empty avatar.
+    expect(screen.getByTestId('avatar')).toHaveTextContent('');
+  });
+
+  it('shows a generic error message when the failure carries no server message', async () => {
+    const user = userEvent.setup();
+    // Reject with a bare error (no response.data.data.message) → `?? 'An error occurred…'` fallback.
+    postStudentInterviewResult.mockRejectedValue(new Error('network down'));
+    render(<InterviewFeedback {...makeProps()} />);
+
+    await user.click(screen.getByText('8'));
+    await user.type(screen.getByLabelText('Comment'), 'A sufficiently long comment to satisfy validation.');
+    await user.click(screen.getByRole('button', { name: /^Submit$/i }));
+
+    await waitFor(() => expect(postStudentInterviewResult).toHaveBeenCalled());
+    // Form is not reset on error (comment remains).
+    expect(screen.getByLabelText('Comment')).toBeInTheDocument();
   });
 });

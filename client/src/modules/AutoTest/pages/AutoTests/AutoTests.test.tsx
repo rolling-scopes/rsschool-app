@@ -105,4 +105,14 @@ describe('AutoTests page', () => {
     const availableTab = screen.getByRole('tab', { name: /available/i });
     expect(within(availableTab).getByText('1')).toBeInTheDocument();
   });
+
+  it('should fall back to empty lists when the hook returns no tasks (undefined)', () => {
+    // exercises the `|| []` fallbacks on `tasks?.map` / `tasks?.filter`
+    useCourseTaskVerifications.mockReturnValue({ tasks: undefined });
+    render(<AutoTests />);
+
+    expect(screen.getByRole('heading', { name: 'Auto-tests' })).toBeInTheDocument();
+    expect(screen.getAllByRole('tab')).toHaveLength(3);
+    expect(screen.queryByText('Available Task')).not.toBeInTheDocument();
+  });
 });

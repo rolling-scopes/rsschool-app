@@ -83,6 +83,21 @@ describe('getColumnSearchProps', () => {
     expect(container.querySelector('.anticon-search')).toBeInTheDocument();
   });
 
+  it('renders a non-highlighted filter icon when not filtered', () => {
+    // filtered=false -> the `filtered ? '#1677ff' : undefined` else branch.
+    const { config } = renderDropdown();
+    const { container } = render(<>{config.filterIcon?.(false, {} as never)}</>);
+
+    expect(container.querySelector('.anticon-search')).toBeInTheDocument();
+  });
+
+  it('onFilter treats a missing field value as an empty string', () => {
+    // record lacks the dataIndex field -> `get(record, field) || ''` falls back to ''.
+    const { config } = renderDropdown();
+
+    expect(config.onFilter?.('a', {} as never)).toBe(false);
+  });
+
   it('onFilter matches a record on a single dataIndex (case-insensitive)', () => {
     const { config } = renderDropdown();
 

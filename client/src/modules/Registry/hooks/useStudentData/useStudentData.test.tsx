@@ -284,4 +284,118 @@ describe('useStudentData', () => {
     // Only the ungated open course survives the missing-discipline filter.
     expect(view.current.courses.map(c => c.id)).toEqual([1]);
   });
+
+  test('ignores a submit fired before the async data has loaded', async () => {
+    // Keep the data request pending so dataLoading stays true → handleSubmit early-returns.
+    let resolveCourses: (v: unknown) => void = () => {};
+    getCourses.mockReturnValue(new Promise(resolve => (resolveCourses = resolve)));
+    const view = renderHookView();
+
+    await act(async () => {
+      await view.current.handleSubmit({ courseId: 1 } as never);
+    });
+    expect(registerStudent).not.toHaveBeenCalled();
+    expect(updateUser).not.toHaveBeenCalled();
+
+    // Let the pending request settle so the test exits cleanly.
+    await act(async () => {
+      resolveCourses([openCourse]);
+    });
+  });
+
+  test('submits empty location strings when no location is provided', async () => {
+    const view = renderHookView();
+    await waitFor(() => expect(view.current.loading).toBe(false));
+
+    await act(async () => {
+      await view.current.handleSubmit({
+        courseId: 1,
+        // location omitted → `location?.cityName ?? ''` / `countryName ?? ''` fall back to ''.
+        primaryEmail: 'a@b.c',
+        contactsEpamEmail: 'a@epam.com',
+        firstName: 'Ada',
+        lastName: 'L',
+        languagesMentoring: ['English'],
+      } as never);
+    });
+
+    expect(updateUser).toHaveBeenCalledWith(expect.objectContaining({ cityName: '', countryName: '' }));
+  });
+
+  test('leaves the location null when the profile has no country/city', async () => {
+    // getInitialValues: `countryName && cityName ? {…} : null` → null branch.
+    getMyProfile.mockResolvedValue({ ...profile, countryName: undefined, cityName: undefined });
+    const view = renderHookView();
+
+    await waitFor(() => expect(view.current.loading).toBe(false));
+    // The General step receives a null location (no crash, courses still resolved).
+    expect(view.current.courses).toHaveLength(1);
+  });
+
+  test('handles a missing studentStats array when computing enrolled courses', async () => {
+    // profileInfo without studentStats → `studentStats?.reduce(...) ?? []` and the `|| []`
+    // fallback in getMissingDisciplines both engage.
+    getProfileInfo.mockResolvedValue({});
+    getCourses.mockResolvedValue([{ ...openCourse, certificateDisciplines: [10] }]);
+    getDisciplinesByIds.mockResolvedValue({ data: [{ id: 10, name: 'JavaScript' }] });
+    const view = renderHookView('js-2024');
+
+    await waitFor(() => expect(view.current.loading).toBe(false));
+    expect(view.current.registered).toBe(false);
+  });
+
+  test('keeps a planned course with no registration end date and labels it "Planned"', async () => {
+    // registrationEndDate missing → `|| 0` (registration inactive), but planned → still open.
+    // The student is already enrolled elsewhere so the warning lists it as "(Planned)".
+    const plannedCourse = {
+      ...openCourse,
+      id: 7,
+      alias: 'planned-course',
+      planned: true,
+      registrationEndDate: undefined,
+    };
+    const otherPlanned = {
+      ...openCourse,
+      id: 8,
+      alias: 'other-planned',
+      name: 'Other Planned',
+      planned: true,
+      completed: false,
+      registrationEndDate: undefined,
+    };
+    getCourses.mockResolvedValue([plannedCourse, otherPlanned]);
+    getProfileInfo.mockResolvedValue({
+      studentStats: [{ courseId: 8, isExpelled: false, isCourseCompleted: false, certificateId: null }],
+    });
+    const view = renderHookView();
+    await waitFor(() => expect(view.current.loading).toBe(false));
+
+    // The planned course (id 7) is open for registration despite no active reg window.
+    expect(view.current.courses.map(c => c.id)).toContain(7);
+
+    await act(async () => {
+      await view.current.handleSubmit({
+        courseId: 7,
+        location: { countryName: 'PL', cityName: 'WAW' },
+        primaryEmail: 'a@b.c',
+        contactsEpamEmail: 'a@epam.com',
+        firstName: 'A',
+        lastName: 'B',
+        languagesMentoring: ['English'],
+      } as never);
+    });
+
+    // The enrolled planned course is labelled with the "Planned" status.
+    expect(await screen.findByText('Other Planned (Planned)')).toBeInTheDocument();
+  });
+
+  test('reports "any" missing discipline for an empty certificate list with no certificates', async () => {
+    // certificateDisciplines = [] (empty array) and the student has no certificates →
+    // `Array.isArray(disciplineIds) && !certifiedStudentCourseIds.length` → 'any'.
+    getCourses.mockResolvedValue([{ ...openCourse, certificateDisciplines: [] }]);
+    getProfileInfo.mockResolvedValue({ studentStats: [] });
+    const view = renderHookView('js-2024');
+
+    await waitFor(() => expect(view.current.missingDisciplines).toBe('any'));
+  });
 });

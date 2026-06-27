@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import { INSTRUCTIONS_TEXT } from '.';
+import { INSTRUCTIONS_TEXT, renderSocialLinks } from '.';
 import Instructions from './Instructions';
 
 const { getInviteLinkByDiscordServerId } = vi.hoisted(() => ({
@@ -59,5 +59,17 @@ describe('Instructions', () => {
     render(<Instructions courseId={400} discordServerId={0} />);
 
     expect(getInviteLinkByDiscordServerId).not.toHaveBeenCalled();
+  });
+
+  it('renders a social link with no icon for an unknown platform title', () => {
+    // renderSocialLinks needs theme context, so render it through a host component.
+    // An unknown title falls through the icon switch `default` branch (no icon).
+    function Host() {
+      return <>{renderSocialLinks([{ title: 'myspace', url: 'https://myspace.com/rs' }])}</>;
+    }
+    render(<Host />);
+
+    const link = screen.getByRole('link');
+    expect(link).toHaveAttribute('href', 'https://myspace.com/rs');
   });
 });

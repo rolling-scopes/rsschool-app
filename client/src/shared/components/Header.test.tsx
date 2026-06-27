@@ -1,6 +1,7 @@
 /* eslint-disable testing-library/no-container, testing-library/no-node-access */
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { useRouter } from 'next/router';
 import { Header } from './Header';
 import { SessionContext } from '@client/modules/Course/contexts';
 
@@ -34,6 +35,7 @@ vi.mock('./SolidarityUkraine', () => ({
 describe('Header', () => {
   beforeEach(() => {
     useActiveCourseContextMock.mockReturnValue({ course: { id: 1, name: 'JS Course' } });
+    vi.mocked(useRouter).mockReturnValue({ asPath: '/' } as ReturnType<typeof useRouter>);
   });
 
   it('renders the logo, theme switch and navigation links', () => {
@@ -93,5 +95,28 @@ describe('Header', () => {
     const menu = container.querySelector('.ant-menu-horizontal');
     expect(menu).toBeInTheDocument();
     expect(within(menu as HTMLElement).getByText('Schedule')).toBeInTheDocument();
+  });
+
+  it('does not pass the course to navigation links when the course id is empty', () => {
+    // course.id === 0 -> courseNotEmpty is null (the `course.id ? course : null` and
+    // `courseNotEmpty ?? null` falsy branches).
+    useActiveCourseContextMock.mockReturnValue({ course: { id: 0, name: '' } });
+
+    render(<Header title="Dashboard" showCourseName />);
+
+    // No course name rendered, header still mounts.
+    expect(screen.getByText(/Dashboard/)).toBeInTheDocument();
+  });
+
+  it('marks the active menu item when the current route matches a menu link', async () => {
+    // asPath === '/profile' makes `isActive` true for the Profile entry, hitting the
+    // active-class branch in the dropdown menu items.
+    vi.mocked(useRouter).mockReturnValue({ asPath: '/profile' } as ReturnType<typeof useRouter>);
+    const user = userEvent.setup();
+    render(<Header />);
+
+    await user.click(screen.getByRole('button'));
+
+    expect(await screen.findByRole('link', { name: /profile/i })).toBeInTheDocument();
   });
 });

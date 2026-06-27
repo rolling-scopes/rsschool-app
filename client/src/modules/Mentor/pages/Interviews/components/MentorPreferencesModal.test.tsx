@@ -31,6 +31,10 @@ vi.mock('@client/services/course', async importOriginal => {
   };
 });
 
+// Lets a test opt out of registering the `students` field so the modal's
+// `values.students?.map(...) ?? []` nullish fallback is exercised on confirm.
+const { omitStudents } = vi.hoisted(() => ({ omitStudents: { value: false } }));
+
 // MentorOptions wraps StudentSearch (remote) + several selects. Stub it to a
 // minimal form bound to the provided FormInstance and register all three fields
 // so that the modal's form.validateFields() returns the values it forwards to
@@ -39,7 +43,11 @@ vi.mock('@client/components/MentorOptions', () => ({
   MentorOptions: ({ form }: { form: FormInstance }) => (
     <Form
       form={form}
-      initialValues={{ maxStudentsLimit: 3, preferedStudentsLocation: 'any', students: [{ value: 5 }] }}
+      initialValues={{
+        maxStudentsLimit: 3,
+        preferedStudentsLocation: 'any',
+        ...(omitStudents.value ? {} : { students: [{ value: 5 }] }),
+      }}
     >
       <Form.Item name="maxStudentsLimit" label="Max students">
         <input aria-label="max-students" />
@@ -47,9 +55,11 @@ vi.mock('@client/components/MentorOptions', () => ({
       <Form.Item name="preferedStudentsLocation" hidden>
         <input aria-label="prefered-location" />
       </Form.Item>
-      <Form.Item name="students" hidden>
-        <input aria-label="students" />
-      </Form.Item>
+      {!omitStudents.value && (
+        <Form.Item name="students" hidden>
+          <input aria-label="students" />
+        </Form.Item>
+      )}
     </Form>
   ),
 }));
@@ -78,6 +88,7 @@ function renderProvider(session: Session = SESSION) {
 
 describe('MentorPreferencesModal', () => {
   beforeEach(() => {
+    omitStudents.value = false;
     getMentorOptions.mockReset().mockResolvedValue({
       data: {
         students: [{ id: 5, githubId: 'stud', name: 'Stud' }],
@@ -134,6 +145,27 @@ describe('MentorPreferencesModal', () => {
       }),
     );
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+  });
+
+  it('submits an empty students array when no students are selected', async () => {
+    // No `students` field registered -> values.students is undefined ->
+    // `values.students?.map(...) ?? []` falls back to [].
+    omitStudents.value = true;
+    const user = userEvent.setup();
+    renderProvider();
+
+    await user.click(screen.getByRole('button', { name: 'open-options' }));
+    await screen.findByRole('dialog');
+
+    await user.click(screen.getByRole('button', { name: /Confirm/ }));
+
+    await waitFor(() =>
+      expect(createMentor).toHaveBeenCalledWith('mentor-gh', {
+        maxStudentsLimit: 3,
+        preferedStudentsLocation: 'any',
+        students: [],
+      }),
+    );
   });
 
   it('should not call getMentorOptions when the session has no mentorId for the course', async () => {

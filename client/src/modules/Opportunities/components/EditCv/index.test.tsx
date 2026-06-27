@@ -214,4 +214,33 @@ describe('EditCV', () => {
     expect(submitted.visibleCourses).toContain(11);
     expect(submitted.visibleCourses).not.toContain(22);
   });
+
+  test('saves with empty data when the forms are not rendered (null refs)', async () => {
+    const mockSaveResume = vi
+      .spyOn(OpportunitiesApi.prototype, 'saveResume')
+      .mockResolvedValue({ data: {} } as AxiosResponse);
+
+    // No userData/contacts/visibleCourses → none of the forms render → their refs stay null.
+    // hasInvalidFields(null) returns false (no validation alert) and getFieldsValue() ?? {}
+    // falls back to an empty object.
+    render(
+      <EditCV
+        githubId={mockGithubId}
+        contacts={null}
+        userData={null}
+        switchView={mockSwitchView}
+        onUpdateResume={mockOnUpdateResume}
+        visibleCourses={null as unknown as number[]}
+        courses={null}
+      />,
+    );
+
+    fireEvent.click(await screen.findByRole('button', { name: /save cv/i }));
+
+    await waitFor(() => expect(mockSaveResume).toHaveBeenCalled());
+    // No invalid-fields alert since both refs were null.
+    expect(screen.queryByText('All required fields must be filled first')).not.toBeInTheDocument();
+    const submitted = mockSaveResume.mock.calls[0]![1] as { visibleCourses?: number[] };
+    expect(submitted.visibleCourses).toEqual([]);
+  });
 });

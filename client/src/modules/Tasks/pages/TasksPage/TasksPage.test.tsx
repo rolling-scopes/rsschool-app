@@ -269,4 +269,48 @@ describe('TasksPage', () => {
     await waitFor(() => expect(getTaskCriteria).toHaveBeenCalled());
     expect(updateTask).not.toHaveBeenCalled();
   });
+
+  it('defaults criteria to an empty list when the edited task returns no criteria field', async () => {
+    const user = userEvent.setup();
+    // getTaskCriteria with no `criteria` key on edit-open → `data.criteria ?? []` fallback.
+    getTaskCriteria.mockResolvedValueOnce({ data: {} });
+    render(<TasksPage />);
+
+    await waitFor(() => expect(getTasks).toHaveBeenCalled());
+    const editLinks = await screen.findAllByText('Edit');
+    await user.click(editLinks[1] as HTMLElement);
+
+    await waitFor(() => expect(getTaskCriteria).toHaveBeenCalledWith(TASKS[1]?.id));
+    // The edit modal still opens normally.
+    expect(await screen.findByRole('dialog')).toHaveTextContent('mode: edit');
+  });
+
+  it('applies createRecord defaults for omitted optional fields', async () => {
+    const user = userEvent.setup();
+    // Only the required fields are present → the `?? ''` / `?? []` defaults in createRecord engage.
+    submitValues.current = {
+      name: 'Minimal Task',
+      type: TASKS[0]?.type,
+      discipline: 1,
+      descriptionUrl: 'https://example.com/min',
+    } as FormValues;
+    render(<TasksPage />);
+
+    await waitFor(() => expect(getTasks).toHaveBeenCalled());
+    await user.click(screen.getByRole('button', { name: /add task/i }));
+    await user.click(await screen.findByRole('button', { name: 'submit-modal' }));
+
+    await waitFor(() => expect(createTask).toHaveBeenCalledTimes(1));
+    const record = createTask.mock.calls[0]?.[0];
+    expect(record).toMatchObject({
+      name: 'Minimal Task',
+      githubPrRequired: false,
+      githubRepoName: '',
+      sourceGithubRepoUrl: '',
+      description: '',
+      tags: [],
+      skills: [],
+      attributes: {},
+    });
+  });
 });
