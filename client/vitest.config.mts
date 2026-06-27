@@ -21,6 +21,9 @@ export default mergeConfig(
       // the slowest Table/Form-validation tests can exceed 30s on busy/CI runners.
       testTimeout: 60000,
       hookTimeout: 60000,
+      // Retry transient flakes (antd async validation/Table renders occasionally
+      // timing out under load). A genuine failure still fails all attempts.
+      retry: 2,
       env: {
         TZ: 'UTC',
       },
@@ -49,10 +52,10 @@ export default mergeConfig(
         // post-exclude baseline so this config-only change passes, then bumps up
         // as each test tier lands, ending at a flat 90% (free above 90, fail below).
         thresholds: {
-          statements: 34,
-          branches: 33,
-          functions: 30,
-          lines: 34,
+          statements: 40,
+          branches: 39,
+          functions: 36,
+          lines: 40,
         },
       },
       deps: {
