@@ -16,7 +16,10 @@ jobs:
       group: pr-checks_${{ github.head_ref }}
       cancel-in-progress: true
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    # Runs format + lint + the client and nestjs unit suites (both with v8
+    # coverage). Those suites grew ~3x with the coverage initiative, so 20m is no
+    # longer enough on a 2-core runner — raised to keep the gate from timing out.
+    timeout-minutes: 40
     steps:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
