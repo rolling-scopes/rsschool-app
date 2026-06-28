@@ -23,9 +23,14 @@ function getState(courseTask: CourseTaskDetailedDto, verifications: Verification
 }
 
 function getStatus(
-  { studentEndDate, maxScore, publicAttributes }: CourseTaskDetailedDto,
+  { id, studentEndDate, maxScore, publicAttributes }: CourseTaskDetailedDto,
   verifications: Verification[],
+  manuallyDoneIds: number[],
 ): CourseTaskStatus {
+  if (manuallyDoneIds.includes(id)) {
+    return CourseTaskStatus.Done;
+  }
+
   const attemptsCount = verifications?.length || 0;
   const now = dayjs();
   const end = dayjs(studentEndDate);
@@ -53,13 +58,17 @@ function getStatus(
 }
 
 // TODO: refactor nestjs models to return CourseTaskVerifications from server
-export function mapTo(courseTask: CourseTaskDetailedDto, verifications: Verification[]): CourseTaskVerifications {
+export function mapTo(
+  courseTask: CourseTaskDetailedDto,
+  verifications: Verification[],
+  manuallyDoneIds: number[] = [],
+): CourseTaskVerifications {
   const taskVerifications = verifications.filter(v => v.courseTaskId === courseTask.id);
 
   return {
     ...courseTask,
     state: getState(courseTask, taskVerifications),
-    status: getStatus(courseTask, taskVerifications),
+    status: getStatus(courseTask, taskVerifications, manuallyDoneIds),
     publicAttributes: courseTask.publicAttributes as SelfEducationPublicAttributes,
     verifications: taskVerifications,
   };

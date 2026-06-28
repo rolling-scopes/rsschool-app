@@ -13,6 +13,7 @@ export interface TaskCardProps {
   courseTask: CourseTaskVerifications;
   course: Course;
   isAvailableTab: boolean;
+  onMarkAsDone: (taskId: number) => void;
 }
 
 function getStatusTag(state: CourseTaskState) {
@@ -26,7 +27,7 @@ function getStatusTag(state: CourseTaskState) {
   }
 }
 
-function TaskCard({ courseTask, course, isAvailableTab }: TaskCardProps) {
+function TaskCard({ courseTask, course, isAvailableTab, onMarkAsDone }: TaskCardProps) {
   const { id, name, studentStartDate, studentEndDate, verifications, state, descriptionUrl, publicAttributes } =
     courseTask;
   const { attemptsCount, explanation } = useAttemptsMessage(courseTask);
@@ -92,7 +93,7 @@ function TaskCard({ courseTask, course, isAvailableTab }: TaskCardProps) {
             {isAvailableTab && (
               <Col>
                 <Tooltip title="move to the 'Done' tab">
-                  <Button type="primary" onClick={() => console.log('moveToDone')} disabled={!isMinimumScoreDone}>
+                  <Button type="primary" onClick={() => onMarkAsDone(id)} disabled={!isMinimumScoreDone}>
                     Done Task
                   </Button>
                 </Tooltip>

@@ -17,7 +17,7 @@ const RESPONSIVE_COLUMNS: ColProps = {
 
 function AutoTests() {
   const { course } = useActiveCourseContext();
-  const { tasks } = useCourseTaskVerifications(course.id);
+  const { tasks, markTaskAsDone } = useCourseTaskVerifications(course.id);
   const [activeTab, setActiveTab] = useState(CourseTaskStatus.Available);
   const statuses = useMemo(() => tasks?.map(t => t.status) || [], [tasks]);
   const filteredTasks = useMemo(() => tasks?.filter(t => t.status === activeTab) || [], [tasks, activeTab]);
@@ -33,7 +33,12 @@ function AutoTests() {
       <Row gutter={[24, 24]} style={{ padding: '0 16px', marginRight: 0 }}>
         {filteredTasks.map(courseTask => (
           <Col {...RESPONSIVE_COLUMNS} key={courseTask.id}>
-            <TaskCard courseTask={courseTask} course={course} isAvailableTab={isAvailableTab} />
+            <TaskCard
+              courseTask={courseTask}
+              course={course}
+              isAvailableTab={isAvailableTab}
+              onMarkAsDone={markTaskAsDone}
+            />
           </Col>
         ))}
       </Row>

@@ -68,7 +68,44 @@ describe('TaskCard', () => {
 
     expect(push).toHaveBeenCalledWith(getAutoTestTaskRoute(COURSE_MOCK.alias, courseTask.id));
   });
+
+  it('does not render the "Done Task" button outside the Available tab', () => {
+    const courseTask = generateCourseTask(2, passingScore());
+    render(<TaskCard course={COURSE_MOCK} courseTask={courseTask} isAvailableTab={false} onMarkAsDone={vi.fn()} />);
+
+    expect(screen.queryByRole('button', { name: /done task/i })).not.toBeInTheDocument();
+  });
+
+  it('enables "Done Task" and calls onMarkAsDone with the task id when the score reaches the threshold', async () => {
+    const user = userEvent.setup();
+    const onMarkAsDone = vi.fn();
+    const courseTask = generateCourseTask(2, passingScore());
+    render(<TaskCard course={COURSE_MOCK} courseTask={courseTask} isAvailableTab onMarkAsDone={onMarkAsDone} />);
+
+    const button = screen.getByRole('button', { name: /done task/i });
+    expect(button).toBeEnabled();
+
+    await user.click(button);
+    expect(onMarkAsDone).toHaveBeenCalledWith(courseTask.id);
+  });
+
+  it('disables "Done Task" when the score is below the threshold', () => {
+    const courseTask = generateCourseTask(2, {
+      verifications: [{ score: 50 }],
+      publicAttributes: { maxAttemptsNumber: 2, tresholdPercentage: 80 },
+    } as Partial<CourseTaskVerifications>);
+    render(<TaskCard course={COURSE_MOCK} courseTask={courseTask} isAvailableTab onMarkAsDone={vi.fn()} />);
+
+    expect(screen.getByRole('button', { name: /done task/i })).toBeDisabled();
+  });
 });
+
+function passingScore(): Partial<CourseTaskVerifications> {
+  return {
+    verifications: [{ score: 90 }],
+    publicAttributes: { maxAttemptsNumber: 2, tresholdPercentage: 80 },
+  } as Partial<CourseTaskVerifications>;
+}
 
 function generateCourseTask(
   maxAttemptsNumber?: number,
