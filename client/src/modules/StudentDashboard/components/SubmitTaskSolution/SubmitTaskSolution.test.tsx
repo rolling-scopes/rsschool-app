@@ -31,7 +31,11 @@ const tasks = [
     name: 'Mentor Task A',
     checker: CheckerEnum.Mentor,
     type: 'jstask',
-    taskSolutions: [],
+    // A defined-but-empty-url solution: exercises the prefill branch in
+    // useSubmitTaskSolution without crashing (an empty `[]` is truthy but
+    // Object.values(...)[0] is undefined -> reading `.url` throws). Empty url
+    // also keeps the link field blank so the typed URL is submitted as-is.
+    taskSolutions: [{ url: '' }],
     studentStartDate: past,
     studentEndDate: future,
   },
@@ -40,7 +44,11 @@ const tasks = [
     name: 'Mentor Task B',
     checker: CheckerEnum.Mentor,
     type: 'jstask',
-    taskSolutions: [],
+    // A defined-but-empty-url solution: exercises the prefill branch in
+    // useSubmitTaskSolution without crashing (an empty `[]` is truthy but
+    // Object.values(...)[0] is undefined -> reading `.url` throws). Empty url
+    // also keeps the link field blank so the typed URL is submitted as-is.
+    taskSolutions: [{ url: '' }],
     studentStartDate: past,
     studentEndDate: future,
   },
