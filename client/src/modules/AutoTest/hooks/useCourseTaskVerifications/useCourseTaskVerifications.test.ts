@@ -44,6 +44,7 @@ function detailedTask(overrides: Record<string, unknown> = {}) {
 describe('useCourseTaskVerifications', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    localStorage.clear();
     getTaskVerifications.mockResolvedValue([]);
   });
 
@@ -87,6 +88,32 @@ describe('useCourseTaskVerifications', () => {
 
     act(() => result.current.reload());
     await waitFor(() => expect(getTaskVerifications).toHaveBeenCalledTimes(2));
+  });
+
+  it('marks a task as done, moving it to the Done status and persisting the id per course', async () => {
+    getCourseTasksDetailed.mockResolvedValueOnce({ data: [detailedTask({ id: 1, name: 'Available' })] });
+    const { result } = renderHook(() => useCourseTaskVerifications(42));
+
+    await waitFor(() => expect(result.current.tasks).toHaveLength(1));
+    expect(result.current.tasks?.[0]?.status).toBe('Available');
+
+    act(() => result.current.markTaskAsDone(1));
+
+    await waitFor(() => expect(result.current.tasks?.[0]?.status).toBe('Done'));
+    expect(JSON.parse(localStorage.getItem('autotest-done-tasks-42') ?? '[]')).toContain(1);
+  });
+
+  it('does not duplicate an id that was already marked as done', async () => {
+    getCourseTasksDetailed.mockResolvedValueOnce({ data: [detailedTask({ id: 1 })] });
+    const { result } = renderHook(() => useCourseTaskVerifications(42));
+
+    await waitFor(() => expect(result.current.tasks).toHaveLength(1));
+
+    act(() => result.current.markTaskAsDone(1));
+    act(() => result.current.markTaskAsDone(1));
+
+    await waitFor(() => expect(result.current.tasks?.[0]?.status).toBe('Done'));
+    expect(JSON.parse(localStorage.getItem('autotest-done-tasks-42') ?? '[]')).toEqual([1]);
   });
 
   it('surfaces a message when the verifications request fails', async () => {

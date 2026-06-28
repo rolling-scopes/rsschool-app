@@ -19,8 +19,9 @@ vi.mock('@client/modules/Course/contexts', () => ({
   useActiveCourseContext: () => ({ course: { id: 42, alias: 'rs-2025' } }),
 }));
 
-const { useCourseTaskVerifications } = vi.hoisted(() => ({
+const { useCourseTaskVerifications, markTaskAsDone } = vi.hoisted(() => ({
   useCourseTaskVerifications: vi.fn(),
+  markTaskAsDone: vi.fn(),
 }));
 vi.mock('@client/modules/AutoTest/hooks', () => ({
   useCourseTaskVerifications,
@@ -51,12 +52,14 @@ function task(id: number, name: string, status: CourseTaskStatus): CourseTaskVer
 
 describe('AutoTests page', () => {
   beforeEach(() => {
+    markTaskAsDone.mockClear();
     useCourseTaskVerifications.mockReturnValue({
       tasks: [
         task(1, 'Available Task', CourseTaskStatus.Available),
         task(2, 'Missed Task', CourseTaskStatus.Missed),
-        task(3, 'Done Task', CourseTaskStatus.Done),
+        task(3, 'Completed Task', CourseTaskStatus.Done),
       ],
+      markTaskAsDone,
     });
   });
 
@@ -77,7 +80,7 @@ describe('AutoTests page', () => {
 
     expect(screen.getByText('Available Task')).toBeInTheDocument();
     expect(screen.queryByText('Missed Task')).not.toBeInTheDocument();
-    expect(screen.queryByText('Done Task')).not.toBeInTheDocument();
+    expect(screen.queryByText('Completed Task')).not.toBeInTheDocument();
   });
 
   it('should switch the visible tasks when another tab is selected', async () => {
@@ -89,6 +92,21 @@ describe('AutoTests page', () => {
 
     expect(screen.getByText('Missed Task')).toBeInTheDocument();
     expect(screen.queryByText('Available Task')).not.toBeInTheDocument();
+  });
+
+  it('calls markTaskAsDone with the task id when "Done Task" is clicked on the Available tab', async () => {
+    const user = userEvent.setup();
+    const passedTask = {
+      ...task(1, 'Available Task', CourseTaskStatus.Available),
+      verifications: [{ score: 90 }],
+      publicAttributes: { maxAttemptsNumber: 2, tresholdPercentage: 80 },
+    } as unknown as CourseTaskVerifications;
+    useCourseTaskVerifications.mockReturnValue({ tasks: [passedTask], markTaskAsDone });
+    render(<AutoTests />);
+
+    await user.click(screen.getByRole('button', { name: /done task/i }));
+
+    expect(markTaskAsDone).toHaveBeenCalledWith(1);
   });
 
   it('should render no task cards when there are no tasks', () => {

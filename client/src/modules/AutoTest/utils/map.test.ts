@@ -98,5 +98,15 @@ describe('mapTo', () => {
       const result = mapTo(task(), [verification({ score: 10 })]);
       expect(result.status).toBe(CourseTaskStatus.Available);
     });
+
+    it('is Done when the task id is in the manually-done list, overriding the derived status', () => {
+      const result = mapTo(task({ id: 7 }), [verification({ courseTaskId: 7, score: 10 })], [7]);
+      expect(result.status).toBe(CourseTaskStatus.Done);
+    });
+
+    it('ignores manually-done ids that do not match the task', () => {
+      const result = mapTo(task({ id: 1 }), [verification({ score: 10 })], [999]);
+      expect(result.status).toBe(CourseTaskStatus.Available);
+    });
   });
 });
