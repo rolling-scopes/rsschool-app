@@ -2,6 +2,13 @@ import path from 'node:path';
 import { defineConfig, mergeConfig } from 'vitest/config';
 import shared from '../vitest.shared.mjs';
 
+// Pin the timezone in the MAIN vitest process so worker threads inherit UTC at
+// init. The `threads` pool (set below) starts ~2x faster than `forks`, but
+// threads inherit the parent process timezone — vitest's `test.env.TZ` only
+// reliably applies to `forks`. Setting it here (before the pool is created) keeps
+// date/calendar assertions deterministic under threads. Cross-platform, no shell prefix.
+process.env.TZ = 'UTC';
+
 export default mergeConfig(
   shared,
   defineConfig({
@@ -17,6 +24,11 @@ export default mergeConfig(
       environment: 'jsdom',
       include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
       setupFiles: ['src/setupTests.ts'],
+      // `threads` starts workers far faster than the default `forks` pool and
+      // shares the V8 code cache across files, roughly halving module-import time
+      // for this antd-heavy suite. (Per-file isolation is kept — the suite's
+      // per-file vi.mock usage is not safe with isolate:false.)
+      pool: 'threads',
       // antd v6 in jsdom is CPU-heavy; under coverage instrumentation + parallelism
       // the slowest Table/Form-validation tests can exceed 30s on busy/CI runners.
       testTimeout: 60000,
