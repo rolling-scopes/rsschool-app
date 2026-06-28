@@ -16,7 +16,6 @@ To help you successfully complete the selected course, the **RS School App** has
 ![schedule control panel](./img/schedule-3.png)
 
 1. Select the type of schedule. The selection is saved for the device/browser
-
    - **Table** - the most detailed view of the schedule (opens by default)
    - **List** - the most compact view for mobile devices (opens by default on mobile)
    - **Calendar** - common calendar for schedule review

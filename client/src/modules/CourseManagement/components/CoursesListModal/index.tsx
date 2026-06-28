@@ -1,6 +1,6 @@
 import { Form, Select } from 'antd';
-import { CourseDto, CoursesApi } from 'api';
-import { ModalForm } from 'components/Forms';
+import { CourseDto, CoursesApi } from '@client/api';
+import { ModalForm } from '@client/shared/components/Forms';
 import { useCallback, PropsWithChildren } from 'react';
 import { useAsync } from 'react-use';
 

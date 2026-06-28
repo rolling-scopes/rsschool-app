@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Website (lives on docs branch)
+website/
+
+# Build outputs
+dist/
+*.js
+*.d.ts
+*.js.map
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.local

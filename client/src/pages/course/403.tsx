@@ -1,3 +1,3 @@
-import { CouseNoAccessPage } from 'modules/Course/pages/CouseNoAccess';
+import { CouseNoAccessPage } from '@client/modules/Course/pages/CouseNoAccess';
 
 export default CouseNoAccessPage;

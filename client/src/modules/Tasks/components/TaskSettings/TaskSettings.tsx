@@ -1,10 +1,10 @@
 import { Collapse, CollapseProps, Space, Typography } from 'antd';
 import { CollapsibleType } from 'antd/es/collapse/CollapsePanel';
-import { CriteriaDto, TaskDtoTypeEnum } from 'api';
+import { CriteriaDto, TaskDtoTypeEnum } from '@client/api';
 
-import { CrossCheckTaskCriteriaPanel, GitHubPanel, JsonAttributesPanel } from 'modules/Tasks/components';
-import { TASK_SETTINGS_HEADERS } from 'modules/Tasks/constants';
-import { Settings, SettingsSet } from 'modules/Tasks/types';
+import { CrossCheckTaskCriteriaPanel, GitHubPanel, JsonAttributesPanel } from '@client/modules/Tasks/components';
+import { TASK_SETTINGS_HEADERS } from '@client/modules/Tasks/constants';
+import { Settings, SettingsSet } from '@client/modules/Tasks/types';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 type Props = {
@@ -48,7 +48,7 @@ export function TaskSettings({ dataCriteria, taskType, setDataCriteria }: Props)
   }, [taskType]);
 
   return (
-    <Space direction="vertical" size={16} style={{ width: '100%' }}>
+    <Space orientation="vertical" size={16} style={{ width: '100%' }}>
       <Text strong>Settings for some types of tasks</Text>
       <Collapse items={collapseItems} defaultActiveKey={[]} activeKey={activeKey} onChange={handleChange} accordion />
     </Space>

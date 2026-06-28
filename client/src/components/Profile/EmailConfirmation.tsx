@@ -1,5 +1,5 @@
 import { Alert } from 'antd';
-import { Timer } from 'components/Timer';
+import { Timer } from '@client/shared/components/Timer';
 import dayjs from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -30,7 +30,8 @@ export function EmailConfirmation({ connection, sendConfirmationEmail }: Props) 
   return (
     <Alert
       type="error"
-      message={
+      style={{ margin: '0.5rem 0' }}
+      title={
         <div>
           Email is not verified.{' '}
           {allowedToResend && (

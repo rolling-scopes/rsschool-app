@@ -14,13 +14,13 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { addHours } from 'date-fns';
 import { Response } from 'express';
 import { DefaultGuard, RequiredRoles, Role, RoleGuard } from '.';
 import { AuthService, CurrentRequest } from './auth.service';
 import { JWT_COOKIE_NAME } from './constants';
 import { AuthConnectionDto } from './dto/auth-connection.dto';
 import { GithubStrategy } from './strategies/github.strategy';
-import * as dayjs from 'dayjs';
 
 const isDev = process.env.NODE_ENV !== 'production';
 const COOKIE_DOMAIN = isDev ? undefined : 'rs.school';
@@ -85,7 +85,7 @@ export class AuthController {
   async createConnectLinkViaGithub(@Body() dto: AuthConnectionDto) {
     const link = await this.githubStrategy.getAuthorizeUrl({
       data: dto,
-      expires: dayjs().add(1, 'hour').toISOString(),
+      expires: addHours(new Date(), 1).toISOString(),
     });
     return {
       link,

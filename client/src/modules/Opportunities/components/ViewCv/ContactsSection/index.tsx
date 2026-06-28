@@ -1,4 +1,4 @@
-import { Contacts } from 'modules/Opportunities/models';
+import { Contacts } from '@client/modules/Opportunities/models';
 import { ContactsList } from './ContactsList';
 
 type Props = {

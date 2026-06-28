@@ -1,12 +1,11 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { MentorRegistryDto, RegistryApi, InviteMentorsDto } from 'api';
-import { PreferredStudentsLocation } from '@common/enums/mentor';
-import { MentorRegistryTabsMode } from 'modules/MentorRegistry/constants';
+import { AxiosError } from 'axios';
+import { MentorRegistryDto, RegistryApi, InviteMentorsDto, MentorDetailsDtoStudentsPreferenceEnum } from '@client/api';
+import { MentorRegistryTabsMode } from '@client/modules/MentorRegistry/constants';
 
 export type MentorResponse = {
   preselectedCourses: number[];
   maxStudentsLimit: number;
-  preferedStudentsLocation: PreferredStudentsLocation;
+  preferedStudentsLocation: MentorDetailsDtoStudentsPreferenceEnum;
   preferredCourses: number[];
 };
 
@@ -45,11 +44,9 @@ export interface GetMentorRegistriesOptions {
 }
 
 export class MentorRegistryService {
-  private axios: AxiosInstance;
   private registryApi: RegistryApi;
 
   constructor() {
-    this.axios = axios.create({ baseURL: `/api/registry` });
     this.registryApi = new RegistryApi();
   }
 
@@ -57,19 +54,18 @@ export class MentorRegistryService {
     if (!options) {
       const response = await this.registryApi.getMentorRegistries();
       return response.data;
-    } else {
-      const response = await this.registryApi.getMentorRegistries(
-        options.status,
-        options.pageSize,
-        options.currentPage,
-        options.githubId,
-        options.cityName,
-        options.preferedCourses,
-        options.preselectedCourses,
-        options.technicalMentoring,
-      );
-      return response.data;
     }
+    const response = await this.registryApi.getMentorRegistries(
+      options.status,
+      options.pageSize,
+      options.currentPage,
+      options.githubId,
+      options.cityName,
+      options.preferedCourses,
+      options.preselectedCourses,
+      options.technicalMentoring,
+    );
+    return response.data;
   }
 
   public async updateMentor(githubId: string, data: { preselectedCourses: string[] }) {
@@ -86,9 +82,17 @@ export class MentorRegistryService {
     await this.registryApi.commentMentorRegistry(githubId, { comment: comment });
   }
 
-  public async getMentor() {
-    const response = await this.axios.get<AxiosResponse<MentorResponse>>(`/mentor`);
-    return response.data.data;
+  public async getMentor(): Promise<MentorResponse | null> {
+    try {
+      const response = await this.registryApi.getOwnMentorRegistry();
+      return response.data as MentorResponse;
+    } catch (e) {
+      if (e instanceof AxiosError && e.response?.status === 404) {
+        console.info('Mentor is not found in the mentor registry.');
+        return null;
+      }
+      throw e;
+    }
   }
 
   public async inviteMentors(data: InviteMentorsDto) {

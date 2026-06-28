@@ -1,5 +1,4 @@
 import { Button, Col, Result, Row } from 'antd';
-import React from 'react';
 
 export function CourseNoAccess() {
   return (

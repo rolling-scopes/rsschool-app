@@ -1,0 +1,10 @@
+{
+  "trailingComma": "all",
+  "tabWidth": 2,
+  "semi": true,
+  "singleQuote": true,
+  "printWidth": 120,
+  "arrowParens": "avoid",
+  "sortPackageJson": false,
+  "ignorePatterns": ["client/src/api/", "client/playwright-report/", "client/next-env.d.ts", "package-lock.json"]
+}

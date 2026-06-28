@@ -3,7 +3,7 @@ import { Row, Col, Space } from 'antd';
 import YoutubeFilled from '@ant-design/icons/YoutubeFilled';
 import GithubFilled from '@ant-design/icons/GithubFilled';
 import LinkedinOutlined from '@ant-design/icons/LinkedinOutlined';
-import { DiscordOutlined } from 'components/Icons/DiscordOutlined';
+import { DiscordOutlined } from '@client/shared/components/Icons/DiscordOutlined';
 
 const iconStyle = { fontSize: 24 };
 

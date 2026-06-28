@@ -1,11 +1,11 @@
 import { Col, ColProps, Row, message } from 'antd';
-import { AutoTestsApi, BasicAutoTestTaskDto } from 'api';
-import { AdminPageLayout } from 'components/PageLayout';
-import AutoTestTaskCard from 'modules/AutoTest/components/AutoTestTaskCard/AutoTestTaskCard';
-import { SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { AutoTestsApi, BasicAutoTestTaskDto } from '@client/api';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
+import AutoTestTaskCard from '@client/modules/AutoTest/components/AutoTestTaskCard/AutoTestTaskCard';
+import { SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { useState } from 'react';
 import { useAsync } from 'react-use';
-import { CourseRole } from 'services/models';
+import { CourseRole } from '@client/services/models';
 
 const RESPONSIVE_COLUMNS: ColProps = {
   sm: 24,

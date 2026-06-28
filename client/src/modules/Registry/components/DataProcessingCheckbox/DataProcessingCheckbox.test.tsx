@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Form } from 'antd';
-import { ERROR_MESSAGES } from 'modules/Registry/constants';
+import { ERROR_MESSAGES } from '@client/modules/Registry/constants';
 import { DataProcessingCheckbox } from './DataProcessingCheckbox';
 
 enum Checkbox {

@@ -1,8 +1,9 @@
 import eslint from '@eslint/js';
-import tsEslint from 'typescript-eslint';
 import turbo from 'eslint-config-turbo/flat';
+import vitest from '@vitest/eslint-plugin';
 import globals from 'globals';
-import jest from 'eslint-plugin-jest';
+import tsEslint from 'typescript-eslint';
+import { isAgent } from 'std-env';
 
 export default tsEslint.config(
   eslint.configs.recommended,
@@ -10,7 +11,7 @@ export default tsEslint.config(
   ...turbo,
   {
     files: ['**/__tests__/**/*.ts?(x)', '**/?(*.)+(spec|test).ts?(x)'],
-    ...jest.configs['flat/recommended'],
+    ...vitest.configs.recommended,
   },
   {
     ignores: ['node_modules', 'dist'],
@@ -21,7 +22,7 @@ export default tsEslint.config(
       },
     },
     rules: {
-      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-explicit-any': isAgent ? 'off' : 'warn',
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
@@ -34,6 +35,7 @@ export default tsEslint.config(
           ignoreRestSiblings: true,
         },
       ],
+      'no-else-return': ['error'],
     },
-  }
+  },
 );

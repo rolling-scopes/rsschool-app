@@ -1,9 +1,9 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = `
+exports[`ContactsCard > Should render correctly > if editing mode is disabled 1`] = `
 <div>
   <div
-    class="ant-card ant-card-bordered css-dev-only-do-not-override-1v2lwm6"
+    class="ant-card ant-card-bordered css-dev-only-do-not-override-1enej14 css-var-root"
   >
     <div
       class="ant-card-head"
@@ -15,7 +15,7 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
           class="ant-card-head-title"
         >
           <h2
-            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-1v2lwm6"
+            class="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line css-dev-only-do-not-override-1enej14 css-var-root"
             style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
             <span>
@@ -49,151 +49,184 @@ exports[`ContactsCard Should render correctly if editing mode is disabled 1`] = 
       class="ant-card-body"
     >
       <div
-        class="ant-list ant-list-split css-dev-only-do-not-override-1v2lwm6"
+        class="ant-flex css-dev-only-do-not-override-1enej14 css-var-root ant-flex-align-stretch ant-flex-vertical"
+        data-size="default"
       >
-        <div
-          class="ant-spin-nested-loading css-dev-only-do-not-override-1v2lwm6"
+        <ul
+          style="list-style: none; padding: 0px; margin: 0px; display: flex; flex-direction: column; gap: 8px;"
         >
-          <div
-            class="ant-spin-container"
+          <li
+            data-testid="list-item-0"
+            style="padding-bottom: 8px; border-bottom: 1px solid rgba(5, 5, 5, 0.06);"
           >
-            <ul
-              class="ant-list-items"
+            <div
+              class="ant-flex css-dev-only-do-not-override-1enej14 css-var-root ant-flex-wrap-wrap ant-flex-align-center"
             >
-              <li
-                class="ant-list-item ant-list-item-no-flex"
+              <span
+                class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
               >
-                <span
-                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
-                >
-                  <strong>
-                    EPAM E-mail
-                    :
-                  </strong>
-                </span>
-                 
-                vasya@epam.com
-              </li>
-              <li
-                class="ant-list-item ant-list-item-no-flex"
+                <strong>
+                  EPAM E-mail
+                  :
+                </strong>
+              </span>
+               
+              vasya@epam.com
+            </div>
+          </li>
+          <li
+            data-testid="list-item-1"
+            style="padding-bottom: 8px; border-bottom: 1px solid rgba(5, 5, 5, 0.06);"
+          >
+            <div
+              class="ant-flex css-dev-only-do-not-override-1enej14 css-var-root ant-flex-wrap-wrap ant-flex-align-center"
+            >
+              <span
+                class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
               >
-                <span
-                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
-                >
-                  <strong>
-                    E-mail
-                    :
-                  </strong>
-                </span>
-                 
-                vasya@tut.by
-              </li>
-              <li
-                class="ant-list-item ant-list-item-no-flex"
+                <strong>
+                  E-mail
+                  :
+                </strong>
+              </span>
+               
+              vasya@tut.by
+            </div>
+          </li>
+          <li
+            data-testid="list-item-2"
+            style="padding-bottom: 8px; border-bottom: 1px solid rgba(5, 5, 5, 0.06);"
+          >
+            <div
+              class="ant-flex css-dev-only-do-not-override-1enej14 css-var-root ant-flex-wrap-wrap ant-flex-align-center"
+            >
+              <span
+                class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
               >
-                <span
-                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
-                >
-                  <strong>
-                    Telegram
-                    :
-                  </strong>
-                </span>
-                 
-                televasya
-              </li>
-              <li
-                class="ant-list-item ant-list-item-no-flex"
+                <strong>
+                  Telegram
+                  :
+                </strong>
+              </span>
+               
+              televasya
+            </div>
+          </li>
+          <li
+            data-testid="list-item-3"
+            style="padding-bottom: 8px; border-bottom: 1px solid rgba(5, 5, 5, 0.06);"
+          >
+            <div
+              class="ant-flex css-dev-only-do-not-override-1enej14 css-var-root ant-flex-wrap-wrap ant-flex-align-center"
+            >
+              <span
+                class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
               >
-                <span
-                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
-                >
-                  <strong>
-                    Phone
-                    :
-                  </strong>
-                </span>
-                 
-                1232422
-              </li>
-              <li
-                class="ant-list-item ant-list-item-no-flex"
+                <strong>
+                  Phone
+                  :
+                </strong>
+              </span>
+               
+              1232422
+            </div>
+          </li>
+          <li
+            data-testid="list-item-4"
+            style="padding-bottom: 8px; border-bottom: 1px solid rgba(5, 5, 5, 0.06);"
+          >
+            <div
+              class="ant-flex css-dev-only-do-not-override-1enej14 css-var-root ant-flex-wrap-wrap ant-flex-align-center"
+            >
+              <span
+                class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
               >
-                <span
-                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
-                >
-                  <strong>
-                    Skype
-                    :
-                  </strong>
-                </span>
-                 
-                skype_vasya
-              </li>
-              <li
-                class="ant-list-item ant-list-item-no-flex"
+                <strong>
+                  Skype
+                  :
+                </strong>
+              </span>
+               
+              skype_vasya
+            </div>
+          </li>
+          <li
+            data-testid="list-item-5"
+            style="padding-bottom: 8px; border-bottom: 1px solid rgba(5, 5, 5, 0.06);"
+          >
+            <div
+              class="ant-flex css-dev-only-do-not-override-1enej14 css-var-root ant-flex-wrap-wrap ant-flex-align-center"
+            >
+              <span
+                class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
               >
-                <span
-                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
-                >
-                  <strong>
-                    WhatsApp
-                    :
-                  </strong>
-                </span>
-                 
-                1234567890
-              </li>
-              <li
-                class="ant-list-item ant-list-item-no-flex"
+                <strong>
+                  WhatsApp
+                  :
+                </strong>
+              </span>
+               
+              1234567890
+            </div>
+          </li>
+          <li
+            data-testid="list-item-6"
+            style="padding-bottom: 8px; border-bottom: 1px solid rgba(5, 5, 5, 0.06);"
+          >
+            <div
+              class="ant-flex css-dev-only-do-not-override-1enej14 css-var-root ant-flex-wrap-wrap ant-flex-align-center"
+            >
+              <span
+                class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
               >
-                <span
-                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
-                >
-                  <strong>
-                    Notes
-                    :
-                  </strong>
-                </span>
-                 
-                vasya
-              </li>
-              <li
-                class="ant-list-item ant-list-item-no-flex"
+                <strong>
+                  Notes
+                  :
+                </strong>
+              </span>
+               
+              vasya
+            </div>
+          </li>
+          <li
+            data-testid="list-item-7"
+            style="padding-bottom: 0px;"
+          >
+            <div
+              class="ant-flex css-dev-only-do-not-override-1enej14 css-var-root ant-flex-wrap-wrap ant-flex-align-center"
+            >
+              <span
+                class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
               >
-                <span
-                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
+                <strong>
+                  LinkedIn
+                  :
+                </strong>
+              </span>
+               
+              <span
+                class="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line css-dev-only-do-not-override-1enej14 css-var-root"
+              >
+                <a
+                  href="http://linkedin_test.com/vasya"
+                  target="__blank"
                 >
-                  <strong>
-                    LinkedIn
-                    :
-                  </strong>
-                </span>
-                 
-                <span
-                  class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-1v2lwm6"
-                >
-                  <a
-                    href="http://linkedin_test.com/vasya"
-                    target="__blank"
-                  >
-                    http://linkedin_test.com/vasya
-                  </a>
-                </span>
-              </li>
-            </ul>
-          </div>
-        </div>
+                  http://linkedin_test.com/vasya
+                </a>
+              </span>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
 </div>
 `;
 
-exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
+exports[`ContactsCard > Should render correctly > if editing mode is enabled 1`] = `
 <div>
   <div
-    class="ant-card ant-card-bordered css-dev-only-do-not-override-1v2lwm6"
+    class="ant-card ant-card-bordered css-dev-only-do-not-override-1enej14 css-var-root"
   >
     <div
       class="ant-card-head"
@@ -205,7 +238,7 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
           class="ant-card-head-title"
         >
           <h2
-            class="ant-typography ant-typography-ellipsis ant-typography-single-line ant-typography-ellipsis-single-line css-dev-only-do-not-override-1v2lwm6"
+            class="ant-typography ant-typography-ellipsis ant-typography-ellipsis-single-line css-dev-only-do-not-override-1enej14 css-var-root"
             style="font-size: 16px; margin-bottom: 0px; display: flex; align-items: center; justify-content: space-between;"
           >
             <span>
@@ -259,113 +292,132 @@ exports[`ContactsCard Should render correctly if editing mode is enabled 1`] = `
       class="ant-card-body"
     >
       <div
-        class="ant-list ant-list-split css-dev-only-do-not-override-1v2lwm6"
+        class="ant-flex css-dev-only-do-not-override-1enej14 css-var-root ant-flex-align-stretch ant-flex-vertical"
+        data-size="default"
       >
-        <div
-          class="ant-spin-nested-loading css-dev-only-do-not-override-1v2lwm6"
+        <ul
+          style="list-style: none; padding: 0px; margin: 0px; display: flex; flex-direction: column; gap: 8px;"
         >
-          <div
-            class="ant-spin-container"
+          <li
+            data-testid="list-item-0"
+            style="padding-bottom: 8px; border-bottom: 1px solid rgba(5, 5, 5, 0.06);"
           >
-            <ul
-              class="ant-list-items"
+            <div
+              class="ant-flex css-dev-only-do-not-override-1enej14 css-var-root ant-flex-wrap-wrap ant-flex-align-center"
             >
-              <li
-                class="ant-list-item ant-list-item-no-flex"
+              <span
+                class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
               >
-                <span
-                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
-                >
-                  <strong>
-                    EPAM E-mail
-                    :
-                  </strong>
-                </span>
-                 
-                vasya@epam.com
-              </li>
-              <li
-                class="ant-list-item ant-list-item-no-flex"
+                <strong>
+                  EPAM E-mail
+                  :
+                </strong>
+              </span>
+               
+              vasya@epam.com
+            </div>
+          </li>
+          <li
+            data-testid="list-item-1"
+            style="padding-bottom: 8px; border-bottom: 1px solid rgba(5, 5, 5, 0.06);"
+          >
+            <div
+              class="ant-flex css-dev-only-do-not-override-1enej14 css-var-root ant-flex-wrap-wrap ant-flex-align-center"
+            >
+              <span
+                class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
               >
-                <span
-                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
-                >
-                  <strong>
-                    E-mail
-                    :
-                  </strong>
-                </span>
-                 
-                vasya@tut.by
+                <strong>
+                  E-mail
+                  :
+                </strong>
+              </span>
+               
+              vasya@tut.by
+              <div
+                class="ant-alert ant-alert-error ant-alert-no-icon css-var-root css-dev-only-do-not-override-1enej14"
+                data-show="true"
+                role="alert"
+                style="margin: 0.5rem 0px;"
+              >
                 <div
-                  class="ant-alert ant-alert-error ant-alert-no-icon css-dev-only-do-not-override-1v2lwm6"
-                  data-show="true"
-                  role="alert"
+                  class="ant-alert-section"
                 >
                   <div
-                    class="ant-alert-content"
+                    class="ant-alert-title"
                   >
-                    <div
-                      class="ant-alert-message"
-                    >
-                      <div>
-                        Email is not verified.
-                         
-                        <span
-                          style="text-decoration: underline; cursor: pointer;"
-                        >
-                          Send confirmation email?
-                        </span>
-                      </div>
+                    <div>
+                      Email is not verified.
+                       
+                      <span
+                        style="text-decoration: underline; cursor: pointer;"
+                      >
+                        Send confirmation email?
+                      </span>
                     </div>
                   </div>
                 </div>
-              </li>
-              <li
-                class="ant-list-item ant-list-item-no-flex"
+              </div>
+            </div>
+          </li>
+          <li
+            data-testid="list-item-2"
+            style="padding-bottom: 8px; border-bottom: 1px solid rgba(5, 5, 5, 0.06);"
+          >
+            <div
+              class="ant-flex css-dev-only-do-not-override-1enej14 css-var-root ant-flex-wrap-wrap ant-flex-align-center"
+            >
+              <span
+                class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
               >
-                <span
-                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
-                >
-                  <strong>
-                    Phone
-                    :
-                  </strong>
-                </span>
-                 
-                1232422
-              </li>
-              <li
-                class="ant-list-item ant-list-item-no-flex"
+                <strong>
+                  Phone
+                  :
+                </strong>
+              </span>
+               
+              1232422
+            </div>
+          </li>
+          <li
+            data-testid="list-item-3"
+            style="padding-bottom: 8px; border-bottom: 1px solid rgba(5, 5, 5, 0.06);"
+          >
+            <div
+              class="ant-flex css-dev-only-do-not-override-1enej14 css-var-root ant-flex-wrap-wrap ant-flex-align-center"
+            >
+              <span
+                class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
               >
-                <span
-                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
-                >
-                  <strong>
-                    Skype
-                    :
-                  </strong>
-                </span>
-                 
-                skype_vasya
-              </li>
-              <li
-                class="ant-list-item ant-list-item-no-flex"
+                <strong>
+                  Skype
+                  :
+                </strong>
+              </span>
+               
+              skype_vasya
+            </div>
+          </li>
+          <li
+            data-testid="list-item-4"
+            style="padding-bottom: 0px;"
+          >
+            <div
+              class="ant-flex css-dev-only-do-not-override-1enej14 css-var-root ant-flex-wrap-wrap ant-flex-align-center"
+            >
+              <span
+                class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
               >
-                <span
-                  class="ant-typography css-dev-only-do-not-override-1v2lwm6"
-                >
-                  <strong>
-                    WhatsApp
-                    :
-                  </strong>
-                </span>
-                 
-                1234567890
-              </li>
-            </ul>
-          </div>
-        </div>
+                <strong>
+                  WhatsApp
+                  :
+                </strong>
+              </span>
+               
+              1234567890
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
   </div>

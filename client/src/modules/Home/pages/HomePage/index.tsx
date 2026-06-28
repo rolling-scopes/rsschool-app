@@ -1,23 +1,23 @@
-import { Alert, Button, Col, Layout, List, Row, theme } from 'antd';
-import { AlertDto, AlertsApi } from 'api';
-import { AdminSider } from 'components/Sider/AdminSider';
-import { FooterLayout } from 'components/Footer';
-import { Header } from 'components/Header';
-import { isAdmin, isAnyCourseDementor, isAnyCoursePowerUser, isAnyMentor } from 'domain/user';
-import { HomeSummary } from 'modules/Home/components/HomeSummary';
-import { NoCourse } from 'modules/Home/components/NoCourse';
-import { CourseSelector } from 'modules/Home/components/CourseSelector';
-import { RegistryBanner } from 'modules/Home/components/RegistryBanner';
-import { SystemAlerts } from 'modules/Home/components/SystemAlerts';
-import { getCourseLinks } from 'modules/Home/data/links';
-import { useStudentSummary } from 'modules/Home/hooks/useStudentSummary';
-import Link from 'next/link';
+import { Alert, Button, Col, Layout, Row, theme } from 'antd';
+import { AlertDto, AlertsApi } from '@client/api';
+import { AdminSider } from '@client/shared/components/Sider/AdminSider';
+import { FooterLayout } from '@client/components/Footer';
+import { Header } from '@client/shared/components/Header';
+import { isAdmin, isAnyCourseDementor, isAnyCoursePowerUser, isAnyMentor } from '@client/domain/user';
+import HomeSummary from '@client/modules/Home/components/HomeSummary';
+import { NoCourse } from '@client/modules/Home/components/NoCourse';
+import { CourseSelector } from '@client/modules/Home/components/CourseSelector';
+import { RegistryBanner } from '@client/modules/Home/components/RegistryBanner';
+import { SystemAlerts } from '@client/modules/Home/components/SystemAlerts';
+import { getCourseLinks } from '@client/modules/Home/data/links';
+import { useStudentSummary } from '@client/modules/Home/hooks/useStudentSummary';
 import { useContext, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { CoursesService } from 'services/courses';
-import { MentorRegistryService } from 'services/mentorRegistry';
-import { Course } from 'services/models';
-import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
+import { CoursesService } from '@client/services/courses';
+import { MentorRegistryService } from '@client/services/mentorRegistry';
+import { Course } from '@client/services/models';
+import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
+import CourseLinks from '@client/modules/Home/components/CourseLinks';
 
 const { Content } = Layout;
 
@@ -85,7 +85,7 @@ export function HomePage() {
               <Alert
                 type="success"
                 showIcon
-                message={`You are approved as a mentor to "${approvedCourse.name}" course`}
+                title={`You are approved as a mentor to "${approvedCourse.name}" course`}
                 description={
                   <Button type="primary" href={`/course/mentor/confirm?course=${approvedCourse.alias}`}>
                     Confirm Participation
@@ -103,23 +103,10 @@ export function HomePage() {
 
           <Row gutter={24}>
             <Col xs={24} sm={12} md={10} lg={8} style={{ marginBottom: 16 }}>
-              {courseLinks.length ? (
-                <List
-                  size="small"
-                  bordered
-                  dataSource={courseLinks}
-                  renderItem={linkInfo => (
-                    <List.Item key={linkInfo.url}>
-                      <Link prefetch={false} href={linkInfo.url}>
-                        {linkInfo.icon} {linkInfo.name}
-                      </Link>
-                    </List.Item>
-                  )}
-                />
-              ) : null}
+              <CourseLinks courseLinks={courseLinks} />
             </Col>
             <Col xs={24} sm={12} md={12} lg={16}>
-              {studentSummary && <HomeSummary courseTasks={courseTasks} summary={studentSummary} />}
+              <HomeSummary courseTasks={courseTasks} summary={studentSummary} />
             </Col>
           </Row>
         </Content>

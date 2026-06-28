@@ -80,7 +80,9 @@ export type TagCloudElement = InstanceType<typeof tagCloud>;
   cursor: pointer;
   color: inherit;
   background-color: var(--color-background);
-  transition: background-color 0.3s ease, color 0.5s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.5s ease;
   border-radius: 1rem;
 }
 

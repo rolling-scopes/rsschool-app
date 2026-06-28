@@ -1,10 +1,11 @@
 import { Button, Card, Col, Divider, Row, Tag, Tooltip, Typography } from 'antd';
 import Link from 'next/link';
-import { getAutoTestTaskRoute } from 'services/routes';
+import { useRouter } from 'next/router';
+import { getAutoTestTaskRoute } from '@client/services/routes';
 import { TaskCardColumn, TaskDeadlineDate } from '..';
-import { Course } from 'services/models';
-import { useAttemptsMessage } from 'modules/AutoTest/hooks';
-import { CourseTaskState, CourseTaskVerifications } from 'modules/AutoTest/types';
+import { Course } from '@client/services/models';
+import { useAttemptsMessage } from '@client/modules/AutoTest/hooks';
+import { CourseTaskState, CourseTaskVerifications } from '@client/modules/AutoTest/types';
 
 const { Title, Paragraph } = Typography;
 
@@ -29,10 +30,10 @@ function TaskCard({ courseTask, course, isAvailableTab }: TaskCardProps) {
   const { id, name, studentStartDate, studentEndDate, verifications, state, descriptionUrl, publicAttributes } =
     courseTask;
   const { attemptsCount, explanation } = useAttemptsMessage(courseTask);
+  const router = useRouter();
 
   const score = verifications?.[0]?.score ?? null;
-  const isMinimumScoreDone = score >= publicAttributes.tresholdPercentage;
-  console.log(isMinimumScoreDone);
+  const isMinimumScoreDone = score !== null && score >= publicAttributes.tresholdPercentage;
 
   const columns = [
     {
@@ -81,17 +82,23 @@ function TaskCard({ courseTask, course, isAvailableTab }: TaskCardProps) {
             {explanation}
           </Paragraph>
         </Col>
-        <Col span={24} style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Link href={getAutoTestTaskRoute(course.alias, id)} legacyBehavior>
-            <Button type="primary">Open Task</Button>
-          </Link>
-          {!isAvailableTab && (
-            <Tooltip title="move to the 'Done' tab">
-              <Button type="primary" onClick={() => console.log('moveToDone')} disabled={!isMinimumScoreDone}>
-                Done Task
+        <Col span={24}>
+          <Row justify="space-between">
+            <Col>
+              <Button onClick={() => router.push(getAutoTestTaskRoute(course.alias, id))} type="primary">
+                Open Task
               </Button>
-            </Tooltip>
-          )}
+            </Col>
+            {isAvailableTab && (
+              <Col>
+                <Tooltip title="move to the 'Done' tab">
+                  <Button type="primary" onClick={() => console.log('moveToDone')} disabled={!isMinimumScoreDone}>
+                    Done Task
+                  </Button>
+                </Tooltip>
+              </Col>
+            )}
+          </Row>
         </Col>
       </Row>
       <Divider />

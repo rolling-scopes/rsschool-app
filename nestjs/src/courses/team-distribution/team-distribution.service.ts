@@ -2,7 +2,6 @@ import { Student, TeamDistributionStudent } from '@entities/index';
 import { TeamDistribution } from '@entities/teamDistribution';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as dayjs from 'dayjs';
 import { Repository } from 'typeorm';
 import { TeamService } from './team.service';
 import { SaveScoreInput, WriteScoreService } from '../score';
@@ -43,8 +42,8 @@ export class TeamDistributionService {
       return { ...distribution, registrationStatus: registrationStatusEnum.Unavailable };
     }
 
-    const currTimestampUTC = dayjs();
-    const distributionStartDate = dayjs(distribution.startDate);
+    const currTimestampUTC = new Date();
+    const distributionStartDate = new Date(distribution.startDate);
 
     if (currTimestampUTC < distributionStartDate) {
       return { ...distribution, registrationStatus: registrationStatusEnum.Future };
@@ -58,7 +57,7 @@ export class TeamDistributionService {
       return { ...distribution, registrationStatus: registrationStatusEnum.Completed };
     }
 
-    const distributionEndDate = dayjs(distribution.endDate);
+    const distributionEndDate = new Date(distribution.endDate);
     if (currTimestampUTC <= distributionEndDate && currTimestampUTC >= distributionStartDate) {
       return { ...distribution, registrationStatus: registrationStatusEnum.Available };
     }
@@ -127,7 +126,7 @@ export class TeamDistributionService {
         const studentsIds = team.students.map(el => el.id);
         const studentsWithTaskResultsInTeam = studentsWithScore.filter(el => studentsIds.includes(el.studentId));
 
-        const taskResults = studentsWithTaskResultsInTeam.map(el => el.student.taskResults?.at(0));
+        const taskResults = studentsWithTaskResultsInTeam.map(el => el.student.taskResults?.[0]);
         const maxScore = taskResults.length ? Math.max(...taskResults.map(taskResult => taskResult?.score ?? 0)) : 0;
         const taskResultWithMaxScore = taskResults.find(taskResult => taskResult?.score === maxScore);
 

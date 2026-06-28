@@ -2,8 +2,8 @@ import { Button, Modal, Row, Space, Typography } from 'antd';
 import Link from 'next/link';
 import { DownOutlined } from '@ant-design/icons';
 import { TextProps } from 'antd/lib/typography/Text';
-import { TeamDistributionDto, TeamDistributionDtoRegistrationStatusEnum } from 'api';
-import { dateWithTimeZoneRenderer } from 'components/Table';
+import { TeamDistributionDto, TeamDistributionDtoRegistrationStatusEnum } from '@client/api';
+import { dateWithTimeZoneRenderer } from '@client/shared/components/Table';
 import dayjs from 'dayjs';
 
 const { Text, Link: LinkButton } = Typography;

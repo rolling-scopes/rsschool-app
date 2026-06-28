@@ -1,16 +1,16 @@
 import { Row, Col, Form, Input, Select, Card, Space, Tag, Empty, Typography } from 'antd';
 import { Dispatch, SetStateAction, useMemo } from 'react';
 import union from 'lodash/union';
-import { TaskDto, CriteriaDto, DisciplineDto } from 'api';
-import { ModalForm } from 'components/Forms';
-import { stringSorter } from 'components/Table';
-import { SKILLS } from 'data/skills';
-import { TASK_TYPES } from 'data/taskTypes';
-import { ModalFormMode } from 'hooks';
-import { TaskSettings } from 'modules/Tasks/components';
-import { ERROR_MESSAGES, LABELS, MODAL_TITLES, PLACEHOLDERS } from 'modules/Tasks/constants';
-import { FormValues } from 'modules/Tasks/types';
-import { urlPattern } from 'services/validators';
+import { TaskDto, CriteriaDto, DisciplineDto } from '@client/api';
+import { ModalForm } from '@client/shared/components/Forms';
+import { stringSorter } from '@client/shared/components/Table';
+import { SKILLS } from '@client/data/skills';
+import { TASK_TYPES } from '@client/data/taskTypes';
+import { ModalFormMode } from '@client/hooks';
+import { TaskSettings } from '@client/modules/Tasks/components';
+import { ERROR_MESSAGES, LABELS, MODAL_TITLES, PLACEHOLDERS } from '@client/modules/Tasks/constants';
+import { FormValues } from '@client/modules/Tasks/types';
+import { urlPattern } from '@client/services/validators';
 
 const { Text } = Typography;
 const { TextArea } = Input;
@@ -141,9 +141,9 @@ export function TaskModal({
       </Form.Item>
       <Row gutter={24}>
         <Col span={24}>
-          <Space direction="vertical" size={8} style={{ width: '100%', marginBottom: 24 }}>
+          <Space orientation="vertical" size={8} style={{ width: '100%', marginBottom: 24 }}>
             <Text>{LABELS.usedInCourses}</Text>
-            <Card bodyStyle={{ padding: 8 }}>
+            <Card styles={{ body: { padding: 8 } }}>
               {formData?.courses?.length ? (
                 <Space size={[0, 8]} wrap>
                   {formData.courses.map(({ name, isActive }) => (

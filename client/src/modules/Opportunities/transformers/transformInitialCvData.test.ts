@@ -1,4 +1,4 @@
-import { ResumeDtoEnglishLevelEnum, ResumeDto, ResumeDtoMilitaryServiceEnum } from 'api';
+import { ResumeDtoEnglishLevelEnum, ResumeDto, ResumeDtoMilitaryServiceEnum } from '@client/api';
 import mapValues from 'lodash/mapValues';
 import { transformInitialCvData } from './transformInitialCvData';
 

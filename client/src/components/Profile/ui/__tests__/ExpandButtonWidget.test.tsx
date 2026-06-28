@@ -11,7 +11,7 @@ describe('ExpandButtonWidget', () => {
   });
 
   it('should call onClick callback', async () => {
-    const onClick = jest.fn();
+    const onClick = vi.fn();
     render(<ExpandButtonWidget onClick={onClick} />);
     const button = screen.getByRole('button');
     await userEvent.click(button);

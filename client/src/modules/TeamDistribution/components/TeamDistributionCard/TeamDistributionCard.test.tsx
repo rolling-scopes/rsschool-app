@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { TeamDistributionDto } from 'api';
+import { TeamDistributionDto } from '@client/api';
 import TeamDistributionCard from './TeamDistributionCard';
 
 const distribution = {
@@ -11,11 +11,11 @@ const distribution = {
   descriptionUrl: 'http://example.com',
 } as TeamDistributionDto;
 
-const mockOnDelete = jest.fn(() => Promise.resolve());
-const mockOnEdit = jest.fn();
-const onRegister = jest.fn();
-const onDeleteRegister = jest.fn();
-const onOpenSubmitScoreModal = jest.fn();
+const mockOnDelete = vi.fn(() => Promise.resolve());
+const mockOnEdit = vi.fn();
+const onRegister = vi.fn();
+const onDeleteRegister = vi.fn();
+const onOpenSubmitScoreModal = vi.fn();
 
 function renderCard(distribution: TeamDistributionDto, isManager = false) {
   return render(

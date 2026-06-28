@@ -2,12 +2,12 @@ import { useRequest } from 'ahooks';
 import { message, Space, TablePaginationConfig, Typography } from 'antd';
 import { FilterValue } from 'antd/es/table/interface';
 import { SorterResult } from 'antd/lib/table/interface';
-import { CoursesTasksApi, CourseTaskDtoCheckerEnum, MentorReviewDto, MentorReviewsApi } from 'api';
-import { IPaginationInfo } from '@common/types/pagination';
-import { AdminPageLayout } from 'components/PageLayout';
-import { useLoading } from 'components/useLoading';
-import { isCourseManager } from 'domain/user';
-import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
+import { CoursesTasksApi, CourseTaskDtoCheckerEnum, MentorReviewDto, MentorReviewsApi } from '@client/api';
+import { IPaginationInfo } from '@client/shared/utils/pagination';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
+import { useLoading } from '@client/components/useLoading';
+import { isCourseManager } from '@client/domain/user';
+import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { useContext, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 import MentorReviewsTable from '../components/ReviewsTable';
@@ -59,6 +59,7 @@ export const MentorTasksReview = () => {
           course.id,
           filters?.taskName?.toString(),
           filters?.student?.toString(),
+          filters?.checker?.toString(),
           ...sortValues,
         );
         setReviews({ ...reviews, ...data });
@@ -76,7 +77,7 @@ export const MentorTasksReview = () => {
 
   return (
     <AdminPageLayout loading={loading} title="Mentor tasks review" showCourseName courses={courses}>
-      <Space direction="vertical">
+      <Space orientation="vertical">
         <Space>
           <Text strong>Submitted tasks</Text>
           <Text>{course.name}</Text>

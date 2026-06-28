@@ -1,0 +1,24 @@
+name: Branch Protection
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  check-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Block docs branch merge to main
+        if: github.head_ref == 'docs'
+        run: |
+          echo "::error::Merging 'docs' branch into 'main' is not allowed."
+          echo ""
+          echo "The 'docs' branch contains the documentation website which should"
+          echo "remain separate from the main skill files to keep installations lightweight."
+          echo ""
+          echo "If you need to sync changes, cherry-pick specific commits instead."
+          exit 1
+
+      - name: Branch check passed
+        if: github.head_ref != 'docs'
+        run: echo "Branch check passed - not merging from docs branch"

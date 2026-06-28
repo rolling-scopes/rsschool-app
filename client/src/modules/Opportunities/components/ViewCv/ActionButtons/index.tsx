@@ -2,9 +2,9 @@ import { Row, Modal, Button, Divider, Alert, Typography } from 'antd';
 import { useCallback } from 'react';
 import { useCopyToClipboard } from 'react-use';
 import { DeleteOutlined, EditOutlined, ShareAltOutlined } from '@ant-design/icons';
-import { useMessage } from 'hooks';
+import { useMessage } from '@client/hooks';
 
-const { Text, Paragraph } = Typography;
+const { Paragraph } = Typography;
 
 const buttonStyle = { width: 'fit-content', margin: '5px' };
 
@@ -21,14 +21,7 @@ export const ActionButtons = ({ onRemoveConsent, switchView, url, isExpired }: P
   const [modal, contextHolder] = Modal.useModal();
 
   const showDeletionConfirmationModal = useCallback(() => {
-    const title = (
-      <>
-        <Text strong style={{ fontSize: '18px' }}>
-          Delete your CV
-        </Text>
-        <Divider style={{ marginTop: '5px', marginBottom: '10px' }} />
-      </>
-    );
+    const title = 'Delete your CV';
 
     const message =
       "All information from your resume will be permanently deleted. This action won't affect your profile info.";
@@ -39,7 +32,7 @@ export const ActionButtons = ({ onRemoveConsent, switchView, url, isExpired }: P
         <Alert
           type="warning"
           showIcon
-          message={
+          title={
             <>
               <Paragraph>{message}</Paragraph>
               <Paragraph>{messageRu}</Paragraph>

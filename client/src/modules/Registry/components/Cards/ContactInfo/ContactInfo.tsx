@@ -1,12 +1,18 @@
 import { Alert, Form, Input, Space, Typography } from 'antd';
-import { CARD_TITLES, ERROR_MESSAGES, LABELS, PLACEHOLDERS, RSSCHOOL_BOT_LINK } from 'modules/Registry/constants';
-import { emailPattern, phonePattern } from 'services/validators';
-import { FormButtons, FormCard } from 'modules/Registry/components';
+import {
+  CARD_TITLES,
+  ERROR_MESSAGES,
+  LABELS,
+  PLACEHOLDERS,
+  RSSCHOOL_BOT_LINK,
+} from '@client/modules/Registry/constants';
+import { emailPattern, phonePattern } from '@client/services/validators';
+import { FormButtons, FormCard } from '@client/modules/Registry/components';
 
 const { Title, Text } = Typography;
 
 const CardTitle = (
-  <Space direction="vertical" size={0}>
+  <Space orientation="vertical" size={0}>
     <Title level={5}>{CARD_TITLES.contactInfo}</Title>
     <Text type="secondary" style={{ whiteSpace: 'normal' }}>
       Information will be shown to students so they can contact you. Indicate only the data that you're willing to share
@@ -24,7 +30,7 @@ export function ContactInfo() {
           <Alert
             style={{ marginTop: 12 }}
             type="info"
-            message={
+            title={
               <span>
                 Subscribe to our{' '}
                 <a href={RSSCHOOL_BOT_LINK} target="_blank">

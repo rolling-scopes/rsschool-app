@@ -1,50 +1,50 @@
 import { render, screen } from '@testing-library/react';
-import { ResumeDto } from 'api';
-import { ExpirationState } from 'modules/Opportunities/constants';
-import { useViewData, useExpiration } from 'modules/Opportunities/hooks';
+import { ResumeDto } from '@client/api';
+import { ExpirationState } from '@client/modules/Opportunities/constants';
+import { useViewData, useExpiration } from '@client/modules/Opportunities/hooks';
 import { ViewCV } from './index';
 
-jest.mock('modules/Opportunities/components/ExpirationTooltip', () => ({
+vi.mock('@client/modules/Opportunities/components/ExpirationTooltip', () => ({
   ExpirationTooltip: () => <div>ExpirationTooltip</div>,
 }));
 
-jest.mock('./AboutSection', () => ({
+vi.mock('./AboutSection', () => ({
   AboutSection: () => <div>AboutSection</div>,
 }));
 
-jest.mock('./ContactsSection', () => ({
+vi.mock('./ContactsSection', () => ({
   ContactsSection: () => <div>ContactsSection</div>,
 }));
 
-jest.mock('./CoursesSection', () => ({
+vi.mock('./CoursesSection', () => ({
   CoursesSection: () => <div>CoursesSection</div>,
 }));
 
-jest.mock('./FeedbackSection', () => ({
+vi.mock('./FeedbackSection', () => ({
   FeedbackSection: () => <div>FeedbackSection</div>,
 }));
 
-jest.mock('./GratitudeSection', () => ({
+vi.mock('./GratitudeSection', () => ({
   GratitudeSection: () => <div>GratitudeSection</div>,
 }));
 
-jest.mock('./PersonalSection', () => ({
+vi.mock('./PersonalSection', () => ({
   PersonalSection: () => <div>PersonalSection</div>,
 }));
 
-jest.mock('../NameTitle', () => ({
+vi.mock('../NameTitle', () => ({
   NameTitle: () => <div>NameTitle</div>,
 }));
 
-jest.mock('../PublicLink', () => ({
+vi.mock('../PublicLink', () => ({
   PublicLink: ({ url }: { url: string }) => <div>PublicLink {url}</div>,
 }));
 
-jest.mock('./ActionButtons', () => ({
+vi.mock('./ActionButtons', () => ({
   ActionButtons: () => <div>ActionButtons</div>,
 }));
 
-jest.mock('modules/Opportunities/hooks');
+vi.mock('@client/modules/Opportunities/hooks');
 
 /*
     Preerequisities:
@@ -67,27 +67,12 @@ jest.mock('modules/Opportunities/hooks');
     4.Loading = false + userData => Expiration
 */
 
-const mockOrigin = 'htps://example.com';
 const mockUuid = '13791ec3-83b9-44ce-95c5-f06837a71966';
 
 describe('ViewCV', () => {
-  let originalWindowLocation: string;
-
-  beforeAll(() => {
-    originalWindowLocation = window.location.href;
-    Object.defineProperty(window, 'location', {
-      writable: true,
-      value: { origin: mockOrigin },
-    });
-  });
-
-  afterAll(() => {
-    window.location.href = originalWindowLocation;
-  });
-
   test('should display loading screeen if loading is true', () => {
-    (useViewData as jest.Mock).mockReturnValue({ loading: true });
-    (useExpiration as jest.Mock).mockReturnValue({
+    vi.mocked(useViewData).mockReturnValue({ loading: true });
+    vi.mocked(useExpiration).mockReturnValue({
       expirationState: ExpirationState.NotExpired,
       expirationDateFormatted: '2021-01-01',
     });
@@ -100,15 +85,15 @@ describe('ViewCV', () => {
   });
 
   test('should display public link in public mode', () => {
-    (useViewData as jest.Mock).mockReturnValue({ loading: false, uuid: mockUuid });
-    (useExpiration as jest.Mock).mockReturnValue({
+    vi.mocked(useViewData).mockReturnValue({ loading: false, uuid: mockUuid });
+    vi.mocked(useExpiration).mockReturnValue({
       expirationState: ExpirationState.NotExpired,
       expirationDateFormatted: '2021-01-01',
     });
 
     render(<ViewCV initialData={{} as ResumeDto} publicMode={true} />);
 
-    const publicLink = screen.getByText(`PublicLink ${mockOrigin}/cv/${mockUuid}`);
+    const publicLink = screen.getByText(`PublicLink ${window.location.origin}/cv/${mockUuid}`);
     const actionButtons = screen.queryByText('ActionButtons');
 
     expect(publicLink).toBeInTheDocument();
@@ -116,15 +101,15 @@ describe('ViewCV', () => {
   });
 
   test('should display action buttons in non public mode', () => {
-    (useViewData as jest.Mock).mockReturnValue({ loading: false, uuid: mockUuid });
-    (useExpiration as jest.Mock).mockReturnValue({
+    vi.mocked(useViewData).mockReturnValue({ loading: false, uuid: mockUuid });
+    vi.mocked(useExpiration).mockReturnValue({
       expirationState: ExpirationState.NotExpired,
       expirationDateFormatted: '2021-01-01',
     });
 
     render(<ViewCV initialData={{} as ResumeDto} publicMode={false} />);
 
-    const publicLink = screen.queryByText(`PublicLink ${mockOrigin}/cv/${mockUuid}`);
+    const publicLink = screen.queryByText(`PublicLink ${window.location.origin}/cv/${mockUuid}`);
     const actionButtons = screen.getByText('ActionButtons');
 
     expect(publicLink).not.toBeInTheDocument();
@@ -132,8 +117,8 @@ describe('ViewCV', () => {
   });
 
   test('should not display userData-related content if userData is provided', () => {
-    (useViewData as jest.Mock).mockReturnValue({ loading: false, uuid: mockUuid, userData: {} });
-    (useExpiration as jest.Mock).mockReturnValue({
+    vi.mocked(useViewData).mockReturnValue({ loading: false, uuid: mockUuid, userData: {} });
+    vi.mocked(useExpiration).mockReturnValue({
       expirationState: ExpirationState.NotExpired,
       expirationDateFormatted: '2021-01-01',
     });
@@ -160,8 +145,8 @@ describe('ViewCV', () => {
   });
 
   test('should not display userData-related content if userData is not provided', () => {
-    (useViewData as jest.Mock).mockReturnValue({ loading: false, uuid: mockUuid, userData: null });
-    (useExpiration as jest.Mock).mockReturnValue({
+    vi.mocked(useViewData).mockReturnValue({ loading: false, uuid: mockUuid, userData: null });
+    vi.mocked(useExpiration).mockReturnValue({
       expirationState: ExpirationState.NotExpired,
       expirationDateFormatted: '2021-01-01',
     });

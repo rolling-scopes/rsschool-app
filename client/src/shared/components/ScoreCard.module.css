@@ -1,0 +1,67 @@
+.card {
+  position: relative;
+  transform-style: preserve-3d;
+  width: 56px;
+  height: 40px;
+  background: var(--card-bg);
+  border: 2px solid var(--card-border);
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  transform: rotateX(40deg);
+  transform-origin: bottom;
+  transition:
+    transform 0.5s ease,
+    box-shadow 0.5s ease,
+    background 0.5s ease,
+    border-color 0.5s ease;
+}
+
+.card:hover,
+.card.selected {
+  transform: rotateX(0deg) translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.selectedRed {
+  border-color: var(--card-error);
+  background: var(--card-error-bg);
+}
+
+.selectedYellow {
+  border-color: var(--card-warning);
+  background: var(--card-warning-bg);
+}
+
+.selectedGreen {
+  border-color: var(--card-success);
+  background: var(--card-success-bg);
+}
+
+.cardStick {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 20px;
+  background: #999;
+  border-radius: 0 0 3px 3px;
+  pointer-events: none;
+}
+
+.selectedRed .cardStick {
+  background: var(--card-error);
+}
+
+.selectedYellow .cardStick {
+  background: var(--card-warning);
+}
+
+.selectedGreen .cardStick {
+  background: var(--card-success);
+}

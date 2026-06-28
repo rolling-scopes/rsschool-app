@@ -32,7 +32,7 @@ export const initElement = (
   scaleMin: number,
   scaleTrue: number,
   scaleMax: number,
-  isResizable = true
+  isResizable = true,
 ): CanvasElement => {
   return {
     isResizable,
@@ -70,7 +70,7 @@ export const calcCanvasSizes = (cnv: HTMLCanvasElement, canvasScaleSteps: number
 export const drawBackground = (
   canvas: HTMLCanvasElement,
   ctx: CanvasRenderingContext2D,
-  canvasProps: CanvasProperties
+  canvasProps: CanvasProperties,
 ) => {
   if (!canvasProps.backgroundTransparent) {
     ctx.fillStyle = canvasProps.backgroundColor;
@@ -82,7 +82,7 @@ export const drawMerchImage = (
   canvas: HTMLCanvasElement,
   ctx: CanvasRenderingContext2D,
   img: HTMLImageElement,
-  color: string
+  color: string,
 ) => {
   const tempCanvas = document.createElement('canvas');
   const tempctx = tempCanvas.getContext('2d');
@@ -109,7 +109,7 @@ export const calcElementsSizes = (
   imgCanvasElement: CanvasElement,
   topCanvasElement: CanvasElement,
   bottomCanvasElement: CanvasElement,
-  canvasScaleSteps: number
+  canvasScaleSteps: number,
 ) => {
   let canvasElement = imgCanvasElement;
   if (img) {
@@ -133,7 +133,7 @@ export const calcElementsSizes = (
 };
 
 export const calcElementsPosition = (layers: CanvasElement[], canvasScaleSteps: number) => {
-  layers.forEach((el) => {
+  layers.forEach(el => {
     const canvasElement = el;
 
     canvasElement.scaledLeft = canvasElement.left * canvasScaleSteps;
@@ -242,11 +242,11 @@ export const moveElements = (
   e: MouseEvent,
   canvas: HTMLCanvasElement,
   layers: CanvasElement[],
-  canvasScaleSteps: number
+  canvasScaleSteps: number,
 ) => {
   const mousePos = getMousePos(e, canvas);
 
-  const selected = layers.filter((el) => el.isSelected);
+  const selected = layers.filter(el => el.isSelected);
 
   if (selected.length) {
     // move selected only
@@ -310,7 +310,7 @@ export const selectElements = (e: MouseEvent, canvas: HTMLCanvasElement, layers:
 };
 
 export const deselectElements = (layers: CanvasElement[]) => {
-  layers.forEach((el) => {
+  layers.forEach(el => {
     const canvasElement = el;
 
     canvasElement.isSelected = false;
@@ -321,7 +321,7 @@ export const deselectElements = (layers: CanvasElement[]) => {
 };
 
 export const unhoverElements = (layers: CanvasElement[]) => {
-  layers.forEach((el) => {
+  layers.forEach(el => {
     const canvasElement = el;
 
     canvasElement.isHovered = false;
@@ -339,7 +339,7 @@ export const scaleTrueCanvas = (props: CanvasProperties, layers: CanvasElement[]
   const canvasProps = props;
   canvasProps.scaleSteps = 1;
 
-  layers.forEach((el) => {
+  layers.forEach(el => {
     const canvasElement = el;
     canvasElement.scaleSteps = canvasElement.scaleTrue;
   });
@@ -357,7 +357,7 @@ export const scalingElements = (e: WheelEvent, layers: CanvasElement[], props: C
 
   let isHovered = false;
 
-  layers.forEach((el) => {
+  layers.forEach(el => {
     if (el.isHovered) {
       isHovered = true;
       const canvasElement = el;
@@ -383,7 +383,7 @@ const drawTextMultiLineDown = (
   el: CanvasElement,
   canvasScaleSteps: number,
   fontSize: number,
-  isStroked: boolean
+  isStroked: boolean,
 ) => {
   const { scaledLeft, scaledTop } = el;
   const width = el.scaledWidth;
@@ -423,7 +423,7 @@ export const drawTextDown = (
   canvasProps: CanvasProperties,
   el: CanvasElement,
   canvasScaleSteps: number,
-  isStroked = false
+  isStroked = false,
 ) => {
   ctx.fillStyle = canvasProps.textColor;
   if (isStroked) ctx.strokeStyle = canvasProps.strokeColor;
@@ -442,7 +442,7 @@ const drawTextMultiLineUp = (
   el: CanvasElement,
   canvasScaleSteps: number,
   fontSize: number,
-  isStroked: boolean
+  isStroked: boolean,
 ) => {
   const { scaledLeft, scaledBottom } = el;
   const width = el.scaledWidth;
@@ -483,7 +483,7 @@ export const drawTextUp = (
   canvasProps: CanvasProperties,
   el: CanvasElement,
   canvasScaleSteps: number,
-  isStroked = false
+  isStroked = false,
 ) => {
   ctx.fillStyle = canvasProps.textColor;
   if (isStroked) ctx.strokeStyle = canvasProps.strokeColor;
@@ -503,7 +503,7 @@ export const centeringElements = (
   topCanvasElement: CanvasElement,
   bottomCanvasElement: CanvasElement,
   scaleSteps: number,
-  toImg = false
+  toImg = false,
 ) => {
   let canvasElement = imgCanvasElement;
   canvasElement.left = (canvasSize - canvasElement.scaledWidth / scaleSteps) / 2;
@@ -528,7 +528,7 @@ export const centeringElements = (
 };
 
 export const loadImage = (url: string): Promise<HTMLImageElement> => {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const image = new Image();
     image.setAttribute('crossorigin', 'anonymous');
     image.addEventListener('load', () => {
@@ -539,10 +539,10 @@ export const loadImage = (url: string): Promise<HTMLImageElement> => {
 };
 
 export const getCursor = (layers: CanvasElement[]): string => {
-  const borderHovered = layers.filter((el) => el.isBorderHovered);
+  const borderHovered = layers.filter(el => el.isBorderHovered);
   if (borderHovered.length > 0 && borderHovered[0].isResizable) return 'w-resize';
 
-  const isHovered = layers.filter((el) => el.isHovered).length > 0;
+  const isHovered = layers.filter(el => el.isHovered).length > 0;
   if (isHovered) return 'move';
 
   return 'auto';

@@ -1,16 +1,17 @@
 import { DislikeOutlined, HourglassOutlined, LikeOutlined } from '@ant-design/icons';
 import { Button, Col, Row, Select, Statistic, Table, Typography } from 'antd';
-import axios from 'axios';
-import { GithubUserLink } from 'components/GithubUserLink';
-import { stringSorter } from 'components/Table';
+import { RegistryApi, UpdateRegistrationsDtoStatusEnum } from '@client/api';
+import { GithubUserLink } from '@client/shared/components/GithubUserLink';
+import { stringSorter } from '@client/shared/components/Table';
 import { useState } from 'react';
-import { formatMonthFriendly } from 'services/formatter';
-import { Course, CourseRole } from 'services/models';
-import { AdminPageLayout } from 'components/PageLayout';
-import { SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { formatMonthFriendly } from '@client/services/formatter';
+import { Course, CourseRole } from '@client/services/models';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
+import { SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 
 const defaultRowGutter = 24;
 const PAGINATION = 200;
+const registryApi = new RegistryApi();
 const DEFAULT_STATISTICS = { approved: 0, rejected: 0, pending: 0 };
 
 type Stats = {
@@ -35,7 +36,7 @@ function Page() {
   const [activeCourses] = useState((courses || []).filter((course: Course) => !course.completed && !course.inviteOnly));
   const [selectedIds, setSelectedIds] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any[]>([]);
   const [stats, setStats] = useState(DEFAULT_STATISTICS as Stats);
   const [courseId, setCourseId] = useState(null as number | null);
 
@@ -47,10 +48,7 @@ function Page() {
     const courseId = Number(id);
     setCourseId(courseId);
 
-    const url = `/api/registry?type=mentor&courseId=${courseId}`;
-    const {
-      data: { data: registrations },
-    } = await axios.get(url);
+    const { data: registrations } = await registryApi.getRegistrations('mentor', courseId);
     const statistics = { ...DEFAULT_STATISTICS };
 
     for (const registration of registrations) {
@@ -103,11 +101,11 @@ function Page() {
     setStats(statistics);
   };
 
-  const handleSubmit = async (_: any, status: string) => {
+  const handleSubmit = async (_: any, status: UpdateRegistrationsDtoStatusEnum) => {
     if (selectedIds.length) {
       try {
         setLoading(true);
-        await axios.put('/api/registry', { ids: selectedIds, status });
+        await registryApi.updateRegistrations({ ids: selectedIds, status });
         await handleCourseChange(courseId as number);
       } catch (e) {
         console.error(e);
@@ -157,7 +155,7 @@ function Page() {
               <Statistic
                 title="Approved"
                 value={stats.approved}
-                valueStyle={{ color: '#3f8600' }}
+                styles={{ content: { color: '#3f8600' } }}
                 prefix={<LikeOutlined />}
               />
             </Col>
@@ -165,7 +163,7 @@ function Page() {
               <Statistic
                 title="Rejected"
                 value={stats.rejected}
-                valueStyle={{ color: '#cf1322' }}
+                styles={{ content: { color: '#cf1322' } }}
                 prefix={<DislikeOutlined />}
               />
             </Col>
@@ -192,7 +190,7 @@ function Page() {
                 render: (_: any, record: Registration) => <a href={record.user.profileUrl}>{record.user.name}</a>,
               },
               {
-                title: 'Github',
+                title: 'GitHub',
                 dataIndex: 'githubId',
                 key: 'githubId',
                 width: 100,

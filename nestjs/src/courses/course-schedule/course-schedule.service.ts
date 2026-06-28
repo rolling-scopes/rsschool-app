@@ -11,7 +11,8 @@ import { PersonDto } from '../../core/dto';
 import { Repository } from 'typeorm';
 import { EventType } from '../course-events/dto/course-event.dto';
 import { Course } from '@entities/course';
-import * as dayjs from 'dayjs';
+import { differenceInMinutes } from 'date-fns';
+import { formatInTimeZone } from 'date-fns-tz';
 import { TeamDistribution } from '@entities/teamDistribution';
 import { TeamDistributionStudent } from '@entities/teamDistributionStudent';
 
@@ -90,7 +91,7 @@ export class CourseScheduleService {
       coding: 3,
     };
 
-    const timeDifference = dayjs(a.startDate).diff(dayjs(b.startDate), 'minute');
+    const timeDifference = differenceInMinutes(a.startDate, b.startDate);
     if (timeDifference !== 0) {
       return timeDifference;
     }
@@ -124,8 +125,8 @@ export class CourseScheduleService {
     teamDistribution: TeamDistribution,
     teamDistributionStudents: TeamDistributionStudent[],
   ) {
-    const currTimestampUTC = dayjs();
-    const distributionStartDate = dayjs(teamDistribution.startDate);
+    const currTimestampUTC = new Date();
+    const distributionStartDate = new Date(teamDistribution.startDate);
     const teamDistributionStudent = teamDistributionStudents.find(el => el.teamDistributionId === teamDistribution.id);
 
     if (currTimestampUTC < distributionStartDate) {
@@ -148,7 +149,7 @@ export class CourseScheduleService {
       return CourseScheduleItemStatus.Unavailable;
     }
 
-    const distributionEndDate = dayjs(teamDistribution.endDate);
+    const distributionEndDate = new Date(teamDistribution.endDate);
     if (currTimestampUTC <= distributionEndDate && currTimestampUTC >= distributionStartDate) {
       return CourseScheduleItemStatus.Available;
     }
@@ -559,5 +560,61 @@ export class CourseScheduleService {
       default:
         return CourseScheduleItemTag.Lecture;
     }
+  }
+
+  public async getScheduleAsCsvRows(courseId: number, timeZone: string) {
+    const courseTasks = await this.courseTaskRepository
+      .createQueryBuilder('courseTask')
+      .innerJoinAndSelect('courseTask.task', 'task')
+      .leftJoin('courseTask.taskOwner', 'taskOwner')
+      .addSelect(['taskOwner.githubId', 'taskOwner.id', 'taskOwner.firstName', 'taskOwner.lastName'])
+      .where('courseTask.courseId = :courseId', { courseId })
+      .andWhere('courseTask.disabled = :disabled', { disabled: false })
+      .getMany();
+    const courseEvents = await this.courseEventRepository
+      .createQueryBuilder('courseEvent')
+      .innerJoinAndSelect('courseEvent.event', 'event')
+      .leftJoin('courseEvent.organizer', 'organizer')
+      .addSelect(['organizer.id', 'organizer.firstName', 'organizer.lastName', 'organizer.githubId'])
+      .where('courseEvent.courseId = :courseId', { courseId })
+      .orderBy('courseEvent.dateTime')
+      .getMany();
+
+    const tasksToCsv = courseTasks.map(item => ({
+      entityType: 'task',
+      templateId: item.taskId,
+      id: item.id,
+      startDate: CourseScheduleService.formatDate(item.studentStartDate as string, timeZone),
+      endDate: CourseScheduleService.formatDate(item.studentEndDate as string, timeZone),
+      type: item.type || item.task.type,
+      name: item.task.name,
+      descriptionUrl: item.task.descriptionUrl,
+      githubId: item.taskOwner ? item.taskOwner.githubId : null,
+      place: null,
+      checker: item.checker,
+      pairsCount: item.pairsCount,
+    }));
+    const eventsToCsv = courseEvents.map(item => ({
+      entityType: 'event',
+      templateId: item.eventId,
+      id: item.id,
+      startDate: item.dateTime ? CourseScheduleService.formatDate(item.dateTime.toString(), timeZone) : '',
+      type: item.event.type,
+      special: item.special,
+      name: item.event.name,
+      descriptionUrl: item.event.descriptionUrl,
+      githubId: item.organizer ? item.organizer.githubId : null,
+      place: item.place,
+      checker: null,
+      pairsCount: null,
+    }));
+
+    return [...tasksToCsv, ...eventsToCsv].sort(
+      (a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+    );
+  }
+
+  private static formatDate(date: string, timeZone: string) {
+    return date ? formatInTimeZone(new Date(date), timeZone, 'yyyy-MM-dd HH:mm') : '';
   }
 }

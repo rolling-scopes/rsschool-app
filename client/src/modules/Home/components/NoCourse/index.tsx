@@ -1,7 +1,6 @@
 import { CheckSquareOutlined, QuestionCircleTwoTone, StarOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Result, Row } from 'antd';
-import React from 'react';
-import { Course } from 'services/models';
+import { Course } from '@client/services/models';
 
 type Props = {
   courses: Course[];

@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, ForwardedRef } from 'react';
 import { Form, Input, Card, FormInstance, Typography } from 'antd';
-import { Contacts } from 'modules/Opportunities/models';
+import { Contacts } from '@client/modules/Opportunities/models';
 import { contactsValidationRules as validationRules } from '../form-validation';
 
 const { Item } = Form;
@@ -49,8 +49,8 @@ export const ContactsForm = forwardRef((props: Props, ref: ForwardedRef<FormInst
         <Item label="LinkedIn" name="linkedin" rules={[...validationRules['linkedin']]}>
           <Input style={inputStyle} placeholder="LinkedIn username" />
         </Item>
-        <Item label="Github" name="githubUsername" rules={[...validationRules['github']]}>
-          <Input style={inputStyle} placeholder="Github username" />
+        <Item label="GitHub" name="githubUsername" rules={[...validationRules['github']]}>
+          <Input style={inputStyle} placeholder="GitHub username" />
         </Item>
         <Item label="Website" name="website" rules={[...validationRules['website']]}>
           <Input style={inputStyle} placeholder="Enter your website URL" />

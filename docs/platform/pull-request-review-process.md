@@ -70,7 +70,7 @@ This approach solves several problems that are usually encountered when reviewin
   - It is often quite difficult to carefully look into the entire code of the task in one go and clarify all the concepts that the student missed within the large code base.
   - It is often much easier to find time for 2 smaller reviews, although in general, the total time may be increased.
 - Catching architectural mishaps at the very beginning, which lead to "expensive", in terms of refactoring, problems
-- Learn how to work with Git and Github
+- Learn how to work with Git and GitHub
 - Motivation to meet the deadline
 
 ## Code Review Process Example

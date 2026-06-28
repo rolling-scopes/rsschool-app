@@ -1,4 +1,4 @@
-import { SoftSkillEntryIdEnum, SoftSkillEntryValueEnum } from 'api';
+import { SoftSkillEntryIdEnum, SoftSkillEntryValueEnum } from '@client/api';
 
 export const softSkills: { id: SoftSkillEntryIdEnum; name: string }[] = [
   {

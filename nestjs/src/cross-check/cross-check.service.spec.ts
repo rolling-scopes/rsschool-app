@@ -1,33 +1,10 @@
-import { HttpService } from '@nestjs/axios';
-import { ConfigService } from '../config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CrossCheckService } from './cross-check.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { CourseTask } from '../../../server/src/models/courseTask';
+import { CourseTask } from '@entities/courseTask';
+import { CourseCrossCheckService } from '../courses/cross-checks';
 
 const MOCK_CURRENT_TIMESTAMP = new Date('2022-03-22 00:05 UTC').getTime();
-
-const MOCK_HOST = 'https://testhost';
-
-const MOCK_ADMIN_USERNAME = 'TEST_USERNAME';
-const MOCK_ADMIN_PASSWORD = 'TEST_PASSWORD';
-
-const mockConfigService = {
-  users: {
-    root: {
-      username: MOCK_ADMIN_USERNAME,
-      password: MOCK_ADMIN_PASSWORD,
-    },
-  },
-  host: MOCK_HOST,
-};
-
-const expectedAxiosRequestConfig = {
-  auth: {
-    username: MOCK_ADMIN_USERNAME,
-    password: MOCK_ADMIN_PASSWORD,
-  },
-};
 
 enum MockDate {
   DateBefore = '2022-03-21T00:00:00.000Z',
@@ -99,13 +76,12 @@ const tasks = [
   },
 ];
 
-const mockPost = jest.fn(() => ({
-  pipe: jest.fn(() => []),
-}));
+const mockRunDistribution = vi.fn();
+const mockRunCompletion = vi.fn();
 
-const mockCourseTaskRepositoryFind = jest.fn(() => tasks);
+const mockCourseTaskRepositoryFind = vi.fn(() => tasks);
 
-const mockCourseTaskRepositoryFactory = jest.fn(() => ({
+const mockCourseTaskRepositoryFactory = vi.fn(() => ({
   find: mockCourseTaskRepositoryFind,
 }));
 
@@ -117,14 +93,11 @@ describe('CrossCheckService', () => {
       providers: [
         CrossCheckService,
         {
-          provide: HttpService,
+          provide: CourseCrossCheckService,
           useValue: {
-            post: mockPost,
+            runDistribution: mockRunDistribution,
+            runCompletion: mockRunCompletion,
           },
-        },
-        {
-          provide: ConfigService,
-          useValue: mockConfigService,
         },
         {
           provide: getRepositoryToken(CourseTask),
@@ -146,42 +119,22 @@ describe('CrossCheckService', () => {
 
   describe('executeCronJobs should work correctly', () => {
     beforeEach(async () => {
-      jest.spyOn(Date, 'now').mockImplementation(() => MOCK_CURRENT_TIMESTAMP);
+      mockRunDistribution.mockClear();
+      mockRunCompletion.mockClear();
+      vi.spyOn(Date, 'now').mockImplementation(() => MOCK_CURRENT_TIMESTAMP);
       await service.executeCronJobs();
     });
 
-    it('httpService.post should be called right amout of times', () => {
-      expect(mockPost).toHaveBeenCalledTimes(4);
+    it('tasks with submission deadline passed should be distributed (via service, no HTTP)', () => {
+      expect(mockRunDistribution).toHaveBeenCalledTimes(2);
+      expect(mockRunDistribution).toHaveBeenNthCalledWith(1, 2);
+      expect(mockRunDistribution).toHaveBeenNthCalledWith(2, 3);
     });
 
-    it('tasks with submission deadline passed should be distributed', () => {
-      expect(mockPost).toHaveBeenNthCalledWith(
-        1,
-        `${MOCK_HOST}/api/course/2/task/2/cross-check/distribution`,
-        null,
-        expectedAxiosRequestConfig,
-      );
-      expect(mockPost).toHaveBeenNthCalledWith(
-        2,
-        `${MOCK_HOST}/api/course/3/task/3/cross-check/distribution`,
-        null,
-        expectedAxiosRequestConfig,
-      );
-    });
-
-    it('tasks with cross-check deadline passed should be completed', () => {
-      expect(mockPost).toHaveBeenNthCalledWith(
-        3,
-        `${MOCK_HOST}/api/course/22/task/22/cross-check/completion`,
-        null,
-        expectedAxiosRequestConfig,
-      );
-      expect(mockPost).toHaveBeenNthCalledWith(
-        4,
-        `${MOCK_HOST}/api/course/33/task/33/cross-check/completion`,
-        null,
-        expectedAxiosRequestConfig,
-      );
+    it('tasks with cross-check deadline passed should be completed (via service, no HTTP)', () => {
+      expect(mockRunCompletion).toHaveBeenCalledTimes(2);
+      expect(mockRunCompletion).toHaveBeenNthCalledWith(1, 22);
+      expect(mockRunCompletion).toHaveBeenNthCalledWith(2, 33);
     });
   });
 });

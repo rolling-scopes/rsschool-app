@@ -1,9 +1,9 @@
 import { useAsync } from 'react-use';
 import { Card, Form, Modal, Select, Space, Spin, Typography, message } from 'antd';
 
-import { CoursesTasksApi, TeamDistributionDto } from 'api';
-import { useActiveCourseContext } from 'modules/Course/contexts';
-import { useSubmitTeamScore } from 'modules/TeamDistribution/hooks/useSubmitTeamScore';
+import { CoursesTasksApi, TeamDistributionDto } from '@client/api';
+import { useActiveCourseContext } from '@client/modules/Course/contexts';
+import { useSubmitTeamScore } from '@client/modules/TeamDistribution/hooks/useSubmitTeamScore';
 
 const { Text } = Typography;
 const { Option } = Select;
@@ -45,7 +45,7 @@ export default function SubmitScoreModal({ distribution, onClose }: Props) {
       okType="danger"
     >
       <Spin spinning={loading}>
-        <Space direction="vertical">
+        <Space orientation="vertical">
           <Card bordered>
             <Text type="warning" strong>
               After submission, reverting changes will be impossible. Please be careful when selecting the task. The

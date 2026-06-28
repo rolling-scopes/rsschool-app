@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Form } from 'antd';
-import { ERROR_MESSAGES, LABELS, PLACEHOLDERS } from 'modules/Tasks/constants';
+import { ERROR_MESSAGES, LABELS, PLACEHOLDERS } from '@client/modules/Tasks/constants';
 import { GitHubPanel } from './GitHubPanel';
 
 const renderPanel = () => {
@@ -11,7 +11,7 @@ const renderPanel = () => {
   );
 };
 
-describe('Github', () => {
+describe('GitHub', () => {
   test.each`
     label
     ${LABELS.repoUrl}
@@ -41,7 +41,7 @@ describe('Github', () => {
     expect(field).toBeInTheDocument();
   });
 
-  test('should render error message on invalid source Github repo URL input', async () => {
+  test('should render error message on invalid source GitHub repo URL input', async () => {
     renderPanel();
 
     const field = await screen.findByPlaceholderText(PLACEHOLDERS.sourceGithubRepoUrl);
@@ -49,12 +49,12 @@ describe('Github', () => {
 
     fireEvent.change(field, { target: { value: 'http://github.com/i-vasilich-i' } });
 
-    const errorMessage = await screen.findByRole('alert');
+    const errorMessage = await screen.findByText(ERROR_MESSAGES.sourceGithubRepoUrl);
     expect(errorMessage).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent(ERROR_MESSAGES.sourceGithubRepoUrl);
   });
 
-  test('should not render error message on valid source Github repo URL input', async () => {
+  test('should not render error message on valid source GitHub repo URL input', async () => {
     renderPanel();
 
     const field = await screen.findByPlaceholderText(PLACEHOLDERS.sourceGithubRepoUrl);

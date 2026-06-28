@@ -1,4 +1,3 @@
-import React from 'react';
 import { Menu } from './Menu';
 import { HeartOutlined, LikeOutlined, TrophyOutlined } from '@ant-design/icons';
 

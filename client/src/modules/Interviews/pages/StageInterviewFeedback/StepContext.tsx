@@ -1,7 +1,7 @@
-import { CoursesInterviewsApi, InterviewFeedbackDto, ProfileCourseDto } from 'api';
-import { FeedbackStep, Feedback } from 'data/interviews/technical-screening';
+import { CoursesInterviewsApi, InterviewFeedbackDto, ProfileCourseDto } from '@client/api';
+import { FeedbackStep, Feedback } from '@client/data/interviews/technical-screening';
 import { createContext, PropsWithChildren, useCallback, useMemo, useState } from 'react';
-import { useLoading } from 'components/useLoading';
+import { useLoading } from '@client/components/useLoading';
 import { message } from 'antd';
 import { useRouter } from 'next/router';
 import {
@@ -25,7 +25,7 @@ type StepApi = {
   steps: FeedbackStep[];
   next: (values: InterviewFeedbackValues) => void;
   prev: () => void;
-  onValuesChange(_: InterviewFeedbackValues, values: InterviewFeedbackValues): void;
+  onValuesChange(_: Partial<InterviewFeedbackValues>, values: InterviewFeedbackValues): void;
   loading: boolean;
   isFinalStep: boolean;
 };
@@ -75,7 +75,7 @@ export function StepContextProvider(props: PropsWithChildren<ContextProps>) {
   });
 
   const onValuesChange = useCallback(
-    (_: InterviewFeedbackValues, values: InterviewFeedbackValues) => {
+    (_: Partial<InterviewFeedbackValues>, values: InterviewFeedbackValues) => {
       if (activeStep) {
         setIsFinished(isInterviewCanceled(activeStep.id, values));
       }

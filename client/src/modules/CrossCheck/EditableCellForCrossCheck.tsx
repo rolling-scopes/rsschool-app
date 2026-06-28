@@ -1,4 +1,4 @@
-import { CriteriaDto } from 'api';
+import { CriteriaDto } from '@client/api';
 import React from 'react';
 import { EditableCriteriaInput } from './EditableCriteriaInput';
 import { EditableTableColumnsDataIndex } from './constants';

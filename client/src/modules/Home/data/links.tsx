@@ -10,11 +10,10 @@ import {
   PlayCircleOutlined,
   StopOutlined,
 } from '@ant-design/icons';
-import { Session } from 'components/withSession';
-import React from 'react';
-import { Course } from 'services/models';
-import { isStudent, isAdmin, isMentor, isCourseManager, isActiveStudent, isDementor } from 'domain/user';
-import { getAutoTestRoute } from 'services/routes';
+import { Session } from '@client/components/withSession';
+import { Course } from '@client/services/models';
+import { isStudent, isAdmin, isMentor, isCourseManager, isActiveStudent, isDementor } from '@client/domain/user';
+import { getAutoTestRoute } from '@client/services/routes';
 import { MenuProps } from 'antd';
 import Router from 'next/router';
 import CalendarOutlined from '@ant-design/icons/CalendarOutlined';
@@ -151,6 +150,8 @@ export function getCourseLinks(session: Session, activeCourse: Course | null): L
 }
 
 export function getNavigationItems(session: Session, activeCourse: Course | null): MenuProps['items'] {
+  if (!activeCourse || !activeCourse.id) return [];
+
   return activeCourse
     ? links
         .filter(

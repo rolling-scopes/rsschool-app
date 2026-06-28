@@ -1,11 +1,31 @@
-import { Body, Controller, Delete, Get, Param, Put, Req, UseGuards, Query, ParseArrayPipe, Post } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  Put,
+  Req,
+  Res,
+  UseGuards,
+  Query,
+  ParseArrayPipe,
+  Post,
+} from '@nestjs/common';
+import { ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
+import { parseAsync } from 'json2csv';
 import { uniq } from 'lodash';
 import { CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { UserNotificationsService } from 'src/users-notifications/users.notifications.service';
 import { ApproveMentorDto } from './dto/approve-mentor.dto';
 import { MentorRegistryDto } from './dto/mentor-registry.dto';
+import { OwnMentorRegistryDto } from './dto/own-mentor-registry.dto';
 import { RegistryService } from './registry.service';
+import { RegisterMentorDto } from './dto/register-mentor.dto';
+import { CreateRegistrationDto, RegistrationResultDto } from './dto/create-registration.dto';
+import { RegistrationDto, UpdateRegistrationsDto, UpdateRegistrationsResponseDto } from './dto/registration.dto';
 import { CoursesService } from 'src/courses/courses.service';
 import { DisciplinesService } from 'src/disciplines/disciplines.service';
 import { CommentMentorRegistryDto } from './dto/comment-mentor-registry.dto';
@@ -29,6 +49,60 @@ export class RegistryController {
     private coursesService: CoursesService,
     private disciplinesService: DisciplinesService,
   ) {}
+
+  @Post('mentor')
+  @ApiOperation({ operationId: 'registerMentor' })
+  @ApiOkResponse()
+  public async registerMentor(@Req() req: CurrentRequest, @Body() dto: RegisterMentorDto) {
+    await this.registryService.registerMentor(req.user.githubId, dto);
+    await this.notificationService.sendEventNotification({
+      data: {},
+      notificationId: 'mentorRegistrationApproval:submit',
+      userId: req.user.id,
+    });
+  }
+
+  @Post('/')
+  @ApiOperation({ operationId: 'createRegistration' })
+  @ApiOkResponse({ type: RegistrationResultDto })
+  public async createRegistration(@Req() req: CurrentRequest, @Body() dto: CreateRegistrationDto) {
+    const registry = await this.registryService.createRegistration(
+      { id: req.user.id, githubId: req.user.githubId },
+      dto,
+    );
+    return new RegistrationResultDto(registry);
+  }
+
+  @Get('registrations')
+  @ApiOperation({ operationId: 'getRegistrations' })
+  @ApiQuery({ name: 'type', required: false, type: String })
+  @ApiQuery({ name: 'courseId', required: false, type: Number })
+  @ApiOkResponse({ type: [RegistrationDto] })
+  @RequiredRoles([Role.Admin])
+  public async getRegistrations(@Query('type') type?: string, @Query('courseId') courseId?: number) {
+    const registrations = await this.registryService.getRegistrations(type, courseId ? Number(courseId) : undefined);
+    return registrations.map(registry => new RegistrationDto(registry));
+  }
+
+  @Put('registrations')
+  @ApiOperation({ operationId: 'updateRegistrations' })
+  @ApiOkResponse({ type: UpdateRegistrationsResponseDto })
+  @RequiredRoles([Role.Admin])
+  public async updateRegistrations(@Body() dto: UpdateRegistrationsDto) {
+    const result = await this.registryService.updateRegistrations(dto.ids, dto.status);
+    return new UpdateRegistrationsResponseDto(result);
+  }
+
+  @Get('mentor')
+  @ApiOperation({ operationId: 'getOwnMentorRegistry' })
+  @ApiOkResponse({ type: OwnMentorRegistryDto })
+  public async getOwnMentorRegistry(@Req() req: CurrentRequest) {
+    const mentorRegistry = await this.registryService.getOwnMentorRegistry(req.user.id);
+    if (mentorRegistry == null) {
+      throw new NotFoundException('Mentor registry record not found');
+    }
+    return new OwnMentorRegistryDto(mentorRegistry);
+  }
 
   @Put('mentor/:githubId')
   @ApiOperation({ operationId: 'approveMentor' })
@@ -95,30 +169,42 @@ export class RegistryController {
         total: data.length,
         mentors: data.map(el => new MentorRegistryDto(el)),
       };
-    } else {
-      const data = await this.registryService.filterMentorRegistries({
-        page: currentPage || DEFAULT_PAGE_NUMBER,
-        limit: pageSize || DEFAULT_PAGE_SIZE,
-        githubId,
-        cityName,
-        preferedCourses,
-        preselectedCourses,
-        technicalMentoring,
-        coursesIds: req.user.isAdmin
-          ? undefined
-          : Object.entries(req.user.courses)
-              .filter(
-                ([_, value]) => value.roles.includes(CourseRole.Manager) || value.roles.includes(CourseRole.Supervisor),
-              )
-              .map(([key]) => Number(key)),
-        disciplineNames: req.user.isAdmin ? undefined : await this.getDisciplineNamesByCourseIds(req.user.courses),
-        status,
-      });
-      return {
-        total: data.total,
-        mentors: data.mentors.map(el => new MentorRegistryDto(el)),
-      };
     }
+    const data = await this.registryService.filterMentorRegistries({
+      page: currentPage || DEFAULT_PAGE_NUMBER,
+      limit: pageSize || DEFAULT_PAGE_SIZE,
+      githubId,
+      cityName,
+      preferedCourses,
+      preselectedCourses,
+      technicalMentoring,
+      coursesIds: req.user.isAdmin
+        ? undefined
+        : Object.entries(req.user.courses)
+            .filter(
+              ([_, value]) => value.roles.includes(CourseRole.Manager) || value.roles.includes(CourseRole.Supervisor),
+            )
+            .map(([key]) => Number(key)),
+      disciplineNames: req.user.isAdmin ? undefined : await this.getDisciplineNamesByCourseIds(req.user.courses),
+      status,
+    });
+    return {
+      total: data.total,
+      mentors: data.mentors.map(el => new MentorRegistryDto(el)),
+    };
+  }
+
+  @Get('mentors/csv')
+  @ApiOperation({ operationId: 'getMentorRegistriesCsv' })
+  @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor])
+  @ApiForbiddenResponse()
+  public async getMentorRegistriesCsv(@Res() res: Response) {
+    const data = await this.registryService.getMentorRegistriesForExport();
+    const csv = await parseAsync(data);
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-disposition', `filename="mentors.csv"`);
+    res.end(csv);
   }
 
   private async getDisciplineNamesByCourseIds(userCourses: Record<number, CourseInfo>): Promise<string[]> {

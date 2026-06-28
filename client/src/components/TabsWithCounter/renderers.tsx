@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Space } from 'antd';
-import { CountBadge } from 'components/CountBadge';
+import { CountBadge } from '@client/components/CountBadge';
 
 export type LabelItem = {
   label: string;

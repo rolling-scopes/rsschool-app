@@ -1,6 +1,7 @@
-import { Form, Input, List, Typography } from 'antd';
+import { Form, Input, Typography } from 'antd';
 import { Contacts } from '@common/models/profile';
-import { Contact } from 'services/user';
+import { Contact } from '@client/services/user';
+import { List } from '@client/shared/components/List';
 
 const { Text } = Typography;
 
@@ -27,7 +28,6 @@ const ContactsCardForm = ({ contacts, setValues, setHasError }: FormProps) => {
       initialValues={Object.fromEntries(contacts.map(c => [c.key, c.value]))}
     >
       <List<Contact>
-        itemLayout="horizontal"
         dataSource={contacts}
         renderItem={({ name, key, rules }: Contact) => (
           <List.Item>

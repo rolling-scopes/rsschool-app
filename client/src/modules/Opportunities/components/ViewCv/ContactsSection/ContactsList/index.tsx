@@ -10,11 +10,12 @@ import {
   MessageOutlined,
   CopyOutlined,
 } from '@ant-design/icons';
-import { Contacts, ContactType } from 'modules/Opportunities/models';
-import { getContactsToRender } from 'modules/Opportunities/data/getContactsToRender';
+import { Contacts, ContactType } from '@client/modules/Opportunities/models';
+import { getContactsToRender } from '@client/modules/Opportunities/data/getContactsToRender';
 
-import { Link } from 'modules/Opportunities/components/Link';
-import { useMessage } from 'hooks';
+import { Link } from '@client/modules/Opportunities/components/Link';
+import { useMessage } from '@client/hooks';
+import styles from './index.module.css';
 
 const { Text } = Typography;
 
@@ -36,11 +37,11 @@ export const ContactsList = ({ contacts }: Props) => {
   return (
     <div>
       {list.map(({ icon, node, value }, i) => (
-        <div className="container" key={i} style={{ paddingTop: 3 }}>
-          <div className="icon" style={{ paddingRight: 8 }}>
+        <div className={styles.container} key={i} style={{ paddingTop: 3 }}>
+          <div className={styles.icon} style={{ paddingRight: 8 }}>
             {icon}
           </div>
-          <div className="value">{node}</div>
+          <div className={styles.value}>{node}</div>
           <Button
             onClick={() => {
               copyToClipboard(value ?? '');
@@ -53,25 +54,6 @@ export const ContactsList = ({ contacts }: Props) => {
           />
         </div>
       ))}
-      <style jsx>{`
-        .container {
-          max-width: 100%;
-          display: flex;
-        }
-
-        .value {
-          word-break: break-all;
-        }
-
-        @media print {
-          .icon {
-            color: #000 !important;
-          }
-          .icon .anticon svg {
-            fill: #000 !important;
-          }
-        }
-      `}</style>
     </div>
   );
 };
@@ -106,7 +88,7 @@ const contactRendererMap: AllowedContacts = {
   },
   githubUsername: {
     icon: <GithubOutlined />,
-    render: contact => <Link title="Github" url={`https://github.com/${contact}`} text={contact} />,
+    render: contact => <Link title="GitHub" url={`https://github.com/${contact}`} text={contact} />,
   },
   website: {
     icon: <IdcardOutlined />,

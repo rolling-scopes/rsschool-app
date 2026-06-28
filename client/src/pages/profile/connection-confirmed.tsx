@@ -1,5 +1,5 @@
-import { SessionProvider } from 'modules/Course/contexts';
-import { ConnectionConfirmed } from 'modules/Notifications/pages/ConnectionConfirmedPage';
+import { SessionProvider } from '@client/modules/Course/contexts';
+import { ConnectionConfirmed } from '@client/modules/Notifications/pages/ConnectionConfirmedPage';
 
 function Page() {
   return (

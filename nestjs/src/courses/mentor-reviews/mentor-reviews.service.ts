@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { TaskSolution } from '@entities/taskSolution';
 import { paginate } from 'src/core/paginate';
 import { Checker } from '@entities/courseTask';
-import { TaskChecker } from '../../../../server/src/models';
+import { TaskChecker } from '@entities/index';
 import { MentorReviewAssignDto } from './dto/mentor-review-assign.dto';
 
 @Injectable()
@@ -21,12 +21,14 @@ export class MentorReviewsService {
     courseId,
     tasks,
     student,
+    checker,
     sortField,
     sortOrder,
   }: {
     courseId: number;
     tasks?: string;
     student?: string;
+    checker?: string;
     sortField?: string;
     sortOrder?: 'ASC' | 'DESC';
   }) {
@@ -52,7 +54,7 @@ export class MentorReviewsService {
       .leftJoin('mentor.user', 'mentorUser')
       .leftJoin('taskResult.lastChecker', 'lastChecker')
       .where('student.courseId = :courseId AND student.isExpelled = false', { courseId })
-      .andWhere('courseTask.checker = :checker', { checker: Checker.Mentor })
+      .andWhere('courseTask.checker = :checkerType', { checkerType: Checker.Mentor })
       .select([
         'student.id',
         'student.mentorId',
@@ -88,6 +90,12 @@ export class MentorReviewsService {
       query.andWhere('studentUser.githubId ILIKE :student', { student: `%${student}%` });
     }
 
+    if (checker) {
+      query.andWhere('COALESCE(lastChecker.githubId, mentorUser.githubId, studentMentorUser.githubId) ILIKE :checker', {
+        checker: `%${checker}%`,
+      });
+    }
+
     if (sortField && sortOrder) {
       if (sortField === 'submittedAt') {
         query.orderBy('taskSolution.createdDate', sortOrder);
@@ -109,10 +117,11 @@ export class MentorReviewsService {
     limit: number,
     tasks?: string,
     student?: string,
+    checker?: string,
     sortField?: string,
     sortOrder?: 'ASC' | 'DESC',
   ) {
-    const query = this.buildMentorReviewsQuery({ courseId, tasks, student: student, sortField, sortOrder });
+    const query = this.buildMentorReviewsQuery({ courseId, tasks, student, checker, sortField, sortOrder });
     const data = await paginate(query, { page, limit });
 
     return data;
@@ -129,6 +138,14 @@ export class MentorReviewsService {
 
   public async assignReviewer({ courseTaskId, mentorId, studentId }: MentorReviewAssignDto) {
     const taskCheckerRecord = await this.findTaskCheckerRecord(courseTaskId, studentId);
+
+    if (!mentorId) {
+      if (taskCheckerRecord) {
+        return await this.taskCheckerRepository.delete(taskCheckerRecord.id);
+      }
+
+      return;
+    }
 
     if (taskCheckerRecord) {
       return await this.taskCheckerRepository.update(taskCheckerRecord.id, { courseTaskId, mentorId, studentId });

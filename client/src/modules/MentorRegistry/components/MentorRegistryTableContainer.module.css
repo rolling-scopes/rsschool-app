@@ -1,0 +1,13 @@
+.infoIcons {
+  display: flex;
+  justify-content: center;
+}
+
+.infoIcons > div {
+  margin-right: 8px;
+}
+
+.iconCertificate :global(svg) {
+  width: 16px;
+  height: 16px;
+}

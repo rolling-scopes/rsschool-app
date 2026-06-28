@@ -1,20 +1,22 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ProfilePage Should render correctly if full profile info is in the state 1`] = `
+exports[`ProfilePage > Should render correctly > if full profile info is in the state 1`] = `
 <div>
   <div
-    class="jsx-785735b688e37766 loading-screen"
+    class="_loadingScreen_7068aa"
     data-testid="loading-screen"
     style="justify-content: center; align-items: center; display: flex; width: 100vw; position: fixed; height: 100vh; background: rgb(255, 255, 255);"
   >
     <div
-      class="ant-spin-nested-loading css-dev-only-do-not-override-1v2lwm6"
+      aria-busy="true"
+      aria-live="polite"
+      class="ant-spin ant-spin-spinning css-dev-only-do-not-override-1enej14 css-var-root"
     >
-      <div>
-        <div
-          aria-busy="true"
-          aria-live="polite"
-          class="ant-spin ant-spin-spinning ant-spin-show-text css-dev-only-do-not-override-1v2lwm6"
+      <div
+        class="ant-spin-section"
+      >
+        <span
+          class="ant-spin-dot-holder"
         >
           <span
             class="ant-spin-dot ant-spin-dot-spin"
@@ -32,18 +34,17 @@ exports[`ProfilePage Should render correctly if full profile info is in the stat
               class="ant-spin-dot-item"
             />
           </span>
-          <div
-            class="ant-spin-text"
-          >
-            Loading...
-          </div>
+        </span>
+        <div
+          class="ant-spin-description"
+        >
+          Loading...
         </div>
       </div>
       <div
-        class="ant-spin-container ant-spin-blur"
+        class="ant-spin-container"
       >
         <div
-          class="jsx-785735b688e37766"
           style="padding: 50px;"
         />
       </div>

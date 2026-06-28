@@ -1,8 +1,9 @@
 import { Alert, theme, Typography } from 'antd';
 import InfoCircleTwoTone from '@ant-design/icons/InfoCircleTwoTone';
 import Link from 'next/link';
-import { getInterviewWaitList } from 'domain/interview';
+import { getInterviewWaitList } from '@client/domain/interview';
 import { useAlert } from '../hooks/useAlert';
+import styles from './WaitListAlert.module.css';
 
 export function WaitListAlert({
   courseAlias,
@@ -18,10 +19,10 @@ export function WaitListAlert({
   if (isDismissed) return null;
 
   return (
-    <div className="wait-list-alert">
+    <div className={styles.waitListAlert}>
       <Alert
         closable
-        message="Do you want to interview more students?"
+        title="Do you want to interview more students?"
         icon={<InfoCircleTwoTone />}
         onClose={() => setDismissed()}
         showIcon
@@ -36,25 +37,11 @@ export function WaitListAlert({
                 students' waitlist.
               </Link>
             </Typography.Text>
-            <div className="icon-group" />
+            <div className={styles.iconGroup} />
           </>
         }
         type="info"
       />
-      <style jsx>{`
-        .icon-group {
-          background-image: url(/static/svg/sloths/students.svg);
-          background-position: center;
-          background-size: contain;
-          background-repeat: no-repeat;
-          width: 270px;
-          height: 160px;
-          margin: 10px auto;
-        }
-        .wait-list-alert {
-          margin-bottom: 10px;
-        }
-      `}</style>
     </div>
   );
 }

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button } from 'antd';
 import HeartTwoTone from '@ant-design/icons/HeartTwoTone';
 

@@ -1,6 +1,6 @@
 import { Table } from 'antd';
 import { ColumnType } from 'antd/lib/table';
-import { ScoreStudentDto } from 'api';
+import { ScoreStudentDto } from '@client/api';
 import get from 'lodash/get';
 
 type SummaryProps = {

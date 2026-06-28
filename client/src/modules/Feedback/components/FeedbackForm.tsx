@@ -5,8 +5,8 @@ import {
   MentorStudentDto,
   CreateStudentFeedbackDtoRecommendationEnum as RecommendationEnum,
   SoftSkillEntryIdEnum,
-} from 'api';
-import { UserSearch } from 'components/UserSearch';
+} from '@client/api';
+import { UserSearch } from '@client/shared/components/UserSearch';
 import { useEffect } from 'react';
 import { convertSoftSkillValueToEnum, softSkills, softSkillValues } from '../data/softSkills';
 import { useRouter } from 'next/router';
@@ -125,7 +125,7 @@ export const FeedbackForm = ({ studentId, onSubmit, students }: FeedbackFormProp
       <Alert
         showIcon
         type="info"
-        message={
+        title={
           <>
             <div>This feedback is very important for RS School process.</div>
             <div>Please spend 5 minutes to complete it. Thank you!</div>
@@ -136,7 +136,7 @@ export const FeedbackForm = ({ studentId, onSubmit, students }: FeedbackFormProp
         style={{ marginTop: 8 }}
         showIcon
         type="warning"
-        message={
+        title={
           <div>If you recommend to "Hire", we will attach the feedback to student's CV and it will be public.</div>
         }
       />

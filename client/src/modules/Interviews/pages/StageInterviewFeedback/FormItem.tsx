@@ -1,7 +1,7 @@
 import { Form, FormInstance, Input, Radio, Space, Typography, Checkbox } from 'antd';
-import { StepFormItem, RadioOption, FeedbackStepId } from 'data/interviews/technical-screening';
+import { StepFormItem, RadioOption, FeedbackStepId } from '@client/data/interviews/technical-screening';
 import { NestedRadio } from './NestedRadio';
-import { InputType } from 'data/interviews';
+import { InputType } from '@client/data/interviews';
 import { Fragment } from 'react';
 import { QuestionList } from './QuestionList';
 
@@ -15,7 +15,7 @@ export function FormItem({ item, form, stepId }: { item: StepFormItem; form: For
       return (
         <Item name={item.id} rules={[{ required: item.required, message: 'Required' }]}>
           <Group>
-            <Space direction="vertical">
+            <Space orientation="vertical">
               {item.options.map((option: RadioOption) => {
                 return (
                   <Fragment key={option.id}>

@@ -1,9 +1,9 @@
-FROM node:20-alpine
+FROM node:24-alpine
 
 EXPOSE 8080
 
-ENV NODE_ENV production
-ENV NODE_PORT 8080
+ENV NODE_ENV=production
+ENV NODE_PORT=8080
 
 WORKDIR /app
 

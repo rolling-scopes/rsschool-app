@@ -2,9 +2,10 @@ import { Alert, Typography } from 'antd';
 import InfoCircleTwoTone from '@ant-design/icons/InfoCircleTwoTone';
 import dayjs from 'dayjs';
 import { useContext } from 'react';
-import { InterviewDto, TaskDtoTypeEnum } from 'api';
+import { InterviewDto, TaskDtoTypeEnum } from '@client/api';
 import { MentorOptionsContext } from './MentorPreferencesModal';
 import { useAlert } from '../hooks/useAlert';
+import styles from './RegistrationNoticeAlert.module.css';
 
 export function RegistrationNoticeAlert(props: { interview: InterviewDto; startDate: string }) {
   const { startDate, interview } = props;
@@ -22,7 +23,7 @@ export function RegistrationNoticeAlert(props: { interview: InterviewDto; startD
     <>
       <Alert
         closable
-        message="Registration period"
+        title="Registration period"
         icon={<InfoCircleTwoTone />}
         showIcon
         onClose={() => setDismissed()}
@@ -32,22 +33,11 @@ export function RegistrationNoticeAlert(props: { interview: InterviewDto; startD
               Students’ registration for {interview.name} continues until {dayjs(startDate).format('DD MMM hh:mm')}. You
               can change <a onClick={showMentorOptions}>mentoring options</a> till this date.
             </Typography.Text>
-            <div className="icon-mentor" />
+            <div className={styles.iconMentor} />
           </>
         }
         type="info"
       />
-      <style jsx>{`
-        .icon-mentor {
-          background-image: url(https://cdn.rs.school/sloths/cleaned/mentor-new.svg);
-          background-position: center;
-          background-size: contain;
-          background-repeat: no-repeat;
-          width: 129px;
-          height: 170px;
-          margin: 10px auto;
-        }
-      `}</style>
     </>
   );
 

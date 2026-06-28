@@ -1,8 +1,8 @@
 import { message } from 'antd';
-import { CreateCourseEventDto, CreateEventDto, EventDto, EventsApi } from 'api';
-import { EVENT_TYPES } from 'data/eventTypes';
+import { CreateCourseEventDto, CreateEventDto, EventDto, EventsApi } from '@client/api';
+import { EVENT_TYPES } from '@client/data/eventTypes';
 import omit from 'lodash/omit';
-import { CourseEvent, CourseService } from 'services/course';
+import { CourseEvent, CourseService } from '@client/services/course';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';

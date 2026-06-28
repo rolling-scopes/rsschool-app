@@ -1,4 +1,4 @@
-import { ModalFormMode } from 'hooks';
+import { ModalFormMode } from '@client/hooks';
 
 const LABELS = {
   name: 'Task name',
@@ -16,7 +16,7 @@ const LABELS = {
 
 const TASK_SETTINGS_HEADERS = {
   crossCheckCriteria: 'Criteria For Cross-Check Task',
-  github: 'Github',
+  github: 'GitHub',
   jsonAttributes: 'JSON Attributes',
 };
 

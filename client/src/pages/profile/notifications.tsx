@@ -1,5 +1,5 @@
-import { SessionProvider } from 'modules/Course/contexts';
-import { UserNotificationsPage } from 'modules/Notifications/pages/UserNotificationsSettingsPage';
+import { SessionProvider } from '@client/modules/Course/contexts';
+import { UserNotificationsPage } from '@client/modules/Notifications/pages/UserNotificationsSettingsPage';
 
 function Page() {
   return (

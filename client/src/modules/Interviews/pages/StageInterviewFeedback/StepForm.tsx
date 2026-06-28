@@ -1,7 +1,7 @@
 import { Form, Space, Typography, Button } from 'antd';
-import { FeedbackStep, StepFormItem } from 'data/interviews/technical-screening';
+import { FeedbackStep, StepFormItem } from '@client/data/interviews/technical-screening';
 import { FormItem } from './FormItem';
-import { InputType } from 'data/interviews';
+import { InputType } from '@client/data/interviews';
 import { InterviewFeedbackValues } from '@common/models';
 
 const { Title, Text } = Typography;
@@ -12,7 +12,7 @@ type Props = {
   step: FeedbackStep;
   back: () => void;
   next: (values: Values) => void;
-  onValuesChange: (changedValues: Values, values: Values) => void;
+  onValuesChange: (changedValues: Partial<Values>, values: Values) => void;
   isLast: boolean;
   isFirst: boolean;
 };
@@ -29,7 +29,7 @@ export function StepForm({ step, next, back, isFirst, isLast, onValuesChange }: 
       initialValues={getInitialQuestions(step)}
       onFinishFailed={({ errorFields: [errorField] }) => errorField && form.scrollToField(errorField.name)}
     >
-      <Space direction="vertical" style={{ width: '100%' }}>
+      <Space orientation="vertical" style={{ width: '100%' }}>
         <Form.Item>
           <Title level={3}>{step.title}</Title>
           <Text type="secondary">{step.description}</Text>

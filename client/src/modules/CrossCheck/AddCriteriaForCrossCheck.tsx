@@ -1,9 +1,9 @@
 import { Button, Form, Input, InputNumber } from 'antd';
-import React, { ChangeEventHandler, useMemo, useState } from 'react';
-import { CrossCheckCriteriaType, IAddCriteriaForCrossCheck } from 'services/course';
+import { ChangeEventHandler, useMemo, useState } from 'react';
+import { CrossCheckCriteriaType, IAddCriteriaForCrossCheck } from '@client/services/course';
 import { CriteriaTypeSelect } from './CriteriaTypeSelect';
 import { TaskType } from './constants';
-import { useMessage } from 'hooks';
+import { useMessage } from '@client/hooks';
 
 const { Item } = Form;
 const { TextArea } = Input;

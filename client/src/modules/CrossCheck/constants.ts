@@ -1,4 +1,4 @@
-import { CrossCheckMessageDtoRoleEnum } from 'api';
+import { CrossCheckMessageDtoRoleEnum } from '@client/api';
 
 export enum LocalStorageKey {
   AreContactsVisible = 'crossCheckAreContactsVisible',

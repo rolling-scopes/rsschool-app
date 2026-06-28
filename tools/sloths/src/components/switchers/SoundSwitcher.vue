@@ -43,7 +43,7 @@ export default defineComponent({
     ...mapWritableState(useAudioOn, ['isAudioOn']),
     ...mapWritableState(useThemeProp, ['currTheme']),
     soundStatus(): string {
-      return this.sounds.filter((sound) => sound !== this.currSound)[0];
+      return this.sounds.filter(sound => sound !== this.currSound)[0];
     },
   },
 

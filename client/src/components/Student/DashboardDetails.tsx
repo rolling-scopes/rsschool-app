@@ -1,17 +1,12 @@
-import {
-  BranchesOutlined,
-  CloseCircleOutlined,
-  FileExcelOutlined,
-  SolutionOutlined,
-  UndoOutlined,
-} from '@ant-design/icons';
+import { CloseCircleOutlined, FileExcelOutlined, SolutionOutlined, UndoOutlined } from '@ant-design/icons';
 import { Button, Descriptions, Drawer, Popconfirm, theme } from 'antd';
 import { MentorBasic } from '@common/models';
-import { CommentModal } from 'components/CommentModal';
-import { MentorSearch } from 'components/MentorSearch';
-import { useState } from 'react';
-import { StudentDetails } from 'services/course';
-import css from 'styled-jsx/css';
+import { CommentModal } from '@client/shared/components/CommentModal';
+import { MentorSearch } from '@client/shared/components/MentorSearch';
+import { IssueCertificateModal } from '@client/modules/CourseManagement/components';
+import { useEffect, useState } from 'react';
+import { StudentDetails } from '@client/services/course';
+import styles from './DashboardDetails.module.css';
 
 type Props = {
   details: StudentDetails | null;
@@ -19,10 +14,9 @@ type Props = {
   isLoading: boolean;
   isAdmin: boolean;
   onClose: () => void;
-  onCreateRepository: () => void;
   onRestoreStudent: () => void;
   onExpelStudent: (comment: string) => void;
-  onIssueCertificate: () => void;
+  onIssueCertificate: (templateId: string) => Promise<boolean | void>;
   onRemoveCertificate: () => void;
   onUpdateMentor: (githubId: string) => void;
   courseManagerOrSupervisor: boolean;
@@ -30,8 +24,17 @@ type Props = {
 
 export function DashboardDetails(props: Props) {
   const [expelMode, setExpelMode] = useState(false);
+  const [issueOpen, setIssueOpen] = useState(false);
   const { details } = props;
   const { token } = theme.useToken();
+
+  // The component is rendered unconditionally and only returns null when details is empty,
+  // so it never unmounts when switching students — reset transient modal state manually.
+  useEffect(() => {
+    setExpelMode(false);
+    setIssueOpen(false);
+  }, [details?.githubId]);
+
   if (details == null) {
     return null;
   }
@@ -46,21 +49,17 @@ export function DashboardDetails(props: Props) {
         onClose={props.onClose}
         open={!!details}
       >
-        <div className="student-details-actions">
+        <div className={styles.studentDetailsActions}>
           {props.courseManagerOrSupervisor && (
             <>
               <Button
-                disabled={!details.isActive || !!details.repository}
-                icon={<BranchesOutlined />}
-                onClick={props.onCreateRepository}
+                disabled={!details.isActive}
+                icon={<SolutionOutlined />}
+                loading={props.isLoading}
+                onClick={() => setIssueOpen(true)}
               >
-                Create Repository
+                Issue Certificate
               </Button>
-              <Popconfirm title="Are you sure you want to issue the certificate?" onConfirm={props.onIssueCertificate}>
-                <Button disabled={!details.isActive} icon={<SolutionOutlined />} loading={props.isLoading}>
-                  Issue Certificate
-                </Button>
-              </Popconfirm>
               {props.isAdmin && (
                 <Popconfirm
                   title="Are you sure you want to remove the certificate?"
@@ -92,6 +91,7 @@ export function DashboardDetails(props: Props) {
             <Descriptions bordered layout="vertical" size="small" column={1}>
               <Descriptions.Item label="Mentor">
                 <MentorSearch
+                  disabled={!details.isActive}
                   style={{ width: '100%' }}
                   onChange={props.onUpdateMentor}
                   courseId={props.courseId}
@@ -103,23 +103,25 @@ export function DashboardDetails(props: Props) {
             </Descriptions>
           )}
         </div>
+        <IssueCertificateModal
+          open={issueOpen}
+          studentName={details.name}
+          onCancel={() => setIssueOpen(false)}
+          onSubmit={async templateId => {
+            const ok = await props.onIssueCertificate(templateId);
+            if (ok) setIssueOpen(false);
+          }}
+        />
       </Drawer>
       <CommentModal
         title="Expelling Reason"
-        visible={expelMode}
+        open={expelMode}
         onCancel={() => setExpelMode(false)}
         onOk={(text: string) => {
           props.onExpelStudent(text);
           setExpelMode(false);
         }}
       />
-      <style jsx>{styles}</style>
     </>
   );
 }
-
-const styles = css`
-  .student-details-actions :global(.ant-btn) {
-    margin: 0 8px 8px 0;
-  }
-`;

@@ -1,4 +1,7 @@
 import { Checker, CourseTask, CrossCheckStatus } from '@entities/courseTask';
+import { TaskChecker } from '@entities/taskChecker';
+import { Mentor } from '@entities/mentor';
+import { CrossMentorDistributionService } from '../interviews/cross-mentor-distribution.service';
 import { User } from '@entities/user';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,8 +14,9 @@ import {
   Repository,
   FindOptionsWhere,
   In,
+  DataSource,
 } from 'typeorm';
-import * as dayjs from 'dayjs';
+import { addHours, subHours } from 'date-fns';
 import { TaskResult } from '@entities/taskResult';
 import { TaskInterviewResult } from '@entities/taskInterviewResult';
 import { TaskSolution } from '@entities/taskSolution';
@@ -31,7 +35,49 @@ export class CourseTasksService {
     readonly courseTaskRepository: Repository<CourseTask>,
     @InjectRepository(TaskSolution)
     readonly taskSolutionRepository: Repository<TaskSolution>,
+    private readonly dataSource: DataSource,
+    private readonly crossMentorDistributionService: CrossMentorDistributionService,
   ) {}
+
+  public async createTaskDistribution(courseId: number, courseTaskId: number, cleanDistribution?: boolean) {
+    const courseTask = await this.courseTaskRepository.findOne({ where: { id: courseTaskId }, select: ['id'] });
+
+    if (courseTask == null) {
+      return null;
+    }
+
+    const mentors = await this.dataSource
+      .getRepository(Mentor)
+      .createQueryBuilder('mentor')
+      .innerJoinAndSelect('mentor.user', 'user')
+      .leftJoinAndSelect('mentor.students', 'students')
+      .where('mentor.courseId = :courseId', { courseId })
+      .andWhere('mentor.isExpelled = false')
+      .andWhere('students.isExpelled = false')
+      .getMany();
+
+    if (mentors.length === 0) {
+      return {};
+    }
+
+    const checkerRepository = this.dataSource.getRepository(TaskChecker);
+
+    if (cleanDistribution) {
+      await checkerRepository.delete({ courseTaskId });
+    }
+
+    const existingPairs = await checkerRepository.findBy({ courseTaskId });
+
+    const { mentors: crossMentors } = this.crossMentorDistributionService.distribute(mentors, existingPairs);
+
+    const taskCheckPairs = crossMentors
+      .map(stm => stm.students?.map(s => ({ courseTaskId, mentorId: stm.id, studentId: s.id })) ?? [])
+      .reduce((acc, student) => acc.concat(student), []);
+
+    await checkerRepository.insert(taskCheckPairs);
+
+    return taskCheckPairs;
+  }
 
   public getAll(courseId: number, status?: 'started' | 'inprogress' | 'finished', useCache = false, checker?: Checker) {
     return this.courseTaskRepository.find({
@@ -133,7 +179,7 @@ export class CourseTasksService {
   }
 
   public getUpdatedTasks(courseId: number, lastHours: number) {
-    const date = dayjs().subtract(lastHours, 'hours');
+    const date = subHours(new Date(), lastHours);
 
     return this.courseTaskRepository.find({
       where: { courseId, updatedDate: MoreThanOrEqual(date.toISOString()) },
@@ -145,14 +191,14 @@ export class CourseTasksService {
     courseId: number,
     { deadlineWithinHours = 24, safeBuffer = 1 }: { deadlineWithinHours?: number; safeBuffer?: number } = {},
   ) {
-    const now = dayjs();
-    const endDate = dayjs().add(deadlineWithinHours, 'hours').toISOString();
+    const now = new Date();
+    const endDate = addHours(now, deadlineWithinHours).toISOString();
 
     const where: FindOptionsWhere<CourseTask> = {
       courseId,
       disabled: false,
       studentStartDate: LessThanOrEqual(now.toISOString()),
-      studentEndDate: Between(now.add(safeBuffer, 'hours').toISOString(), endDate),
+      studentEndDate: Between(addHours(now, safeBuffer).toISOString(), endDate),
     };
 
     return this.courseTaskRepository.find({
@@ -176,6 +222,12 @@ export class CourseTasksService {
     return this.courseTaskRepository.update(id, {
       id, // required to get right update in subscription
       disabled: true,
+    });
+  }
+
+  public changeCourseTaskProcessing(id: number, isProcessing: boolean) {
+    return this.courseTaskRepository.update(id, {
+      isCreatingInterviewPairs: isProcessing,
     });
   }
 

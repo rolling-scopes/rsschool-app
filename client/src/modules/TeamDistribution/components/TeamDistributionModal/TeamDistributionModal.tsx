@@ -1,9 +1,9 @@
 import { DatePicker, Form, Input, InputNumber, message, Select, Typography, Modal } from 'antd';
-import { CreateTeamDistributionDto, TeamDistributionApi, TeamDistributionDto } from 'api';
-import { TIMEZONES } from 'configs/timezones';
+import { CreateTeamDistributionDto, TeamDistributionApi, TeamDistributionDto } from '@client/api';
+import { TIMEZONES } from '@client/configs/timezones';
 import dayjs, { Dayjs } from 'dayjs';
-import { formatTimezoneToUTC } from 'services/formatter';
-import { urlPattern } from 'services/validators';
+import { formatTimezoneToUTC } from '@client/services/formatter';
+import { urlPattern } from '@client/services/validators';
 import timezone from 'dayjs/plugin/timezone';
 
 const { TextArea } = Input;

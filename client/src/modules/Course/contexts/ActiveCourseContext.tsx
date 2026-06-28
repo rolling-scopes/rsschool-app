@@ -1,10 +1,10 @@
-import { ProfileCourseDto } from 'api';
-import { LoadingScreen } from 'components/LoadingScreen';
+import { ProfileCourseDto } from '@client/api';
+import { LoadingScreen } from '@client/shared/components/LoadingScreen';
 import { useRouter } from 'next/router';
 import React, { useCallback, useContext, useMemo, useState } from 'react';
 import { useLocalStorage } from 'react-use';
-import { UserService } from 'services/user';
-import { WelcomeCard } from 'components/WelcomeCard';
+import { UserService } from '@client/services/user';
+import { WelcomeCard } from '@client/components/WelcomeCard';
 import { Alert, Col, notification, Row } from 'antd';
 import useRequest from 'ahooks/lib/useRequest';
 import { AxiosError } from 'axios';
@@ -79,7 +79,7 @@ export const ActiveCourseProvider = ({ children, publicRoutes }: Props) => {
       <Row justify="center">
         <Col md={12} xs={18} style={{ marginTop: '60px' }}>
           <Alert
-            message="No Access"
+            title="No Access"
             description="Probably you do not participate in the course. Please register or choose another course."
             type="error"
           />

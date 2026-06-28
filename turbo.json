@@ -1,5 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "noUpdateNotifier": true,
   "globalDependencies": ["**/.env"],
   "tasks": {
     "build": {
@@ -51,16 +52,20 @@
         "RSSHCOOL_USERS_ADMINS",
         "RSSHCOOL_USERS_HIRERS",
         "SENTRY_DSN",
-        "SERVER_HOST"
+        "SERVER_HOST",
+        "RSSCHOOL_DEV_TOOLS"
       ]
     },
-    "lint": {},
+    "lint": {
+      "env": ["AGENT", "OPENCODE", "CLAUDECODE", "CURSOR_AGENT", "CODEX_THREAD_ID", "NO_COLOR"]
+    },
     "test": {},
     "test:ci": {},
     "start": {
       "cache": false,
       "persistent": true
     },
-    "compile": {}
+    "compile": {},
+    "openapi": {}
   }
 }

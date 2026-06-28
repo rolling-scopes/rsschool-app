@@ -1,7 +1,7 @@
 export const PAGINATION = 100;
 
 export enum MentorsRegistryColumnKey {
-  Github = 'githubId',
+  GitHub = 'githubId',
   Info = 'info',
   PreferredCourses = 'preferedCourses',
   ReceivedDate = 'receivedDate',
@@ -16,7 +16,7 @@ export enum MentorsRegistryColumnKey {
 }
 
 export enum MentorsRegistryColumnName {
-  Github = 'Github',
+  GitHub = 'GitHub',
   Info = 'Additional',
   PreferredCourses = 'Preferred',
   ReceivedDate = 'Received',
@@ -37,7 +37,7 @@ export enum MentorRegistryTabsMode {
 
 export const TABS = {
   [MentorRegistryTabsMode.New]: [
-    MentorsRegistryColumnKey.Github,
+    MentorsRegistryColumnKey.GitHub,
     MentorsRegistryColumnKey.Info,
     MentorsRegistryColumnKey.PreferredCourses,
     MentorsRegistryColumnKey.Preselected,
@@ -50,7 +50,7 @@ export const TABS = {
     MentorsRegistryColumnKey.Actions,
   ],
   [MentorRegistryTabsMode.All]: [
-    MentorsRegistryColumnKey.Github,
+    MentorsRegistryColumnKey.GitHub,
     MentorsRegistryColumnKey.Info,
     MentorsRegistryColumnKey.PreferredCourses,
     MentorsRegistryColumnKey.Preselected,

@@ -1,5 +1,5 @@
-import { SessionProvider } from 'modules/Course/contexts';
-import { Students } from 'modules/Students/Pages/Students';
+import { SessionProvider } from '@client/modules/Course/contexts';
+import { Students } from '@client/modules/Students/Pages/Students';
 
 export default function () {
   return (

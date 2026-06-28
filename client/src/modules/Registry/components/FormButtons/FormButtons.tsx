@@ -1,5 +1,5 @@
 import { Row, Col, Button, Form } from 'antd';
-import { TAIL_FORM_ITEM_LAYOUT } from 'modules/Registry/constants';
+import { TAIL_FORM_ITEM_LAYOUT } from '@client/modules/Registry/constants';
 
 type Props = {
   onPrevious?: () => void;

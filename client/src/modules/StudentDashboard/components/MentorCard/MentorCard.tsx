@@ -2,7 +2,7 @@ import { Col, Typography, Row } from 'antd';
 import CommonCard from '../CommonDashboardCard';
 import { MentorInfo } from '../MentorInfo';
 import { SubmitTaskSolution } from '../SubmitTaskSolution';
-import { MentorStudentSummaryDto } from 'api';
+import { MentorStudentSummaryDto } from '@client/api';
 
 export type MentorCardProps = {
   mentor?: MentorStudentSummaryDto | null;

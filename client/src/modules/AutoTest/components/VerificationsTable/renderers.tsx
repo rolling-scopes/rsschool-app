@@ -1,9 +1,9 @@
 import { Space, Typography } from 'antd';
 import { ColumnType } from 'antd/lib/table';
-import { dateWithTimeZoneRenderer } from 'components/Table';
-import { CourseTaskDetailedDtoTypeEnum } from 'api';
+import { dateWithTimeZoneRenderer } from '@client/shared/components/Table';
+import { CourseTaskDetailedDtoTypeEnum } from '@client/api';
 import { CheckSquareTwoTone, CloseSquareTwoTone } from '@ant-design/icons';
-import { Verification } from 'services/course';
+import { Verification } from '@client/services/course';
 
 const { Text, Link, Title } = Typography;
 
@@ -67,7 +67,7 @@ function renderDetails(value: string, row: Verification) {
     return (
       <>
         <Title level={5}>{value}</Title>
-        <Space direction="vertical" align="start">
+        <Space orientation="vertical" align="start">
           {(row?.metadata as Metadata[])?.map(({ id, url, name, completed }, index: number) => (
             <Link key={id} href={url} target="_blank">
               {completed ? (
@@ -105,7 +105,7 @@ function renderDate(createdDate: string) {
 
 function renderMobileRow(maxScore: number) {
   return (_: string, row: Verification) => (
-    <Space direction="vertical">
+    <Space orientation="vertical">
       {renderDate(row.createdDate)}
       {renderScore(maxScore)(row.score)}
       {renderDetails(row.details, row)}

@@ -1,6 +1,5 @@
 import { Alert } from 'antd';
-import type { AlertDto } from 'api';
-import React from 'react';
+import type { AlertDto } from '@client/api';
 
 type Props = {
   alerts: AlertDto[];

@@ -1,8 +1,8 @@
 import { Form, Row, Col, Select } from 'antd';
-import { ModalForm } from 'components/Forms';
-import { GithubAvatar } from 'components/GithubAvatar';
-import { MentorSearch } from 'components/MentorSearch';
-import { MentorInterview } from 'services/course';
+import { ModalForm } from '@client/shared/components/Forms';
+import { GithubAvatar } from '@client/shared/components/GithubAvatar';
+import { MentorSearch } from '@client/shared/components/MentorSearch';
+import { MentorInterview } from '@client/services/course';
 
 type Props = {
   interviews: MentorInterview[];

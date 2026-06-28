@@ -83,13 +83,13 @@ export default defineComponent({
   async mounted() {
     this.getGameInfo();
 
-    this.sortingOptions = this.sortingOptionsAll.map((el, i) => i).filter((el) => isEven(el));
+    this.sortingOptions = this.sortingOptionsAll.map((el, i) => i).filter(el => isEven(el));
   },
 
   methods: {
     getGameInfo() {
       this.gameResults = [];
-      MEMORY_LEVELS.forEach((item) => {
+      MEMORY_LEVELS.forEach(item => {
         let levelRecords: GameResult[] = [];
         const levelData = localStorage.getItem(`rs-sloths-memory-${item.level}`);
 
@@ -119,7 +119,7 @@ export default defineComponent({
     },
 
     takeSort() {
-      this.gameResults.forEach((gameResult) => {
+      this.gameResults.forEach(gameResult => {
         gameResult.results.sort((a, b) => {
           const item1: number = this.sortTypes(this.sorting, a);
           const item2: number = this.sortTypes(this.sorting, b);

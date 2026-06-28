@@ -18,3 +18,4 @@ setup/backup.sql
 setup/cdk/cdk.out
 test-results/
 client/tsconfig.tsbuildinfo
+/tmp

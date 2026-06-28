@@ -1,7 +1,7 @@
 import { Button, Space, Table } from 'antd';
-import { ContributorDto } from 'api';
+import { ContributorDto } from '@client/api';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { GithubAvatar } from 'components/GithubAvatar';
+import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 
 const { Column } = Table;
 

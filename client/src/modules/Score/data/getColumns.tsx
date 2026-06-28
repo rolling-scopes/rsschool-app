@@ -1,7 +1,7 @@
 import { ColumnType } from 'antd/es/table';
-import { ScoreStudentDto } from 'api';
-import { GithubAvatar } from 'components/GithubAvatar';
-import { dateRenderer, getColumnSearchProps } from 'components/Table';
+import { ScoreStudentDto } from '@client/api';
+import { GithubAvatar } from '@client/shared/components/GithubAvatar';
+import { dateRenderer, getColumnSearchProps } from '@client/shared/components/Table';
 import isArray from 'lodash/isArray';
 import Link from 'next/link';
 
@@ -32,7 +32,7 @@ export function getColumns(props: Props): ColumnType<ScoreStudentDto>[] {
       render: (value: number) => (value >= 999999 ? 'New' : value),
     },
     {
-      title: 'Github',
+      title: 'GitHub',
       fixed: 'left',
       key: 'githubId',
       dataIndex: 'githubId',
@@ -91,13 +91,6 @@ export function getColumns(props: Props): ColumnType<ScoreStudentDto>[] {
       dataIndex: 'totalScoreChangeDate',
       width: 80,
       sorter: 'totalScoreChangeDate',
-      render: dateRenderer,
-    },
-    {
-      title: 'Last Commit Date',
-      dataIndex: 'repositoryLastActivityDate',
-      width: 80,
-      sorter: 'repositoryLastActivityDate',
       render: dateRenderer,
     },
     {

@@ -5,28 +5,30 @@ import { TaskSolution } from '@entities/taskSolution';
 
 export class MentorReviewDto {
   constructor(taskSolution: TaskSolution) {
+    const taskResult = taskSolution.student.taskResults?.[0];
+
     this.id = taskSolution.id;
     this.taskName = taskSolution.courseTask.task.name;
     this.taskId = taskSolution.courseTask.id;
     this.solutionUrl = taskSolution.url;
     this.submittedAt = new Date(taskSolution.createdDate);
     this.checker = this.getChecker(taskSolution);
-    this.score = taskSolution.student.taskResults?.at(0)?.score;
+    this.score = taskResult?.score;
     this.maxScore = taskSolution.courseTask.maxScore;
     this.student = taskSolution.student.user.githubId;
     this.studentId = taskSolution.student.id;
-    this.reviewedAt = taskSolution.student.taskResults?.at(0)?.updatedDate
-      ? new Date(taskSolution.student.taskResults.at(0)!.updatedDate)
-      : undefined;
+    this.reviewedAt = taskResult?.updatedDate ? new Date(taskResult.updatedDate) : undefined;
     this.taskDescriptionUrl = taskSolution.courseTask.task.descriptionUrl;
   }
 
   private getChecker(taskSolution: TaskSolution) {
-    if (taskSolution.student.taskResults?.at(0)?.score !== undefined) {
-      return taskSolution.student.taskResults.at(0)?.lastChecker?.githubId;
+    const taskResult = taskSolution.student.taskResults?.[0];
+
+    if (taskResult?.score !== undefined) {
+      return taskResult.lastChecker?.githubId;
     }
 
-    return taskSolution.student.taskChecker?.at(0)?.mentor.user.githubId ?? taskSolution.student.mentor?.user.githubId;
+    return taskSolution.student.taskChecker?.[0]?.mentor.user.githubId ?? taskSolution.student.mentor?.user.githubId;
   }
 
   @ApiProperty({ description: 'Task solution id' })

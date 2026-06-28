@@ -9,7 +9,10 @@ type CourseStatsParams = {
   year?: number;
 };
 
-async function fetchCourseStats({ ids = [], year = 0 }: CourseStatsParams): Promise<CourseAggregateStatsDto> {
+async function fetchCourseStats({
+  ids = [],
+  year = 0,
+}: CourseStatsParams): Promise<CourseAggregateStatsDto | undefined> {
   try {
     const { data } = await courseStatsApi.getCoursesStats(ids, year);
     return data;

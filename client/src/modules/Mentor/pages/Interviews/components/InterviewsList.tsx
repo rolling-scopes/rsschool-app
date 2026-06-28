@@ -1,13 +1,14 @@
 import { Alert, Spin } from 'antd';
 import InfoCircleTwoTone from '@ant-design/icons/InfoCircleTwoTone';
 import { useState } from 'react';
-import { MentorInterview } from 'services/course';
+import { MentorInterview } from '@client/services/course';
 import { StudentInterview } from './StudentInterview';
 import { InterviewsSummary } from './InterviewsSummary';
-import { InterviewDto, TaskDtoTypeEnum } from 'api';
-import { Course } from 'services/models';
-import { useLoading } from 'components/useLoading';
+import { InterviewDto, TaskDtoTypeEnum } from '@client/api';
+import { Course } from '@client/services/models';
+import { useLoading } from '@client/components/useLoading';
 import { useAsyncFn } from 'react-use';
+import styles from './InterviewsList.module.css';
 
 type StudentsListProps = {
   interviews: MentorInterview[] | undefined;
@@ -37,7 +38,7 @@ export function InterviewsList(props: StudentsListProps) {
 
   return (
     <Spin spinning={loading}>
-      <div className="container">
+      <div className={styles.container}>
         <InterviewsSummary
           interviewTask={interviewTask}
           interviews={interviews}
@@ -47,7 +48,7 @@ export function InterviewsList(props: StudentsListProps) {
           courseAlias={course.alias}
         />
         {isExpanded && (
-          <div>
+          <div className={styles.items}>
             {interviews.map(studentInterview => (
               <StudentInterview
                 key={studentInterview.student.githubId}
@@ -60,11 +61,6 @@ export function InterviewsList(props: StudentsListProps) {
             ))}
           </div>
         )}
-        <style jsx>{`
-          .container {
-            margin: 15px 0;
-          }
-        `}</style>
       </div>
     </Spin>
   );

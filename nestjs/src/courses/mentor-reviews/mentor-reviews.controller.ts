@@ -21,13 +21,14 @@ export class MentorReviewsController {
   ) {
     const page = parseInt(query.current);
     const limit = parseInt(query.pageSize);
-    const { student, tasks, sortField, sortOrder } = query;
+    const { student, checker, tasks, sortField, sortOrder } = query;
     const mentorReviews = await this.mentorReviewsService.getMentorReviews(
       courseId,
       page,
       limit,
       tasks,
       student,
+      checker,
       sortField,
       sortOrder,
     );

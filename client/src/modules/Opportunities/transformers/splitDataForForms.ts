@@ -1,4 +1,4 @@
-import { Contacts, UserData, AllUserCVData } from 'modules/Opportunities/models';
+import { Contacts, UserData, AllUserCVData } from '@client/modules/Opportunities/models';
 
 export const splitDataForForms = (data: AllUserCVData) => {
   const userData: Omit<UserData, 'uuid'> = {

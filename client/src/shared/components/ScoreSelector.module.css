@@ -1,0 +1,34 @@
+.container {
+  display: flex;
+  justify-content: left;
+  gap: 12px;
+  padding: 10px 0 20px;
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.scoreSloth {
+  position: absolute;
+  right: 0;
+  bottom: -100px;
+  width: 100px;
+  height: 100px;
+  background-image: url('https://cdn.rs.school/sloths/cleaned/its-a-good-job.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.slothScoreCard {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 12px;
+  width: 24px;
+  text-align: center;
+  right: -3px;
+  top: 23px;
+  font-size: 12px;
+  font-weight: 900;
+}

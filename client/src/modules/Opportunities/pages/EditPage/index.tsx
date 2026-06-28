@@ -1,14 +1,14 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Layout, Modal, Typography } from 'antd';
 import { AxiosError } from 'axios';
 import dayjs from 'dayjs';
 import Head from 'next/head';
-import { OpportunitiesApi, ResumeDto } from 'api';
-import { Header } from 'components/Header';
-import { LoadingScreen } from 'components/LoadingScreen';
-import { useLoading } from 'components/useLoading';
-import { SessionContext } from 'modules/Course/contexts';
-import { EditViewCv } from 'modules/Opportunities/components/EditViewCv';
+import { OpportunitiesApi, ResumeDto } from '@client/api';
+import { Header } from '@client/shared/components/Header';
+import { LoadingScreen } from '@client/shared/components/LoadingScreen';
+import { useLoading } from '@client/components/useLoading';
+import { SessionContext } from '@client/modules/Course/contexts';
+import { EditViewCv } from '@client/modules/Opportunities/components/EditViewCv';
 
 const { Content } = Layout;
 const { Text, Paragraph } = Typography;
@@ -92,7 +92,7 @@ export function EditPage() {
       </Head>
       <LoadingScreen show={loading}>
         <Header title="My CV" />
-        <Content className="print-no-padding" style={{ maxWidth: 960, margin: 'auto' }}>
+        <Content className="print-no-padding ubuntu-font" style={{ maxWidth: 960, margin: 'auto' }}>
           <EditViewCv
             githubId={githubId}
             consent={consent}
@@ -105,12 +105,6 @@ export function EditPage() {
           />
         </Content>
       </LoadingScreen>
-      <style jsx global>{`
-        html,
-        body {
-          font-family: 'Ubuntu', sans-serif;
-        }
-      `}</style>
     </>
   );
 }

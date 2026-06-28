@@ -1,16 +1,16 @@
 import { Form } from 'antd';
-import { CourseTaskDetailedDtoTypeEnum, CourseTaskVerificationsApi } from 'api';
+import { CourseTaskDetailedDtoTypeEnum, CourseTaskVerificationsApi } from '@client/api';
 import snakeCase from 'lodash/snakeCase';
 import { useContext, useMemo, useState } from 'react';
-import { FilesService } from 'services/files';
-import { SelfEducationPublicAttributes } from 'services/course';
+import { FilesService } from '@client/services/files';
+import { SelfEducationPublicAttributes } from '@client/services/course';
 import { AxiosError } from 'axios';
-import { isExpelledStudent } from 'domain/user';
-import { SessionContext } from 'modules/Course/contexts';
+import { isExpelledStudent } from '@client/domain/user';
+import { SessionContext } from '@client/modules/Course/contexts';
 import { InternalUploadFile } from 'antd/lib/upload/interface';
 import { useBeforeUnload } from 'react-use';
-import { CourseTaskVerifications } from 'modules/AutoTest/types';
-import { useMessage } from 'hooks';
+import { CourseTaskVerifications } from '@client/modules/AutoTest/types';
+import { useMessage } from '@client/hooks';
 
 type SelfEducationValues = Record<string, number>;
 export type IpynbFile = { upload: { file: InternalUploadFile } };
@@ -81,7 +81,7 @@ export function useCourseTaskSubmit(courseId: number, courseTask: CourseTaskVeri
     }
   };
 
-  const getError = (error: AxiosError<any>): string => {
+  const getError = (error: AxiosError<Error>): string => {
     switch (error.response?.status) {
       case 401:
         return 'Your authorization token has expired. You need to re-login in the application.';
@@ -95,14 +95,13 @@ export function useCourseTaskSubmit(courseId: number, courseTask: CourseTaskVeri
       case 403: {
         if (isExpelledStudent(session, courseId)) {
           return 'This task can only be submitted by active students.';
-        } else {
-          const { oneAttemptPerNumberOfHours, maxAttemptsNumber = 0 } = (courseTask?.publicAttributes ??
-            {}) as SelfEducationPublicAttributes;
-          const timeLimitedAttempts = oneAttemptPerNumberOfHours
-            ? `You can submit this task not more than one time per ${oneAttemptPerNumberOfHours} hours.`
-            : '';
-          return `You can submit this task only ${maxAttemptsNumber} times. ${timeLimitedAttempts} For now your attempts limit is over!`;
         }
+        const { oneAttemptPerNumberOfHours, maxAttemptsNumber = 0 } = (courseTask?.publicAttributes ??
+          {}) as SelfEducationPublicAttributes;
+        const timeLimitedAttempts = oneAttemptPerNumberOfHours
+          ? `You can submit this task not more than one time per ${oneAttemptPerNumberOfHours} hours.`
+          : '';
+        return `You can submit this task only ${maxAttemptsNumber} times. ${timeLimitedAttempts} For now your attempts limit is over!`;
       }
 
       default:
@@ -135,13 +134,13 @@ export function useCourseTaskSubmit(courseId: number, courseTask: CourseTaskVeri
       finishTask();
       setIsModified(false);
     } catch (e) {
-      const error = e as AxiosError<any>;
-      const message = getError(error as AxiosError<any>);
+      const error = e as AxiosError<Error>;
+      const message = getError(error);
 
       notification.error({
         message,
         // notification will never be closed automatically when status is 401
-        duration: error.response?.status === 401 ? null : undefined,
+        duration: error.response?.status === 401 ? false : undefined,
       });
     } finally {
       setLoading(false);

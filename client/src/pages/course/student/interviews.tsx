@@ -1,12 +1,18 @@
 import { message, Row, Spin, Modal } from 'antd';
-import { PageLayout } from 'components/PageLayout';
+import { PageLayout } from '@client/shared/components/PageLayout';
 import { useMemo, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService } from 'services/course';
-import { InterviewDetails } from 'domain/interview';
-import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
-import { CoursesInterviewsApi, CourseTaskDtoTypeEnum, InterviewDto, TaskDtoTypeEnum } from 'api';
-import { InterviewCard, NoInterviewsAlert } from 'modules/Interview/Student';
+import { CourseService } from '@client/services/course';
+import { InterviewDetails } from '@client/domain/interview';
+import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
+import {
+  CoursesInterviewsApi,
+  CourseTaskDtoTypeEnum,
+  InterviewCommentDto,
+  InterviewDto,
+  TaskDtoTypeEnum,
+} from '@client/api';
+import { InterviewCard, NoInterviewsAlert } from '@client/modules/Interview/Student';
 
 const coursesInterviewApi = new CoursesInterviewsApi();
 
@@ -14,7 +20,8 @@ function StudentInterviewPage() {
   const session = useContext(SessionContext);
   const { course } = useActiveCourseContext();
   const courseService = useMemo(() => new CourseService(course.id), [course.id]);
-  const [data, setData] = useState<InterviewDetails[]>([]);
+  const [studentInterviews, setStudentInterviews] = useState<InterviewDetails[]>([]);
+  const [commentsToStudent, setCommentsToStudent] = useState<InterviewCommentDto[]>([]);
   const [interviews, setInterviews] = useState<InterviewDto[]>([]);
   const [registeredInterviews, setRegisteredInterviews] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -23,7 +30,7 @@ function StudentInterviewPage() {
   useAsync(async () => {
     try {
       setLoading(true);
-      const [data, { data: interviews }] = await Promise.all([
+      const [studentInterviews, { data: interviews }] = await Promise.all([
         courseService.getStudentInterviews(session.githubId),
         coursesInterviewApi.getInterviews(course.id, false, [
           TaskDtoTypeEnum.Interview,
@@ -32,9 +39,18 @@ function StudentInterviewPage() {
       ] as const);
       const registeredInterviews = await getRegisteredInterviews(interviews);
 
-      setData(data);
+      setStudentInterviews(studentInterviews);
       setInterviews(interviews);
       setRegisteredInterviews(registeredInterviews);
+
+      const stageInterview = interviews.find(i => i.type === TaskDtoTypeEnum.StageInterview);
+
+      if (stageInterview) {
+        const { data: stageInterviewsCommentToStudent } = await coursesInterviewApi.getStageInterviewsCommentToStudent(
+          course.id,
+        );
+        setCommentsToStudent(stageInterviewsCommentToStudent);
+      }
     } catch {
       message.error('An error occurred. Please try later.');
     } finally {
@@ -88,7 +104,7 @@ function StudentInterviewPage() {
 
   const hasInterview = (id: number) => registeredInterviews.includes(id.toString());
 
-  const getInterviewItem = (interviewName: string) => data.find(d => d.name === interviewName) ?? null;
+  const getStudentInterviewItems = (interviewName: string) => studentInterviews.filter(i => i.name === interviewName);
 
   return (
     <PageLayout loading={loading} title="Interviews" showCourseName>
@@ -100,13 +116,30 @@ function StudentInterviewPage() {
           <Row gutter={[12, 12]} justify="start">
             {interviews.map(interview => {
               const { name, id } = interview;
-              const item = getInterviewItem(name);
+              const items = getStudentInterviewItems(name);
+
+              if (items.length > 0) {
+                return items.map((item, index) => {
+                  const interviewComment = commentsToStudent.find(comment => comment.id === item.id);
+                  return (
+                    <InterviewCard
+                      key={item.id + index}
+                      interview={interview}
+                      comment={interviewComment?.commentToStudent}
+                      item={item}
+                      isRegistered={true}
+                      onRegister={handleRegister}
+                    />
+                  );
+                });
+              }
+
               const registered = hasInterview(id);
               return (
                 <InterviewCard
                   key={id}
                   interview={interview}
-                  item={item}
+                  item={null}
                   isRegistered={registered}
                   onRegister={handleRegister}
                 />

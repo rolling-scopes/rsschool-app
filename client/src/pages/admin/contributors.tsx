@@ -1,5 +1,5 @@
-import { ContributorPage } from 'modules/Contributor/pages/ContributorPage';
-import { SessionProvider } from 'modules/Course/contexts';
+import { ContributorPage } from '@client/modules/Contributor/pages/ContributorPage';
+import { SessionProvider } from '@client/modules/Course/contexts';
 
 export default function () {
   return (

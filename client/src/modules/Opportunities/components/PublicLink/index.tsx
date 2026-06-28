@@ -1,6 +1,5 @@
 import { CopyOutlined } from '@ant-design/icons';
 import { Alert, Button, notification } from 'antd';
-import React from 'react';
 import { useCopyToClipboard } from 'react-use';
 
 type Props = {
@@ -16,7 +15,7 @@ export const PublicLink = ({ url }: Props) => {
 
   return (
     <Alert
-      message={
+      title={
         <>
           Public Link{' '}
           <Button target="_blank" type="link" href={url}>

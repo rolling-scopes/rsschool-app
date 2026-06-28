@@ -1,16 +1,16 @@
 import { Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import { TaskDto } from 'api';
+import { TaskDto } from '@client/api';
 import {
   stringSorter,
   getColumnSearchProps,
   tagsRenderer,
   tagsCoursesRendererWithRemainingNumber,
   boolIconRenderer,
-} from 'components/Table';
-import { TASK_TYPES } from 'data/taskTypes';
+} from '@client/shared/components/Table';
+import { TASK_TYPES } from '@client/data/taskTypes';
 import { uniqBy } from 'lodash';
-import { ColumnName } from 'modules/Tasks/types';
+import { ColumnName } from '@client/modules/Tasks/types';
 import { useMemo } from 'react';
 
 function getColumns(

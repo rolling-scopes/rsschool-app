@@ -1,19 +1,19 @@
 import { render, screen } from '@testing-library/react';
-import { CourseInfo, Session } from 'components/withSession';
-import { SessionContext } from 'modules/Course/contexts';
+import { CourseInfo, Session } from '@client/components/withSession';
+import { SessionContext } from '@client/modules/Course/contexts';
 import { INSTRUCTIONS_TEXT } from '../Instructions';
 import MentorDashboard from './MentorDashboard';
-import { useMentorDashboard } from 'modules/Mentor/hooks/useMentorDashboard';
+import { useMentorDashboard } from '@client/modules/Mentor/hooks/useMentorDashboard';
 
-jest.mock('modules/Mentor/hooks/useMentorDashboard');
+vi.mock('@client/modules/Mentor/hooks/useMentorDashboard');
 
-jest.mock('next/router', () => ({
-  useRouter: jest.fn().mockImplementation(() => ({ asPath: '/course/mentor/' })),
+vi.mock('next/router', () => ({
+  useRouter: vi.fn().mockImplementation(() => ({ asPath: '/course/mentor/' })),
 }));
 
 describe('MentorDashboard', () => {
   it('should render instructions when mentor has no students for this course', async () => {
-    jest.mocked(useMentorDashboard).mockReturnValue([[], false, jest.fn()]);
+    vi.mocked(useMentorDashboard).mockReturnValue([[], false, vi.fn()]);
 
     render(
       <SessionContext.Provider
@@ -58,7 +58,7 @@ describe('MentorDashboard', () => {
       } as const,
     ];
 
-    jest.mocked(useMentorDashboard).mockReturnValue([mockData, false, jest.fn()]);
+    vi.mocked(useMentorDashboard).mockReturnValue([mockData, false, vi.fn()]);
 
     render(
       <SessionContext.Provider

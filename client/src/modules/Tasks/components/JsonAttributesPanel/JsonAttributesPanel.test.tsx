@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { JsonAttributesPanel } from './JsonAttributesPanel';
 import { Form } from 'antd';
-import { ERROR_MESSAGES, PLACEHOLDERS } from 'modules/Tasks/constants';
+import { ERROR_MESSAGES, PLACEHOLDERS } from '@client/modules/Tasks/constants';
 
 const renderPanel = () => {
   render(
@@ -29,7 +29,7 @@ describe('JSON Attributes', () => {
 
     fireEvent.change(textarea, { target: { value: invalidJson } });
 
-    const errorMessage = await screen.findByRole('alert');
+    const errorMessage = await screen.findByText(ERROR_MESSAGES.invalidJson);
     expect(errorMessage).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent(ERROR_MESSAGES.invalidJson);
   });

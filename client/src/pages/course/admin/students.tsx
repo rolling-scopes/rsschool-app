@@ -1,8 +1,8 @@
-import { BranchesOutlined, CheckCircleTwoTone, ClockCircleTwoTone, MinusCircleOutlined } from '@ant-design/icons';
+import { CheckCircleTwoTone, ClockCircleTwoTone, MinusCircleOutlined } from '@ant-design/icons';
 import { Button, Row, Space, Statistic, Switch, Table, Typography } from 'antd';
 import { ColumnProps } from 'antd/lib/table/Column';
-import { AdminPageLayout } from 'components/PageLayout';
-import { DashboardDetails } from 'components/Student';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
+import { DashboardDetails } from '@client/components/Student';
 import {
   boolIconRenderer,
   boolSorter,
@@ -10,17 +10,17 @@ import {
   numberSorter,
   PersonCell,
   stringSorter,
-} from 'components/Table';
-import { useLoading } from 'components/useLoading';
-import { isAdmin, isCourseManager, isCourseSupervisor } from 'domain/user';
-import { useMessage } from 'hooks';
+} from '@client/shared/components/Table';
+import { useLoading } from '@client/components/useLoading';
+import { isAdmin, isCourseManager, isCourseSupervisor } from '@client/domain/user';
+import { useMessage } from '@client/hooks';
 import keys from 'lodash/keys';
-import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
-import { CertificateCriteriaModal, ExpelCriteriaModal } from 'modules/CourseManagement/components';
+import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
+import { CertificateCriteriaModal, ExpelCriteriaModal } from '@client/modules/CourseManagement/components';
 import { useContext, useMemo, useState } from 'react';
 import { useAsync, useToggle } from 'react-use';
-import { CourseService, StudentDetails } from 'services/course';
-import { CourseRole } from 'services/models';
+import { CourseService, StudentDetails } from '@client/services/course';
+import { CourseRole } from '@client/services/models';
 
 const { Text } = Typography;
 
@@ -30,6 +30,7 @@ type CertificateCriteria = {
   courseTaskIds?: number[];
   minScore?: number;
   minTotalScore?: number;
+  templateId?: string;
 };
 type ExpelCriteria = {
   courseTaskIds?: number[];
@@ -57,14 +58,16 @@ function Page() {
   const [isExpelModalOpen, toggleExpelModal] = useToggle(false);
   const [isCertificateModalOpen, toggleCertificateModal] = useToggle(false);
 
-  useAsync(withLoading(loadStudents), [activeOnly]);
+  useAsync(withLoading(loadStudents), [activeOnly, details]);
 
-  const issueCertificate = withLoading(async () => {
+  const issueCertificate = withLoading(async (templateId: string) => {
     const githubId = details?.githubId;
-    if (githubId != null) {
-      await courseService.createCertificate(githubId);
-      message.info('The certificate has been requested.');
+    if (githubId == null) {
+      return false;
     }
+    await courseService.createCertificate(githubId, templateId);
+    message.info('The certificate has been requested.');
+    return true;
   });
 
   const removeCertificate = withLoading(async () => {
@@ -75,20 +78,12 @@ function Page() {
     }
   });
 
-  const createRepository = withLoading(async () => {
-    const githubId = details?.githubId;
-    if (githubId != null) {
-      const { repository } = await courseService.createRepository(githubId);
-      const newStudents = students.map(s => (s.githubId === githubId ? { ...s, repository: repository } : s));
-      setStudents(newStudents);
-    }
-  });
-
   const expelStudent = withLoading(async (text: string) => {
     const githubId = details?.githubId;
     if (githubId != null) {
       await courseService.expelStudent(githubId, text);
       message.info('Student has been expelled');
+      setDetails(null);
     }
   });
 
@@ -97,6 +92,7 @@ function Page() {
     if (githubId != null) {
       await courseService.restoreStudent(githubId);
       message.info('Student has been restored');
+      setDetails(null);
     }
   });
 
@@ -115,8 +111,8 @@ function Page() {
     message.success('Students successfully expelled');
   });
 
-  const issueCertificates = withLoading(async (criteria: CertificateCriteria) => {
-    await courseService.postCertificateStudents(criteria);
+  const issueCertificates = withLoading(async ({ templateId, ...criteria }: CertificateCriteria) => {
+    await courseService.postCertificateStudents(criteria, templateId);
     toggleCertificateModal();
     message.success('All certificates successfully issued');
   });
@@ -154,7 +150,6 @@ function Page() {
           onIssueCertificate={issueCertificate}
           onRemoveCertificate={removeCertificate}
           onExpelStudent={expelStudent}
-          onCreateRepository={createRepository}
           onClose={() => {
             setDetails(null);
             loadStudents();
@@ -256,16 +251,9 @@ function Page() {
           }
           if (value.every(e => e.isCompleted)) {
             return <CheckCircleTwoTone title="Completed" twoToneColor="#52c41a" />;
-          } else {
-            return <ClockCircleTwoTone title="Assigned" />;
           }
+          return <ClockCircleTwoTone title="Assigned" />;
         },
-      },
-      {
-        title: <BranchesOutlined />,
-        dataIndex: 'repository',
-        width: 80,
-        render: (value: string) => (value ? <a href={value}>Link</a> : null),
       },
       {
         title: 'Total',

@@ -1,4 +1,4 @@
-import { CriteriaDto } from 'api';
+import { CriteriaDto } from '@client/api';
 
 export const addKeyAndIndex = (array: CriteriaDto[]): CriteriaDto[] => {
   return array.map((item, index) => ({

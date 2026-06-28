@@ -1,14 +1,15 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsInt } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsInt, IsOptional } from 'class-validator';
 
 export class MentorReviewAssignDto {
   @ApiProperty()
   @IsInt()
   courseTaskId: number;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
+  @IsOptional()
   @IsInt()
-  mentorId: number;
+  mentorId?: number;
 
   @ApiProperty()
   @IsInt()

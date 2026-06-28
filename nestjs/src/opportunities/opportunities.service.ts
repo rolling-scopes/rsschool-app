@@ -1,5 +1,5 @@
 import { In, Repository } from 'typeorm';
-import * as dayjs from 'dayjs';
+import { addDays } from 'date-fns';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '@entities/user';
@@ -137,7 +137,7 @@ export class OpportunitiesService {
   }
 
   private getProlongedExpirationTimestamp() {
-    const expirationDate = dayjs().add(EXPIRATION_DAYS_PROLONGATION, 'days');
+    const expirationDate = addDays(new Date(), EXPIRATION_DAYS_PROLONGATION);
     const expirationTimestamp = expirationDate.valueOf();
     return expirationTimestamp;
   }

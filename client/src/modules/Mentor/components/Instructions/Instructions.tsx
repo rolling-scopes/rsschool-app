@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Badge, Card, Col, Row, Space, Typography } from 'antd';
 import { INSTRUCTIONS_TEXT, renderDescription, renderSocialLinks } from '.';
-import { DiscordServersApi } from 'api';
+import { DiscordServersApi } from '@client/api';
 import { useAsyncEffect } from 'ahooks';
 
 interface InstructionsProps {
@@ -38,7 +38,7 @@ function Instructions({ courseId, discordServerId }: InstructionsProps) {
   }, []);
 
   return (
-    <Card bordered={false}>
+    <Card variant="borderless">
       <Grid style={{ width: '100%' }} hoverable={false}>
         <Meta title={title} description={<Text>{description}</Text>} />
       </Grid>
@@ -54,7 +54,7 @@ function Instructions({ courseId, discordServerId }: InstructionsProps) {
                   </Space>
                 }
                 description={
-                  <Space direction="vertical" size="middle">
+                  <Space orientation="vertical" size="middle">
                     {renderDescription(s.html)}
                     {s.links ? renderSocialLinks(s.links) : null}
                   </Space>

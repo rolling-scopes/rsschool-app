@@ -1,7 +1,7 @@
 import { Form, Input, message, Modal, Spin } from 'antd';
-import { ContributorDto, ContributorsApi, UsersApi } from 'api';
+import { ContributorDto, ContributorsApi, UsersApi } from '@client/api';
 import useRequest from 'ahooks/lib/useRequest';
-import { UserSearch } from 'components/UserSearch';
+import { UserSearch } from '@client/shared/components/UserSearch';
 
 type Props = {
   contributorId: number | null;

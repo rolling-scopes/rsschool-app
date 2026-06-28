@@ -1,6 +1,6 @@
 import FileOutlined from '@ant-design/icons/FileOutlined';
 import { Button } from 'antd';
-import { CriteriaDto } from 'api';
+import { CriteriaDto } from '@client/api';
 import omit from 'lodash/omit';
 import { CriteriaJSONType } from './UploadCriteriaJSON';
 import { TaskType } from './constants';

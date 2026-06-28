@@ -1,5 +1,5 @@
 import { Space, theme, Typography } from 'antd';
-import { DiscordFilled, LinkedInIcon, TelegramIcon } from 'components/Icons';
+import { DiscordFilled, LinkedInIcon, TelegramIcon } from '@client/shared/components/Icons';
 import { GithubOutlined } from '@ant-design/icons';
 
 const { Link, Text } = Typography;

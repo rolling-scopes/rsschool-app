@@ -1,6 +1,6 @@
 import { Alert, Layout } from 'antd';
-import { FooterLayout } from 'components/Footer';
-import { PageLayout } from 'components/PageLayout';
+import { FooterLayout } from '@client/components/Footer';
+import { PageLayout } from '@client/shared/components/PageLayout';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -13,7 +13,7 @@ export function ConnectionConfirmed() {
         <Alert
           type="success"
           showIcon
-          message={`Your have successfully connected your ${connectionType}`}
+          title={`Your have successfully connected your ${connectionType}`}
           description={
             <div>
               Now you can subscribe to <Link href="/profile/notifications">notifications</Link>

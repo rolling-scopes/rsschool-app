@@ -1,8 +1,8 @@
 import { useRequest } from 'ahooks';
 import { Button, Layout } from 'antd';
-import { ContributorDto, ContributorsApi } from 'api';
-import { AdminPageLayout } from 'components/PageLayout';
-import { useActiveCourseContext } from 'modules/Course/contexts';
+import { ContributorDto, ContributorsApi } from '@client/api';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
+import { useActiveCourseContext } from '@client/modules/Course/contexts';
 import { ContributorModal } from '../components/ContributorModal';
 import { ContributorsTable } from '../components/ContributorsTable';
 import { useState } from 'react';

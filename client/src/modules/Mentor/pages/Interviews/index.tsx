@@ -1,14 +1,15 @@
-import { CoursesInterviewsApi, InterviewDto, TaskDtoTypeEnum } from 'api';
-import { PageLayout } from 'components/PageLayout';
-import { useLoading } from 'components/useLoading';
+import { CoursesInterviewsApi, InterviewDto, TaskDtoTypeEnum } from '@client/api';
+import { PageLayout } from '@client/shared/components/PageLayout';
+import { useLoading } from '@client/components/useLoading';
 import { useCallback, useState, useContext } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService, MentorInterview } from 'services/course';
+import { CourseService, MentorInterview } from '@client/services/course';
 import { InterviewCard } from './components/InterviewCard';
 import { MentorOptionsProvider } from './components/MentorPreferencesModal';
 import groupBy from 'lodash/groupBy';
 import type { Dictionary } from 'lodash';
-import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
+import styles from './index.module.css';
 
 export function Interviews() {
   const session = useContext(SessionContext);
@@ -39,7 +40,7 @@ export function Interviews() {
   return (
     <PageLayout loading={loading} title="Interviews" showCourseName>
       <MentorOptionsProvider course={course} session={session}>
-        <div className="container">
+        <div className={styles.container}>
           {interviews.map(interviewTask => (
             <InterviewCard
               interviewTask={interviewTask}
@@ -51,15 +52,6 @@ export function Interviews() {
           ))}
         </div>
       </MentorOptionsProvider>
-      <style jsx>{`
-        .container {
-          display: flex;
-          margin: 0 auto;
-          width: 100%;
-          max-width: 1200px;
-          flex-direction: column;
-        }
-      `}</style>
     </PageLayout>
   );
 }

@@ -24,6 +24,8 @@ export class UpdateCourseDto {
   @ApiPropertyOptional()
   descriptionUrl?: string;
 
+  @IsNumber()
+  @IsOptional()
   @ApiPropertyOptional()
   year?: number;
 
@@ -71,11 +73,6 @@ export class UpdateCourseDto {
   @IsOptional()
   @ApiPropertyOptional()
   certificateIssuer?: string;
-
-  @IsBoolean()
-  @IsOptional()
-  @ApiPropertyOptional()
-  usePrivateRepositories?: boolean;
 
   @IsBoolean()
   @IsOptional()

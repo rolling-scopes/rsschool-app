@@ -1,13 +1,13 @@
 import { Col, Row, Button, Typography, Space, Popconfirm } from 'antd';
-import { GithubAvatar } from 'components/GithubAvatar';
+import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 import GithubFilled from '@ant-design/icons/GithubFilled';
-import { DecisionTag, getInterviewFeedbackUrl, InterviewStatus } from 'domain/interview';
-import { CourseService, MentorInterview } from 'services/course';
-import css from 'styled-jsx/css';
+import { DecisionTag, getInterviewFeedbackUrl, InterviewStatus } from '@client/domain/interview';
+import { CourseService, MentorInterview } from '@client/services/course';
 import { useState } from 'react';
+import styles from './StudentInterview.module.css';
 import { CloseCircleOutlined } from '@ant-design/icons';
-import { TaskDtoTypeEnum } from 'api';
-import { useMessage } from 'hooks';
+import { TaskDtoTypeEnum } from '@client/api';
+import { useMessage } from '@client/hooks';
 
 export function StudentInterview(props: {
   interview: MentorInterview;
@@ -67,8 +67,8 @@ export function StudentInterview(props: {
   };
 
   return (
-    <Col className={containerClassName}>
-      <Space size={21} direction="vertical" style={{ width: '100%' }}>
+    <Col className={styles.container}>
+      <Space size={21} orientation="vertical" style={{ width: '100%' }}>
         <Row justify="space-between" align="middle">
           <DecisionTag decision={interview.decision} status={interviewStatus} />
           <Popconfirm
@@ -107,21 +107,6 @@ export function StudentInterview(props: {
           </Space>
         </Row>
       </Space>
-      {containerStyles}
     </Col>
   );
 }
-
-const { className: containerClassName, styles: containerStyles } = css.resolve`
-  div {
-    border: 1px solid rgba(245, 245, 245, 1);
-    padding: 16px;
-  }
-  div + div {
-    border-top: none;
-  }
-
-  div:first-child {
-    margin-top: 15px;
-  }
-`;

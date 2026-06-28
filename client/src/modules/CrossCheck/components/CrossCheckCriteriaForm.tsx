@@ -1,12 +1,14 @@
 import { useEffect } from 'react';
-import { Typography, InputNumber, Button, Modal, List } from 'antd';
+import { Typography, InputNumber, Button, Modal } from 'antd';
 import { isEqual } from 'lodash';
 
 import { SubtaskCriteria } from './criteria/SubtaskCriteria';
 import { TitleCriteria } from './criteria/TitleCriteria';
 import { PenaltyCriteria } from './criteria/PenaltyCriteria';
-import { CrossCheckCriteriaDataDto, CrossCheckSolutionReviewDto } from 'api';
+import { CrossCheckCriteriaDataDto, CrossCheckSolutionReviewDto } from '@client/api';
 import { TaskType } from '../constants';
+import styles from './CrossCheckCriteriaForm.module.css';
+import { List } from '@client/shared/components/List';
 
 const { Text, Title } = Typography;
 
@@ -71,7 +73,7 @@ export function CrossCheckCriteriaForm({
         cancelText: 'Back to review',
         content: (
           <>
-            <div className="skip-modal">
+            <div className={styles.skipModal}>
               <Text>Are you sure you want to skip cross check form?</Text>
               <Text>Possible reasons:</Text>
               <List
@@ -80,13 +82,6 @@ export function CrossCheckCriteriaForm({
                 renderItem={item => <List.Item>{item}</List.Item>}
               />
             </div>
-            <style jsx>{`
-              .skip-modal {
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-              }
-            `}</style>
           </>
         ),
       });

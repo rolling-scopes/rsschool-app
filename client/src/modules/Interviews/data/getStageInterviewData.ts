@@ -6,10 +6,10 @@ import {
   StudentDto,
   StudentsApi,
   TaskDtoTypeEnum,
-} from 'api';
-import { getTasksTotalScore } from 'domain/course';
+} from '@client/api';
+import { getTasksTotalScore } from '@client/domain/course';
 import { ParsedUrlQuery } from 'querystring';
-import type { CourseOnlyPageProps } from 'services/models';
+import type { CourseOnlyPageProps } from '@client/services/models';
 
 export type StageFeedbackProps = CourseOnlyPageProps & {
   interviewId: number;

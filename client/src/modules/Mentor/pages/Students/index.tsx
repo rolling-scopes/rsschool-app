@@ -1,24 +1,19 @@
-import {
-  MessageOutlined,
-  MessageTwoTone,
-  InteractionTwoTone,
-  StarOutlined,
-  LockFilled,
-  TrophyOutlined,
-} from '@ant-design/icons';
+import { MessageOutlined, MessageTwoTone, InteractionTwoTone, StarOutlined, TrophyOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Empty, Row, Statistic, Typography } from 'antd';
-import { GithubUserLink } from 'components/GithubUserLink';
-import { PageLayoutSimple } from 'components/PageLayout';
-import { getMentorId } from 'domain/user';
-import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
-import { useMentorStudents } from 'modules/Mentor/hooks/useMentorStudents';
+import { GithubUserLink } from '@client/shared/components/GithubUserLink';
+import { PageLayoutSimple } from '@client/shared/components/PageLayout';
+import { getMentorId } from '@client/domain/user';
+import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
+import { useMentorStudents } from '@client/modules/Mentor/hooks/useMentorStudents';
 import Link from 'next/link';
 import { useContext } from 'react';
-import * as routes from 'services/routes';
+import { useRouter } from 'next/router';
+import * as routes from '@client/services/routes';
 
 export function Students() {
   const session = useContext(SessionContext);
   const { course } = useActiveCourseContext();
+  const router = useRouter();
   const { id: courseId, alias, completed } = course;
   const mentorId = getMentorId(session, courseId);
 
@@ -33,36 +28,35 @@ export function Students() {
             <Card
               key={student.githubId}
               style={{ marginBottom: 32 }}
-              headStyle={{ border: 'none', paddingTop: 12 }}
+              styles={{ header: { border: 'none', paddingTop: 12 } }}
               size="small"
+              className="antd-card_action_button_with_icon-fix"
               title={
                 <>
                   <div>
                     <GithubUserLink value={student.githubId} />
                   </div>
                   <Link href={`/profile?githubId=${student.githubId}`}>{student.name}</Link>
-                  {student.repoUrl && (
-                    <div>
-                      <LockFilled />{' '}
-                      <a href={student.repoUrl} target="_blank">
-                        {student.repoUrl.split('/').pop()}
-                      </a>
-                    </div>
-                  )}
                 </>
               }
               actions={[
-                <Link key="feedback" href={routes.getStudentFeedbackRoute(alias, student.id)}>
-                  <Button type="link" icon={completed ? <MessageTwoTone twoToneColor="red" /> : <MessageOutlined />}>
-                    {feedback ? `Edit Feedback` : `Give Feedback`}
-                  </Button>
-                </Link>,
+                <Button
+                  key="feedback"
+                  onClick={() => router.push(routes.getStudentFeedbackRoute(alias, student.id))}
+                  type="link"
+                  icon={completed ? <MessageTwoTone twoToneColor="red" /> : <MessageOutlined />}
+                >
+                  {feedback ? `Edit Feedback` : `Give Feedback`}
+                </Button>,
                 student.active ? (
-                  <Link key="expel" href={routes.getExpelRoute(alias)} legacyBehavior>
-                    <Button type="link" icon={<InteractionTwoTone twoToneColor="orange" />}>
-                      Change Status
-                    </Button>
-                  </Link>
+                  <Button
+                    key="expel"
+                    onClick={() => router.push(routes.getExpelRoute(alias))}
+                    type="link"
+                    icon={<InteractionTwoTone twoToneColor="orange" />}
+                  >
+                    Change Status
+                  </Button>
                 ) : null,
               ].filter(Boolean)}
               extra={
@@ -74,7 +68,7 @@ export function Students() {
               <Row gutter={16}>
                 <Col flex={8}>
                   <Statistic
-                    valueStyle={{ fontSize: 16 }}
+                    styles={{ content: { fontSize: 16 } }}
                     title="Rank"
                     value={student.rank}
                     prefix={<TrophyOutlined />}
@@ -82,7 +76,7 @@ export function Students() {
                 </Col>
                 <Col flex={8}>
                   <Statistic
-                    valueStyle={{ fontSize: 16 }}
+                    styles={{ content: { fontSize: 16 } }}
                     title="Score"
                     value={student.totalScore}
                     prefix={<StarOutlined />}

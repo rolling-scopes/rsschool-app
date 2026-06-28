@@ -1,5 +1,19 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { ContactsList } from './index';
+
+// Boundaries: clipboard (react-use) and the notification toast (@client/hooks).
+const { copyToClipboard, notificationSuccess } = vi.hoisted(() => ({
+  copyToClipboard: vi.fn(),
+  notificationSuccess: vi.fn(),
+}));
+vi.mock('react-use', async () => ({
+  ...(await vi.importActual('react-use')),
+  useCopyToClipboard: () => [{}, copyToClipboard] as const,
+}));
+vi.mock('@client/hooks', () => ({
+  useMessage: () => ({ notification: { success: notificationSuccess } }),
+}));
 
 const mockContacts = {
   email: 'example@example.com',
@@ -61,11 +75,32 @@ describe('ContactsList', () => {
     const [emailIcon, githubIcon, linkedinIcon, phoneIcon, skypeIcon, telegramIcon, websiteIcon] = links;
 
     expect(emailIcon).toHaveAttribute('title', 'E-mail');
-    expect(githubIcon).toHaveAttribute('title', 'Github');
+    expect(githubIcon).toHaveAttribute('title', 'GitHub');
     expect(linkedinIcon).toHaveAttribute('title', 'LinkedIn');
     expect(phoneIcon).toHaveAttribute('title', 'Phone');
     expect(skypeIcon).toHaveAttribute('title', 'Skype');
     expect(telegramIcon).toHaveAttribute('title', 'Telegram');
     expect(websiteIcon).toHaveAttribute('title', 'Website');
+  });
+
+  test('copies a contact value to the clipboard and shows a notification', async () => {
+    const user = userEvent.setup();
+    render(<ContactsList contacts={{ email: 'copy@me.com' }} />);
+
+    await user.click(screen.getByRole('button'));
+
+    expect(copyToClipboard).toHaveBeenCalledWith('copy@me.com');
+    expect(notificationSuccess).toHaveBeenCalledWith({ message: 'Copied to clipboard' });
+  });
+
+  test('copies an empty string when a kept contact value is undefined', async () => {
+    const user = userEvent.setup();
+    // getContactsToRender drops only null values; an `undefined` value is kept and
+    // exercises the `value ?? ''` fallback on copy.
+    render(<ContactsList contacts={{ email: undefined } as never} />);
+
+    await user.click(screen.getByRole('button'));
+
+    expect(copyToClipboard).toHaveBeenCalledWith('');
   });
 });

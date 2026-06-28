@@ -1,9 +1,9 @@
 import { Alert, Button, Col, Row, Space, theme, Tooltip, Typography } from 'antd';
-import { VerificationsTable } from 'modules/AutoTest/components';
-import { useAttemptsMessage } from 'modules/AutoTest/hooks';
-import { CourseTaskVerifications } from 'modules/AutoTest/types';
+import { VerificationsTable } from '@client/modules/AutoTest/components';
+import { useAttemptsMessage } from '@client/modules/AutoTest/hooks';
+import { CourseTaskVerifications } from '@client/modules/AutoTest/types';
 import ReloadOutlined from '@ant-design/icons/ReloadOutlined';
-import { CourseTaskDetailedDtoTypeEnum } from 'api';
+import { CourseTaskDetailedDtoTypeEnum } from '@client/api';
 
 export type VerificationInformationProps = {
   courseTask: CourseTaskVerifications;
@@ -42,7 +42,7 @@ function VerificationInformation({
         justify="end"
       >
         <Col span={24}>
-          <Alert showIcon type="info" message={explanation} />
+          <Alert showIcon type="info" title={explanation} />
         </Col>
         {attemptsLeftMessage && (
           <Col flex="auto">

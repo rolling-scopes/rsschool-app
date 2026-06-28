@@ -1,9 +1,9 @@
 import { Col, Form, Row, Typography } from 'antd';
-import React, { useMemo, useState } from 'react';
-import { ModalSubmitForm } from 'components/Forms/ModalSubmitForm';
-import { ScoreInput } from 'components/Forms';
-import { MentorDashboardDto } from 'api';
-import { CourseService } from 'services/course';
+import { useMemo, useState } from 'react';
+import { ModalSubmitForm } from '@client/shared/components/Forms';
+import { ScoreInput } from '@client/shared/components/Forms';
+import { MentorDashboardDto } from '@client/api';
+import { CourseService } from '@client/services/course';
 import isEmpty from 'lodash/isEmpty';
 import { AxiosError } from 'axios';
 
@@ -75,7 +75,7 @@ function SubmitReviewModal({ data, courseId, onClose, onSubmit }: SubmitReviewMo
               {taskName}
             </Link>
           </Form.Item>
-          <Form.Item label="Github Pull Request" name="prUrl">
+          <Form.Item label="GitHub Pull Request" name="prUrl">
             <Link href={solutionUrl} target="_blank">
               {solutionUrl}
             </Link>

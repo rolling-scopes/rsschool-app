@@ -1,4 +1,4 @@
-import { getQueryParams, getQueryString } from 'utils/queryParams-utils';
+import { getQueryParams, getQueryString } from '@client/shared/utils/queryParams-utils';
 
 export function getExportCsvUrl(courseId: number, cityName?: string | string[], mentor?: string | string[]) {
   const queryParams = getQueryString(getQueryParams({ cityName, ['mentor.githubId']: mentor }));
@@ -7,5 +7,5 @@ export function getExportCsvUrl(courseId: number, cityName?: string | string[], 
 }
 
 const buildUrl = (id: number, params: string): string => {
-  return `/api/course/${id}/students/score/csv${params}`;
+  return `/api/v2/course/${id}/students/score/csv${params}`;
 };

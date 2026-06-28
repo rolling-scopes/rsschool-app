@@ -1,16 +1,16 @@
 import { Button, Col, Form, message, Result, Row, Typography } from 'antd';
-import { AuthApi, CourseDto as Course, DiscordServersApi } from 'api';
-import { PageLayout, PageLayoutSimple } from 'components/PageLayout';
+import { AuthApi, CourseDto as Course, DiscordServersApi } from '@client/api';
+import { PageLayout, PageLayoutSimple } from '@client/shared/components/PageLayout';
 import { useRouter } from 'next/router';
-import { useMemo, useState, useContext } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService } from 'services/course';
-import { CoursesService } from 'services/courses';
-import { MentorRegistryService, MentorResponse } from 'services/mentorRegistry';
-import { Warning } from 'components/Warning';
-import { MentorOptions } from 'components/MentorOptions';
-import { SessionContext, SessionProvider } from 'modules/Course/contexts';
-import { LoadingScreen } from '@client/components/LoadingScreen';
+import { CourseService } from '@client/services/course';
+import { CoursesService } from '@client/services/courses';
+import { MentorRegistryService, MentorResponse } from '@client/services/mentorRegistry';
+import { Warning } from '@client/components/Warning';
+import { MentorOptions } from '@client/components/MentorOptions';
+import { SessionContext, SessionProvider } from '@client/modules/Course/contexts';
+import { LoadingScreen } from '@client/shared/components/LoadingScreen';
 import { useAsyncEffect } from 'ahooks';
 
 const { Link } = Typography;
@@ -42,12 +42,23 @@ function Page() {
     return new CourseService(course.id);
   }, [course]);
 
-  const mapMentorData = (mentor: MentorResponse, course: Course | null): MentorResponse => {
-    const courseMinStudentsPerMentorValue = course?.minStudentsPerMentor;
-    if (courseMinStudentsPerMentorValue && courseMinStudentsPerMentorValue > Number(mentor?.maxStudentsLimit)) {
-      mentor.maxStudentsLimit = courseMinStudentsPerMentorValue;
+  const mapMentorData = (
+    mentor: MentorResponse | null,
+    course: Course | null,
+  ): Omit<MentorResponse, 'preferedStudentsLocation'> => {
+    const courseMinStudentsPerMentorValue = course?.minStudentsPerMentor || 0;
+    const shouldUseCourseMinimum = courseMinStudentsPerMentorValue > Number(mentor?.maxStudentsLimit || 0);
+    if (mentor) {
+      return {
+        ...mentor,
+        maxStudentsLimit: shouldUseCourseMinimum ? courseMinStudentsPerMentorValue : mentor.maxStudentsLimit,
+      };
     }
-    return mentor;
+    return {
+      maxStudentsLimit: courseMinStudentsPerMentorValue,
+      preferredCourses: [],
+      preselectedCourses: [],
+    };
   };
 
   useAsync(async () => {
@@ -63,17 +74,16 @@ function Page() {
       setCourse(course);
       const mentor = await mentorRegistry.getMentor();
       const mappedMentorData = mapMentorData(mentor, course);
-      const preferredCourse = course?.id ? mappedMentorData.preferredCourses?.includes(course?.id) : null;
-      const preselectedCourses = course?.id ? mappedMentorData.preselectedCourses?.includes(course?.id) : null;
+      const preferredCourse = course?.id ? mappedMentorData?.preferredCourses?.includes(course?.id) : null;
+      const preselectedCourses = course?.id ? mappedMentorData?.preselectedCourses?.includes(course?.id) : null;
       setIsPreferredCourse(preferredCourse);
       if (preselectedCourses === false) {
         setNoAccess(true);
         return;
-      } else {
-        setNoAccess(false);
-        setMentorData(mentor);
-        form.setFieldsValue(mentor);
       }
+      setNoAccess(false);
+      setMentorData(mentor);
+      form.setFieldsValue(mentor);
     } catch {
       setNoAccess(null);
     } finally {

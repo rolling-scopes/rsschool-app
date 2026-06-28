@@ -1,7 +1,14 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { generateTasksData } from 'modules/Tasks/utils/test-utils';
-import { FormValues } from 'modules/Tasks/types';
-import { ERROR_MESSAGES, LABELS, MODAL_TITLES, PLACEHOLDERS, TASK_SETTINGS_HEADERS } from 'modules/Tasks/constants';
+import userEvent from '@testing-library/user-event';
+import { generateTasksData } from '@client/modules/Tasks/utils/test-utils';
+import { FormValues } from '@client/modules/Tasks/types';
+import {
+  ERROR_MESSAGES,
+  LABELS,
+  MODAL_TITLES,
+  PLACEHOLDERS,
+  TASK_SETTINGS_HEADERS,
+} from '@client/modules/Tasks/constants';
 import { ModalProps, TaskModal } from './TaskModal';
 
 const mockData = generateData();
@@ -93,12 +100,13 @@ describe('TaskModal', () => {
     });
 
     test('should render error messages on required fields', async () => {
+      const user = userEvent.setup();
       render(<TaskModal {...generateData(true)} />);
 
       const save = screen.getByRole('button', { name: /save/i });
       expect(save).toBeInTheDocument();
 
-      fireEvent.click(save);
+      await user.click(save);
 
       const errors = await Promise.all([
         screen.findByText(ERROR_MESSAGES.name),
@@ -126,6 +134,77 @@ describe('TaskModal', () => {
     expect(github).toBeInTheDocument();
     expect(jsonAttributes).toBeInTheDocument();
   });
+
+  test('renders an empty courses card when the task is not used in any course', () => {
+    // formData without courses → the `courses?.length ? … : <Empty>` Empty branch; tasks with
+    // no tags/skills → the `task.tags || []` / `task.skills || []` fallbacks.
+    const props = generateData();
+    props.tasks = [{ ...props.tasks[0], tags: undefined, skills: undefined }] as never;
+    props.formData = { ...props.formData!, courses: [] };
+
+    render(<TaskModal {...props} />);
+
+    // No courses → the antd Empty placeholder (with its "No data" description) is rendered.
+    expect(screen.getAllByText('No data').length).toBeGreaterThan(0);
+  });
+
+  test('renders an uncoloured tag for an inactive course', () => {
+    const props = generateData();
+    props.formData = {
+      ...props.formData!,
+      courses: [{ name: 'Archived Course', isActive: false }],
+    };
+
+    render(<TaskModal {...props} />);
+
+    const tag = screen.getByText('Archived Course');
+    // isActive false → `isActive ? 'blue' : ''` → no blue color class.
+    // eslint-disable-next-line testing-library/no-node-access
+    expect(tag.closest('.ant-tag')).not.toHaveClass('ant-tag-blue');
+  });
+
+  test('renders with an empty form when formData is undefined', () => {
+    const props = generateData();
+    props.formData = undefined; // `formData ?? {}` fallback.
+
+    render(<TaskModal {...props} />);
+
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    // No courses → the Empty placeholder is shown.
+    expect(screen.getAllByText('No data').length).toBeGreaterThan(0);
+  });
+
+  test('resets dependent settings when the task type changes', async () => {
+    const user = userEvent.setup();
+    const setDataCriteria = vi.fn();
+    const props = generateData(true);
+    props.setDataCriteria = setDataCriteria;
+
+    render(<TaskModal {...props} />);
+
+    // Open the task-type select and pick the first option → handleTypeChange runs.
+    await user.click(screen.getByLabelText(LABELS.taskType));
+    const options = await screen.findAllByText(/./, { selector: '.ant-select-item-option-content' });
+    await user.click(options[0]);
+
+    expect(setDataCriteria).toHaveBeenCalledWith([]);
+  });
+
+  test('clears criteria and closes the modal on cancel', async () => {
+    const user = userEvent.setup();
+    const toggleModal = vi.fn();
+    const setDataCriteria = vi.fn();
+    const props = generateData();
+    props.toggleModal = toggleModal;
+    props.setDataCriteria = setDataCriteria;
+
+    render(<TaskModal {...props} />);
+
+    await user.click(screen.getByRole('button', { name: /cancel/i }));
+
+    expect(toggleModal).toHaveBeenCalled();
+    expect(setDataCriteria).toHaveBeenCalledWith([]);
+  });
 });
 
 function generateData(isEmpty = false): ModalProps {
@@ -152,8 +231,8 @@ function generateData(isEmpty = false): ModalProps {
     modalLoading: false,
     disciplines: [],
     mode: isEmpty ? 'create' : 'edit',
-    setDataCriteria: jest.fn(),
-    handleModalSubmit: jest.fn(),
-    toggleModal: jest.fn(),
+    setDataCriteria: vi.fn(),
+    handleModalSubmit: vi.fn(),
+    toggleModal: vi.fn(),
   };
 }

@@ -9,11 +9,9 @@ describe('IsGoodCandidateWidget', () => {
     expect(screen.getByText('Yes')).toBeInTheDocument();
   });
 
-  it('renders No tag when isGoodCandidate is false', () => {
+  it('renders nothing when isGoodCandidate is false', () => {
     render(<IsGoodCandidateWidget isGoodCandidate={false} />);
-
-    expect(screen.getByText('Good candidate:')).toBeInTheDocument();
-    expect(screen.getByText('No')).toBeInTheDocument();
+    expect(screen.queryByText(/Good candidate:/i)).not.toBeInTheDocument();
   });
 
   it('renders nothing when isGoodCandidate is null', () => {

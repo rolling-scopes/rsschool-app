@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { Button, Modal, List, Result, Tooltip, Typography } from 'antd';
+import { Button, Modal, Result, theme, Tooltip, Typography } from 'antd';
 import { QuestionCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { List } from '@client/shared/components/List';
 
 const { Paragraph, Title, Text } = Typography;
 const { Item } = List;
@@ -15,7 +15,7 @@ export const confirmationModalInfo = {
     header: 'Attention! The following information will be public:',
     availableDataList: [
       'Personal information (Name, Desired Position, English level, Military Service, Avatar, Link to a presentation, Self-Description, etc.)',
-      'Contact details (Phone, Email, Skype, Telegram, LinkedIn, Location, Github username, Website Link)',
+      'Contact details (Phone, Email, Skype, Telegram, LinkedIn, Location, GitHub username, Website Link)',
       'Information about passed school courses (Courses Info, Mentor, Course Status, Score, Position);',
       'Public feedback information (Gratitudes)',
     ],
@@ -24,7 +24,7 @@ export const confirmationModalInfo = {
     header: 'Внимание! Следующая информация будет публичной:',
     availableDataList: [
       'Личная информация (имя, желаемая позиция, уровень английского, отношение к военной службе, аватар, ссылка на самопрезентацию, краткое самоописание и т.д.)',
-      'Контактные данные (телефон, электронная почта, Skype, Telegram, LinkedIn, локация, в которой хотите работать, Github, ссылка на веб-сайт)',
+      'Контактные данные (телефон, электронная почта, Skype, Telegram, LinkedIn, локация, в которой хотите работать, GitHub, ссылка на веб-сайт)',
       'Информация о пройденных в школе курсах (в каких курсах принято участие, статус курса для участника, скор, место в скоре)',
       'Информация о публичной обратной связи (отзывы в RS School App)',
     ],
@@ -32,6 +32,7 @@ export const confirmationModalInfo = {
 };
 
 export const NoConsentView = (props: Props) => {
+  const { token } = theme.useToken();
   const { isOwner, giveConsent } = props;
   const [modal, contextHolder] = Modal.useModal();
 
@@ -51,7 +52,7 @@ export const NoConsentView = (props: Props) => {
       }
       dataSource={confirmationModalInfo.en.availableDataList}
       renderItem={(text, idx) => (
-        <Item style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <Item style={{ alignItems: 'flex-start', flexWrap: 'nowrap', gap: token.paddingXS }}>
           <Paragraph>{text}</Paragraph>
           <Tooltip
             placement="topLeft"

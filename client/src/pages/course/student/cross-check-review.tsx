@@ -6,25 +6,28 @@ import {
   CrossCheckSolutionReviewDto,
   CrossCheckStatusEnum,
   TasksCriteriaApi,
-} from 'api';
-import { CourseTaskSelect } from 'components/Forms';
-import MarkdownInput from 'components/Forms/MarkdownInput';
-import { markdownLabel } from 'components/Forms/PreparedComment';
-import { PageLayout } from 'components/PageLayout';
-import { useLoading } from 'components/useLoading';
-import { UserSearch } from 'components/UserSearch';
-import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
-import { AssignmentLink, CrossCheckAssignmentLink } from 'modules/CrossCheck/components/CrossCheckAssignmentLink';
-import { CrossCheckCriteriaForm } from 'modules/CrossCheck/components/CrossCheckCriteriaForm';
-import { CrossCheckHistory } from 'modules/CrossCheck/components/CrossCheckHistory';
-import { TaskType } from 'modules/CrossCheck/constants';
+} from '@client/api';
+import { CourseTaskSelect } from '@client/shared/components/Forms';
+import MarkdownInput from '@client/shared/components/Forms/MarkdownInput';
+import { markdownLabel } from '@client/shared/components/Forms/PreparedComment';
+import { PageLayout } from '@client/shared/components/PageLayout';
+import { useLoading } from '@client/components/useLoading';
+import { UserSearch } from '@client/shared/components/UserSearch';
+import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
+import {
+  AssignmentLink,
+  CrossCheckAssignmentLink,
+} from '@client/modules/CrossCheck/components/CrossCheckAssignmentLink';
+import { CrossCheckCriteriaForm } from '@client/modules/CrossCheck/components/CrossCheckCriteriaForm';
+import { CrossCheckHistory } from '@client/modules/CrossCheck/components/CrossCheckHistory';
+import { TaskType } from '@client/modules/CrossCheck/constants';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { useAsync, useLocalStorage } from 'react-use';
-import { CourseService } from 'services/course';
-import { CourseRole } from 'services/models';
-import { getQueryString } from 'utils/queryParams-utils';
-import { useMessage } from 'hooks';
+import { CourseService } from '@client/services/course';
+import { CourseRole } from '@client/services/models';
+import { getQueryString } from '@client/shared/utils/queryParams-utils';
+import { useMessage } from '@client/hooks';
 
 enum LocalStorage {
   IsUsernameVisible = 'crossCheckIsUsernameVisible',

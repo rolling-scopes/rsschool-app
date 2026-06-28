@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
-import { ProfileCourseDto } from 'api';
+import { ProfileCourseDto } from '@client/api';
 import { useActiveCourse } from './useActiveCourse';
 import * as ReactUse from 'react-use';
 
@@ -16,7 +16,7 @@ describe('useActiveCourse', () => {
   });
 
   it('should return the previously selected course when it is stored in local storage', () => {
-    jest.spyOn(ReactUse, 'useLocalStorage').mockReturnValueOnce(['2', jest.fn(), jest.fn()]);
+    vi.spyOn(ReactUse, 'useLocalStorage').mockReturnValueOnce(['2', vi.fn(), vi.fn()]);
     const { result } = renderHook(() => useActiveCourse(courses));
     expect(result.current[0]).toEqual(courses[1]);
   });

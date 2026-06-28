@@ -2,8 +2,8 @@ import { Input, Typography, InputNumber, Slider, theme } from 'antd';
 import { useMemo } from 'react';
 import isUndefined from 'lodash/isUndefined';
 import isNil from 'lodash/isNil';
-import { CrossCheckCriteriaDataDto } from 'api';
-import { getCriteriaStatusColor } from 'modules/CrossCheck';
+import { CrossCheckCriteriaDataDto } from '@client/api';
+import { getCriteriaStatusColor } from '@client/modules/CrossCheck';
 
 const { TextArea } = Input;
 const { Text } = Typography;

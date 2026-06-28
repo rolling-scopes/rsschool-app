@@ -11,20 +11,23 @@ type Props = {
 
 function LiquidChart({ count, total, color = Colors.Blue, background }: Props) {
   const { token } = theme.useToken();
+
   const percent = count / total;
   const config: LiquidConfig = {
+    interaction: { tooltip: false },
     theme: {
       background: background || token.colorBgContainer,
     },
     percent: percent,
-    outline: {
-      border: 4,
-      distance: 8,
+    style: {
+      fill: color,
+      textFill: token.colorTextLabel,
+      outlineBorder: 4,
+      outlineDistance: 8,
+      outlineStroke: color,
+      waveLength: 128,
+      contentText: `${(percent * 100).toFixed(2)}%`,
     },
-    wave: {
-      length: 128,
-    },
-    color: () => color,
   };
   return <Liquid {...config} />;
 }

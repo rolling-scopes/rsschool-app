@@ -1,21 +1,20 @@
 import { Button, Divider, Form, Input, InputNumber, Radio, Rate, Space, Typography } from 'antd';
 import { AxiosError } from 'axios';
-import { GithubAvatar } from 'components/GithubAvatar';
-import { PageLayoutSimple } from 'components/PageLayout';
-import { useLoading } from 'components/useLoading';
-import { useMessage } from 'hooks';
+import { GithubAvatar } from '@client/shared/components/GithubAvatar';
+import { PageLayoutSimple } from '@client/shared/components/PageLayout';
+import { useLoading } from '@client/components/useLoading';
+import { useMessage } from '@client/hooks';
 import get from 'lodash/get';
 import keys from 'lodash/keys';
 import set from 'lodash/set';
-import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { ChangeEvent, useContext, useEffect, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
-import { CourseService } from 'services/course';
-import { CourseRole, StudentBasic } from 'services/models';
+import { CourseService } from '@client/services/course';
+import { CourseRole, StudentBasic } from '@client/services/models';
 
 type FormValues = typeof defaultInitialValues;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type HandleChangeValue = (skillName: string) => (value: any) => void;
 
 const SKILLS_LEVELS = [
@@ -174,7 +173,7 @@ const renderProgrammingTask = (handleSkillChange: HandleChangeValue) => (
     </Form.Item>
     <Form.Item label="Has the student solved the task(s)?" name="programmingTask-resolved">
       <Radio.Group onChange={handleSkillChange('programmingTask-resolved')}>
-        <Space direction="vertical">
+        <Space orientation="vertical">
           <Radio value={1}>Yes, he/she has</Radio>
           <Radio value={2}>Yes, he/she has, but with tips</Radio>
           <Radio value={3}>No, he/she hasn't</Radio>
@@ -234,7 +233,7 @@ const renderResume = (handleSkillChange: HandleChangeValue) => (
     <Typography.Title level={3}>Resume</Typography.Title>
     <Form.Item label="Do you want take the student in your group and be his/her mentor?" name="resume-verdict" required>
       <Radio.Group onChange={handleSkillChange('resume-verdict')}>
-        <Space direction="vertical">
+        <Space orientation="vertical">
           <Radio value={'yes'}>Yes, I do.</Radio>
           <Radio value={'no'}>No, I do not.</Radio>
           <Radio value={'noButGoodCandidate'}>No, I do not, but he/she is a good candidate.</Radio>
@@ -307,7 +306,6 @@ function Page() {
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const calculateResult = (result: any) => {
     const { skills, programmingTask } = result;
     const commonSkills = Object.values(skills.common).filter(Boolean) as number[];
@@ -399,7 +397,6 @@ function Page() {
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function serializeToJson(values: FormValues): any {
   return keys(values)
     .filter(v => v !== 'githubId')
@@ -408,12 +405,10 @@ function serializeToJson(values: FormValues): any {
     }, {});
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function deserializeFromJson(json: Record<string, unknown>): any {
   return keys(defaultInitialValues)
     .filter(key => key !== 'githubId')
     .reduce((acc, key) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (acc as any)[key] = get(json, key.split('-'));
       return acc;
     }, {} as FormValues);

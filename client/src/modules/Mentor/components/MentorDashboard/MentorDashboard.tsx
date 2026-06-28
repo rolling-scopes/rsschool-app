@@ -1,8 +1,8 @@
-import { PageLayout } from 'components/PageLayout';
+import { PageLayout } from '@client/shared/components/PageLayout';
 import { Instructions, Notification, TaskSolutionsTable } from '..';
-import { SessionContext, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
 import { useContext } from 'react';
-import { useMentorDashboard } from 'modules/Mentor/hooks/useMentorDashboard';
+import { useMentorDashboard } from '@client/modules/Mentor/hooks/useMentorDashboard';
 
 function MentorDashboard() {
   const { courses } = useContext(SessionContext);

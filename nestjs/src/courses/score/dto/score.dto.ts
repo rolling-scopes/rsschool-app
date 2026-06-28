@@ -118,7 +118,6 @@ export class ScoreStudentDto extends StudentDto {
     this.githubId = user.githubId;
     this.totalScoreChangeDate = student.totalScoreChangeDate;
     this.crossCheckScore = student.crossCheckScore;
-    this.repositoryLastActivityDate = student.repositoryLastActivityDate;
     this.taskResults = taskResults.map(taskResult => new TaskResultsDto(taskResult));
     this.isActive = !student.isExpelled && !student.isFailed;
     this.contacts = contacts && new ContactsDto(contacts);
@@ -126,9 +125,6 @@ export class ScoreStudentDto extends StudentDto {
 
   @ApiProperty({ type: MentorDto, nullable: true })
   mentor: MentorDto | undefined;
-
-  @ApiProperty({ type: String })
-  name: string;
 
   @ApiProperty()
   githubId: string;
@@ -138,9 +134,6 @@ export class ScoreStudentDto extends StudentDto {
 
   @ApiProperty({ type: Number })
   crossCheckScore: number;
-
-  @ApiProperty({ type: Date })
-  repositoryLastActivityDate: Date;
 
   @ApiProperty({ type: [TaskResultsDto] })
   taskResults: TaskResultsDto[];

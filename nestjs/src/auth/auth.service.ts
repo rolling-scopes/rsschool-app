@@ -13,7 +13,6 @@ import { UsersService } from '../users/users.service';
 import { AuthUser } from './auth-user.model';
 import { JwtService } from '../core/jwt/jwt.service';
 import { lastValueFrom } from 'rxjs';
-import * as dayjs from 'dayjs';
 import { NotificationUserConnection } from '@entities/notificationUserConnection';
 import { CourseUser } from '@entities/courseUser';
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
@@ -77,16 +76,18 @@ export class AuthService {
       });
     }
 
-    if (result == null) {
-      // Github has "primary" field
-      const emails: (NonNullable<Profile['emails']>[number] & { primary?: boolean })[] = profile.emails ?? [];
-      const [email] = emails.filter(email => !!email.primary) ?? [];
+    const email = this.extractEmailFromProfile(profile);
 
+    if (result != null && !result.primaryEmail && email) {
+      await this.userService.updateUser(result.id, { primaryEmail: email });
+    }
+
+    if (result == null) {
       const user: Partial<User> = {
         githubId: username,
         providerUserId,
         provider,
-        primaryEmail: email ? email.value : undefined,
+        primaryEmail: email,
         firstName: profile.name ? profile.name.givenName : '',
         lastName: profile.name ? profile.name.familyName : '',
         lastActivityTime: Date.now(),
@@ -96,6 +97,10 @@ export class AuthService {
 
     const authUser = await this.getAuthUser(username!, admin);
     return authUser;
+  }
+
+  private extractEmailFromProfile(profile: Profile): string | undefined {
+    return profile.emails?.slice(0, 1)?.[0]?.value || undefined;
   }
 
   public async getAuthUser(username: string, admin = false) {
@@ -134,7 +139,7 @@ export class AuthService {
     return this.loginStateRepository.findOne({
       where: {
         id,
-        expires: MoreThanOrEqual(dayjs().toISOString()),
+        expires: MoreThanOrEqual(new Date().toISOString()),
       },
       order: {
         createdDate: 'DESC',
@@ -146,7 +151,7 @@ export class AuthService {
     return this.loginStateRepository.findOne({
       where: {
         userId: id,
-        expires: MoreThanOrEqual(dayjs().toISOString()),
+        expires: MoreThanOrEqual(new Date().toISOString()),
       },
       order: {
         createdDate: 'DESC',

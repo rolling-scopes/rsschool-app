@@ -1,10 +1,10 @@
 import { Button, Card } from 'antd';
-import css from 'styled-jsx/css';
-import { InterviewPeriod } from 'domain/interview';
+import { InterviewPeriod } from '@client/domain/interview';
+import styles from './InterviewCard.module.css';
 import { InterviewDetails } from './InterviewDetails';
-import { InterviewDto } from 'api';
-import { Course } from 'services/models';
-import { MentorInterview } from 'services/course';
+import { InterviewDto } from '@client/api';
+import { Course } from '@client/services/models';
+import { MentorInterview } from '@client/services/course';
 
 export function InterviewCard(props: {
   interviewTask: InterviewDto;
@@ -18,13 +18,13 @@ export function InterviewCard(props: {
   return (
     <Card
       hoverable
-      className={containerCss.className}
+      className={styles.container}
       title={name}
       extra={<InterviewPeriod startDate={startDate} endDate={endDate} />}
       key={id}
     >
       {description && <p>{description}</p>}
-      <Button type="link" href={descriptionUrl} target="_blank" className={linkCss.className}>
+      <Button type="link" href={descriptionUrl} target="_blank" className={styles.link}>
         Read more
       </Button>
       <InterviewDetails
@@ -33,25 +33,6 @@ export function InterviewCard(props: {
         interviews={interviews}
         fetchStudentInterviews={fetchStudentInterviews}
       />
-      {containerCss.styles}
-      {linkCss.styles}
     </Card>
   );
 }
-
-const containerCss = css.resolve`
-  div {
-    margin-bottom: 16px;
-    cursor: default;
-  }
-
-  div:last-child {
-    margin-bottom: 0;
-  }
-`;
-
-const linkCss = css.resolve`
-  a {
-    padding-left: 0;
-  }
-`;

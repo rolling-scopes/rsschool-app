@@ -1,11 +1,11 @@
 import { BgColorsOutlined } from '@ant-design/icons';
 import { ColorPicker, Space, Tag } from 'antd';
-import { CourseScheduleItemDtoTagEnum } from 'api';
-import { TAG_NAME_MAP } from 'modules/Schedule/constants';
-import { getTagStyle } from 'modules/Schedule/utils';
+import { CourseScheduleItemDtoTagEnum } from '@client/api';
+import { TAG_NAME_MAP } from '@client/modules/Schedule/constants';
+import { getTagStyle } from '@client/modules/Schedule/utils';
 import React from 'react';
-import SettingsItem from './SettingsItem';
 import type { Color } from 'antd/es/color-picker';
+import SettingsItem from '@client/components/SettingsItem';
 
 interface ChangeTagColorProps {
   tags: CourseScheduleItemDtoTagEnum[];
@@ -19,7 +19,7 @@ const ChangeTagColors: React.FC<ChangeTagColorProps> = ({ tagColors, setTagColor
 
   return (
     <SettingsItem header="Change Tag Colors" IconComponent={BgColorsOutlined}>
-      <Space direction="vertical">
+      <Space orientation="vertical">
         {tags.map(tag => (
           <Space key={tag}>
             <ColorPicker defaultValue={tagColors[tag]} onChange={value => changeColor(value, tag)} />

@@ -1,6 +1,6 @@
-import { CourseRole } from 'services/models';
-import { SessionProvider } from 'modules/Course/contexts';
-import { TasksPage } from 'modules/Tasks/pages';
+import { CourseRole } from '@client/services/models';
+import { SessionProvider } from '@client/modules/Course/contexts';
+import { TasksPage } from '@client/modules/Tasks/pages';
 
 export default function () {
   return (

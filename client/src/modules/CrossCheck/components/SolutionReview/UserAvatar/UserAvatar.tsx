@@ -1,8 +1,8 @@
-import { CDN_AVATARS_URL } from 'configs/cdn';
+import { CDN_AVATARS_URL } from '@client/configs/cdn';
 import { Avatar } from 'antd';
-import { CrossCheckMessageAuthor } from 'services/course';
-import { AVATAR_ICON_PATH } from 'modules/CrossCheck/constants';
-import { CrossCheckMessageDtoRoleEnum } from 'api';
+import { CrossCheckMessageAuthor } from '@client/services/course';
+import { AVATAR_ICON_PATH } from '@client/modules/CrossCheck/constants';
+import { CrossCheckMessageDtoRoleEnum } from '@client/api';
 
 export type UserAvatarProps = {
   author: CrossCheckMessageAuthor | null;
@@ -24,17 +24,15 @@ function createAvatarPath(props: UserAvatarProps): string {
     case CrossCheckMessageDtoRoleEnum.Reviewer:
       if (author && areContactsVisible) {
         return `${CDN_AVATARS_URL}/${author.githubId}.png?size=${size * 2}`;
-      } else {
-        return AVATAR_ICON_PATH.expert;
       }
+      return AVATAR_ICON_PATH.expert;
 
     case CrossCheckMessageDtoRoleEnum.Student:
     default:
       if (author && areContactsVisible) {
         return `${CDN_AVATARS_URL}/${author.githubId}.png?size=${size * 2}`;
-      } else {
-        return AVATAR_ICON_PATH.thanks;
       }
+      return AVATAR_ICON_PATH.thanks;
   }
 }
 

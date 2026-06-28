@@ -1,5 +1,5 @@
 import { Col, Row, Switch, Typography } from 'antd';
-import { SolutionReviewSettings } from 'modules/CrossCheck/constants';
+import { SolutionReviewSettings } from '@client/modules/CrossCheck/constants';
 
 const { Text } = Typography;
 

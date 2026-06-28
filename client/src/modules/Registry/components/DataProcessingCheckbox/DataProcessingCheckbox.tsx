@@ -1,5 +1,5 @@
 import { Form, Checkbox, Typography } from 'antd';
-import { ERROR_MESSAGES, DATA_PROCESSING_TEXT, TAIL_FORM_ITEM_LAYOUT } from 'modules/Registry/constants';
+import { ERROR_MESSAGES, DATA_PROCESSING_TEXT, TAIL_FORM_ITEM_LAYOUT } from '@client/modules/Registry/constants';
 
 const { Text } = Typography;
 

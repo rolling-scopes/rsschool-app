@@ -4,7 +4,7 @@ import { TaskType } from '@entities/task';
 import { TaskVerification } from '@entities/taskVerification';
 import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as dayjs from 'dayjs';
+import { isBefore, isValid, subHours } from 'date-fns';
 import { CloudApiService } from 'src/cloud-api/cloud-api.service';
 import { MoreThan, Repository } from 'typeorm';
 import { SelfEducationAnswers, SelfEducationQuestionSelectedAnswersDto, TaskVerificationAttemptDto } from './dto';
@@ -38,13 +38,55 @@ export class TaskVerificationsService {
     readonly seflEducationService: SelfEducationService,
   ) {}
 
+  public async getCourseTasksVerifications(courseId: number) {
+    const verifications = await this.taskVerificationsRepository
+      .createQueryBuilder('v')
+      .select(['v.id', 'v.status', 'v.courseTaskId'])
+      .innerJoin('v.courseTask', 'courseTask')
+      .innerJoin('courseTask.task', 'task')
+      .innerJoin('v.student', 'student')
+      .innerJoin('student.user', 'user')
+      .addSelect([
+        'student.id',
+        'user.githubId',
+        'task.name',
+        'task.githubRepoName',
+        'task.sourceGithubRepoUrl',
+        'task.attributes',
+        'courseTask.id',
+      ])
+      .where('courseTask.courseId = :courseId', { courseId })
+      .andWhere('courseTask.disabled = :disabled', { disabled: false })
+      .andWhere("v.status = 'pending' ")
+      .orderBy('v.createdDate', 'ASC')
+      .getMany();
+
+    return verifications.map(verification => ({
+      courseId: Number(courseId),
+      id: verification.id,
+      githubId: verification.student.user.githubId,
+      courseTaskId: verification.courseTaskId,
+      taskName: verification.courseTask.task.name,
+      sourceGithubRepoUrl: verification.courseTask.task.sourceGithubRepoUrl,
+      githubRepoName: verification.courseTask.task.githubRepoName,
+      attributes: verification.courseTask.task.attributes,
+    }));
+  }
+
+  public async updateVerification(id: number, data: { score: number; details: string; status: string }) {
+    const score = Math.round(Number(data.score));
+    await this.taskVerificationsRepository.save({ ...data, score, id } as Partial<TaskVerification>);
+
+    return this.taskVerificationsRepository.findOneByOrFail({ id });
+  }
+
   public async getAnswersByAttempts(courseTaskId: number, studentId: number): Promise<TaskVerificationAttemptDto[]> {
     const courseTask = await this.courseTasksRepository.findOneByOrFail({ id: courseTaskId });
 
-    const now = dayjs();
-    const endDate = dayjs(courseTask?.studentEndDate);
+    const now = new Date();
+    const endDate = courseTask?.studentEndDate ? new Date(courseTask.studentEndDate) : null;
 
-    if (now.isBefore(endDate)) {
+    if (endDate && isValid(endDate) && isBefore(now, endDate)) {
       throw new BadRequestException('The answers cannot be checked until the deadline has passed.');
     }
 
@@ -91,9 +133,8 @@ export class TaskVerificationsService {
 
         return new TaskVerificationAttemptDto(verification, questionsWithIncorrectAnswers);
       });
-    } else {
-      throw new BadRequestException('The answers cannot be checked if there were no attempts.');
     }
+    throw new BadRequestException('The answers cannot be checked if there were no attempts.');
   }
 
   public async createTaskVerification(
@@ -126,7 +167,7 @@ export class TaskVerificationsService {
         status: 'pending',
         studentId,
         courseTaskId,
-        updatedDate: MoreThan(dayjs().add(-1, 'hour').toDate()),
+        updatedDate: MoreThan(subHours(new Date(), 1)),
       },
       select: ['id'],
     });
@@ -135,10 +176,10 @@ export class TaskVerificationsService {
       throw new HttpException(`Task Verification [${existing.id}] is in progress`, HttpStatus.TOO_MANY_REQUESTS);
     }
 
-    const now = dayjs();
-    const endDate = dayjs(courseTask?.studentEndDate);
+    const now = new Date();
+    const endDate = courseTask?.studentEndDate ? new Date(courseTask.studentEndDate) : null;
 
-    if (endDate.isBefore(now)) {
+    if (endDate && isValid(endDate) && isBefore(endDate, now)) {
       throw new BadRequestException(`Task Verification [${courseTask.id}] expired`);
     }
 
@@ -174,5 +215,27 @@ export class TaskVerificationsService {
     await this.cloudService.submitTask([result]);
 
     return { id };
+  }
+
+  public async getStudentVerifications(courseId: number, githubId: string) {
+    const student = await this.studentsRepository
+      .createQueryBuilder('student')
+      .innerJoin('student.user', 'user')
+      .where('user.githubId = :githubId', { githubId })
+      .andWhere('student.courseId = :courseId', { courseId })
+      .getOne();
+    if (student == null) {
+      return null;
+    }
+
+    return this.taskVerificationsRepository
+      .createQueryBuilder('v')
+      .innerJoin('v.courseTask', 'courseTask')
+      .innerJoin('courseTask.task', 'task')
+      .addSelect(['task.name', 'courseTask.id', 'courseTask.type'])
+      .where('v.studentId = :id', { id: student.id })
+      .andWhere('courseTask.disabled = :disabled', { disabled: false })
+      .orderBy('v.updatedDate', 'DESC')
+      .getMany();
   }
 }

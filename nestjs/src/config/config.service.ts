@@ -54,6 +54,7 @@ export class ConfigService {
   public readonly secure: Secure;
   public readonly openai: { apiKey: string };
   public readonly env: 'prod' | 'staging' | 'local';
+  public readonly devToolsToggle = process.env.RSSCHOOL_DEV_TOOLS === 'true';
 
   public readonly buckets: {
     cdn: string;
@@ -114,5 +115,12 @@ export class ConfigService {
     this.buckets = { cdn: 'cdn.rs.school' };
 
     this.env = conf.get('RS_ENV') === 'staging' ? 'staging' : this.isDev ? 'local' : 'prod';
+  }
+
+  authWithDevUser(username: string) {
+    if (!this.devToolsToggle) {
+      return;
+    }
+    this.auth.dev.username = username;
   }
 }

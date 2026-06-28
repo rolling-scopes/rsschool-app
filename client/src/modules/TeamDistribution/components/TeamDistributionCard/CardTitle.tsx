@@ -1,6 +1,6 @@
 import { Col, Row, Space, Typography } from 'antd';
 import TeamOutlined from '@ant-design/icons/TeamOutlined';
-import { TeamDistributionDto, TeamDistributionDtoRegistrationStatusEnum } from 'api';
+import { TeamDistributionDto, TeamDistributionDtoRegistrationStatusEnum } from '@client/api';
 import { DistributionPeriod } from './DistributionPeriod';
 import { RenderMinTotalScore, RenderRegistrationStatus } from './renderers';
 

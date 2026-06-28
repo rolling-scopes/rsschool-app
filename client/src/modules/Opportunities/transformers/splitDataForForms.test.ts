@@ -1,4 +1,4 @@
-import { ResumeDtoEnglishLevelEnum, ResumeDtoMilitaryServiceEnum } from 'api';
+import { ResumeDtoEnglishLevelEnum, ResumeDtoMilitaryServiceEnum } from '@client/api';
 import { AllUserCVData } from '../models';
 import { splitDataForForms } from './splitDataForForms';
 

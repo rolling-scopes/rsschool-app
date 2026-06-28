@@ -1,7 +1,7 @@
 import { Form, Select, Typography } from 'antd';
-import { CourseDto } from 'api';
-import { CourseLabel, FormCard, LanguagesMentoring } from 'modules/Registry/components';
-import { CARD_TITLES, LABELS, PLACEHOLDERS } from 'modules/Registry/constants';
+import { CourseDto } from '@client/api';
+import { CourseLabel, FormCard, LanguagesMentoring } from '@client/modules/Registry/components';
+import { CARD_TITLES, LABELS, PLACEHOLDERS } from '@client/modules/Registry/constants';
 
 const { Title } = Typography;
 

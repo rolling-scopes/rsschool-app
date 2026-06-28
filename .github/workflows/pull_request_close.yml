@@ -13,7 +13,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -24,10 +24,9 @@ jobs:
           cache-name: cache-npm
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('setup/cdk/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
-            ${{ runner.os }}-
 
       - name: Install Dependencies
         working-directory: setup/cdk

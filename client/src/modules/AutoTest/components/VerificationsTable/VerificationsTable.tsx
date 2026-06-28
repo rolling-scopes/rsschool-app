@@ -1,6 +1,6 @@
 import { Table } from 'antd';
 import { useMemo } from 'react';
-import { Verification } from 'services/course';
+import { Verification } from '@client/services/course';
 import { getColumns } from './renderers';
 
 export type VerificationsTableProps = {

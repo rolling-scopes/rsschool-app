@@ -1,8 +1,9 @@
-import * as React from 'react';
 import CommonCard from '../CommonDashboardCard';
 import { Typography, Table } from 'antd';
 import { getAvailableTasksColumns } from './renderers';
-import { CourseScheduleItemDto } from 'api';
+import { CourseScheduleItemDto } from '@client/api';
+
+import styles from './NextEventCard.module.css';
 
 const { Link } = Typography;
 
@@ -32,18 +33,10 @@ function NextEventCard({ nextEvents, courseAlias }: Props) {
             rowKey="id"
             size="middle"
             columns={columns}
-            className="next-event-card-table"
+            className={styles.table}
           />
         }
       />
-      <style jsx>{`
-        :global(.next-event-card-table .ant-table-thead) {
-          display: none;
-        }
-        :global(.next-event-card-table tr:last-child > td) {
-          border-bottom: none;
-        }
-      `}</style>
     </>
   );
 }

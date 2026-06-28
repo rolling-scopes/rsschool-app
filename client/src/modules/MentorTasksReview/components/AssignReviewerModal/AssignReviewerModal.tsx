@@ -1,10 +1,10 @@
 import { Col, Form, message, Row, Typography } from 'antd';
-import React, { useState } from 'react';
-import { ModalSubmitForm } from 'components/Forms/ModalSubmitForm';
-import { MentorReviewDto, MentorReviewsApi } from 'api';
+import { useState } from 'react';
+import { ModalSubmitForm } from '@client/shared/components/Forms';
+import { MentorReviewAssignDto, MentorReviewDto, MentorReviewsApi } from '@client/api';
 import isEmpty from 'lodash/isEmpty';
-import { MentorSearch } from 'components/MentorSearch';
-import { useActiveCourseContext } from 'modules/Course/contexts';
+import { MentorSearch } from '@client/shared/components/MentorSearch';
+import { useActiveCourseContext } from '@client/modules/Course/contexts';
 import useRequest from 'ahooks/lib/useRequest';
 
 const mentorReviewsApi = new MentorReviewsApi();
@@ -34,14 +34,13 @@ function AssignReviewerModal({ review, onClose, onSubmit }: AssignReviewerModalP
     onError: () => message.error('An unexpected error occurred. Please try later.'),
   });
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: { mentorId?: number }) => {
     const { mentorId } = values;
     try {
-      if (mentorId) {
-        await assignReviewer(course.id, { courseTaskId: taskId!, mentorId, studentId: studentId! });
-        setSubmitted(true);
-        onSubmit();
-      }
+      const payload: MentorReviewAssignDto = { courseTaskId: taskId!, studentId: studentId!, mentorId };
+      await assignReviewer(course.id, payload);
+      setSubmitted(true);
+      onSubmit();
     } catch (e: any) {
       const error = e.response?.data?.message ?? e.message;
       setErrorText(error);
@@ -78,8 +77,8 @@ function AssignReviewerModal({ review, onClose, onSubmit }: AssignReviewerModalP
               {solutionUrl}
             </Link>
           </Form.Item>
-          <Form.Item name="mentorId" rules={[{ required: true, message: 'Please select  mentor' }]} label="Mentor">
-            <MentorSearch keyField="id" courseId={courseId} />
+          <Form.Item name="mentorId" label="Mentor">
+            <MentorSearch keyField="id" courseId={courseId} allowClear />
           </Form.Item>
         </Col>
       </Row>

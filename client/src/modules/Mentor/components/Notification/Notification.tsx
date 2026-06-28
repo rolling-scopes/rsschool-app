@@ -1,7 +1,6 @@
 import { Alert } from 'antd';
-import React from 'react';
 import { useLocalStorage } from 'react-use';
-import { INFO_MESSAGE } from 'modules/Mentor/constants';
+import { INFO_MESSAGE } from '@client/modules/Mentor/constants';
 
 function Notification() {
   const [isShown, setIsShown] = useLocalStorage('isPersonalInformationNotificationShown', true);
@@ -11,7 +10,7 @@ function Notification() {
   };
 
   return isShown ? (
-    <Alert message={INFO_MESSAGE} type="info" showIcon closable onClose={handleClose} style={{ marginBottom: 24 }} />
+    <Alert title={INFO_MESSAGE} type="info" showIcon closable onClose={handleClose} style={{ marginBottom: 24 }} />
   ) : null;
 }
 

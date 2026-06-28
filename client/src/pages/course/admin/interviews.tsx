@@ -1,15 +1,21 @@
 import { Button, Row, Select, Table, Popconfirm } from 'antd';
-import { StudentMentorModal } from 'components/StudentMentorModal';
-import { AdminPageLayout } from 'components/PageLayout';
-import { getColumnSearchProps, stringSorter, boolIconRenderer, PersonCell, numberSorter } from 'components/Table';
-import { useLoading } from 'components/useLoading';
+import { StudentMentorModal } from '@client/shared/components/StudentMentorModal';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
+import {
+  getColumnSearchProps,
+  stringSorter,
+  boolIconRenderer,
+  PersonCell,
+  numberSorter,
+} from '@client/shared/components/Table';
+import { useLoading } from '@client/components/useLoading';
 import { useMemo, useState, useContext } from 'react';
-import { CourseService } from 'services/course';
-import { CourseRole } from 'services/models';
+import { CourseService } from '@client/services/course';
+import { CourseRole } from '@client/services/models';
 import { useAsync } from 'react-use';
-import { isCourseManager } from 'domain/user';
-import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
-import { CoursesInterviewsApi, InterviewDto, InterviewPairDto } from 'api';
+import { isCourseManager } from '@client/domain/user';
+import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
+import { CoursesInterviewsApi, InterviewDto, InterviewPairDto } from '@client/api';
 
 const coursesInterviewsApi = new CoursesInterviewsApi();
 
@@ -35,8 +41,8 @@ function Page() {
     setSelected(filtered[0]?.id.toString() ?? null);
   };
 
-  const deleteInterview = withLoading(async (record: any) => {
-    await courseService.cancelInterviewPair(selected!, record.id);
+  const deleteInterview = withLoading(async (record: InterviewPairDto) => {
+    await courseService.cancelInterviewPair(selected!, String(record.id));
     const filtered = data.filter(d => d.id !== record.id);
     setData(filtered);
   });
@@ -80,13 +86,14 @@ function Page() {
               <Popconfirm
                 onConfirm={() => createInterviews()}
                 title="Do you want to create interview pairs for not distributed students?"
+                disabled={!selected}
               >
-                <Button>Create Interview Pairs</Button>
+                <Button disabled={!selected}>Create Interview Pairs</Button>
               </Popconfirm>
             </div>
           ) : null}
         </Row>
-        <Button type="primary" onClick={() => setModal(true)}>
+        <Button type="primary" disabled={!selected} onClick={() => setModal(true)}>
           Create
         </Button>
       </Row>
@@ -95,20 +102,20 @@ function Page() {
         pagination={{ defaultPageSize: 50 }}
         size="small"
         rowKey="id"
-        dataSource={data as any}
+        dataSource={data}
         columns={[
           {
             fixed: 'left',
             title: 'Interviewer',
             dataIndex: 'interviewer',
-            sorter: stringSorter('interviewer.githubId'),
+            sorter: stringSorter('interviewer.githubId' as keyof InterviewPairDto),
             render: value => <PersonCell value={value} />,
             ...getColumnSearchProps('interviewer.githubId'),
           },
           {
             title: 'Student',
             dataIndex: 'student',
-            sorter: stringSorter('student.githubId'),
+            sorter: stringSorter('student.githubId' as keyof InterviewPairDto),
             render: value => <PersonCell value={value} />,
             ...getColumnSearchProps('student.githubId'),
           },
@@ -144,12 +151,15 @@ function Page() {
 
       <StudentMentorModal
         onOk={withLoading(async (studentGithubId, mentorGithubId) => {
-          await courseService.addInterviewPair(selected!, mentorGithubId, studentGithubId);
+          if (!selected) {
+            return;
+          }
+          await courseService.addInterviewPair(selected, mentorGithubId, studentGithubId);
           await loadData();
           setModal(false);
         })}
         onCancel={() => setModal(false)}
-        visible={modal}
+        open={modal}
         courseId={course.id}
       />
     </AdminPageLayout>

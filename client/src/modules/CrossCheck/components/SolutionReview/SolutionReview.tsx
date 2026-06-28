@@ -1,20 +1,21 @@
 import { Alert, Button, Col, Divider, Form, notification, Row, Spin, Typography } from 'antd';
-import { Comment } from '@ant-design/compatible';
-import PreparedComment, { markdownLabel } from 'components/Forms/PreparedComment';
-import { ScoreIcon } from 'components/Icons/ScoreIcon';
-import { SolutionReviewSettings } from 'modules/CrossCheck/constants';
+import { Comment } from '@client/components/Comment';
+import PreparedComment, { markdownLabel } from '@client/shared/components/Forms/PreparedComment';
+import { ScoreIcon } from '@client/shared/components/Icons/ScoreIcon';
+import { SolutionReviewSettings } from '@client/modules/CrossCheck/constants';
 import { useEffect, useMemo, useState } from 'react';
-import { CourseService } from 'services/course';
-import { formatDateTime } from 'services/formatter';
+import { CourseService } from '@client/services/course';
+import { formatDateTime } from '@client/services/formatter';
 import { CrossCheckCriteriaModal } from '../criteria/CrossCheckCriteriaModal';
-import { StudentDiscord } from '../../../../components/StudentDiscord';
+import { StudentDiscord } from '@client/components/StudentDiscord';
 import { getAmountUnreadMessages, getHowManyUnreadMessagesText } from './helpers';
 import { Message } from './Message';
 import { MessageSendingPanel } from './MessageSendingPanel';
 import { UserAvatar } from './UserAvatar';
 import { Username } from './Username';
-import { CrossCheckCriteriaDataDto, CrossCheckMessageDtoRoleEnum, CrossCheckSolutionReviewDto } from 'api';
-import { useMessage } from 'hooks';
+import { CrossCheckCriteriaDataDto, CrossCheckMessageDtoRoleEnum, CrossCheckSolutionReviewDto } from '@client/api';
+import { useMessage } from '@client/hooks';
+import styles from './SolutionReview.module.css';
 
 const { Text } = Typography;
 
@@ -106,7 +107,7 @@ function SolutionReview(props: SolutionReviewProps) {
   };
 
   return (
-    <Spin spinning={loading}>
+    <Spin spinning={loading} className={styles.container}>
       <CrossCheckCriteriaModal modalInfo={modalData} isModalVisible={isModalVisible} showModal={setIsModalVisible} />
       <Row style={{ margin: '8px 0' }}>
         <Col span={24}>
@@ -117,7 +118,7 @@ function SolutionReview(props: SolutionReviewProps) {
       {amountUnreadMessages > 0 && (
         <Row>
           <Col>
-            <Alert message={howManyUnreadMessagesText} type="info" showIcon />
+            <Alert title={howManyUnreadMessagesText} type="info" showIcon />
           </Col>
         </Row>
       )}
@@ -218,23 +219,6 @@ function SolutionReview(props: SolutionReviewProps) {
           </Comment>
         </Col>
       </Row>
-
-      <style jsx>{`
-        :global(.ant-comment-inner) {
-          padding: 0 !important;
-        }
-
-        :global(.ant-comment-avatar) {
-          position: sticky !important;
-          top: 16px;
-          align-self: start;
-        }
-
-        :global(.ant-comment-avatar img) {
-          width: 100% !important;
-          height: 100% !important;
-        }
-      `}</style>
     </Spin>
   );
 }

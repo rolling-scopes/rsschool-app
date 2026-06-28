@@ -75,7 +75,7 @@ export default defineComponent({
   async mounted() {
     this.getGameInfo();
 
-    this.sortingOptions = this.sortingOptionsAll.map((el, i) => i).filter((el) => isEven(el));
+    this.sortingOptions = this.sortingOptionsAll.map((el, i) => i).filter(el => isEven(el));
   },
 
   methods: {

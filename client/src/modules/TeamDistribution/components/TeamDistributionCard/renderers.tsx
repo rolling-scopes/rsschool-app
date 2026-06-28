@@ -1,4 +1,4 @@
-import { TeamDistributionDtoRegistrationStatusEnum } from 'api';
+import { TeamDistributionDtoRegistrationStatusEnum } from '@client/api';
 import ClockCircleOutlined from '@ant-design/icons/ClockCircleOutlined';
 import { Tag, Typography } from 'antd';
 

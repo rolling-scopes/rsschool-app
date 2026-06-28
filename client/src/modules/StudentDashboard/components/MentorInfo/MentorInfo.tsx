@@ -1,9 +1,8 @@
 import { Col, Row, Space, Typography } from 'antd';
-import React from 'react';
 import GithubFilled from '@ant-design/icons/GithubFilled';
 import EnvironmentFilled from '@ant-design/icons/EnvironmentFilled';
-import { GithubAvatar } from 'components/GithubAvatar';
-import { MentorStudentSummaryDto } from 'api';
+import { GithubAvatar } from '@client/shared/components/GithubAvatar';
+import { MentorStudentSummaryDto } from '@client/api';
 
 const { Text, Link } = Typography;
 
@@ -49,7 +48,7 @@ function MentorInfo({ mentor }: Props) {
           <GithubAvatar size={48} githubId={githubId!} />
         </Col>
         <Col>
-          <Space direction="vertical" size={4}>
+          <Space orientation="vertical" size={4}>
             {name && <Text strong>{name}</Text>}
             <Link target="_blank" href={`https://github.com/${githubId}`}>
               <GithubFilled /> {githubId}

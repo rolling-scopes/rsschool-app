@@ -1,6 +1,6 @@
 import { Student } from '@entities/index';
 import { Mentor } from '@entities/mentor';
-import { PreferredStudentsLocation } from '@common/enums/mentor';
+import { PreferredStudentsLocation } from '@entities/mentorRegistry';
 import { ApiProperty, ApiResponse } from '@nestjs/swagger';
 import { IsArray, IsNumber, IsString } from 'class-validator';
 import { PersonDto } from 'src/core/dto';

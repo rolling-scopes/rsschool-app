@@ -1,5 +1,5 @@
 import { Button, Modal, Space, Table } from 'antd';
-import { DisciplineDto } from 'api';
+import { DisciplineDto } from '@client/api';
 import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 
 const { Column } = Table;

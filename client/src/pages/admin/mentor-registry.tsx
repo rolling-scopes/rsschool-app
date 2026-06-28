@@ -3,14 +3,14 @@ import { Alert, Button, Col, Form, message, notification, Row, Select, Space, Ta
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 
-import { DisciplineDto, DisciplinesApi, MentorRegistryDto } from 'api';
+import { DisciplineDto, DisciplinesApi, MentorRegistryDto } from '@client/api';
 
-import { CommentModal } from 'components/CommentModal';
-import { ModalForm } from 'components/Forms';
-import { AdminPageLayout } from 'components/PageLayout';
-import { tabRenderer } from 'components/TabsWithCounter/renderers';
-import { useLoading } from 'components/useLoading';
-import { SessionContext, SessionProvider } from 'modules/Course/contexts';
+import { CommentModal } from '@client/shared/components/CommentModal';
+import { ModalForm } from '@client/shared/components/Forms';
+import { AdminPageLayout } from '@client/shared/components/PageLayout';
+import { tabRenderer } from '@client/components/TabsWithCounter/renderers';
+import { useLoading } from '@client/components/useLoading';
+import { SessionContext, SessionProvider } from '@client/modules/Course/contexts';
 import {
   CombinedFilter,
   MentorRegistryDeleteModal,
@@ -19,14 +19,14 @@ import {
   MentorRegistryTableContainer,
   MentorRegistryTabsMode,
   PAGINATION,
-} from 'modules/MentorRegistry';
+} from '@client/modules/MentorRegistry';
 import dynamic from 'next/dynamic';
-import { CoursesService } from 'services/courses';
-import { MentorRegistryService } from 'services/mentorRegistry';
-import { Course, CourseRole } from 'services/models';
-import css from 'styled-jsx/css';
+import { CoursesService } from '@client/services/courses';
+import { MentorRegistryService } from '@client/services/mentorRegistry';
+import { Course, CourseRole } from '@client/services/models';
+import styles from './mentor-registry.module.css';
 
-const InviteMentorsModal = dynamic(() => import('modules/MentorRegistry/components/InviteMentorsModal'), {
+const InviteMentorsModal = dynamic(() => import('@client/modules/MentorRegistry/components/InviteMentorsModal'), {
   ssr: false,
 });
 
@@ -250,7 +250,7 @@ function Page() {
 
   return (
     <AdminPageLayout title="Mentor Registry" loading={loading} courses={courses} styles={{ margin: 0, padding: 0 }}>
-      <Row justify="space-between" style={{ padding: '0 24px', minHeight: 64 }} align="bottom" className="tabs">
+      <Row justify="space-between" style={{ padding: '0 24px', minHeight: 64 }} align="bottom" className={styles.tabs}>
         <Tabs
           className="custom-mentor-registry-tabs"
           tabBarStyle={{ margin: '0' }}
@@ -259,7 +259,7 @@ function Page() {
           onChange={handleTabChange}
         />
         <Space style={{ alignSelf: 'center' }}>
-          <Button icon={<FileExcelOutlined />} onClick={() => (window.location.href = `/api/registry/mentors/csv`)}>
+          <Button icon={<FileExcelOutlined />} onClick={() => (window.location.href = `/api/v2/registry/mentors/csv`)}>
             Export CSV
           </Button>
           {session.isAdmin && (
@@ -268,11 +268,10 @@ function Page() {
             </Button>
           )}
         </Space>
-        <style jsx>{styles}</style>
       </Row>
       <Col style={{ padding: 24 }}>
         <Alert
-          message={
+          title={
             <>
               The number of mentors below can mentor: <Typography.Text strong>{maxStudents} students</Typography.Text>
             </>
@@ -318,7 +317,7 @@ function Page() {
       {isModalOpen && modalData?.mode === ModalDataMode.Comment && (
         <CommentModal
           title="Comment"
-          visible={isModalOpen}
+          open={isModalOpen}
           onCancel={onCancelModal}
           initialValue={modalData?.record?.comment ?? undefined}
           availableEmptyComment={true}
@@ -340,15 +339,3 @@ export default function () {
     </SessionProvider>
   );
 }
-
-export const styles = css`
-  :global(.custom-mentor-registry-tabs .ant-tabs-tab) {
-    min-width: 100px;
-  }
-  @media (min-width: 575px) {
-    .tabs {
-      padding: '12px 24px 0';
-      height: 64px;
-    }
-  }
-`;

@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { FeedbackDto, FeedbackSoftSkillIdEnum, FeedbackSoftSkillValueEnum } from 'api';
+import { FeedbackDto, FeedbackSoftSkillIdEnum, FeedbackSoftSkillValueEnum } from '@client/api';
 import { FeedbackSection } from './index';
 
 const mockFeedback = {
@@ -64,5 +64,17 @@ describe('FeedbackSection', () => {
     expect(communicationSkill).toBeInTheDocument();
     expect(responsibilitySkill).toBeInTheDocument();
     expect(teamPlayerSkill).toBeInTheDocument();
+  });
+
+  test('labels an unrecognized soft skill id as "Unknown"', () => {
+    // Forward-compat: a soft-skill id the frontend does not know maps to the default label.
+    const withUnknownSkill = {
+      ...mockFeedback,
+      softSkills: [{ id: 'future-skill', value: FeedbackSoftSkillValueEnum.Great }],
+    } as unknown as FeedbackDto;
+
+    render(<FeedbackSection data={[withUnknownSkill]} />);
+
+    expect(screen.getByText('Unknown: Great')).toBeInTheDocument();
   });
 });

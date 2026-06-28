@@ -1,5 +1,5 @@
 import { renderHook, waitFor } from '@testing-library/react';
-import { OpportunitiesApi, ResumeDto } from 'api';
+import { OpportunitiesApi, ResumeDto } from '@client/api';
 import { useResumeData } from './useResumeData';
 import { AxiosResponse } from 'axios';
 
@@ -11,7 +11,7 @@ const mockResumeData = {
 
 describe('useResumeData', () => {
   it('should return resume data', async () => {
-    jest.spyOn(OpportunitiesApi.prototype, 'getResume').mockImplementation(() =>
+    vi.spyOn(OpportunitiesApi.prototype, 'getResume').mockImplementation(() =>
       Promise.resolve({
         status: 200,
         statusText: 'OK',
@@ -27,7 +27,7 @@ describe('useResumeData', () => {
   });
 
   it('should return null in case of 404 error', async () => {
-    jest.spyOn(OpportunitiesApi.prototype, 'getResume').mockImplementation(() =>
+    vi.spyOn(OpportunitiesApi.prototype, 'getResume').mockImplementation(() =>
       Promise.reject({
         response: {
           status: 404,
@@ -52,7 +52,7 @@ describe('useResumeData', () => {
         config: {},
       },
     };
-    jest.spyOn(OpportunitiesApi.prototype, 'getResume').mockImplementation(() => Promise.reject(mockErrorResponse));
+    vi.spyOn(OpportunitiesApi.prototype, 'getResume').mockImplementation(() => Promise.reject(mockErrorResponse));
     const { result } = renderHook(() => useResumeData({ githubId: mockGithubId, actualTime: mockActualTime }));
     await waitFor(() => {
       expect(result.current[1]).toBe(mockErrorResponse);

@@ -1,10 +1,10 @@
 import { Space, Tag, Typography, Button } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
-import { TeamDistributionStudentDto } from 'api';
-import { StudentsTableColumnKey, StudentsTableColumnName } from 'modules/Teams/constants';
+import { TeamDistributionStudentDto } from '@client/api';
+import { StudentsTableColumnKey, StudentsTableColumnName } from '@client/modules/Teams/constants';
 import { TeamOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Breakpoint } from 'antd/lib';
-import { StudentDiscord } from 'components/StudentDiscord';
+import { StudentDiscord } from '@client/components/StudentDiscord';
 const { Text, Link } = Typography;
 
 function renderName({ fullName, cvUuid, id }: TeamDistributionStudentDto, teamLeadId?: number) {
@@ -57,7 +57,7 @@ function renderDiscord(_v: string, { discord }: TeamDistributionStudentDto) {
 
 function renderStudent(_v: string, student: TeamDistributionStudentDto) {
   return (
-    <Space direction="vertical" size="small">
+    <Space orientation="vertical" size="small">
       {renderName(student)}
       {renderLocation('', student)}
       <Text>rank: {renderPosition('', student)}</Text>
@@ -67,7 +67,7 @@ function renderStudent(_v: string, student: TeamDistributionStudentDto) {
 
 function renderContacts(_v: string, student: TeamDistributionStudentDto) {
   return (
-    <Space direction="vertical" size="small">
+    <Space orientation="vertical" size="small">
       {renderDiscord('', student)}
       {renderEmail('', student)}
     </Space>
@@ -123,8 +123,8 @@ export const getColumns = (
     responsive: DISPLAY_TABLE_BREAKPOINTS,
   },
   {
-    key: StudentsTableColumnKey.Github,
-    title: StudentsTableColumnName.Github,
+    key: StudentsTableColumnKey.GitHub,
+    title: StudentsTableColumnName.GitHub,
     dataIndex: 'github',
     width: '10%',
     render: renderGithub,

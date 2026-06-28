@@ -152,7 +152,7 @@ This helps balance the distribution of talent among the teams, allowing each tea
     }
 
     // Save teams and teamDistributionStudent
-    const updatedTeams = teams.map(t => ({ ...t, teamLeadId: t.students.sort((a, b) => a.rank - b.rank).at(0)?.id }));
+    const updatedTeams = teams.map(t => ({ ...t, teamLeadId: t.students.sort((a, b) => a.rank - b.rank)[0]?.id }));
     const distributedStudents = teamDistributionStudents.map(s => ({ ...s, distributed: true }));
     await this.modifyTeams(updatedTeams, distributedStudents);
   }

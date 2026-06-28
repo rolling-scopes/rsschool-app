@@ -1,10 +1,10 @@
 import { Button, Row, Space, Typography } from 'antd';
 import { EditTwoTone, CopyOutlined, RedoOutlined } from '@ant-design/icons';
 import { useMemo } from 'react';
-import { TeamApi, TeamDistributionDetailedDto, TeamDto } from 'api';
+import { TeamApi, TeamDistributionDetailedDto, TeamDto } from '@client/api';
 import StudentsTable from '../StudentsTable/StudentsTable';
 import { useCopyToClipboard } from 'react-use';
-import { useMessage } from 'hooks';
+import { useMessage } from '@client/hooks';
 
 const { Text, Title } = Typography;
 
@@ -47,7 +47,7 @@ export default function MyTeamSection({
   };
 
   return distribution.myTeam ? (
-    <Space size="large" direction="vertical" style={{ width: '100%' }}>
+    <Space size="large" orientation="vertical" style={{ width: '100%' }}>
       <Title level={5}>{myTeam.name}</Title>
       <Space size={12}>
         <Text type="secondary">{myTeam.description}</Text>

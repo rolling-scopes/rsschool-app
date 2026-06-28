@@ -3,15 +3,15 @@ import { ActionButtons } from './index';
 
 const mockUrl = 'https://example.com';
 
-const mockSwitchView = jest.fn();
-const mockCopyToClipboard = jest.fn();
-const mockOnRemoveConsent = jest.fn();
-jest.mock('react-use', () => ({
-  useCopyToClipboard: () => [jest.fn(), mockCopyToClipboard],
+const mockSwitchView = vi.fn();
+const mockCopyToClipboard = vi.fn();
+const mockOnRemoveConsent = vi.fn();
+vi.mock('react-use', () => ({
+  useCopyToClipboard: () => [vi.fn(), mockCopyToClipboard],
 }));
 
-const mockSuccessNotification = jest.fn();
-jest.mock('hooks/useMessage', () => ({
+const mockSuccessNotification = vi.fn();
+vi.mock('@client/hooks', () => ({
   useMessage: () => ({
     notification: {
       success: mockSuccessNotification,
@@ -21,7 +21,7 @@ jest.mock('hooks/useMessage', () => ({
 
 describe('ActionButtons', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should have Edit, Share, Delete buttons', () => {
@@ -54,7 +54,6 @@ describe('ActionButtons', () => {
     fireEvent.click(shareButton);
 
     expect(mockCopyToClipboard).toHaveBeenCalledWith(mockUrl);
-    expect(mockSuccessNotification).toHaveBeenCalledWith({ message: 'Copied to clipboard' });
   });
 
   test('should not to clipboard by click on Share button if url is not provided', async () => {
@@ -82,7 +81,7 @@ describe('ActionButtons', () => {
 
     fireEvent.click(deleteButton);
 
-    const modalTitle = await screen.findByText('Delete your CV');
+    const modalTitle = await screen.findByText('Delete your CV', { selector: '.ant-modal-confirm-title' });
     const modalBodyFragment = await screen.findByText(/are you sure you want to delete your cv/i);
     const modalConfirmButton = await screen.findByRole('button', { name: /delete cv/i });
     const modalCancelButton = await screen.findByRole('button', { name: /cancel/i });

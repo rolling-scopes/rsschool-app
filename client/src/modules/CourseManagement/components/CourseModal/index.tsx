@@ -18,12 +18,12 @@ import {
 } from 'antd';
 import { Tooltip } from 'antd/lib';
 
-import { CoursesApi, CreateCourseDto, DisciplineDto, IdNameDto, UpdateCourseDto } from 'api';
-import { DEFAULT_COURSE_ICONS } from 'configs/course-icons';
+import { CoursesApi, CreateCourseDto, DisciplineDto, IdNameDto, UpdateCourseDto } from '@client/api';
+import { DEFAULT_COURSE_ICONS } from '@client/configs/course-icons';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { Course } from 'services/models';
-import { PublicSvgIcon } from '@client/components/Icons';
+import { Course } from '@client/services/models';
+import { PublicSvgIcon } from '@client/shared/components/Icons';
 
 dayjs.extend(utc);
 
@@ -69,7 +69,6 @@ type FormData = {
   primarySkillId?: string;
 
   logo?: string;
-  usePrivateRepositories?: boolean;
   personalMentoring?: boolean;
   personalMentoringStartDate?: string | null;
   personalMentoringEndDate?: string | null;
@@ -245,7 +244,7 @@ export function CourseModal(props: CourseModalProps) {
                     value: icon.id,
                     label: (
                       <Flex gap="small" align="center">
-                        <PublicSvgIcon src={icon.active} alt={icon.label} size={'2.5ch'} />
+                        <PublicSvgIcon src={icon.active} alt={icon.label} size={'1.5em'} />
                         <span>{icon.label}</span>
                       </Flex>
                     ),
@@ -408,10 +407,6 @@ export function CourseModal(props: CourseModalProps) {
             </Col>
           </Row>
 
-          <Form.Item style={{ marginTop: 8 }} name="usePrivateRepositories" valuePropName="checked">
-            <Checkbox>Use Private Repositories</Checkbox>
-          </Form.Item>
-
           <Row gutter={24}>
             <Col md={8} sm={12} span={24}>
               <Form.Item name="personalMentoring" valuePropName="checked">
@@ -464,7 +459,6 @@ function createRecord(values: FormData) {
     disciplineId: values.discipline?.id,
     certificateIssuer: values.certificateIssuer,
     discordServerId: values.discordServerId,
-    usePrivateRepositories: values.usePrivateRepositories,
     personalMentoring: values.personalMentoring,
     personalMentoringStartDate: personalMentoringStartDate
       ? dayjs.utc(personalMentoringStartDate).startOf('day').format()

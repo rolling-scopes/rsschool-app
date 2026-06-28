@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import ProfileSettingsModal from '../ProfileSettingsModal';
 
@@ -9,8 +8,8 @@ describe('ProfileSettingsModal', () => {
         isSettingsVisible={true}
         content={<div>content</div>}
         settingsTitle="Settings Title"
-        onSave={jest.fn()}
-        onCancel={jest.fn()}
+        onSave={vi.fn()}
+        onCancel={vi.fn()}
       />,
     );
 
@@ -23,8 +22,8 @@ describe('ProfileSettingsModal', () => {
         isSettingsVisible={false}
         content={<div>content</div>}
         settingsTitle="Settings Title"
-        onSave={jest.fn()}
-        onCancel={jest.fn()}
+        onSave={vi.fn()}
+        onCancel={vi.fn()}
       />,
     );
 

@@ -6,7 +6,7 @@ Cross-check is a peer-review of tasks by students according to given criteria.
 
 ### Step #1 Sending task to cross-check
 
-To send the task to cross-check, enter <span style="color:green_apple">[app.rs.school](https://app.rs.school/)</span> and follow the link <span style="color:orange">`Cross-Check: Submit`</span>. Depending on the task requirements, show either a link to the working and deployed website or a link to the original code/Github repository. It is possible to submit the link several times - only the last one is saved. All who fail to meet the deadline and do not provide their link on time get 0 points for that task. Deadlines are shown in the schedule.
+To send the task to cross-check, enter <span style="color:green_apple">[app.rs.school](https://app.rs.school/)</span> and follow the link <span style="color:orange">`Cross-Check: Submit`</span>. Depending on the task requirements, show either a link to the working and deployed website or a link to the original code/GitHub repository. It is possible to submit the link several times - only the last one is saved. All who fail to meet the deadline and do not provide their link on time get 0 points for that task. Deadlines are shown in the schedule.
 
 ### Step #2 Generating peers
 
@@ -97,11 +97,11 @@ Messages in the channel #cross-check must be directed towards the discussion of 
 To appeal:
 
 1. Wait for all the checks of your work and completion of step #4 (see above). Check if all criteria are met in order to appeal (see above).
-2. Create a new issue <span style="color:green_apple">[github.com/rolling-scopes-school/support/issues](https://github.com/rolling-scopes-school/support/issues)</span>. Call it by the following template: Cross-Check 'task title' - 'Your Github name'.
+2. Create a new issue <span style="color:green_apple">[github.com/rolling-scopes-school/support/issues](https://github.com/rolling-scopes-school/support/issues)</span>. Call it by the following template: Cross-Check 'task title' - 'Your GitHub name'.
 3. Fill in the issue with the following template (if the issue has a title, but is not filled in correctly, it will not be reviewed):
 
 - A link to your deployed project.
-- A link to the project repository on Github.
+- A link to the project repository on GitHub.
 - A link to the task.
 - A link to the assessment form (if there is any).
 - A screenshot of cross-checking marks (reviewers' contacts must be hidden).

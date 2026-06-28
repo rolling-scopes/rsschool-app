@@ -1,9 +1,10 @@
 import { Typography, Form, Row, Checkbox, Radio, Col, Space } from 'antd';
 import { useMemo } from 'react';
-import { SelfEducationQuestionWithIndex, SelfEducationQuestion } from 'services/course';
+import { SelfEducationQuestionWithIndex, SelfEducationQuestion } from '@client/services/course';
 import shuffle from 'lodash/shuffle';
-import { CourseTaskVerifications } from 'modules/AutoTest/types';
-import css from 'styled-jsx/css';
+import { CourseTaskVerifications } from '@client/modules/AutoTest/types';
+
+import styles from './SelfEducation.module.css';
 
 type SelfEducationProps = {
   courseTask: CourseTaskVerifications;
@@ -25,7 +26,7 @@ function SelfEducation({ courseTask }: SelfEducationProps) {
   );
 
   return (
-    <div className="self-education">
+    <div className={styles.selfEducation}>
       <Paragraph>To submit the task answer the questions.</Paragraph>
       {randomQuestions?.map(
         ({ question, answers, multiple, questionImage, answersType, index: questionIndex }, idx) => {
@@ -59,7 +60,7 @@ function SelfEducation({ courseTask }: SelfEducationProps) {
             >
               {multiple ? (
                 <Checkbox.Group>
-                  <Space direction="vertical" size="small">
+                  <Space orientation="vertical" size="small">
                     {answers?.map((answer, answerIndex) => (
                       <Checkbox key={answerIndex} value={answerIndex}>
                         {answersType === 'image' ? (
@@ -83,7 +84,7 @@ function SelfEducation({ courseTask }: SelfEducationProps) {
                 </Checkbox.Group>
               ) : (
                 <Radio.Group>
-                  <Space direction="vertical" size="small">
+                  <Space orientation="vertical" size="small">
                     {answers?.map((answer, index) => (
                       <Radio key={index} value={index}>
                         {answersType === 'image' ? (
@@ -110,16 +111,8 @@ function SelfEducation({ courseTask }: SelfEducationProps) {
           );
         },
       )}
-      <style jsx>{styles}</style>
     </div>
   );
 }
-
-const styles = css`
-  .self-education :global(.ant-radio) {
-    align-self: flex-start !important;
-    margin-top: 3px !important;
-  }
-`;
 
 export default SelfEducation;

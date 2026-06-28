@@ -1,6 +1,6 @@
 import { Button, Card } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { TeamDistributionDto } from 'api';
+import { TeamDistributionDto } from '@client/api';
 import { Actions } from './Actions';
 import { CardTitle } from './CardTitle';
 

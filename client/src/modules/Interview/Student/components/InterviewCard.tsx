@@ -1,27 +1,29 @@
-import { Col, Card, Button, Alert } from 'antd';
-import { InfoCircleTwoTone } from '@ant-design/icons';
-import { InterviewDto } from 'api';
+import { Col, Card, Button, Alert, Typography, Flex } from 'antd';
+import { CommentOutlined, InfoCircleTwoTone } from '@ant-design/icons';
+import { InterviewDto } from '@client/api';
 import {
   getInterviewCardResult,
   InterviewDetails,
   InterviewPeriod,
   InterviewStatus,
   isRegistrationNotStarted,
-} from 'domain/interview';
+} from '@client/domain/interview';
 import { InterviewDescription } from './InterviewDescription';
 import { getInterviewCardDetails } from '../data/getInterviewCardDetails';
 import { AlertDescription } from './AlertDescription';
 import { ExtraInfo } from './ExtraInfo';
-import { Decision } from 'data/interviews/technical-screening';
+import { Decision } from '@client/data/interviews/technical-screening';
 
 const { Meta } = Card;
 
 export const InterviewCard = ({
+  comment,
   interview,
   item,
   isRegistered,
   onRegister,
 }: {
+  comment?: string | null;
   interview: InterviewDto;
   item: InterviewDetails | null;
   isRegistered: boolean;
@@ -30,6 +32,8 @@ export const InterviewCard = ({
   const { id, descriptionUrl, name, startDate, endDate, studentRegistrationStartDate: registrationStart } = interview;
   const interviewPassed = item?.status === InterviewStatus.Completed;
   const interviewResult = getInterviewCardResult(item?.result as Decision);
+  const hasInterviewPair = !!item;
+
   const registrationNotStarted = isRegistrationNotStarted(registrationStart);
   const { cardMessage, backgroundImage } = getInterviewCardDetails({
     interviewResult,
@@ -37,12 +41,13 @@ export const InterviewCard = ({
     isRegistered,
     registrationNotStarted,
     registrationStart,
+    hasInterviewPair,
   });
 
   return (
     <Col key={id} xs={24} lg={12}>
       <Card
-        bodyStyle={{ paddingTop: 0 }}
+        styles={{ body: { paddingTop: 0 } }}
         hoverable
         title={
           <Button type="link" href={descriptionUrl} target="_blank" style={{ padding: 0, fontWeight: 500 }}>
@@ -66,14 +71,28 @@ export const InterviewCard = ({
             )
           }
         />
-        <Alert
-          message={<div style={{ minHeight: 50 }}>{cardMessage}</div>}
-          icon={<InfoCircleTwoTone />}
-          showIcon
-          type="info"
-          description={<AlertDescription backgroundImage={backgroundImage} />}
-          style={{ minHeight: 275 }}
-        />
+        <Flex vertical gap="small">
+          <Alert
+            title={<div style={{ minHeight: 50 }}>{cardMessage}</div>}
+            icon={<InfoCircleTwoTone />}
+            showIcon
+            type="info"
+            description={<AlertDescription backgroundImage={backgroundImage} />}
+            style={{ minHeight: 275 }}
+          />
+          {comment && (
+            <Alert
+              title={
+                <Typography.Paragraph ellipsis={{ rows: 1, tooltip: true }} style={{ marginBottom: 0 }}>
+                  {comment}
+                </Typography.Paragraph>
+              }
+              icon={<CommentOutlined />}
+              showIcon
+              type="success"
+            />
+          )}
+        </Flex>
       </Card>
     </Col>
   );

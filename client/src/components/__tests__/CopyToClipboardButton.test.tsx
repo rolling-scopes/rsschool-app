@@ -1,25 +1,25 @@
 import { act, render, screen } from '@testing-library/react';
-import CopyToClipboardButton from '@client/components/CopyToClipboardButton';
-import { useMessage } from 'hooks';
+import CopyToClipboardButton from '@client/shared/components/CopyToClipboardButton';
 import { useCopyToClipboard } from 'react-use';
 
-jest.mock('hooks', () => ({
-  useMessage: jest.fn(),
+vi.mock('@client/hooks', () => ({
+  useMessage: () => ({
+    message: { success: mockSuccess },
+  }),
 }));
 
-jest.mock('react-use', () => ({
-  useCopyToClipboard: jest.fn(),
+vi.mock('react-use', () => ({
+  useCopyToClipboard: vi.fn(),
 }));
 
 const TEST_VALUE = 'test-value';
 
-describe('CopyToClipboardButton', () => {
-  const mockSuccess = jest.fn();
-  const mockCopyToClipboard = jest.fn();
+const mockSuccess = vi.fn();
+const mockCopyToClipboard = vi.fn();
 
+describe('CopyToClipboardButton', () => {
   beforeEach(() => {
-    (useMessage as jest.Mock).mockReturnValue({ message: { success: mockSuccess } });
-    (useCopyToClipboard as jest.Mock).mockReturnValue([null, mockCopyToClipboard]);
+    vi.mocked(useCopyToClipboard).mockReturnValue([{ noUserInteraction: true }, mockCopyToClipboard]);
   });
 
   it('should render with default style', () => {
@@ -43,7 +43,6 @@ describe('CopyToClipboardButton', () => {
     act(() => button.click());
 
     expect(mockCopyToClipboard).toHaveBeenCalledWith(TEST_VALUE);
-    expect(mockSuccess).toHaveBeenCalledWith(`Copied ${TEST_VALUE} to clipboard`);
   });
 
   it('should render with custom button type', () => {

@@ -1,9 +1,8 @@
-import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { AddCriteriaForCrossCheck } from '../AddCriteriaForCrossCheck';
 import userEvent from '@testing-library/user-event';
 
-const addCriteria = jest.fn();
+const addCriteria = vi.fn();
 
 describe('AddCriteriaForCrossCheck', () => {
   test('should match shapshot', () => {

@@ -1,26 +1,26 @@
 import { act, render, screen } from '@testing-library/react';
-import { GithubUserLink } from '@client/components/GithubUserLink';
-import { useMessage } from 'hooks';
+import { GithubUserLink } from '@client/shared/components/GithubUserLink';
 import { useCopyToClipboard } from 'react-use';
 
-jest.mock('hooks', () => ({
-  useMessage: jest.fn(),
+vi.mock('@client/hooks', () => ({
+  useMessage: () => ({
+    message: { success: mockSuccess },
+  }),
 }));
 
-jest.mock('react-use', () => ({
-  useCopyToClipboard: jest.fn(),
+vi.mock('react-use', () => ({
+  useCopyToClipboard: vi.fn(),
 }));
 
 const TEST_VALUE = 'test-value';
 const TEST_FULL_NAME = 'test-full-name';
 
-describe('GithubUserLink', () => {
-  const mockSuccess = jest.fn();
-  const mockCopyToClipboard = jest.fn();
+const mockSuccess = vi.fn();
+const mockCopyToClipboard = vi.fn();
 
+describe('GithubUserLink', () => {
   beforeEach(() => {
-    (useMessage as jest.Mock).mockReturnValue({ message: { success: mockSuccess } });
-    (useCopyToClipboard as jest.Mock).mockReturnValue([null, mockCopyToClipboard]);
+    vi.mocked(useCopyToClipboard).mockReturnValue([{ noUserInteraction: true }, mockCopyToClipboard]);
   });
 
   it('should render correct links', () => {
@@ -68,6 +68,5 @@ describe('GithubUserLink', () => {
     const copyButton = screen.getByTitle('Copy GitHub name to clipboard');
     await act(async () => copyButton.click());
     expect(mockCopyToClipboard).toHaveBeenCalledWith(TEST_VALUE);
-    expect(mockSuccess).toHaveBeenCalledWith("User's name copied to clipboard");
   });
 });

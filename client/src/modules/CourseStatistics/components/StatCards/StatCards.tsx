@@ -1,4 +1,4 @@
-import { CourseAggregateStatsDto } from '@client/api';
+import { CourseAggregateStatsDto, CoursesTasksApi, CourseTaskDto } from '@client/api';
 import { StudentsCountriesCard } from '@client/modules/CourseStatistics/components/StudentsCountriesCard';
 import { StudentsStatsCard } from '@client/modules/CourseStatistics/components/StudentsStatsCard';
 import { MentorsCountriesCard } from '@client/modules/CourseStatistics/components/MentorsCountriesCard/MentorsCountriesCard';
@@ -9,7 +9,9 @@ import { StudentsEligibleForCertificationCard } from '@client/modules/CourseStat
 import { TaskPerformanceCard } from '@client/modules/CourseStatistics/components/TaskPerformanceCard';
 import { StudentsCertificatesCountriesCard } from '@client/modules/CourseStatistics/components/StudentsCertificatesCountriesCard';
 import Masonry from 'react-masonry-css';
-import css from 'styled-jsx/css';
+import { useAsync } from 'react-use';
+import styles from './StatCards.module.css';
+import { useActiveCourseContext } from '@client/modules/Course/contexts';
 
 type StatCardsProps = {
   coursesData?: CourseAggregateStatsDto;
@@ -24,7 +26,18 @@ const masonryBreakPoints = {
   500: 1,
 };
 
+const coursesTasksApi = new CoursesTasksApi();
+
 export function StatCards({ coursesData }: StatCardsProps) {
+  const { course } = useActiveCourseContext();
+  const { value: courseTasks } = useAsync(async () => {
+    if (course?.id) {
+      const { data } = await coursesTasksApi.getCourseTasks(course.id);
+
+      return data;
+    }
+  }, [course]);
+
   const cards = [
     coursesData?.studentsCountries && {
       title: 'studentsCountriesCard',
@@ -66,10 +79,15 @@ export function StatCards({ coursesData }: StatCardsProps) {
         title: 'StudentsEligibleForCertificationCard',
         component: <StudentsEligibleForCertificationCard studentsStats={coursesData.studentsStats} />,
       },
-    coursesData?.courseTasks && {
-      title: 'taskPerformanceCard',
-      component: <TaskPerformanceCard tasks={coursesData.courseTasks} />,
-    },
+    coursesData?.courseTasks &&
+      courseTasks && {
+        title: 'taskPerformanceCard',
+        component: (
+          <TaskPerformanceCard
+            tasks={courseTasks.filter((task: CourseTaskDto) => coursesData.courseTasks?.some(ct => ct.id === task.id))}
+          />
+        ),
+      },
     coursesData?.studentsCertificatesCountries &&
       coursesData.studentsStats.certifiedStudentsCount && {
         title: 'studentsCertificatesCountriesCard',
@@ -86,8 +104,8 @@ export function StatCards({ coursesData }: StatCardsProps) {
     <>
       <Masonry
         breakpointCols={masonryBreakPoints}
-        className={masonryClassName}
-        columnClassName={masonryColumnClassName}
+        className={styles.masonry as string}
+        columnClassName={styles.masonryColumn as string}
       >
         {cards.map(({ title, component }) => (
           <div style={{ marginBottom: gapSize }} key={title}>
@@ -95,23 +113,6 @@ export function StatCards({ coursesData }: StatCardsProps) {
           </div>
         ))}
       </Masonry>
-      {masonryStyles}
-      {masonryColumnStyles}
     </>
   );
 }
-
-const { className: masonryClassName, styles: masonryStyles } = css.resolve`
-  div {
-    display: flex;
-    margin-left: -${gapSize}px;
-    width: auto;
-    min-height: 85vh;
-  }
-`;
-const { className: masonryColumnClassName, styles: masonryColumnStyles } = css.resolve`
-  div {
-    padding-left: ${gapSize}px;
-    background-clip: padding-box;
-  }
-`;

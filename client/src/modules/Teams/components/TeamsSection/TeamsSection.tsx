@@ -1,12 +1,12 @@
 import { Col, Input, Row, Space, Table, TablePaginationConfig, TableProps, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 
-import { TeamApi, TeamDistributionDetailedDto, TeamDto } from 'api';
+import { TeamApi, TeamDistributionDetailedDto, TeamDto } from '@client/api';
 import { useAsync } from 'react-use';
-import { IPaginationInfo } from '@common/types/pagination';
+import { IPaginationInfo } from '@client/shared/utils/pagination';
 import { getColumns, expandedRowRender } from './renderers';
-import { useLoading } from 'components/useLoading';
-import { TeamsTableColumnKey } from 'modules/Teams/constants';
+import { useLoading } from '@client/components/useLoading';
+import { TeamsTableColumnKey } from '@client/modules/Teams/constants';
 
 type Props = {
   distribution: TeamDistributionDetailedDto;
@@ -60,7 +60,7 @@ export default function TeamSection({ distribution, toggleTeamModal, isManager }
   useAsync(async () => await getTeams(teams.pagination), [distribution, search]);
 
   return (
-    <Space size={24} direction="vertical" style={{ width: '100%' }}>
+    <Space size={24} orientation="vertical" style={{ width: '100%' }}>
       <Row justify="space-between">
         <Col span={8}>
           <Title level={5}>{`${distribution.name} teams`}</Title>

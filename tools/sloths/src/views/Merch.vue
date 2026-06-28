@@ -185,7 +185,7 @@ export default defineComponent({
       this.imgCanvasElement,
       this.topCanvasElement,
       this.bottomCanvasElement,
-      this.canvasProps.scaleSteps
+      this.canvasProps.scaleSteps,
     );
     if (!loaded) this.centering();
 
@@ -264,7 +264,7 @@ export default defineComponent({
         this.topCanvasElement,
         this.bottomCanvasElement,
         this.canvasProps.scaleSteps,
-        true
+        true,
       );
 
       this.draw();
@@ -280,7 +280,7 @@ export default defineComponent({
         this.imgCanvasElement,
         this.topCanvasElement,
         this.bottomCanvasElement,
-        this.canvasProps.scaleSteps
+        this.canvasProps.scaleSteps,
       );
 
       CanvasUtils.calcElementsPosition(this.layers, this.canvasProps.scaleSteps);
@@ -294,7 +294,7 @@ export default defineComponent({
         this.imgCanvasElement.scaledLeft,
         this.imgCanvasElement.scaledTop,
         this.imgCanvasElement.scaledWidth,
-        this.imgCanvasElement.scaledHeight
+        this.imgCanvasElement.scaledHeight,
       );
 
       const { scaleSteps } = this.canvasProps;
@@ -303,7 +303,7 @@ export default defineComponent({
       CanvasUtils.drawTextDown(height, this.ctx, this.canvasProps, this.bottomCanvasElement, scaleSteps);
 
       const color = CanvasUtils.invertHex(this.canvasProps.itemColor);
-      this.layers.forEach((el) => CanvasUtils.drawBorder(el, this.ctx, color));
+      this.layers.forEach(el => CanvasUtils.drawBorder(el, this.ctx, color));
     },
 
     handleMouseMove(e: MouseEvent) {
@@ -365,7 +365,7 @@ export default defineComponent({
         this.imgCanvasElement,
         this.topCanvasElement,
         this.bottomCanvasElement,
-        this.canvasProps.scaleSteps
+        this.canvasProps.scaleSteps,
       );
       this.centering();
 
@@ -377,24 +377,24 @@ export default defineComponent({
       const minLeft =
         Math.min.apply(
           null,
-          this.layers.map((el) => el.scaledLeft)
+          this.layers.map(el => el.scaledLeft),
         ) / this.canvasProps.scaleSteps;
       const maxRight =
         Math.max.apply(
           null,
-          this.layers.map((el) => el.scaledLeft + el.scaledWidth)
+          this.layers.map(el => el.scaledLeft + el.scaledWidth),
         ) / this.canvasProps.scaleSteps;
       const maxWidth = maxRight - minLeft;
 
       const minTop =
         Math.min.apply(
           null,
-          this.layers.map((el) => el.scaledTop)
+          this.layers.map(el => el.scaledTop),
         ) / this.canvasProps.scaleSteps;
       const maxBottom =
         Math.max.apply(
           null,
-          this.layers.map((el) => el.scaledTop + el.scaledHeight)
+          this.layers.map(el => el.scaledTop + el.scaledHeight),
         ) / this.canvasProps.scaleSteps;
       const maxHeight = maxBottom - minTop;
 
@@ -415,7 +415,7 @@ export default defineComponent({
       const bottomCanvasElement = { ...this.bottomCanvasElement };
       const layers = [imgCanvasElement, topCanvasElement, bottomCanvasElement];
 
-      layers.forEach((el) => {
+      layers.forEach(el => {
         const canvasElement = el;
         canvasElement.left -= minLeft;
         canvasElement.top -= minTop;
@@ -434,7 +434,7 @@ export default defineComponent({
         imgCanvasElement.scaledLeft,
         imgCanvasElement.scaledTop,
         imgCanvasElement.scaledWidth,
-        imgCanvasElement.scaledHeight
+        imgCanvasElement.scaledHeight,
       );
 
       const height = (this.canvas.height / this.canvasProps.scaleSteps) * scaleSteps;
@@ -459,7 +459,7 @@ export default defineComponent({
     },
 
     copyImage() {
-      this.canvas.toBlob((blob) => {
+      this.canvas.toBlob(blob => {
         const type = blob?.type;
         if (!type) return;
         const item = new ClipboardItem({ [type]: blob });

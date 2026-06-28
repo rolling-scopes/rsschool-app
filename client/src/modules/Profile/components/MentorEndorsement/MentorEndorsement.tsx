@@ -1,6 +1,6 @@
 import { Alert, Input, Modal, Spin, Typography } from 'antd';
 import { useMemo } from 'react';
-import { ProfileApi } from 'api';
+import { ProfileApi } from '@client/api';
 import { useAsync } from 'react-use';
 import isNull from 'lodash/isNull';
 import isObject from 'lodash/isObject';
@@ -37,7 +37,7 @@ export function MentorEndorsement(props: Props) {
           {error ? (
             <Alert
               closable={false}
-              message="Error occurred while generating endorsment"
+              title="Error occurred while generating endorsment"
               description={error.message}
               type="error"
             />

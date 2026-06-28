@@ -65,12 +65,12 @@ const mockFindOneResponse = mockCourseUser;
 const mockInsertResponse = { a: 1 };
 const mockUpdateResponse = { b: 2 };
 
-const mockFind = jest.fn(() => Promise.resolve(mockFindResponse));
-const mockFindOne = jest.fn(() => Promise.resolve(mockFindOneResponse));
-const mockInsert = jest.fn(() => Promise.resolve(mockInsertResponse));
-const mockUpdate = jest.fn(() => Promise.resolve(mockUpdateResponse));
+const mockFind = vi.fn(() => Promise.resolve(mockFindResponse));
+const mockFindOne = vi.fn(() => Promise.resolve(mockFindOneResponse));
+const mockInsert = vi.fn(() => Promise.resolve(mockInsertResponse));
+const mockUpdate = vi.fn(() => Promise.resolve(mockUpdateResponse));
 
-const mockCourseUserRepositoryFactory = jest.fn(() => ({
+const mockCourseUserRepositoryFactory = vi.fn(() => ({
   find: mockFind,
   findOne: mockFindOne,
   insert: mockInsert,

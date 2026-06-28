@@ -1,12 +1,16 @@
 import { render, screen, fireEvent, within, waitFor } from '@testing-library/react';
-import { ExpirationState } from 'modules/Opportunities/constants';
+import { ExpirationState } from '@client/modules/Opportunities/constants';
 import { ExpirationTooltip } from './index';
 
 const mockSystemTime = new Date('2022-09-26T13:41:39.161Z');
 
 describe('ExpirationTooltip', () => {
   beforeAll(() => {
-    jest.useFakeTimers().setSystemTime(mockSystemTime);
+    vi.useFakeTimers({ shouldAdvanceTime: true }).setSystemTime(mockSystemTime);
+  });
+
+  afterAll(() => {
+    vi.useRealTimers();
   });
 
   test('should show corresponding title and text in case if CV is far from expiration', async () => {
@@ -25,7 +29,7 @@ describe('ExpirationTooltip', () => {
     const modal = await screen.findByRole('dialog');
 
     expect(modal).toBeInTheDocument();
-    const title = within(modal).getByText(`Your CV is public until ${datestring30DaysAfter}`);
+    const title = within(modal).getAllByText(`Your CV is public until ${datestring30DaysAfter}`)[0];
     const text = within(modal).getByText(/If you won't renew your CV until this date/);
     expect(title).toBeInTheDocument();
     expect(text).toBeInTheDocument();
@@ -52,7 +56,7 @@ describe('ExpirationTooltip', () => {
 
     expect(modal).toBeInTheDocument();
 
-    const title = within(modal).getByText(`Your CV will expire in 2 days on ${datestring1DayAfter}`);
+    const title = within(modal).getAllByText(`Your CV will expire in 2 days on ${datestring1DayAfter}`)[0];
     const text = within(modal).getByText(/If you won't renew your CV until this date/);
 
     expect(title).toBeInTheDocument();
@@ -77,7 +81,7 @@ describe('ExpirationTooltip', () => {
 
     expect(modal).toBeInTheDocument();
 
-    const title = within(modal).getByText('Your CV is archived');
+    const title = within(modal).getAllByText('Your CV is archived')[0];
     const text = within(modal).getByText(/You need to renew your resume/i);
 
     expect(title).toBeInTheDocument();
@@ -103,7 +107,7 @@ describe('ExpirationTooltip', () => {
 
     expect(modal).toBeInTheDocument();
 
-    const title = within(modal).getByText('Your CV is archived');
+    const title = within(modal).getAllByText('Your CV is archived')[0];
     const text = within(modal).getByText(/You need to renew your resume/i);
 
     expect(title).toBeInTheDocument();

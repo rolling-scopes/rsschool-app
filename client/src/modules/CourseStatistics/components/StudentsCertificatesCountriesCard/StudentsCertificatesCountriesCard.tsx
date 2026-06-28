@@ -1,6 +1,6 @@
 import { Card } from 'antd';
-import { CountriesStatsDto } from 'api';
-import { Colors } from 'modules/CourseStatistics/data';
+import { CountriesStatsDto } from '@client/api';
+import { Colors } from '@client/modules/CourseStatistics/data';
 import { dynamicWithSkeleton } from '@client/utils/dynamicWithSkeleton';
 
 type Props = {

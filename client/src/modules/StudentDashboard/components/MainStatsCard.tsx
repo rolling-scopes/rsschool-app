@@ -24,7 +24,7 @@ export function MainStatsCard({ totalScore, position, maxCourseScore, totalStude
   return (
     <CommonCard
       title="Your stats"
-      bodyStyle={{ padding: 0 }}
+      styles={{ body: { padding: 0 } }}
       content={
         <>
           <Card.Grid hoverable={false} style={gridStyle}>

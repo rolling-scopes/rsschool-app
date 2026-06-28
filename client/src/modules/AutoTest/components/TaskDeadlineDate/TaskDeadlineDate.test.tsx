@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import dayjs from 'dayjs';
 import { TaskDeadlineDate, TaskDeadlineDateProps } from '..';
-import { CourseTaskState } from 'modules/AutoTest/types';
+import { CourseTaskState } from '@client/modules/AutoTest/types';
 
 describe('TaskDeadlineDate', () => {
   it.each`

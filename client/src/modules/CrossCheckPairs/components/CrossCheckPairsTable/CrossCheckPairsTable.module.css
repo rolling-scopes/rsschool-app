@@ -1,0 +1,6 @@
+.tableScore :global(td),
+.tableScore :global(th),
+.tableRow :global(td) {
+  padding: 0 5px !important;
+  font-size: 11px;
+}

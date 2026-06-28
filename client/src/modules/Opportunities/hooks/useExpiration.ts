@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import { ExpirationState } from 'modules/Opportunities/constants';
+import { ExpirationState } from '@client/modules/Opportunities/constants';
 
 dayjs.extend(duration);
 

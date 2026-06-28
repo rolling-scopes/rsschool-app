@@ -16,14 +16,14 @@ const mockSoftDeleteResponse = { a: 1 };
 
 const mockId = 1;
 
-const mockFind = jest.fn(() => Promise.resolve(mockFindResponse));
-const mockFindOneBy = jest.fn(() => Promise.resolve(mockFindOneByResponse));
-const mockFindOneByOrFail = jest.fn(() => Promise.resolve(mockFindOneByResponse));
-const mockSave = jest.fn(() => Promise.resolve(mockSaveResponse));
-const mockUpdate = jest.fn(() => Promise.resolve(mockSaveResponse));
-const mockSoftDelete = jest.fn(() => Promise.resolve(mockSoftDeleteResponse));
+const mockFind = vi.fn(() => Promise.resolve(mockFindResponse));
+const mockFindOneBy = vi.fn(() => Promise.resolve(mockFindOneByResponse));
+const mockFindOneByOrFail = vi.fn(() => Promise.resolve(mockFindOneByResponse));
+const mockSave = vi.fn(() => Promise.resolve(mockSaveResponse));
+const mockUpdate = vi.fn(() => Promise.resolve(mockSaveResponse));
+const mockSoftDelete = vi.fn(() => Promise.resolve(mockSoftDeleteResponse));
 
-const mockDisciplinesRepositoryFactory = jest.fn(() => ({
+const mockDisciplinesRepositoryFactory = vi.fn(() => ({
   find: mockFind,
   findOneBy: mockFindOneBy,
   findOneByOrFail: mockFindOneByOrFail,

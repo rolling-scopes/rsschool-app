@@ -1,14 +1,14 @@
 import { Alert, Checkbox, Form, Select, Space, Spin } from 'antd';
 import { useAsync } from 'react-use';
-import { InviteMentorsDto } from 'api';
-import { ModalForm } from 'components/Forms';
-import { useLoading } from 'components/useLoading';
+import { InviteMentorsDto } from '@client/api';
+import { ModalForm } from '@client/shared/components/Forms';
+import { useLoading } from '@client/components/useLoading';
 import ReactQuill from 'react-quill';
-import { MentorRegistryService } from 'services/mentorRegistry';
-import { DisciplinesApi } from 'api';
+import { MentorRegistryService } from '@client/services/mentorRegistry';
+import { DisciplinesApi } from '@client/api';
 
 import 'react-quill/dist/quill.snow.css';
-import { useMessage } from 'hooks';
+import { useMessage } from '@client/hooks';
 
 type Props = {
   onCancel: () => void;
@@ -32,8 +32,8 @@ function InviteMentorsModal({ onCancel }: Props) {
 
   return (
     <ModalForm data={{}} title="Invite as a Mentor" submit={submit} cancel={onCancel} loading={loading}>
-      <Space direction="vertical" style={{ width: '100%' }}>
-        <Alert showIcon message="Invitation will be send to all mentors meeting the criteria below." type="info" />
+      <Space orientation="vertical" style={{ width: '100%' }}>
+        <Alert showIcon title="Invitation will be send to all mentors meeting the criteria below." type="info" />
         <Form.Item
           name="disciplines"
           label="Disciplines"

@@ -1,5 +1,5 @@
-import { CourseTaskDetailedDto } from 'api';
-import { SelfEducationPublicAttributes, Verification } from 'services/course';
+import { CourseTaskDetailedDto } from '@client/api';
+import { SelfEducationPublicAttributes, Verification } from '@client/services/course';
 
 export enum CourseTaskStatus {
   Available = 'Available',

@@ -1,12 +1,12 @@
 import { Col, Input, Row, Space, TablePaginationConfig, Typography, Modal } from 'antd';
 import { useState } from 'react';
 
-import { TeamDistributionApi, TeamDistributionDetailedDto, TeamDistributionStudentDto } from 'api';
+import { TeamDistributionApi, TeamDistributionDetailedDto, TeamDistributionStudentDto } from '@client/api';
 import { useAsync } from 'react-use';
 import StudentsTable from '../StudentsTable/StudentsTable';
-import { IPaginationInfo } from '@common/types/pagination';
-import { useLoading } from 'components/useLoading';
-import { useMessage } from 'hooks';
+import { IPaginationInfo } from '@client/shared/utils/pagination';
+import { useLoading } from '@client/components/useLoading';
+import { useMessage } from '@client/hooks';
 
 type Props = {
   distribution: TeamDistributionDetailedDto;
@@ -77,7 +77,7 @@ export default function StudentsWithoutTeamSection({ distribution, isManager, re
   useAsync(async () => await getStudents(students.pagination), [distribution, search]);
 
   return (
-    <Space size={24} direction="vertical" style={{ width: '100%' }}>
+    <Space size={24} orientation="vertical" style={{ width: '100%' }}>
       <Row justify="space-between">
         <Col span={8}>
           <Title level={5}>{`${distribution.name} teams`}</Title>

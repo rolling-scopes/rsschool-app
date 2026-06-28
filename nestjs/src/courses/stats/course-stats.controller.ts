@@ -1,5 +1,6 @@
 import {
   Controller,
+  Delete,
   ForbiddenException,
   Get,
   Param,
@@ -12,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 import { ApiBadRequestResponse, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { CourseGuard, CurrentRequest, DefaultGuard } from '../../auth';
+import { CourseGuard, CurrentRequest, DefaultGuard, RequiredRoles, RoleGuard } from '../../auth';
 import { ONE_HOUR_CACHE_TTL } from '../../constants';
 import { CourseAccessService } from '../course-access.service';
 import { CourseStatsService } from './course-stats.service';
@@ -23,6 +24,9 @@ import {
   TaskPerformanceStatsDto,
   CourseAggregateStatsDto,
 } from './dto';
+import { ExpelledStatsDto } from './dto/expelled-stats.dto';
+import { ExpelledStatsService } from '../expelled-stats.service';
+import { CourseRole, Role } from '../../auth/auth-user.model';
 
 @Controller('courses')
 @ApiTags('course stats')
@@ -31,7 +35,38 @@ export class CourseStatsController {
   constructor(
     private courseStatsService: CourseStatsService,
     private courseAccessService: CourseAccessService,
+    private expelledStatsService: ExpelledStatsService,
   ) {}
+
+  @Get('/stats/expelled')
+  @UseGuards(DefaultGuard, RoleGuard)
+  @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor])
+  @ApiOperation({ operationId: 'getExpelledStats' })
+  @ApiOkResponse({ type: [ExpelledStatsDto] })
+  public async getExpelledStats() {
+    const data = await this.expelledStatsService.findAll();
+    return data.map(item => new ExpelledStatsDto(item));
+  }
+
+  @Get('/:courseId/stats/expelled')
+  @UseGuards(DefaultGuard, CourseGuard, RoleGuard)
+  @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor], true)
+  @ApiOperation({ operationId: 'getCourseExpelledStats' })
+  @ApiOkResponse({ type: [ExpelledStatsDto] })
+  public async getCourseExpelledStats(@Param('courseId', ParseIntPipe) courseId: number) {
+    const data = await this.expelledStatsService.findByCourseId(courseId);
+    return data.map(item => new ExpelledStatsDto(item));
+  }
+
+  @Delete('/stats/expelled/:id')
+  @UseGuards(DefaultGuard, RoleGuard)
+  @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor])
+  @ApiOperation({ operationId: 'deleteExpelledStat' })
+  @ApiOkResponse({ type: String }) // Assuming it returns a success message or ID
+  public async deleteExpelledStat(@Param('id') id: string) {
+    await this.expelledStatsService.remove(id);
+    return 'Successfully deleted';
+  }
 
   @Get('/aggregate/stats')
   @CacheTTL(ONE_HOUR_CACHE_TTL)

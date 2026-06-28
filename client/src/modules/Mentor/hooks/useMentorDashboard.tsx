@@ -1,5 +1,5 @@
 import { useRequest } from 'ahooks';
-import { MentorsApi } from 'api';
+import { MentorsApi } from '@client/api';
 
 const service = new MentorsApi();
 

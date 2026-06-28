@@ -1,12 +1,12 @@
 import { Button, Row, Space, Typography } from 'antd';
 import { UserSwitchOutlined, UserAddOutlined } from '@ant-design/icons';
 import { useMemo, useState } from 'react';
-import { MentorInterview } from 'services/course';
-import { InterviewDto } from 'api';
-import { getInterviewWaitList, isTechnicalScreening } from 'domain/interview';
+import { MentorInterview } from '@client/services/course';
+import { InterviewDto } from '@client/api';
+import { getInterviewWaitList, isTechnicalScreening } from '@client/domain/interview';
 import { SelectMentorModal } from './SelectMentorModal';
 import { useAsyncFn } from 'react-use';
-import { CourseService } from 'services/course';
+import { CourseService } from '@client/services/course';
 
 export function InterviewsSummary({
   interviews,

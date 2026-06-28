@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
-import { Contacts } from 'modules/Opportunities/models';
+import { Contacts } from '@client/modules/Opportunities/models';
 import { ContactsSection } from './index';
 
-jest.mock('./ContactsList', () => ({
+vi.mock('./ContactsList', () => ({
   ContactsList: () => <div>Mock Contacts</div>,
 }));
 

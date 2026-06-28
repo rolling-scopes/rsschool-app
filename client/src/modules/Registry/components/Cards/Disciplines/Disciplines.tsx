@@ -1,7 +1,7 @@
 import { Form, Checkbox, Row, Empty, Typography, Col } from 'antd';
-import { DisciplineDto } from 'api';
-import { CARD_TITLES, LABELS, VALIDATION_RULES, WIDE_FORM_ITEM_LAYOUT } from 'modules/Registry/constants';
-import { FormCard } from 'modules/Registry/components';
+import { DisciplineDto } from '@client/api';
+import { CARD_TITLES, LABELS, VALIDATION_RULES, WIDE_FORM_ITEM_LAYOUT } from '@client/modules/Registry/constants';
+import { FormCard } from '@client/modules/Registry/components';
 
 type Props = {
   disciplines: DisciplineDto[];

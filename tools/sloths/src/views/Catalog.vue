@@ -141,7 +141,7 @@ export default defineComponent({
     ...mapWritableState(useThemeProp, ['currTheme']),
 
     someChecked(): boolean {
-      return this.checked.some((el) => el.checked);
+      return this.checked.some(el => el.checked);
     },
   },
 
@@ -216,7 +216,7 @@ export default defineComponent({
       let slothIndex = this.sloths.indexOf(sloth);
       if (slothIndex !== -1) this.sloths[slothIndex].checked = !this.sloths[slothIndex].checked;
 
-      slothIndex = this.checked.findIndex((el) => el.id === sloth.id);
+      slothIndex = this.checked.findIndex(el => el.id === sloth.id);
       if (slothIndex !== -1) {
         this.checked.splice(slothIndex, 1);
       } else {
@@ -227,8 +227,8 @@ export default defineComponent({
     },
 
     setChecked() {
-      this.sloths.forEach((sloth) => {
-        const slothIndex = this.checked.findIndex((el) => el.id === sloth.id);
+      this.sloths.forEach(sloth => {
+        const slothIndex = this.checked.findIndex(el => el.id === sloth.id);
         this.sloths[this.sloths.indexOf(sloth)].checked = slothIndex !== -1;
       });
     },
@@ -241,7 +241,7 @@ export default defineComponent({
         if (!res) throw new Error(`${this.$t('catalog.idNotFound')} (${sloth.id})`);
 
         const dataSloth = res;
-        const slothIndex = this.sloths.findIndex((el) => el.id === sloth.id);
+        const slothIndex = this.sloths.findIndex(el => el.id === sloth.id);
 
         if (slothIndex !== -1) this.sloths[slothIndex] = dataSloth;
 
@@ -267,7 +267,7 @@ export default defineComponent({
     },
 
     async approveDownload() {
-      const forDownload = this.checked.filter((el) => el.checked).map((el) => el.id);
+      const forDownload = this.checked.filter(el => el.checked).map(el => el.id);
 
       if (!forDownload.length) return;
 
@@ -281,8 +281,8 @@ export default defineComponent({
       const zip = JSZip();
       const zipFilename = `sloths_${new Date().toISOString()}.zip`;
 
-      ids.forEach((id) => {
-        const blobPromise = fetch(`${CDN_STICKERS_URL}/${id}/image.svg`).then((r) => {
+      ids.forEach(id => {
+        const blobPromise = fetch(`${CDN_STICKERS_URL}/${id}/image.svg`).then(r => {
           if (r.status === 200) return r.blob();
           return Promise.reject(new Error(r.statusText));
         });
@@ -291,8 +291,8 @@ export default defineComponent({
 
       zip
         .generateAsync({ type: 'blob' })
-        .then((blob) => saveAs(blob, zipFilename))
-        .catch((e) => errorHandler(e));
+        .then(blob => saveAs(blob, zipFilename))
+        .catch(e => errorHandler(e));
     },
 
     closeModal() {
@@ -307,7 +307,7 @@ export default defineComponent({
         searchText: getSearchText(),
         selected: getSelected(),
         sorting: getSortingList(),
-        checked: this.checked.filter((el) => el.checked).map((el) => el.id),
+        checked: this.checked.filter(el => el.checked).map(el => el.id),
       };
       setPageCatalogState(JSON.stringify(savedProps));
     },
@@ -343,7 +343,7 @@ export default defineComponent({
 
       const { checked } = settings;
       checked?.forEach((id: string) => {
-        const found = this.sloths.find((el) => el.id === id);
+        const found = this.sloths.find(el => el.id === id);
         if (found) found.checked = true;
       });
     },

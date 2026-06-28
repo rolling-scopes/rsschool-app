@@ -1,29 +1,27 @@
-import { PageLayout } from 'components/PageLayout';
-import { useContext, useMemo } from 'react';
+import { PageLayout } from '@client/shared/components/PageLayout';
+import { useContext } from 'react';
 import Masonry from 'react-masonry-css';
-import css from 'styled-jsx/css';
 
-import { SessionContext, SessionProvider, useActiveCourseContext } from 'modules/Course/contexts';
+import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
+import styles from './dashboard.module.css';
 import {
   AvailableReviewCard,
   MainStatsCard,
   MentorCard,
   NextEventCard,
-  RepositoryCard,
   TasksStatsCard,
   useDashboardData,
-} from 'modules/StudentDashboard';
-import { CourseService } from 'services/course';
+} from '@client/modules/StudentDashboard';
+
+const gapSize = 24;
 
 function Page() {
   const { githubId } = useContext(SessionContext);
   const { course } = useActiveCourseContext();
 
-  const { fullName, usePrivateRepositories, alias } = course;
+  const { fullName, alias } = course;
 
-  const courseService = useMemo(() => new CourseService(course.id), [course.id]);
-
-  const { data, loading, run } = useDashboardData(course.id, githubId);
+  const { data, loading } = useDashboardData(course.id, githubId);
 
   const studentPosition = data?.studentSummary?.rank ?? 0;
   const maxCourseScore = data?.maxCourseScore ?? 0;
@@ -48,14 +46,6 @@ function Page() {
       courseAlias={alias}
     />,
     <MentorCard key="mentor-card" courseId={course.id} mentor={data?.studentSummary?.mentor} />,
-    usePrivateRepositories && (
-      <RepositoryCard
-        githubId={githubId}
-        url={data?.studentSummary.repository ?? ''}
-        onSendInviteRepository={courseService.sendInviteRepository.bind(courseService)}
-        onUpdateUrl={() => run()}
-      />
-    ),
   ].filter(Boolean) as JSX.Element[];
 
   return (
@@ -63,8 +53,8 @@ function Page() {
       <>
         <Masonry
           breakpointCols={{ default: 3, 1180: 2, 800: 1 }}
-          className={masonryClassName}
-          columnClassName={masonryColumnClassName}
+          className={styles.masonry as string}
+          columnClassName={styles.masonryColumn as string}
         >
           {cards.map((card, idx) => (
             <div style={{ marginBottom: gapSize }} key={`card-${idx}`}>
@@ -72,28 +62,10 @@ function Page() {
             </div>
           ))}
         </Masonry>
-        {masonryStyles}
-        {masonryColumnStyles}
       </>
     </PageLayout>
   );
 }
-
-const gapSize = 24;
-const { className: masonryClassName, styles: masonryStyles } = css.resolve`
-  div {
-    display: flex;
-    margin-left: -${gapSize}px;
-    width: auto;
-    min-height: 85vh;
-  }
-`;
-const { className: masonryColumnClassName, styles: masonryColumnStyles } = css.resolve`
-  div {
-    padding-left: ${gapSize}px;
-    background-clip: padding-box;
-  }
-`;
 
 export default function () {
   return (

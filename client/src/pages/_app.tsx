@@ -1,12 +1,12 @@
 import App from 'next/app';
 import Head from 'next/head';
 
-import { ActiveCourseProvider } from 'modules/Course/contexts';
+import { ActiveCourseProvider } from '@client/modules/Course/contexts';
 import 'antd/dist/reset.css';
-import { initializeFeatures } from 'services/features';
+import { initializeFeatures } from '@client/services/features';
 import { Analytics } from '../components/Analytics';
 import '../styles/main.css';
-import { MessageProvider, ThemeProvider } from '@client/providers';
+import { DevToolsProvider, MessageProvider, ThemeProvider } from '@client/providers';
 
 class RsSchoolApp extends App {
   render() {
@@ -22,11 +22,19 @@ class RsSchoolApp extends App {
         </Head>
         <ThemeProvider>
           <MessageProvider>
-            <ActiveCourseProvider
-              publicRoutes={['/login', '/registry/mentor', '/registry/student', '/course/mentor/confirm']}
-            >
-              <Component {...pageProps} />
-            </ActiveCourseProvider>
+            <DevToolsProvider>
+              <ActiveCourseProvider
+                publicRoutes={[
+                  '/login',
+                  '/registry/mentor',
+                  '/registry/student',
+                  '/course/mentor/confirm',
+                  '/mentors-hall-of-fame',
+                ]}
+              >
+                <Component {...pageProps} />
+              </ActiveCourseProvider>
+            </DevToolsProvider>
           </MessageProvider>
         </ThemeProvider>
       </>

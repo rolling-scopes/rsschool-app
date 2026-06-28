@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CoursesApi } from 'api';
+import { CoursesApi } from '@client/api';
 import type { CoursesResponse } from './courses';
 
 const baseURL = process.env.CDN_HOST || '';
@@ -19,12 +19,12 @@ export class CdnService {
   }
 
   public async registerStudent(payload: unknown) {
-    const result = await this.client.post<CoursesResponse>(`/api/registry`, payload);
-    return result.data.data;
+    const result = await this.client.post<CoursesResponse>(`/api/v2/registry`, payload);
+    return result.data;
   }
 
   public async registerMentor(payload: unknown) {
-    const result = await this.client.post<CoursesResponse>(`/api/registry/mentor`, payload);
-    return result.data.data;
+    const result = await this.client.post<CoursesResponse>(`/api/v2/registry/mentor`, payload);
+    return result.data;
   }
 }

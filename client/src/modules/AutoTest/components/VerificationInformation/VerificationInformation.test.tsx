@@ -1,16 +1,18 @@
 import { render, screen } from '@testing-library/react';
-import { CourseTaskDetailedDtoTypeEnum, CheckerEnum } from 'api';
-import { CourseTaskVerifications } from 'modules/AutoTest/types';
+import { CourseTaskDetailedDtoTypeEnum, CheckerEnum } from '@client/api';
+import { CourseTaskVerifications } from '@client/modules/AutoTest/types';
 import VerificationInformation, { VerificationInformationProps } from './VerificationInformation';
 
 function renderVerificationInformation({
   type,
   studentEndDate = '2022-10-10 12:00',
   isTableVisible = true,
+  verifications,
 }: {
   type: CourseTaskDetailedDtoTypeEnum;
   studentEndDate?: string;
   isTableVisible?: boolean;
+  verifications?: CourseTaskVerifications['verifications'];
 }) {
   const courseTask = {
     name: 'Course Task',
@@ -21,6 +23,7 @@ function renderVerificationInformation({
     descriptionUrl: 'description-url',
     githubRepoName: 'github-repo-name',
     type,
+    verifications,
     publicAttributes: {
       maxAttemptsNumber: 2,
     },
@@ -30,9 +33,9 @@ function renderVerificationInformation({
     courseTask,
     isTableVisible,
     loading: false,
-    reload: jest.fn(),
-    startTask: jest.fn(),
-    showAnswers: jest.fn(),
+    reload: vi.fn(),
+    startTask: vi.fn(),
+    showAnswers: vi.fn(),
   };
 
   return render(<VerificationInformation {...props} />);
@@ -83,5 +86,28 @@ describe('VerificationInformation', () => {
     const refreshButton = screen.queryByRole('button', { name: /refresh/i });
     expect(startTaskButton).not.toBeInTheDocument();
     expect(refreshButton).not.toBeInTheDocument();
+  });
+
+  it('should render the attempts-left message before the deadline for a self-education task', () => {
+    // future deadline + SelfEducation => useAttemptsMessage yields a truthy attemptsLeftMessage
+    renderVerificationInformation({
+      type: CourseTaskDetailedDtoTypeEnum.Selfeducation,
+      studentEndDate: '2999-10-10 12:00',
+    });
+
+    expect(screen.getByText('Attempts:')).toBeInTheDocument();
+    expect(screen.getByText(/attempts left\./i)).toBeInTheDocument();
+  });
+
+  it('should enable "Show answers" once the deadline passed and there is at least one attempt', () => {
+    // past deadline + a verification => allowCheckAnswers is true => button enabled, tooltip title empty
+    renderVerificationInformation({
+      type: CourseTaskDetailedDtoTypeEnum.Selfeducation,
+      studentEndDate: '2000-01-01 12:00',
+      verifications: [{ score: 50 }] as CourseTaskVerifications['verifications'],
+    });
+
+    const answersButton = screen.getByRole('button', { name: /show answers/i });
+    expect(answersButton).toBeEnabled();
   });
 });

@@ -1,5 +1,5 @@
-import { CourseStatistics } from 'modules/CourseStatistics';
-import { SessionProvider } from 'modules/Course/contexts';
+import { CourseStatistics } from '@client/modules/CourseStatistics';
+import { SessionProvider } from '@client/modules/Course/contexts';
 
 function Page() {
   return (

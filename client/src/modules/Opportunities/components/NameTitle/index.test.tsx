@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
-import { UserData } from 'modules/Opportunities/models';
+import { UserData } from '@client/modules/Opportunities/models';
 import { NameTitle } from './index';
 
-jest.mock('../AvatarCv', () => ({
+vi.mock('../AvatarCv', () => ({
   AvatarCv: ({ src }: { src: string }) => <div>{src}</div>,
 }));
 

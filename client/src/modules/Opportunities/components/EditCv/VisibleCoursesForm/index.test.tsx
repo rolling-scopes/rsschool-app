@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { ResumeCourseDto } from 'api';
+import { ResumeCourseDto } from '@client/api';
 import { VisibleCoursesForm } from './index';
 
 const mockCourses = [
@@ -36,5 +36,17 @@ describe('VisibleCoursesForm', () => {
       expect(courseName).toBeInTheDocument();
       expect(coursePosition).toBeInTheDocument();
     });
+  });
+
+  test('shows a fallback message when there are no courses', () => {
+    render(<VisibleCoursesForm courses={[]} visibleCourses={[]} />);
+
+    expect(screen.getByText('No courses to show')).toBeInTheDocument();
+  });
+
+  test('shows the fallback message when courses is null', () => {
+    render(<VisibleCoursesForm courses={null} visibleCourses={[]} />);
+
+    expect(screen.getByText('No courses to show')).toBeInTheDocument();
   });
 });

@@ -1,11 +1,10 @@
 import { Button, Dropdown, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import React from 'react';
 import { buildExportLink, buildICalendarLink, setExportLink } from './helpers';
 import { SettingsButtons } from '../SettingsPanel';
 import { useCopyToClipboard } from 'react-use';
-import { useMessage } from 'hooks';
+import { useMessage } from '@client/hooks';
 
 export type MenuItemType = Required<MenuProps>['items'][number];
 type MenuItemClickHandler = Required<MenuProps>['onClick'];
@@ -75,7 +74,7 @@ const AdditionalActions = ({
 
   return (
     <Dropdown menu={{ items: menuItems, onClick: handleMenuItemClick }} trigger={['click']} placement="bottomRight">
-      <Button>
+      <Button data-testid={SettingsButtons.More}>
         <Space>
           {SettingsButtons.More}
           <DownOutlined />

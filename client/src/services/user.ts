@@ -1,18 +1,16 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { getApiConfiguration, getServerAxiosProps } from 'utils/axios';
 import { EnglishLevel } from '@common/models';
-import { ProfileApi, ProfileDto, UsersNotificationsApi, UpdateUserDtoLanguagesEnum } from 'api';
+import { ProfileApi, ProfileDto, UsersApi, UsersNotificationsApi, UpdateUserDtoLanguagesEnum } from '@client/api';
 import discordIntegration from '../configs/discord-integration';
 import type {
   ConfigurableProfilePermissions,
   Contacts,
   Discord,
   GeneralInfo,
+  Location,
   MentorStats,
   PublicFeedback,
   StageInterviewDetailedFeedback,
   StudentStats,
-  Location,
 } from '@common/models/profile';
 import { Rule } from 'antd/lib/form';
 
@@ -22,20 +20,12 @@ export interface UserBasic {
   id: number;
 }
 
-type SearchResponse = { data: UserBasic[] };
+const profileApi = new ProfileApi();
+const searchApi = new UsersApi();
+const usersApi = new UsersNotificationsApi();
 
 export class UserService {
-  private axios: AxiosInstance;
-  private profileApi: ProfileApi;
-  private opts: AxiosRequestConfig;
-  private usersApi: UsersNotificationsApi;
-
-  constructor(private token?: string) {
-    this.opts = getServerAxiosProps(this.token);
-    this.axios = axios.create(this.opts);
-    this.profileApi = new ProfileApi(getApiConfiguration(this.token));
-    this.usersApi = new UsersNotificationsApi(getApiConfiguration(this.token));
-  }
+  constructor() {}
 
   async getDiscordIds() {
     const fragment = new URLSearchParams(window.location.hash.slice(1));
@@ -67,7 +57,7 @@ export class UserService {
   }
 
   async getCourses() {
-    const { data } = await this.profileApi.getUserCourses('me');
+    const { data } = await profileApi.getUserCourses('me');
     return data;
   }
 
@@ -76,27 +66,25 @@ export class UserService {
       if (!query) {
         return [];
       }
-      const response = await this.axios.get<SearchResponse>(`/api/users/search/${query}`);
-      return response.data.data;
+      const response = await searchApi.searchUsersBasic(query);
+      return response.data;
     } catch {
       return [];
     }
   }
 
   async getMyProfile() {
-    const response = await this.axios.get<{ data: UserFull }>(`/api/profile/me`);
-    return response.data.data;
+    const response = await profileApi.getMyProfile();
+    return response.data as unknown as UserFull;
   }
 
   async getProfileInfo(githubId?: string) {
-    const response = await this.axios.get<{ data: ProfileInfo }>(`/api/profile/info`, {
-      params: { githubId },
-    });
-    return response.data.data;
+    const response = await profileApi.getFullProfileInfo(githubId);
+    return response.data as ProfileInfo;
   }
 
   async sendEmailConfirmationLink() {
-    return this.usersApi.sendEmailConfirmationLink();
+    return usersApi.sendEmailConfirmationLink();
   }
 }
 
