@@ -112,4 +112,114 @@ describe('<CertificateTemplatePicker />', () => {
 
     await waitFor(() => expect(screen.queryByRole('radio')).not.toBeInTheDocument());
   });
+
+  it('serves templates from the module cache on a subsequent mount (no refetch)', async () => {
+    // Import once and keep the module instance so the module-level cache survives.
+    const { CertificateTemplatePicker: Picker } = await import('./CertificateTemplatePicker');
+
+    const { unmount } = render(<Picker />);
+    await screen.findByText('Default');
+    expect(mockedGet).toHaveBeenCalledTimes(1);
+    unmount();
+
+    // Second mount reads cachedTemplates: no spinner, no second network call.
+    render(<Picker />);
+    expect(screen.getByText('Default')).toBeInTheDocument();
+    expect(mockedGet).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not update state when unmounted before the fetch resolves', async () => {
+    let resolve!: (v: unknown) => void;
+    mockedGet.mockReturnValue(new Promise(r => (resolve = r)));
+
+    const { container, unmount } = await renderPicker();
+    expect(container.querySelector('.ant-spin')).toBeInTheDocument();
+
+    // Unmount triggers the cleanup (cancelled = true) before the fetch settles.
+    unmount();
+    resolve({ data: templates });
+    // Give the resolved promise a tick; the cancelled guards must swallow the updates.
+    await Promise.resolve();
+    expect(screen.queryByText('Default')).not.toBeInTheDocument();
+  });
+
+  it('closes the preview when the image preview is dismissed', async () => {
+    await renderPicker({ value: 'default', onChange: vi.fn() });
+
+    const previewButtons = await screen.findAllByRole('button', { name: /view full preview/i });
+    fireEvent.click(previewButtons[0]);
+
+    // Preview is open.
+    await waitFor(() => {
+      expect(document.querySelector('.ant-image-preview-img, .ant-image-preview-operations')).toBeTruthy();
+    });
+
+    // Close it via the antd preview close control => onOpenChange(false) => setPreviewSrc(undefined).
+    const closeBtn = document.querySelector('.ant-image-preview-close') as HTMLElement | null;
+    if (closeBtn) {
+      fireEvent.click(closeBtn);
+    } else {
+      fireEvent.keyDown(document.body, { key: 'Escape', code: 'Escape' });
+    }
+
+    await waitFor(() => {
+      expect(document.querySelector('.ant-image-preview-wrap.ant-image-preview-moving')).toBeNull();
+    });
+  });
+
+  it('swallows mousedown on the fullscreen control so the radio is not toggled', async () => {
+    const onChange = vi.fn();
+    await renderPicker({ value: 'default', onChange });
+
+    const previewButtons = await screen.findAllByRole('button', { name: /view full preview/i });
+    fireEvent.mouseDown(previewButtons[1]);
+
+    expect(onChange).not.toHaveBeenCalledWith('modern');
+  });
+
+  it('auto-selects safely when no onChange handler is provided', async () => {
+    // value undefined + no onChange => the optional-chain `onChangeRef.current?.(fallback)` no-ops.
+    const { CertificateTemplatePicker: Picker } = await import('./CertificateTemplatePicker');
+    render(<Picker />);
+
+    expect(await screen.findByText('Default')).toBeInTheDocument();
+  });
+
+  it('reuses a single in-flight request for concurrent mounts', async () => {
+    let resolve!: (v: unknown) => void;
+    mockedGet.mockReturnValue(new Promise(r => (resolve = r)));
+    const { CertificateTemplatePicker: Picker } = await import('./CertificateTemplatePicker');
+
+    // Two simultaneous mounts: the second fetchTemplates call must reuse `inflight`.
+    render(<Picker />);
+    render(<Picker />);
+
+    resolve({ data: templates });
+    await waitFor(() => expect(screen.getAllByText('Default').length).toBeGreaterThan(0));
+    // Only one network request despite two mounts.
+    expect(mockedGet).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not call onChange when the resolved templates have no usable id', async () => {
+    // find(...)?.id ?? templates[0]?.id resolves to a falsy id => the `if (fallback)` guard is false.
+    mockedGet.mockResolvedValue({ data: [{ id: '', label: 'Blank', previewUrl: 'https://cdn/blank.png' }] });
+    const onChange = vi.fn();
+    await renderPicker({ onChange });
+
+    expect(await screen.findByText('Blank')).toBeInTheDocument();
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it('does not update state when unmounted before a failing fetch settles', async () => {
+    let reject!: (e: unknown) => void;
+    mockedGet.mockReturnValue(new Promise((_, r) => (reject = r)));
+
+    const { container, unmount } = await renderPicker();
+    expect(container.querySelector('.ant-spin')).toBeInTheDocument();
+
+    unmount();
+    reject(new Error('boom'));
+    await Promise.resolve();
+    expect(screen.queryByRole('radio')).not.toBeInTheDocument();
+  });
 });

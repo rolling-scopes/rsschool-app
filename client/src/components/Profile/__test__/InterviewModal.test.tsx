@@ -1,4 +1,5 @@
 import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import InterviewModal from '../InterviewModal';
 import { CoreJsInterviewFeedback, LegacyFeedback, StageInterviewDetailedFeedback } from '@common/models/profile';
 
@@ -122,5 +123,78 @@ describe('InterviewModal', () => {
     expect(screen.getByText('Practice')).toBeInTheDocument();
     expect(screen.getByText(/Certified level of English/)).toBeInTheDocument();
     expect(screen.getByText(/English level by interviewers opinion/)).toBeInTheDocument();
+  });
+
+  it('renders nothing for CoreJS body when the interview at idx does not exist', () => {
+    const coreJsData: CoreJsInterviewFeedback = {
+      courseName: 'JS Course',
+      courseFullName: 'JS Course 2021',
+      locationName: 'EU',
+      interviews: [],
+    };
+
+    render(<InterviewModal isVisible={true} onHide={noop} coreJs={{ data: coreJsData, idx: 5 }} />);
+
+    // title still rendered, but no answers table since interview at idx is missing
+    expect(screen.getByText(/JS Course 2021 CoreJS Interview Feedback/)).toBeInTheDocument();
+    expect(screen.queryByTestId('profile-corejs-iviews-modal-table')).not.toBeInTheDocument();
+  });
+
+  it('renders CoreJS body without comment and with a non-boolean answer', () => {
+    const coreJsData: CoreJsInterviewFeedback = {
+      courseName: 'JS Course',
+      courseFullName: 'JS Course 2021',
+      locationName: 'EU',
+      interviews: [
+        {
+          name: 'CoreJS Interview A',
+          score: 42,
+          comment: '',
+          answers: [{ questionId: 'q3', questionText: 'Rate knowledge', answer: 'partial' as unknown as boolean }],
+          interviewer: { name: 'Alice', githubId: 'alice' },
+          interviewDate: '2021-06-01',
+        },
+      ],
+    };
+
+    render(<InterviewModal isVisible={true} onHide={noop} coreJs={{ data: coreJsData, idx: 0 }} />);
+
+    // no comment block rendered (comment is empty)
+    expect(screen.queryByText(/^Comment:/)).not.toBeInTheDocument();
+    // string answer rendered as-is (neither Yes nor No tag)
+    expect(screen.getByText('partial')).toBeInTheDocument();
+    expect(screen.queryByText('Yes')).not.toBeInTheDocument();
+    expect(screen.queryByText('No')).not.toBeInTheDocument();
+  });
+
+  // NOTE: renderPreScreeningModal's `if (!data) return null` guard (InterviewModal.tsx:62)
+  // is unreachable: the title computation `prescreening?.data.courseFullName` (line 84) is
+  // evaluated first and throws a TypeError when prescreening.data is null/undefined, so the
+  // component crashes before the guard can run. Covered intent documented here instead.
+
+  it('calls onHide when the modal is cancelled', async () => {
+    const onHide = vi.fn();
+    const user = userEvent.setup();
+    const coreJsData: CoreJsInterviewFeedback = {
+      courseName: 'JS Course',
+      courseFullName: 'JS Course 2021',
+      locationName: 'EU',
+      interviews: [
+        {
+          name: 'CoreJS Interview A',
+          score: 42,
+          comment: 'c',
+          answers: [],
+          interviewer: { name: 'Alice', githubId: 'alice' },
+          interviewDate: '2021-06-01',
+        },
+      ],
+    };
+
+    render(<InterviewModal isVisible={true} onHide={onHide} coreJs={{ data: coreJsData, idx: 0 }} />);
+
+    const dialog = screen.getByRole('dialog');
+    await user.click(within(dialog).getByRole('button', { name: /close/i }));
+    expect(onHide).toHaveBeenCalled();
   });
 });

@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MentorDashboardDto } from '@client/api';
 import { MODAL_TITLE, SubmitReviewModal, SubmitReviewModalProps } from '.';
 import { SUCCESS_MESSAGE } from './SubmitReviewModal';
@@ -115,6 +115,21 @@ describe('SubmitReviewModal', () => {
 
     const message = await screen.findByText(errorMessage);
     expect(message).toBeInTheDocument();
+  });
+
+  it('does not post a score when the student github id or course task id is missing', async () => {
+    // data is non-empty (modal opens) but lacks studentGithubId -> the
+    // `if (studentGithubId && courseTaskId)` guard is false, so no request is sent
+    // and no success message appears.
+    const data = { ...MODAL_DATA_MOCK, studentGithubId: undefined } as MentorDashboardDto;
+    render(<SubmitReviewModal {...PROPS_MOCK} data={data} />);
+
+    const scoreInput = screen.getByRole('spinbutton', { name: /score \(max 100 points\)/i });
+    fireEvent.change(scoreInput, { target: { value: 10 } });
+    fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
+
+    await waitFor(() => expect(mockAxios.request).not.toHaveBeenCalled());
+    expect(screen.queryByText(SUCCESS_MESSAGE)).not.toBeInTheDocument();
   });
 
   it('should call onClose when "Cancel" button was clicked', async () => {

@@ -1,6 +1,7 @@
 import { render, screen, within, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { Form } from 'antd';
 import { SettingsDrawer } from './index';
 
 // CourseTaskDto has many required fields; the drawer only reads id/name/isVisible.
@@ -128,5 +129,31 @@ describe('<SettingsDrawer />', () => {
     await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: /close/i }));
 
     expect(props.onCancel).toHaveBeenCalled();
+  });
+
+  describe('when form validation fails', () => {
+    let spy: ReturnType<typeof vi.spyOn>;
+
+    afterEach(() => spy?.mockRestore());
+
+    it('does not call onOk if validateFields rejects', async () => {
+      const user = userEvent.setup();
+      // Keep the real form (so <Form> still works) but force validateFields to reject →
+      // `await ….catch(() => null)` yields null → the `if (!values) return` guard short-circuits.
+      const realUseForm = Form.useForm;
+      spy = vi.spyOn(Form, 'useForm').mockImplementation((...args) => {
+        const [form] = realUseForm(...args);
+        vi.spyOn(form, 'validateFields').mockRejectedValue(new Error('invalid'));
+        return [form];
+      });
+
+      const props = makeProps();
+      render(<SettingsDrawer {...props} />);
+
+      await openPanel(user);
+      await user.click(screen.getByText('Save'));
+
+      await waitFor(() => expect(props.onOk).not.toHaveBeenCalled());
+    });
   });
 });

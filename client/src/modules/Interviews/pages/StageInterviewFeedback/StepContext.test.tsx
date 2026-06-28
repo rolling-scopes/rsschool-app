@@ -53,6 +53,24 @@ vi.mock('@client/api', async () => ({
   },
 }));
 
+// Controllable override for the template handler: by default delegate to the real
+// pure-logic implementation; when `emptyStepsOverride.value` is true, return a feedback
+// with NO steps so the provider's `activeStep` is undefined. This is the only way to reach
+// the defensive `activeStep ? … : false` / `if (activeStep)` guards, since the real template
+// is always non-empty.
+const { emptyStepsOverride } = vi.hoisted(() => ({ emptyStepsOverride: { value: false } }));
+
+vi.mock('./feedbackTemplateHandler', async () => {
+  const actual = (await vi.importActual('./feedbackTemplateHandler')) as typeof import('./feedbackTemplateHandler');
+  return {
+    ...actual,
+    getFeedbackFromTemplate: (...args: Parameters<typeof actual.getFeedbackFromTemplate>) =>
+      emptyStepsOverride.value
+        ? { steps: [], isCompleted: false, version: 1 }
+        : actual.getFeedbackFromTemplate(...args),
+  };
+});
+
 // next/router is aliased to src/__mocks__/next/router by vitest config. Grab its push spy.
 import { useRouter } from 'next/router';
 const routerPush = (useRouter() as unknown as { push: ReturnType<typeof vi.fn> }).push;
@@ -283,6 +301,39 @@ describe('<StepContextProvider /> (multi-step feedback container)', () => {
     expect(screen.getByText('Step not found')).toBeInTheDocument();
   });
 
+  it('keeps the index at 0 when prev() is invoked on the first step (clamp guard)', async () => {
+    const user = userEvent.setup();
+    // A consumer that exposes the context `prev` action via a button and reports the index.
+    function PrevProbe() {
+      const { prev, activeStepIndex } = useContext(StepContext);
+      return (
+        <div>
+          <span data-testid="idx">{activeStepIndex}</span>
+          <button type="button" onClick={prev}>
+            go-prev
+          </button>
+        </div>
+      );
+    }
+
+    render(
+      <StepContextProvider
+        interviewFeedback={makeFeedback()}
+        course={course}
+        interviewId={7}
+        type="stage-interview"
+        interviewMaxScore={100}
+      >
+        <PrevProbe />
+      </StepContextProvider>,
+    );
+
+    expect(screen.getByTestId('idx')).toHaveTextContent('0');
+    // Invoking prev while already on step 0 must clamp at 0 (cannot go below the first step).
+    await user.click(screen.getByRole('button', { name: 'go-prev' }));
+    expect(screen.getByTestId('idx')).toHaveTextContent('0');
+  });
+
   it('marks completed prior steps as "finish" and the active one as "process" in the stepper', async () => {
     const user = userEvent.setup();
     renderProvider();
@@ -299,6 +350,54 @@ describe('<StepContextProvider /> (multi-step feedback container)', () => {
     const theoryDesc = screen.getByText('Talk about theory, how things work');
     const theoryItem = theoryDesc.closest('.ant-steps-item');
     expect(theoryItem).toHaveClass('ant-steps-item-process');
+  });
+});
+
+describe('StepContextProvider with no template steps (defensive guards)', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    emptyStepsOverride.value = true;
+  });
+  afterEach(() => {
+    emptyStepsOverride.value = false;
+  });
+
+  it('treats an empty-steps feedback as not-finished and no-ops onValuesChange', async () => {
+    const user = userEvent.setup();
+    // Consumer that surfaces isFinalStep and lets us fire onValuesChange when activeStep is undefined.
+    function EmptyProbe() {
+      const { isFinalStep, onValuesChange, steps } = useContext(StepContext);
+      return (
+        <div>
+          <span data-testid="final">{String(isFinalStep)}</span>
+          <span data-testid="count">{steps.length}</span>
+          <button type="button" onClick={() => onValuesChange({}, {} as never)}>
+            change
+          </button>
+        </div>
+      );
+    }
+
+    render(
+      <StepContextProvider
+        interviewFeedback={makeFeedback()}
+        course={course}
+        interviewId={7}
+        type="stage-interview"
+        interviewMaxScore={100}
+      >
+        <EmptyProbe />
+      </StepContextProvider>,
+    );
+
+    expect(screen.getByTestId('count')).toHaveTextContent('0');
+    // No active step → isInterviewCanceled is skipped, isFinished stays false.
+    // isFinalStep = (activeStepIndex === steps.length-1) → 0 === -1 → false, and isFinished false.
+    expect(screen.getByTestId('final')).toHaveTextContent('false');
+
+    // onValuesChange with no active step must not throw (the `if (activeStep)` guard short-circuits).
+    await user.click(screen.getByRole('button', { name: 'change' }));
+    expect(screen.getByTestId('final')).toHaveTextContent('false');
   });
 });
 

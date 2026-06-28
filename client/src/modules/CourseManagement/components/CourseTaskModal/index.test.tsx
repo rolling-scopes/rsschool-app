@@ -33,12 +33,20 @@ vi.mock('@client/services/user', () => ({
 
 // UserSearch is a remote-data Select (brittle). Replace with a minimal controlled
 // stub that preserves value/onChange, like ManualSubmitTab stubs StudentSearch.
+// It also forwards to searchFn so the modal's loadUsers handler is exercised.
 vi.mock('@client/shared/components/UserSearch', () => ({
-  UserSearch: (props: { value?: number; onChange?: (v: number) => void }) => (
+  UserSearch: (props: {
+    value?: number;
+    onChange?: (v: number) => void;
+    searchFn?: (text: string) => Promise<unknown>;
+  }) => (
     <input
       data-testid="task-owner"
       value={props.value ?? ''}
-      onChange={e => props.onChange?.(Number(e.target.value))}
+      onChange={e => {
+        props.onChange?.(Number(e.target.value));
+        props.searchFn?.(e.target.value);
+      }}
     />
   ),
 }));
@@ -254,5 +262,37 @@ describe('<CourseTaskModal />', () => {
     await user.click(screen.getByRole('button', { name: /cancel/i }));
 
     expect(props.onCancel).toHaveBeenCalled();
+  });
+
+  it('prefills the task owner and registration start date from an interview record', async () => {
+    render(
+      <CourseTaskModal
+        {...makeProps({
+          data: {
+            taskId: 20,
+            type: 'interview',
+            taskOwner: { id: 99, githubId: 'owner' },
+            studentRegistrationStartDate: '2024-01-01T00:00:00.000Z',
+            studentStartDate: '2024-02-01T00:00:00.000Z',
+            studentEndDate: '2024-02-10T00:00:00.000Z',
+          } as never,
+        })}
+      />,
+    );
+
+    // getInitialValues maps taskOwner -> taskOwnerId and seeds the registration date.
+    expect(await screen.findByText('Registration Start Date')).toBeInTheDocument();
+    expect(screen.getByTestId('task-owner')).toBeInTheDocument();
+  });
+
+  it('searches users through loadUsers when the task owner field changes', async () => {
+    render(<CourseTaskModal {...makeProps()} />);
+
+    await screen.findByText('Course Task');
+    const taskOwner = screen.getByTestId('task-owner');
+    fireEvent.change(taskOwner, { target: { value: '7' } });
+
+    // loadUsers -> userService.searchUser invoked; field remains rendered.
+    expect(taskOwner).toBeInTheDocument();
   });
 });

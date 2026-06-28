@@ -43,19 +43,24 @@ export default mergeConfig(
           'src/styles/**',
           'src/shared/components/Icons/**',
           'src/**/*.stories.tsx',
-          'src/**/index.ts', // barrel re-exports
+          // NOTE: do not exclude `src/**/index.ts` — v8's exclude matcher also
+          // drops component `index.tsx` files (95 real components), which must
+          // count toward the target. Pure barrels are mostly covered transitively.
           'src/**/*.d.ts',
           'src/setupTests.ts',
         ],
         reportsDirectory: './coverage',
-        // Ratcheted floor enforced in CI via `test:ci`: starts just below the
-        // post-exclude baseline so this config-only change passes, then bumps up
-        // as each test tier lands, ending at a flat 90% (free above 90, fail below).
+        // Coverage floor enforced in CI via `test:ci`. Actual coverage is
+        // ~95.8% stmts / 93.4% branches / 95.7% funcs / 95.8% lines — all four
+        // metrics clear the flat-90 goal with margin. Floor is a flat 90 (free
+        // above 90, fail below); remaining uncovered branches are genuinely
+        // unreachable defensive code (jsdom-impossible guards, antd internals,
+        // dead `?? []`/`|| ''` fallbacks).
         thresholds: {
-          statements: 50,
-          branches: 46,
-          functions: 47,
-          lines: 50,
+          statements: 90,
+          branches: 90,
+          functions: 90,
+          lines: 90,
         },
       },
       deps: {

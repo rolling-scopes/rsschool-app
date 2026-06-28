@@ -301,4 +301,12 @@ describe('TasksTable', () => {
       expect(rows).toHaveLength(data.length);
     });
   });
+
+  test('renders no description link when the task has no descriptionUrl', () => {
+    const [task] = generateTasksData(1);
+    renderTasksTable([{ ...task, descriptionUrl: '' } as TaskDto]);
+
+    // descriptionUrl falsy → the `value ? <a> : null` render returns null (no Link cell).
+    expect(screen.queryByRole('link', { name: /link/i })).not.toBeInTheDocument();
+  });
 });

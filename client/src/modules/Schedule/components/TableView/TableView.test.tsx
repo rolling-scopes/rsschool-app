@@ -214,6 +214,76 @@ describe('TableView', () => {
 
     expect(setFilterMock).toHaveBeenCalledWith({ types: [], statuses: [], tags: [] });
   });
+
+  it('removes a single Type tag (and its value) when its close icon is clicked', () => {
+    const setFilterMock = vi.fn();
+    vi.spyOn(ReactUse, 'useLocalStorage').mockReturnValueOnce([
+      {
+        types: [TagsEnum.Coding],
+        statuses: [],
+        tags: [{ label: `${ColumnName.Type}: Coding`, value: TagsEnum.Coding, tagType: ColumnName.Type }],
+      },
+      setFilterMock,
+      vi.fn(),
+    ]);
+    render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
+
+    fireEvent.click(screen.getByRole('img', { name: 'Close' }));
+
+    expect(setFilterMock).toHaveBeenCalledWith(expect.objectContaining({ types: [], statuses: [] }));
+  });
+
+  it('removes a single Status tag (and its value) when its close icon is clicked', () => {
+    const setFilterMock = vi.fn();
+    vi.spyOn(ReactUse, 'useLocalStorage').mockReturnValueOnce([
+      {
+        types: [],
+        statuses: [StatusEnum.Done],
+        tags: [{ label: `${ColumnName.Status}: Done`, value: StatusEnum.Done, tagType: ColumnName.Status }],
+      },
+      setFilterMock,
+      vi.fn(),
+    ]);
+    render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
+
+    fireEvent.click(screen.getByRole('img', { name: 'Close' }));
+
+    expect(setFilterMock).toHaveBeenCalledWith(expect.objectContaining({ statuses: [] }));
+  });
+
+  it('shows an error when closing a tag with an unrecognized tag type', () => {
+    vi.spyOn(ReactUse, 'useLocalStorage').mockReturnValueOnce([
+      {
+        types: [],
+        statuses: [],
+        tags: [{ label: 'Weird: tag', value: 'x', tagType: 'weird' as never }],
+      },
+      vi.fn(),
+      vi.fn(),
+    ]);
+    render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
+
+    fireEvent.click(screen.getByRole('img', { name: 'Close' }));
+    // The default switch branch surfaces an "Unknown tag" error message.
+    return waitFor(() => expect(screen.getByText('Unknown tag')).toBeInTheDocument());
+  });
+
+  it('clears stored statuses when navigating to a non-"all" status tab', () => {
+    const setFilterMock = vi.fn();
+    // statusFilter != ALL and stored statuses present → the effect resets statuses + status tags.
+    vi.spyOn(ReactUse, 'useLocalStorage').mockReturnValue([
+      {
+        types: [],
+        statuses: [StatusEnum.Done],
+        tags: [{ label: `${ColumnName.Status}: Done`, value: StatusEnum.Done, tagType: ColumnName.Status }],
+      },
+      setFilterMock,
+      vi.fn(),
+    ]);
+    render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} statusFilter={StatusEnum.Missed} />);
+
+    expect(setFilterMock).toHaveBeenCalledWith(expect.objectContaining({ statuses: [] }));
+  });
 });
 
 function generateCourseData(

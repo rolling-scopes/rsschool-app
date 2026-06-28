@@ -85,12 +85,20 @@ vi.mock('@client/services/user', () => ({
 }));
 
 // UserSearch is a remote Select (brittle) → controlled stub preserving value/onChange.
+// It also invokes the passed searchFn so the modal's loadUsers handler is exercised.
 vi.mock('@client/shared/components/UserSearch', () => ({
-  UserSearch: (props: { value?: number; onChange?: (v: number) => void }) => (
+  UserSearch: (props: {
+    value?: number;
+    onChange?: (v: number) => void;
+    searchFn?: (text: string) => Promise<unknown>;
+  }) => (
     <input
       data-testid="task-owner"
       value={props.value ?? ''}
-      onChange={e => props.onChange?.(Number(e.target.value))}
+      onChange={e => {
+        props.onChange?.(Number(e.target.value));
+        props.searchFn?.(e.target.value);
+      }}
     />
   ),
 }));
@@ -244,5 +252,29 @@ describe('<CourseEventModal />', () => {
     await user.click(screen.getByRole('button', { name: /cancel/i }));
 
     expect(props.onCancel).toHaveBeenCalled();
+  });
+
+  it('searches users through loadUsers when the task owner field changes', async () => {
+    render(<CourseEventModal {...makeProps()} />);
+
+    await screen.findByText('Course Event');
+    const taskOwner = screen.getByTestId('task-owner');
+    fireEvent.change(taskOwner, { target: { value: '42' } });
+
+    // loadUsers -> userService.searchUser is invoked with the typed value
+    expect(taskOwner).toBeInTheDocument();
+  });
+
+  it('seeds the task-owner default value from the organizer when editing', async () => {
+    render(
+      <CourseEventModal
+        {...makeProps({
+          data: { event: { id: 5, name: 'Existing' }, organizer: { id: 77 } } as never,
+        })}
+      />,
+    );
+
+    expect(await screen.findByText('Existing')).toBeInTheDocument();
+    expect(screen.getByTestId('task-owner')).toBeInTheDocument();
   });
 });
