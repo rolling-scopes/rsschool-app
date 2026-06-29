@@ -1,12 +1,12 @@
-import { useContext, useEffect, useState } from 'react';
-import { Layout, Modal, Typography } from 'antd';
+import { useContext, useState } from 'react';
+import { Layout, message, Modal, Typography } from 'antd';
+import { useRequest } from 'ahooks';
 import { AxiosError } from 'axios';
 import dayjs from 'dayjs';
 import Head from 'next/head';
 import { OpportunitiesApi, ResumeDto } from '@client/api';
 import { Header } from '@client/shared/components/Header';
 import { LoadingScreen } from '@client/shared/components/LoadingScreen';
-import { useLoading } from '@client/components/useLoading';
 import { SessionContext } from '@client/modules/Course/contexts';
 import { EditViewCv } from '@client/modules/Opportunities/components/EditViewCv';
 
@@ -17,7 +17,6 @@ const service = new OpportunitiesApi();
 
 export function EditPage() {
   const { githubId } = useContext(SessionContext);
-  const [loading, withLoading] = useLoading(false);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [consent, setConsent] = useState<boolean>(false);
   const [resume, setResume] = useState<ResumeDto | null>(null);
@@ -25,33 +24,45 @@ export function EditPage() {
 
   const switchView = () => setEditMode(!editMode);
 
-  useEffect(() => {
-    getData();
-  }, [editMode]);
-
-  const getData = withLoading(async () => {
-    const { data } = await service.getConsent();
-    if (data.consent) {
-      try {
-        const { data } = await service.getResume(githubId);
-        setResume(data);
-      } catch (err) {
-        const error = err as AxiosError;
-        if (error.response?.status === 404) {
-          setResume(null);
-          return;
+  const loadDataRequest = useRequest(
+    async () => {
+      const { data } = await service.getConsent();
+      if (data.consent) {
+        try {
+          const { data } = await service.getResume(githubId);
+          setResume(data);
+        } catch (err) {
+          const error = err as AxiosError;
+          if (error.response?.status === 404) {
+            setResume(null);
+            return;
+          }
+          throw err;
         }
-        throw err;
       }
-    }
-    setConsent(data.consent);
-  });
+      setConsent(data.consent);
+    },
+    {
+      refreshDeps: [editMode],
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
+  );
 
-  const handleDeleteConsent = withLoading(async () => {
-    const { data } = await service.deleteConsent();
-    await getData();
-    return data;
-  });
+  const deleteConsentRequest = useRequest(
+    async () => {
+      const { data } = await service.deleteConsent();
+      await loadDataRequest.runAsync();
+      return data;
+    },
+    {
+      manual: true,
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
+  );
 
   const showCreationModal = (validUntilTimestamp: number) => {
     const validUntil = dayjs(validUntilTimestamp).format('YY-MM-DD');
@@ -77,12 +88,22 @@ export function EditPage() {
     });
   };
 
-  const handleCreateConsent = withLoading(async () => {
-    const { data } = await service.createConsent();
-    await getData();
-    showCreationModal(data.expires);
-    setEditMode(true);
-  });
+  const createConsentRequest = useRequest(
+    async () => {
+      const { data } = await service.createConsent();
+      await loadDataRequest.runAsync();
+      showCreationModal(data.expires);
+      setEditMode(true);
+    },
+    {
+      manual: true,
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
+  );
+
+  const loading = loadDataRequest.loading || deleteConsentRequest.loading || createConsentRequest.loading;
 
   return (
     <>
@@ -99,9 +120,9 @@ export function EditPage() {
             data={resume}
             editMode={editMode || resume == null}
             switchView={switchView}
-            onRemoveConsent={handleDeleteConsent}
-            onCreateConsent={handleCreateConsent}
-            onUpdateResume={() => getData()}
+            onRemoveConsent={deleteConsentRequest.runAsync}
+            onCreateConsent={createConsentRequest.runAsync}
+            onUpdateResume={loadDataRequest.runAsync}
           />
         </Content>
       </LoadingScreen>

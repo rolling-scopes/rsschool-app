@@ -2,18 +2,58 @@ import { Button, Divider, Form, Input, InputNumber, Radio, Rate, Space, Typograp
 import { AxiosError } from 'axios';
 import { GithubAvatar } from '@client/shared/components/GithubAvatar';
 import { PageLayoutSimple } from '@client/shared/components/PageLayout';
-import { useLoading } from '@client/components/useLoading';
+import { useRequest } from 'ahooks';
 import { useMessage } from '@client/hooks';
 import get from 'lodash/get';
 import keys from 'lodash/keys';
 import set from 'lodash/set';
 import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
-import { ChangeEvent, useContext, useEffect, useMemo, useState } from 'react';
-import { useAsync } from 'react-use';
+import { ChangeEvent, useContext, useMemo, useState } from 'react';
+import { useRouter } from 'next/router';
 import { CourseService } from '@client/services/course';
 import { CourseRole, StudentBasic } from '@client/services/models';
 
-type FormValues = typeof defaultInitialValues;
+type FormValues = Omit<typeof defaultInitialValues, 'githubId'> & { githubId: string | null };
+
+type SerializedFormValues = {
+  skills: {
+    common: {
+      binaryNumber: number;
+      oop: number;
+      bigONotation: number;
+      sortingAndSearchAlgorithms: number;
+    };
+    dataStructures: {
+      array: number;
+      list: number;
+      stack: number;
+      queue: number;
+      tree: number;
+      hashTable: number;
+      heap: number;
+    };
+    htmlCss: {
+      level: number;
+    };
+  };
+  programmingTask: {
+    task: string;
+    codeWritingLevel: number;
+    resolved: number;
+    comment: string;
+  };
+  english: {
+    levelStudentOpinion: number;
+    levelMentorOpinion: number;
+    whereAndWhenLearned: string;
+    comment: string;
+  };
+  resume: {
+    verdict: string;
+    comment: string;
+    score: number;
+  };
+};
 
 type HandleChangeValue = (skillName: string) => (value: any) => void;
 
@@ -263,50 +303,52 @@ function Page() {
   const { message } = useMessage();
   const { course } = useActiveCourseContext();
   const session = useContext(SessionContext);
+  const router = useRouter();
   const courseId = course.id;
-  const [githubId] = useState(window ? new URLSearchParams(window.location.search).get('githubId') : null);
+  const githubId = typeof router.query.githubId === 'string' ? router.query.githubId : null;
+  const defaultResume = useMemo(
+    () => ({
+      ...defaultInitialValues,
+      githubId,
+    }),
+    [githubId],
+  );
 
   const [form] = Form.useForm();
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
-  const [loading, withLoading] = useLoading(false);
-  const [studentGitHubId, setStudentGitHubId] = useState<string>();
-  const [students, setStudents] = useState([] as StudentBasic[]);
-  const [interviews, setInterviews] = useState([] as { id: number; completed: boolean; student: StudentBasic }[]);
+  const interviewsRequest = useRequest(async () => courseService.getInterviewerStageInterviews(session.githubId), {
+    onError: () => {
+      message.error('An unexpected error occurred. Please try later.');
+    },
+  });
+  const interviews = (interviewsRequest.data ?? []) as { id: number; completed: boolean; student: StudentBasic }[];
 
-  const [resume, setResume] = useState(defaultInitialValues);
+  const [resume, setResume] = useState(defaultResume);
 
-  const loadData = async () => {
-    const interviews = await courseService.getInterviewerStageInterviews(session.githubId);
-    setStudents(interviews.filter(i => !i.completed).map(i => i.student));
-    setStudents(students);
-    setInterviews(interviews);
-  };
-
-  useAsync(withLoading(loadData), []);
-
-  useEffect(() => {
-    form.setFieldsValue({ githubId });
-  }, [githubId]);
-
-  useEffect(() => {
-    if (interviews?.length && githubId) {
-      handleStudentSelect(githubId);
-    }
-  }, [interviews, githubId]);
-
-  const handleStudentSelect = async (githubId: string) => {
-    setStudentGitHubId(githubId);
-
-    const interview = interviews.find(i => i.student.githubId === githubId);
-    if (interview != null) {
+  const feedbackRequest = useRequest(
+    async () => {
+      const interview = interviews.find(i => i.student.githubId === githubId);
+      if (interview == null) {
+        return null;
+      }
       const feedback = await courseService.getStageInterviewFeedback(interview.id);
-      const deserializeFeedback = deserializeFromJson(feedback);
-      setResume(deserializeFeedback);
-      form.setFieldsValue(deserializeFeedback);
-    }
-  };
+      return deserializeFromJson(feedback);
+    },
+    {
+      ready: Boolean(githubId && interviews.length),
+      refreshDeps: [defaultResume, githubId, interviews],
+      onSuccess: feedback => {
+        const nextResume = feedback == null ? defaultResume : { ...defaultResume, ...feedback };
+        setResume(nextResume);
+        form.setFieldsValue(nextResume);
+      },
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
+  );
 
-  const calculateResult = (result: any) => {
+  const calculateResult = (result: SerializedFormValues) => {
     const { skills, programmingTask } = result;
     const commonSkills = Object.values(skills.common).filter(Boolean) as number[];
     const dataStructuresSkills = Object.values(skills.dataStructures).filter(Boolean) as number[];
@@ -324,32 +366,37 @@ function Page() {
     return Math.floor(rating * 10);
   };
 
-  const handleSubmit = withLoading(async (values: FormValues) => {
-    if (!githubId || !values['resume-verdict'] || loading) {
-      return;
-    }
-    const interview = interviews.find(i => i.student.githubId === githubId);
-    if (interview == null) {
-      return;
-    }
+  const handleSubmitRequest = useRequest(
+    async (values: FormValues) => {
+      if (!githubId || !values['resume-verdict'] || loading) {
+        return;
+      }
+      const interview = interviews.find(i => i.student.githubId === githubId);
+      if (interview == null) {
+        return;
+      }
 
-    try {
-      const json = serializeToJson(values);
-      await courseService.postStageInterviewFeedback(interview?.id, {
-        json,
-        githubId: githubId ?? '',
-        isCompleted: values['resume-verdict'] !== 'didNotDecideYet',
-        isGoodCandidate: values['resume-verdict'] === 'noButGoodCandidate',
-        decision: values['resume-verdict'],
-      });
-      message.success('You interview feedback has been submitted. Thank you.');
-      form.resetFields();
-    } catch (e) {
-      const error = e as AxiosError<{ data?: { message?: string } }>;
-      const errorMessage = error?.response?.data?.data?.message ?? 'An error occurred. Please try later.';
-      message.error(errorMessage);
-    }
-  });
+      try {
+        const json = serializeToJson(values);
+        await courseService.postStageInterviewFeedback(interview?.id, {
+          json,
+          githubId: githubId ?? '',
+          isCompleted: values['resume-verdict'] !== 'didNotDecideYet',
+          isGoodCandidate: values['resume-verdict'] === 'noButGoodCandidate',
+          decision: values['resume-verdict'],
+        });
+        message.success('You interview feedback has been submitted. Thank you.');
+        form.resetFields();
+      } catch (e) {
+        const error = e as AxiosError<{ data?: { message?: string } }>;
+        const errorMessage = error?.response?.data?.data?.message ?? 'An error occurred. Please try later.';
+        message.error(errorMessage);
+      }
+    },
+    { manual: true },
+  );
+
+  const loading = interviewsRequest.loading || feedbackRequest.loading || handleSubmitRequest.loading;
 
   const handleTotalScoreChange = (skillName: string) => (value: ChangeEvent<HTMLInputElement> | number) => {
     const comment = (value as ChangeEvent<HTMLInputElement>)?.target?.value;
@@ -361,7 +408,7 @@ function Page() {
       newResult = { ...resume, [skillName]: value, 'resume-score': result };
     }
     setResume(newResult);
-    form.setFieldsValue({ ...newResult, githubId: studentGitHubId });
+    form.setFieldsValue({ ...newResult, githubId });
   };
 
   return (
@@ -370,7 +417,7 @@ function Page() {
         form={form}
         initialValues={resume}
         layout="vertical"
-        onFinish={handleSubmit}
+        onFinish={handleSubmitRequest.runAsync}
         onFinishFailed={({ errorFields: [errorField] }) => form.scrollToField(errorField?.name)}
       >
         <Space align="baseline">
@@ -397,15 +444,15 @@ function Page() {
   );
 }
 
-function serializeToJson(values: FormValues): any {
+function serializeToJson(values: FormValues): SerializedFormValues {
   return keys(values)
     .filter(v => v !== 'githubId')
     .reduce((acc, key) => {
       return set(acc, key.split('-').join('.'), values[key as keyof FormValues]);
-    }, {});
+    }, {} as SerializedFormValues);
 }
 
-function deserializeFromJson(json: Record<string, unknown>): any {
+function deserializeFromJson(json: Record<string, unknown>): FormValues {
   return keys(defaultInitialValues)
     .filter(key => key !== 'githubId')
     .reduce((acc, key) => {

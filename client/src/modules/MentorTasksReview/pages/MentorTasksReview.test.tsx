@@ -25,7 +25,7 @@ vi.mock('@client/api', async importOriginal => {
 });
 
 vi.mock('ahooks', () => ({
-  useRequest: (fn: () => Promise<unknown>) => useRequestMock(fn),
+  useRequest: (fn: (...args: unknown[]) => Promise<unknown>, options?: unknown) => useRequestMock(fn, options),
 }));
 
 // AssignReviewerModal (reached via the table) uses the default useRequest export;
@@ -91,7 +91,14 @@ describe('MentorTasksReview page', () => {
       data: { content: [REVIEW_MOCK], pagination: { current: 1, pageSize: 20, total: 1 } },
     });
     messageError.mockReset();
-    useRequestMock.mockReset().mockReturnValue({ data: [{ id: 10, name: 'Review task' }] });
+    // The page derives `tasksRequest.data` from one useRequest and drives the
+    // reviews fetch through another via `runAsync`; expose both shapes.
+    useRequestMock.mockReset().mockImplementation((fn: (...args: unknown[]) => Promise<unknown>) => ({
+      data: [{ id: 10, name: 'Review task' }],
+      loading: false,
+      run: fn,
+      runAsync: fn,
+    }));
     isCourseManagerMock.mockReset().mockReturnValue(true);
   });
 

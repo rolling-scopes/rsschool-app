@@ -8,10 +8,10 @@ import {
   TasksCriteriaApi,
 } from '@client/api';
 import { CourseTaskSelect } from '@client/shared/components/Forms';
+import { useRequest } from 'ahooks';
 import MarkdownInput from '@client/shared/components/Forms/MarkdownInput';
 import { markdownLabel } from '@client/shared/components/Forms/PreparedComment';
 import { PageLayout } from '@client/shared/components/PageLayout';
-import { useLoading } from '@client/components/useLoading';
 import { UserSearch } from '@client/shared/components/UserSearch';
 import { SessionContext, SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
 import {
@@ -48,7 +48,32 @@ function Page() {
   const queryGithubId = router.query.githubId ?? null;
   const [form] = Form.useForm();
 
-  const [loading, withLoading] = useLoading(false);
+  const submitReviewRequest = useRequest(
+    async (values: any) => {
+      try {
+        if (values.maxScore != null && values.maxScore < score) {
+          message.error(`The score (${score}) exceeds the maximum score (${values.maxScore}) for the task.`);
+          return;
+        }
+        await courseService.postTaskSolutionResult(values.githubId, values.courseTaskId, {
+          score,
+          comment: markdownLabel + values.comment,
+          anonymous: values.visibleName !== true,
+          comments: [],
+          review: [],
+          criteria: criteriaData,
+        });
+        message.success('The review has been submitted. Thanks!');
+        form.resetFields(['comment', 'githubId', 'visibleName']);
+        setScore(0);
+        setCriteriaData([]);
+        setState({ loading: false, data: [] });
+      } catch {
+        message.error('An error occurred. Please try later.');
+      }
+    },
+    { manual: true },
+  );
   const [modal, contextHolder] = Modal.useModal();
   const [courseTaskId, setCourseTaskId] = useState<number | null>(queryTaskId);
   const [criteriaId, setCriteriaId] = useState<number | null>(null);
@@ -146,32 +171,8 @@ function Page() {
     }
   }, [historicalCommentSelected]);
 
-  const submitReview = withLoading(async (values: any) => {
-    try {
-      if (values.maxScore != null && values.maxScore < score) {
-        message.error(`The score (${score}) exceeds the maximum score (${values.maxScore}) for the task.`);
-        return;
-      }
-      await courseService.postTaskSolutionResult(values.githubId, values.courseTaskId, {
-        score,
-        comment: markdownLabel + values.comment,
-        anonymous: values.visibleName !== true,
-        comments: [],
-        review: [],
-        criteria: criteriaData,
-      });
-      message.success('The review has been submitted. Thanks!');
-      form.resetFields(['comment', 'githubId', 'visibleName']);
-      setScore(0);
-      setCriteriaData([]);
-      setState({ loading: false, data: [] });
-    } catch {
-      message.error('An error occurred. Please try later.');
-    }
-  });
-
   const handleSubmit = async (values: any) => {
-    if (!values.githubId || loading) {
+    if (!values.githubId || submitReviewRequest.loading) {
       return;
     }
 
@@ -196,10 +197,10 @@ function Page() {
     }
 
     if (score !== 0) {
-      await submitReview(values);
+      await submitReviewRequest.runAsync(values);
     } else {
       modal.confirm({
-        onOk: () => submitReview(values),
+        onOk: () => submitReviewRequest.runAsync(values),
         okText: 'Yes, submit',
         cancelText: 'Change score',
         content: <Text>Are you sure you want to submit a review with a score of 0 points?</Text>,
@@ -246,7 +247,7 @@ function Page() {
   const assignment = assignments.find(({ student }) => student.githubId === form.getFieldValue('githubId'));
 
   return (
-    <PageLayout loading={loading} title="Cross-Check Review" showCourseName>
+    <PageLayout loading={submitReviewRequest.loading} title="Cross-Check Review" showCourseName>
       {contextHolder}
       <Row gutter={24}>
         <Col {...colSizes}>

@@ -534,7 +534,7 @@ export class CourseService {
     return result.data as unknown as { id: number } | null;
   }
 
-  async cancelInterviewPair(interviewId: string, pairId: string) {
+  async cancelInterviewPair(interviewId: string | number, pairId: string) {
     const result = await coursesInterviewsApi.cancelInterviewPair(this.courseId, Number(interviewId), Number(pairId));
     return result.data;
   }
