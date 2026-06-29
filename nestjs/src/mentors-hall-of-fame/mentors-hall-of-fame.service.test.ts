@@ -428,6 +428,18 @@ describe('MentorsHallOfFameService', () => {
       expect(mockQueryBuilder.where).toHaveBeenCalledTimes(1);
     });
 
+    it('counts gratitudes with a plain COUNT (no redundant DISTINCT)', async () => {
+      mockQueryBuilder.getRawMany.mockResolvedValueOnce(mockMentorData).mockResolvedValueOnce([]);
+
+      await service.refreshCache();
+
+      expect(mockGratitudesQueryBuilder.addSelect).toHaveBeenCalledWith('COUNT(feedback.id)', 'gratitudesCount');
+      expect(mockGratitudesQueryBuilder.addSelect).not.toHaveBeenCalledWith(
+        'COUNT(DISTINCT feedback.id)',
+        'gratitudesCount',
+      );
+    });
+
     it('logs and keeps cache unchanged when refresh fails', async () => {
       const loggerErrorSpy = vi.spyOn(
         (service as unknown as { logger: { error: (message: string, error: unknown) => void } }).logger,
