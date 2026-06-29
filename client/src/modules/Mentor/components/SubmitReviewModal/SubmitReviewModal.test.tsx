@@ -1,16 +1,18 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MentorDashboardDto } from '@client/api';
 import { MODAL_TITLE, SubmitReviewModal, SubmitReviewModalProps } from '.';
 import { SUCCESS_MESSAGE } from './SubmitReviewModal';
 
 const { mockAxios } = vi.hoisted(() => {
   const post = vi.fn();
+  const request = vi.fn();
   const instance = {
     get: vi.fn(),
     post,
     put: vi.fn(),
     patch: vi.fn(),
     delete: vi.fn(),
+    request,
     interceptors: {
       request: { use: vi.fn(), eject: vi.fn() },
       response: { use: vi.fn(), eject: vi.fn() },
@@ -23,6 +25,7 @@ const { mockAxios } = vi.hoisted(() => {
       defaults: { headers: { common: {} } },
       reset() {
         post.mockReset();
+        request.mockReset();
       },
     },
   };
@@ -88,7 +91,7 @@ describe('SubmitReviewModal', () => {
   });
 
   it('should render success message on submit', async () => {
-    mockAxios.post.mockResolvedValueOnce({ data: true });
+    mockAxios.request.mockResolvedValueOnce({ data: true });
     render(<SubmitReviewModal {...PROPS_MOCK} />);
     const scoreInput = screen.getByRole('spinbutton', { name: /score \(max 100 points\)/i });
     fireEvent.change(scoreInput, { target: { value: 10 } });
@@ -102,7 +105,7 @@ describe('SubmitReviewModal', () => {
 
   it('should render error message when error has occurred on submit', async () => {
     const errorMessage = 'Network error';
-    mockAxios.post.mockRejectedValueOnce(new Error(errorMessage));
+    mockAxios.request.mockRejectedValueOnce(new Error(errorMessage));
     render(<SubmitReviewModal {...PROPS_MOCK} />);
     const scoreInput = screen.getByRole('spinbutton', { name: /score \(max 100 points\)/i });
     fireEvent.change(scoreInput, { target: { value: 10 } });
@@ -112,6 +115,21 @@ describe('SubmitReviewModal', () => {
 
     const message = await screen.findByText(errorMessage);
     expect(message).toBeInTheDocument();
+  });
+
+  it('does not post a score when the student github id or course task id is missing', async () => {
+    // data is non-empty (modal opens) but lacks studentGithubId -> the
+    // `if (studentGithubId && courseTaskId)` guard is false, so no request is sent
+    // and no success message appears.
+    const data = { ...MODAL_DATA_MOCK, studentGithubId: undefined } as MentorDashboardDto;
+    render(<SubmitReviewModal {...PROPS_MOCK} data={data} />);
+
+    const scoreInput = screen.getByRole('spinbutton', { name: /score \(max 100 points\)/i });
+    fireEvent.change(scoreInput, { target: { value: 10 } });
+    fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
+
+    await waitFor(() => expect(mockAxios.request).not.toHaveBeenCalled());
+    expect(screen.queryByText(SUCCESS_MESSAGE)).not.toBeInTheDocument();
   });
 
   it('should call onClose when "Cancel" button was clicked', async () => {

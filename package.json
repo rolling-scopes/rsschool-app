@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "workspaces": [
-    "server",
     "nestjs",
     "client"
   ],

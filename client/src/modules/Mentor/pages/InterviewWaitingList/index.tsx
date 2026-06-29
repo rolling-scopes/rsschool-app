@@ -1,4 +1,4 @@
-import { Button, Table } from 'antd';
+import { Button, message, Table } from 'antd';
 import { PageLayout } from '@client/shared/components/PageLayout';
 import {
   getColumnSearchProps,
@@ -9,9 +9,7 @@ import {
   PersonCell,
   dateRenderer,
 } from '@client/shared/components/Table';
-import { useLoading } from '@client/components/useLoading';
 import { useMemo, useState, useContext } from 'react';
-import { useAsync } from 'react-use';
 import { CourseService } from '@client/services/course';
 import { CoursePageProps } from '@client/services/models';
 import { isCourseManager, isMentor } from '@client/domain/user';
@@ -34,48 +32,88 @@ export function InterviewWaitingList() {
   const courseId = course.id;
   const router = useRouter();
   const interviewId = Number(router.query.interviewId);
+  const isInterviewReady = router.isReady && Number.isFinite(interviewId);
   const isPowerUser = useMemo(() => isCourseManager(session, courseId), [session, courseId]);
-  const [loading, withLoading] = useLoading(false);
   const [availableStudents, setAvailableStudents] = useState<AvailableStudentDto[]>([]);
   const courseService = useMemo(() => new CourseService(courseId), [courseId]);
 
-  const { data: interview } = useRequest(async () => {
-    const { data } = await api.getInterview(interviewId, courseId);
-    const isStage = data.type === TaskDtoTypeEnum.StageInterview;
-    if (!isStage && dayjs(data.startDate).isAfter(dayjs())) {
-      router.push(`/403`);
-    }
-    return data;
-  });
+  const interviewRequest = useRequest(
+    async () => {
+      const { data } = await api.getInterview(interviewId, courseId);
+      const isStage = data.type === TaskDtoTypeEnum.StageInterview;
+      if (!isStage && dayjs(data.startDate).isAfter(dayjs())) {
+        router.push(`/403`);
+      }
+      return data;
+    },
+    { ready: isInterviewReady },
+  );
+  const interview = interviewRequest.data;
 
   const isStageInterview = interview?.type === TaskDtoTypeEnum.StageInterview;
 
-  useAsync(
-    withLoading(async () => {
+  const availableStudentsRequest = useRequest(
+    async () => {
       const { data } = await api.getAvailableStudents(courseId, interviewId);
       setAvailableStudents(data);
-    }),
-    [],
+    },
+    {
+      ready: isInterviewReady,
+      refreshDeps: [courseId, interviewId],
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
   );
 
-  const inviteStudent = withLoading(async (githubId: string) => {
-    if (isStageInterview) {
-      await courseService.createInterview(githubId, session.githubId);
-    } else {
-      await courseService.addInterviewPair(`${interviewId}`, session.githubId, githubId);
-    }
-    removeStudentFromList(githubId);
-  });
+  const inviteStudentRequest = useRequest(
+    async (githubId: string) => {
+      if (isStageInterview) {
+        await courseService.createInterview(githubId, session.githubId);
+      } else {
+        await courseService.addInterviewPair(`${interviewId}`, session.githubId, githubId);
+      }
+      removeStudentFromList(githubId);
+    },
+    {
+      manual: true,
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
+  );
 
-  const assignStudentToMentor = withLoading(async (studentId: string) => {
-    await courseService.updateStudent(studentId, { mentorGithuId: session.githubId });
-    removeStudentFromList(studentId);
-  });
+  const assignStudentToMentorRequest = useRequest(
+    async (studentId: string) => {
+      await courseService.updateStudent(studentId, { mentorGithuId: session.githubId });
+      removeStudentFromList(studentId);
+    },
+    {
+      manual: true,
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
+  );
 
-  const removeFromList = withLoading(async (githubId: string) => {
-    await courseService.updateMentoringAvailability(githubId, false);
-    removeStudentFromList(githubId);
-  });
+  const removeFromListRequest = useRequest(
+    async (githubId: string) => {
+      await courseService.updateMentoringAvailability(githubId, false);
+      removeStudentFromList(githubId);
+    },
+    {
+      manual: true,
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
+  );
+
+  const loading =
+    availableStudentsRequest.loading ||
+    inviteStudentRequest.loading ||
+    assignStudentToMentorRequest.loading ||
+    removeFromListRequest.loading;
 
   return (
     <PageLayout loading={loading} title={`${interview?.name.trim()}: Wait list`} showCourseName>
@@ -152,7 +190,7 @@ export function InterviewWaitingList() {
                     </>
                   }
                   okText="Yes"
-                  onConfirm={() => inviteStudent(record.githubId)}
+                  onConfirm={() => inviteStudentRequest.runAsync(record.githubId)}
                 >
                   <Button type="link">Want to interview</Button>
                 </CustomPopconfirm>
@@ -164,7 +202,7 @@ export function InterviewWaitingList() {
                       </>
                     }
                     okText="Yes"
-                    onConfirm={() => assignStudentToMentor(record.githubId)}
+                    onConfirm={() => assignStudentToMentorRequest.runAsync(record.githubId)}
                   >
                     <Button type="link">Assign student to me</Button>
                   </CustomPopconfirm>
@@ -173,7 +211,7 @@ export function InterviewWaitingList() {
                   <CustomPopconfirm
                     title={<>Are you sure to remove {record.githubId} from the wait list?</>}
                     okText="Yes"
-                    onConfirm={() => removeFromList(record.githubId)}
+                    onConfirm={() => removeFromListRequest.runAsync(record.githubId)}
                   >
                     <Button type="link">Remove from list</Button>
                   </CustomPopconfirm>

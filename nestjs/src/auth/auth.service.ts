@@ -173,9 +173,11 @@ export class AuthService {
     } catch {
       return '/';
     }
-    // Only allow relative paths to prevent open redirects.
-    // Reject protocol-relative URLs (starting with //) which behave like absolute URLs.
-    if (url.startsWith('/') && !url.startsWith('//')) {
+    // Only allow same-origin relative paths to prevent open redirects.
+    // Reject anything whose second character is "/" or "\": both "//host" and "/\host"
+    // act as protocol-relative URLs (browsers normalise "\" to "/"), and express's
+    // `encodeurl` does not encode "\", so it would reach the browser as an off-site redirect.
+    if (url.startsWith('/') && !/^\/[/\\]/.test(url)) {
       return url;
     }
     return '/';

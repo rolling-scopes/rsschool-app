@@ -16,7 +16,10 @@ jobs:
       group: pr-checks_${{ github.head_ref }}
       cancel-in-progress: true
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    # Runs format + lint + the client and nestjs unit suites (both with v8
+    # coverage). Those suites grew ~3x with the coverage initiative, so 20m is no
+    # longer enough on a 2-core runner — raised to keep the gate from timing out.
+    timeout-minutes: 40
     steps:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
@@ -49,11 +52,6 @@ jobs:
         run: npm run test:ci
         if: success() || failure()
         working-directory: client
-
-      - name: Test (server)
-        run: npm run test:ci
-        if: success() || failure()
-        working-directory: server
 
       - name: Test (nestjs)
         run: npm run test:ci
@@ -164,31 +162,6 @@ jobs:
           tags: 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-ui:pr${{ github.event.pull_request.number }}
           cache-from: type=gha,scope=rsschool-ui-lambda
           cache-to: type=gha,mode=max,scope=rsschool-ui-lambda
-
-      - name: Pull AWS SSM Params
-        uses: deptno/action-aws-ssm-to-dotenv@v1.3.2
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: eu-central-1
-        with:
-          ssm-path: /staging/app
-          format: dotenv
-          output: server/.env
-
-      - name: Package Server
-        uses: docker/build-push-action@v6
-        if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
-        with:
-          platforms: linux/amd64
-          provenance: false
-          context: .
-          file: ./server/Dockerfile.lambda
-          push: true
-          tags: 511361162520.dkr.ecr.eu-central-1.amazonaws.com/rsschool-server:pr${{ github.event.pull_request.number }}
-          cache-from: type=gha,scope=rsschool-server-lambda
-          cache-to: type=gha,mode=max,scope=rsschool-server-lambda
 
       - name: Pull AWS SSM Params
         uses: deptno/action-aws-ssm-to-dotenv@v1.3.2

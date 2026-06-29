@@ -1,6 +1,6 @@
 {
   "extends": ["config:base"],
-  "ignorePaths": ["/tools/bumblebee/**", "/server/**"],
+  "ignorePaths": ["/tools/bumblebee/**"],
   "dependencyDashboard": true,
   "dependencyDashboardApproval": true,
   "lockFileMaintenance": { "enabled": true },

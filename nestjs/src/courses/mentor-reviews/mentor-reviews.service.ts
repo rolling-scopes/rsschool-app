@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { TaskSolution } from '@entities/taskSolution';
 import { paginate } from 'src/core/paginate';
 import { Checker } from '@entities/courseTask';
-import { TaskChecker } from '../../../../server/src/models';
+import { TaskChecker } from '@entities/index';
 import { MentorReviewAssignDto } from './dto/mentor-review-assign.dto';
 
 @Injectable()

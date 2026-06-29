@@ -14,14 +14,16 @@
     "start:prod": "node dist/nestjs/src/main.js",
     "lint": "eslint src",
     "test": "vitest run --passWithNoTests",
-    "test:ci": "vitest run",
+    "test:ci": "vitest run --coverage",
     "test:watch": "vitest watch",
     "test:cov": "vitest run --coverage",
     "test:debug": "vitest run --inspect-brk --no-file-parallelism",
     "openapi": "npm run openapi:spec && npm run openapi:sdk && npm run openapi:format",
     "openapi:spec": "ts-node --project tsconfig.json ./src/openapi-spec.ts",
     "openapi:format": "oxfmt src/spec.json",
-    "openapi:sdk": "npx openapi-generator-cli generate -i ./src/spec.json -g typescript-axios -o ../client/src/api --additional-properties=supportsES6=true"
+    "openapi:sdk": "npx openapi-generator-cli generate -i ./src/spec.json -g typescript-axios -o ../client/src/api --additional-properties=supportsES6=true",
+    "typeorm": "TS_NODE_TRANSPILE_ONLY=true typeorm-ts-node-commonjs",
+    "migration:generate": "npm run typeorm -- migration:generate -d src/data-source.ts"
   },
   "dependencies": {
     "@apalchys/pino-cloudwatch": "0.9.0",
