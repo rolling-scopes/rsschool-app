@@ -93,14 +93,12 @@ describe('MentorTasksReview page', () => {
     messageError.mockReset();
     // The page derives `tasksRequest.data` from one useRequest and drives the
     // reviews fetch through another via `runAsync`; expose both shapes.
-    useRequestMock
-      .mockReset()
-      .mockImplementation((fn: (...args: unknown[]) => Promise<unknown>) => ({
-        data: [{ id: 10, name: 'Review task' }],
-        loading: false,
-        run: fn,
-        runAsync: fn,
-      }));
+    useRequestMock.mockReset().mockImplementation((fn: (...args: unknown[]) => Promise<unknown>) => ({
+      data: [{ id: 10, name: 'Review task' }],
+      loading: false,
+      run: fn,
+      runAsync: fn,
+    }));
     isCourseManagerMock.mockReset().mockReturnValue(true);
   });
 

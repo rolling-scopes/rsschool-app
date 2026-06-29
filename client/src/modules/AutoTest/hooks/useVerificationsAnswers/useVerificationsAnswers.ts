@@ -27,7 +27,7 @@ export function useVerificationsAnswers(courseId: number, courseTaskId: number) 
   return {
     loading: showAnswersRequest.loading,
     answers,
-    showAnswers: showAnswersRequest.runAsync,
+    showAnswers: showAnswersRequest.run,
     hideAnswers,
   };
 }
