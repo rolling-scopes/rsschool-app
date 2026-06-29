@@ -6,7 +6,7 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import { mapTo } from '@client/modules/AutoTest/utils/map';
 import { useEffect, useMemo, useState } from 'react';
 import { useLocalStorage } from 'react-use';
-import { CourseService } from '@client/services/course';
+import { CourseService, Verification } from '@client/services/course';
 
 dayjs.extend(isSameOrAfter);
 
@@ -35,14 +35,22 @@ export function useCourseTaskVerifications(courseId: number) {
 
   const {
     loading,
-    data: allVerifications = [],
+    data: verificationGroups = [],
     error,
     run: reload,
   } = useRequest(async () => await courseService.getTaskVerifications());
 
+  const verificationsByTask = useMemo(() => {
+    const grouped = new Map<number, Verification[]>();
+    for (const group of verificationGroups) {
+      grouped.set(group.courseTaskId, group.verifications);
+    }
+    return grouped;
+  }, [verificationGroups]);
+
   const tasks = useMemo(
-    () => courseTasks?.map(ct => mapTo(ct, allVerifications, manuallyDoneTaskIds)),
-    [courseTasks, allVerifications, manuallyDoneTaskIds],
+    () => courseTasks?.map(ct => mapTo(ct, verificationsByTask.get(ct.id) ?? [], manuallyDoneTaskIds)),
+    [courseTasks, verificationsByTask, manuallyDoneTaskIds],
   );
 
   function markTaskAsDone(taskId: number) {

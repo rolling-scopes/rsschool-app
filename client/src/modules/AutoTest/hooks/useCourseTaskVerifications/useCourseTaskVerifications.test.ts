@@ -64,6 +64,20 @@ describe('useCourseTaskVerifications', () => {
     expect(result.current.tasks?.[0]?.name).toBe('Visible');
   });
 
+  it('attaches each course task only the verifications grouped under its id', async () => {
+    getCourseTasksDetailed.mockResolvedValueOnce({ data: [detailedTask({ id: 1 })] });
+    getTaskVerifications.mockReset();
+    getTaskVerifications.mockResolvedValue([
+      { courseTaskId: 1, verifications: [{ id: 11, courseTaskId: 1, score: 90 }] },
+      { courseTaskId: 999, verifications: [{ id: 22, courseTaskId: 999, score: 10 }] },
+    ]);
+
+    const { result } = renderHook(() => useCourseTaskVerifications(42));
+
+    await waitFor(() => expect(result.current.tasks).toHaveLength(1));
+    expect(result.current.tasks?.[0]?.verifications).toEqual([{ id: 11, courseTaskId: 1, score: 90 }]);
+  });
+
   it('toggles isExerciseVisible via startTask and finishTask', async () => {
     getCourseTasksDetailed.mockResolvedValueOnce({ data: [] });
     const { result } = renderHook(() => useCourseTaskVerifications(42));

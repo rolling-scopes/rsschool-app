@@ -8,6 +8,7 @@ import { isBefore, isValid, subHours } from 'date-fns';
 import { CloudApiService } from 'src/cloud-api/cloud-api.service';
 import { MoreThan, Repository } from 'typeorm';
 import { SelfEducationAnswers, SelfEducationQuestionSelectedAnswersDto, TaskVerificationAttemptDto } from './dto';
+import { CourseTaskVerificationsDto } from './dto/course-task-verifications.dto';
 import { SelfEducationService } from './self-education.service';
 
 export type VerificationEvent = {
@@ -217,7 +218,10 @@ export class TaskVerificationsService {
     return { id };
   }
 
-  public async getStudentVerifications(courseId: number, githubId: string) {
+  public async getStudentVerifications(
+    courseId: number,
+    githubId: string,
+  ): Promise<CourseTaskVerificationsDto[] | null> {
     const student = await this.studentsRepository
       .createQueryBuilder('student')
       .innerJoin('student.user', 'user')
@@ -228,7 +232,7 @@ export class TaskVerificationsService {
       return null;
     }
 
-    return this.taskVerificationsRepository
+    const verifications = await this.taskVerificationsRepository
       .createQueryBuilder('v')
       .innerJoin('v.courseTask', 'courseTask')
       .innerJoin('courseTask.task', 'task')
@@ -237,5 +241,18 @@ export class TaskVerificationsService {
       .andWhere('courseTask.disabled = :disabled', { disabled: false })
       .orderBy('v.updatedDate', 'DESC')
       .getMany();
+
+    return this.groupVerificationsByCourseTask(verifications);
+  }
+
+  private groupVerificationsByCourseTask(verifications: TaskVerification[]): CourseTaskVerificationsDto[] {
+    const byCourseTask = new Map<number, TaskVerification[]>();
+    for (const verification of verifications) {
+      const group = byCourseTask.get(verification.courseTaskId) ?? [];
+      group.push(verification);
+      byCourseTask.set(verification.courseTaskId, group);
+    }
+
+    return [...byCourseTask.entries()].map(([courseTaskId, verifications]) => ({ courseTaskId, verifications }));
   }
 }

@@ -2440,7 +2440,17 @@
       "get": {
         "operationId": "getStudentTaskVerifications",
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
-        "responses": { "200": { "description": "" }, "400": { "description": "" } },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/CourseTaskVerificationsDto" } }
+              }
+            }
+          },
+          "400": { "description": "" }
+        },
         "summary": "",
         "tags": ["course task verifications"]
       }
@@ -5863,6 +5873,49 @@
           "studentId": { "type": "number" }
         },
         "required": ["courseTaskId", "studentId"]
+      },
+      "VerificationTaskDto": { "type": "object", "properties": { "name": { "type": "string" } }, "required": ["name"] },
+      "VerificationCourseTaskDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "type": { "type": "string" },
+          "task": { "$ref": "#/components/schemas/VerificationTaskDto" }
+        },
+        "required": ["id", "type", "task"]
+      },
+      "StudentTaskVerificationDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "createdDate": { "format": "date-time", "type": "string" },
+          "studentId": { "type": "number" },
+          "courseTaskId": { "type": "number" },
+          "courseTask": { "$ref": "#/components/schemas/VerificationCourseTaskDto" },
+          "details": { "type": "string" },
+          "status": { "type": "string" },
+          "score": { "type": "number" },
+          "metadata": { "type": "array", "items": { "type": "object", "additionalProperties": true } }
+        },
+        "required": [
+          "id",
+          "createdDate",
+          "studentId",
+          "courseTaskId",
+          "courseTask",
+          "details",
+          "status",
+          "score",
+          "metadata"
+        ]
+      },
+      "CourseTaskVerificationsDto": {
+        "type": "object",
+        "properties": {
+          "courseTaskId": { "type": "number" },
+          "verifications": { "type": "array", "items": { "$ref": "#/components/schemas/StudentTaskVerificationDto" } }
+        },
+        "required": ["courseTaskId", "verifications"]
       },
       "Map": { "type": "object", "properties": {} },
       "NotificationUserSettingsDto": {

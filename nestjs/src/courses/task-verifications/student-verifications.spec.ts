@@ -9,8 +9,9 @@ import { CloudApiService } from 'src/cloud-api/cloud-api.service';
 import { SelfEducationService } from './self-education.service';
 import { StudentTaskVerificationsController } from './task-verifications.controller';
 
-// Fixtures mirrored from server/src/routes/course/__test__/studentVerifications.test.ts to prove business-logic equivalence
-const mockVerifications = [{ id: 1, status: 'completed', score: 90 }];
+// Fixtures mirrored from server/src/routes/course/__test__/studentVerifications.test.ts.
+// The endpoint now returns the verifications grouped by courseTaskId (see CourseTaskVerificationsDto).
+const mockVerifications = [{ id: 1, status: 'completed', score: 90, courseTaskId: 10 }];
 
 const taskVerificationsRepository = { createQueryBuilder: vi.fn() };
 const studentsRepository = { createQueryBuilder: vi.fn() };
@@ -78,7 +79,7 @@ describe('student verifications', () => {
     expect(verificationsQb.where).toHaveBeenCalledWith('v.studentId = :id', { id: 42 });
     expect(verificationsQb.andWhere).toHaveBeenCalledWith('courseTask.disabled = :disabled', { disabled: false });
     expect(verificationsQb.orderBy).toHaveBeenCalledWith('v.updatedDate', 'DESC');
-    expect(result).toEqual(mockVerifications);
+    expect(result).toEqual([{ courseTaskId: 10, verifications: mockVerifications }]);
   });
 
   it('responds 400 when student is not found in the course', async () => {

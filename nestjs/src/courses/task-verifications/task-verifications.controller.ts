@@ -22,6 +22,7 @@ import {
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, RoleGuard } from '../../auth';
 import { CreateTaskVerificationDto } from './dto/create-task-verification.dto';
 import { TaskVerificationAttemptDto } from './dto/task-verifications-attempts.dto';
+import { CourseTaskVerificationsDto } from './dto/course-task-verifications.dto';
 import { TaskVerificationsService } from './task-verifications.service';
 
 @Controller('courses/:courseId/tasks/:courseTaskId/verifications')
@@ -81,7 +82,7 @@ export class StudentTaskVerificationsController {
 
   @Get('/')
   @ApiOperation({ operationId: 'getStudentTaskVerifications' })
-  @ApiOkResponse()
+  @ApiOkResponse({ type: [CourseTaskVerificationsDto] })
   @ApiBadRequestResponse()
   @UseGuards(DefaultGuard, CourseGuard)
   public async getStudentTaskVerifications(

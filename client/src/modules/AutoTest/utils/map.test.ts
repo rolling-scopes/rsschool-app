@@ -26,14 +26,12 @@ function verification(overrides: Partial<Verification> = {}): Verification {
 }
 
 describe('mapTo', () => {
-  it('keeps only verifications belonging to the given task', () => {
-    const result = mapTo(task(), [
-      verification({ id: 1, courseTaskId: 1, score: 10 }),
-      verification({ id: 2, courseTaskId: 999, score: 20 }),
-    ]);
+  it('passes the given (already task-scoped) verifications straight through', () => {
+    const verifications = [verification({ id: 1, score: 10 }), verification({ id: 2, score: 20 })];
 
-    expect(result.verifications).toHaveLength(1);
-    expect(result.verifications[0]?.id).toBe(1);
+    const result = mapTo(task(), verifications);
+
+    expect(result.verifications).toEqual(verifications);
   });
 
   describe('state', () => {

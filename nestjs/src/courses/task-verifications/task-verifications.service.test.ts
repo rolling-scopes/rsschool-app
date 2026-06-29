@@ -16,6 +16,7 @@ describe('TaskVerificationsService', () => {
     find: vi.fn(),
     findOne: vi.fn(),
     save: vi.fn(),
+    createQueryBuilder: vi.fn(),
   };
 
   const courseTasksRepository = {
@@ -25,6 +26,7 @@ describe('TaskVerificationsService', () => {
 
   const studentsRepository = {
     findOneByOrFail: vi.fn(),
+    createQueryBuilder: vi.fn(),
   };
 
   const cloudService = {
@@ -404,6 +406,49 @@ describe('TaskVerificationsService', () => {
         },
       ]);
       expect(result).toEqual({ id: 556 });
+    });
+  });
+
+  describe('getStudentVerifications', () => {
+    function qb(terminal: Record<string, unknown>) {
+      const builder: Record<string, unknown> = {};
+      for (const method of ['innerJoin', 'addSelect', 'where', 'andWhere', 'orderBy']) {
+        builder[method] = vi.fn(() => builder);
+      }
+      return Object.assign(builder, terminal);
+    }
+
+    it('returns null when the student is not found in the course', async () => {
+      studentsRepository.createQueryBuilder.mockReturnValue(qb({ getOne: vi.fn().mockResolvedValue(null) }));
+
+      const result = await service.getStudentVerifications(13, 'ghost');
+
+      expect(result).toBeNull();
+    });
+
+    it('groups the student verifications by courseTaskId', async () => {
+      studentsRepository.createQueryBuilder.mockReturnValue(qb({ getOne: vi.fn().mockResolvedValue({ id: 7 }) }));
+      const verifications = [
+        { id: 1, courseTaskId: 100, score: 80 },
+        { id: 2, courseTaskId: 200, score: 50 },
+        { id: 3, courseTaskId: 100, score: 90 },
+      ];
+      taskVerificationsRepository.createQueryBuilder.mockReturnValue(
+        qb({ getMany: vi.fn().mockResolvedValue(verifications) }),
+      );
+
+      const result = await service.getStudentVerifications(13, 'alreadybored');
+
+      expect(result).toEqual([
+        {
+          courseTaskId: 100,
+          verifications: [
+            { id: 1, courseTaskId: 100, score: 80 },
+            { id: 3, courseTaskId: 100, score: 90 },
+          ],
+        },
+        { courseTaskId: 200, verifications: [{ id: 2, courseTaskId: 200, score: 50 }] },
+      ]);
     });
   });
 });
