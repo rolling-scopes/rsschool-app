@@ -532,22 +532,58 @@ describe('AuthService', () => {
   });
 
   describe('getRedirectUrl', () => {
-    it('should decode the redirect url from login data', () => {
-      const result = service.getRedirectUrl({ redirectUrl: '%2Fcourse%2F1' });
-
-      expect(result).toBe('/course/1');
+    it('should return / when no loginData is provided', () => {
+      expect(service.getRedirectUrl(undefined)).toBe('/');
     });
 
-    it('should return root when login data has no redirect url', () => {
-      const result = service.getRedirectUrl({});
-
-      expect(result).toBe('/');
+    it('should return / when loginData has no redirectUrl', () => {
+      expect(service.getRedirectUrl({})).toBe('/');
     });
 
-    it('should return root when login data is undefined', () => {
-      const result = service.getRedirectUrl(undefined);
+    it('should return a valid relative path', () => {
+      expect(service.getRedirectUrl({ redirectUrl: '/dashboard' })).toBe('/dashboard');
+    });
 
-      expect(result).toBe('/');
+    it('should return a relative path with query string', () => {
+      expect(service.getRedirectUrl({ redirectUrl: '/course?id=123' })).toBe('/course?id=123');
+    });
+
+    it('should decode a percent-encoded relative path', () => {
+      expect(service.getRedirectUrl({ redirectUrl: '%2Fcourse%2F1' })).toBe('/course/1');
+      expect(service.getRedirectUrl({ redirectUrl: '/course%3Fid%3D123' })).toBe('/course?id=123');
+    });
+
+    it('should allow a deep relative path containing a backslash in a later segment', () => {
+      expect(service.getRedirectUrl({ redirectUrl: '/course/a\\b' })).toBe('/course/a\\b');
+    });
+
+    it('should return / for an absolute URL (open redirect prevention)', () => {
+      expect(service.getRedirectUrl({ redirectUrl: 'https://evil.com' })).toBe('/');
+    });
+
+    it('should return / for an http URL (open redirect prevention)', () => {
+      expect(service.getRedirectUrl({ redirectUrl: 'http://evil.com/path' })).toBe('/');
+    });
+
+    it('should return / for a protocol-relative URL (open redirect prevention)', () => {
+      expect(service.getRedirectUrl({ redirectUrl: '//evil.com' })).toBe('/');
+    });
+
+    it('should return / for a backslash protocol-relative URL (open redirect prevention)', () => {
+      expect(service.getRedirectUrl({ redirectUrl: '/\\evil.com' })).toBe('/');
+    });
+
+    it('should return / for a percent-encoded backslash protocol-relative URL', () => {
+      // decodes to /\evil.com, which browsers normalise to //evil.com
+      expect(service.getRedirectUrl({ redirectUrl: '/%5Cevil.com' })).toBe('/');
+    });
+
+    it('should return / for a mixed slash/backslash protocol-relative URL', () => {
+      expect(service.getRedirectUrl({ redirectUrl: '/\\/evil.com' })).toBe('/');
+    });
+
+    it('should return / for malformed percent-encoding', () => {
+      expect(service.getRedirectUrl({ redirectUrl: '/path%GGinvalid' })).toBe('/');
     });
   });
 
