@@ -22,10 +22,12 @@ import { CrossCheckModule } from './cross-check/cross-check.module';
 import { OpportunitiesModule } from './opportunities/opportunities.module';
 import { UserGroupsModule } from './user-groups/user-groups.module';
 import { ScheduleModule } from './schedule/schedule.module';
+import { CronModule } from './cron/cron.module';
 import { ActivityModule } from './activity/activity.module';
 import { UsersNotificationsModule } from './users-notifications';
 import { GratitudesModule } from './gratitudes';
 import { CloudApiModule } from './cloud-api/cloud-api.module';
+import { FilesModule } from './files/files.module';
 import { EventsModule } from './events/events.module';
 import { TasksModule } from './tasks/tasks.module';
 import { PromptsModule } from './prompts/prompts.module';
@@ -33,7 +35,6 @@ import { AutoTestModule } from './auto-test/auto-test.module';
 import { ContributorsModule } from './contributors';
 import { ListenersModule } from './listeners';
 import { MentorsHallOfFameModule } from './mentors-hall-of-fame';
-import { RepositoriesModule } from './repositories';
 import { SessionModule } from './session/session.module';
 import { DevtoolsModule } from './devtools/devtools.module';
 
@@ -67,9 +68,11 @@ import { DevtoolsModule } from './devtools/devtools.module';
     OpportunitiesModule,
     UserGroupsModule,
     ScheduleModule,
+    CronModule,
     UsersNotificationsModule,
     GratitudesModule,
     CloudApiModule,
+    FilesModule,
     EventsModule,
     TasksModule,
     PromptsModule,
@@ -77,7 +80,6 @@ import { DevtoolsModule } from './devtools/devtools.module';
     ContributorsModule,
     ListenersModule,
     MentorsHallOfFameModule,
-    RepositoriesModule,
     SessionModule,
     DevtoolsModule.forRoot(),
   ],

@@ -35,7 +35,7 @@ function ReviewRandomTask({ mentorId, courseId, onClick }: Props) {
       icon={<EyeOutlined />}
       loading={reviewRandomTaskRequest.loading}
       disabled={reviewRandomTaskRequest.loading}
-      onClick={reviewRandomTaskRequest.runAsync}
+      onClick={reviewRandomTaskRequest.run}
     >
       Review random task
     </Button>

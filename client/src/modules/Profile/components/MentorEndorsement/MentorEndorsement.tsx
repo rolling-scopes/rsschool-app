@@ -37,7 +37,7 @@ export function MentorEndorsement(props: Props) {
           {error ? (
             <Alert
               closable={false}
-              message="Error occurred while generating endorsment"
+              title="Error occurred while generating endorsment"
               description={error.message}
               type="error"
             />

@@ -1,5 +1,6 @@
-import { Button, Card, Col, Divider, Row, Tag, Typography } from 'antd';
+import { Button, Card, Col, Divider, Row, Tag, Tooltip, Typography } from 'antd';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { getAutoTestTaskRoute } from '@client/services/routes';
 import { TaskCardColumn, TaskDeadlineDate } from '..';
 import { Course } from '@client/services/models';
@@ -11,6 +12,8 @@ const { Title, Paragraph } = Typography;
 export interface TaskCardProps {
   courseTask: CourseTaskVerifications;
   course: Course;
+  isAvailableTab: boolean;
+  onMarkAsDone: (taskId: number) => void;
 }
 
 function getStatusTag(state: CourseTaskState) {
@@ -24,11 +27,14 @@ function getStatusTag(state: CourseTaskState) {
   }
 }
 
-function TaskCard({ courseTask, course }: TaskCardProps) {
-  const { id, name, studentStartDate, studentEndDate, verifications, state, descriptionUrl } = courseTask;
+function TaskCard({ courseTask, course, isAvailableTab, onMarkAsDone }: TaskCardProps) {
+  const { id, name, studentStartDate, studentEndDate, verifications, state, descriptionUrl, publicAttributes } =
+    courseTask;
   const { attemptsCount, explanation } = useAttemptsMessage(courseTask);
+  const router = useRouter();
 
   const score = verifications?.[0]?.score ?? null;
+  const isMinimumScoreDone = score !== null && score >= publicAttributes.tresholdPercentage;
 
   const columns = [
     {
@@ -78,9 +84,22 @@ function TaskCard({ courseTask, course }: TaskCardProps) {
           </Paragraph>
         </Col>
         <Col span={24}>
-          <Link href={getAutoTestTaskRoute(course.alias, id)} legacyBehavior>
-            <Button type="primary">Open Task</Button>
-          </Link>
+          <Row justify="space-between">
+            <Col>
+              <Button onClick={() => router.push(getAutoTestTaskRoute(course.alias, id))} type="primary">
+                Open Task
+              </Button>
+            </Col>
+            {isAvailableTab && (
+              <Col>
+                <Tooltip title="move to the 'Done' tab">
+                  <Button type="primary" onClick={() => onMarkAsDone(id)} disabled={!isMinimumScoreDone}>
+                    Done Task
+                  </Button>
+                </Tooltip>
+              </Col>
+            )}
+          </Row>
         </Col>
       </Row>
       <Divider />

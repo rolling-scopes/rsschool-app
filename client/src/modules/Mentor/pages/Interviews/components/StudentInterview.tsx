@@ -68,7 +68,7 @@ export function StudentInterview(props: {
 
   return (
     <Col className={styles.container}>
-      <Space size={21} direction="vertical" style={{ width: '100%' }}>
+      <Space size={21} orientation="vertical" style={{ width: '100%' }}>
         <Row justify="space-between" align="middle">
           <DecisionTag decision={interview.decision} status={interviewStatus} />
           <Popconfirm

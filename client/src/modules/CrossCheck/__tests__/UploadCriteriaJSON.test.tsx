@@ -1,7 +1,7 @@
 import { UploadCriteriaJSON } from '../UploadCriteriaJSON';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
-const onLoad = jest.fn();
+const onLoad = vi.fn();
 
 describe('UploadCriteriaJSON', () => {
   test('contains following element', () => {
@@ -12,7 +12,7 @@ describe('UploadCriteriaJSON', () => {
 
   test('upload file', async () => {
     render(<UploadCriteriaJSON onLoad={onLoad} />);
-    global.URL.createObjectURL = jest.fn();
+    global.URL.createObjectURL = vi.fn();
 
     const file = new File(['{test: 1}'], 'test.json', { type: 'application/json' });
     const input = screen.getByTestId('uploader') as HTMLInputElement;

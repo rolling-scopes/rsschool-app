@@ -5,8 +5,8 @@ import { IPaginationInfo } from '@client/shared/utils/pagination';
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import { dateTimeRenderer } from '@client/shared/components/Table';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { CourseService, CourseTaskDetails } from '@client/services/course';
-import { CoursesTasksApi, CrossCheckMessageDtoRoleEnum, CrossCheckPairDto } from '@client/api';
+import { CourseService } from '@client/services/course';
+import { CourseTaskDetailedDto, CoursesTasksApi, CrossCheckMessageDtoRoleEnum, CrossCheckPairDto } from '@client/api';
 import PreparedComment from '@client/shared/components/Forms/PreparedComment';
 import { Message } from '@client/modules/CrossCheck/components/SolutionReview/Message';
 import { CrossCheckCriteria } from '@client/modules/CrossCheck/components/criteria/CrossCheckCriteria';
@@ -35,7 +35,7 @@ export default function Page() {
   const courseService = useMemo(() => new CourseService(courseId), [course]);
 
   const [loading, setLoading] = useState(false);
-  const [courseTasks, setCourseTasks] = useState<CourseTaskDetails[]>([]);
+  const [courseTasks, setCourseTasks] = useState<CourseTaskDetailedDto[]>([]);
   const [crossCheckList, setCrossCheckList] = useState({
     content: [] as CrossCheckPairDto[],
     pagination: { current: 1, pageSize: 50 } as IPaginationInfo,
@@ -121,7 +121,7 @@ export default function Page() {
       maskClosable: true,
       title: `Comment from ${checker.githubId}`,
       content: historicalScores.map((historicalScore, index) => (
-        <Space direction="vertical" key={historicalScore.dateTime} style={{ width: '100%' }}>
+        <Space orientation="vertical" key={historicalScore.dateTime} style={{ width: '100%' }}>
           <Comment
             content={
               <>

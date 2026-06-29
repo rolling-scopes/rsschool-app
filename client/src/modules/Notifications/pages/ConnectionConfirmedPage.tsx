@@ -13,7 +13,7 @@ export function ConnectionConfirmed() {
         <Alert
           type="success"
           showIcon
-          message={`Your have successfully connected your ${connectionType}`}
+          title={`Your have successfully connected your ${connectionType}`}
           description={
             <div>
               Now you can subscribe to <Link href="/profile/notifications">notifications</Link>

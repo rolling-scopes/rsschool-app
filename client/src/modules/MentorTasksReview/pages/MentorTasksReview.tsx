@@ -80,7 +80,7 @@ export const MentorTasksReview = () => {
       showCourseName
       courses={courses}
     >
-      <Space direction="vertical">
+      <Space orientation="vertical">
         <Space>
           <Text strong>Submitted tasks</Text>
           <Text>{course.name}</Text>

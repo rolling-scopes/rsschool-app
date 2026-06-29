@@ -278,7 +278,7 @@ function Page() {
           onChange={handleTabChange}
         />
         <Space style={{ alignSelf: 'center' }}>
-          <Button icon={<FileExcelOutlined />} onClick={() => (window.location.href = `/api/registry/mentors/csv`)}>
+          <Button icon={<FileExcelOutlined />} onClick={() => (window.location.href = `/api/v2/registry/mentors/csv`)}>
             Export CSV
           </Button>
           {session.isAdmin && (
@@ -290,7 +290,7 @@ function Page() {
       </Row>
       <Col style={{ padding: 24 }}>
         <Alert
-          message={
+          title={
             <>
               The number of mentors below can mentor: <Typography.Text strong>{maxStudents} students</Typography.Text>
             </>
@@ -336,7 +336,7 @@ function Page() {
       {isModalOpen && modalData?.mode === ModalDataMode.Comment && (
         <CommentModal
           title="Comment"
-          visible={isModalOpen}
+          open={isModalOpen}
           onCancel={onCancelModal}
           initialValue={modalData?.record?.comment ?? undefined}
           availableEmptyComment={true}

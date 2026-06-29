@@ -47,7 +47,7 @@ export const InterviewCard = ({
   return (
     <Col key={id} xs={24} lg={12}>
       <Card
-        bodyStyle={{ paddingTop: 0 }}
+        styles={{ body: { paddingTop: 0 } }}
         hoverable
         title={
           <Button type="link" href={descriptionUrl} target="_blank" style={{ padding: 0, fontWeight: 500 }}>
@@ -73,7 +73,7 @@ export const InterviewCard = ({
         />
         <Flex vertical gap="small">
           <Alert
-            message={<div style={{ minHeight: 50 }}>{cardMessage}</div>}
+            title={<div style={{ minHeight: 50 }}>{cardMessage}</div>}
             icon={<InfoCircleTwoTone />}
             showIcon
             type="info"
@@ -82,7 +82,7 @@ export const InterviewCard = ({
           />
           {comment && (
             <Alert
-              message={
+              title={
                 <Typography.Paragraph ellipsis={{ rows: 1, tooltip: true }} style={{ marginBottom: 0 }}>
                   {comment}
                 </Typography.Paragraph>

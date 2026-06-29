@@ -115,6 +115,7 @@ function Page() {
               <Popconfirm
                 onConfirm={() => createInterviewsRequest.run(selected!)}
                 title="Do you want to create interview pairs for not distributed students?"
+                disabled={!selected}
               >
                 <Button disabled={!hasSelectedInterview}>Create Interview Pairs</Button>
               </Popconfirm>
@@ -180,7 +181,7 @@ function Page() {
       <StudentMentorModal
         onOk={addInterviewPairRequest.run}
         onCancel={() => setModal(false)}
-        visible={modal}
+        open={modal}
         courseId={course.id}
       />
     </AdminPageLayout>

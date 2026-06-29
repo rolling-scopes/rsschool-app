@@ -1,12 +1,12 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { forwardRef } from 'react';
+import { forwardRef, useImperativeHandle } from 'react';
 import { AxiosResponse } from 'axios';
 import { Contacts, UserData } from '@client/modules/Opportunities/models';
 import { OpportunitiesApi } from '@client/api';
 import { EditCV } from './index';
 
-const mockSuccessNotification = jest.fn();
-jest.mock('hooks', () => ({
+const mockSuccessNotification = vi.fn();
+vi.mock('@client/hooks', () => ({
   useMessage: () => ({
     notification: {
       success: mockSuccessNotification,
@@ -20,22 +20,48 @@ const enum EditCvForms {
   VisibleCoursesForm,
 }
 
-jest.mock('./GeneralInfoForm', () => ({
-  GeneralInfoForm: forwardRef(() => <div>{EditCvForms.GeneralInfoForm}</div>),
+// Each mocked form forwards a fake FormInstance (from these holders) through its ref so the
+// page's hasInvalidFields / getFieldsValue logic runs against real-ish data. Tests reset the
+// holders per case to drive the valid vs. invalid-fields branches.
+const { formInstances } = vi.hoisted(() => ({
+  formInstances: {
+    user: { getFieldsError: () => [], getFieldsValue: () => ({}) } as Record<string, unknown>,
+    contacts: { getFieldsError: () => [], getFieldsValue: () => ({}) } as Record<string, unknown>,
+    visibleCourses: { getFieldsError: () => [], getFieldsValue: () => ({}) } as Record<string, unknown>,
+  },
 }));
 
-jest.mock('./ContactsForm', () => ({
-  ContactsForm: forwardRef(() => <div>{EditCvForms.ContactsForm}</div>),
+vi.mock('./GeneralInfoForm', () => ({
+  GeneralInfoForm: forwardRef((_props, ref) => {
+    useImperativeHandle(ref, () => formInstances.user);
+    return <div>{EditCvForms.GeneralInfoForm}</div>;
+  }),
 }));
 
-jest.mock('./VisibleCoursesForm', () => ({
-  VisibleCoursesForm: forwardRef(() => <div>{EditCvForms.VisibleCoursesForm}</div>),
+vi.mock('./ContactsForm', () => ({
+  ContactsForm: forwardRef((_props, ref) => {
+    useImperativeHandle(ref, () => formInstances.contacts);
+    return <div>{EditCvForms.ContactsForm}</div>;
+  }),
 }));
+
+vi.mock('./VisibleCoursesForm', () => ({
+  VisibleCoursesForm: forwardRef((_props, ref) => {
+    useImperativeHandle(ref, () => formInstances.visibleCourses);
+    return <div>{EditCvForms.VisibleCoursesForm}</div>;
+  }),
+}));
+
+beforeEach(() => {
+  formInstances.user = { getFieldsError: () => [], getFieldsValue: () => ({}) };
+  formInstances.contacts = { getFieldsError: () => [], getFieldsValue: () => ({}) };
+  formInstances.visibleCourses = { getFieldsError: () => [], getFieldsValue: () => ({}) };
+});
 
 const mockGithubId = 'some-github';
 
-const mockSwitchView = jest.fn();
-const mockOnUpdateResume = jest.fn();
+const mockSwitchView = vi.fn();
+const mockOnUpdateResume = vi.fn();
 
 describe('EditCV', () => {
   test('should display forms and control buttons', () => {
@@ -105,7 +131,7 @@ describe('EditCV', () => {
   });
 
   test('should save data on Save button click and show success notification', async () => {
-    const mockSaveResume = jest
+    const mockSaveResume = vi
       .spyOn(OpportunitiesApi.prototype, 'saveResume')
       .mockResolvedValue({ data: {} } as AxiosResponse);
 
@@ -130,5 +156,91 @@ describe('EditCV', () => {
     await waitFor(() => {
       expect(mockOnUpdateResume).toHaveBeenCalled();
     });
+  });
+
+  test('shows the validation alert and does not save when a form has invalid fields', async () => {
+    const mockSaveResume = vi.spyOn(OpportunitiesApi.prototype, 'saveResume');
+    // The user form reports a field error -> hasInvalidFields is true.
+    formInstances.user = {
+      getFieldsError: () => [{ name: ['name'], errors: ['Field cannot be empty'] }],
+      getFieldsValue: () => ({}),
+    };
+
+    render(
+      <EditCV
+        githubId={mockGithubId}
+        contacts={{} as Contacts}
+        userData={{} as UserData}
+        switchView={mockSwitchView}
+        onUpdateResume={mockOnUpdateResume}
+        visibleCourses={[]}
+        courses={[]}
+      />,
+    );
+
+    fireEvent.click(await screen.findByRole('button', { name: /save cv/i }));
+
+    expect(await screen.findByText('All required fields must be filled first')).toBeInTheDocument();
+    expect(mockSaveResume).not.toHaveBeenCalled();
+  });
+
+  test('collects the checked visible courses into the saved payload', async () => {
+    const mockSaveResume = vi
+      .spyOn(OpportunitiesApi.prototype, 'saveResume')
+      .mockResolvedValue({ data: {} } as AxiosResponse);
+    // Two visible-course toggles: one on, one off -> only the enabled id is collected.
+    formInstances.visibleCourses = {
+      getFieldsError: () => [],
+      getFieldsValue: () => ({ 11: true, 22: false }),
+    };
+
+    render(
+      <EditCV
+        githubId={mockGithubId}
+        contacts={{} as Contacts}
+        userData={{} as UserData}
+        switchView={mockSwitchView}
+        onUpdateResume={mockOnUpdateResume}
+        visibleCourses={[]}
+        courses={[]}
+      />,
+    );
+
+    fireEvent.click(await screen.findByRole('button', { name: /save cv/i }));
+
+    await waitFor(() => expect(mockSaveResume).toHaveBeenCalled());
+    // The reduce kept course 11 (enabled) and dropped 22 (disabled).
+    const submitted = mockSaveResume.mock.calls[0]![1] as { visibleCourses?: number[] };
+    expect(submitted.visibleCourses).toContain(11);
+    expect(submitted.visibleCourses).not.toContain(22);
+  });
+
+  test('saves with empty data when the forms are not rendered (null refs)', async () => {
+    const mockSaveResume = vi
+      .spyOn(OpportunitiesApi.prototype, 'saveResume')
+      .mockResolvedValue({ data: {} } as AxiosResponse);
+
+    // No userData/contacts/visibleCourses → none of the forms render → their refs stay null.
+    // hasInvalidFields(null) returns false (no validation alert) and getFieldsValue() ?? {}
+    // falls back to an empty object.
+    render(
+      <EditCV
+        githubId={mockGithubId}
+        contacts={null}
+        userData={null}
+        switchView={mockSwitchView}
+        onUpdateResume={mockOnUpdateResume}
+        visibleCourses={null as unknown as number[]}
+        courses={null}
+      />,
+    );
+
+    fireEvent.click(await screen.findByRole('button', { name: /save cv/i }));
+
+    await waitFor(() => expect(mockSaveResume).toHaveBeenCalled());
+    // No invalid-fields alert since both refs were null.
+    expect(screen.queryByText('All required fields must be filled first')).not.toBeInTheDocument();
+    const submitted = mockSaveResume.mock.calls[0]![1] as { visibleCourses?: number[] };
+    expect(submitted.visibleCourses).toEqual([]);
   });
 });

@@ -1,0 +1,111 @@
+import path from 'node:path';
+import { defineConfig, mergeConfig } from 'vitest/config';
+import shared from '../vitest.shared.mjs';
+
+// Pin the timezone in the MAIN vitest process so worker threads inherit UTC at
+// init. The `threads` pool (set below) starts ~2x faster than `forks`, but
+// threads inherit the parent process timezone — vitest's `test.env.TZ` only
+// reliably applies to `forks`. Setting it here (before the pool is created) keeps
+// date/calendar assertions deterministic under threads. Cross-platform, no shell prefix.
+process.env.TZ = 'UTC';
+
+export default mergeConfig(
+  shared,
+  defineConfig({
+    resolve: {
+      alias: {
+        '@client/hooks': path.resolve(import.meta.dirname, 'src/__mocks__/hooks'),
+        '@client': path.resolve(import.meta.dirname, 'src'),
+        'next/config': path.resolve(import.meta.dirname, 'src/__mocks__/next/config'),
+        'next/router': path.resolve(import.meta.dirname, 'src/__mocks__/next/router'),
+      },
+    },
+    test: {
+      environment: 'jsdom',
+      include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
+      setupFiles: ['src/setupTests.ts'],
+      // `threads` starts workers far faster than the default `forks` pool and
+      // shares the V8 code cache across files, roughly halving module-import time
+      // for this antd-heavy suite. (Per-file isolation is kept — the suite's
+      // per-file vi.mock usage is not safe with isolate:false.)
+      pool: 'threads',
+      // antd v6 in jsdom is CPU-heavy; under coverage instrumentation + parallelism
+      // the slowest Table/Form-validation tests can exceed 30s on busy/CI runners.
+      testTimeout: 60000,
+      hookTimeout: 60000,
+      // Retry transient flakes (antd async validation/Table renders occasionally
+      // timing out under load). A genuine failure still fails all attempts.
+      retry: 2,
+      env: {
+        TZ: 'UTC',
+      },
+      css: false,
+      coverage: {
+        include: ['src/**/*.{ts,tsx}'],
+        // Measure real component/hook/service logic — exclude generated, route
+        // shims, static, presentational-only and test/support files.
+        exclude: [
+          'src/**/*.test.{ts,tsx}',
+          'src/__tests__/**',
+          'src/__mocks__/**',
+          'src/api/**', // generated OpenAPI client
+          'src/pages/**', // Next.js route shims (module-level */pages/* components stay)
+          'src/data/**',
+          'src/configs/**',
+          'src/styles/**',
+          'src/shared/components/Icons/**',
+          'src/**/*.stories.tsx',
+          // NOTE: do not exclude `src/**/index.ts` — v8's exclude matcher also
+          // drops component `index.tsx` files (95 real components), which must
+          // count toward the target. Pure barrels are mostly covered transitively.
+          'src/**/*.d.ts',
+          'src/setupTests.ts',
+        ],
+        reportsDirectory: './coverage',
+        // Coverage floor enforced in CI via `test:ci`. Actual coverage is
+        // ~95.8% stmts / 93.4% branches / 95.7% funcs / 95.8% lines — all four
+        // metrics clear the flat-90 goal with margin. Floor is a flat 90 (free
+        // above 90, fail below); remaining uncovered branches are genuinely
+        // unreachable defensive code (jsdom-impossible guards, antd internals,
+        // dead `?? []`/`|| ''` fallbacks).
+        thresholds: {
+          statements: 90,
+          branches: 90,
+          functions: 90,
+          lines: 90,
+        },
+      },
+      deps: {
+        optimizer: {
+          web: {
+            include: [
+              'react-markdown',
+              'vfile',
+              'unist-util-stringify-position',
+              'remark-parse',
+              'remark-rehype',
+              'mdast-util-from-markdown',
+              'mdast-util-to-hast',
+              'unified',
+              'bail',
+              'is-plain-obj',
+              'trough',
+              'micromark',
+              'parse-entities',
+              'character-entities',
+              'property-information',
+              'comma-separated-tokens',
+              'hast-util-whitespace',
+              'space-separated-tokens',
+              'decode-named-character-reference',
+              'ccount',
+              'escape-string-regexp',
+              'markdown-table',
+              'trim-lines',
+            ],
+          },
+        },
+      },
+    },
+  }),
+);

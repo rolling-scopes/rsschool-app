@@ -83,7 +83,7 @@ export default function StudentsWithoutTeamSection({ distribution, isManager, re
   useAsync(async () => await studentsRequest.runAsync(students.pagination), [distribution, search]);
 
   return (
-    <Space size={24} direction="vertical" style={{ width: '100%' }}>
+    <Space size={24} orientation="vertical" style={{ width: '100%' }}>
       <Row justify="space-between">
         <Col span={8}>
           <Title level={5}>{`${distribution.name} teams`}</Title>

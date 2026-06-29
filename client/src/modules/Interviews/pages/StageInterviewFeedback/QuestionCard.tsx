@@ -13,7 +13,7 @@ type Props = {
  */
 export function QuestionCard({ content, fieldName, required, tooltips }: Props) {
   return (
-    <Card bodyStyle={{ padding: '12px 24px' }} style={{ flex: 1 }}>
+    <Card styles={{ body: { padding: '12px 24px' } }} style={{ flex: 1 }}>
       <Row align="middle" wrap={false}>
         <Col flex={1} style={{ flexWrap: 'wrap' }}>
           {content}

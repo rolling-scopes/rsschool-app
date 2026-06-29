@@ -22,7 +22,7 @@ export function WaitListAlert({
     <div className={styles.waitListAlert}>
       <Alert
         closable
-        message="Do you want to interview more students?"
+        title="Do you want to interview more students?"
         icon={<InfoCircleTwoTone />}
         onClose={() => setDismissed()}
         showIcon

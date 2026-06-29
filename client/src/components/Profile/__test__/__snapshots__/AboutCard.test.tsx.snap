@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`AboutCard Should render correctly if "data" is not present 1`] = `
+exports[`AboutCard > Should render correctly > if "data" is not present 1`] = `
 <div>
   <div
     class="ant-card ant-card-bordered css-dev-only-do-not-override-1enej14 css-var-root"
@@ -104,7 +104,7 @@ exports[`AboutCard Should render correctly if "data" is not present 1`] = `
 </div>
 `;
 
-exports[`AboutCard Should render correctly if "data" is present 1`] = `
+exports[`AboutCard > Should render correctly > if "data" is present 1`] = `
 <div>
   <div
     class="ant-card ant-card-bordered css-dev-only-do-not-override-1enej14 css-var-root"

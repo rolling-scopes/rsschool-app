@@ -1,7 +1,8 @@
-import { Badge, Card, Col, List, Typography } from 'antd';
+import { Badge, Card, Col, Typography } from 'antd';
 import { FeedbackDto, FeedbackSoftSkillIdEnum } from '@client/api';
 import { DataTextValue } from '@client/modules/Opportunities/components/ViewCv/DataTextValue';
 import { BaseSection } from '../BaseSection';
+import { List } from '@client/shared/components/List';
 
 const { Text, Paragraph } = Typography;
 
@@ -37,7 +38,7 @@ export const FeedbackSection = ({ data }: Props) => {
             <Col flex={1} style={{ paddingRight: 16 }}>
               <Badge.Ribbon text="Recommend To Hire" color="green">
                 <Card
-                  bordered={false}
+                  variant="borderless"
                   title={
                     <DataTextValue>
                       <div>

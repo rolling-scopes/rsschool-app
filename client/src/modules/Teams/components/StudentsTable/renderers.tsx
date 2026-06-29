@@ -57,7 +57,7 @@ function renderDiscord(_v: string, { discord }: TeamDistributionStudentDto) {
 
 function renderStudent(_v: string, student: TeamDistributionStudentDto) {
   return (
-    <Space direction="vertical" size="small">
+    <Space orientation="vertical" size="small">
       {renderName(student)}
       {renderLocation('', student)}
       <Text>rank: {renderPosition('', student)}</Text>
@@ -67,7 +67,7 @@ function renderStudent(_v: string, student: TeamDistributionStudentDto) {
 
 function renderContacts(_v: string, student: TeamDistributionStudentDto) {
   return (
-    <Space direction="vertical" size="small">
+    <Space orientation="vertical" size="small">
       {renderDiscord('', student)}
       {renderEmail('', student)}
     </Space>

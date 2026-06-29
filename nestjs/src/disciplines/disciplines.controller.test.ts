@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DisciplinesController } from './disciplines.controller';
 import { DisciplinesService } from './disciplines.service';
-import { CreateDisciplineDto, DisciplineDto, UpdateDisciplineDto } from './dto';
+import { CreateDisciplineDto, DisciplineDto, DisciplineIdsDto, UpdateDisciplineDto } from './dto';
 
 const mockId = 1;
 
@@ -15,12 +15,14 @@ const mockDiscipline = {
 
 const mockCreate = vi.fn(() => Promise.resolve(mockDiscipline));
 const mockGetAll = vi.fn(() => Promise.resolve([mockDiscipline, mockDiscipline]));
+const mockGetByIds = vi.fn(() => Promise.resolve([mockDiscipline, mockDiscipline]));
 const mockDelete = vi.fn(() => Promise.resolve());
 const mockUpdate = vi.fn(() => Promise.resolve(mockDiscipline));
 
 const mockDisciplinesServiceFactory = vi.fn(() => ({
   create: mockCreate,
   getAll: mockGetAll,
+  getByIds: mockGetByIds,
   delete: mockDelete,
   update: mockUpdate,
 }));
@@ -54,6 +56,18 @@ describe('DisciplinesController', () => {
 
       expect(result).toEqual([new DisciplineDto(mockDiscipline), new DisciplineDto(mockDiscipline)]);
       expect(mockGetAll).toHaveBeenCalled();
+    });
+  });
+
+  describe('getByIds', () => {
+    it('should get disciplines by ids', async () => {
+      const mockDisciplineIdsDto = new DisciplineIdsDto();
+      mockDisciplineIdsDto.ids = [1, 2];
+
+      const result = await controller.getByIds(mockDisciplineIdsDto);
+
+      expect(result).toEqual([new DisciplineDto(mockDiscipline), new DisciplineDto(mockDiscipline)]);
+      expect(mockGetByIds).toHaveBeenCalledWith(mockDisciplineIdsDto.ids);
     });
   });
 

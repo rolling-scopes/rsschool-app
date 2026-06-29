@@ -37,7 +37,7 @@ export function NestedRadio({
         form.getFieldValue(parentId) === option.id && (
           <Item name={option.id} rules={[{ required: true, message: 'Required' }]}>
             <Group>
-              <Space direction="vertical" style={{ marginLeft: '24px' }}>
+              <Space orientation="vertical" style={{ marginLeft: '24px' }}>
                 {option.options?.map((subOption: any) => (
                   <Radio key={subOption.id} value={subOption.id}>
                     {subOption.title}

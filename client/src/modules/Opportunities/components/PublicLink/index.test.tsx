@@ -3,10 +3,10 @@ import { PublicLink } from './index';
 
 const mockUrl = 'https://expample.com';
 
-const mockCopyToClipboard = jest.fn();
+const mockCopyToClipboard = vi.fn();
 
-jest.mock('react-use', () => ({
-  useCopyToClipboard: () => [jest.fn(), mockCopyToClipboard],
+vi.mock('react-use', () => ({
+  useCopyToClipboard: () => [vi.fn(), mockCopyToClipboard],
 }));
 
 describe('PublicLink', () => {

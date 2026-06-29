@@ -47,7 +47,7 @@ export default function MyTeamSection({
   };
 
   return distribution.myTeam ? (
-    <Space size="large" direction="vertical" style={{ width: '100%' }}>
+    <Space size="large" orientation="vertical" style={{ width: '100%' }}>
       <Title level={5}>{myTeam.name}</Title>
       <Space size={12}>
         <Text type="secondary">{myTeam.description}</Text>

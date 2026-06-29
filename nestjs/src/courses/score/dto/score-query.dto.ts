@@ -10,7 +10,6 @@ export const orderByFieldMapping = {
   cityName: 'user.cityName',
   mentor: 'mu.githubId',
   totalScoreChangeDate: 'student.totalScoreChangeDate',
-  repositoryLastActivityDate: 'student.repositoryLastActivityDate',
 };
 
 export type OrderDirection = 'asc' | 'desc';

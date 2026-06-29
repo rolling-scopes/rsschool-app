@@ -1,7 +1,8 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MentorStatsCard } from '../MentorStatsCard';
+import userEvent from '@testing-library/user-event';
 
-jest.mock('modules/Profile/components/MentorEndorsement', () => ({
+vi.mock('@client/modules/Profile/components/MentorEndorsement', () => ({
   MentorEndorsement: ({ open, onClose }: { open: boolean; onClose: () => void }) => (
     <div>
       {open ? <div data-testid="endorsement-open">endorsement-open</div> : null}
@@ -21,14 +22,12 @@ describe('MentorStatsCard', () => {
           name: 'Alex Petrov',
           isExpelled: false,
           totalScore: 3453,
-          repoUrl: 'https://github.com/rolling-scopes-school/alex-RS2018Q1',
         },
         {
           githubId: 'vasya',
           name: 'Vasiliy Alexandrov',
           isExpelled: true,
           totalScore: 120,
-          repoUrl: 'https://github.com/rolling-scopes-school/vasya-RS2018Q1',
         },
       ],
     },
@@ -73,23 +72,26 @@ describe('MentorStatsCard', () => {
     expect(screen.queryByRole('button', { name: /Get Endorsement/i })).not.toBeInTheDocument();
   });
 
-  it('opens MentorStatsModal for a course with students when expand is clicked', () => {
+  it('opens MentorStatsModal for a course with students when expand is clicked', async () => {
     render(<MentorStatsCard githubId="test" data={mentorStats} />);
+    const user = userEvent.setup();
 
     const expandBtn = screen.getByTestId('expand-button');
-    fireEvent.click(expandBtn);
+    await user.click(expandBtn);
 
     expect(screen.getByText('rs-2018-q1 statistics')).toBeInTheDocument();
   });
 
   it('closes MentorStatsModal when Close is clicked', async () => {
-    render(<MentorStatsCard githubId="test" data={mentorStats} />);
+    const { unmount } = render(<MentorStatsCard githubId="test" data={mentorStats} />);
+    const user = userEvent.setup();
 
-    fireEvent.click(screen.getByTestId('expand-button'));
+    await user.click(screen.getByTestId('expand-button'));
     expect(screen.getByText('rs-2018-q1 statistics')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Close' }));
-    await waitFor(() => expect(screen.getByText('rs-2018-q1 statistics')).not.toBeVisible());
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    unmount();
+    await waitFor(() => expect(screen.queryByText('rs-2018-q1 statistics')).not.toBeInTheDocument());
   });
 
   it('renders students list for the first course when it has students', () => {
@@ -100,13 +102,57 @@ describe('MentorStatsCard', () => {
     expect(screen.getByText('3453')).toBeInTheDocument();
   });
 
-  it('opens and closes MentorEndorsement modal via the admin button', () => {
+  it('opens and closes MentorEndorsement modal via the admin button', async () => {
     render(<MentorStatsCard githubId="mentor" data={mentorStats} isAdmin={true} />);
+    const user = userEvent.setup();
 
-    fireEvent.click(screen.getByRole('button', { name: /Get Endorsement/i }));
+    await user.click(screen.getByRole('button', { name: /Get Endorsement/i }));
     expect(screen.getByTestId('endorsement-open')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByText('mock-close-endorsement'));
+    await user.click(screen.getByText('mock-close-endorsement'));
     expect(screen.queryByTestId('endorsement-open')).not.toBeInTheDocument();
+  });
+
+  it('does not render MentorStatsModal when there are no courses (stats[courseIndex] undefined)', () => {
+    render(<MentorStatsCard githubId="test" data={[]} />);
+    // count is 0 and there are no course cards
+    expect(screen.getByText('Mentored Students:')).toBeInTheDocument();
+    expect(screen.queryByTestId('expand-button')).not.toBeInTheDocument();
+    // MentorStatsModal not rendered -> no statistics title
+    expect(screen.queryByText(/statistics/)).not.toBeInTheDocument();
+  });
+
+  it('renders students count text (not a list) for non-first courses that have students', () => {
+    const data = [
+      mentorStats[0],
+      {
+        courseName: 'rs-2019-q2',
+        courseLocationName: 'Minsk',
+        students: [
+          { githubId: 'kate', name: 'Kate Smith', isExpelled: false, totalScore: 500 },
+          { githubId: 'tom', name: 'Tom Jones', isExpelled: false, totalScore: 400 },
+        ],
+      },
+    ];
+    render(<MentorStatsCard githubId="test" data={data} />);
+
+    // second course (idx 1) with students renders the count text, not individual links
+    expect(screen.getByText(/Students number:/)).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Kate Smith' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Tom Jones' })).not.toBeInTheDocument();
+  });
+
+  it('renders a course card without expand button when course has no students', () => {
+    const data = [
+      {
+        courseName: 'rs-empty',
+        courseLocationName: '',
+        // no students -> extra (ExpandButtonWidget) not rendered, message shown
+      },
+    ];
+    render(<MentorStatsCard githubId="test" data={data} />);
+
+    expect(screen.getByText('Does not have students at this course yet')).toBeInTheDocument();
+    expect(screen.queryByTestId('expand-button')).not.toBeInTheDocument();
   });
 });

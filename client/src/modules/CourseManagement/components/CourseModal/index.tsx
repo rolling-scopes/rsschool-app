@@ -69,7 +69,6 @@ type FormData = {
   primarySkillId?: string;
 
   logo?: string;
-  usePrivateRepositories?: boolean;
   personalMentoring?: boolean;
   personalMentoringStartDate?: string | null;
   personalMentoringEndDate?: string | null;
@@ -408,10 +407,6 @@ export function CourseModal(props: CourseModalProps) {
             </Col>
           </Row>
 
-          <Form.Item style={{ marginTop: 8 }} name="usePrivateRepositories" valuePropName="checked">
-            <Checkbox>Use Private Repositories</Checkbox>
-          </Form.Item>
-
           <Row gutter={24}>
             <Col md={8} sm={12} span={24}>
               <Form.Item name="personalMentoring" valuePropName="checked">
@@ -464,7 +459,6 @@ function createRecord(values: FormData) {
     disciplineId: values.discipline?.id,
     certificateIssuer: values.certificateIssuer,
     discordServerId: values.discordServerId,
-    usePrivateRepositories: values.usePrivateRepositories,
     personalMentoring: values.personalMentoring,
     personalMentoringStartDate: personalMentoringStartDate
       ? dayjs.utc(personalMentoringStartDate).startOf('day').format()

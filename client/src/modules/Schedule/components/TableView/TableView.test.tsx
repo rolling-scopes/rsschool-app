@@ -1,4 +1,5 @@
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, within, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import TableView from './TableView';
 import * as ReactUse from 'react-use';
 import { ALL_TAB_KEY, ColumnKey, ColumnName } from '@client/modules/Schedule/constants';
@@ -12,16 +13,16 @@ import { ScheduleSettings } from '@client/modules/Schedule/hooks/useScheduleSett
 
 const PROPS_SETTINGS_MOCK: ScheduleSettings = {
   timezone: 'Europe/Moscow',
-  setTimezone: jest.fn(),
+  setTimezone: vi.fn(),
   tagColors: {
     coding: '#722ed1',
     'cross-check': '#13c2c2',
   },
-  setTagColors: jest.fn(),
+  setTagColors: vi.fn(),
   columnsHidden: [],
-  setColumnsHidden: jest.fn(),
+  setColumnsHidden: vi.fn(),
   tagsHidden: [],
-  setTagsHidden: jest.fn(),
+  setTagsHidden: vi.fn(),
 };
 
 describe('TableView', () => {
@@ -69,10 +70,9 @@ describe('TableView', () => {
 
   describe('should filter data', () => {
     it('by selected tag', () => {
-      jest
-        .spyOn(ReactUse, 'useLocalStorage')
+      vi.spyOn(ReactUse, 'useLocalStorage')
         // Mock useLocalStorage for combinedFilter
-        .mockReturnValueOnce([{ types: [TagsEnum.Test], statuses: [], tags: [] }, jest.fn(), jest.fn()]);
+        .mockReturnValueOnce([{ types: [TagsEnum.Test], statuses: [], tags: [] }, vi.fn(), vi.fn()]);
       const data = generateCourseData();
 
       render(<TableView settings={PROPS_SETTINGS_MOCK} data={data} />);
@@ -114,6 +114,7 @@ describe('TableView', () => {
       ${ColumnName.Name}      | ${'Course Item 0'}
       ${ColumnName.Organizer} | ${'organizer 0'}
     `('by "$field" column search', async ({ field, searchQuery }: { field: string; searchQuery: string }) => {
+      const user = userEvent.setup();
       const data = generateCourseData();
       render(<TableView settings={PROPS_SETTINGS_MOCK} data={data} />);
       // Check that all items rendered
@@ -121,19 +122,16 @@ describe('TableView', () => {
       // Find and click search button for column
       const columnHeader = screen.getByRole('columnheader', { name: new RegExp(field, 'i') });
       const searchButton = within(columnHeader).getByRole('button', { name: /search/i });
-      fireEvent.click(searchButton);
+      await user.click(searchButton);
       // Type search query inside search input
       const searchInput = await screen.findByRole('textbox');
-      fireEvent.change(searchInput, { target: { value: searchQuery } });
-
-      // Apply search
-      const inputSearchBtn = screen.getByRole('button', { name: /search search/i });
-      fireEvent.click(inputSearchBtn);
+      await user.type(searchInput, searchQuery);
+      fireEvent.keyDown(searchInput, { key: 'Enter', keyCode: 13 });
 
       // Find the line with search query and no others
       const item = await screen.findByText(searchQuery);
       expect(item).toBeInTheDocument();
-      expect(screen.queryByText(data[1]?.name ?? '')).not.toBeInTheDocument();
+      await waitFor(() => expect(screen.queryByText(data[1]?.name ?? '')).not.toBeInTheDocument());
     });
   });
 
@@ -164,13 +162,12 @@ describe('TableView', () => {
     ${TagsEnum.Test}
     ${TagsEnum.Interview}
   `('should check filters in dropdown when tag "$tag" was selected', async ({ tag }: { tag: string }) => {
-    jest
-      .spyOn(ReactUse, 'useLocalStorage')
+    vi.spyOn(ReactUse, 'useLocalStorage')
       // Mock useLocalStorage for combinedFilter
       .mockReturnValueOnce([
         { types: [TagsEnum.Coding, TagsEnum.Test, TagsEnum.Interview], statuses: [], tags: [] },
-        jest.fn(),
-        jest.fn(),
+        vi.fn(),
+        vi.fn(),
       ]);
     render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
 
@@ -186,10 +183,9 @@ describe('TableView', () => {
   });
 
   it('should not render filtered tags when tags is empty', () => {
-    jest
-      .spyOn(ReactUse, 'useLocalStorage')
+    vi.spyOn(ReactUse, 'useLocalStorage')
       // Mock useLocalStorage for combinedFilter
-      .mockReturnValueOnce([{ tags: [] }, jest.fn(), jest.fn()]);
+      .mockReturnValueOnce([{ tags: [] }, vi.fn(), vi.fn()]);
     render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
 
     const tag = screen.queryByText(/Type: /);
@@ -198,10 +194,9 @@ describe('TableView', () => {
   });
 
   it('should remove tags when "Clear all" button was clicked', async () => {
-    const setFilterMock = jest.fn();
+    const setFilterMock = vi.fn();
     const types = [TagsEnum.Coding, TagsEnum.Test, TagsEnum.Interview];
-    jest
-      .spyOn(ReactUse, 'useLocalStorage')
+    vi.spyOn(ReactUse, 'useLocalStorage')
       // Mock useLocalStorage for combinedFilter
       .mockReturnValueOnce([
         {
@@ -210,7 +205,7 @@ describe('TableView', () => {
           tags: types.map(t => ({ label: `${ColumnName.Type}: ${t}`, value: t, tagType: ColumnName.Type })),
         },
         setFilterMock,
-        jest.fn(),
+        vi.fn(),
       ]);
     render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
 
@@ -218,6 +213,76 @@ describe('TableView', () => {
     fireEvent.click(clearAllBtn);
 
     expect(setFilterMock).toHaveBeenCalledWith({ types: [], statuses: [], tags: [] });
+  });
+
+  it('removes a single Type tag (and its value) when its close icon is clicked', () => {
+    const setFilterMock = vi.fn();
+    vi.spyOn(ReactUse, 'useLocalStorage').mockReturnValueOnce([
+      {
+        types: [TagsEnum.Coding],
+        statuses: [],
+        tags: [{ label: `${ColumnName.Type}: Coding`, value: TagsEnum.Coding, tagType: ColumnName.Type }],
+      },
+      setFilterMock,
+      vi.fn(),
+    ]);
+    render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
+
+    fireEvent.click(screen.getByRole('img', { name: 'Close' }));
+
+    expect(setFilterMock).toHaveBeenCalledWith(expect.objectContaining({ types: [], statuses: [] }));
+  });
+
+  it('removes a single Status tag (and its value) when its close icon is clicked', () => {
+    const setFilterMock = vi.fn();
+    vi.spyOn(ReactUse, 'useLocalStorage').mockReturnValueOnce([
+      {
+        types: [],
+        statuses: [StatusEnum.Done],
+        tags: [{ label: `${ColumnName.Status}: Done`, value: StatusEnum.Done, tagType: ColumnName.Status }],
+      },
+      setFilterMock,
+      vi.fn(),
+    ]);
+    render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
+
+    fireEvent.click(screen.getByRole('img', { name: 'Close' }));
+
+    expect(setFilterMock).toHaveBeenCalledWith(expect.objectContaining({ statuses: [] }));
+  });
+
+  it('shows an error when closing a tag with an unrecognized tag type', () => {
+    vi.spyOn(ReactUse, 'useLocalStorage').mockReturnValueOnce([
+      {
+        types: [],
+        statuses: [],
+        tags: [{ label: 'Weird: tag', value: 'x', tagType: 'weird' as never }],
+      },
+      vi.fn(),
+      vi.fn(),
+    ]);
+    render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
+
+    fireEvent.click(screen.getByRole('img', { name: 'Close' }));
+    // The default switch branch surfaces an "Unknown tag" error message.
+    return waitFor(() => expect(screen.getByText('Unknown tag')).toBeInTheDocument());
+  });
+
+  it('clears stored statuses when navigating to a non-"all" status tab', () => {
+    const setFilterMock = vi.fn();
+    // statusFilter != ALL and stored statuses present → the effect resets statuses + status tags.
+    vi.spyOn(ReactUse, 'useLocalStorage').mockReturnValue([
+      {
+        types: [],
+        statuses: [StatusEnum.Done],
+        tags: [{ label: `${ColumnName.Status}: Done`, value: StatusEnum.Done, tagType: ColumnName.Status }],
+      },
+      setFilterMock,
+      vi.fn(),
+    ]);
+    render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} statusFilter={StatusEnum.Missed} />);
+
+    expect(setFilterMock).toHaveBeenCalledWith(expect.objectContaining({ statuses: [] }));
   });
 });
 

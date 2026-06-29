@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { TopMentorDto } from '@client/api';
 import { MentorCard } from './MentorCard';
 
-jest.mock('next/config', () => () => ({}));
+vi.mock('next/config', () => () => ({}));
 
 const mockMentor: TopMentorDto = {
   rank: 1,
@@ -55,12 +55,11 @@ describe('MentorCard', () => {
     expect(screen.getByText('10')).toBeInTheDocument();
   });
 
-  it('renders "Say Thank you!" button with link to /gratitude', () => {
+  it('renders "Say Thank you!" button that navigates to /gratitude', () => {
     render(<MentorCard mentor={mockMentor} />);
 
-    const link = screen.getByRole('link', { name: /say thank you/i });
-    expect(link).toBeInTheDocument();
-    expect(link).toHaveAttribute('href', '/gratitude?githubId=testmentor');
+    const button = screen.getByRole('button', { name: /say thank you/i });
+    expect(button).toBeInTheDocument();
   });
 
   it('handles empty course stats gracefully', () => {

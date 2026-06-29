@@ -83,4 +83,16 @@ describe('GeneralInfoForm', () => {
     expect(selfIntroLink).toBeInTheDocument();
     expect(notes).toBeInTheDocument();
   });
+
+  test('leaves the date empty and unchecks full-time when those fields are absent', async () => {
+    // startFrom undefined → `startFrom ? dayjs() : undefined`; fullTime undefined → `?? false`.
+    const { startFrom: _s, fullTime: _f, ...rest } = mockUserData;
+    render(<GeneralInfoForm userData={rest as never} />);
+
+    const datePicker = await screen.findByPlaceholderText('Not selected yet');
+    expect(datePicker).toHaveValue('');
+
+    const fullTime = await screen.findByRole('checkbox', { name: /ready to work full time/i });
+    expect(fullTime).not.toBeChecked();
+  });
 });

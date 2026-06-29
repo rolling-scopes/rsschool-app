@@ -1,4 +1,4 @@
-import { BranchesOutlined, CheckCircleTwoTone, ClockCircleTwoTone, MinusCircleOutlined } from '@ant-design/icons';
+import { CheckCircleTwoTone, ClockCircleTwoTone, MinusCircleOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { Button, Row, Space, Statistic, Switch, Table, Typography } from 'antd';
 import { ColumnProps } from 'antd/lib/table/Column';
@@ -30,6 +30,7 @@ type CertificateCriteria = {
   courseTaskIds?: number[];
   minScore?: number;
   minTotalScore?: number;
+  templateId?: string;
 };
 type ExpelCriteria = {
   courseTaskIds?: number[];
@@ -78,12 +79,14 @@ function Page() {
   );
 
   const issueCertificateRequest = useRequest(
-    async () => {
+    async (templateId: string) => {
       const githubId = details?.githubId;
-      if (githubId != null) {
-        await courseService.createCertificate(githubId);
-        message.info('The certificate has been requested.');
+      if (githubId == null) {
+        return false;
       }
+      await courseService.createCertificate(githubId, templateId);
+      message.info('The certificate has been requested.');
+      return true;
     },
     { manual: true, onError: handleRequestError },
   );
@@ -94,18 +97,6 @@ function Page() {
       if (studentId != null) {
         await courseService.removeCertificate(studentId);
         message.info('The certificate has been removed.');
-      }
-    },
-    { manual: true, onError: handleRequestError },
-  );
-
-  const createRepositoryRequest = useRequest(
-    async () => {
-      const githubId = details?.githubId;
-      if (githubId != null) {
-        const { repository } = await courseService.createRepository(githubId);
-        const newStudents = students.map(s => (s.githubId === githubId ? { ...s, repository: repository } : s));
-        setStudents(newStudents);
       }
     },
     { manual: true, onError: handleRequestError },
@@ -157,8 +148,8 @@ function Page() {
   );
 
   const issueCertificatesRequest = useRequest(
-    async (criteria: CertificateCriteria) => {
-      await courseService.postCertificateStudents(criteria);
+    async ({ templateId, ...criteria }: CertificateCriteria) => {
+      await courseService.postCertificateStudents(criteria, templateId);
       toggleCertificateModal();
       message.success('All certificates successfully issued');
     },
@@ -169,7 +160,6 @@ function Page() {
     loadStudentsRequest.loading ||
     issueCertificateRequest.loading ||
     removeCertificateRequest.loading ||
-    createRepositoryRequest.loading ||
     expelStudentRequest.loading ||
     restoreStudentRequest.loading ||
     updateMentorRequest.loading ||
@@ -209,7 +199,6 @@ function Page() {
           onIssueCertificate={issueCertificateRequest.runAsync}
           onRemoveCertificate={removeCertificateRequest.runAsync}
           onExpelStudent={expelStudentRequest.runAsync}
-          onCreateRepository={createRepositoryRequest.runAsync}
           onClose={() => {
             setDetails(null);
             loadStudentsRequest.runAsync();
@@ -308,12 +297,6 @@ function Page() {
           }
           return <ClockCircleTwoTone title="Assigned" />;
         },
-      },
-      {
-        title: <BranchesOutlined />,
-        dataIndex: 'repository',
-        width: 80,
-        render: (value: string) => (value ? <a href={value}>Link</a> : null),
       },
       {
         title: 'Total',

@@ -166,7 +166,7 @@ function Page() {
       <StudentMentorModal
         onOk={createInterviewRequest.runAsync}
         onCancel={() => setModal(false)}
-        visible={modal}
+        open={modal}
         courseId={course.id}
       />
     </AdminPageLayout>

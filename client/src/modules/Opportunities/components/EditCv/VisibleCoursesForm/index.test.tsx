@@ -37,4 +37,16 @@ describe('VisibleCoursesForm', () => {
       expect(coursePosition).toBeInTheDocument();
     });
   });
+
+  test('shows a fallback message when there are no courses', () => {
+    render(<VisibleCoursesForm courses={[]} visibleCourses={[]} />);
+
+    expect(screen.getByText('No courses to show')).toBeInTheDocument();
+  });
+
+  test('shows the fallback message when courses is null', () => {
+    render(<VisibleCoursesForm courses={null} visibleCourses={[]} />);
+
+    expect(screen.getByText('No courses to show')).toBeInTheDocument();
+  });
 });

@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`CommonCard Should render correctly if is null content passed 1`] = `
+exports[`CommonCard > Should render correctly > if is null content passed 1`] = `
 <div>
   <div
     class="ant-card ant-card-bordered css-dev-only-do-not-override-1enej14 css-var-root"
@@ -85,7 +85,7 @@ exports[`CommonCard Should render correctly if is null content passed 1`] = `
 </div>
 `;
 
-exports[`CommonCard Should render correctly if just basic props is present 1`] = `
+exports[`CommonCard > Should render correctly > if just basic props is present 1`] = `
 <div>
   <div
     class="ant-card ant-card-bordered css-dev-only-do-not-override-1enej14 css-var-root"

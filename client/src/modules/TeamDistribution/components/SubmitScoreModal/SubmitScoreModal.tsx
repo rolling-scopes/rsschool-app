@@ -45,7 +45,7 @@ export default function SubmitScoreModal({ distribution, onClose }: Props) {
       okType="danger"
     >
       <Spin spinning={loading}>
-        <Space direction="vertical">
+        <Space orientation="vertical">
           <Card bordered>
             <Text type="warning" strong>
               After submission, reverting changes will be impossible. Please be careful when selecting the task. The

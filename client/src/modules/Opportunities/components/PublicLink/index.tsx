@@ -15,7 +15,7 @@ export const PublicLink = ({ url }: Props) => {
 
   return (
     <Alert
-      message={
+      title={
         <>
           Public Link{' '}
           <Button target="_blank" type="link" href={url}>

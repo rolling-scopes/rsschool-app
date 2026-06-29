@@ -12,7 +12,6 @@ describe('MentorStatsModal', () => {
         name: 'Alex Petrov',
         isExpelled: false,
         totalScore: 3453,
-        repoUrl: 'https://github.com/rolling-scopes-school/alex-RS2018Q1',
       },
       {
         githubId: 'vasya',
@@ -24,7 +23,7 @@ describe('MentorStatsModal', () => {
   } as const;
 
   it('renders title and student items with proper links and score', () => {
-    render(<MentorStatsModal stats={stats as unknown as MentorStats} isVisible={true} onHide={jest.fn()} />);
+    render(<MentorStatsModal stats={stats as unknown as MentorStats} isVisible={true} onHide={vi.fn()} />);
 
     expect(screen.getByText('RS 2018 Q1 statistics')).toBeInTheDocument();
 
@@ -37,13 +36,10 @@ describe('MentorStatsModal', () => {
 
     expect(screen.getByRole('link', { name: 'alex' })).toHaveAttribute('href', 'https://github.com/alex');
     expect(screen.getByRole('link', { name: 'vasya' })).toHaveAttribute('href', 'https://github.com/vasya');
-
-    const repoLink = screen.getByRole('link', { name: 'alex-RS2018Q1' });
-    expect(repoLink).toHaveAttribute('href', 'https://github.com/rolling-scopes-school/alex-RS2018Q1');
   });
 
   it('calls onHide when close button is clicked', () => {
-    const onHide = jest.fn();
+    const onHide = vi.fn();
     render(<MentorStatsModal stats={stats as unknown as MentorStats} isVisible={true} onHide={onHide} />);
 
     const closeBtn = screen.getByRole('button', { name: 'Close' });

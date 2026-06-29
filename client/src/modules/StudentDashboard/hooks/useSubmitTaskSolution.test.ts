@@ -25,7 +25,7 @@ const rejectedMock: AxiosError = {
 
 describe('useSubmitTaskSolution', () => {
   it('should show modal with course tasks', async () => {
-    jest.spyOn(CoursesTasksApi.prototype, 'getCourseTasksWithStudentSolution').mockResolvedValue({
+    vi.spyOn(CoursesTasksApi.prototype, 'getCourseTasksWithStudentSolution').mockResolvedValue({
       ...resolvedMock,
       data: generateCourseTasks(),
     });
@@ -39,7 +39,7 @@ describe('useSubmitTaskSolution', () => {
   });
 
   it('should save solution', async () => {
-    jest.spyOn(CoursesTaskSolutionsApi.prototype, 'createTaskSolution').mockResolvedValue(resolvedMock);
+    vi.spyOn(CoursesTaskSolutionsApi.prototype, 'createTaskSolution').mockResolvedValue(resolvedMock);
     const { result } = renderHook(() => useSubmitTaskSolution(COURSE_ID));
 
     await act(async () => {
@@ -59,9 +59,83 @@ describe('useSubmitTaskSolution', () => {
     expect(result.current.state).toBeNull();
   });
 
+  it('sets the solution url from an existing task solution', async () => {
+    vi.spyOn(CoursesTasksApi.prototype, 'getCourseTasksWithStudentSolution').mockResolvedValue({
+      ...resolvedMock,
+      data: [
+        {
+          id: 100,
+          checker: 'mentor',
+          taskSolutions: { '1': { url: 'https://github.com/pr/1' } },
+        },
+      ] as unknown as CourseTaskDto[],
+    });
+    const { result } = renderHook(() => useSubmitTaskSolution(COURSE_ID));
+
+    await act(async () => {
+      await result.current.showModal();
+    });
+    act(() => {
+      result.current.setSolutionUrl(100);
+    });
+
+    expect(result.current.state?.selectedSolutionUrl).toBe('https://github.com/pr/1');
+  });
+
+  it('falls back to an empty solution url when the task has no solutions', async () => {
+    vi.spyOn(CoursesTasksApi.prototype, 'getCourseTasksWithStudentSolution').mockResolvedValue({
+      ...resolvedMock,
+      data: [{ id: 100, checker: 'mentor' }] as unknown as CourseTaskDto[],
+    });
+    const { result } = renderHook(() => useSubmitTaskSolution(COURSE_ID));
+
+    await act(async () => {
+      await result.current.showModal();
+    });
+    act(() => {
+      result.current.setSolutionUrl(100);
+    });
+
+    expect(result.current.state?.selectedSolutionUrl).toBe('');
+  });
+
+  it('falls back to an empty solution url when the existing solution has no url', async () => {
+    vi.spyOn(CoursesTasksApi.prototype, 'getCourseTasksWithStudentSolution').mockResolvedValue({
+      ...resolvedMock,
+      data: [
+        {
+          id: 100,
+          checker: 'mentor',
+          // taskSolutions present, but the solution's url is nullish -> `url ?? ''` right side.
+          taskSolutions: { '1': { url: null } },
+        },
+      ] as unknown as CourseTaskDto[],
+    });
+    const { result } = renderHook(() => useSubmitTaskSolution(COURSE_ID));
+
+    await act(async () => {
+      await result.current.showModal();
+    });
+    act(() => {
+      result.current.setSolutionUrl(100);
+    });
+
+    expect(result.current.state?.selectedSolutionUrl).toBe('');
+  });
+
+  it('falls back to an empty solution url when the task id is unknown', () => {
+    const { result } = renderHook(() => useSubmitTaskSolution(COURSE_ID));
+
+    act(() => {
+      result.current.setSolutionUrl(999);
+    });
+
+    expect(result.current.state?.selectedSolutionUrl).toBe('');
+  });
+
   describe('should show error', () => {
     it('when getCourseTasksWithStudentSolution request failed', async () => {
-      jest.spyOn(CoursesTasksApi.prototype, 'getCourseTasksWithStudentSolution').mockRejectedValue(rejectedMock);
+      vi.spyOn(CoursesTasksApi.prototype, 'getCourseTasksWithStudentSolution').mockRejectedValue(rejectedMock);
       const { result } = renderHook(() => useSubmitTaskSolution(COURSE_ID));
 
       await act(async () => {
@@ -72,7 +146,7 @@ describe('useSubmitTaskSolution', () => {
     });
 
     it('when createTaskSolution request failed', async () => {
-      jest.spyOn(CoursesTaskSolutionsApi.prototype, 'createTaskSolution').mockRejectedValue(rejectedMock);
+      vi.spyOn(CoursesTaskSolutionsApi.prototype, 'createTaskSolution').mockRejectedValue(rejectedMock);
       const { result } = renderHook(() => useSubmitTaskSolution(COURSE_ID));
 
       await act(async () => {

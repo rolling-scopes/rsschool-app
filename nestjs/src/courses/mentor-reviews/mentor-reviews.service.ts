@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { TaskSolution } from '@entities/taskSolution';
 import { paginate } from 'src/core/paginate';
 import { Checker } from '@entities/courseTask';
-import { TaskChecker } from '../../../../server/src/models';
+import { TaskChecker } from '@entities/index';
 import { MentorReviewAssignDto } from './dto/mentor-review-assign.dto';
 
 @Injectable()
@@ -54,7 +54,7 @@ export class MentorReviewsService {
       .leftJoin('mentor.user', 'mentorUser')
       .leftJoin('taskResult.lastChecker', 'lastChecker')
       .where('student.courseId = :courseId AND student.isExpelled = false', { courseId })
-      .andWhere('courseTask.checker = :checker', { checker: Checker.Mentor })
+      .andWhere('courseTask.checker = :checkerType', { checkerType: Checker.Mentor })
       .select([
         'student.id',
         'student.mentorId',

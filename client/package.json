@@ -12,11 +12,11 @@
     "compile": "tsc -p tsconfig.json --noEmit",
     "prod": "next start -p 8080",
     "lint": "eslint src",
-    "test": "jest --silent",
-    "test:ci": "jest --ci --reporters=default --reporters=jest-junit --silent",
-    "test:watch": "jest --watch",
+    "test": "vitest run",
+    "test:ci": "vitest run --coverage",
+    "test:watch": "vitest",
     "test:e2e": "npx playwright test",
-    "coverage": "jest --coverage"
+    "coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@ant-design/cssinjs": "^2.1.0",
@@ -42,7 +42,7 @@
     "use-places-autocomplete": "4.0.1"
   },
   "devDependencies": {
-    "@playwright/test": "1.49.1",
+    "@playwright/test": "^1.51.1",
     "@testing-library/jest-dom": "6.1.4",
     "@testing-library/react": "14.1.2",
     "@testing-library/user-event": "14.5.1",
@@ -51,18 +51,12 @@
     "@types/react": "18.3.18",
     "@types/react-dom": "18.3.5",
     "eslint-plugin-testing-library": "7.16.0",
-    "jest-environment-jsdom": "30.2.0",
-    "jest-junit": "16.0.0",
-    "jest-mock-axios": "4.9.0",
+    "jsdom": "^29.0.2",
     "mq-polyfill": "1.1.8"
   },
   "nextBundleAnalysis": {
     "budget": 512000,
     "budgetPercentIncreaseRed": 5,
     "showDetails": true
-  },
-  "jest-junit": {
-    "outputDirectory": "../reports",
-    "outputName": "jest-junit-client.xml"
   }
 }

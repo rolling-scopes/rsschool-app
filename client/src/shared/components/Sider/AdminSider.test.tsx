@@ -7,14 +7,14 @@ import { Session } from '@client/components/withSession';
 import { getAdminMenuItems, getCourseManagementMenuItems } from './data/menuItems';
 import router from 'next/router';
 
-jest.mock('next/router', () => ({
+vi.mock('next/router', () => ({
   __esModule: true,
   default: {
-    push: jest.fn(),
+    push: vi.fn(),
   },
 }));
-jest.mock('react-use');
-jest.mock('./data/menuItems');
+vi.mock('react-use');
+vi.mock('./data/menuItems');
 
 describe('AdminSider', () => {
   const mockCourses: Course[] = [
@@ -39,7 +39,6 @@ describe('AdminSider', () => {
       locationName: 'Test Location',
       discordServerId: 123,
       certificateIssuer: 'Test Issuer',
-      usePrivateRepositories: false,
       personalMentoring: false,
       personalMentoringStartDate: null,
       personalMentoringEndDate: null,
@@ -71,15 +70,15 @@ describe('AdminSider', () => {
   ];
 
   beforeEach(() => {
-    (useLocalStorage as jest.Mock).mockImplementation(key => {
-      if (key === 'isSiderCollapsed') return [false, jest.fn()];
-      if (key === 'openedSidebarItems') return [[], jest.fn()];
-      return [undefined, jest.fn()];
+    vi.mocked(useLocalStorage).mockImplementation(key => {
+      if (key === 'isSiderCollapsed') return [false, vi.fn()];
+      if (key === 'openedSidebarItems') return [[], vi.fn()];
+      return [undefined, vi.fn()];
     });
 
-    (getAdminMenuItems as jest.Mock).mockReturnValue(mockAdminMenuItems);
-    (getCourseManagementMenuItems as jest.Mock).mockReturnValue(mockCourseMenuItems);
-    (router.push as jest.Mock).mockClear();
+    vi.mocked(getAdminMenuItems).mockReturnValue(mockAdminMenuItems);
+    vi.mocked(getCourseManagementMenuItems).mockReturnValue(mockCourseMenuItems);
+    vi.mocked(router.push).mockClear();
   });
 
   const renderComponent = (props = {}) => {
@@ -100,11 +99,11 @@ describe('AdminSider', () => {
   });
 
   it('handles sidebar collapse toggle', () => {
-    const setIsSiderCollapsed = jest.fn();
+    const setIsSiderCollapsed = vi.fn();
 
-    (useLocalStorage as jest.Mock).mockImplementation(key => {
+    vi.mocked(useLocalStorage).mockImplementation(key => {
       if (key === 'isSiderCollapsed') return [false, setIsSiderCollapsed];
-      return [undefined, jest.fn()];
+      return [undefined, vi.fn()];
     });
 
     renderComponent();
@@ -144,5 +143,35 @@ describe('AdminSider', () => {
 
     expect(screen.getByText('Admin Area')).toBeInTheDocument();
     expect(screen.getByText('Course Management')).toBeInTheDocument();
+  });
+
+  it('renders neither section when there are no admin or course-management items', () => {
+    // Empty menu lists drive the false branches of both `if (...length)` guards.
+    vi.mocked(getAdminMenuItems).mockReturnValue([]);
+    vi.mocked(getCourseManagementMenuItems).mockReturnValue([]);
+
+    renderComponent();
+
+    expect(screen.queryByText('Admin Area')).not.toBeInTheDocument();
+    expect(screen.queryByText('Course Management')).not.toBeInTheDocument();
+  });
+
+  it('shows the unfold icon when the sider is collapsed', () => {
+    // isSiderCollapsed=true selects the MenuUnfoldOutlined icon.
+    vi.mocked(useLocalStorage).mockImplementation(key => {
+      if (key === 'isSiderCollapsed') return [true, vi.fn()];
+      return [[], vi.fn()];
+    });
+
+    renderComponent();
+
+    expect(screen.getByRole('img', { name: 'menu-unfold' })).toBeInTheDocument();
+  });
+
+  it('prefers the activeCourse prop when provided', () => {
+    // Passing activeCourse exercises the left side of `props.activeCourse ?? activeCourse`.
+    renderComponent({ activeCourse: mockCourses[0] });
+
+    expect(getCourseManagementMenuItems).toHaveBeenCalledWith(mockSession, mockCourses[0]);
   });
 });

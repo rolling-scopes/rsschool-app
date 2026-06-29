@@ -8,7 +8,7 @@ const searchRef = { current: null as InputRef | null };
 export function getColumnSearchProps<T = unknown>(
   dataIndex: string | string[],
   label?: string,
-): Pick<ColumnType<T>, 'filterDropdown' | 'filterIcon' | 'onFilter' | 'onFilterDropdownOpenChange'> {
+): Pick<ColumnType<T>, 'filterDropdown' | 'filterIcon' | 'onFilter' | 'filterDropdownProps'> {
   return {
     filterDropdown: ({
       setSelectedKeys,
@@ -67,10 +67,12 @@ export function getColumnSearchProps<T = unknown>(
       );
       return val;
     },
-    onFilterDropdownOpenChange: (visible: boolean) => {
-      if (visible) {
-        requestAnimationFrame(() => searchRef.current?.select());
-      }
+    filterDropdownProps: {
+      onOpenChange: (visible: boolean) => {
+        if (visible) {
+          requestAnimationFrame(() => searchRef.current?.select());
+        }
+      },
     },
   };
 }

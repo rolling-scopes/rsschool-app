@@ -44,7 +44,7 @@ const MENU_ITEMS = [
     title: 'My CV',
   },
   {
-    link: 'https://rs.school/docs/en',
+    link: 'https://rs.school/docs',
     icon: <QuestionCircleFilled />,
     title: 'Help',
     target: '_blank',
@@ -101,7 +101,7 @@ export function Header({ title, showCourseName, showCarousel = true }: Props) {
 
   return (
     <Space
-      direction="vertical"
+      orientation="vertical"
       size={0}
       style={{
         width: '100%',

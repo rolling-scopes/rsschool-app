@@ -2,6 +2,7 @@ import { GithubOutlined } from '@ant-design/icons';
 import { Button, Card, Flex } from 'antd';
 import ThemeSwitch from '@client/shared/components/ThemeSwitch';
 import styles from './index.module.css';
+import clsx from 'clsx';
 
 const { Meta } = Card;
 
@@ -9,7 +10,7 @@ export default function LoginPage() {
   return (
     <main>
       <div className={styles.loginForm}>
-        <div style={{ width: 320, height: 120 }} className={styles.loginImage} />
+        <div className={clsx(styles.loginImage, 'login-image')} />
         <Card
           style={{ width: 320 }}
           cover={
