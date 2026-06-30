@@ -161,11 +161,35 @@ export class InterviewsService {
     }));
   }
 
-  /**
-   * TODO: rewrite it. Hard to maintain and understand
-   */
   public async getStageInterviewAvailableStudents(courseId: number): Promise<AvailableStudentDto[]> {
-    const { entities, raw } = await this.studentRepository
+    const { entities, raw } = await this.buildAvailableStudentsQuery(courseId).getRawAndEntities();
+    const registrationDateByStudentId = InterviewsService.mapRegistrationDates(raw);
+
+    return entities
+      .filter(student => InterviewsService.isAvailableForStageInterview(student))
+      .map(student => this.mapToAvailableStudentDto(student, registrationDateByStudentId.get(student.id) ?? ''));
+  }
+
+  /**
+   * Build a studentId → registration date lookup from the raw rows once, so mapping is O(1) per
+   * student instead of scanning `raw` (which the left joins can inflate) for every student.
+   */
+  private static mapRegistrationDates(raw: { student_id: number; sis_createdDate: string }[]): Map<number, string> {
+    const registrationDateByStudentId = new Map<number, string>();
+    for (const row of raw) {
+      if (!registrationDateByStudentId.has(row.student_id)) {
+        registrationDateByStudentId.set(row.student_id, row.sis_createdDate);
+      }
+    }
+    return registrationDateByStudentId;
+  }
+
+  /**
+   * Registered, mentoring-eligible students of the course (not failed, not expelled, no mentor yet),
+   * with their stage interviews, feedbacks and registration date joined for downstream mapping.
+   */
+  private buildAvailableStudentsQuery(courseId: number) {
+    return this.studentRepository
       .createQueryBuilder('student')
       .innerJoin(StageInterviewStudent, 'sis', 'sis.studentId = student.id')
       .innerJoin('student.user', 'user')
@@ -196,37 +220,39 @@ export class InterviewsService {
         ].join(' AND '),
         { courseId },
       )
-      .orderBy('student.totalScore', 'DESC')
-      .getRawAndEntities();
+      .orderBy('student.totalScore', 'DESC');
+  }
 
-    const result = entities
-      .filter(s => {
-        return (
-          !s.stageInterviews ||
-          s.stageInterviews.length === 0 ||
-          s.stageInterviews.every(i => (i.isCompleted && i.decision !== 'draft') || i.isCanceled)
-        );
-      })
-      .map(student => {
-        const { id, user, totalScore } = student;
-        const stageInterviews: StageInterview[] = student.stageInterviews || [];
-        const lastStageInterview = InterviewsService.getLastStageInterview(stageInterviews);
-        return {
-          id,
-          totalScore,
-          githubId: user.githubId,
-          name: UsersService.getFullName(student.user),
-          cityName: user.cityName,
-          countryName: user.countryName,
-          isGoodCandidate: this.isGoodCandidate(stageInterviews),
-          rating: lastStageInterview?.rating,
-          maxScore: lastStageInterview?.maxScore,
-          feedbackVersion: lastStageInterview?.version,
-          registeredDate: raw.find(item => item.student_id === student.id)?.sis_createdDate,
-        };
-      });
+  /**
+   * A student is available for a new stage interview when they have no interviews yet, or every
+   * existing interview is either canceled or completed with a final (non-draft) decision.
+   */
+  private static isAvailableForStageInterview(student: Student): boolean {
+    const interviews = student.stageInterviews;
+    return (
+      !interviews ||
+      interviews.length === 0 ||
+      interviews.every(interview => (interview.isCompleted && interview.decision !== 'draft') || interview.isCanceled)
+    );
+  }
 
-    return result;
+  private mapToAvailableStudentDto(student: Student, registeredDate: string): AvailableStudentDto {
+    const stageInterviews: StageInterview[] = student.stageInterviews || [];
+    const lastStageInterview = InterviewsService.getLastStageInterview(stageInterviews);
+
+    return {
+      id: student.id,
+      totalScore: student.totalScore,
+      githubId: student.user.githubId,
+      name: UsersService.getFullName(student.user),
+      cityName: student.user.cityName,
+      countryName: student.user.countryName,
+      isGoodCandidate: this.isGoodCandidate(stageInterviews),
+      rating: lastStageInterview?.rating,
+      maxScore: lastStageInterview?.maxScore,
+      feedbackVersion: lastStageInterview?.version,
+      registeredDate,
+    };
   }
 
   /**

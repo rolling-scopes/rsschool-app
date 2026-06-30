@@ -3,8 +3,6 @@ import userEvent from '@testing-library/user-event';
 import { ProfileMainCardData } from '@client/services/user';
 import MainCard from '../MainCard';
 
-// TODO: Known Issue: https://stackoverflow.com/questions/59942808/how-can-i-use-jest-coverage-in-next-js
-
 // Stub the remote (Google Maps) LocationSelect with a simple value-emitting control so
 // handleLocationChange can be exercised without the maps integration.
 const { obfuscateProfile } = vi.hoisted(() => ({

@@ -62,9 +62,12 @@ export class MentorsHallOfFameService implements OnModuleInit {
 
     const gratitudesSubquery = this.userRepository.manager
       .createQueryBuilder()
+      // The subquery selects from a single `feedback` table (no fan-out joins) and groups by
+      // `toUserId`, so `feedback.id` (the primary key) is already unique within each group.
+      // `COUNT(DISTINCT feedback.id)` would therefore equal `COUNT(feedback.id)`; we use the
+      // plain count to avoid a redundant de-duplication pass.
       .select('feedback.toUserId', 'toUserId')
-      // TODO: Check if we need to count distinct feedback.id or not on real data
-      .addSelect('COUNT(DISTINCT feedback.id)', 'gratitudesCount')
+      .addSelect('COUNT(feedback.id)', 'gratitudesCount')
       .from(Feedback, 'feedback')
       .groupBy('feedback.toUserId');
 

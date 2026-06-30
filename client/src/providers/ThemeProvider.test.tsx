@@ -57,14 +57,26 @@ describe('ThemeProvider', () => {
     expect(() => ctx?.changeAutoTheme()).not.toThrow();
   });
 
-  it('provides the default light theme when nothing is stored', () => {
+  it('defaults to auto mode following the system (light) when nothing is stored', () => {
+    setMatchMedia(false);
     render(
       <ThemeProvider>
         <Consumer />
       </ThemeProvider>,
     );
+    expect(screen.getByTestId('auto')).toHaveTextContent('true');
     expect(screen.getByTestId('theme')).toHaveTextContent('light');
-    expect(screen.getByTestId('auto')).toHaveTextContent('false');
+  });
+
+  it('defaults to auto mode following the system (dark) when nothing is stored', () => {
+    setMatchMedia(true);
+    render(
+      <ThemeProvider>
+        <Consumer />
+      </ThemeProvider>,
+    );
+    expect(screen.getByTestId('auto')).toHaveTextContent('true');
+    expect(screen.getByTestId('theme')).toHaveTextContent('dark');
   });
 
   it('themeChange to dark applies the dark theme, body class, and persists it', () => {
@@ -110,7 +122,9 @@ describe('ThemeProvider', () => {
     expect(screen.getByTestId('auto')).toHaveTextContent('false');
   });
 
-  it('enables auto mode when stored theme is "auto" and follows system (dark)', () => {
+  it('enables auto mode for a legacy stored "auto" value and follows system (dark)', () => {
+    // "auto" is no longer written to storage, but users upgraded from the old build may still
+    // have it. It is not a valid AppTheme, so it falls through to the auto (follow-system) branch.
     localStorage.setItem('app-theme', 'auto');
     setMatchMedia(true);
     render(
@@ -120,29 +134,37 @@ describe('ThemeProvider', () => {
     );
     expect(screen.getByTestId('auto')).toHaveTextContent('true');
     expect(screen.getByTestId('theme')).toHaveTextContent('dark');
+    // the stale legacy value is cleared so auto mode stays represented by the absence of the key
+    expect(localStorage.getItem('app-theme')).toBeNull();
   });
 
-  it('toggling auto on persists "auto" and applies the system (light) theme', () => {
+  it('toggling auto on clears the stored theme and applies the system (light) theme', () => {
+    // Start from an explicit manual theme so auto is off, then toggle it on.
+    localStorage.setItem('app-theme', AppTheme.Dark);
     setMatchMedia(false);
     render(
       <ThemeProvider>
         <Consumer />
       </ThemeProvider>,
     );
+    expect(screen.getByTestId('auto')).toHaveTextContent('false');
 
     fireEvent.click(screen.getByText('toggle-auto'));
 
     expect(screen.getByTestId('auto')).toHaveTextContent('true');
-    expect(localStorage.getItem('app-theme')).toBe('auto');
+    expect(localStorage.getItem('app-theme')).toBeNull();
     expect(screen.getByTestId('theme')).toHaveTextContent('light');
   });
 
-  it('toggling auto on then off flips the auto flag back to false', () => {
+  it('toggling auto off then on flips the auto flag', () => {
+    // Start from an explicit manual theme so auto is off initially.
+    localStorage.setItem('app-theme', AppTheme.Light);
     render(
       <ThemeProvider>
         <Consumer />
       </ThemeProvider>,
     );
+    expect(screen.getByTestId('auto')).toHaveTextContent('false');
 
     fireEvent.click(screen.getByText('toggle-auto'));
     expect(screen.getByTestId('auto')).toHaveTextContent('true');
@@ -152,6 +174,7 @@ describe('ThemeProvider', () => {
   });
 
   it('responds to system theme changes while auto mode is active', () => {
+    // Nothing stored → auto mode is on by default and subscribed to the media query.
     const mql = setMatchMedia(false);
     render(
       <ThemeProvider>
@@ -159,7 +182,7 @@ describe('ThemeProvider', () => {
       </ThemeProvider>,
     );
 
-    fireEvent.click(screen.getByText('toggle-auto'));
+    expect(screen.getByTestId('auto')).toHaveTextContent('true');
     expect(screen.getByTestId('theme')).toHaveTextContent('light');
 
     act(() => {
