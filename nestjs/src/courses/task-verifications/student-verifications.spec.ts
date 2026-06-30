@@ -10,8 +10,32 @@ import { SelfEducationService } from './self-education.service';
 import { StudentTaskVerificationsController } from './task-verifications.controller';
 
 // Fixtures mirrored from server/src/routes/course/__test__/studentVerifications.test.ts.
-// The endpoint now returns the verifications grouped by courseTaskId (see CourseTaskVerificationsDto).
-const mockVerifications = [{ id: 1, status: 'completed', score: 90, courseTaskId: 10 }];
+// The endpoint now returns the verifications grouped by courseTaskId (see CourseTaskVerificationsDto),
+// mapped to the documented DTO fields (entity internals such as updatedDate are dropped).
+const mockVerification = {
+  id: 1,
+  createdDate: new Date('2024-01-01T00:00:00.000Z'),
+  updatedDate: new Date('2024-01-02T00:00:00.000Z'),
+  studentId: 42,
+  courseTaskId: 10,
+  courseTask: { id: 10, type: 'jstask', task: { name: 'Task A' } },
+  details: 'ok',
+  status: 'completed',
+  score: 90,
+  metadata: [],
+};
+const mockVerifications = [mockVerification];
+const expectedDto = {
+  id: 1,
+  createdDate: new Date('2024-01-01T00:00:00.000Z'),
+  studentId: 42,
+  courseTaskId: 10,
+  courseTask: { id: 10, type: 'jstask', task: { name: 'Task A' } },
+  details: 'ok',
+  status: 'completed',
+  score: 90,
+  metadata: [],
+};
 
 const taskVerificationsRepository = { createQueryBuilder: vi.fn() };
 const studentsRepository = { createQueryBuilder: vi.fn() };
@@ -79,7 +103,7 @@ describe('student verifications', () => {
     expect(verificationsQb.where).toHaveBeenCalledWith('v.studentId = :id', { id: 42 });
     expect(verificationsQb.andWhere).toHaveBeenCalledWith('courseTask.disabled = :disabled', { disabled: false });
     expect(verificationsQb.orderBy).toHaveBeenCalledWith('v.updatedDate', 'DESC');
-    expect(result).toEqual([{ courseTaskId: 10, verifications: mockVerifications }]);
+    expect(result).toEqual([{ courseTaskId: 10, verifications: [expectedDto] }]);
   });
 
   it('responds 400 when student is not found in the course', async () => {
