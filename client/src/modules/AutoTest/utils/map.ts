@@ -57,19 +57,18 @@ function getStatus(
   return CourseTaskStatus.Available;
 }
 
-// TODO: refactor nestjs models to return CourseTaskVerifications from server
+// `verifications` are already scoped to this course task — the server returns them grouped by
+// courseTaskId (see CourseTaskVerificationsDto), so no client-side filtering is needed here.
 export function mapTo(
   courseTask: CourseTaskDetailedDto,
   verifications: Verification[],
   manuallyDoneIds: number[] = [],
 ): CourseTaskVerifications {
-  const taskVerifications = verifications.filter(v => v.courseTaskId === courseTask.id);
-
   return {
     ...courseTask,
-    state: getState(courseTask, taskVerifications),
-    status: getStatus(courseTask, taskVerifications, manuallyDoneIds),
+    state: getState(courseTask, verifications),
+    status: getStatus(courseTask, verifications, manuallyDoneIds),
     publicAttributes: courseTask.publicAttributes as SelfEducationPublicAttributes,
-    verifications: taskVerifications,
+    verifications,
   };
 }

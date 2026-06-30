@@ -43,9 +43,9 @@ export interface Verification {
     task: {
       name: string;
     };
-    type: string;
+    type: string | null;
   };
-  details: string;
+  details: string | null;
   metadata: unknown[];
   score: number;
   status: string;

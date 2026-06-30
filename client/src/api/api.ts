@@ -1979,6 +1979,25 @@ export type CourseTaskDtoCheckerEnum = typeof CourseTaskDtoCheckerEnum[keyof typ
 /**
  * 
  * @export
+ * @interface CourseTaskVerificationsDto
+ */
+export interface CourseTaskVerificationsDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof CourseTaskVerificationsDto
+     */
+    'courseTaskId': number;
+    /**
+     * 
+     * @type {Array<StudentTaskVerificationDto>}
+     * @memberof CourseTaskVerificationsDto
+     */
+    'verifications': Array<StudentTaskVerificationDto>;
+}
+/**
+ * 
+ * @export
  * @interface CourseUserDto
  */
 export interface CourseUserDto {
@@ -7393,6 +7412,67 @@ export interface StudentSummaryDto {
 /**
  * 
  * @export
+ * @interface StudentTaskVerificationDto
+ */
+export interface StudentTaskVerificationDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof StudentTaskVerificationDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof StudentTaskVerificationDto
+     */
+    'createdDate': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof StudentTaskVerificationDto
+     */
+    'studentId': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof StudentTaskVerificationDto
+     */
+    'courseTaskId': number;
+    /**
+     * 
+     * @type {VerificationCourseTaskDto}
+     * @memberof StudentTaskVerificationDto
+     */
+    'courseTask': VerificationCourseTaskDto;
+    /**
+     * 
+     * @type {string}
+     * @memberof StudentTaskVerificationDto
+     */
+    'details': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof StudentTaskVerificationDto
+     */
+    'status': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof StudentTaskVerificationDto
+     */
+    'score': number;
+    /**
+     * 
+     * @type {Array<{ [key: string]: object; }>}
+     * @memberof StudentTaskVerificationDto
+     */
+    'metadata': Array<{ [key: string]: object; }>;
+}
+/**
+ * 
+ * @export
  * @interface StudentsDto
  */
 export interface StudentsDto {
@@ -9774,6 +9854,44 @@ export interface Validations {
      * @memberof Validations
      */
     'githubPrInUrl': boolean;
+}
+/**
+ * 
+ * @export
+ * @interface VerificationCourseTaskDto
+ */
+export interface VerificationCourseTaskDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof VerificationCourseTaskDto
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof VerificationCourseTaskDto
+     */
+    'type': string | null;
+    /**
+     * 
+     * @type {VerificationTaskDto}
+     * @memberof VerificationCourseTaskDto
+     */
+    'task': VerificationTaskDto;
+}
+/**
+ * 
+ * @export
+ * @interface VerificationTaskDto
+ */
+export interface VerificationTaskDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof VerificationTaskDto
+     */
+    'name': string;
 }
 /**
  * 
@@ -12975,7 +13093,7 @@ export const CourseTaskVerificationsApiFp = function(configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getStudentTaskVerifications(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async getStudentTaskVerifications(courseId: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CourseTaskVerificationsDto>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getStudentTaskVerifications(courseId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -13036,7 +13154,7 @@ export const CourseTaskVerificationsApiFactory = function (configuration?: Confi
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStudentTaskVerifications(courseId: number, options?: any): AxiosPromise<void> {
+        getStudentTaskVerifications(courseId: number, options?: any): AxiosPromise<Array<CourseTaskVerificationsDto>> {
             return localVarFp.getStudentTaskVerifications(courseId, options).then((request) => request(axios, basePath));
         },
         /**
