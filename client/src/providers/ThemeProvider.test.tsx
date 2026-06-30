@@ -134,6 +134,8 @@ describe('ThemeProvider', () => {
     );
     expect(screen.getByTestId('auto')).toHaveTextContent('true');
     expect(screen.getByTestId('theme')).toHaveTextContent('dark');
+    // the stale legacy value is cleared so auto mode stays represented by the absence of the key
+    expect(localStorage.getItem('app-theme')).toBeNull();
   });
 
   it('toggling auto on clears the stored theme and applies the system (light) theme', () => {

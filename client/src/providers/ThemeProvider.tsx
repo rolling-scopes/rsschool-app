@@ -76,8 +76,12 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
       setAuto(false);
       applyTheme(storedTheme);
     } else {
-      // No explicit light/dark choice stored (or a legacy "auto" value): follow the system.
-      // The `[auto]` effect applies the system theme and subscribes to changes.
+      // No explicit light/dark choice stored (or a legacy "auto"/invalid value): follow the system.
+      // Clear any stale value so auto mode stays represented by the absence of the key, then let
+      // the `[auto]` effect apply the system theme and subscribe to changes.
+      if (storedTheme !== null) {
+        localStorage.removeItem('app-theme');
+      }
       setAuto(true);
     }
   }, []);
