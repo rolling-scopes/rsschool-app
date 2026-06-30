@@ -418,6 +418,35 @@ describe('TaskVerificationsService', () => {
       return Object.assign(builder, terminal);
     }
 
+    const CREATED = new Date('2024-01-01T00:00:00.000Z');
+    function verification(overrides: Record<string, unknown> = {}) {
+      return {
+        id: 1,
+        createdDate: CREATED,
+        updatedDate: new Date('2024-01-02T00:00:00.000Z'),
+        studentId: 7,
+        courseTaskId: 100,
+        courseTask: { id: 100, type: 'jstask', task: { name: 'Task A' } },
+        details: 'ok',
+        status: 'completed',
+        score: 80,
+        metadata: [],
+        ...overrides,
+      };
+    }
+    const dto = (overrides: Record<string, unknown> = {}) => ({
+      id: 1,
+      createdDate: CREATED,
+      studentId: 7,
+      courseTaskId: 100,
+      courseTask: { id: 100, type: 'jstask', task: { name: 'Task A' } },
+      details: 'ok',
+      status: 'completed',
+      score: 80,
+      metadata: [],
+      ...overrides,
+    });
+
     it('returns null when the student is not found in the course', async () => {
       studentsRepository.createQueryBuilder.mockReturnValue(qb({ getOne: vi.fn().mockResolvedValue(null) }));
 
@@ -426,15 +455,21 @@ describe('TaskVerificationsService', () => {
       expect(result).toBeNull();
     });
 
-    it('groups the student verifications by courseTaskId', async () => {
+    it('groups verifications by courseTaskId and exposes only the documented DTO fields', async () => {
       studentsRepository.createQueryBuilder.mockReturnValue(qb({ getOne: vi.fn().mockResolvedValue({ id: 7 }) }));
-      const verifications = [
-        { id: 1, courseTaskId: 100, score: 80 },
-        { id: 2, courseTaskId: 200, score: 50 },
-        { id: 3, courseTaskId: 100, score: 90 },
-      ];
       taskVerificationsRepository.createQueryBuilder.mockReturnValue(
-        qb({ getMany: vi.fn().mockResolvedValue(verifications) }),
+        qb({
+          getMany: vi.fn().mockResolvedValue([
+            verification({ id: 1, courseTaskId: 100, score: 80 }),
+            verification({
+              id: 2,
+              courseTaskId: 200,
+              score: 50,
+              courseTask: { id: 200, type: 'cv:markdown', task: { name: 'Task B' } },
+            }),
+            verification({ id: 3, courseTaskId: 100, score: 90 }),
+          ]),
+        }),
       );
 
       const result = await service.getStudentVerifications(13, 'alreadybored');
@@ -442,13 +477,40 @@ describe('TaskVerificationsService', () => {
       expect(result).toEqual([
         {
           courseTaskId: 100,
+          verifications: [dto({ id: 1, score: 80 }), dto({ id: 3, score: 90 })],
+        },
+        {
+          courseTaskId: 200,
           verifications: [
-            { id: 1, courseTaskId: 100, score: 80 },
-            { id: 3, courseTaskId: 100, score: 90 },
+            dto({
+              id: 2,
+              courseTaskId: 200,
+              score: 50,
+              courseTask: { id: 200, type: 'cv:markdown', task: { name: 'Task B' } },
+            }),
           ],
         },
-        { courseTaskId: 200, verifications: [{ id: 2, courseTaskId: 200, score: 50 }] },
       ]);
+      // entity internals (e.g. updatedDate) must not leak into the documented response
+      expect(result![0]!.verifications[0]).not.toHaveProperty('updatedDate');
+    });
+
+    it('surfaces null details and null course-task type instead of dropping them', async () => {
+      studentsRepository.createQueryBuilder.mockReturnValue(qb({ getOne: vi.fn().mockResolvedValue({ id: 7 }) }));
+      taskVerificationsRepository.createQueryBuilder.mockReturnValue(
+        qb({
+          getMany: vi
+            .fn()
+            .mockResolvedValue([
+              verification({ details: null, courseTask: { id: 100, type: null, task: { name: 'Task A' } } }),
+            ]),
+        }),
+      );
+
+      const result = await service.getStudentVerifications(13, 'alreadybored');
+
+      expect(result![0]!.verifications[0]!.details).toBeNull();
+      expect(result![0]!.verifications[0]!.courseTask.type).toBeNull();
     });
   });
 });

@@ -7450,7 +7450,7 @@ export interface StudentTaskVerificationDto {
      * @type {string}
      * @memberof StudentTaskVerificationDto
      */
-    'details': string;
+    'details': string | null;
     /**
      * 
      * @type {string}
@@ -9872,7 +9872,7 @@ export interface VerificationCourseTaskDto {
      * @type {string}
      * @memberof VerificationCourseTaskDto
      */
-    'type': string;
+    'type': string | null;
     /**
      * 
      * @type {VerificationTaskDto}

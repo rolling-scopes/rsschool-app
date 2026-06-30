@@ -5879,7 +5879,7 @@
         "type": "object",
         "properties": {
           "id": { "type": "number" },
-          "type": { "type": "string" },
+          "type": { "type": "string", "nullable": true },
           "task": { "$ref": "#/components/schemas/VerificationTaskDto" }
         },
         "required": ["id", "type", "task"]
@@ -5892,7 +5892,7 @@
           "studentId": { "type": "number" },
           "courseTaskId": { "type": "number" },
           "courseTask": { "$ref": "#/components/schemas/VerificationCourseTaskDto" },
-          "details": { "type": "string" },
+          "details": { "type": "string", "nullable": true },
           "status": { "type": "string" },
           "score": { "type": "number" },
           "metadata": { "type": "array", "items": { "type": "object", "additionalProperties": true } }

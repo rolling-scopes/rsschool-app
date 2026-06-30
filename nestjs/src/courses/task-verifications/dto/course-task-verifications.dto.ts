@@ -9,8 +9,8 @@ class VerificationCourseTaskDto {
   @ApiProperty()
   id: number;
 
-  @ApiProperty()
-  type: string;
+  @ApiProperty({ nullable: true, type: String })
+  type: string | null;
 
   @ApiProperty({ type: VerificationTaskDto })
   task: VerificationTaskDto;
@@ -32,8 +32,8 @@ export class StudentTaskVerificationDto {
   @ApiProperty({ type: VerificationCourseTaskDto })
   courseTask: VerificationCourseTaskDto;
 
-  @ApiProperty()
-  details: string;
+  @ApiProperty({ nullable: true, type: String })
+  details: string | null;
 
   @ApiProperty()
   status: string;
