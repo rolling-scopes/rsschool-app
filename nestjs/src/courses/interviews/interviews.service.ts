@@ -163,12 +163,25 @@ export class InterviewsService {
 
   public async getStageInterviewAvailableStudents(courseId: number): Promise<AvailableStudentDto[]> {
     const { entities, raw } = await this.buildAvailableStudentsQuery(courseId).getRawAndEntities();
+    const registrationDateByStudentId = InterviewsService.mapRegistrationDates(raw);
 
     return entities
       .filter(student => InterviewsService.isAvailableForStageInterview(student))
-      .map(student =>
-        this.mapToAvailableStudentDto(student, raw.find(item => item.student_id === student.id)?.sis_createdDate),
-      );
+      .map(student => this.mapToAvailableStudentDto(student, registrationDateByStudentId.get(student.id) ?? ''));
+  }
+
+  /**
+   * Build a studentId → registration date lookup from the raw rows once, so mapping is O(1) per
+   * student instead of scanning `raw` (which the left joins can inflate) for every student.
+   */
+  private static mapRegistrationDates(raw: { student_id: number; sis_createdDate: string }[]): Map<number, string> {
+    const registrationDateByStudentId = new Map<number, string>();
+    for (const row of raw) {
+      if (!registrationDateByStudentId.has(row.student_id)) {
+        registrationDateByStudentId.set(row.student_id, row.sis_createdDate);
+      }
+    }
+    return registrationDateByStudentId;
   }
 
   /**
