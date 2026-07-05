@@ -112,4 +112,47 @@ describe('MentorStatsCard', () => {
     await user.click(screen.getByText('mock-close-endorsement'));
     expect(screen.queryByTestId('endorsement-open')).not.toBeInTheDocument();
   });
+
+  it('does not render MentorStatsModal when there are no courses (stats[courseIndex] undefined)', () => {
+    render(<MentorStatsCard githubId="test" data={[]} />);
+    // count is 0 and there are no course cards
+    expect(screen.getByText('Mentored Students:')).toBeInTheDocument();
+    expect(screen.queryByTestId('expand-button')).not.toBeInTheDocument();
+    // MentorStatsModal not rendered -> no statistics title
+    expect(screen.queryByText(/statistics/)).not.toBeInTheDocument();
+  });
+
+  it('renders students count text (not a list) for non-first courses that have students', () => {
+    const data = [
+      mentorStats[0],
+      {
+        courseName: 'rs-2019-q2',
+        courseLocationName: 'Minsk',
+        students: [
+          { githubId: 'kate', name: 'Kate Smith', isExpelled: false, totalScore: 500 },
+          { githubId: 'tom', name: 'Tom Jones', isExpelled: false, totalScore: 400 },
+        ],
+      },
+    ];
+    render(<MentorStatsCard githubId="test" data={data} />);
+
+    // second course (idx 1) with students renders the count text, not individual links
+    expect(screen.getByText(/Students number:/)).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Kate Smith' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Tom Jones' })).not.toBeInTheDocument();
+  });
+
+  it('renders a course card without expand button when course has no students', () => {
+    const data = [
+      {
+        courseName: 'rs-empty',
+        courseLocationName: '',
+        // no students -> extra (ExpandButtonWidget) not rendered, message shown
+      },
+    ];
+    render(<MentorStatsCard githubId="test" data={data} />);
+
+    expect(screen.getByText('Does not have students at this course yet')).toBeInTheDocument();
+    expect(screen.queryByTestId('expand-button')).not.toBeInTheDocument();
+  });
 });

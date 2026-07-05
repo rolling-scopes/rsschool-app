@@ -1,6 +1,6 @@
 import { useRequest } from 'ahooks';
 import { Descriptions, Divider, Form, Space, Switch, Tag, Typography } from 'antd';
-import { AutoTestsApi, SelfEducationQuestionSelectedAnswersDto } from '@client/api';
+import { AutoTestsApi } from '@client/api';
 import { AdminPageLayout } from '@client/shared/components/PageLayout';
 import { Question } from '@client/modules/AutoTest/components';
 import { SessionProvider, useActiveCourseContext } from '@client/modules/Course/contexts';
@@ -101,14 +101,12 @@ function Page() {
             {selectedTask?.attributes.public.questions.map((question, index) => (
               <Question
                 key={index}
-                question={
-                  {
-                    ...question,
-                    // TODO: Investigate and fix potential type mismatch for selectedAnswers.
-                    // Related issue: https://github.com/rolling-scopes/rsschool-app/issues/2572
-                    selectedAnswers: selectedTask?.attributes.answers[index],
-                  } as SelfEducationQuestionSelectedAnswersDto
-                }
+                question={{
+                  ...question,
+                  // `attributes.answers[index]` holds the correct answers for this question;
+                  // default to an empty selection when none are recorded for the index.
+                  selectedAnswers: selectedTask?.attributes.answers[index] ?? [],
+                }}
               />
             ))}
           </Form>

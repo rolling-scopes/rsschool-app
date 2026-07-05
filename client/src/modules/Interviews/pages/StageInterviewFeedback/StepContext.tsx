@@ -1,7 +1,7 @@
 import { CoursesInterviewsApi, InterviewFeedbackDto, ProfileCourseDto } from '@client/api';
 import { FeedbackStep, Feedback } from '@client/data/interviews/technical-screening';
 import { createContext, PropsWithChildren, useCallback, useMemo, useState } from 'react';
-import { useLoading } from '@client/components/useLoading';
+import { useRequest } from 'ahooks';
 import { message } from 'antd';
 import { useRouter } from 'next/router';
 import {
@@ -35,10 +35,6 @@ export const StepContext = createContext<StepApi>({} as StepApi);
 export function StepContextProvider(props: PropsWithChildren<ContextProps>) {
   const { interviewFeedback, children, course, interviewId, type, interviewMaxScore } = props;
   const router = useRouter();
-  const [loading, withLoading] = useLoading(false, error => {
-    message.error('An unexpected error occurred. Please try later.');
-    throw error;
-  });
 
   const [feedback, setFeedback] = useState<Feedback>(() =>
     getFeedbackFromTemplate(interviewFeedback, interviewMaxScore),
@@ -51,28 +47,37 @@ export function StepContextProvider(props: PropsWithChildren<ContextProps>) {
   );
   const isFinalStep = activeStepIndex === feedback.steps.length - 1 || isFinished;
 
-  const saveFeedback = withLoading(async (values: InterviewFeedbackValues) => {
-    const { feedbackValues, steps, isCompleted, score, decision, isGoodCandidate } = getUpdatedFeedback({
-      feedback,
-      newValues: values,
-      activeStepIndex,
-      interviewMaxScore,
-    });
-    await new CoursesInterviewsApi().createInterviewFeedback(course.id, interviewId, type, {
-      isCompleted,
-      score,
-      decision,
-      isGoodCandidate,
-      json: feedbackValues,
-      version: feedback.version,
-    });
+  const saveFeedbackRequest = useRequest(
+    async (values: InterviewFeedbackValues) => {
+      const { feedbackValues, steps, isCompleted, score, decision, isGoodCandidate } = getUpdatedFeedback({
+        feedback,
+        newValues: values,
+        activeStepIndex,
+        interviewMaxScore,
+      });
+      await new CoursesInterviewsApi().createInterviewFeedback(course.id, interviewId, type, {
+        isCompleted,
+        score,
+        decision,
+        isGoodCandidate,
+        json: feedbackValues,
+        version: feedback.version,
+      });
 
-    setFeedback({
-      isCompleted,
-      steps,
-      version: feedback.version,
-    });
-  });
+      setFeedback({
+        isCompleted,
+        steps,
+        version: feedback.version,
+      });
+    },
+    {
+      manual: true,
+      onError: error => {
+        message.error('An unexpected error occurred. Please try later.');
+        throw error;
+      },
+    },
+  );
 
   const onValuesChange = useCallback(
     (_: Partial<InterviewFeedbackValues>, values: InterviewFeedbackValues) => {
@@ -86,7 +91,7 @@ export function StepContextProvider(props: PropsWithChildren<ContextProps>) {
   const next = useCallback(
     async (values: InterviewFeedbackValues) => {
       try {
-        await saveFeedback(values);
+        await saveFeedbackRequest.runAsync(values);
       } catch {
         return;
       }
@@ -123,10 +128,10 @@ export function StepContextProvider(props: PropsWithChildren<ContextProps>) {
       next,
       prev,
       onValuesChange,
-      loading,
+      loading: saveFeedbackRequest.loading,
       isFinalStep,
     }),
-    [activeStepIndex, feedback.steps, isFinalStep, loading, onValuesChange],
+    [activeStepIndex, feedback.steps, isFinalStep, onValuesChange, saveFeedbackRequest.loading],
   );
 
   return <StepContext.Provider value={api}>{children}</StepContext.Provider>;

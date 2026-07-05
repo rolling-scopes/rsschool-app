@@ -38,6 +38,19 @@ describe('SelfEducation', () => {
     const image = screen.getByRole('img');
     expect(image).toBeInTheDocument();
   });
+
+  it('should render only the intro paragraph when the task has no public attributes', () => {
+    // exercises the `publicAttributes || {}` fallback (and the empty-questions path)
+    const courseTask = {} as CourseTaskVerifications;
+    render(
+      <Form>
+        <SelfEducation courseTask={courseTask} />
+      </Form>,
+    );
+
+    expect(screen.getByText(/To submit the task answer the questions\./i)).toBeInTheDocument();
+    expect(screen.queryByRole('heading')).not.toBeInTheDocument();
+  });
 });
 
 function renderSelfEducation({ numberOfQuestions = 5, questions = generateQuestions() }) {

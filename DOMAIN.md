@@ -1,6 +1,6 @@
 # Domain Model
 
-This document describes the core domain model implemented in `server/src/models` and how the entities relate. It is meant as a quick map for agents working on the platform.
+This document describes the core domain model implemented in `nestjs/src/models` and how the entities relate. It is meant as a quick map for agents working on the platform.
 
 ## Core identity and profile
 

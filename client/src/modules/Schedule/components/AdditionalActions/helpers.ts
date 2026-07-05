@@ -2,7 +2,7 @@ export const buildICalendarLink = (courseId: number, token: string, timezone: st
   `/api/v2/courses/${courseId}/icalendar/${token}?timezone=${encodeURIComponent(timezone || '')}`;
 
 export const buildExportLink = (courseId: number, timezone: string) =>
-  `/api/course/${courseId}/schedule/csv/${timezone.replace('/', '_')}`;
+  `/api/v2/courses/${courseId}/schedule/csv/${timezone.replace('/', '_')}`;
 
 export const setExportLink = (link: string) => {
   window.location.href = link;

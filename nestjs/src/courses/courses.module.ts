@@ -40,6 +40,7 @@ import { CourseAccessService } from './course-access.service';
 import { CourseTasksController, CourseTasksService } from './course-tasks';
 import { InterviewsController, InterviewsService, InterviewFeedbackService } from './interviews';
 import { CrossMentorDistributionService } from './interviews/cross-mentor-distribution.service';
+import { StageInterviewsService } from './interviews/stage-interviews.service';
 import { TasksController } from './tasks/tasks.controller';
 import { TasksService } from './tasks/tasks.service';
 import { CourseStatsController, CourseStatsService } from './stats';
@@ -58,7 +59,11 @@ import { TeamDistributionController } from './team-distribution/team-distributio
 import { TeamDistributionService } from './team-distribution/team-distribution.service';
 import { TeamService } from './team-distribution/team.service';
 import { TeamController } from './team-distribution/team.controller';
-import { TaskVerificationsController } from './task-verifications/task-verifications.controller';
+import {
+  StudentTaskVerificationsController,
+  TaskVerificationsController,
+} from './task-verifications/task-verifications.controller';
+import { TaskVerificationsAwsController } from './task-verifications/task-verifications-aws.controller';
 import { TaskVerificationsService } from './task-verifications/task-verifications.service';
 import { TeamDistributionStudentService } from './team-distribution/team-distribution-student.service';
 import { DistributeStudentsService } from './team-distribution/distribute-students.service';
@@ -127,10 +132,12 @@ import { CourseLeaveSurveyResponse } from '@entities/index';
     TeamDistributionController,
     TeamController,
     TaskVerificationsController,
+    TaskVerificationsAwsController,
     CourseUsersController,
     CourseMentorsController,
     CourseStudentsController,
     MentorReviewsController,
+    StudentTaskVerificationsController,
   ],
   providers: [
     CourseTasksService,
@@ -144,6 +151,7 @@ import { CourseLeaveSurveyResponse } from '@entities/index';
     InterviewsService,
     InterviewFeedbackService,
     CrossMentorDistributionService,
+    StageInterviewsService,
     TasksService,
     CourseStatsService,
     CourseCrossCheckService,
@@ -163,6 +171,13 @@ import { CourseLeaveSurveyResponse } from '@entities/index';
     MentorReviewsService,
     ExpelledStatsService,
   ],
-  exports: [CourseTasksService, CourseUsersService, CoursesService, StudentsService, ExpelledStatsService],
+  exports: [
+    CourseTasksService,
+    CourseUsersService,
+    CoursesService,
+    StudentsService,
+    ExpelledStatsService,
+    CourseCrossCheckService,
+  ],
 })
 export class CoursesModule {}

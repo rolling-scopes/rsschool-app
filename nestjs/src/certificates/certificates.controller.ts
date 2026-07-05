@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -18,9 +19,13 @@ import { UserNotificationsService } from 'src/users-notifications/users.notifica
 import { CertificationsService } from './certificates.service';
 import { BulkIssueResultDto } from './dto/bulk-issue-result.dto';
 import { CertificateCriteriaDto } from './dto/certificate-criteria.dto';
-import { CertificateIssuanceRequestDto } from './dto/certificate-issuance-request.dto';
 import { EligibleStudentsPreviewDto } from './dto/eligible-students-preview.dto';
 import { SaveCertificateDto } from './dto/save-certificate-dto';
+import {
+  CertificateRequestDto,
+  CreateCourseCertificatesDto,
+  CreateStudentCertificateDto,
+} from './dto/create-certificate.dto';
 import { CERTIFICATE_TEMPLATES } from './templates/catalog';
 
 @Controller('certificate')
@@ -31,6 +36,40 @@ export class CertificatesController {
     private notificationService: UserNotificationsService,
     private studentsService: StudentsService,
   ) {}
+
+  @Post('/course/:courseId/student/:githubId')
+  @ApiOperation({ operationId: 'createStudentCertificate' })
+  @ApiOkResponse({ type: CertificateRequestDto })
+  @UseGuards(DefaultGuard, RoleGuard)
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  public async createStudentCertificate(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('githubId') githubId: string,
+    @Body() dto: CreateStudentCertificateDto,
+  ) {
+    const request = await this.certificatesService.buildStudentCertificateRequest(courseId, githubId, dto.templateId);
+    if (request == null) {
+      throw new BadRequestException('No student');
+    }
+    await this.certificatesService.requestCertificates(request);
+    return request;
+  }
+
+  @Post('/course/:courseId')
+  @ApiOperation({ operationId: 'createCourseCertificates' })
+  @ApiOkResponse({ type: [CertificateRequestDto] })
+  @UseGuards(DefaultGuard, RoleGuard)
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  public async createCourseCertificates(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Body() dto: CreateCourseCertificatesDto,
+  ) {
+    const { requests, shortCircuit } = await this.certificatesService.buildCourseCertificateRequests(courseId, dto);
+    if (!shortCircuit) {
+      await this.certificatesService.requestCertificates(requests);
+    }
+    return requests;
+  }
 
   @Get('/templates')
   @ApiOperation({ operationId: 'getCertificateTemplates' })
@@ -97,18 +136,6 @@ export class CertificatesController {
   @ApiOperation({ operationId: 'removeCertificate' })
   public async removeCertificate(@Param('studentId', ParseIntPipe) studentId: number) {
     await this.certificatesService.removeCertificate(studentId);
-  }
-
-  @Post('/course/:courseId/student/:githubId')
-  @UseGuards(DefaultGuard, RoleGuard)
-  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
-  @ApiOperation({ operationId: 'issueCertificate' })
-  @ApiOkResponse({ type: CertificateIssuanceRequestDto })
-  public async issueCertificate(
-    @Param('courseId', ParseIntPipe) courseId: number,
-    @Param('githubId') githubId: string,
-  ): Promise<CertificateIssuanceRequestDto> {
-    return this.certificatesService.requestCertificateIssuance(courseId, githubId);
   }
 
   @Post('/course/:courseId/eligible')

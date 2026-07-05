@@ -75,6 +75,49 @@ describe('TaskSolutionsTable', () => {
       const reviewBtn = screen.queryByText(/review random task/i);
       expect(reviewBtn).not.toBeInTheDocument();
     });
+
+    it('should open the submit review modal when a row Submit button is clicked', () => {
+      // Clicking the per-row Submit button runs handleSubmitButtonClick -> setModalData,
+      // which opens the SubmitReviewModal titled with the student name.
+      render(<TaskSolutionsTable {...mockProps} />);
+
+      const submitButtons = screen.getAllByRole('button', { name: 'Submit' });
+      fireEvent.click(submitButtons[0]);
+
+      expect(screen.getByText(/Submit Score for Student 0/)).toBeInTheDocument();
+    });
+  });
+
+  describe('on a mobile (xs) viewport', () => {
+    const originalWidth = window.innerWidth;
+
+    afterEach(() => {
+      window.innerWidth = originalWidth;
+      window.dispatchEvent(new Event('resize'));
+    });
+
+    it('renders the compact mobile column and falls back to plain text for missing fields', () => {
+      // Shrink to an xs viewport so the mobile (responsive ['xs']) column renders,
+      // exercising renderMobile and the "no link / no score" fallback branches of
+      // renderName/renderTask/renderSolutionUrl/renderScore.
+      window.innerWidth = 400;
+      window.dispatchEvent(new Event('resize'));
+
+      const data = [
+        {
+          ...(generateData()[0] as MentorDashboardDto),
+          studentName: '',
+          taskDescriptionUrl: '',
+          solutionUrl: '',
+          taskName: 'Plain Task',
+          maxScore: 0,
+        },
+      ];
+
+      render(<TaskSolutionsTable {...mockProps} data={data} />);
+
+      expect(screen.getByText('Plain Task')).toBeInTheDocument();
+    });
   });
 
   describe('when result score was not provided', () => {

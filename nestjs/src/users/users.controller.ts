@@ -1,7 +1,20 @@
-import { Controller, ForbiddenException, Get, Query, Req, UseGuards } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  ForbiddenException,
+  Get,
+  Param,
+  ParseArrayPipe,
+  ParseIntPipe,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiBody, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../auth';
-import { UserSearchDto } from './dto';
+import { OperationResultDto, UpdateActivistDto, UpsertUserDto, UserSearchBasicDto, UserSearchDto } from './dto';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -26,5 +39,39 @@ export class UsersController {
     }
     const users = await this.usersService.searchUsers(query, { includeSystem: wantsSystem });
     return users.map(user => new UserSearchDto(user, req.user.isAdmin || req.user.isHirer));
+  }
+
+  @Get('/search/basic')
+  @ApiOperation({ operationId: 'searchUsersBasic' })
+  @ApiOkResponse({ type: [UserSearchBasicDto] })
+  public async searchUsersBasic(@Query('query') query?: string) {
+    const users = await this.usersService.searchUsersBasic(query);
+    return users.map(user => new UserSearchBasicDto(user));
+  }
+
+  @Post('/')
+  @ApiOperation({ operationId: 'createUsers' })
+  @RequiredRoles([Role.Admin])
+  @ApiBody({ type: [UpsertUserDto] })
+  @ApiOkResponse({ type: [OperationResultDto] })
+  public async createUsers(
+    @Body(new ParseArrayPipe({ items: UpsertUserDto })) inputData: UpsertUserDto[],
+  ): Promise<OperationResultDto[]> {
+    return this.usersService.upsertUsers(inputData);
+  }
+
+  @Post('/:userId/activist')
+  @ApiOperation({ operationId: 'updateUserActivist' })
+  @RequiredRoles([Role.Admin])
+  @ApiBody({ type: UpdateActivistDto })
+  @ApiOkResponse()
+  public async updateUserActivist(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Body() body: UpdateActivistDto,
+  ): Promise<void> {
+    const updated = await this.usersService.setActivist(userId, body.activist);
+    if (!updated) {
+      throw new BadRequestException('no user');
+    }
   }
 }

@@ -7,5 +7,5 @@ export function getExportCsvUrl(courseId: number, cityName?: string | string[], 
 }
 
 const buildUrl = (id: number, params: string): string => {
-  return `/api/course/${id}/students/score/csv${params}`;
+  return `/api/v2/course/${id}/students/score/csv${params}`;
 };

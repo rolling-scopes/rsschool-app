@@ -18,7 +18,7 @@ const config: DataSourceOptions = {
   entities: models,
   migrations,
   synchronize: false,
-  migrationsRun: false,
+  migrationsRun: true,
   subscribers: [path.resolve(__dirname, '**/*.subscriber.*')],
   logging: ['migration', 'error', 'warn'],
 };

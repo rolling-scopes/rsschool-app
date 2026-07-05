@@ -14,7 +14,7 @@ import { MentorBasic, MentorDetails } from '@common/models';
 import { PersonDto } from 'src/core/dto';
 import { MentorDashboardDto, SolutionItemStatus } from './dto/mentor-dashboard.dto';
 import { addWeeks } from 'date-fns';
-import { TaskChecker, User } from '../../../../server/src/models';
+import { TaskChecker, User } from '@entities/index';
 import { PreferredStudentsLocation } from '@entities/mentorRegistry';
 
 export interface SolutionItem {

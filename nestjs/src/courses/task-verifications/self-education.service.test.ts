@@ -1,9 +1,11 @@
+import type { Mocked } from 'vitest';
 import { CourseTask } from '@entities/courseTask';
 import { Task, TaskType } from '@entities/task';
 import { TaskVerification } from '@entities/taskVerification';
 import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { WriteScoreService } from '../score/write-score.service';
 import { SelfEducationAnswers } from './dto';
 import { SelfEducationAttributes, SelfEducationService } from './self-education.service';
@@ -32,6 +34,8 @@ const createMockCourseTask = (
 
 describe('SelfEducationService', () => {
   let service: SelfEducationService;
+  let taskVerificationsRepository: Mocked<Repository<TaskVerification>>;
+  let writeScoreService: Mocked<WriteScoreService>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -39,19 +43,139 @@ describe('SelfEducationService', () => {
         SelfEducationService,
         {
           provide: getRepositoryToken(TaskVerification),
-          useValue: {},
+          useValue: {
+            find: vi.fn(),
+            save: vi.fn(),
+            findOneByOrFail: vi.fn(),
+          },
         },
         {
           provide: WriteScoreService,
-          useValue: {},
+          useValue: {
+            saveScore: vi.fn(),
+          },
         },
       ],
     }).compile();
     service = module.get<SelfEducationService>(SelfEducationService);
+    taskVerificationsRepository = module.get(getRepositoryToken(TaskVerification));
+    writeScoreService = module.get(WriteScoreService);
   });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  describe('createSelfEducationVerification', () => {
+    let mockTask: CourseTask;
+    let studentAnswers: SelfEducationAnswers;
+
+    beforeEach(() => {
+      mockTask = createMockCourseTask({
+        public: {
+          numberOfQuestions: 2,
+          tresholdPercentage: 50,
+          maxAttemptsNumber: 5,
+          strictAttemptsMode: true,
+          oneAttemptPerNumberOfHours: 0,
+        },
+        answers: [0, 1],
+      });
+      studentAnswers = [
+        { index: 0, value: 0 },
+        { index: 1, value: 1 },
+      ];
+    });
+
+    it('should verify answers, persist a completed verification and write the score', async () => {
+      taskVerificationsRepository.find.mockResolvedValue([]);
+      taskVerificationsRepository.save.mockResolvedValue({ id: 99 } as TaskVerification);
+      const savedRecord = { id: 99, score: 100, status: 'completed' } as TaskVerification;
+      taskVerificationsRepository.findOneByOrFail.mockResolvedValue(savedRecord);
+
+      const result = await service.createSelfEducationVerification({
+        courseId: 1,
+        courseTask: mockTask,
+        studentId: 7,
+        studentAnswers,
+      });
+
+      expect(taskVerificationsRepository.find).toHaveBeenCalledWith({
+        where: { studentId: 7, courseTaskId: mockTask.id },
+        order: { createdDate: 'DESC' },
+      });
+      expect(taskVerificationsRepository.save).toHaveBeenCalledWith({
+        studentId: 7,
+        courseTaskId: mockTask.id,
+        score: 100,
+        details: 'Accuracy: 100%',
+        status: 'completed',
+        answers: [
+          { index: 0, value: 0, isCorrect: true },
+          { index: 1, value: 1, isCorrect: true },
+        ],
+      });
+      expect(taskVerificationsRepository.findOneByOrFail).toHaveBeenCalledWith({ id: 99 });
+      expect(writeScoreService.saveScore).toHaveBeenCalledWith(7, mockTask.id, {
+        score: 100,
+        comment: 'Accuracy: 100%',
+      });
+      expect(result).toEqual({ ...savedRecord, courseTask: { type: mockTask.type } });
+    });
+
+    it('should pass the previous attempt count and last attempt time into verification', async () => {
+      const lastDate = new Date('2026-01-01T10:00:00.000Z');
+      taskVerificationsRepository.find.mockResolvedValue([
+        { createdDate: lastDate } as TaskVerification,
+        {} as TaskVerification,
+      ]);
+      taskVerificationsRepository.save.mockResolvedValue({ id: 5 } as TaskVerification);
+      taskVerificationsRepository.findOneByOrFail.mockResolvedValue({ id: 5 } as TaskVerification);
+      const verifySpy = vi.spyOn(service, 'verifySelfEducationAnswers');
+
+      await service.createSelfEducationVerification({
+        courseId: 1,
+        courseTask: mockTask,
+        studentId: 7,
+        studentAnswers,
+      });
+
+      expect(verifySpy).toHaveBeenCalledWith(mockTask, studentAnswers, 2, lastDate.toString());
+    });
+
+    it('should pass undefined last attempt time when there are no previous verifications', async () => {
+      taskVerificationsRepository.find.mockResolvedValue([]);
+      taskVerificationsRepository.save.mockResolvedValue({ id: 5 } as TaskVerification);
+      taskVerificationsRepository.findOneByOrFail.mockResolvedValue({ id: 5 } as TaskVerification);
+      const verifySpy = vi.spyOn(service, 'verifySelfEducationAnswers');
+
+      await service.createSelfEducationVerification({
+        courseId: 1,
+        courseTask: mockTask,
+        studentId: 7,
+        studentAnswers,
+      });
+
+      expect(verifySpy).toHaveBeenCalledWith(mockTask, studentAnswers, 0, undefined);
+    });
+
+    it('should not persist or write a score when verification throws (e.g. attempts exceeded)', async () => {
+      taskVerificationsRepository.find.mockResolvedValue(
+        Array.from({ length: 5 }, () => ({ createdDate: new Date() }) as TaskVerification),
+      );
+
+      await expect(
+        service.createSelfEducationVerification({
+          courseId: 1,
+          courseTask: mockTask,
+          studentId: 7,
+          studentAnswers,
+        }),
+      ).rejects.toThrow(ForbiddenException);
+
+      expect(taskVerificationsRepository.save).not.toHaveBeenCalled();
+      expect(writeScoreService.saveScore).not.toHaveBeenCalled();
+    });
   });
 
   describe('verifySelfEducationAnswers', () => {
@@ -618,6 +742,24 @@ describe('SelfEducationService', () => {
         const result = service.verifySelfEducationAnswers(mockTask, studentAnswers, 0);
         expect(result.score).toBe(0);
         expect(result.details).toBe('Accuracy: 100%');
+      });
+
+      it('should throw if the answer slot is a hole in a sparse answers array (within range)', () => {
+        // A sparse array passes the `index < answers.length` range check but
+        // `answers[index]` is `undefined`, exercising the inner guard.
+        const sparseAnswers: SelfEducationAttributes['answers'] = [0, 1];
+        delete sparseAnswers[1];
+        mockTask = createMockCourseTask({
+          public: { numberOfQuestions: 2 },
+          answers: sparseAnswers,
+        });
+        studentAnswers = [
+          { index: 0, value: 0 },
+          { index: 1, value: 1 },
+        ];
+        expect(() => service.verifySelfEducationAnswers(mockTask, studentAnswers, 0)).toThrow(
+          new BadRequestException('Invalid answer index'),
+        );
       });
 
       it('should handle extremely large attempt numbers correctly in non-strict mode', () => {

@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { HttpModule } from '@nestjs/axios';
 import { CourseTask } from '@entities/courseTask';
-import { ConfigModule } from '../config/config.module';
+import { CoursesModule } from '../courses/courses.module';
 import { CrossCheckService } from './cross-check.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CourseTask]), HttpModule, ConfigModule],
+  imports: [TypeOrmModule.forFeature([CourseTask]), CoursesModule],
   providers: [CrossCheckService],
 })
 export class CrossCheckModule {}

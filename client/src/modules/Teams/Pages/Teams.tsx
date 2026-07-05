@@ -1,4 +1,5 @@
 import { message, Modal, Row, Typography } from 'antd';
+import { useRequest } from 'ahooks';
 import { useMemo, useState, useContext } from 'react';
 import { PageLayout } from '@client/shared/components/PageLayout';
 import {
@@ -12,7 +13,6 @@ import {
 import { isActiveStudent, isCourseManager } from '@client/domain/user';
 import { useCopyToClipboard } from 'react-use';
 import { CreateTeamDto, TeamApi, TeamDto, JoinTeamDto, TeamDistributionApi } from '@client/api';
-import { useLoading } from '@client/components/useLoading';
 import { useDistribution } from '../hooks';
 import { useMessage, useModalForm } from '@client/hooks';
 import { SessionContext, useActiveCourseContext } from '@client/modules/Course/contexts';
@@ -40,7 +40,6 @@ function Teams() {
   } = useDistribution(course.id, teamDistributionId);
 
   const { open: openTeamModal, toggle: toggleTeamModal, mode, formData: teamData } = useModalForm<Partial<TeamDto>>();
-  const [loading, withLoading] = useLoading(false);
 
   const [showJoinTeamModal, setShowJoinTeamModal] = useState(false);
 
@@ -56,16 +55,19 @@ function Teams() {
     toggleTeamModal();
   };
 
-  const distributeStudentsToTeam = withLoading(async () => {
-    try {
-      await teamDistributionApi.distributeStudentsToTeam(course.id, teamDistributionId);
-    } catch {
-      message.error('Failed to distribute students to team. Please try later.');
-    }
-  });
+  const distributeStudentsToTeamRequest = useRequest(
+    async () => {
+      try {
+        await teamDistributionApi.distributeStudentsToTeam(course.id, teamDistributionId);
+      } catch {
+        message.error('Failed to distribute students to team. Please try later.');
+      }
+    },
+    { manual: true },
+  );
 
   const handleDistributeStudents = async () => {
-    await distributeStudentsToTeam();
+    await distributeStudentsToTeamRequest.runAsync();
     await loadDistribution();
   };
 
@@ -73,24 +75,27 @@ function Teams() {
     setShowJoinTeamModal(true);
   };
 
-  const joinTeam = withLoading(async (teamId: number, record: JoinTeamDto) => {
-    try {
-      const { data: team } = await teamApi.joinTeam(course.id, teamDistributionId, teamId, record);
-      await loadDistribution();
-      setShowJoinTeamModal(false);
-      modal.success({
-        title: <Title level={5}>Successfully joined to the {team.name}</Title>,
-        content: (
-          <div>
-            <Text type="secondary">{team.description}</Text>
-          </div>
-        ),
-        okText: 'Next',
-      });
-    } catch {
-      message.error('Failed to join to team. Please try later.');
-    }
-  });
+  const joinTeamRequest = useRequest(
+    async (teamId: number, record: JoinTeamDto) => {
+      try {
+        const { data: team } = await teamApi.joinTeam(course.id, teamDistributionId, teamId, record);
+        await loadDistribution();
+        setShowJoinTeamModal(false);
+        modal.success({
+          title: <Title level={5}>Successfully joined to the {team.name}</Title>,
+          content: (
+            <div>
+              <Text type="secondary">{team.description}</Text>
+            </div>
+          ),
+          okText: 'Next',
+        });
+      } catch {
+        message.error('Failed to join to team. Please try later.');
+      }
+    },
+    { manual: true },
+  );
 
   const copyPassword = async (teamId: number): Promise<void> => {
     const teamApi = new TeamApi();
@@ -114,34 +119,39 @@ function Teams() {
     }
   };
 
-  const submitTeam = withLoading(async (record: CreateTeamDto, id?: number) => {
-    try {
-      if (id) {
-        await teamApi.updateTeam(course.id, teamDistributionId, id, record);
-      } else {
-        const { data: team } = await teamApi.createTeam(course.id, teamDistributionId, record);
-        modal.confirm({
-          title: <Title level={5}>{team.name} is created successfully</Title>,
-          content: (
-            <div>
-              <Title level={5}>As a team lead you get an invitation password to join members</Title>
-              <Text type="secondary">{team.description}</Text>
-            </div>
-          ),
-          cancelText: 'Next',
-          cancelButtonProps: { type: 'primary' },
-          onOk: () => copyPassword(team.id),
-          okText: 'Copy invitation password',
-          okButtonProps: { type: 'default' },
-          icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
-        });
+  const submitTeamRequest = useRequest(
+    async (record: CreateTeamDto, id?: number) => {
+      try {
+        if (id) {
+          await teamApi.updateTeam(course.id, teamDistributionId, id, record);
+        } else {
+          const { data: team } = await teamApi.createTeam(course.id, teamDistributionId, record);
+          modal.confirm({
+            title: <Title level={5}>{team.name} is created successfully</Title>,
+            content: (
+              <div>
+                <Title level={5}>As a team lead you get an invitation password to join members</Title>
+                <Text type="secondary">{team.description}</Text>
+              </div>
+            ),
+            cancelText: 'Next',
+            cancelButtonProps: { type: 'primary' },
+            onOk: () => copyPassword(team.id),
+            okText: 'Copy invitation password',
+            okButtonProps: { type: 'default' },
+            icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
+          });
+        }
+        await loadDistribution();
+        toggleTeamModal();
+      } catch {
+        message.error('Failed to create team. Please try later.');
       }
-      await loadDistribution();
-      toggleTeamModal();
-    } catch {
-      message.error('Failed to create team. Please try later.');
-    }
-  });
+    },
+    { manual: true },
+  );
+
+  const loading = distributeStudentsToTeamRequest.loading || joinTeamRequest.loading || submitTeamRequest.loading;
 
   const contentRenderers = () => {
     if (!distribution) {
@@ -186,13 +196,15 @@ function Teams() {
           mode={mode}
           isManager={isManager}
           data={teamData}
-          onSubmit={submitTeam}
+          onSubmit={submitTeamRequest.runAsync}
           onCancel={toggleTeamModal}
           maxStudentsCount={distribution.strictTeamSize}
           courseId={distribution.courseId}
         />
       )}
-      {showJoinTeamModal && <JoinTeamModal onSubmit={joinTeam} onCancel={() => setShowJoinTeamModal(false)} />}
+      {showJoinTeamModal && (
+        <JoinTeamModal onSubmit={joinTeamRequest.runAsync} onCancel={() => setShowJoinTeamModal(false)} />
+      )}
       {distribution ? (
         <TeamsHeader
           courseAlias={course.alias}

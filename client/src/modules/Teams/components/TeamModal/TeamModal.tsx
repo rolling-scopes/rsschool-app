@@ -1,7 +1,7 @@
 import { Form, Input, message, Space, Typography, Modal } from 'antd';
+import { useRequest } from 'ahooks';
 import { CreateTeamDto, TeamDto } from '@client/api';
 import { StudentSearch } from '@client/shared/components/StudentSearch';
-import { useLoading } from '@client/components/useLoading';
 import { urlPattern } from '@client/services/validators';
 
 const { TextArea } = Input;
@@ -25,7 +25,6 @@ const layout = {
 
 export default function TeamModal({ onCancel, onSubmit, data, courseId, isManager, maxStudentsCount, mode }: Props) {
   const [form] = Form.useForm<CreateTeamDto>();
-  const [loading, withLoading] = useLoading(false);
 
   const createRecord = ({
     name = 'Team name',
@@ -41,10 +40,18 @@ export default function TeamModal({ onCancel, onSubmit, data, courseId, isManage
     };
   };
 
-  const handleModalSubmit = withLoading(async (values: CreateTeamDto) => {
-    const record = createRecord(values);
-    await onSubmit(record, data?.id);
-  });
+  const handleModalSubmitRequest = useRequest(
+    async (values: CreateTeamDto) => {
+      const record = createRecord(values);
+      await onSubmit(record, data?.id);
+    },
+    {
+      manual: true,
+      onError: () => {
+        message.error('An unexpected error occurred. Please try later.');
+      },
+    },
+  );
 
   const handleChangeStudents = (value: number[]) => {
     if (value.length <= maxStudentsCount) {
@@ -68,9 +75,9 @@ export default function TeamModal({ onCancel, onSubmit, data, courseId, isManage
         if (values == null) {
           return;
         }
-        handleModalSubmit(values);
+        handleModalSubmitRequest.runAsync(values);
       }}
-      okButtonProps={{ disabled: loading }}
+      okButtonProps={{ disabled: handleModalSubmitRequest.loading }}
       onCancel={() => {
         onCancel();
         form.resetFields();

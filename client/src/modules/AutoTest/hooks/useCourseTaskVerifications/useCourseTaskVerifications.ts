@@ -5,12 +5,19 @@ import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import { mapTo } from '@client/modules/AutoTest/utils/map';
 import { useEffect, useMemo, useState } from 'react';
-import { CourseService } from '@client/services/course';
+import { useLocalStorage } from 'react-use';
+import { CourseService, Verification } from '@client/services/course';
 
 dayjs.extend(isSameOrAfter);
 
 export function useCourseTaskVerifications(courseId: number) {
   const [isExerciseVisible, setIsExerciseVisible] = useState(false);
+  // The Available/Missed/Done status is derived on the client; there is no server-side flag,
+  // so tasks the student marks as done are persisted locally per course.
+  const [manuallyDoneTaskIds = [], setManuallyDoneTaskIds] = useLocalStorage<number[]>(
+    `autotest-done-tasks-${courseId}`,
+    [],
+  );
 
   const { data } = useRequest(async () => {
     const { data } = await new CoursesTasksApi().getCourseTasksDetailed(courseId);
@@ -28,12 +35,30 @@ export function useCourseTaskVerifications(courseId: number) {
 
   const {
     loading,
-    data: allVerifications = [],
+    data: verificationGroups = [],
     error,
     run: reload,
   } = useRequest(async () => await courseService.getTaskVerifications());
 
-  const tasks = useMemo(() => courseTasks?.map(ct => mapTo(ct, allVerifications)), [courseTasks, allVerifications]);
+  const verificationsByTask = useMemo(() => {
+    const grouped = new Map<number, Verification[]>();
+    for (const group of verificationGroups) {
+      grouped.set(group.courseTaskId, group.verifications);
+    }
+    return grouped;
+  }, [verificationGroups]);
+
+  const tasks = useMemo(
+    () => courseTasks?.map(ct => mapTo(ct, verificationsByTask.get(ct.id) ?? [], manuallyDoneTaskIds)),
+    [courseTasks, verificationsByTask, manuallyDoneTaskIds],
+  );
+
+  function markTaskAsDone(taskId: number) {
+    if (!manuallyDoneTaskIds.includes(taskId)) {
+      setManuallyDoneTaskIds([...manuallyDoneTaskIds, taskId]);
+      message.success("The task has been moved to the 'Done' tab.");
+    }
+  }
 
   function startTask() {
     setIsExerciseVisible(true);
@@ -57,5 +82,6 @@ export function useCourseTaskVerifications(courseId: number) {
     startTask,
     finishTask,
     reload,
+    markTaskAsDone,
   };
 }

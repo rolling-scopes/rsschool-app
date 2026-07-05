@@ -1,11 +1,25 @@
-import { Body, Controller, Delete, ForbiddenException, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
-import { ApiBody, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Delete,
+  ForbiddenException,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Req,
+  UseGuards,
+  Query,
+  NotFoundException,
+} from '@nestjs/common';
+import { ApiBody, ApiOkResponse, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { CoursesService } from 'src/courses/courses.service';
 import { CurrentRequest } from '../auth/auth.service';
-import { ProfileCourseDto, UpdateUserDto, UpdateProfileInfoDto } from './dto';
+import { ProfileCourseDto, UpdateUserDto, UpdateProfileInfoDto, ProfileInfoExtendedDto, MyProfileDto } from './dto';
 import { ProfileDto } from './dto/profile.dto';
 import { ProfileService } from './profile.service';
+import { ProfileInfoService } from './profile-info/profile-info.service';
 import { PersonalProfileDto } from './dto/personal-profile.dto';
 import { EndorsementService } from './endorsement.service';
 import { EndorsementDataDto, EndorsementDto } from './dto/endorsement.dto';
@@ -17,6 +31,7 @@ export class ProfileController {
     private readonly profileService: ProfileService,
     private readonly endormentService: EndorsementService,
     private readonly coursesService: CoursesService,
+    private readonly profileInfoService: ProfileInfoService,
   ) {}
 
   @Get(':username/courses')
@@ -57,6 +72,28 @@ export class ProfileController {
     const { user } = req;
 
     await this.profileService.updateProfileFlat(user.id, dto);
+  }
+
+  @Get('info')
+  @ApiOperation({ operationId: 'getFullProfileInfo' })
+  @ApiQuery({ name: 'githubId', required: false, type: String })
+  @ApiResponse({ type: ProfileInfoExtendedDto })
+  @UseGuards(DefaultGuard)
+  public async getFullProfileInfo(@Req() req: CurrentRequest, @Query('githubId') githubId?: string) {
+    const profileInfo = await this.profileInfoService.getProfileInfo(req.user, githubId);
+    return new ProfileInfoExtendedDto(profileInfo);
+  }
+
+  @Get('me')
+  @ApiOperation({ operationId: 'getMyProfile' })
+  @ApiOkResponse({ type: MyProfileDto })
+  @UseGuards(DefaultGuard)
+  public async getMyProfile(@Req() req: CurrentRequest) {
+    const user = await this.profileService.getMyProfile(req.user.githubId);
+    if (user == null) {
+      throw new NotFoundException('User not found');
+    }
+    return new MyProfileDto(user);
   }
 
   @Get(':username')

@@ -36,8 +36,10 @@ export default function StudentsTable({
       loading={loading}
       bordered
       /**
-       * @see
-       * dirty-hack to fix x-scroll in antd table
+       * `x: ''` keeps horizontal scrolling available without pinning the table to a fixed width.
+       * Switching to a width value (e.g. `x: 'max-content'`) regresses sticky-header alignment on
+       * antd's scrollable table — notably with an empty dataSource (see ant-design/ant-design#35284).
+       * Re-verified on antd 6.3.1: the empty-string form is still required.
        */
       scroll={{ y: 'calc(100vh - 260px)', x: '' }}
     />

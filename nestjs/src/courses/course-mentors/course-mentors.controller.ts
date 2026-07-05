@@ -1,18 +1,68 @@
 import { CacheTTL } from '@nestjs/cache-manager';
-import { Controller, Get, Param, ParseIntPipe, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  ForbiddenException,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { parseAsync, transforms } from 'json2csv';
 import { DEFAULT_CACHE_TTL } from 'src/constants';
-import { CourseGuard, CourseRole, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
+import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
 import { CourseMentorsService } from './course-mentors.service';
 import { MentorDetailsDto } from './dto/mentor-details.dto';
 import { SearchMentorDto } from './dto/search-mentor.dto';
+import { CreateMentorDto } from './dto/create-mentor.dto';
 
 @Controller('course/:courseId/mentors')
 @ApiTags('course mentors')
 export class CourseMentorsController {
   constructor(private readonly courseMentorsService: CourseMentorsService) {}
+
+  @Post('/:githubId')
+  @ApiOperation({ operationId: 'createMentor' })
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  @UseGuards(DefaultGuard)
+  public async createMentor(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('githubId') githubIdParam: string,
+    @Body() dto: CreateMentorDto,
+  ) {
+    const githubId = githubIdParam === 'me' ? req.user.githubId : githubIdParam.toLowerCase();
+    if (!req.user.isAdmin && req.user.githubId !== githubId) {
+      throw new ForbiddenException();
+    }
+    await this.courseMentorsService.createMentor(req.user, courseId, githubId, dto);
+  }
+
+  @Post('/:githubId/status/expelled')
+  @ApiOperation({ operationId: 'expelMentor' })
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  @UseGuards(DefaultGuard, CourseGuard, RoleGuard)
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  public async expelMentor(@Param('courseId', ParseIntPipe) courseId: number, @Param('githubId') githubId: string) {
+    await this.courseMentorsService.expelMentor(courseId, githubId);
+  }
+
+  @Post('/:githubId/status/restore')
+  @ApiOperation({ operationId: 'restoreMentor' })
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  @UseGuards(DefaultGuard, CourseGuard, RoleGuard)
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  public async restoreMentor(@Param('courseId', ParseIntPipe) courseId: number, @Param('githubId') githubId: string) {
+    await this.courseMentorsService.restoreMentor(courseId, githubId);
+  }
 
   @Get('details')
   @ApiOperation({ operationId: 'getMentorsDetails' })

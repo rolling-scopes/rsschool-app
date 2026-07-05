@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiForbiddenResponse,
@@ -18,6 +18,17 @@ import { UpdateCourseEventDto } from './dto/update-course-event.dto';
 @UseGuards(DefaultGuard, CourseGuard, RoleGuard)
 export class CourseEventsController {
   constructor(private courseEventsService: CourseEventsService) {}
+
+  @Get('/')
+  @ApiOkResponse({ type: [CourseEventDto] })
+  @ApiForbiddenResponse()
+  @ApiBadRequestResponse()
+  @ApiOperation({ operationId: 'getCourseEvents' })
+  public async getCourseEvents(@Param('courseId', ParseIntPipe) courseId: number) {
+    const events = await this.courseEventsService.getCourseEvents(courseId);
+
+    return events.map(event => new CourseEventDto(event));
+  }
 
   @Post('/')
   @ApiOkResponse({ type: [CourseEventDto] })

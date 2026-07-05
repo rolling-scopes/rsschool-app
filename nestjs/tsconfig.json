@@ -12,7 +12,7 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
-      "@entities/*": ["../server/src/models/*"],
+      "@entities/*": ["./src/models/*"],
       "@common/*": ["../common/*"]
     },
     "incremental": true,

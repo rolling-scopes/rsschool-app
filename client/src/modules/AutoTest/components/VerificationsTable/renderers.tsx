@@ -42,7 +42,7 @@ export function getColumns(maxScore: number): ColumnType<Verification>[] {
       responsive: DISPLAY_ACCURACY,
       render: (_, row: Verification) => {
         const accuracyWordWithNumber = /accuracy:\s+(\d+%)/gi;
-        const [, accuracyNumber] = accuracyWordWithNumber.exec(row.details) ?? [];
+        const [, accuracyNumber] = accuracyWordWithNumber.exec(row.details ?? '') ?? [];
         return accuracyNumber ?? '–';
       },
     },
@@ -62,7 +62,7 @@ export function getColumns(maxScore: number): ColumnType<Verification>[] {
   ];
 }
 
-function renderDetails(value: string, row: Verification) {
+function renderDetails(value: string | null, row: Verification) {
   if (row?.courseTask?.type === CourseTaskDetailedDtoTypeEnum.Codewars) {
     return (
       <>

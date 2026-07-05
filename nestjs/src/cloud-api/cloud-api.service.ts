@@ -28,6 +28,13 @@ export class CloudApiService {
     return lastValueFrom(this.httpService.post(`${this.baseUrl}/certificate`, data, this.getHeaders()));
   }
 
+  public async uploadFile(githubId: string, key: string, data: unknown) {
+    const response = await lastValueFrom(
+      this.httpService.post(`${this.baseUrl}/upload?key=${key}&githubId=${githubId}`, data, this.getHeaders()),
+    );
+    return response.data;
+  }
+
   private getHeaders() {
     return { headers: { 'x-api-key': this.apiKey } };
   }

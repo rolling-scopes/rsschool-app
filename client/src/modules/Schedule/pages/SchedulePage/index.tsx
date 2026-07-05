@@ -1,12 +1,12 @@
 import { Alert, theme } from 'antd';
 import {
   CourseDto,
-  CourseEventDto,
   CoursesScheduleApi,
   CoursesScheduleIcalApi,
   CoursesTasksApi,
   CreateCourseTaskDto,
 } from '@client/api';
+import { CourseEvent } from '@client/services/course';
 import { PageLayout } from '@client/shared/components/PageLayout';
 import { isCourseManager } from '@client/domain/user';
 import uniq from 'lodash/uniq';
@@ -35,7 +35,7 @@ export function SchedulePage() {
 
   const [cipher, setCipher] = useState('');
   const [courseTask, setCourseTask] = useState<null | Record<string, any>>(null);
-  const [courseEvent, setCourseEvent] = useState<Partial<CourseEventDto> | null>(null);
+  const [courseEvent, setCourseEvent] = useState<Partial<CourseEvent> | null>(null);
   const [copyModal, setCopyModal] = useState<{ id?: number } | null>(null);
   const [selectedTab, setSelectedTab] = useLocalStorage<string>(LocalStorageKeys.StatusFilter, ALL_TAB_KEY);
   const isManager = useMemo(() => isCourseManager(session, course.id), [session, course.id]);

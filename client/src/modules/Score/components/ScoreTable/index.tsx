@@ -185,9 +185,11 @@ export function ScoreTable(props: Props) {
   }
 
   const handleChange: TableProps<ScoreStudentDto>['onChange'] = async (pagination, filters, sorter, { action }) => {
-    // Dirty hack to prevent sort request with old filters on Enter key in filter modal search input
-    // This is known issue please, see https://github.com/ant-design/ant-design/issues/37334
-    // TODO: Remove this hack after fix in antd
+    // Workaround: pressing Enter inside a filter dropdown's search input also triggers the
+    // column sorter, firing a sort request with the previous (pre-filter) filters. We stash the
+    // just-applied filters for a tick and reuse them if a sort fires immediately after.
+    // Upstream issue ant-design/ant-design#37334 was closed as "not planned" (re-checked on
+    // antd 6.3.1), so this workaround is intentionally permanent rather than a temporary hack.
     if (action === 'filter') {
       recentlyAppliedFilters.current = filters;
       setTimeout(() => (recentlyAppliedFilters.current = null), 50);

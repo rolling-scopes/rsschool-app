@@ -1,17 +1,17 @@
 import { Button, Col, Modal, Row, Select, Spin } from 'antd';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CheckService } from '@client/services/check';
-import { CourseTaskDetails } from '@client/services/course';
+import { CourseTaskDetailedDto } from '@client/api';
 import { BadReviewTable } from './BadReviewTable';
 
 interface IBadReviewControllersProps {
-  courseTasks: CourseTaskDetails[];
+  courseTasks: CourseTaskDetailedDto[];
   courseId: number;
 }
 
 export interface IBadReview {
   checkerScore: number;
-  comment?: string;
+  comment?: string | null;
   taskName: string;
   checkerGithubId: string;
   studentGithubId: string;

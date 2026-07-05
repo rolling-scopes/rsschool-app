@@ -1,20 +1,15 @@
-import globalAxios, { AxiosInstance } from 'axios';
 import { message } from 'antd';
+import { CoursesTasksApi } from '@client/api';
 import { IBadReview, checkType } from '@client/modules/CrossCheckPairs/components/BadReview/BadReviewControllers';
 
 type routesType = Exclude<checkType, 'No type'>;
 
-const ROUTES: Record<routesType, string> = {
-  'Bad comment': 'badcomment',
-  'Did not check': 'maxscore',
-};
+const coursesTasksApi = new CoursesTasksApi();
 
 export class CheckService {
-  private axios: AxiosInstance;
   private cache: Record<number, Record<routesType, IBadReview[]>>;
 
   constructor() {
-    this.axios = globalAxios.create({ baseURL: `/api/` });
     this.cache = {};
   }
 
@@ -39,9 +34,12 @@ export class CheckService {
 
   private async getDataFromServer(taskId: number, type: routesType, courseId: number) {
     if (this.cache?.[taskId]?.[type]) return this.cache[taskId][type];
-    const result = await this.axios.get(`checks/${ROUTES[type]}/${courseId}/${taskId}`);
-    this.saveToCache(taskId, type, result.data.data);
-    return result.data.data;
+    const { data } =
+      type === 'Bad comment'
+        ? await coursesTasksApi.getBadCommentCheckers(courseId, taskId)
+        : await coursesTasksApi.getMaxScoreCheckers(courseId, taskId);
+    this.saveToCache(taskId, type, data);
+    return data;
   }
 
   private saveToCache(taskId: number, type: routesType, data: IBadReview[]) {

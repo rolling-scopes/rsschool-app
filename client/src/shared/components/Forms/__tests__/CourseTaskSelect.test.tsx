@@ -1,7 +1,7 @@
 /* eslint-disable testing-library/no-container */
 /* eslint-disable testing-library/no-node-access */
 import { Form } from 'antd';
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 import { CourseTaskSelect } from '..';
 import { CourseTaskDto } from '@client/api';
@@ -335,5 +335,47 @@ describe('CourseTaskSelect', () => {
 
       expect(baseElement).toMatchSnapshot();
     });
+  });
+
+  it('calls onChange with the selected task id when an option is picked', async () => {
+    // Passing onChange exercises the `onChange ? { onChange } : {}` true branch and
+    // wires it onto the Select so picking an option forwards the task id.
+    const onChange = vi.fn();
+    render(
+      <Form>
+        <CourseTaskSelect data={ActiveCodewarsData} groupBy="default" onChange={onChange} />
+      </Form>,
+    );
+
+    fireEvent.mouseDown(screen.getByRole('combobox'));
+
+    // antd wires the select handler on the `.ant-select-item-option` wrapper.
+    const option = await screen.findByText('Codewars Algorithms-2');
+    const optionWrapper = option.closest('.ant-select-item-option');
+    fireEvent.click(optionWrapper as Element);
+
+    // antd Select forwards (value, option); assert the value (task id) it was called with.
+    await waitFor(() => expect(onChange).toHaveBeenCalled());
+    expect(onChange.mock.calls[0][0]).toBe(451);
+  });
+
+  it('keeps tasks with a missing sort date stable (sort comparator fallback)', async () => {
+    // A task with no studentEndDate makes the `firstDate && secondDate` guard in
+    // sortTasks false, hitting the `return 1` fallback path (runs during render).
+    const data = [
+      { ...(ActiveCodewarsData[0] as CourseTaskDto), id: 9001, name: 'No End Date', studentEndDate: '' },
+      { ...(ActiveCodewarsData[1] as CourseTaskDto), id: 9002, name: 'Has End Date' },
+    ];
+    render(
+      <Form>
+        <CourseTaskSelect data={data} groupBy="default" />
+      </Form>,
+    );
+
+    // Opening the dropdown reveals both options (sort kept them stable, no crash).
+    fireEvent.mouseDown(screen.getByRole('combobox'));
+
+    expect(await screen.findByText('No End Date')).toBeInTheDocument();
+    expect(screen.getByText('Has End Date')).toBeInTheDocument();
   });
 });

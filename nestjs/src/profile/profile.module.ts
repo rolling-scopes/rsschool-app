@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ProfileService } from './profile.service';
+import { ProfileInfoService } from './profile-info/profile-info.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Course } from '@entities/course';
 import { ProfileController } from './profile.controller';
@@ -33,7 +34,7 @@ import { ConfigModule } from 'src/config';
     ConfigModule,
   ],
   controllers: [ProfileController],
-  providers: [ProfileService, EndorsementService],
+  providers: [ProfileService, EndorsementService, ProfileInfoService],
   exports: [ProfileService],
 })
 export class ProfileModule {}

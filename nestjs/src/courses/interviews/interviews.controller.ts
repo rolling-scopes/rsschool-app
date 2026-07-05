@@ -14,6 +14,8 @@ import {
   Req,
   UseGuards,
   UseInterceptors,
+  Delete,
+  Put,
 } from '@nestjs/common';
 import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 import {
@@ -30,7 +32,12 @@ import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, R
 import { DEFAULT_CACHE_TTL } from '../../constants';
 import { InterviewDto } from './dto';
 import { AvailableStudentDto } from './dto/available-student.dto';
+import { isAdmin, isManager, isMentor } from '@entities/session';
 import { InterviewsService } from './interviews.service';
+import { StageInterviewsService } from './stage-interviews.service';
+import { CreateStageInterviewsDto, UpdateStageInterviewPairDto } from './dto/stage-interview-pair.dto';
+import { UserNotificationsService } from 'src/users-notifications';
+import { CreateInterviewResultDto } from './dto/create-interview-result.dto';
 import { TaskType } from '@entities/task';
 import { InterviewFeedbackService } from './interviewFeedback.service';
 import { InterviewFeedbackDto } from './dto/get-interview-feedback.dto';
@@ -49,6 +56,8 @@ export class InterviewsController {
     private interviewsService: InterviewsService,
     private interviewFeedbackService: InterviewFeedbackService,
     private courseTasksService: CourseTasksService,
+    private stageInterviewsService: StageInterviewsService,
+    private userNotificationsService: UserNotificationsService,
   ) {}
 
   @Get()
@@ -94,6 +103,122 @@ export class InterviewsController {
 
     const commentsToStudent = await this.interviewFeedbackService.getCourseStageInterviewsComment(courseId, studentId);
     return commentsToStudent;
+  }
+
+  @Get('/stage')
+  @ApiOkResponse({ schema: { type: 'array', items: { type: 'object' } } })
+  @ApiForbiddenResponse()
+  @ApiOperation({ operationId: 'getStageInterviews' })
+  @RequiredRoles([CourseRole.Mentor, CourseRole.Supervisor, CourseRole.Manager, Role.Admin], true)
+  public async getStageInterviews(@Param('courseId', ParseIntPipe) courseId: number) {
+    return this.stageInterviewsService.findMany(courseId);
+  }
+
+  @Post('/stage')
+  @ApiOkResponse({ schema: { type: 'array', items: { type: 'object' } } })
+  @ApiForbiddenResponse()
+  @ApiBadRequestResponse()
+  @ApiOperation({ operationId: 'createStageInterviews' })
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  public async createStageInterviews(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Body() dto: CreateStageInterviewsDto,
+  ) {
+    try {
+      const result = await this.stageInterviewsService.createAutomatically(courseId, dto.noRegistration ?? false);
+
+      await Promise.all(
+        result.map(async pair => {
+          try {
+            const [interviewer, student] = await Promise.all([
+              this.stageInterviewsService.queryMentorById(courseId, pair.mentorId),
+              this.stageInterviewsService.queryStudentById(courseId, pair.studentId),
+            ]);
+            if (!interviewer || !student) return;
+            await this.userNotificationsService.sendEventNotification({
+              userId: student.userId,
+              notificationId: 'interviewerAssigned',
+              data: { interviewer },
+            });
+          } catch {
+            // ignore notification failures, same as legacy
+          }
+        }),
+      );
+      return result;
+    } catch (e) {
+      throw new BadRequestException((e as Error).message);
+    }
+  }
+
+  @Get('/stage/interviewer/me/students')
+  @ApiOkResponse({ schema: { type: 'array', items: { type: 'object' } } })
+  @ApiForbiddenResponse()
+  @ApiOperation({ operationId: 'getStageInterviewerStudents' })
+  @RequiredRoles([CourseRole.Mentor, CourseRole.Supervisor, CourseRole.Manager, Role.Admin], true)
+  public async getStageInterviewerStudents(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+  ) {
+    return this.stageInterviewsService.findByInterviewer(courseId, req.user.githubId);
+  }
+
+  @Post('/stage/interviewer/:interviewerGithubId/student/:studentGithubId')
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  @ApiOperation({ operationId: 'createStageInterviewPair' })
+  @RequiredRoles([CourseRole.Mentor, CourseRole.Supervisor, CourseRole.Manager, Role.Admin], true)
+  public async createStageInterviewPair(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('interviewerGithubId') interviewerGithubId: string,
+    @Param('studentGithubId') studentGithubId: string,
+  ) {
+    const result = await this.stageInterviewsService.create(courseId, studentGithubId, interviewerGithubId);
+
+    try {
+      const [interviewer, student] = await Promise.all([
+        this.stageInterviewsService.queryMentorByGithubId(courseId, interviewerGithubId),
+        this.stageInterviewsService.queryStudentByGithubId(courseId, studentGithubId),
+      ]);
+      if (interviewer && student) {
+        await this.userNotificationsService.sendEventNotification({
+          userId: student.userId,
+          notificationId: 'interviewerAssigned',
+          data: { interviewer },
+        });
+      }
+    } catch {
+      // ignore notification failures, same as legacy
+    }
+
+    return { id: result?.id };
+  }
+
+  @Put('/stage/pairs/:interviewId')
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  @ApiBadRequestResponse()
+  @ApiOperation({ operationId: 'updateStageInterviewPair' })
+  @RequiredRoles([CourseRole.Mentor, CourseRole.Supervisor, CourseRole.Manager, Role.Admin], true)
+  public async updateStageInterviewPair(
+    @Param('courseId', ParseIntPipe) _courseId: number,
+    @Param('interviewId', ParseIntPipe) interviewId: number,
+    @Body() dto: UpdateStageInterviewPairDto,
+  ) {
+    await this.stageInterviewsService.updateInterviewer(interviewId, dto.githubId);
+    return {};
+  }
+
+  @Delete('/stage/pairs/:interviewId')
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  @ApiOperation({ operationId: 'cancelStageInterviewPair' })
+  @RequiredRoles([CourseRole.Mentor, CourseRole.Supervisor, CourseRole.Manager, Role.Admin], true)
+  public async cancelStageInterviewPair(
+    @Param('courseId', ParseIntPipe) _courseId: number,
+    @Param('interviewId', ParseIntPipe) interviewId: number,
+  ) {
+    return this.stageInterviewsService.cancel(interviewId);
   }
 
   @Get('/:interviewId')
@@ -218,6 +343,145 @@ export class InterviewsController {
     }
 
     throw new BadRequestException('Invalid interview id');
+  }
+
+  @Post('/:courseTaskId/interviewer/:interviewerGithubId/student/:studentGithubId')
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  @ApiOperation({ operationId: 'addInterviewPair' })
+  @RequiredRoles([CourseRole.Mentor, CourseRole.Manager, Role.Admin], true)
+  public async addInterviewPair(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+    @Param('interviewerGithubId') interviewerGithubId: string,
+    @Param('studentGithubId') studentGithubId: string,
+  ) {
+    const user = req.user;
+    const isPowerUser = isAdmin(user) || isManager(user, courseId);
+    if (isMentor(user, courseId) && !isPowerUser) {
+      const isStarted = await this.interviewsService.isInterviewStarted(courseTaskId);
+      if (!isStarted) {
+        throw new ForbiddenException();
+      }
+    }
+
+    const result = await this.interviewsService.addInterviewPair(
+      courseId,
+      courseTaskId,
+      interviewerGithubId,
+      studentGithubId,
+    );
+
+    if (result) {
+      try {
+        await this.userNotificationsService.sendEventNotification({
+          userId: result.studentUserId,
+          notificationId: 'interviewerAssigned',
+          data: { interviewer: result.interviewer },
+        });
+      } catch {
+        // ignore notification failures, same as legacy
+      }
+    }
+
+    return { id: result?.id };
+  }
+
+  @Delete('/:courseTaskId/pairs/:pairId')
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  @ApiOperation({ operationId: 'cancelInterviewPair' })
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  public async cancelInterviewPair(
+    @Param('courseId', ParseIntPipe) _courseId: number,
+    @Param('courseTaskId', ParseIntPipe) _courseTaskId: number,
+    @Param('pairId', ParseIntPipe) pairId: number,
+  ) {
+    await this.interviewsService.cancelInterviewPair(pairId);
+    return {};
+  }
+
+  @Get('/:interviewId/students/me/registration')
+  @ApiOkResponse()
+  @ApiBadRequestResponse()
+  @ApiOperation({ operationId: 'getInterviewRegistration' })
+  @UseGuards(DefaultGuard, CourseGuard)
+  public async getInterviewRegistration(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('interviewId') interviewId: string,
+  ) {
+    const result = await this.interviewsService.getRegisteredInterviewStudent(courseId, req.user.githubId, interviewId);
+    if (result === undefined) {
+      throw new BadRequestException();
+    }
+    return result;
+  }
+
+  @Get('/students/me')
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  @ApiOperation({ operationId: 'getStudentInterviews' })
+  @UseGuards(DefaultGuard, CourseGuard)
+  public async getStudentInterviews(@Req() req: CurrentRequest, @Param('courseId', ParseIntPipe) courseId: number) {
+    return this.interviewsService.getUserInterviewDetails(courseId, req.user.githubId, 'student');
+  }
+
+  @Get('/mentors/me')
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  @ApiOperation({ operationId: 'getMentorInterviews' })
+  @UseGuards(DefaultGuard, CourseGuard)
+  public async getMentorInterviews(@Req() req: CurrentRequest, @Param('courseId', ParseIntPipe) courseId: number) {
+    return this.interviewsService.getUserInterviewDetails(courseId, req.user.githubId, 'mentor');
+  }
+
+  @Get('/:courseTaskId/interviewer/me/students')
+  @ApiOkResponse()
+  @ApiForbiddenResponse()
+  @ApiOperation({ operationId: 'getInterviewerStudents' })
+  @RequiredRoles([CourseRole.Mentor, Role.Admin], true)
+  public async getInterviewerStudents(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+  ) {
+    const students = await this.interviewsService.getInterviewStudentsByMentor(
+      courseId,
+      courseTaskId,
+      req.user.githubId,
+    );
+    if (students == null) {
+      throw new NotFoundException('Mentor not found');
+    }
+    return students;
+  }
+
+  @Post('/:courseTaskId/students/:githubId/result')
+  @ApiOkResponse()
+  @ApiBadRequestResponse()
+  @ApiForbiddenResponse()
+  @ApiOperation({ operationId: 'createInterviewResult' })
+  @RequiredRoles([CourseRole.Mentor, Role.Admin], true)
+  public async createInterviewResult(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
+    @Param('githubId') githubIdParam: string,
+    @Body() dto: CreateInterviewResultDto,
+  ) {
+    const githubId = githubIdParam === 'me' ? req.user.githubId : githubIdParam.toLowerCase();
+    const { ok, message } = await this.interviewsService.createInterviewResult(
+      courseId,
+      courseTaskId,
+      githubId,
+      req.user.id,
+      dto,
+    );
+    if (!ok) {
+      throw new BadRequestException(message);
+    }
   }
 
   // use `type` as a way to differentiate between stage-interview and interview.

@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
+import { AxiosError } from 'axios';
 import { MentorRegistryDto, RegistryApi, InviteMentorsDto, MentorDetailsDtoStudentsPreferenceEnum } from '@client/api';
 import { MentorRegistryTabsMode } from '@client/modules/MentorRegistry/constants';
 
@@ -44,11 +44,9 @@ export interface GetMentorRegistriesOptions {
 }
 
 export class MentorRegistryService {
-  private axios: AxiosInstance;
   private registryApi: RegistryApi;
 
   constructor() {
-    this.axios = axios.create({ baseURL: `/api/registry` });
     this.registryApi = new RegistryApi();
   }
 
@@ -84,10 +82,10 @@ export class MentorRegistryService {
     await this.registryApi.commentMentorRegistry(githubId, { comment: comment });
   }
 
-  public async getMentor() {
+  public async getMentor(): Promise<MentorResponse | null> {
     try {
-      const response = await this.axios.get<AxiosResponse<MentorResponse>>(`/mentor`);
-      return response.data.data;
+      const response = await this.registryApi.getOwnMentorRegistry();
+      return response.data as MentorResponse;
     } catch (e) {
       if (e instanceof AxiosError && e.response?.status === 404) {
         console.info('Mentor is not found in the mentor registry.');

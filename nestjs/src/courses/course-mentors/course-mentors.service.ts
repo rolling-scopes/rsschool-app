@@ -1,7 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, ForbiddenException, Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, QueryFailedError, Repository } from 'typeorm';
 import { CourseTask, Mentor, TaskResult } from '@entities/index';
+import { Student } from '@entities/student';
+import { MentorRegistry } from '@entities/mentorRegistry';
+import { User } from '@entities/user';
+import { IUserSession, isAdmin, isManager, isSupervisor } from '@entities/session';
+import { StageInterview } from '@entities/stageInterview';
 import { MentorDetails } from '@common/models';
 import { UsersService } from '../../users/users.service';
 import { MentorsService } from '../mentors';
@@ -183,5 +188,115 @@ export class CourseMentorsService {
       });
     }
     return mentors;
+  }
+
+  public async createMentor(
+    session: IUserSession,
+    courseId: number,
+    githubId: string,
+    input: { maxStudentsLimit?: number; preferedStudentsLocation?: string; students: number[] },
+  ) {
+    const user = await this.dataSource.getRepository(User).findOne({ where: { githubId } });
+
+    if (user == null) {
+      throw new BadRequestException();
+    }
+
+    const { maxStudentsLimit, preferedStudentsLocation } = input;
+    const data = {
+      ...(maxStudentsLimit ? { maxStudentsLimit } : {}),
+      ...(preferedStudentsLocation
+        ? { studentsPreference: preferedStudentsLocation as Mentor['studentsPreference'] }
+        : {}),
+    };
+    const exist = await this.mentorsRepository.findOne({ where: { courseId, userId: user.id } });
+    let mentorId = exist?.id;
+    if (mentorId == null) {
+      const mentorRegistrationInfo = await this.dataSource
+        .getRepository(MentorRegistry)
+        .findOne({ where: { userId: user.id } });
+
+      const isMentorApproved = (mentorRegistrationInfo?.preselectedCourses ?? []).some(
+        approvedCourseId => courseId === +approvedCourseId,
+      );
+
+      const isPowerUserOrSupervisor =
+        isAdmin(session) || isManager(session, courseId) || isSupervisor(session, courseId);
+      if (!isMentorApproved && !isPowerUserOrSupervisor) {
+        throw new ForbiddenException();
+      }
+      try {
+        const {
+          identifiers: [identifier],
+        } = await this.mentorsRepository.insert({
+          courseId,
+          userId: user.id,
+          ...data,
+        });
+        mentorId = identifier?.['id'];
+      } catch (err) {
+        if (
+          err instanceof QueryFailedError &&
+          (err as { driverError?: { code?: string } }).driverError?.code === '23505'
+        ) {
+          throw new ConflictException('Mentor is already registered for this course (concurrent request).');
+        }
+        throw err;
+      }
+    } else {
+      await this.mentorsRepository.update(mentorId, data);
+    }
+
+    const studentRepository = this.dataSource.getRepository(Student);
+    if (input.students.length > 0) {
+      if (exist) {
+        await studentRepository.update({ mentorId }, { mentorId: null });
+      }
+      await studentRepository.update(input.students, { mentorId });
+    }
+  }
+
+  public async expelMentor(courseId: number, githubId: string) {
+    const mentor = await this.findMentorByGithubId(courseId, githubId);
+    if (mentor) {
+      await this.dataSource.getRepository(Student).update({ mentorId: mentor.id }, { mentorId: null });
+      await this.mentorsRepository.update(mentor.id, { isExpelled: true });
+      await this.cancelPendingStageInterviews(mentor.id);
+    }
+  }
+
+  public async restoreMentor(courseId: number, githubId: string) {
+    const mentor = await this.findMentorByGithubId(courseId, githubId);
+    if (mentor) {
+      await this.mentorsRepository.update(mentor.id, { isExpelled: false });
+    }
+  }
+
+  private findMentorByGithubId(courseId: number, githubId: string) {
+    return this.mentorsRepository
+      .createQueryBuilder('mentor')
+      .innerJoin('mentor.user', 'user')
+      .addSelect(['user.firstName', 'user.lastName', 'user.githubId'])
+      .where('user.githubId = :githubId', { githubId })
+      .andWhere('mentor.courseId = :courseId', { courseId })
+      .getOne();
+  }
+
+  private async cancelPendingStageInterviews(mentorId: number) {
+    const stageInterviewRepository = this.dataSource.getRepository(StageInterview);
+    const interviews = await stageInterviewRepository
+      .createQueryBuilder('s')
+      .select(['s.id'])
+      .leftJoin('s.stageInterviewFeedbacks', 'f')
+      .addSelect(['f.id'])
+      .where('f.id IS NULL')
+      .andWhere('s.mentorId = :mentorId', { mentorId })
+      .getMany();
+    if (interviews.length > 0) {
+      await stageInterviewRepository.update(
+        interviews.map(i => i.id),
+        { isCanceled: true },
+      );
+    }
   }
 }

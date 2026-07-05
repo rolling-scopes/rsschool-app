@@ -112,9 +112,9 @@ _NOTE: in case of problems with running `openapi` you might need to install [Jav
 
 If you made changes to DB models, you need to create a DB migration. Here are steps how to do it
 
-1. Go to `/server`
-2. Run `npm run typeorm:migration:generate src/migrations/{MigrationName}` where `{MigrationName}` is your migration name.
-3. Import your migration to `migrations` array at `./server/src/migrations/index.ts`
+1. Go to `/nestjs`
+2. Run `npm run migration:generate -- src/migrations/{MigrationName}` where `{MigrationName}` is your migration name.
+3. Import your migration to `migrations` array at `./nestjs/src/migrations/index.ts`
 4. Commit and push your changes
 
 See more about TypeORM migrations at official docs [Migrations](https://github.com/typeorm/typeorm/blob/master/docs/migrations.md)
