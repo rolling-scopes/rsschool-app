@@ -18,7 +18,7 @@ import { StudentsService } from '../courses/students';
 import { UserNotificationsService } from 'src/users-notifications/users.notifications.service';
 import { CertificationsService } from './certificates.service';
 import { BulkIssueResultDto } from './dto/bulk-issue-result.dto';
-import { CertificateCriteriaDto } from './dto/certificate-criteria.dto';
+import { EligibleStudentsCriteriaDto } from './dto/eligible-students-criteria.dto';
 import { EligibleStudentsPreviewDto } from './dto/eligible-students-preview.dto';
 import { SaveCertificateDto } from './dto/save-certificate-dto';
 import {
@@ -145,7 +145,7 @@ export class CertificatesController {
   @ApiOkResponse({ type: EligibleStudentsPreviewDto })
   public async previewEligibleStudents(
     @Param('courseId', ParseIntPipe) courseId: number,
-    @Body() criteria: CertificateCriteriaDto,
+    @Body() criteria: EligibleStudentsCriteriaDto,
   ): Promise<EligibleStudentsPreviewDto> {
     return this.certificatesService.previewEligibleStudents(courseId, criteria);
   }
@@ -157,7 +157,7 @@ export class CertificatesController {
   @ApiOkResponse({ type: BulkIssueResultDto })
   public async issueCertificatesBulk(
     @Param('courseId', ParseIntPipe) courseId: number,
-    @Body() criteria: CertificateCriteriaDto,
+    @Body() criteria: EligibleStudentsCriteriaDto,
   ): Promise<BulkIssueResultDto> {
     return this.certificatesService.requestBulkCertificateIssuance(courseId, criteria);
   }

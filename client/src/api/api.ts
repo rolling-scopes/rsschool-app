@@ -921,7 +921,7 @@ export interface CertificateCriteriaDto {
      */
     'courseTaskIds'?: Array<number>;
     /**
-     * Required if courseTaskIds is non-empty: minimum score per task
+     * 
      * @type {number}
      * @memberof CertificateCriteriaDto
      */
@@ -931,7 +931,7 @@ export interface CertificateCriteriaDto {
      * @type {number}
      * @memberof CertificateCriteriaDto
      */
-    'minTotalScore': number;
+    'minTotalScore'?: number;
 }
 /**
  * 
@@ -3960,6 +3960,31 @@ export interface EligibleStudentDto {
      * @memberof EligibleStudentDto
      */
     'totalScore': number;
+}
+/**
+ * 
+ * @export
+ * @interface EligibleStudentsCriteriaDto
+ */
+export interface EligibleStudentsCriteriaDto {
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof EligibleStudentsCriteriaDto
+     */
+    'courseTaskIds'?: Array<number>;
+    /**
+     * Required if courseTaskIds is non-empty: minimum score per task
+     * @type {number}
+     * @memberof EligibleStudentsCriteriaDto
+     */
+    'minScore'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof EligibleStudentsCriteriaDto
+     */
+    'minTotalScore': number;
 }
 /**
  * 
@@ -11643,15 +11668,15 @@ export const CertificateApiAxiosParamCreator = function (configuration?: Configu
         /**
          * 
          * @param {number} courseId 
-         * @param {CertificateCriteriaDto} certificateCriteriaDto 
+         * @param {EligibleStudentsCriteriaDto} eligibleStudentsCriteriaDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        issueCertificatesBulk: async (courseId: number, certificateCriteriaDto: CertificateCriteriaDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        issueCertificatesBulk: async (courseId: number, eligibleStudentsCriteriaDto: EligibleStudentsCriteriaDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('issueCertificatesBulk', 'courseId', courseId)
-            // verify required parameter 'certificateCriteriaDto' is not null or undefined
-            assertParamExists('issueCertificatesBulk', 'certificateCriteriaDto', certificateCriteriaDto)
+            // verify required parameter 'eligibleStudentsCriteriaDto' is not null or undefined
+            assertParamExists('issueCertificatesBulk', 'eligibleStudentsCriteriaDto', eligibleStudentsCriteriaDto)
             const localVarPath = `/certificate/course/{courseId}/bulk`
                 .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -11672,7 +11697,7 @@ export const CertificateApiAxiosParamCreator = function (configuration?: Configu
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(certificateCriteriaDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(eligibleStudentsCriteriaDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -11682,15 +11707,15 @@ export const CertificateApiAxiosParamCreator = function (configuration?: Configu
         /**
          * 
          * @param {number} courseId 
-         * @param {CertificateCriteriaDto} certificateCriteriaDto 
+         * @param {EligibleStudentsCriteriaDto} eligibleStudentsCriteriaDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        previewEligibleStudents: async (courseId: number, certificateCriteriaDto: CertificateCriteriaDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        previewEligibleStudents: async (courseId: number, eligibleStudentsCriteriaDto: EligibleStudentsCriteriaDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('previewEligibleStudents', 'courseId', courseId)
-            // verify required parameter 'certificateCriteriaDto' is not null or undefined
-            assertParamExists('previewEligibleStudents', 'certificateCriteriaDto', certificateCriteriaDto)
+            // verify required parameter 'eligibleStudentsCriteriaDto' is not null or undefined
+            assertParamExists('previewEligibleStudents', 'eligibleStudentsCriteriaDto', eligibleStudentsCriteriaDto)
             const localVarPath = `/certificate/course/{courseId}/eligible`
                 .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -11711,7 +11736,7 @@ export const CertificateApiAxiosParamCreator = function (configuration?: Configu
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(certificateCriteriaDto, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(eligibleStudentsCriteriaDto, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -11841,23 +11866,23 @@ export const CertificateApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} courseId 
-         * @param {CertificateCriteriaDto} certificateCriteriaDto 
+         * @param {EligibleStudentsCriteriaDto} eligibleStudentsCriteriaDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async issueCertificatesBulk(courseId: number, certificateCriteriaDto: CertificateCriteriaDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BulkIssueResultDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.issueCertificatesBulk(courseId, certificateCriteriaDto, options);
+        async issueCertificatesBulk(courseId: number, eligibleStudentsCriteriaDto: EligibleStudentsCriteriaDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BulkIssueResultDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.issueCertificatesBulk(courseId, eligibleStudentsCriteriaDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
          * @param {number} courseId 
-         * @param {CertificateCriteriaDto} certificateCriteriaDto 
+         * @param {EligibleStudentsCriteriaDto} eligibleStudentsCriteriaDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async previewEligibleStudents(courseId: number, certificateCriteriaDto: CertificateCriteriaDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EligibleStudentsPreviewDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.previewEligibleStudents(courseId, certificateCriteriaDto, options);
+        async previewEligibleStudents(courseId: number, eligibleStudentsCriteriaDto: EligibleStudentsCriteriaDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EligibleStudentsPreviewDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.previewEligibleStudents(courseId, eligibleStudentsCriteriaDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -11931,22 +11956,22 @@ export const CertificateApiFactory = function (configuration?: Configuration, ba
         /**
          * 
          * @param {number} courseId 
-         * @param {CertificateCriteriaDto} certificateCriteriaDto 
+         * @param {EligibleStudentsCriteriaDto} eligibleStudentsCriteriaDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        issueCertificatesBulk(courseId: number, certificateCriteriaDto: CertificateCriteriaDto, options?: any): AxiosPromise<BulkIssueResultDto> {
-            return localVarFp.issueCertificatesBulk(courseId, certificateCriteriaDto, options).then((request) => request(axios, basePath));
+        issueCertificatesBulk(courseId: number, eligibleStudentsCriteriaDto: EligibleStudentsCriteriaDto, options?: any): AxiosPromise<BulkIssueResultDto> {
+            return localVarFp.issueCertificatesBulk(courseId, eligibleStudentsCriteriaDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @param {number} courseId 
-         * @param {CertificateCriteriaDto} certificateCriteriaDto 
+         * @param {EligibleStudentsCriteriaDto} eligibleStudentsCriteriaDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        previewEligibleStudents(courseId: number, certificateCriteriaDto: CertificateCriteriaDto, options?: any): AxiosPromise<EligibleStudentsPreviewDto> {
-            return localVarFp.previewEligibleStudents(courseId, certificateCriteriaDto, options).then((request) => request(axios, basePath));
+        previewEligibleStudents(courseId: number, eligibleStudentsCriteriaDto: EligibleStudentsCriteriaDto, options?: any): AxiosPromise<EligibleStudentsPreviewDto> {
+            return localVarFp.previewEligibleStudents(courseId, eligibleStudentsCriteriaDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -12025,25 +12050,25 @@ export class CertificateApi extends BaseAPI {
     /**
      * 
      * @param {number} courseId 
-     * @param {CertificateCriteriaDto} certificateCriteriaDto 
+     * @param {EligibleStudentsCriteriaDto} eligibleStudentsCriteriaDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CertificateApi
      */
-    public issueCertificatesBulk(courseId: number, certificateCriteriaDto: CertificateCriteriaDto, options?: AxiosRequestConfig) {
-        return CertificateApiFp(this.configuration).issueCertificatesBulk(courseId, certificateCriteriaDto, options).then((request) => request(this.axios, this.basePath));
+    public issueCertificatesBulk(courseId: number, eligibleStudentsCriteriaDto: EligibleStudentsCriteriaDto, options?: AxiosRequestConfig) {
+        return CertificateApiFp(this.configuration).issueCertificatesBulk(courseId, eligibleStudentsCriteriaDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @param {number} courseId 
-     * @param {CertificateCriteriaDto} certificateCriteriaDto 
+     * @param {EligibleStudentsCriteriaDto} eligibleStudentsCriteriaDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CertificateApi
      */
-    public previewEligibleStudents(courseId: number, certificateCriteriaDto: CertificateCriteriaDto, options?: AxiosRequestConfig) {
-        return CertificateApiFp(this.configuration).previewEligibleStudents(courseId, certificateCriteriaDto, options).then((request) => request(this.axios, this.basePath));
+    public previewEligibleStudents(courseId: number, eligibleStudentsCriteriaDto: EligibleStudentsCriteriaDto, options?: AxiosRequestConfig) {
+        return CertificateApiFp(this.configuration).previewEligibleStudents(courseId, eligibleStudentsCriteriaDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

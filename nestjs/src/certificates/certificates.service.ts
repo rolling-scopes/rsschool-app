@@ -11,7 +11,7 @@ import { Student } from '@entities/student';
 import { Course } from '@entities/course';
 import { User } from '@entities/user';
 import { BulkIssueResultDto } from './dto/bulk-issue-result.dto';
-import { CertificateCriteriaDto } from './dto/certificate-criteria.dto';
+import { EligibleStudentsCriteriaDto } from './dto/eligible-students-criteria.dto';
 import { CertificateMetadataDto } from './dto/certificate-metadata.dto';
 import { CertificateIssuanceRequestDto } from './dto/certificate-issuance-request.dto';
 import { EligibleStudentDto } from './dto/eligible-student.dto';
@@ -110,7 +110,7 @@ export class CertificationsService {
 
   public async previewEligibleStudents(
     courseId: number,
-    criteria: CertificateCriteriaDto,
+    criteria: EligibleStudentsCriteriaDto,
   ): Promise<EligibleStudentsPreviewDto> {
     const students = await this.findEligibleStudents(courseId, criteria);
     return new EligibleStudentsPreviewDto(students);
@@ -118,7 +118,7 @@ export class CertificationsService {
 
   public async requestBulkCertificateIssuance(
     courseId: number,
-    criteria: CertificateCriteriaDto,
+    criteria: EligibleStudentsCriteriaDto,
   ): Promise<BulkIssueResultDto> {
     const eligible = await this.findEligibleStudents(courseId, criteria);
     if (eligible.length === 0) {
@@ -148,7 +148,10 @@ export class CertificationsService {
     return new BulkIssueResultDto(eligible);
   }
 
-  public async findEligibleStudents(courseId: number, criteria: CertificateCriteriaDto): Promise<EligibleStudentDto[]> {
+  public async findEligibleStudents(
+    courseId: number,
+    criteria: EligibleStudentsCriteriaDto,
+  ): Promise<EligibleStudentDto[]> {
     const taskIds = criteria.courseTaskIds ?? [];
     const tasksCount = taskIds.length;
     const minScore = criteria.minScore ?? 1;

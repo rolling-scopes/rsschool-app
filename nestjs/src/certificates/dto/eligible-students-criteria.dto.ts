@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsInt, IsNumber, IsOptional, Min, ValidateIf } from 'class-validator';
 
-export class CertificateCriteriaDto {
+export class EligibleStudentsCriteriaDto {
   @ApiProperty({ required: false, type: [Number] })
   @IsOptional()
   @IsArray()

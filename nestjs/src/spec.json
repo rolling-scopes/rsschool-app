@@ -3345,7 +3345,9 @@
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "requestBody": {
           "required": true,
-          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CertificateCriteriaDto" } } }
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/EligibleStudentsCriteriaDto" } }
+          }
         },
         "responses": {
           "200": {
@@ -3365,7 +3367,9 @@
         "parameters": [{ "name": "courseId", "required": true, "in": "path", "schema": { "type": "number" } }],
         "requestBody": {
           "required": true,
-          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CertificateCriteriaDto" } } }
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/EligibleStudentsCriteriaDto" } }
+          }
         },
         "responses": {
           "200": {
@@ -6798,13 +6802,9 @@
         "type": "object",
         "properties": {
           "courseTaskIds": { "type": "array", "items": { "type": "number" } },
-          "minScore": {
-            "type": "number",
-            "description": "Required if courseTaskIds is non-empty: minimum score per task"
-          },
+          "minScore": { "type": "number" },
           "minTotalScore": { "type": "number" }
-        },
-        "required": ["minTotalScore"]
+        }
       },
       "CreateCourseCertificatesDto": {
         "type": "object",
@@ -6823,6 +6823,18 @@
           "issueDate": { "type": "string" }
         },
         "required": ["publicId", "studentId", "s3Bucket", "s3Key", "issueDate"]
+      },
+      "EligibleStudentsCriteriaDto": {
+        "type": "object",
+        "properties": {
+          "courseTaskIds": { "type": "array", "items": { "type": "number" } },
+          "minScore": {
+            "type": "number",
+            "description": "Required if courseTaskIds is non-empty: minimum score per task"
+          },
+          "minTotalScore": { "type": "number" }
+        },
+        "required": ["minTotalScore"]
       },
       "EligibleStudentDto": {
         "type": "object",
