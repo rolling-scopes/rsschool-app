@@ -11,12 +11,13 @@ const flushMicrotasks = () => new Promise<void>(resolve => setImmediate(resolve)
 
 describe('TasksController', () => {
   let controller: TasksController;
-  let tasksService: Mocked<Pick<TasksService, 'getPendingTasksDeadline'>>;
+  let tasksService: Mocked<Pick<TasksService, 'getPendingTasksDeadline' | 'getPendingCrossCheckDeadline'>>;
   let notificationService: Mocked<Pick<UserNotificationsService, 'sendEventNotification'>>;
 
   beforeEach(async () => {
     const mockTasksService = {
       getPendingTasksDeadline: vi.fn(),
+      getPendingCrossCheckDeadline: vi.fn(),
     } as Partial<TasksService> as TasksService;
     const mockNotificationService = {
       sendEventNotification: vi.fn(),
@@ -107,6 +108,78 @@ describe('TasksController', () => {
       await flushMicrotasks();
 
       // both users are attempted even though the first one throws (error is swallowed and logged)
+      expect(notificationService.sendEventNotification).toHaveBeenCalledTimes(2);
+      expect(notificationService.sendEventNotification).toHaveBeenCalledWith(expect.objectContaining({ userId: 100 }));
+      expect(notificationService.sendEventNotification).toHaveBeenCalledWith(expect.objectContaining({ userId: 200 }));
+    });
+  });
+
+  describe('notifyCrossCheckDeadlines', () => {
+    it('delegates to the tasks service using the deadlineInHours from the dto', async () => {
+      tasksService.getPendingCrossCheckDeadline.mockResolvedValue(new Map());
+      const dto: CheckTasksDeadlineDto = { deadlineInHours: 12 };
+
+      await controller.notifyCrossCheckDeadlines(dto);
+
+      expect(tasksService.getPendingCrossCheckDeadline).toHaveBeenCalledWith(12);
+    });
+
+    it('returns undefined (background notification work is fire-and-forget)', async () => {
+      tasksService.getPendingCrossCheckDeadline.mockResolvedValue(new Map());
+
+      const result = await controller.notifyCrossCheckDeadlines({ deadlineInHours: 24 });
+
+      expect(result).toBeUndefined();
+    });
+
+    it('sends one crossCheckDeadline notification per student with their pending tasks', async () => {
+      const tasksForUser1 = [{ task: { id: 10 }, crossCheckEndDate: '2024-02-01' }];
+      const tasksForUser2 = [{ task: { id: 11 }, crossCheckEndDate: '2024-02-02' }];
+      const students = new Map<number, unknown[]>([
+        [100, tasksForUser1],
+        [200, tasksForUser2],
+      ]);
+      tasksService.getPendingCrossCheckDeadline.mockResolvedValue(students as never);
+      notificationService.sendEventNotification.mockResolvedValue(undefined);
+
+      await controller.notifyCrossCheckDeadlines({ deadlineInHours: 24 });
+      await flushMicrotasks();
+
+      expect(notificationService.sendEventNotification).toHaveBeenCalledTimes(2);
+      expect(notificationService.sendEventNotification).toHaveBeenCalledWith({
+        data: { tasks: tasksForUser1 },
+        notificationId: 'crossCheckDeadline',
+        userId: 100,
+      });
+      expect(notificationService.sendEventNotification).toHaveBeenCalledWith({
+        data: { tasks: tasksForUser2 },
+        notificationId: 'crossCheckDeadline',
+        userId: 200,
+      });
+    });
+
+    it('does not send any notification when no students have pending cross-check tasks', async () => {
+      tasksService.getPendingCrossCheckDeadline.mockResolvedValue(new Map());
+
+      await controller.notifyCrossCheckDeadlines({ deadlineInHours: 24 });
+      await flushMicrotasks();
+
+      expect(notificationService.sendEventNotification).not.toHaveBeenCalled();
+    });
+
+    it('continues notifying remaining students when one notification rejects', async () => {
+      const students = new Map<number, unknown[]>([
+        [100, [{ task: { id: 10 }, crossCheckEndDate: '2024-02-01' }]],
+        [200, [{ task: { id: 11 }, crossCheckEndDate: '2024-02-02' }]],
+      ]);
+      tasksService.getPendingCrossCheckDeadline.mockResolvedValue(students as never);
+      notificationService.sendEventNotification
+        .mockRejectedValueOnce(new Error('boom'))
+        .mockResolvedValueOnce(undefined);
+
+      await controller.notifyCrossCheckDeadlines({ deadlineInHours: 24 });
+      await flushMicrotasks();
+
       expect(notificationService.sendEventNotification).toHaveBeenCalledTimes(2);
       expect(notificationService.sendEventNotification).toHaveBeenCalledWith(expect.objectContaining({ userId: 100 }));
       expect(notificationService.sendEventNotification).toHaveBeenCalledWith(expect.objectContaining({ userId: 200 }));

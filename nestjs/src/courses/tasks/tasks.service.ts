@@ -3,6 +3,7 @@ import { CoursesService } from 'src/courses/courses.service';
 import { CourseTasksService } from 'src/courses';
 import { Course } from '@entities/course';
 import { Task } from '@entities/task';
+import { CourseTask } from '@entities/courseTask';
 
 @Injectable()
 export class TasksService {
@@ -44,6 +45,42 @@ export class TasksService {
       }
     }
     this.logger.log({ message: `students missing deadlines ${studentMap.size}` });
+
+    return studentMap;
+  }
+
+  public async getPendingCrossCheckDeadline(deadlineWithinHours: number) {
+    const activeCourses = await this.courseService.getActiveCourses(['students']);
+    const studentMap = new Map<
+      number,
+      { course: Omit<Course, 'students'>; task: Task; crossCheckEndDate: CourseTask['crossCheckEndDate'] }[]
+    >();
+
+    for (const course of activeCourses) {
+      const { students, ...courseInfo } = course;
+      const courseTasks = await this.courseTasksService.getCrossCheckTasksPendingDeadline(courseInfo.id, {
+        deadlineWithinHours,
+      });
+      this.logger.log({
+        message: `course: ${course.id} has ${courseTasks.length} cross-check tasks pending deadline`,
+      });
+
+      if (!courseTasks.length) continue;
+
+      for (const student of students) {
+        if (student.isExpelled) continue;
+        for (const courseTask of courseTasks) {
+          const studentPendingTasks = studentMap.get(student.userId) ?? [];
+          studentPendingTasks.push({
+            course: courseInfo,
+            task: courseTask.task,
+            crossCheckEndDate: courseTask.crossCheckEndDate,
+          });
+          studentMap.set(student.userId, studentPendingTasks);
+        }
+      }
+    }
+    this.logger.log({ message: `students with pending cross-check deadlines ${studentMap.size}` });
 
     return studentMap;
   }

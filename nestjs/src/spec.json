@@ -1081,6 +1081,19 @@
         "tags": ["courses tasks"]
       }
     },
+    "/tasks/notify/cross-check": {
+      "post": {
+        "operationId": "notifyCrossCheckDeadlines",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CheckTasksDeadlineDto" } } }
+        },
+        "responses": { "403": { "description": "" } },
+        "summary": "",
+        "tags": ["courses tasks"]
+      }
+    },
     "/courses/stats/expelled": {
       "get": {
         "operationId": "getExpelledStats",
