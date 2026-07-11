@@ -279,7 +279,12 @@ describe('TasksService', () => {
       const result = await service.getPendingCrossCheckDeadline(24);
 
       expect(result.size).toBe(1);
-      expect(result.get(100)?.map(p => p.task.id).sort()).toEqual([10, 20]);
+      expect(
+        result
+          .get(100)
+          ?.map(p => p.task.id)
+          .sort(),
+      ).toEqual([10, 20]);
     });
 
     it('produces no entries when no cross-check tasks are pending', async () => {

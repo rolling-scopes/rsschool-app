@@ -567,8 +567,18 @@ describe('ScheduleService', () => {
         operation: 'update',
         entityId: 100,
         event: 'course_task',
-        update: { courseId: 5, taskId: 200, studentEndDate: '2024-01-10', crossCheckStatus: CrossCheckStatus.Distributed },
-        previous: { courseId: 5, taskId: 200, studentEndDate: '2024-01-10', crossCheckStatus: CrossCheckStatus.Distributed },
+        update: {
+          courseId: 5,
+          taskId: 200,
+          studentEndDate: '2024-01-10',
+          crossCheckStatus: CrossCheckStatus.Distributed,
+        },
+        previous: {
+          courseId: 5,
+          taskId: 200,
+          studentEndDate: '2024-01-10',
+          crossCheckStatus: CrossCheckStatus.Distributed,
+        },
       } as unknown as History;
       historyRepository.createQueryBuilder.mockReturnValue(makeQb('getMany', [noopRecord]));
       courseEventRepository.query.mockResolvedValue([{ id: 200, name: 'Task 200', type: 'task' }]);
@@ -586,8 +596,18 @@ describe('ScheduleService', () => {
         operation: 'update',
         entityId: 100,
         event: 'course_task',
-        update: { courseId: 5, taskId: 200, studentEndDate: '2024-01-10', crossCheckStatus: CrossCheckStatus.Distributed },
-        previous: { courseId: 5, taskId: 200, studentEndDate: '2024-01-10', crossCheckStatus: CrossCheckStatus.Initial },
+        update: {
+          courseId: 5,
+          taskId: 200,
+          studentEndDate: '2024-01-10',
+          crossCheckStatus: CrossCheckStatus.Distributed,
+        },
+        previous: {
+          courseId: 5,
+          taskId: 200,
+          studentEndDate: '2024-01-10',
+          crossCheckStatus: CrossCheckStatus.Initial,
+        },
       } as unknown as History;
       historyRepository.createQueryBuilder.mockReturnValue(makeQb('getMany', [startedRecord]));
       courseEventRepository.query.mockResolvedValue([{ id: 200, name: 'Task 200', type: 'task' }]);
