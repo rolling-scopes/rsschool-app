@@ -23,6 +23,7 @@ export type NotificationId =
   | 'courseCertificate'
   | 'courseScheduleChange'
   | 'taskDeadline'
+  | 'crossCheckDeadline'
   | 'interviewerAssigned'
   | 'emailConfirmation'
   | 'mentor:assigned'

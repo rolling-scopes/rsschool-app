@@ -10,7 +10,7 @@ import { Mentor } from '@entities/mentor';
 import { CourseUser } from '@entities/courseUser';
 import { History } from '@entities/history';
 import { CourseEvent } from '@entities/courseEvent';
-import { CourseTask } from '@entities/courseTask';
+import { CourseTask, CrossCheckStatus } from '@entities/courseTask';
 
 @Injectable()
 export class ScheduleService {
@@ -116,6 +116,14 @@ export class ScheduleService {
       });
     });
 
+    // Drop courses whose records were all skipped (e.g. status-only no-op updates),
+    // so they don't produce an empty notification.
+    for (const [courseId, recordsMap] of courseMap) {
+      if (recordsMap.size === 0) {
+        courseMap.delete(courseId);
+      }
+    }
+
     return courseMap;
   }
 
@@ -177,10 +185,15 @@ export class ScheduleService {
           ...this.getInsertFields(event, entryPrevious),
         });
       } else if (operation === 'update') {
+        const updatedFields = this.getUpdatedFields(event, entryUpdate, entryPrevious);
+        // No real change (no date change AND no recognised cross-check transition) -> do not list the task.
+        if (!updatedFields) {
+          continue;
+        }
         recordsMap.set(entryKey, {
           ...prevEntry,
           type,
-          ...this.getUpdatedFields(event, entryUpdate, entryPrevious),
+          ...updatedFields,
         });
       }
     }
@@ -274,6 +287,8 @@ export class ScheduleService {
         studentStartDateOld: string | Date;
         studentEndDateOld: string | Date;
         crossCheckEndDateOld: string | Date;
+        isCrossCheckStarted: boolean;
+        isCrossCheckCompleted: boolean;
       }
     > = {};
 
@@ -291,7 +306,29 @@ export class ScheduleService {
       fields.crossCheckEndDateOld = previousTask.crossCheckEndDate ?? undefined;
     }
 
-    return fields;
+    const transition = this.getCrossCheckTransition(task, previousTask);
+    if (transition) {
+      Object.assign(fields, transition);
+    }
+
+    // For tasks return undefined (mirroring the course_event branch) when nothing meaningful
+    // changed, so buildChangesMaps can skip status-only no-op updates instead of listing a
+    // phantom "Task is updated".
+    return Object.keys(fields).length > 0 ? fields : undefined;
+  }
+
+  private getCrossCheckTransition(task: CourseTask, previousTask: CourseTask) {
+    const from = previousTask?.crossCheckStatus;
+    const to = task?.crossCheckStatus;
+    if (!to || from === to) return undefined;
+    if (from === CrossCheckStatus.Initial && to === CrossCheckStatus.Distributed) {
+      return { isCrossCheckStarted: true as const };
+    }
+    if (from === CrossCheckStatus.Distributed && to === CrossCheckStatus.Completed) {
+      return { isCrossCheckCompleted: true as const };
+    }
+    // Unknown / backward transitions (e.g. an admin reset) are not surfaced.
+    return undefined;
   }
 
   private isDateEqual(date1: string | Date | null, date2: string | Date | null) {
@@ -307,6 +344,8 @@ type Recipients = UserCourses[];
 type ChangeEvent = {
   isNew?: boolean;
   isRemoved?: boolean;
+  isCrossCheckStarted?: boolean;
+  isCrossCheckCompleted?: boolean;
   type: string;
   name?: string;
 } & Partial<CourseEvent | CourseTask>;

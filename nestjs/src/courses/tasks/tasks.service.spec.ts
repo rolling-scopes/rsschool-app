@@ -20,15 +20,24 @@ const makeCourseTask = (taskId: number, solutionStudentIds?: number[] | null) =>
   taskSolutions: solutionStudentIds == null ? solutionStudentIds : solutionStudentIds.map(studentId => ({ studentId })),
 });
 
+// Minimal course-task shape as returned by getCrossCheckTasksPendingDeadline (task + crossCheckEndDate).
+const makeCrossCheckCourseTask = (taskId: number, crossCheckEndDate = '2024-01-15') => ({
+  task: { id: taskId, name: `task-${taskId}` },
+  crossCheckEndDate,
+});
+
 describe('TasksService', () => {
   let service: TasksService;
   let coursesService: Mocked<Pick<CoursesService, 'getActiveCourses'>>;
-  let courseTasksService: Mocked<Pick<CourseTasksService, 'getTasksPendingDeadline'>>;
+  let courseTasksService: Mocked<
+    Pick<CourseTasksService, 'getTasksPendingDeadline' | 'getCrossCheckTasksPendingDeadline'>
+  >;
 
   beforeEach(async () => {
     const mockCoursesService = { getActiveCourses: vi.fn() } as Partial<CoursesService> as CoursesService;
     const mockCourseTasksService = {
       getTasksPendingDeadline: vi.fn(),
+      getCrossCheckTasksPendingDeadline: vi.fn(),
     } as Partial<CourseTasksService> as CourseTasksService;
 
     const module: TestingModule = await Test.createTestingModule({
@@ -181,6 +190,103 @@ describe('TasksService', () => {
       courseTasksService.getTasksPendingDeadline.mockResolvedValue([makeCourseTask(10, [])] as never);
 
       const result = await service.getPendingTasksDeadline(24);
+
+      expect(result.size).toBe(0);
+    });
+  });
+
+  describe('getPendingCrossCheckDeadline', () => {
+    it('requests active courses with the students relation', async () => {
+      coursesService.getActiveCourses.mockResolvedValue([]);
+
+      await service.getPendingCrossCheckDeadline(24);
+
+      expect(coursesService.getActiveCourses).toHaveBeenCalledWith(['students']);
+    });
+
+    it('returns an empty map when there are no active courses', async () => {
+      coursesService.getActiveCourses.mockResolvedValue([]);
+
+      const result = await service.getPendingCrossCheckDeadline(24);
+
+      expect(result.size).toBe(0);
+      expect(courseTasksService.getCrossCheckTasksPendingDeadline).not.toHaveBeenCalled();
+    });
+
+    it('forwards courseId and deadlineWithinHours to the course-tasks service per course', async () => {
+      coursesService.getActiveCourses.mockResolvedValue([makeCourse(7, [makeStudent(1, 100)])]);
+      courseTasksService.getCrossCheckTasksPendingDeadline.mockResolvedValue([]);
+
+      await service.getPendingCrossCheckDeadline(48);
+
+      expect(courseTasksService.getCrossCheckTasksPendingDeadline).toHaveBeenCalledWith(7, { deadlineWithinHours: 48 });
+    });
+
+    it('maps every active student to the pending cross-check task keyed by userId (no submission check)', async () => {
+      coursesService.getActiveCourses.mockResolvedValue([makeCourse(7, [makeStudent(1, 100), makeStudent(2, 200)])]);
+      courseTasksService.getCrossCheckTasksPendingDeadline.mockResolvedValue([
+        makeCrossCheckCourseTask(10, '2024-02-01'),
+      ] as never);
+
+      const result = await service.getPendingCrossCheckDeadline(24);
+
+      expect(result.size).toBe(2);
+      expect(result.get(100)?.[0]).toEqual({
+        course: expect.objectContaining({ id: 7, name: 'course-7' }),
+        task: expect.objectContaining({ id: 10 }),
+        crossCheckEndDate: '2024-02-01',
+      });
+      expect(result.get(100)?.[0].course).not.toHaveProperty('students');
+      expect(result.get(200)).toHaveLength(1);
+    });
+
+    it('skips expelled students entirely', async () => {
+      coursesService.getActiveCourses.mockResolvedValue([
+        makeCourse(7, [makeStudent(1, 100, true), makeStudent(2, 200)]),
+      ]);
+      courseTasksService.getCrossCheckTasksPendingDeadline.mockResolvedValue([makeCrossCheckCourseTask(10)] as never);
+
+      const result = await service.getPendingCrossCheckDeadline(24);
+
+      expect(result.size).toBe(1);
+      expect(result.has(100)).toBe(false);
+      expect(result.get(200)).toHaveLength(1);
+    });
+
+    it('accumulates multiple pending cross-check tasks under the same userId', async () => {
+      coursesService.getActiveCourses.mockResolvedValue([makeCourse(7, [makeStudent(1, 100)])]);
+      courseTasksService.getCrossCheckTasksPendingDeadline.mockResolvedValue([
+        makeCrossCheckCourseTask(10),
+        makeCrossCheckCourseTask(11),
+      ] as never);
+
+      const result = await service.getPendingCrossCheckDeadline(24);
+
+      const pending = result.get(100);
+      expect(pending).toHaveLength(2);
+      expect(pending?.map(p => p.task.id)).toEqual([10, 11]);
+    });
+
+    it('aggregates pending cross-check tasks for the same userId across courses', async () => {
+      coursesService.getActiveCourses.mockResolvedValue([
+        makeCourse(7, [makeStudent(1, 100)]),
+        makeCourse(8, [makeStudent(2, 100)]),
+      ]);
+      courseTasksService.getCrossCheckTasksPendingDeadline
+        .mockResolvedValueOnce([makeCrossCheckCourseTask(10)] as never)
+        .mockResolvedValueOnce([makeCrossCheckCourseTask(20)] as never);
+
+      const result = await service.getPendingCrossCheckDeadline(24);
+
+      expect(result.size).toBe(1);
+      expect(result.get(100)?.map(p => p.task.id).sort()).toEqual([10, 20]);
+    });
+
+    it('produces no entries when no cross-check tasks are pending', async () => {
+      coursesService.getActiveCourses.mockResolvedValue([makeCourse(7, [makeStudent(1, 100)])]);
+      courseTasksService.getCrossCheckTasksPendingDeadline.mockResolvedValue([]);
+
+      const result = await service.getPendingCrossCheckDeadline(24);
 
       expect(result.size).toBe(0);
     });

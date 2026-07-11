@@ -19,7 +19,10 @@ const config: DataSourceOptions = {
   migrations,
   synchronize: false,
   migrationsRun: true,
-  subscribers: [path.resolve(__dirname, '**/*.subscriber.*')],
+  subscribers: [
+    path.resolve(__dirname, '**/*.subscriber.ts'),
+    path.resolve(__dirname, '**/*.subscriber.js'),
+  ],
   logging: ['migration', 'error', 'warn'],
 };
 
