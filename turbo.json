@@ -50,6 +50,8 @@
         "RSSHCOOL_PG_USERNAME",
         "RSAPP_BASE_URL",
         "RSAPP_PAT",
+        "RSAPP_API_PREFIX",
+        "RSAPP_TOOLSETS",
         "RSSHCOOL_UI_GCP_MAPS_API_KEY",
         "RSSHCOOL_USERS_ADMINS",
         "RSSHCOOL_USERS_HIRERS",

@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { describeError, type RsappApiClient } from '../api-client.js';
+import { describeError } from '../api-client.js';
+import type { ToolContext } from '../types.js';
 
 export const searchUsersInputSchema = z.object({
   query: z.string().min(1).describe('Search string: name, GitHub login, or numeric user ID'),
@@ -32,10 +33,10 @@ type UserRow = {
   name?: string | null;
 };
 
-export async function runSearchUsers(client: RsappApiClient, input: SearchUsersInput): Promise<string> {
+export async function runSearchUsers(ctx: ToolContext, input: SearchUsersInput): Promise<string> {
   const params = new URLSearchParams({ query: input.query });
   if (input.includeSystem) params.set('includeSystem', 'true');
-  const result = await client.get<UserRow[]>(`/api/v2/users/search?${params.toString()}`);
+  const result = await ctx.client.get<UserRow[]>(`/users/search?${params.toString()}`);
   if (!result.ok) {
     return describeError(result.status, result.message);
   }

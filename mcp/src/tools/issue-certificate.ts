@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { RsappApiClient } from '../api-client.js';
+import type { ToolContext } from '../types.js';
 
 export const issueCertificateInputSchema = z.object({
   courseId: z.number().int().positive().describe('Numeric ID of the course'),
@@ -22,9 +22,9 @@ export const ISSUE_CERTIFICATE_TOOL = {
   },
 } as const;
 
-export async function runIssueCertificate(client: RsappApiClient, input: IssueCertificateInput): Promise<string> {
-  const result = await client.post<{ studentId: number; courseName: string; studentName: string }>(
-    `/api/v2/certificate/course/${input.courseId}/student/${encodeURIComponent(input.studentGithubId)}`,
+export async function runIssueCertificate(ctx: ToolContext, input: IssueCertificateInput): Promise<string> {
+  const result = await ctx.client.post<{ studentId: number; courseName: string; studentName: string }>(
+    `/certificate/course/${input.courseId}/student/${encodeURIComponent(input.studentGithubId)}`,
   );
 
   if (!result.ok) {

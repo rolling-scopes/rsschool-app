@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { describeError, type RsappApiClient } from '../api-client.js';
+import { describeError } from '../api-client.js';
+import type { ToolContext } from '../types.js';
 import { certificateCriteriaJsonSchemaProperties, certificateCriteriaSchema } from './certificate-criteria.js';
 
 export const previewEligibleStudentsInputSchema = z.object({
@@ -43,13 +44,10 @@ type PreviewResult = {
 const PREVIEW_DISPLAY_LIMIT = 50;
 
 export async function runPreviewEligibleStudents(
-  client: RsappApiClient,
+  ctx: ToolContext,
   input: PreviewEligibleStudentsInput,
 ): Promise<string> {
-  const result = await client.post<PreviewResult>(
-    `/api/v2/certificate/course/${input.courseId}/eligible`,
-    input.criteria,
-  );
+  const result = await ctx.client.post<PreviewResult>(`/certificate/course/${input.courseId}/eligible`, input.criteria);
   if (!result.ok) {
     return describeError(result.status, result.message);
   }

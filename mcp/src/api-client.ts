@@ -1,7 +1,16 @@
 export type ApiClientConfig = {
   baseUrl: string;
   token: string;
+  /**
+   * Path prefix between the base URL and API paths. Public deployments sit
+   * behind nginx which strips `/api/v2`, so the default is '/api/v2'; when
+   * talking to the NestJS container directly (docker network, localhost) set
+   * it to '' because NestJS serves routes without the prefix.
+   */
+  apiPrefix?: string;
 };
+
+export const DEFAULT_API_PREFIX = '/api/v2';
 
 export type ApiResult<T> = { ok: true; data: T } | { ok: false; status: number; message: string };
 
@@ -17,7 +26,8 @@ export class RsappApiClient {
   }
 
   private async request<T>(method: 'GET' | 'POST', path: string, body?: unknown): Promise<ApiResult<T>> {
-    const url = `${this.config.baseUrl.replace(/\/$/, '')}${path}`;
+    const prefix = this.config.apiPrefix ?? DEFAULT_API_PREFIX;
+    const url = `${this.config.baseUrl.replace(/\/$/, '')}${prefix}${path}`;
     let response: Response;
     try {
       response = await fetch(url, {

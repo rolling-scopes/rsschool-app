@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { describeError, type RsappApiClient } from '../api-client.js';
+import { describeError } from '../api-client.js';
+import type { ToolContext } from '../types.js';
 
 export const listCourseTasksInputSchema = z.object({
   courseId: z.number().int().positive().describe('Numeric ID of the course'),
@@ -30,8 +31,8 @@ type CourseTaskRow = {
   type?: string | null;
 };
 
-export async function runListCourseTasks(client: RsappApiClient, input: ListCourseTasksInput): Promise<string> {
-  const result = await client.get<CourseTaskRow[]>(`/api/v2/courses/${input.courseId}/tasks`);
+export async function runListCourseTasks(ctx: ToolContext, input: ListCourseTasksInput): Promise<string> {
+  const result = await ctx.client.get<CourseTaskRow[]>(`/courses/${input.courseId}/tasks`);
   if (!result.ok) {
     return describeError(result.status, result.message);
   }

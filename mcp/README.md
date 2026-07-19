@@ -7,33 +7,91 @@ The server uses a Personal Access Token (PAT) generated in RS School to call
 the RS School API. The agent inherits the PAT owner's permissions; nothing
 more.
 
+## Role-based tools
+
+On startup (stdio) or on every request (hosted HTTP) the server resolves the
+PAT owner's roles via the RS School session endpoint and advertises **only the
+tools available to those roles**. A student sees student tools, a mentor sees
+mentor tools, admins see everything. Calling a tool outside your role set is
+rejected locally (and would be denied by the backend anyway).
+
+Roles are derived per course: `student` (skipped for courses you were expelled
+from), `mentor`, `manager`, `supervisor`, `dementor`, `taskOwner`, plus the
+app-level `admin`.
+
 ## Available tools
 
-Read-only (no side effects):
+### common — any authenticated user
 
-- `list_my_courses` — list courses the PAT user manages
-- `list_course_tasks` — list tasks of a course (use to look up courseTaskIds)
-- `preview_eligible_students` — preview students that match the criteria, without issuing
-- `search_users` — find users by name, GitHub login, or numeric ID
+| Tool                  | Type | Description                                          |
+| --------------------- | ---- | ---------------------------------------------------- |
+| `list_my_courses`     | read | Courses you participate in, with your roles in each  |
+| `get_my_profile`      | read | Your RS School profile                               |
+| `get_course_schedule` | read | Course schedule; `upcomingOnly` for future deadlines |
+| `list_course_tasks`   | read | Tasks of a course with IDs and max scores            |
 
-Write:
+### student
 
-- `issue_certificate` — issue a certificate to a single student by github login
-- `issue_certificates_bulk` — issue certificates to every student matching the criteria
+| Tool                              | Type  | Description                                  |
+| --------------------------------- | ----- | -------------------------------------------- |
+| `get_my_score`                    | read  | Your score, rank and per-task results        |
+| `submit_task_solution`            | write | Submit/update a solution URL for a task      |
+| `get_my_cross_check_review_stats` | read  | Cross-check reviews you still need to do     |
+| `get_my_cross_check_result`       | read  | Feedback you received for a cross-check task |
+| `get_course_interviews`           | read  | Interview events and registration windows    |
 
-All write actions require the PAT owner to be a course manager of the target
-course, or an admin.
+### mentor
 
-## Typical workflow for bulk issuance
+| Tool                        | Type               | Description                                    |
+| --------------------------- | ------------------ | ---------------------------------------------- |
+| `list_my_students`          | read               | Students assigned to you                       |
+| `get_mentor_dashboard`      | read               | Your review queue and student progress         |
+| `get_student_summary`       | read               | Score/status/mentor summary for a student      |
+| `submit_task_score`         | write              | Submit a score + feedback for a student's task |
+| `get_my_interview_students` | read               | Students assigned to you for stage interviews  |
+| `update_student_status`     | write, destructive | Expel / restore / self-study a student         |
 
-The agent should follow this order before issuing certificates to many
-students:
+### course-management — manager (supervisor/dementor for some), admin
 
-1. `list_my_courses` — pick the course
-2. `list_course_tasks` — find the task IDs the criteria reference
-3. `preview_eligible_students` — show the user the count and list
-4. Wait for explicit confirmation from the user
-5. `issue_certificates_bulk` — actually issue
+| Tool                           | Type               | Description                                  |
+| ------------------------------ | ------------------ | -------------------------------------------- |
+| `preview_eligible_students`    | read               | Preview certificate criteria matches         |
+| `issue_certificate`            | write              | Issue a certificate to one student           |
+| `issue_certificates_bulk`      | write              | Issue certificates to all matching students  |
+| `get_course_stats`             | read               | Aggregate course statistics                  |
+| `list_course_students_details` | read               | Students with score/status/mentor details    |
+| `list_course_mentors_details`  | read               | Mentors with activity details                |
+| `get_mentor_reviews`           | read               | Reviews done by mentors (dementor oversight) |
+| `expel_students`               | write, destructive | Bulk-expel students by criteria              |
+
+### users — manager, admin
+
+| Tool           | Type | Description                            |
+| -------------- | ---- | -------------------------------------- |
+| `search_users` | read | Find users by name, GitHub login or ID |
+
+Write tools always require explicit confirmation from the human user — tool
+descriptions instruct the agent accordingly (e.g. `preview_eligible_students`
+before `issue_certificates_bulk`).
+
+## Toolsets
+
+`RSAPP_TOOLSETS` (optional, comma-separated) narrows the surface further on
+top of role filtering: `common`, `student`, `mentor`, `course-management`,
+`users`.
+
+Examples: `RSAPP_TOOLSETS=common,student` (student profile),
+`RSAPP_TOOLSETS=common,mentor` (mentor profile). Unknown names fail fast with
+the list of valid toolsets.
+
+## Environment variables
+
+| Variable           | Required   | Description                                                                                                          |
+| ------------------ | ---------- | -------------------------------------------------------------------------------------------------------------------- |
+| `RSAPP_BASE_URL`   | yes        | RS School app URL, e.g. `https://app.rs.school`                                                                      |
+| `RSAPP_PAT`        | stdio only | Personal Access Token (`rsapp_pat_…`)                                                                                |
+| `RSAPP_API_PREFIX` | no         | API path prefix, default `/api/v2`. Set to empty when pointing directly at the NestJS container/localhost (no nginx) |
+| `RSAPP_TOOLSETS`   | no         | Comma-separated toolset filter                                                                                       |
 
 ## Generate a PAT
 
@@ -45,9 +103,29 @@ students:
 Admins can also create PATs for service accounts (system users) from the admin
 panel.
 
-## Configure your agent
+## Hosted server (streamable HTTP)
 
-Set two env vars: `RSAPP_BASE_URL` and `RSAPP_PAT`.
+The hosted endpoint is `https://app.rs.school/mcp`. It is stateless: every
+request must carry the PAT in the `Authorization` header; responses are plain
+JSON (no SSE stream). The tool list is computed per request from your roles.
+
+### Claude Desktop / clients with HTTP support
+
+```json
+{
+  "mcpServers": {
+    "rsschool": {
+      "type": "http",
+      "url": "https://app.rs.school/mcp",
+      "headers": {
+        "Authorization": "Bearer rsapp_pat_..."
+      }
+    }
+  }
+}
+```
+
+## Local server (stdio)
 
 ### Claude Desktop
 
@@ -101,6 +179,20 @@ args = ["-y", "@rsschool/mcp-server"]
 RSAPP_BASE_URL = "https://app.rs.school"
 RSAPP_PAT = "rsapp_pat_..."
 ```
+
+## Deployment
+
+The hosted server runs as the `mcp` container next to `client`/`nestjs` in
+`docker-compose.yml`; nginx proxies `location /mcp` to it (rate-limited). It
+talks to NestJS over the internal docker network
+(`RSAPP_BASE_URL=http://nestjs:8080`, `RSAPP_API_PREFIX=` empty because nginx
+is not in the path). The image is built by the `build_mcp` job in
+`.github/workflows/deploy.yaml` and published as
+`ghcr.io/rolling-scopes/rsschool-app-mcp:master`.
+
+Note for stdio sessions: roles are resolved at startup, so a role change (or
+PAT revocation) applies after restart; API calls themselves always re-validate
+the token.
 
 ## Revoke a token
 

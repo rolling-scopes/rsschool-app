@@ -53,6 +53,25 @@ services:
         awslogs-stream: nestjs
         awslogs-create-group: 'true'
 
+  mcp:
+    container_name: mcp
+    image: ghcr.io/rolling-scopes/rsschool-app-mcp:master
+    environment:
+      RSAPP_BASE_URL: http://nestjs:8080
+      RSAPP_API_PREFIX: ''
+    restart: on-failure
+    depends_on:
+      - nestjs
+    networks:
+      - shared-network
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: eu-central-1
+        awslogs-group: rsschool-app
+        awslogs-stream: mcp
+        awslogs-create-group: 'true'
+
   nginx:
     container_name: nginx
     image: nginx:1.21-alpine
@@ -70,6 +89,7 @@ services:
     depends_on:
       - client
       - nestjs
+      - mcp
 
   certbot:
     container_name: certbot
