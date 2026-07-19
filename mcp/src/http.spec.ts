@@ -3,7 +3,7 @@ import type { AddressInfo } from 'node:net';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
-import { createMcpHttpHandler, sendJsonRpcError } from './http.js';
+import { createMcpHttpHandler, dnsRebindingEnabled, sendJsonRpcError } from './http.js';
 
 const STUDENT_PAT = 'rsapp_pat_student1_secret';
 const MANAGER_PAT = 'rsapp_pat_manager1_secret';
@@ -119,5 +119,17 @@ describe('streamable HTTP entrypoint', () => {
       body: JSON.stringify({ jsonrpc: '2.0', method: 'tools/list', id: 1 }),
     });
     expect(response.status).toBe(401);
+  });
+});
+
+describe('dnsRebindingEnabled', () => {
+  it('is off when no allow-list is configured', () => {
+    expect(dnsRebindingEnabled(undefined, undefined)).toBe(false);
+    expect(dnsRebindingEnabled([], [])).toBe(false);
+  });
+
+  it('is on when hosts or origins are configured', () => {
+    expect(dnsRebindingEnabled(['app.rs.school'], undefined)).toBe(true);
+    expect(dnsRebindingEnabled(undefined, ['https://app.rs.school'])).toBe(true);
   });
 });

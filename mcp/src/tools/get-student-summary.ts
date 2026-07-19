@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
 import { toJsonBlock } from '../format.js';
+import { isContactKey, isSecretKey, redactKeys } from '../redact.js';
 import type { ToolContext } from '../types.js';
 
 export const getStudentSummaryInputSchema = z.object({
@@ -35,5 +36,8 @@ export async function runGetStudentSummary(ctx: ToolContext, input: GetStudentSu
     }
     return describeError(result.status, result.message);
   }
-  return toJsonBlock(result.data);
+  // A score/rank summary needs the mentor's identity, not their personal
+  // contacts — drop contact fields (and any secret) before returning.
+  const safe = redactKeys(result.data, key => isSecretKey(key) || isContactKey(key));
+  return toJsonBlock(safe);
 }

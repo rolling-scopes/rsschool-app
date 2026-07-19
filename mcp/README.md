@@ -120,12 +120,20 @@ the list of valid toolsets.
 
 ## Environment variables
 
-| Variable           | Required   | Description                                                                                                          |
-| ------------------ | ---------- | -------------------------------------------------------------------------------------------------------------------- |
-| `RSAPP_BASE_URL`   | yes        | RS School app URL, e.g. `https://app.rs.school`                                                                      |
-| `RSAPP_PAT`        | stdio only | Personal Access Token (`rsapp_pat_…`)                                                                                |
-| `RSAPP_API_PREFIX` | no         | API path prefix, default `/api/v2`. Set to empty when pointing directly at the NestJS container/localhost (no nginx) |
-| `RSAPP_TOOLSETS`   | no         | Comma-separated toolset filter                                                                                       |
+| Variable                | Required   | Description                                                                                                           |
+| ----------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------- |
+| `RSAPP_BASE_URL`        | yes        | RS School app URL, e.g. `https://app.rs.school`                                                                       |
+| `RSAPP_PAT`             | stdio only | Personal Access Token (`rsapp_pat_…`)                                                                                 |
+| `RSAPP_API_PREFIX`      | no         | API path prefix, default `/api/v2`. Set to empty when pointing directly at the NestJS container/localhost (no nginx)  |
+| `RSAPP_TOOLSETS`        | no         | Comma-separated toolset filter                                                                                        |
+| `RSAPP_ALLOWED_HOSTS`   | no         | HTTP server only. Comma-separated `Host` allow-list. Setting this (or origins) enables DNS-rebinding protection       |
+| `RSAPP_ALLOWED_ORIGINS` | no         | HTTP server only. Comma-separated CORS/Origin allow-list. When unset, CORS stays `*` (safe: auth is a non-cookie PAT) |
+
+> **Deployment note:** in `docker-compose.yml` the `mcp` service sets
+> `RSAPP_API_PREFIX=''`, so it talks to NestJS directly and **bypasses the
+> nginx `/api/v2` layer**. Public rate-limiting must therefore be applied at
+> the nginx `/mcp` proxy — verify that rule exists before exposing the endpoint.
+> For production also set `RSAPP_ALLOWED_HOSTS` / `RSAPP_ALLOWED_ORIGINS`.
 
 ## Generate a PAT
 

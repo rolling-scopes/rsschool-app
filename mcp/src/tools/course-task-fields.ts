@@ -8,13 +8,13 @@ export const courseTaskFieldsSchema = {
     .enum(['auto-test', 'mentor', 'assigned', 'taskOwner', 'crossCheck', 'jury'])
     .optional()
     .describe('Who checks the task'),
-  studentStartDate: z.string().optional().describe('ISO date when the task opens'),
-  studentEndDate: z.string().optional().describe('ISO date of the deadline'),
-  crossCheckEndDate: z.string().optional().describe('ISO date of the cross-check deadline'),
+  studentStartDate: z.string().max(64).optional().describe('ISO date when the task opens'),
+  studentEndDate: z.string().max(64).optional().describe('ISO date of the deadline'),
+  crossCheckEndDate: z.string().max(64).optional().describe('ISO date of the cross-check deadline'),
   taskOwnerId: z.number().int().optional().describe('User ID of the task owner'),
   pairsCount: z.number().int().optional().describe('Number of cross-check pairs'),
-  type: z.string().optional().describe('Task type'),
-  submitText: z.string().optional().describe('Text shown on solution submit'),
+  type: z.string().max(200).optional().describe('Task type'),
+  submitText: z.string().max(2000).optional().describe('Text shown on solution submit'),
 };
 
 export const courseTaskFieldsJsonSchemaProperties = {

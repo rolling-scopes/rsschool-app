@@ -19,6 +19,7 @@ export const ISSUE_CERTIFICATE_TOOL = {
       studentGithubId: { type: 'string', minLength: 1, description: 'GitHub login of the student' },
     },
     required: ['courseId', 'studentGithubId'],
+    additionalProperties: false,
   },
 } as const;
 

@@ -37,8 +37,10 @@ export class RoleGuard implements CanActivate {
     }
 
     if (requiredCourseRoles.length) {
-      if (requireCourseMatch && params.courseId) {
-        return checkUserHasCourseRole(requiredCourseRoles, user, Number(params.courseId));
+      if (requireCourseMatch) {
+        // A course-scoped route must resolve a courseId; never silently fall
+        // back to the any-course check (that is the cross-course IDOR).
+        return params.courseId ? checkUserHasCourseRole(requiredCourseRoles, user, Number(params.courseId)) : false;
       }
 
       return checkUserHasRoleInAnyCourse(requiredCourseRoles, user);

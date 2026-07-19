@@ -6,8 +6,11 @@ export const submitInterviewFeedbackInputSchema = z.object({
   courseId: z.number().int().positive().describe('Numeric ID of the course'),
   interviewId: z.number().int().positive().describe('Numeric ID of the stage interview pair'),
   version: z.number().int().nonnegative().describe('Feedback form version (see get_interview_feedback)'),
-  json: z.record(z.unknown()).describe('Feedback form answers as a JSON object'),
-  decision: z.string().optional().describe('Decision, e.g. "yes", "no", "draft"'),
+  json: z
+    .record(z.unknown())
+    .refine(value => JSON.stringify(value).length <= 20000, 'Feedback JSON is too large (max 20000 characters)')
+    .describe('Feedback form answers as a JSON object'),
+  decision: z.string().max(200).optional().describe('Decision, e.g. "yes", "no", "draft"'),
   isGoodCandidate: z.boolean().optional().describe('Whether the student is a good candidate'),
   isCompleted: z.boolean().optional().describe('Mark the feedback as completed'),
 });

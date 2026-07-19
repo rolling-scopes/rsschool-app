@@ -64,6 +64,25 @@ export function satisfiesRoles(binding: ToolBinding, user: ResolvedUser): boolea
   return binding.roles.some(role => user.roles.has(role));
 }
 
+/**
+ * Defense-in-depth per-course check for course-scoped tools. `satisfiesRoles`
+ * only proves the user holds a required role in *some* course (the union set);
+ * a tool acting on a specific `courseId` must additionally verify the role is
+ * held in *that* course, otherwise a manager of course A could act on course B.
+ * Admin bypasses; an empty `roles` list means any membership in the course is
+ * enough.
+ */
+export function hasCourseRole(user: ResolvedUser, courseId: number, roles: readonly ToolRole[]): boolean {
+  if (user.isAdmin) {
+    return true;
+  }
+  const membership = user.courses.find(course => course.courseId === courseId);
+  if (!membership) {
+    return false;
+  }
+  return roles.length === 0 || roles.some(role => membership.roles.includes(role));
+}
+
 export function parseToolsets(raw: string | undefined): Toolset[] | undefined {
   if (raw === undefined || raw.trim() === '') {
     return undefined;

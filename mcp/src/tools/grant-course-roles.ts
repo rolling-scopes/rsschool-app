@@ -33,6 +33,16 @@ export const GRANT_COURSE_ROLES_TOOL = {
 } as const;
 
 export async function runGrantCourseRoles(ctx: ToolContext, input: GrantCourseRolesInput): Promise<string> {
+  // The backend PUT replaces the whole role set, so a call that names no role
+  // flags would silently revoke every role. Require at least one to be explicit.
+  if (
+    input.isManager === undefined &&
+    input.isSupervisor === undefined &&
+    input.isDementor === undefined &&
+    input.isActivist === undefined
+  ) {
+    return 'Specify at least one role flag (isManager/isSupervisor/isDementor/isActivist); this replaces the full role set, so an empty call would revoke every role.';
+  }
   const roles = {
     isManager: input.isManager ?? false,
     isSupervisor: input.isSupervisor ?? false,

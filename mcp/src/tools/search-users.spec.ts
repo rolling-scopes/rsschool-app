@@ -10,10 +10,16 @@ describe('search_users', () => {
     expect(text).toContain('octo — Octo Cat (id=1)');
   });
 
-  it('passes includeSystem flag', async () => {
-    const { ctx, calls } = makeCtx({ get: () => apiOk([]) });
+  it('passes includeSystem flag for an admin', async () => {
+    const { ctx, calls } = makeCtx({ get: () => apiOk([]), user: { isAdmin: true } });
     await runSearchUsers(ctx, { query: 'bot', includeSystem: true });
     expect(calls[0]?.path).toBe('/users/search?query=bot&includeSystem=true');
+  });
+
+  it('rejects includeSystem for a non-admin without calling the API', async () => {
+    const { ctx, calls } = makeCtx({ get: () => apiOk([]) });
+    expect(await runSearchUsers(ctx, { query: 'bot', includeSystem: true })).toContain('admin-only');
+    expect(calls).toEqual([]);
   });
 
   it('renders users without a name', async () => {

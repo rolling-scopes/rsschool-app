@@ -118,8 +118,8 @@ export class CoursesController {
   @ApiOperation({ operationId: 'copyCourse' })
   @ApiBody({ type: CreateCourseDto, required: true })
   @UseGuards(DefaultGuard, RoleGuard)
-  @RequiredRoles([CourseRole.Manager, Role.Admin])
-  public async copyCourse(@Param('courseId') courseId: number, @Body() body: CreateCourseDto) {
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  public async copyCourse(@Param('courseId', ParseIntPipe) courseId: number, @Body() body: CreateCourseDto) {
     const created = await this.courseService.create(body);
     if (created.id) {
       await this.courseScheduleService.copyFromTo(courseId, created.id);

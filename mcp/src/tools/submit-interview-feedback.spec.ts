@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { apiFail, apiOk, makeCtx } from '../test-utils.js';
-import { runSubmitInterviewFeedback } from './submit-interview-feedback.js';
+import { runSubmitInterviewFeedback, submitInterviewFeedbackInputSchema } from './submit-interview-feedback.js';
 
 describe('submit_interview_feedback', () => {
   it('posts the feedback payload', async () => {
@@ -28,5 +28,12 @@ describe('submit_interview_feedback', () => {
     const { ctx } = makeCtx({ post: () => apiFail(403, 'You are not a mentor of course 5') });
     const text = await runSubmitInterviewFeedback(ctx, { courseId: 5, interviewId: 9, version: 0, json: {} });
     expect(text).toContain('Permission denied');
+  });
+
+  it('accepts a reasonably-sized feedback json but rejects an oversized one', () => {
+    const base = { courseId: 5, interviewId: 9, version: 0 };
+    expect(submitInterviewFeedbackInputSchema.safeParse({ ...base, json: { q1: 'ok' } }).success).toBe(true);
+    const oversized = submitInterviewFeedbackInputSchema.safeParse({ ...base, json: { blob: 'x'.repeat(20001) } });
+    expect(oversized.success).toBe(false);
   });
 });

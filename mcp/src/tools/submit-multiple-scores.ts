@@ -9,13 +9,14 @@ export const submitMultipleScoresInputSchema = z.object({
   scores: z
     .array(
       z.object({
-        studentGithubId: z.string().min(1).describe('GitHub login of the student'),
+        studentGithubId: z.string().min(1).max(100).describe('GitHub login of the student'),
         score: z.number().describe('Score to assign'),
-        comment: z.string().optional().describe('Feedback comment'),
-        githubPrUrl: z.string().url().optional().describe('URL of the reviewed pull request'),
+        comment: z.string().max(2000).optional().describe('Feedback comment'),
+        githubPrUrl: z.string().url().max(2048).optional().describe('URL of the reviewed pull request'),
       }),
     )
     .min(1)
+    .max(1000)
     .describe('Scores to submit, one entry per student'),
 });
 

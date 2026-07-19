@@ -1,7 +1,13 @@
-import { createServer, type Server as HttpServer } from 'node:http';
+import { createServer, type IncomingMessage, type Server as HttpServer, type ServerResponse } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
-import { createRequestListener, type McpRequestHandler } from './http-server.js';
+import {
+  applyCors,
+  createRequestListener,
+  parseCsvList,
+  resolveAllowOrigin,
+  type McpRequestHandler,
+} from './http-server.js';
 
 let server: HttpServer;
 let baseUrl: string;
@@ -121,5 +127,63 @@ describe('createRequestListener', () => {
     expect(response.status).toBe(400);
     const payload = (await response.json()) as { error: { message: string } };
     expect(payload.error.message).toBe('Bad request');
+  });
+});
+
+describe('resolveAllowOrigin', () => {
+  it("returns '*' when no allow-list is configured", () => {
+    expect(resolveAllowOrigin('https://evil.example', undefined)).toBe('*');
+    expect(resolveAllowOrigin(undefined, [])).toBe('*');
+  });
+
+  it('reflects an allowed origin', () => {
+    expect(resolveAllowOrigin('https://app.rs.school', ['https://app.rs.school'])).toBe('https://app.rs.school');
+  });
+
+  it('returns undefined for a disallowed or missing origin', () => {
+    expect(resolveAllowOrigin('https://evil.example', ['https://app.rs.school'])).toBeUndefined();
+    expect(resolveAllowOrigin(undefined, ['https://app.rs.school'])).toBeUndefined();
+  });
+});
+
+describe('parseCsvList', () => {
+  it('returns undefined for empty or blank input', () => {
+    expect(parseCsvList(undefined)).toBeUndefined();
+    expect(parseCsvList('')).toBeUndefined();
+    expect(parseCsvList(' , ,')).toBeUndefined();
+  });
+
+  it('parses, trims and drops empty items', () => {
+    expect(parseCsvList(' a , b ,,c ')).toEqual(['a', 'b', 'c']);
+  });
+});
+
+describe('applyCors', () => {
+  function capture() {
+    const headers: Record<string, unknown> = {};
+    const res = { setHeader: (key: string, value: unknown) => void (headers[key] = value) };
+    return { headers, res: res as unknown as ServerResponse };
+  }
+  const reqWith = (origin?: string) => ({ headers: origin ? { origin } : {} }) as unknown as IncomingMessage;
+
+  it("defaults to '*' with no allow-list and sets no Vary", () => {
+    const { headers, res } = capture();
+    applyCors(reqWith('https://evil.example'), res, undefined);
+    expect(headers['Access-Control-Allow-Origin']).toBe('*');
+    expect(headers['Vary']).toBeUndefined();
+  });
+
+  it('reflects an allowed origin and sets Vary', () => {
+    const { headers, res } = capture();
+    applyCors(reqWith('https://app.rs.school'), res, ['https://app.rs.school']);
+    expect(headers['Access-Control-Allow-Origin']).toBe('https://app.rs.school');
+    expect(headers['Vary']).toBe('Origin');
+  });
+
+  it('omits the allow-origin header for a disallowed origin', () => {
+    const { headers, res } = capture();
+    applyCors(reqWith('https://evil.example'), res, ['https://app.rs.school']);
+    expect(headers['Access-Control-Allow-Origin']).toBeUndefined();
+    expect(headers['Access-Control-Allow-Methods']).toContain('POST');
   });
 });

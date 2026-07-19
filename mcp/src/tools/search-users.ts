@@ -35,6 +35,11 @@ type UserRow = {
 
 export async function runSearchUsers(ctx: ToolContext, input: SearchUsersInput): Promise<string> {
   const params = new URLSearchParams({ query: input.query });
+  // `includeSystem` exposes system/service accounts — admin-only. Enforce it
+  // here rather than trusting the backend, since the tool is granted to managers.
+  if (input.includeSystem && !ctx.user.isAdmin) {
+    return 'Not authorized: includeSystem is admin-only.';
+  }
   if (input.includeSystem) params.set('includeSystem', 'true');
   const result = await ctx.client.get<UserRow[]>(`/users/search?${params.toString()}`);
   if (!result.ok) {

@@ -7,7 +7,7 @@ export const submitTaskScoreInputSchema = z.object({
   githubId: z.string().min(1).describe('GitHub login of the student being scored'),
   courseTaskId: z.number().int().positive().describe('Numeric ID of the course task (see list_course_tasks)'),
   score: z.number().describe('Score to assign'),
-  comment: z.string().optional().describe('Feedback comment for the student'),
+  comment: z.string().max(20000).optional().describe('Feedback comment for the student'),
   githubPrUrl: z.string().url().optional().describe('URL of the reviewed pull request, if any'),
 });
 

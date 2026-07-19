@@ -12,10 +12,24 @@ export type McpHttpConfig = {
   toolsets?: Toolset[];
   /** TTL of the per-token role cache, ms. 0 disables caching. */
   userCacheTtlMs?: number;
+  /**
+   * Host allow-list for DNS-rebinding protection (matched against the `Host`
+   * header). When either this or `allowedOrigins` is non-empty, the transport
+   * enables DNS-rebinding protection. Empty/undefined = protection off (local
+   * dev / trusted network).
+   */
+  allowedHosts?: string[];
+  /** Origin allow-list for the transport's Origin check (browser clients). */
+  allowedOrigins?: string[];
 };
 
 const DEFAULT_USER_CACHE_TTL_MS = 60_000;
 const USER_CACHE_MAX_ENTRIES = 500;
+
+/** DNS-rebinding protection turns on once any host/origin allow-list is set. */
+export function dnsRebindingEnabled(allowedHosts?: string[], allowedOrigins?: string[]): boolean {
+  return Boolean(allowedHosts?.length || allowedOrigins?.length);
+}
 
 type CacheEntry = { user: ResolvedUser; expiresAt: number };
 
@@ -87,6 +101,12 @@ export function createMcpHttpHandler(config: McpHttpConfig) {
     const transport = new StreamableHTTPServerTransport({
       sessionIdGenerator: undefined,
       enableJsonResponse: true,
+      // Protect against DNS-rebinding: reject requests whose Host/Origin is not
+      // in the allow-list. Only active once at least one list is configured, so
+      // local/trusted-network deployments are unaffected.
+      enableDnsRebindingProtection: dnsRebindingEnabled(config.allowedHosts, config.allowedOrigins),
+      allowedHosts: config.allowedHosts,
+      allowedOrigins: config.allowedOrigins,
     });
     res.on('close', () => {
       void transport.close();

@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import type { ApiResult, RsappApiClient } from './api-client.js';
-import { filterTools, parseToolsets, resolveUser, satisfiesRoles } from './roles.js';
-import type { ResolvedUser, ToolBinding, ToolRole } from './types.js';
+import { filterTools, hasCourseRole, parseToolsets, resolveUser, satisfiesRoles } from './roles.js';
+import type { CourseMembership, ResolvedUser, ToolBinding, ToolRole } from './types.js';
 
 function fakeClient(session: unknown, ok = true): RsappApiClient {
   return {
@@ -115,6 +115,34 @@ describe('satisfiesRoles / filterTools', () => {
   it('toolsets narrow the selection further', () => {
     const tools = filterTools(registry, makeUser(['admin'], true), ['student']).map(b => b.tool.name);
     expect(tools).toEqual(['student_tool']);
+  });
+});
+
+describe('hasCourseRole', () => {
+  function userWith(courses: CourseMembership[], isAdmin = false): ResolvedUser {
+    return { id: 1, githubId: 'octo', isAdmin, roles: new Set(), courses };
+  }
+
+  it('admin passes for any course', () => {
+    expect(hasCourseRole(userWith([], true), 5, ['manager'])).toBe(true);
+  });
+
+  it('denies when the user has no membership in the course', () => {
+    expect(hasCourseRole(userWith([{ courseId: 1, roles: ['manager'] }]), 5, ['manager'])).toBe(false);
+  });
+
+  it('requires the role in that specific course', () => {
+    const user = userWith([
+      { courseId: 1, roles: ['manager'] },
+      { courseId: 2, roles: ['student'] },
+    ]);
+    expect(hasCourseRole(user, 1, ['manager'])).toBe(true);
+    // manager in course 1 must NOT satisfy a manager requirement for course 2
+    expect(hasCourseRole(user, 2, ['manager'])).toBe(false);
+  });
+
+  it('treats an empty role list as "any membership"', () => {
+    expect(hasCourseRole(userWith([{ courseId: 3, roles: ['student'] }]), 3, [])).toBe(true);
   });
 });
 

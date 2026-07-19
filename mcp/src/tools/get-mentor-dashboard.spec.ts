@@ -23,7 +23,7 @@ describe('get_mentor_dashboard', () => {
   });
 
   it('surfaces API errors', async () => {
-    const { ctx } = makeCtx({ get: () => apiFail(500, 'oops'), user: MENTOR_USER });
+    const { ctx } = makeCtx({ get: () => apiFail(400, 'oops'), user: MENTOR_USER });
     expect(await runGetMentorDashboard(ctx, { courseId: 5 })).toContain('oops');
   });
 });

@@ -42,8 +42,25 @@ export class CourseStudentsController {
   @ApiOkResponse({
     type: StudentSummaryDto,
   })
+  @UseGuards(CourseGuard)
   @ApiOperation({ operationId: 'getStudentSummary' })
-  public async getStudentSummary(@Param('courseId') courseId: number, @Param('githubId') githubId: string) {
+  public async getStudentSummary(
+    @Req() req: CurrentRequest,
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('githubId') githubId: string,
+  ) {
+    // Course membership is enforced by CourseGuard. Within the course, only
+    // staff may read another student's summary; a student may read their own.
+    const user = req.user;
+    const isStaff =
+      isAdmin(user) ||
+      isManager(user, courseId) ||
+      isSupervisor(user, courseId) ||
+      isMentor(user, courseId) ||
+      Boolean(user.courses[courseId]?.roles.includes(CourseRole.Dementor));
+    if (!isStaff && user.githubId !== githubId) {
+      throw new ForbiddenException();
+    }
     const student = await this.courseStudentService.getStudentByGithubId(courseId, githubId);
 
     if (student === null) {
@@ -79,6 +96,9 @@ export class CourseStudentsController {
   @Get('/search/:searchText')
   @ApiOperation({ operationId: 'searchCourseStudents' })
   @ApiOkResponse({ schema: { type: 'array', items: { type: 'object' } } })
+  @ApiForbiddenResponse()
+  @UseGuards(RoleGuard)
+  @RequiredRoles([CourseRole.Mentor, CourseRole.Supervisor, CourseRole.Manager, CourseRole.Dementor, Role.Admin], true)
   public async searchCourseStudents(
     @Param('courseId', ParseIntPipe) courseId: number,
     @Param('searchText') searchText: string,
@@ -229,8 +249,11 @@ export class CourseStudentsController {
   @Post('expel')
   @ApiOperation({ operationId: 'expelStudents' })
   @UseGuards(RoleGuard)
-  @RequiredRoles([Role.Admin, CourseRole.Manager])
-  public async expelStudents(@Param('courseId') courseId: number, @Body() expelStatusDto: ExpelStatusDto) {
+  @RequiredRoles([Role.Admin, CourseRole.Manager], true)
+  public async expelStudents(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Body() expelStatusDto: ExpelStatusDto,
+  ) {
     return this.courseStudentService.expelStudents({
       courseId,
       expelStatusDto,

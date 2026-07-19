@@ -7,7 +7,7 @@ export const createInterviewResultInputSchema = z.object({
   courseTaskId: z.number().int().positive().describe('Numeric ID of the interview course task'),
   studentGithubId: z.string().min(1).describe('GitHub login of the interviewed student'),
   score: z.number().describe('Interview score'),
-  comment: z.string().optional().describe('Interview comment'),
+  comment: z.string().max(20000).optional().describe('Interview comment'),
 });
 
 export type CreateInterviewResultInput = z.infer<typeof createInterviewResultInputSchema>;

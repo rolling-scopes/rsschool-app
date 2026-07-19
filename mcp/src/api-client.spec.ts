@@ -119,7 +119,14 @@ describe('describeError', () => {
     expect(describeError(0, 'ECONNREFUSED')).toBe('Network error: ECONNREFUSED');
   });
 
-  it('falls back to a generic message', () => {
-    expect(describeError(500, 'boom')).toBe('Request failed (HTTP 500): boom');
+  it('collapses 5xx bodies to a generic server-error message', () => {
+    const described = describeError(500, 'stack trace: at Foo.bar (/app/x.js:1:1)');
+    expect(described).toContain('server error (HTTP 500)');
+    expect(described).not.toContain('stack trace');
+    expect(describeError(503, 'anything')).toContain('server error (HTTP 503)');
+  });
+
+  it('falls back to a generic message for an un-hinted 4xx', () => {
+    expect(describeError(418, 'boom')).toBe('Request failed (HTTP 418): boom');
   });
 });

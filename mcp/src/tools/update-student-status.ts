@@ -6,7 +6,7 @@ export const updateStudentStatusInputSchema = z.object({
   courseId: z.number().int().positive().describe('Numeric ID of the course'),
   githubId: z.string().min(1).describe('GitHub login of the student'),
   status: z.enum(['expelled', 'active', 'self-study']).describe('New status for the student'),
-  comment: z.string().optional().describe('Reason for the status change'),
+  comment: z.string().max(20000).optional().describe('Reason for the status change'),
 });
 
 export type UpdateStudentStatusInput = z.infer<typeof updateStudentStatusInputSchema>;

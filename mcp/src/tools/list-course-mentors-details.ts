@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
 import { toJsonBlock } from '../format.js';
+import { redactSecrets } from '../redact.js';
 import type { ToolContext } from '../types.js';
 
 export const listCourseMentorsDetailsInputSchema = z.object({
@@ -40,7 +41,7 @@ export async function runListCourseMentorsDetails(
     return `Course ${input.courseId} has no mentors.`;
   }
   const limit = input.limit ?? DEFAULT_LIMIT;
-  const shown = result.data.slice(0, limit);
+  const shown = redactSecrets(result.data.slice(0, limit));
   const suffix = total > shown.length ? `\n…and ${total - shown.length} more (raise "limit" to see them)` : '';
   return [`${total} mentor(s), showing ${shown.length}:`, toJsonBlock(shown)].join('\n') + suffix;
 }

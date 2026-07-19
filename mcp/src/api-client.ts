@@ -82,8 +82,11 @@ const STATUS_HINTS: Record<number, string> = {
 };
 
 export function describeError(status: number, message: string): string {
-  const hint = STATUS_HINTS[status];
   if (status === 0) return `Network error: ${message}`;
+  // Don't surface backend 5xx bodies (stack traces / internal detail) to the
+  // caller/model — collapse them to a generic message.
+  if (status >= 500) return `The RS School API returned a server error (HTTP ${status}). Please retry later.`;
+  const hint = STATUS_HINTS[status];
   if (hint) return `${hint} (HTTP ${status}). Detail: ${message}`;
   return `Request failed (HTTP ${status}): ${message}`;
 }

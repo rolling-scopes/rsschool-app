@@ -7,7 +7,7 @@ export const submitCrossCheckReviewInputSchema = z.object({
   courseTaskId: z.number().int().positive().describe('Numeric ID of the cross-check course task'),
   studentGithubId: z.string().min(1).describe('GitHub login of the student whose solution is being reviewed'),
   score: z.number().describe('Score to give for the solution'),
-  comment: z.string().min(1).describe('Review comment for the author'),
+  comment: z.string().min(1).max(20000).describe('Review comment for the author'),
   anonymous: z.boolean().optional().describe('Hide the reviewer identity from the author'),
 });
 

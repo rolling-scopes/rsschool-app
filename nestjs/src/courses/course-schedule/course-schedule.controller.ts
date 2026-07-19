@@ -51,7 +51,7 @@ export class CourseScheduleController {
   @ApiOperation({ operationId: 'copySchedule' })
   @ApiBody({ type: CourseCopyFromDto, required: true })
   @UseGuards(DefaultGuard, RoleGuard)
-  @RequiredRoles([CourseRole.Manager, Role.Admin])
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
   public async copyFrom(
     @Param('courseId', ParseIntPipe) copyToCourseId: number,
     @Body() body: CourseCopyFromDto,
