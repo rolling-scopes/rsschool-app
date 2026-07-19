@@ -210,6 +210,31 @@ export class CourseTasksService {
     });
   }
 
+  public getCrossCheckTasksPendingDeadline(
+    courseId: number,
+    { deadlineWithinHours = 24, safeBuffer = 1 }: { deadlineWithinHours?: number; safeBuffer?: number } = {},
+  ) {
+    const now = new Date();
+    const endDate = addHours(now, deadlineWithinHours).toISOString();
+
+    const where: FindOptionsWhere<CourseTask> = {
+      courseId,
+      disabled: false,
+      checker: Checker.CrossCheck,
+      crossCheckStatus: CrossCheckStatus.Distributed,
+      studentStartDate: LessThanOrEqual(now.toISOString()),
+      crossCheckEndDate: Between(addHours(now, safeBuffer).toISOString(), endDate),
+    };
+
+    return this.courseTaskRepository.find({
+      where,
+      relations: ['task'],
+      order: {
+        crossCheckEndDate: 'ASC',
+      },
+    });
+  }
+
   public createCourseTask(courseEvent: Partial<CourseTask>) {
     return this.courseTaskRepository.insert(courseEvent);
   }

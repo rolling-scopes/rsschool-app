@@ -43,4 +43,32 @@ export class TasksController {
         }),
     );
   }
+
+  @Post('/notify/cross-check')
+  @ApiOperation({ operationId: 'notifyCrossCheckDeadlines' })
+  @ApiForbiddenResponse()
+  @RequiredRoles([Role.Admin])
+  public async notifyCrossCheckDeadlines(@Body() dto: CheckTasksDeadlineDto) {
+    const students = await this.tasksService.getPendingCrossCheckDeadline(dto.deadlineInHours);
+
+    Promise.resolve().then(
+      () =>
+        // eslint-disable-next-line no-async-promise-executor
+        new Promise(async () => {
+          this.logger.log({ message: 'processing cross-check deadline notifications...' });
+
+          for (const [userId, tasks] of students) {
+            try {
+              await this.notificationService.sendEventNotification({
+                data: { tasks },
+                notificationId: 'crossCheckDeadline',
+                userId,
+              });
+            } catch (e) {
+              this.logger.log({ message: (e as Error).message, userId });
+            }
+          }
+        }),
+    );
+  }
 }

@@ -251,6 +251,35 @@ describe('CourseTasksService', () => {
     });
   });
 
+  describe('getCrossCheckTasksPendingDeadline', () => {
+    it('filters active distributed cross-check tasks within the crossCheckEndDate window', async () => {
+      courseTaskRepository.find.mockResolvedValue([]);
+
+      await service.getCrossCheckTasksPendingDeadline(5);
+
+      const args = courseTaskRepository.find.mock.calls[0][0];
+      expect(args.where).toMatchObject({
+        courseId: 5,
+        disabled: false,
+        checker: Checker.CrossCheck,
+        crossCheckStatus: CrossCheckStatus.Distributed,
+      });
+      expect(args.where.studentStartDate).toEqual(LessThanOrEqual(expect.any(String)));
+      expect(args.where.crossCheckEndDate).toEqual(Between(expect.any(String), expect.any(String)));
+      expect(args.relations).toEqual(['task']);
+      expect(args.order).toEqual({ crossCheckEndDate: 'ASC' });
+    });
+
+    it('honours custom deadlineWithinHours and safeBuffer options', async () => {
+      courseTaskRepository.find.mockResolvedValue([]);
+
+      await service.getCrossCheckTasksPendingDeadline(5, { deadlineWithinHours: 48, safeBuffer: 2 });
+
+      const where = courseTaskRepository.find.mock.calls[0][0].where;
+      expect(where.crossCheckEndDate).toEqual(Between(expect.any(String), expect.any(String)));
+    });
+  });
+
   describe('createCourseTask', () => {
     it('inserts the course task', async () => {
       const payload = { courseId: 5, taskId: 1 };

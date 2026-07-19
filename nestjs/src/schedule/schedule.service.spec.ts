@@ -3,6 +3,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from '@entities/user';
 import { History } from '@entities/history';
 import { CourseEvent } from '@entities/courseEvent';
+import { CrossCheckStatus } from '@entities/courseTask';
 import { CoursesService } from 'src/courses/courses.service';
 import { ScheduleService } from './schedule.service';
 
@@ -187,22 +188,24 @@ describe('ScheduleService', () => {
         expect(result).toEqual({ crossCheckEndDate: '2024-02-15', crossCheckEndDateOld: '2024-01-15' });
       });
 
-      it('returns an empty object when no task date changed', () => {
+      it('returns undefined when no task date changed and the status is unchanged', () => {
         const result = service.getUpdatedFields(
           'course_task',
           {
             studentStartDate: '2024-01-01',
             studentEndDate: '2024-01-10',
             crossCheckEndDate: '2024-01-15',
+            crossCheckStatus: CrossCheckStatus.Distributed,
           } as never,
           {
             studentStartDate: '2024-01-01',
             studentEndDate: '2024-01-10',
             crossCheckEndDate: '2024-01-15',
+            crossCheckStatus: CrossCheckStatus.Distributed,
           } as never,
         );
 
-        expect(result).toEqual({});
+        expect(result).toBeUndefined();
       });
 
       it('treats two null dates as equal and reports no change', () => {
@@ -220,7 +223,81 @@ describe('ScheduleService', () => {
           } as never,
         );
 
-        expect(result).toEqual({});
+        expect(result).toBeUndefined();
+      });
+
+      it('reports a cross-check started transition (initial -> distributed) with no date change', () => {
+        const result = service.getUpdatedFields(
+          'course_task',
+          {
+            studentStartDate: '2024-01-01',
+            studentEndDate: '2024-01-10',
+            crossCheckEndDate: '2024-01-15',
+            crossCheckStatus: CrossCheckStatus.Distributed,
+          } as never,
+          {
+            studentStartDate: '2024-01-01',
+            studentEndDate: '2024-01-10',
+            crossCheckEndDate: '2024-01-15',
+            crossCheckStatus: CrossCheckStatus.Initial,
+          } as never,
+        );
+
+        expect(result).toEqual({ isCrossCheckStarted: true });
+      });
+
+      it('reports a cross-check completed transition (distributed -> completed) with no date change', () => {
+        const result = service.getUpdatedFields(
+          'course_task',
+          {
+            studentStartDate: '2024-01-01',
+            studentEndDate: '2024-01-10',
+            crossCheckEndDate: '2024-01-15',
+            crossCheckStatus: CrossCheckStatus.Completed,
+          } as never,
+          {
+            studentStartDate: '2024-01-01',
+            studentEndDate: '2024-01-10',
+            crossCheckEndDate: '2024-01-15',
+            crossCheckStatus: CrossCheckStatus.Distributed,
+          } as never,
+        );
+
+        expect(result).toEqual({ isCrossCheckCompleted: true });
+      });
+
+      it('does not surface unknown/backward status transitions (completed -> distributed)', () => {
+        const result = service.getUpdatedFields(
+          'course_task',
+          { crossCheckStatus: CrossCheckStatus.Distributed } as never,
+          { crossCheckStatus: CrossCheckStatus.Completed } as never,
+        );
+
+        expect(result).toBeUndefined();
+      });
+
+      it('merges a date change with a cross-check transition in one update', () => {
+        const result = service.getUpdatedFields(
+          'course_task',
+          {
+            studentStartDate: '2024-01-01',
+            studentEndDate: '2024-02-10',
+            crossCheckEndDate: '2024-01-15',
+            crossCheckStatus: CrossCheckStatus.Distributed,
+          } as never,
+          {
+            studentStartDate: '2024-01-01',
+            studentEndDate: '2024-01-10',
+            crossCheckEndDate: '2024-01-15',
+            crossCheckStatus: CrossCheckStatus.Initial,
+          } as never,
+        );
+
+        expect(result).toEqual({
+          studentEndDate: '2024-02-10',
+          studentEndDateOld: '2024-01-10',
+          isCrossCheckStarted: true,
+        });
       });
 
       it('coerces missing previous dates to undefined in every old field', () => {
@@ -465,7 +542,7 @@ describe('ScheduleService', () => {
       expect(changes[0]).toMatchObject({ isNew: true, place: 'New', placeOld: 'Old' });
     });
 
-    it('ignores records with an unrecognized operation', async () => {
+    it('ignores records with an unrecognized operation, leaving no course to notify', async () => {
       const unknownRecord = {
         operation: 'unknown',
         entityId: 100,
@@ -475,13 +552,71 @@ describe('ScheduleService', () => {
       } as unknown as History;
       historyRepository.createQueryBuilder.mockReturnValue(makeQb('getMany', [unknownRecord]));
       courseEventRepository.query.mockResolvedValue([{ id: 200, name: 'Task 200', type: 'task' }]);
+      courseService.getByIds.mockResolvedValue([]);
+      userRepository.createQueryBuilder.mockReturnValue(makeQb('getRawMany', [{ id: 42, aliases: ['course-a'] }]));
+
+      const result = await service.getChangedCoursesRecipients(2);
+
+      // the empty course bucket is pruned, so getByIds is queried with no ids and nobody is notified
+      expect(courseService.getByIds).toHaveBeenCalledWith([], expect.any(Object));
+      expect(result).toEqual([]);
+    });
+
+    it('drops a cross-check status-only no-op update (no phantom "is updated")', async () => {
+      const noopRecord = {
+        operation: 'update',
+        entityId: 100,
+        event: 'course_task',
+        update: {
+          courseId: 5,
+          taskId: 200,
+          studentEndDate: '2024-01-10',
+          crossCheckStatus: CrossCheckStatus.Distributed,
+        },
+        previous: {
+          courseId: 5,
+          taskId: 200,
+          studentEndDate: '2024-01-10',
+          crossCheckStatus: CrossCheckStatus.Distributed,
+        },
+      } as unknown as History;
+      historyRepository.createQueryBuilder.mockReturnValue(makeQb('getMany', [noopRecord]));
+      courseEventRepository.query.mockResolvedValue([{ id: 200, name: 'Task 200', type: 'task' }]);
+      courseService.getByIds.mockResolvedValue([]);
+      userRepository.createQueryBuilder.mockReturnValue(makeQb('getRawMany', [{ id: 42, aliases: ['course-a'] }]));
+
+      const result = await service.getChangedCoursesRecipients(2);
+
+      expect(courseService.getByIds).toHaveBeenCalledWith([], expect.any(Object));
+      expect(result).toEqual([]);
+    });
+
+    it('emits a cross-check started marker when the status moves initial -> distributed', async () => {
+      const startedRecord = {
+        operation: 'update',
+        entityId: 100,
+        event: 'course_task',
+        update: {
+          courseId: 5,
+          taskId: 200,
+          studentEndDate: '2024-01-10',
+          crossCheckStatus: CrossCheckStatus.Distributed,
+        },
+        previous: {
+          courseId: 5,
+          taskId: 200,
+          studentEndDate: '2024-01-10',
+          crossCheckStatus: CrossCheckStatus.Initial,
+        },
+      } as unknown as History;
+      historyRepository.createQueryBuilder.mockReturnValue(makeQb('getMany', [startedRecord]));
+      courseEventRepository.query.mockResolvedValue([{ id: 200, name: 'Task 200', type: 'task' }]);
       courseService.getByIds.mockResolvedValue([{ id: 5, alias: 'course-a', name: 'Course A', completed: false }]);
       userRepository.createQueryBuilder.mockReturnValue(makeQb('getRawMany', [{ id: 42, aliases: ['course-a'] }]));
 
       const result = await service.getChangedCoursesRecipients(2);
 
-      // course bucket exists (courseId tracked) but no change was recorded
-      expect(result[0][1][0].changes).toEqual([]);
+      expect(result[0][1][0].changes[0]).toMatchObject({ isCrossCheckStarted: true, type: 'task', name: 'Task 200' });
     });
 
     it('defaults the change name to an empty string when no task/event entry is found', async () => {
