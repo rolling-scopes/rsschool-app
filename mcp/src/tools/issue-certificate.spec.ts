@@ -30,4 +30,14 @@ describe('issue_certificate', () => {
     const { ctx } = makeCtx({ post: () => apiFail(403) });
     expect(await runIssueCertificate(ctx, { courseId: 5, studentGithubId: 'octo' })).toContain('Permission denied');
   });
+
+  it('maps 401 to an authentication message', async () => {
+    const { ctx } = makeCtx({ post: () => apiFail(401) });
+    expect(await runIssueCertificate(ctx, { courseId: 5, studentGithubId: 'octo' })).toContain('Authentication failed');
+  });
+
+  it('reports other statuses generically', async () => {
+    const { ctx } = makeCtx({ post: () => apiFail(500, 'oops') });
+    expect(await runIssueCertificate(ctx, { courseId: 5, studentGithubId: 'octo' })).toContain('HTTP 500');
+  });
 });

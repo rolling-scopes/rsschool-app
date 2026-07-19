@@ -23,12 +23,14 @@ app-level `admin`.
 
 ### common — any authenticated user
 
-| Tool                  | Type | Description                                          |
-| --------------------- | ---- | ---------------------------------------------------- |
-| `list_my_courses`     | read | Courses you participate in, with your roles in each  |
-| `get_my_profile`      | read | Your RS School profile                               |
-| `get_course_schedule` | read | Course schedule; `upcomingOnly` for future deadlines |
-| `list_course_tasks`   | read | Tasks of a course with IDs and max scores            |
+| Tool                     | Type | Description                                          |
+| ------------------------ | ---- | ---------------------------------------------------- |
+| `list_my_courses`        | read | Courses you participate in, with your roles in each  |
+| `get_my_profile`         | read | Your RS School profile                               |
+| `get_course_schedule`    | read | Course schedule; `upcomingOnly` for future deadlines |
+| `list_course_tasks`      | read | Tasks of a course with IDs and max scores            |
+| `list_course_events`     | read | Events of a course with dates and places             |
+| `get_course_leaderboard` | read | Score leaderboard of a course, paginated             |
 
 ### student
 
@@ -38,7 +40,12 @@ app-level `admin`.
 | `submit_task_solution`            | write | Submit/update a solution URL for a task      |
 | `get_my_cross_check_review_stats` | read  | Cross-check reviews you still need to do     |
 | `get_my_cross_check_result`       | read  | Feedback you received for a cross-check task |
+| `get_my_cross_check_feedbacks`    | read  | Reviews received for your own solution       |
+| `get_my_cross_check_assignments`  | read  | Solutions assigned to you for peer review    |
+| `submit_cross_check_review`       | write | Submit a peer review (score + comment)       |
 | `get_course_interviews`           | read  | Interview events and registration windows    |
+| `get_my_interviews`               | read  | Your interviews as a student                 |
+| `register_to_interview`           | write | Register yourself for an interview           |
 
 ### mentor
 
@@ -49,6 +56,11 @@ app-level `admin`.
 | `get_student_summary`       | read               | Score/status/mentor summary for a student      |
 | `submit_task_score`         | write              | Submit a score + feedback for a student's task |
 | `get_my_interview_students` | read               | Students assigned to you for stage interviews  |
+| `get_my_mentor_interviews`  | read               | Your interviews as an interviewer              |
+| `get_interview_feedback`    | read               | Stage interview feedback form + saved answers  |
+| `submit_interview_feedback` | write              | Save stage interview feedback (upsert)         |
+| `create_interview_result`   | write              | Submit a regular interview result              |
+| `submit_multiple_scores`    | write              | Submit scores for many students in one call    |
 | `update_student_status`     | write, destructive | Expel / restore / self-study a student         |
 
 ### course-management — manager (supervisor/dementor for some), admin
@@ -64,6 +76,28 @@ app-level `admin`.
 | `get_mentor_reviews`           | read               | Reviews done by mentors (dementor oversight) |
 | `expel_students`               | write, destructive | Bulk-expel students by criteria              |
 
+### course-admin — manager (registry also for supervisor), admin
+
+Operational course administration. Kept in its own toolset so it can be
+switched off separately via `RSAPP_TOOLSETS` (e.g. a manager who only issues
+certificates can run with `RSAPP_TOOLSETS=common,course-management,users`).
+
+| Tool                              | Type               | Description                                    |
+| --------------------------------- | ------------------ | ---------------------------------------------- |
+| `create_course_task`              | write              | Add a catalog task to the course schedule      |
+| `update_course_task`              | write              | Change dates/checker/scoring of a course task  |
+| `delete_course_task`              | write, destructive | Remove a task from the course                  |
+| `create_course_event`             | write              | Add a catalog event to the course              |
+| `update_course_event`             | write              | Change date/place/organizer of a course event  |
+| `delete_course_event`             | write, destructive | Remove an event from the course                |
+| `create_cross_check_distribution` | write              | Distribute cross-check solutions between peers |
+| `complete_cross_check`            | write              | Finalize cross-check scores                    |
+| `create_stage_interviews`         | write              | Auto-create stage interview pairs              |
+| `distribute_interview_pairs`      | write              | Auto-distribute regular interview pairs        |
+| `list_mentor_registry`            | read               | Mentor applications awaiting approval          |
+| `approve_mentor`                  | write              | Approve a mentor application                   |
+| `grant_course_roles`              | write              | Set manager/supervisor/dementor/activist roles |
+
 ### users — manager, admin
 
 | Tool           | Type | Description                            |
@@ -78,7 +112,7 @@ before `issue_certificates_bulk`).
 
 `RSAPP_TOOLSETS` (optional, comma-separated) narrows the surface further on
 top of role filtering: `common`, `student`, `mentor`, `course-management`,
-`users`.
+`course-admin`, `users`.
 
 Examples: `RSAPP_TOOLSETS=common,student` (student profile),
 `RSAPP_TOOLSETS=common,mentor` (mentor profile). Unknown names fail fast with

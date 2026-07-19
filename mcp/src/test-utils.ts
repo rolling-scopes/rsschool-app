@@ -1,11 +1,13 @@
 import type { ApiResult, RsappApiClient } from './api-client.js';
 import type { ResolvedUser, ToolContext } from './types.js';
 
-export type RecordedCall = { method: 'GET' | 'POST'; path: string; body?: unknown };
+export type RecordedCall = { method: 'GET' | 'POST' | 'PUT' | 'DELETE'; path: string; body?: unknown };
 
 type MakeCtxOptions = {
   get?: (path: string) => ApiResult<unknown>;
   post?: (path: string, body?: unknown) => ApiResult<unknown>;
+  put?: (path: string, body?: unknown) => ApiResult<unknown>;
+  delete?: (path: string) => ApiResult<unknown>;
   user?: Partial<ResolvedUser>;
 };
 
@@ -23,6 +25,14 @@ export function makeCtx(options: MakeCtxOptions = {}): { ctx: ToolContext; calls
     post: async (path: string, body?: unknown) => {
       calls.push({ method: 'POST', path, body });
       return options.post?.(path, body) ?? { ok: true, data: null };
+    },
+    put: async (path: string, body?: unknown) => {
+      calls.push({ method: 'PUT', path, body });
+      return options.put?.(path, body) ?? { ok: true, data: null };
+    },
+    delete: async (path: string) => {
+      calls.push({ method: 'DELETE', path });
+      return options.delete?.(path) ?? { ok: true, data: null };
     },
   } as unknown as RsappApiClient;
   const user: ResolvedUser = {

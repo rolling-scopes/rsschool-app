@@ -18,6 +18,13 @@ describe('list_course_students_details', () => {
     expect(calls[0]?.path).toBe('/courses/5/students/details?status=active');
   });
 
+  it('lists active students below the default limit without a suffix', async () => {
+    const { ctx } = makeCtx({ get: () => apiOk(students(3)) });
+    const text = await runListCourseStudentsDetails(ctx, { courseId: 5, activeOnly: true });
+    expect(text).toContain('3 student(s), showing 3');
+    expect(text).not.toContain('…and');
+  });
+
   it('truncates to the limit', async () => {
     const { ctx } = makeCtx({ get: () => apiOk(students(60)) });
     const text = await runListCourseStudentsDetails(ctx, { courseId: 5, limit: 10 });

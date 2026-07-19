@@ -7,7 +7,7 @@ import type { RsappApiClient } from './api-client.js';
  */
 export type ToolRole = 'student' | 'mentor' | 'manager' | 'supervisor' | 'dementor' | 'taskOwner' | 'admin';
 
-export const TOOLSETS = ['common', 'student', 'mentor', 'course-management', 'users'] as const;
+export const TOOLSETS = ['common', 'student', 'mentor', 'course-management', 'course-admin', 'users'] as const;
 
 export type Toolset = (typeof TOOLSETS)[number];
 

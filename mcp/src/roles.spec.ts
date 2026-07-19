@@ -73,6 +73,13 @@ describe('resolveUser', () => {
     expect(user.roles.size).toBe(1);
   });
 
+  it('tolerates courses without a roles array and a missing courses map', async () => {
+    const user = await resolveUser(fakeClient({ id: 1, githubId: 'a', isAdmin: false, courses: { 1: {} } }));
+    expect(user.roles.size).toBe(0);
+    const bare = await resolveUser(fakeClient({ id: 1, githubId: 'a', isAdmin: false }));
+    expect(bare.courses).toEqual([]);
+  });
+
   it('throws with a readable message when the session call fails', async () => {
     await expect(resolveUser(fakeClient(null, false))).rejects.toThrow(/Failed to resolve the PAT user/);
   });

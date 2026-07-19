@@ -34,6 +34,28 @@ describe('list_my_courses', () => {
     expect(text).not.toContain('Node 2026');
   });
 
+  it('renders discipline and dates when present', async () => {
+    const { ctx } = makeCtx({
+      get: () =>
+        apiOk([
+          {
+            id: 1,
+            name: 'JS 2026',
+            alias: 'js-2026',
+            discipline: { name: 'JavaScript' },
+            startDate: '2026-01-01T00:00:00Z',
+            endDate: '2026-06-01T00:00:00Z',
+            completed: false,
+          },
+        ]),
+      user: { isAdmin: true },
+    });
+    const text = await runListMyCourses(ctx, {});
+    expect(text).toContain('discipline=JavaScript');
+    expect(text).toContain('start=2026-01-01');
+    expect(text).toContain('end=2026-06-01');
+  });
+
   it('reports when the user has no courses', async () => {
     const { ctx } = makeCtx({ get: () => apiOk(COURSES) });
     expect(await runListMyCourses(ctx, {})).toBe('You are not a member of any course.');

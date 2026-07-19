@@ -15,6 +15,19 @@ describe('preview_eligible_students', () => {
     expect(text).toContain('totalScore=77');
   });
 
+  it('truncates previews longer than the display limit', async () => {
+    const students = Array.from({ length: 60 }, (_, i) => ({
+      studentId: i,
+      githubId: `u${i}`,
+      name: `U${i}`,
+      totalScore: i,
+    }));
+    const { ctx } = makeCtx({ post: () => apiOk({ count: 60, students }) });
+    const text = await runPreviewEligibleStudents(ctx, { courseId: 5, criteria });
+    expect(text).toContain('60 student(s) would receive a certificate');
+    expect(text).toContain('…and 10 more');
+  });
+
   it('reports empty preview', async () => {
     const { ctx } = makeCtx({ post: () => apiOk({ count: 0, students: [] }) });
     expect(await runPreviewEligibleStudents(ctx, { courseId: 5, criteria })).toContain('No students match');

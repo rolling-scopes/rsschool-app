@@ -17,8 +17,8 @@
     "start:http": "node dist/http-main.js",
     "compile": "tsc --noEmit",
     "lint": "eslint src",
-    "test": "vitest run --passWithNoTests",
-    "test:ci": "vitest run"
+    "test": "vitest run",
+    "test:ci": "vitest run --coverage"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",

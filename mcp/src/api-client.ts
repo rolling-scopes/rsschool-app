@@ -25,7 +25,19 @@ export class RsappApiClient {
     return this.request<T>('POST', path, body);
   }
 
-  private async request<T>(method: 'GET' | 'POST', path: string, body?: unknown): Promise<ApiResult<T>> {
+  public put<T>(path: string, body?: unknown): Promise<ApiResult<T>> {
+    return this.request<T>('PUT', path, body);
+  }
+
+  public delete<T>(path: string): Promise<ApiResult<T>> {
+    return this.request<T>('DELETE', path);
+  }
+
+  private async request<T>(
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+    path: string,
+    body?: unknown,
+  ): Promise<ApiResult<T>> {
     const prefix = this.config.apiPrefix ?? DEFAULT_API_PREFIX;
     const url = `${this.config.baseUrl.replace(/\/$/, '')}${prefix}${path}`;
     let response: Response;

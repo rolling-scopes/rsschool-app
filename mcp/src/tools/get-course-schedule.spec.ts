@@ -30,6 +30,11 @@ describe('get_course_schedule', () => {
     expect(text).not.toContain('Old task');
   });
 
+  it('reports fully empty schedule', async () => {
+    const { ctx } = makeCtx({ get: () => apiOk([]) });
+    expect(await runGetCourseSchedule(ctx, { courseId: 5 })).toBe('Course 5 has no schedule items.');
+  });
+
   it('reports empty upcoming schedule', async () => {
     const { ctx } = makeCtx({ get: () => apiOk([{ name: 'Old', endDate: PAST }]) });
     expect(await runGetCourseSchedule(ctx, { courseId: 5, upcomingOnly: true })).toBe(

@@ -18,6 +18,14 @@ describe('list_course_tasks', () => {
     expect(text).toContain('Task B');
   });
 
+  it('renders weight, type and falls back to "?" for a nameless task', async () => {
+    const { ctx } = makeCtx({ get: () => apiOk([{ id: 13, scoreWeight: 0.5, type: 'jstask' }]) });
+    const text = await runListCourseTasks(ctx, { courseId: 5 });
+    expect(text).toContain('name=?');
+    expect(text).toContain('weight=0.5');
+    expect(text).toContain('type=jstask');
+  });
+
   it('reports empty task list', async () => {
     const { ctx } = makeCtx({ get: () => apiOk([]) });
     expect(await runListCourseTasks(ctx, { courseId: 5 })).toBe('Course 5 has no tasks.');

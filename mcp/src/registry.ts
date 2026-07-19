@@ -1,4 +1,121 @@
 import type { ToolBinding } from './types.js';
+import { APPROVE_MENTOR_TOOL, approveMentorInputSchema, runApproveMentor } from './tools/approve-mentor.js';
+import {
+  COMPLETE_CROSS_CHECK_TOOL,
+  completeCrossCheckInputSchema,
+  runCompleteCrossCheck,
+} from './tools/complete-cross-check.js';
+import {
+  CREATE_COURSE_EVENT_TOOL,
+  createCourseEventInputSchema,
+  runCreateCourseEvent,
+} from './tools/create-course-event.js';
+import {
+  CREATE_COURSE_TASK_TOOL,
+  createCourseTaskInputSchema,
+  runCreateCourseTask,
+} from './tools/create-course-task.js';
+import {
+  CREATE_CROSS_CHECK_DISTRIBUTION_TOOL,
+  createCrossCheckDistributionInputSchema,
+  runCreateCrossCheckDistribution,
+} from './tools/create-cross-check-distribution.js';
+import {
+  CREATE_INTERVIEW_RESULT_TOOL,
+  createInterviewResultInputSchema,
+  runCreateInterviewResult,
+} from './tools/create-interview-result.js';
+import {
+  CREATE_STAGE_INTERVIEWS_TOOL,
+  createStageInterviewsInputSchema,
+  runCreateStageInterviews,
+} from './tools/create-stage-interviews.js';
+import {
+  DELETE_COURSE_EVENT_TOOL,
+  deleteCourseEventInputSchema,
+  runDeleteCourseEvent,
+} from './tools/delete-course-event.js';
+import {
+  DELETE_COURSE_TASK_TOOL,
+  deleteCourseTaskInputSchema,
+  runDeleteCourseTask,
+} from './tools/delete-course-task.js';
+import {
+  DISTRIBUTE_INTERVIEW_PAIRS_TOOL,
+  distributeInterviewPairsInputSchema,
+  runDistributeInterviewPairs,
+} from './tools/distribute-interview-pairs.js';
+import {
+  GET_COURSE_LEADERBOARD_TOOL,
+  getCourseLeaderboardInputSchema,
+  runGetCourseLeaderboard,
+} from './tools/get-course-leaderboard.js';
+import {
+  GET_INTERVIEW_FEEDBACK_TOOL,
+  getInterviewFeedbackInputSchema,
+  runGetInterviewFeedback,
+} from './tools/get-interview-feedback.js';
+import {
+  GET_MY_CROSS_CHECK_ASSIGNMENTS_TOOL,
+  getMyCrossCheckAssignmentsInputSchema,
+  runGetMyCrossCheckAssignments,
+} from './tools/get-my-cross-check-assignments.js';
+import {
+  GET_MY_CROSS_CHECK_FEEDBACKS_TOOL,
+  getMyCrossCheckFeedbacksInputSchema,
+  runGetMyCrossCheckFeedbacks,
+} from './tools/get-my-cross-check-feedbacks.js';
+import { GET_MY_INTERVIEWS_TOOL, getMyInterviewsInputSchema, runGetMyInterviews } from './tools/get-my-interviews.js';
+import {
+  GET_MY_MENTOR_INTERVIEWS_TOOL,
+  getMyMentorInterviewsInputSchema,
+  runGetMyMentorInterviews,
+} from './tools/get-my-mentor-interviews.js';
+import {
+  GRANT_COURSE_ROLES_TOOL,
+  grantCourseRolesInputSchema,
+  runGrantCourseRoles,
+} from './tools/grant-course-roles.js';
+import {
+  LIST_COURSE_EVENTS_TOOL,
+  listCourseEventsInputSchema,
+  runListCourseEvents,
+} from './tools/list-course-events.js';
+import {
+  LIST_MENTOR_REGISTRY_TOOL,
+  listMentorRegistryInputSchema,
+  runListMentorRegistry,
+} from './tools/list-mentor-registry.js';
+import {
+  REGISTER_TO_INTERVIEW_TOOL,
+  registerToInterviewInputSchema,
+  runRegisterToInterview,
+} from './tools/register-to-interview.js';
+import {
+  SUBMIT_CROSS_CHECK_REVIEW_TOOL,
+  submitCrossCheckReviewInputSchema,
+  runSubmitCrossCheckReview,
+} from './tools/submit-cross-check-review.js';
+import {
+  SUBMIT_INTERVIEW_FEEDBACK_TOOL,
+  submitInterviewFeedbackInputSchema,
+  runSubmitInterviewFeedback,
+} from './tools/submit-interview-feedback.js';
+import {
+  SUBMIT_MULTIPLE_SCORES_TOOL,
+  submitMultipleScoresInputSchema,
+  runSubmitMultipleScores,
+} from './tools/submit-multiple-scores.js';
+import {
+  UPDATE_COURSE_EVENT_TOOL,
+  updateCourseEventInputSchema,
+  runUpdateCourseEvent,
+} from './tools/update-course-event.js';
+import {
+  UPDATE_COURSE_TASK_TOOL,
+  updateCourseTaskInputSchema,
+  runUpdateCourseTask,
+} from './tools/update-course-task.js';
 import { EXPEL_STUDENTS_TOOL, expelStudentsInputSchema, runExpelStudents } from './tools/expel-students.js';
 import {
   GET_COURSE_INTERVIEWS_TOOL,
@@ -261,5 +378,188 @@ export const TOOLS: ToolBinding[] = [
     roles: ['manager'],
     toolset: 'users',
     run: runSearchUsers as never,
+  },
+
+  // common (wave 2)
+  {
+    tool: { ...GET_COURSE_LEADERBOARD_TOOL, annotations: readOnly },
+    schema: getCourseLeaderboardInputSchema,
+    roles: [],
+    toolset: 'common',
+    run: runGetCourseLeaderboard as never,
+  },
+  {
+    tool: { ...LIST_COURSE_EVENTS_TOOL, annotations: readOnly },
+    schema: listCourseEventsInputSchema,
+    roles: [],
+    toolset: 'common',
+    run: runListCourseEvents as never,
+  },
+
+  // student (wave 2)
+  {
+    tool: { ...GET_MY_CROSS_CHECK_ASSIGNMENTS_TOOL, annotations: readOnly },
+    schema: getMyCrossCheckAssignmentsInputSchema,
+    roles: ['student'],
+    toolset: 'student',
+    run: runGetMyCrossCheckAssignments as never,
+  },
+  {
+    tool: { ...SUBMIT_CROSS_CHECK_REVIEW_TOOL, annotations: write },
+    schema: submitCrossCheckReviewInputSchema,
+    roles: ['student'],
+    toolset: 'student',
+    run: runSubmitCrossCheckReview as never,
+  },
+  {
+    tool: { ...GET_MY_CROSS_CHECK_FEEDBACKS_TOOL, annotations: readOnly },
+    schema: getMyCrossCheckFeedbacksInputSchema,
+    roles: ['student'],
+    toolset: 'student',
+    run: runGetMyCrossCheckFeedbacks as never,
+  },
+  {
+    tool: { ...GET_MY_INTERVIEWS_TOOL, annotations: readOnly },
+    schema: getMyInterviewsInputSchema,
+    roles: ['student'],
+    toolset: 'student',
+    run: runGetMyInterviews as never,
+  },
+  {
+    tool: { ...REGISTER_TO_INTERVIEW_TOOL, annotations: write },
+    schema: registerToInterviewInputSchema,
+    roles: ['student'],
+    toolset: 'student',
+    run: runRegisterToInterview as never,
+  },
+
+  // mentor (wave 2)
+  {
+    tool: { ...GET_MY_MENTOR_INTERVIEWS_TOOL, annotations: readOnly },
+    schema: getMyMentorInterviewsInputSchema,
+    roles: ['mentor'],
+    toolset: 'mentor',
+    run: runGetMyMentorInterviews as never,
+  },
+  {
+    tool: { ...GET_INTERVIEW_FEEDBACK_TOOL, annotations: readOnly },
+    schema: getInterviewFeedbackInputSchema,
+    roles: ['mentor', 'supervisor', 'manager'],
+    toolset: 'mentor',
+    run: runGetInterviewFeedback as never,
+  },
+  {
+    tool: { ...SUBMIT_INTERVIEW_FEEDBACK_TOOL, annotations: write },
+    schema: submitInterviewFeedbackInputSchema,
+    roles: ['mentor', 'supervisor', 'manager'],
+    toolset: 'mentor',
+    run: runSubmitInterviewFeedback as never,
+  },
+  {
+    tool: { ...CREATE_INTERVIEW_RESULT_TOOL, annotations: write },
+    schema: createInterviewResultInputSchema,
+    roles: ['mentor'],
+    toolset: 'mentor',
+    run: runCreateInterviewResult as never,
+  },
+  {
+    tool: { ...SUBMIT_MULTIPLE_SCORES_TOOL, annotations: write },
+    schema: submitMultipleScoresInputSchema,
+    roles: ['taskOwner', 'mentor', 'manager'],
+    toolset: 'mentor',
+    run: runSubmitMultipleScores as never,
+  },
+
+  // course-admin (wave 2)
+  {
+    tool: { ...CREATE_COURSE_TASK_TOOL, annotations: write },
+    schema: createCourseTaskInputSchema,
+    roles: ['manager'],
+    toolset: 'course-admin',
+    run: runCreateCourseTask as never,
+  },
+  {
+    tool: { ...UPDATE_COURSE_TASK_TOOL, annotations: write },
+    schema: updateCourseTaskInputSchema,
+    roles: ['manager'],
+    toolset: 'course-admin',
+    run: runUpdateCourseTask as never,
+  },
+  {
+    tool: { ...DELETE_COURSE_TASK_TOOL, annotations: destructive },
+    schema: deleteCourseTaskInputSchema,
+    roles: ['manager'],
+    toolset: 'course-admin',
+    run: runDeleteCourseTask as never,
+  },
+  {
+    tool: { ...CREATE_COURSE_EVENT_TOOL, annotations: write },
+    schema: createCourseEventInputSchema,
+    roles: ['manager'],
+    toolset: 'course-admin',
+    run: runCreateCourseEvent as never,
+  },
+  {
+    tool: { ...UPDATE_COURSE_EVENT_TOOL, annotations: write },
+    schema: updateCourseEventInputSchema,
+    roles: ['manager'],
+    toolset: 'course-admin',
+    run: runUpdateCourseEvent as never,
+  },
+  {
+    tool: { ...DELETE_COURSE_EVENT_TOOL, annotations: destructive },
+    schema: deleteCourseEventInputSchema,
+    roles: ['manager'],
+    toolset: 'course-admin',
+    run: runDeleteCourseEvent as never,
+  },
+  {
+    tool: { ...CREATE_CROSS_CHECK_DISTRIBUTION_TOOL, annotations: write },
+    schema: createCrossCheckDistributionInputSchema,
+    roles: ['manager'],
+    toolset: 'course-admin',
+    run: runCreateCrossCheckDistribution as never,
+  },
+  {
+    tool: { ...COMPLETE_CROSS_CHECK_TOOL, annotations: write },
+    schema: completeCrossCheckInputSchema,
+    roles: ['manager'],
+    toolset: 'course-admin',
+    run: runCompleteCrossCheck as never,
+  },
+  {
+    tool: { ...CREATE_STAGE_INTERVIEWS_TOOL, annotations: write },
+    schema: createStageInterviewsInputSchema,
+    roles: ['manager'],
+    toolset: 'course-admin',
+    run: runCreateStageInterviews as never,
+  },
+  {
+    tool: { ...DISTRIBUTE_INTERVIEW_PAIRS_TOOL, annotations: write },
+    schema: distributeInterviewPairsInputSchema,
+    roles: ['manager'],
+    toolset: 'course-admin',
+    run: runDistributeInterviewPairs as never,
+  },
+  {
+    tool: { ...LIST_MENTOR_REGISTRY_TOOL, annotations: readOnly },
+    schema: listMentorRegistryInputSchema,
+    roles: ['manager', 'supervisor'],
+    toolset: 'course-admin',
+    run: runListMentorRegistry as never,
+  },
+  {
+    tool: { ...APPROVE_MENTOR_TOOL, annotations: write },
+    schema: approveMentorInputSchema,
+    roles: ['manager', 'supervisor'],
+    toolset: 'course-admin',
+    run: runApproveMentor as never,
+  },
+  {
+    tool: { ...GRANT_COURSE_ROLES_TOOL, annotations: write },
+    schema: grantCourseRolesInputSchema,
+    roles: ['manager'],
+    toolset: 'course-admin',
+    run: runGrantCourseRoles as never,
   },
 ];

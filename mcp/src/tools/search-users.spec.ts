@@ -16,6 +16,12 @@ describe('search_users', () => {
     expect(calls[0]?.path).toBe('/users/search?query=bot&includeSystem=true');
   });
 
+  it('renders users without a name', async () => {
+    const { ctx } = makeCtx({ get: () => apiOk([{ id: 2, githubId: 'anon' }]) });
+    const text = await runSearchUsers(ctx, { query: 'anon' });
+    expect(text).toContain('- anon (id=2)');
+  });
+
   it('reports no matches', async () => {
     const { ctx } = makeCtx({ get: () => apiOk([]) });
     expect(await runSearchUsers(ctx, { query: 'nobody' })).toBe('No users matched "nobody".');
