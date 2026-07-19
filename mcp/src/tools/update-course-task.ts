@@ -29,13 +29,28 @@ export const UPDATE_COURSE_TASK_TOOL = {
 
 export async function runUpdateCourseTask(ctx: ToolContext, input: UpdateCourseTaskInput): Promise<string> {
   const { courseId, courseTaskId, ...fields } = input;
-  const body = Object.fromEntries(Object.entries(fields).filter(([, value]) => value !== undefined));
-  if (Object.keys(body).length === 0) {
+  const provided = Object.fromEntries(Object.entries(fields).filter(([, value]) => value !== undefined));
+  if (Object.keys(provided).length === 0) {
     return 'Nothing to update: provide at least one field.';
+  }
+  const body: Record<string, unknown> = { ...provided };
+  // The backend PUT requires studentStartDate and studentEndDate on every call
+  // (they are @IsNotEmpty), so a partial update that omits them would 400.
+  // Carry the current task's dates over so callers can change just one field.
+  if (body.studentStartDate === undefined || body.studentEndDate === undefined) {
+    const current = await ctx.client.get<{ studentStartDate?: string; studentEndDate?: string }>(
+      `/courses/${courseId}/tasks/${courseTaskId}`,
+    );
+    if (!current.ok) {
+      return describeError(current.status, current.message);
+    }
+    body.studentStartDate ??= current.data?.studentStartDate;
+    body.studentEndDate ??= current.data?.studentEndDate;
   }
   const result = await ctx.client.put<unknown>(`/courses/${courseId}/tasks/${courseTaskId}`, body);
   if (!result.ok) {
     return describeError(result.status, result.message);
   }
-  return `Course task ${courseTaskId} updated (${Object.keys(body).join(', ')}).`;
+  // Report only the fields the caller actually changed, not the carried-over dates.
+  return `Course task ${courseTaskId} updated (${Object.keys(provided).join(', ')}).`;
 }
