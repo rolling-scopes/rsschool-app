@@ -97,14 +97,17 @@ export type McpRequestHandler = (req: IncomingMessage, res: ServerResponse, body
 export function createRequestListener(handler: McpRequestHandler, options: ListenerOptions = {}) {
   return async function listener(req: IncomingMessage, res: ServerResponse): Promise<void> {
     const url = new URL(req.url ?? '/', 'http://localhost');
+    // Normalize an optional trailing slash so `/mcp` and `/mcp/` behave the same
+    // (nginx `location /mcp` also proxies `/mcp/`, which would otherwise 404 here).
+    const pathname = url.pathname.length > 1 ? url.pathname.replace(/\/+$/, '') : url.pathname;
 
-    if (url.pathname === '/health') {
+    if (pathname === '/health') {
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ status: 'ok' }));
       return;
     }
 
-    if (url.pathname !== '/mcp') {
+    if (pathname !== '/mcp') {
       res.writeHead(404, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ message: 'Not found' }));
       return;

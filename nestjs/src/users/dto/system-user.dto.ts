@@ -18,6 +18,6 @@ export class SystemUserDto {
     this.id = user.id;
     this.githubId = user.githubId;
     this.name = [user.firstName, user.lastName].filter(Boolean).join(' ').trim();
-    this.createdDate = user.createdDate ? String(user.createdDate) : '';
+    this.createdDate = user.createdDate ? new Date(user.createdDate).toISOString() : '';
   }
 }

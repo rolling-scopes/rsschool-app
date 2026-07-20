@@ -63,6 +63,17 @@ describe('createRequestListener', () => {
     expect(await response.json()).toEqual({ echoed: { hello: 'world' } });
   });
 
+  it('treats /mcp/ (trailing slash) the same as /mcp', async () => {
+    // nginx `location /mcp` also proxies `/mcp/`, so the listener must not 404 it.
+    const response = await fetch(`${baseUrl}/mcp/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ hello: 'slash' }),
+    });
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ echoed: { hello: 'slash' } });
+  });
+
   it('treats an empty body as undefined', async () => {
     const response = await fetch(`${baseUrl}/mcp`, { method: 'POST' });
     expect(await response.json()).toEqual({ echoed: null });
