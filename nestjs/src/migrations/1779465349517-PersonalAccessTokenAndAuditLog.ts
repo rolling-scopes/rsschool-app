@@ -12,7 +12,7 @@ export class PersonalAccessTokenAndAuditLog1779465349517 implements MigrationInt
       `CREATE UNIQUE INDEX "IDX_786fb3eb8a456de6f679d5b34f" ON "personal_access_tokens" ("prefix") `,
     );
     await queryRunner.query(
-      `CREATE TABLE "audit_log" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "userId" integer NOT NULL, "tokenId" uuid NOT NULL, "action" character varying(120) NOT NULL, "method" character varying(10) NOT NULL, "path" character varying(500) NOT NULL, "resource" character varying(120), "resourceId" character varying(120), "requestPayload" jsonb, "responseStatus" smallint NOT NULL, "durationMs" integer NOT NULL, "ip" character varying(45), "userAgent" text, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), CONSTRAINT "PK_07fefa57f7f5ab8fc3f52b3ed0b" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "audit_log" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "userId" integer NOT NULL, "tokenId" uuid NOT NULL, "action" character varying(120) NOT NULL, "toolName" character varying(100), "method" character varying(10) NOT NULL, "path" character varying(500) NOT NULL, "resource" character varying(120), "resourceId" character varying(120), "requestPayload" jsonb, "responseStatus" smallint NOT NULL, "durationMs" integer NOT NULL, "ip" character varying(45), "userAgent" text, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), CONSTRAINT "PK_07fefa57f7f5ab8fc3f52b3ed0b" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(`CREATE INDEX "IDX_audit_log_tokenId_createdAt" ON "audit_log" ("tokenId", "createdAt") `);
     await queryRunner.query(`CREATE INDEX "IDX_audit_log_userId_createdAt" ON "audit_log" ("userId", "createdAt") `);

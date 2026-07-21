@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { describeError } from '../api-client.js';
 import { toJsonBlock } from '../format.js';
 import { redactSecrets } from '../redact.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 
 export const listCourseStudentsDetailsInputSchema = z.object({
   courseId: z.number().int().positive().describe('Numeric ID of the course'),
@@ -33,11 +33,11 @@ const DEFAULT_LIMIT = 50;
 export async function runListCourseStudentsDetails(
   ctx: ToolContext,
   input: ListCourseStudentsDetailsInput,
-): Promise<string> {
+): Promise<ToolResult> {
   const query = input.activeOnly ? '?status=active' : '';
   const result = await ctx.client.get<unknown[]>(`/courses/${input.courseId}/students/details${query}`);
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   const total = result.data.length;
   if (total === 0) {

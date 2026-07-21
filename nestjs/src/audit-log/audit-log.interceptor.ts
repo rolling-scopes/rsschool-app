@@ -59,12 +59,16 @@ export class AuditLogInterceptor implements NestInterceptor {
     const tokenId = user.apiTokenId;
     const userId = user.id;
     const payload = toJsonObject(redactPayload(req.body));
+    // Set by the MCP server so the log distinguishes "an agent ran tool X" from
+    // any other PAT call. Attacker-controlled in principle, so bound the length.
+    const toolName = readToolName(req.headers['x-mcp-tool']);
 
     const finalize = (status: number) => {
       this.auditLog.enqueue({
         userId,
         tokenId,
         action,
+        toolName,
         method: req.method,
         path: req.originalUrl ?? req.url,
         requestPayload: payload,
@@ -85,4 +89,17 @@ export class AuditLogInterceptor implements NestInterceptor {
       }),
     );
   }
+}
+
+/** Column is varchar(100); tool names are short snake_case identifiers. */
+const MAX_TOOL_NAME_LENGTH = 100;
+
+export function readToolName(header: string | string[] | undefined): string | null {
+  const raw = Array.isArray(header) ? header[0] : header;
+  if (!raw) {
+    return null;
+  }
+  const trimmed = raw.trim().slice(0, MAX_TOOL_NAME_LENGTH);
+  // Reject anything that isn't a plain tool identifier rather than storing junk.
+  return /^[a-z0-9_]+$/i.test(trimmed) ? trimmed : null;
 }

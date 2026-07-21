@@ -84,6 +84,8 @@ certificates can run with `RSAPP_TOOLSETS=common,course-management,users`).
 
 | Tool                              | Type               | Description                                    |
 | --------------------------------- | ------------------ | ---------------------------------------------- |
+| `list_task_catalog`               | read               | Catalog tasks with IDs (source of `taskId`)    |
+| `list_event_catalog`              | read               | Catalog events with IDs (source of `eventId`)  |
 | `create_course_task`              | write              | Add a catalog task to the course schedule      |
 | `update_course_task`              | write              | Change dates/checker/scoring of a course task  |
 | `delete_course_task`              | write, destructive | Remove a task from the course                  |
@@ -221,6 +223,20 @@ args = ["-y", "@rsschool/mcp-server"]
 RSAPP_BASE_URL = "https://app.rs.school"
 RSAPP_PAT = "rsapp_pat_..."
 ```
+
+## Errors and logging
+
+A tool that fails (backend 403/404/timeout, a validation refusal, an
+authorization refusal) returns a result flagged `isError`, so the model can
+tell a failure from data. An unexpected exception is logged with its detail and
+returned as a neutral message — internals never reach the client.
+
+The hosted server writes one structured JSON line per tool call to stdout
+(request id, tool, GitHub login, duration, outcome); the container ships it to
+CloudWatch. In stdio mode the same lines go to **stderr**, because stdout
+carries the JSON-RPC stream. Each API call also carries `User-Agent:
+rsschool-mcp/<version>` and `X-MCP-Tool: <tool>`, and the backend stores the
+tool name in the audit log, so `/admin/audit-log` shows which tool did what.
 
 ## Deployment
 

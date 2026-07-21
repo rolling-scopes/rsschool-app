@@ -2,8 +2,10 @@ import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import type { RsappApiClient } from './api-client.js';
 import { filterTools, hasCourseRole } from './roles.js';
+import { noopLogger, type Logger } from './logger.js';
 import { TOOLS } from './registry.js';
-import type { ResolvedUser, ToolBinding, Toolset } from './types.js';
+import { isToolFailure, type ResolvedUser, type ToolBinding, type Toolset } from './types.js';
+import { SERVER_VERSION } from './version.js';
 
 /**
  * A course-scoped tool takes a `courseId` and acts within that one course. We
@@ -27,9 +29,12 @@ export type ServerContext = {
   user: ResolvedUser;
   toolsets?: Toolset[];
   registry?: ToolBinding[];
+  logger?: Logger;
+  /** Correlates every log line of one HTTP request. */
+  requestId?: string;
 };
 
-export const SERVER_INFO = { name: 'rsschool', version: '0.2.0' };
+export const SERVER_INFO = { name: 'rsschool', version: SERVER_VERSION };
 
 /**
  * Builds an MCP server whose tool list is filtered to the resolved user's
@@ -39,6 +44,7 @@ export const SERVER_INFO = { name: 'rsschool', version: '0.2.0' };
  */
 export function createMcpServer(ctx: ServerContext): Server {
   const available = filterTools(ctx.registry ?? TOOLS, ctx.user, ctx.toolsets);
+  const logger = ctx.logger ?? noopLogger;
   const server = new Server(SERVER_INFO, { capabilities: { tools: {} } });
 
   server.setRequestHandler(ListToolsRequestSchema, async () => ({
@@ -79,8 +85,32 @@ export function createMcpServer(ctx: ServerContext): Server {
         ],
       };
     }
-    const text = await binding.run({ client: ctx.client, user: ctx.user }, parsed.data as never);
-    return { content: [{ type: 'text', text }] };
+    const base = { requestId: ctx.requestId, tool: binding.tool.name, githubId: ctx.user.githubId };
+    const startedAt = Date.now();
+    try {
+      // Tag the outgoing API calls with the tool name so the backend audit log
+      // can attribute them (X-MCP-Tool).
+      const client = ctx.client.withTool(binding.tool.name);
+      const result = await binding.run({ client, user: ctx.user }, parsed.data as never);
+      const failed = isToolFailure(result);
+      logger.info('tool call', { ...base, durationMs: Date.now() - startedAt, outcome: failed ? 'tool_error' : 'ok' });
+      return failed
+        ? { isError: true, content: [{ type: 'text', text: result.text }] }
+        : { content: [{ type: 'text', text: result }] };
+    } catch (err) {
+      // Details stay in the log; the model gets a neutral message so internal
+      // stack/detail never reaches the client.
+      logger.error('tool exception', {
+        ...base,
+        durationMs: Date.now() - startedAt,
+        outcome: 'exception',
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return {
+        isError: true,
+        content: [{ type: 'text', text: `The tool "${binding.tool.name}" failed unexpectedly. Please try again.` }],
+      };
+    }
   });
 
   return server;

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { apiFail, apiOk, makeCtx } from '../test-utils.js';
+import { apiFail, apiOk, makeCtx, toText } from '../test-utils.js';
 import { runApproveMentor } from './approve-mentor.js';
 
 const MANAGER_OF_12_34 = {
@@ -12,7 +12,7 @@ const MANAGER_OF_12_34 = {
 describe('approve_mentor', () => {
   it('puts the approval for courses the caller manages or supervises', async () => {
     const { ctx, calls } = makeCtx({ put: () => apiOk({}), user: MANAGER_OF_12_34 });
-    const text = await runApproveMentor(ctx, { githubId: 'octo', preselectedCourses: ['12', '34'] });
+    const text = toText(await runApproveMentor(ctx, { githubId: 'octo', preselectedCourses: ['12', '34'] }));
     expect(calls).toEqual([
       { method: 'PUT', path: '/registry/mentor/octo', body: { preselectedCourses: ['12', '34'] } },
     ]);
@@ -21,7 +21,7 @@ describe('approve_mentor', () => {
 
   it('rejects preselecting a course the caller does not manage or supervise', async () => {
     const { ctx, calls } = makeCtx({ put: () => apiOk({}), user: MANAGER_OF_12_34 });
-    expect(await runApproveMentor(ctx, { githubId: 'octo', preselectedCourses: ['12', '99'] })).toContain(
+    expect(toText(await runApproveMentor(ctx, { githubId: 'octo', preselectedCourses: ['12', '99'] }))).toContain(
       'Not allowed: 99',
     );
     expect(calls).toEqual([]);
@@ -35,11 +35,13 @@ describe('approve_mentor', () => {
 
   it('handles an empty course list', async () => {
     const { ctx } = makeCtx({ put: () => apiOk({}) });
-    expect(await runApproveMentor(ctx, { githubId: 'octo', preselectedCourses: [] })).toContain('(none)');
+    expect(toText(await runApproveMentor(ctx, { githubId: 'octo', preselectedCourses: [] }))).toContain('(none)');
   });
 
   it('surfaces API errors', async () => {
     const { ctx } = makeCtx({ put: () => apiFail(403), user: { isAdmin: true } });
-    expect(await runApproveMentor(ctx, { githubId: 'octo', preselectedCourses: [] })).toContain('Permission denied');
+    expect(toText(await runApproveMentor(ctx, { githubId: 'octo', preselectedCourses: [] }))).toContain(
+      'Permission denied',
+    );
   });
 });

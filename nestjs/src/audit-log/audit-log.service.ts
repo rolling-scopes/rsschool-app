@@ -8,6 +8,8 @@ export type AuditLogEntry = {
   userId: number;
   tokenId: string;
   action: string;
+  /** MCP tool that triggered the call (`X-MCP-Tool`), null for non-MCP PAT calls. */
+  toolName?: string | null;
   method: string;
   path: string;
   resource?: string | null;

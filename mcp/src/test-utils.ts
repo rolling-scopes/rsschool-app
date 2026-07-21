@@ -1,5 +1,18 @@
 import type { ApiResult, RsappApiClient } from './api-client.js';
-import type { ResolvedUser, ToolContext } from './types.js';
+import { isToolFailure, type ResolvedUser, type ToolContext, type ToolResult } from './types.js';
+
+/** Text of a tool result, whether it succeeded or failed. */
+export function toText(result: ToolResult): string {
+  return isToolFailure(result) ? result.text : result;
+}
+
+/** Asserts the tool reported a failure and returns its text. */
+export function failureText(result: ToolResult): string {
+  if (!isToolFailure(result)) {
+    throw new Error(`Expected a tool failure, got a success result: ${result}`);
+  }
+  return result.text;
+}
 
 export type RecordedCall = { method: 'GET' | 'POST' | 'PUT' | 'DELETE'; path: string; body?: unknown };
 
@@ -33,6 +46,11 @@ export function makeCtx(options: MakeCtxOptions = {}): { ctx: ToolContext; calls
     delete: async (path: string) => {
       calls.push({ method: 'DELETE', path });
       return options.delete?.(path) ?? { ok: true, data: null };
+    },
+    // create-server tags the client with the tool name before running a tool;
+    // the stub just returns itself so calls are still recorded in one place.
+    withTool() {
+      return this;
     },
   } as unknown as RsappApiClient;
   const user: ResolvedUser = {

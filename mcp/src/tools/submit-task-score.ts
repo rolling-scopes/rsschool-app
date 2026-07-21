@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 
 export const submitTaskScoreInputSchema = z.object({
   courseId: z.number().int().positive().describe('Numeric ID of the course'),
@@ -32,13 +32,13 @@ export const SUBMIT_TASK_SCORE_TOOL = {
   },
 } as const;
 
-export async function runSubmitTaskScore(ctx: ToolContext, input: SubmitTaskScoreInput): Promise<string> {
+export async function runSubmitTaskScore(ctx: ToolContext, input: SubmitTaskScoreInput): Promise<ToolResult> {
   const result = await ctx.client.post<unknown>(
     `/course/${input.courseId}/students/score/${encodeURIComponent(input.githubId)}/task/${input.courseTaskId}`,
     { score: input.score, comment: input.comment, githubPrUrl: input.githubPrUrl },
   );
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   return `Score ${input.score} submitted for ${input.githubId}, course task ${input.courseTaskId}.`;
 }

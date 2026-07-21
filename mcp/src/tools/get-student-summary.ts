@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { describeError } from '../api-client.js';
 import { toJsonBlock } from '../format.js';
 import { isContactKey, isSecretKey, redactKeys } from '../redact.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 
 export const getStudentSummaryInputSchema = z.object({
   courseId: z.number().int().positive().describe('Numeric ID of the course'),
@@ -26,15 +26,15 @@ export const GET_STUDENT_SUMMARY_TOOL = {
   },
 } as const;
 
-export async function runGetStudentSummary(ctx: ToolContext, input: GetStudentSummaryInput): Promise<string> {
+export async function runGetStudentSummary(ctx: ToolContext, input: GetStudentSummaryInput): Promise<ToolResult> {
   const result = await ctx.client.get<unknown>(
     `/courses/${input.courseId}/students/${encodeURIComponent(input.githubId)}/summary`,
   );
   if (!result.ok) {
     if (result.status === 404) {
-      return `Student "${input.githubId}" not found in course ${input.courseId}.`;
+      return toolError(`Student "${input.githubId}" not found in course ${input.courseId}.`);
     }
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   // A score/rank summary needs the mentor's identity, not their personal
   // contacts — drop contact fields (and any secret) before returning.

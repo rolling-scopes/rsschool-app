@@ -2,7 +2,7 @@ import { CallHandler, ExecutionContext } from '@nestjs/common';
 import { lastValueFrom, of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 import type { AuthUser } from '../auth';
-import { AuditLogInterceptor, redactPayload } from './audit-log.interceptor';
+import { AuditLogInterceptor, readToolName, redactPayload } from './audit-log.interceptor';
 import type { AuditLogService } from './audit-log.service';
 
 function makeContext(opts: {
@@ -13,6 +13,7 @@ function makeContext(opts: {
   statusCode?: number;
   className?: string;
   handlerName?: string;
+  toolName?: string | string[];
 }): ExecutionContext {
   const req = {
     user: opts.user,
@@ -21,7 +22,7 @@ function makeContext(opts: {
     originalUrl: opts.url ?? '/x',
     url: opts.url ?? '/x',
     ip: '127.0.0.1',
-    headers: { 'user-agent': 'vitest' },
+    headers: { 'user-agent': 'vitest', ...(opts.toolName ? { 'x-mcp-tool': opts.toolName } : {}) },
   };
   const res = { statusCode: opts.statusCode ?? 200 };
   return {
@@ -110,5 +111,55 @@ describe('AuditLogInterceptor', () => {
     expect(auditLog.enqueue).toHaveBeenCalledWith(
       expect.objectContaining({ requestPayload: { name: 'ok', password: '[redacted]' } }),
     );
+  });
+});
+
+describe('readToolName', () => {
+  it('returns null when the header is absent', () => {
+    expect(readToolName(undefined)).toBeNull();
+    expect(readToolName('')).toBeNull();
+  });
+
+  it('accepts a plain tool identifier', () => {
+    expect(readToolName('issue_certificate')).toBe('issue_certificate');
+    expect(readToolName('  list_my_courses  ')).toBe('list_my_courses');
+  });
+
+  it('takes the first value when the header repeats', () => {
+    expect(readToolName(['get_my_score', 'other'])).toBe('get_my_score');
+  });
+
+  it('rejects values that are not tool identifiers', () => {
+    expect(readToolName('drop table audit_log')).toBeNull();
+    expect(readToolName('../../etc/passwd')).toBeNull();
+  });
+
+  it('truncates an over-long value to the column width', () => {
+    expect(readToolName('a'.repeat(150))).toHaveLength(100);
+  });
+});
+
+describe('AuditLogInterceptor tool attribution', () => {
+  it('stores the MCP tool name when the header is present', async () => {
+    const auditLog = { enqueue: vi.fn() } as unknown as AuditLogService;
+    const interceptor = new AuditLogInterceptor(auditLog);
+    const next: CallHandler = { handle: () => of('ok') };
+    await lastValueFrom(
+      interceptor.intercept(
+        makeContext({ user: { id: 1, apiTokenId: 'token-1' } as Partial<AuthUser>, toolName: 'issue_certificate' }),
+        next,
+      ),
+    );
+    expect(auditLog.enqueue).toHaveBeenCalledWith(expect.objectContaining({ toolName: 'issue_certificate' }));
+  });
+
+  it('stores null for a PAT call made outside MCP', async () => {
+    const auditLog = { enqueue: vi.fn() } as unknown as AuditLogService;
+    const interceptor = new AuditLogInterceptor(auditLog);
+    const next: CallHandler = { handle: () => of('ok') };
+    await lastValueFrom(
+      interceptor.intercept(makeContext({ user: { id: 1, apiTokenId: 'token-1' } as Partial<AuthUser> }), next),
+    );
+    expect(auditLog.enqueue).toHaveBeenCalledWith(expect.objectContaining({ toolName: null }));
   });
 });

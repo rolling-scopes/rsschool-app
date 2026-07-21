@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 
 export const submitTaskSolutionInputSchema = z.object({
   courseId: z.number().int().positive().describe('Numeric ID of the course'),
@@ -26,12 +26,12 @@ export const SUBMIT_TASK_SOLUTION_TOOL = {
   },
 } as const;
 
-export async function runSubmitTaskSolution(ctx: ToolContext, input: SubmitTaskSolutionInput): Promise<string> {
+export async function runSubmitTaskSolution(ctx: ToolContext, input: SubmitTaskSolutionInput): Promise<ToolResult> {
   const result = await ctx.client.post<unknown>(`/courses/${input.courseId}/tasks/${input.courseTaskId}/solutions`, {
     url: input.url,
   });
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   return `Solution submitted for course task ${input.courseTaskId}: ${input.url}`;
 }

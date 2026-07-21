@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 
 export const createInterviewResultInputSchema = z.object({
   courseId: z.number().int().positive().describe('Numeric ID of the course'),
@@ -30,13 +30,16 @@ export const CREATE_INTERVIEW_RESULT_TOOL = {
   },
 } as const;
 
-export async function runCreateInterviewResult(ctx: ToolContext, input: CreateInterviewResultInput): Promise<string> {
+export async function runCreateInterviewResult(
+  ctx: ToolContext,
+  input: CreateInterviewResultInput,
+): Promise<ToolResult> {
   const result = await ctx.client.post<unknown>(
     `/courses/${input.courseId}/interviews/${input.courseTaskId}/students/${encodeURIComponent(input.studentGithubId)}/result`,
     { score: input.score, comment: input.comment },
   );
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   return `Interview result saved for ${input.studentGithubId}: score ${input.score}.`;
 }

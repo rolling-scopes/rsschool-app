@@ -1,8 +1,9 @@
-import { createHash } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { RsappApiClient } from './api-client.js';
 import { createMcpServer } from './create-server.js';
+import { noopLogger, type Logger } from './logger.js';
 import { resolveUser } from './roles.js';
 import type { ResolvedUser, Toolset } from './types.js';
 
@@ -21,6 +22,9 @@ export type McpHttpConfig = {
   allowedHosts?: string[];
   /** Origin allow-list for the transport's Origin check (browser clients). */
   allowedOrigins?: string[];
+  /** Per-call timeout for requests to the RS School API. */
+  timeoutMs?: number;
+  logger?: Logger;
 };
 
 const DEFAULT_USER_CACHE_TTL_MS = 60_000;
@@ -57,11 +61,30 @@ export class UserRoleCache {
     }
     const user = await resolve();
     if (this.cache.size >= this.maxEntries) {
-      // size >= maxEntries (> 0) guarantees at least one key exists.
-      this.cache.delete(this.cache.keys().next().value as string);
+      this.evict(now);
     }
     this.cache.set(key, { user, expiresAt: now + this.ttlMs });
     return user;
+  }
+
+  /**
+   * Make room for one entry. Expired entries go first: plain FIFO would drop
+   * fresh entries while stale ones survive, which under more than `maxEntries`
+   * active tokens degrades the cache into a miss-every-time /session hammer.
+   */
+  private evict(now: number): void {
+    let freed = false;
+    for (const [key, entry] of this.cache) {
+      if (entry.expiresAt <= now) {
+        this.cache.delete(key);
+        freed = true;
+      }
+    }
+    if (!freed) {
+      // Nothing stale — fall back to dropping the oldest insertion.
+      // size >= maxEntries (> 0) guarantees at least one key exists.
+      this.cache.delete(this.cache.keys().next().value as string);
+    }
   }
 
   get size(): number {
@@ -76,28 +99,37 @@ export class UserRoleCache {
  */
 export function createMcpHttpHandler(config: McpHttpConfig) {
   const cache = new UserRoleCache(config.userCacheTtlMs ?? DEFAULT_USER_CACHE_TTL_MS);
+  const logger = config.logger ?? noopLogger;
 
   const getUser = (client: RsappApiClient, token: string) => cache.getUser(token, () => resolveUser(client));
 
   return async function handleMcpHttpRequest(req: IncomingMessage, res: ServerResponse, body: unknown): Promise<void> {
+    const requestId = randomUUID();
     const auth = req.headers.authorization;
     const token = auth?.startsWith('Bearer ') ? auth.slice('Bearer '.length).trim() : undefined;
     if (!token || !token.startsWith('rsapp_pat_')) {
+      logger.warn('request rejected', { requestId, reason: 'missing_or_malformed_bearer' });
       sendJsonRpcError(res, 401, -32001, 'Missing or malformed Authorization header. Expected: Bearer rsapp_pat_…');
       return;
     }
 
-    const client = new RsappApiClient({ baseUrl: config.baseUrl, token, apiPrefix: config.apiPrefix });
+    const client = new RsappApiClient({
+      baseUrl: config.baseUrl,
+      token,
+      apiPrefix: config.apiPrefix,
+      timeoutMs: config.timeoutMs,
+    });
 
     let user: ResolvedUser;
     try {
       user = await getUser(client, token);
     } catch (err) {
+      logger.warn('request rejected', { requestId, reason: 'session_resolution_failed' });
       sendJsonRpcError(res, 401, -32001, errorMessage(err));
       return;
     }
 
-    const server = createMcpServer({ client, user, toolsets: config.toolsets });
+    const server = createMcpServer({ client, user, toolsets: config.toolsets, logger, requestId });
     const transport = new StreamableHTTPServerTransport({
       sessionIdGenerator: undefined,
       enableJsonResponse: true,
@@ -108,13 +140,24 @@ export function createMcpHttpHandler(config: McpHttpConfig) {
       allowedHosts: config.allowedHosts,
       allowedOrigins: config.allowedOrigins,
     });
-    res.on('close', () => {
-      void transport.close();
-      void server.close();
-    });
-    await server.connect(transport);
-    await transport.handleRequest(req, res, body);
+    try {
+      await server.connect(transport);
+      await transport.handleRequest(req, res, body);
+    } finally {
+      // Deterministic teardown: hanging this off res.on('close') alone left the
+      // pair alive when connect() itself threw, and dropped the rejections.
+      await closeQuietly(() => transport.close(), logger, requestId);
+      await closeQuietly(() => server.close(), logger, requestId);
+    }
   };
+}
+
+export async function closeQuietly(close: () => Promise<void>, logger: Logger, requestId: string): Promise<void> {
+  try {
+    await close();
+  } catch (err) {
+    logger.warn('teardown failed', { requestId, error: err instanceof Error ? err.message : String(err) });
+  }
 }
 
 export function errorMessage(err: unknown): string {

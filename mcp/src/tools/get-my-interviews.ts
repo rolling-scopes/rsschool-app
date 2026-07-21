@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
 import { toJsonBlock } from '../format.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 
 export const getMyInterviewsInputSchema = z.object({
   courseId: z.number().int().positive().describe('Numeric ID of the course'),
@@ -23,10 +23,10 @@ export const GET_MY_INTERVIEWS_TOOL = {
   },
 } as const;
 
-export async function runGetMyInterviews(ctx: ToolContext, input: GetMyInterviewsInput): Promise<string> {
+export async function runGetMyInterviews(ctx: ToolContext, input: GetMyInterviewsInput): Promise<ToolResult> {
   const result = await ctx.client.get<unknown[]>(`/courses/${input.courseId}/interviews/students/me`);
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   if (Array.isArray(result.data) && result.data.length === 0) {
     return 'You have no interviews in this course.';

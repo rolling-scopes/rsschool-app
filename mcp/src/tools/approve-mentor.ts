@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 
 export const approveMentorInputSchema = z.object({
   githubId: z.string().min(1).max(100).describe('GitHub login of the mentor applicant'),
@@ -31,7 +31,7 @@ export const APPROVE_MENTOR_TOOL = {
   },
 } as const;
 
-export async function runApproveMentor(ctx: ToolContext, input: ApproveMentorInput): Promise<string> {
+export async function runApproveMentor(ctx: ToolContext, input: ApproveMentorInput): Promise<ToolResult> {
   // The registry endpoint has no courseId in the path, so the central per-course
   // gate can't cover it. Enforce here that a non-admin only preselects courses
   // they manage or supervise (otherwise a manager of one course could approve a
@@ -44,14 +44,16 @@ export async function runApproveMentor(ctx: ToolContext, input: ApproveMentorInp
     );
     const outOfScope = input.preselectedCourses.filter(courseId => !scoped.has(courseId));
     if (outOfScope.length > 0) {
-      return `Not authorized: you may only preselect courses you manage or supervise. Not allowed: ${outOfScope.join(', ')}.`;
+      return toolError(
+        `Not authorized: you may only preselect courses you manage or supervise. Not allowed: ${outOfScope.join(', ')}.`,
+      );
     }
   }
   const result = await ctx.client.put<unknown>(`/registry/mentor/${encodeURIComponent(input.githubId)}`, {
     preselectedCourses: input.preselectedCourses,
   });
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   return `Mentor ${input.githubId} approved for courses: ${input.preselectedCourses.join(', ') || '(none)'}.`;
 }

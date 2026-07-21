@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
 import { toJsonBlock } from '../format.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 
 export const getMyInterviewStudentsInputSchema = z.object({
   courseId: z.number().int().positive().describe('Numeric ID of the course'),
@@ -23,10 +23,13 @@ export const GET_MY_INTERVIEW_STUDENTS_TOOL = {
   },
 } as const;
 
-export async function runGetMyInterviewStudents(ctx: ToolContext, input: GetMyInterviewStudentsInput): Promise<string> {
+export async function runGetMyInterviewStudents(
+  ctx: ToolContext,
+  input: GetMyInterviewStudentsInput,
+): Promise<ToolResult> {
   const result = await ctx.client.get<unknown[]>(`/courses/${input.courseId}/interviews/stage/interviewer/me/students`);
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   if (Array.isArray(result.data) && result.data.length === 0) {
     return 'No students are assigned to you for stage interviews.';

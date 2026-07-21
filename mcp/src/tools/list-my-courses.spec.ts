@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { apiFail, apiOk, makeCtx } from '../test-utils.js';
+import { apiFail, apiOk, makeCtx, toText } from '../test-utils.js';
 import { runListMyCourses } from './list-my-courses.js';
 
 const COURSES = [
@@ -11,7 +11,7 @@ const COURSES = [
 describe('list_my_courses', () => {
   it('lists all courses for admin', async () => {
     const { ctx, calls } = makeCtx({ get: () => apiOk(COURSES), user: { isAdmin: true } });
-    const text = await runListMyCourses(ctx, {});
+    const text = toText(await runListMyCourses(ctx, {}));
     expect(calls).toEqual([{ method: 'GET', path: '/courses' }]);
     expect(text).toContain('admin with access to all 3');
     expect(text).toContain('JS 2026');
@@ -27,7 +27,7 @@ describe('list_my_courses', () => {
         ],
       },
     });
-    const text = await runListMyCourses(ctx, {});
+    const text = toText(await runListMyCourses(ctx, {}));
     expect(text).toContain('2 course(s)');
     expect(text).toContain('roles=student(expelled)');
     expect(text).toContain('roles=mentor');
@@ -50,7 +50,7 @@ describe('list_my_courses', () => {
         ]),
       user: { isAdmin: true },
     });
-    const text = await runListMyCourses(ctx, {});
+    const text = toText(await runListMyCourses(ctx, {}));
     expect(text).toContain('discipline=JavaScript');
     expect(text).toContain('start=2026-01-01');
     expect(text).toContain('end=2026-06-01');
@@ -58,11 +58,11 @@ describe('list_my_courses', () => {
 
   it('reports when the user has no courses', async () => {
     const { ctx } = makeCtx({ get: () => apiOk(COURSES) });
-    expect(await runListMyCourses(ctx, {})).toBe('You are not a member of any course.');
+    expect(toText(await runListMyCourses(ctx, {}))).toBe('You are not a member of any course.');
   });
 
   it('surfaces API errors', async () => {
     const { ctx } = makeCtx({ get: () => apiFail(401, 'bad token') });
-    expect(await runListMyCourses(ctx, {})).toContain('Authentication failed');
+    expect(toText(await runListMyCourses(ctx, {}))).toContain('Authentication failed');
   });
 });

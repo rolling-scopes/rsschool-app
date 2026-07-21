@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 
 export const submitInterviewFeedbackInputSchema = z.object({
   courseId: z.number().int().positive().describe('Numeric ID of the course'),
@@ -40,7 +40,7 @@ export const SUBMIT_INTERVIEW_FEEDBACK_TOOL = {
 export async function runSubmitInterviewFeedback(
   ctx: ToolContext,
   input: SubmitInterviewFeedbackInput,
-): Promise<string> {
+): Promise<ToolResult> {
   const result = await ctx.client.post<unknown>(
     `/courses/${input.courseId}/interviews/${input.interviewId}/stage-interview/feedback`,
     {
@@ -52,7 +52,7 @@ export async function runSubmitInterviewFeedback(
     },
   );
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   return `Interview feedback saved for interview ${input.interviewId}.`;
 }

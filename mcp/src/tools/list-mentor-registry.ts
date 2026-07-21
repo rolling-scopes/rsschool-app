@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
 import { toJsonBlock } from '../format.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 
 export const listMentorRegistryInputSchema = z.object({
   status: z.enum(['all', 'new', 'active', 'inactive']).optional().describe('Registry tab (default all)'),
@@ -28,7 +28,7 @@ export const LIST_MENTOR_REGISTRY_TOOL = {
   },
 } as const;
 
-export async function runListMentorRegistry(ctx: ToolContext, input: ListMentorRegistryInput): Promise<string> {
+export async function runListMentorRegistry(ctx: ToolContext, input: ListMentorRegistryInput): Promise<ToolResult> {
   const params = new URLSearchParams({
     status: input.status ?? 'all',
     currentPage: String(input.page ?? 1),
@@ -39,7 +39,7 @@ export async function runListMentorRegistry(ctx: ToolContext, input: ListMentorR
   }
   const result = await ctx.client.get<unknown>(`/registry/mentors?${params.toString()}`);
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   return toJsonBlock(result.data);
 }

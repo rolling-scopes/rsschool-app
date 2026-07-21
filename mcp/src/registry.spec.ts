@@ -16,7 +16,13 @@ const WRITE_PREFIXES = [
   'distribute_',
 ];
 
-const DESTRUCTIVE_TOOLS = ['update_student_status', 'expel_students', 'delete_course_task', 'delete_course_event'];
+const DESTRUCTIVE_TOOLS = [
+  'update_student_status',
+  'expel_students',
+  'issue_certificates_bulk',
+  'delete_course_task',
+  'delete_course_event',
+];
 
 describe('tool registry integrity', () => {
   it('has unique tool names', () => {

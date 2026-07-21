@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
 import { toJsonBlock } from '../format.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 
 export const listMyStudentsInputSchema = z.object({
   courseId: z.number().int().positive().describe('Numeric ID of the course where the PAT user is a mentor'),
@@ -23,14 +23,14 @@ export const LIST_MY_STUDENTS_TOOL = {
   },
 } as const;
 
-export async function runListMyStudents(ctx: ToolContext, input: ListMyStudentsInput): Promise<string> {
+export async function runListMyStudents(ctx: ToolContext, input: ListMyStudentsInput): Promise<ToolResult> {
   const mentorId = ctx.user.courses.find(c => c.courseId === input.courseId)?.mentorId;
   if (!mentorId) {
-    return `You are not a mentor of course ${input.courseId}.`;
+    return toolError(`You are not a mentor of course ${input.courseId}.`);
   }
   const result = await ctx.client.get<{ students?: unknown[] } | unknown[]>(`/mentors/${mentorId}/students`);
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   return toJsonBlock(result.data);
 }

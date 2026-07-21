@@ -26,6 +26,13 @@ export class AuditLog {
   @Column({ type: 'varchar', length: 120 })
   action: string;
 
+  /**
+   * Name of the MCP tool that triggered the call, taken from the `X-MCP-Tool`
+   * header. Null for PAT calls made outside the MCP server.
+   */
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  toolName: string | null;
+
   @Column({ type: 'varchar', length: 10 })
   method: string;
 

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 
 export const listCourseTasksInputSchema = z.object({
   courseId: z.number().int().positive().describe('Numeric ID of the course'),
@@ -31,10 +31,10 @@ type CourseTaskRow = {
   type?: string | null;
 };
 
-export async function runListCourseTasks(ctx: ToolContext, input: ListCourseTasksInput): Promise<string> {
+export async function runListCourseTasks(ctx: ToolContext, input: ListCourseTasksInput): Promise<ToolResult> {
   const result = await ctx.client.get<CourseTaskRow[]>(`/courses/${input.courseId}/tasks`);
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   if (result.data.length === 0) {
     return `Course ${input.courseId} has no tasks.`;

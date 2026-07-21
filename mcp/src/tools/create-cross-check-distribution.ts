@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 
 export const createCrossCheckDistributionInputSchema = z.object({
   courseId: z.number().int().positive().describe('Numeric ID of the course'),
@@ -27,12 +27,12 @@ export const CREATE_CROSS_CHECK_DISTRIBUTION_TOOL = {
 export async function runCreateCrossCheckDistribution(
   ctx: ToolContext,
   input: CreateCrossCheckDistributionInput,
-): Promise<string> {
+): Promise<ToolResult> {
   const result = await ctx.client.post<unknown>(
     `/courses/${input.courseId}/cross-checks/${input.courseTaskId}/distribution`,
   );
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   return `Cross-check distribution started for task ${input.courseTaskId}.`;
 }

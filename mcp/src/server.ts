@@ -3,18 +3,21 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { RsappApiClient } from './api-client.js';
 import { readStdioConfig } from './config.js';
 import { createMcpServer } from './create-server.js';
+import { createStderrLogger } from './logger.js';
 import { resolveUser } from './roles.js';
 
 async function main() {
   const config = readStdioConfig();
   const client = new RsappApiClient(config);
+  // stdout is the JSON-RPC stream in stdio mode — logs must go to stderr.
+  const logger = createStderrLogger();
 
   // Resolve the PAT owner's roles once at startup: the advertised tool list
   // is fixed for the lifetime of a stdio session. A revoked PAT fails fast
   // here with a human-readable hint.
   const user = await resolveUser(client);
 
-  const server = createMcpServer({ client, user, toolsets: config.toolsets });
+  const server = createMcpServer({ client, user, toolsets: config.toolsets, logger });
   const transport = new StdioServerTransport();
   await server.connect(transport);
 }

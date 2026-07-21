@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 import { courseEventFieldsJsonSchemaProperties, courseEventFieldsSchema } from './course-event-fields.js';
 
 export const createCourseEventInputSchema = z.object({
@@ -14,7 +14,7 @@ export type CreateCourseEventInput = z.infer<typeof createCourseEventInputSchema
 export const CREATE_COURSE_EVENT_TOOL = {
   name: 'create_course_event',
   description:
-    'Add an event from the events catalog to a course with date, place and organizer. Confirm the event and date with the user before calling.',
+    'Add an event from the events catalog to a course with date, place and organizer. Find the eventId with list_event_catalog first. Confirm the event and date with the user before calling.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -27,11 +27,11 @@ export const CREATE_COURSE_EVENT_TOOL = {
   },
 } as const;
 
-export async function runCreateCourseEvent(ctx: ToolContext, input: CreateCourseEventInput): Promise<string> {
+export async function runCreateCourseEvent(ctx: ToolContext, input: CreateCourseEventInput): Promise<ToolResult> {
   const { courseId, ...body } = input;
   const result = await ctx.client.post<unknown>(`/courses/${courseId}/events`, body);
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   return `Course event created in course ${courseId} (eventId=${input.eventId}).`;
 }

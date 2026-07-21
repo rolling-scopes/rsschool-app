@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 
 export const grantCourseRolesInputSchema = z.object({
   courseId: z.number().int().positive().describe('Numeric ID of the course'),
@@ -32,7 +32,7 @@ export const GRANT_COURSE_ROLES_TOOL = {
   },
 } as const;
 
-export async function runGrantCourseRoles(ctx: ToolContext, input: GrantCourseRolesInput): Promise<string> {
+export async function runGrantCourseRoles(ctx: ToolContext, input: GrantCourseRolesInput): Promise<ToolResult> {
   // The backend PUT replaces the whole role set, so a call that names no role
   // flags would silently revoke every role. Require at least one to be explicit.
   if (
@@ -41,7 +41,9 @@ export async function runGrantCourseRoles(ctx: ToolContext, input: GrantCourseRo
     input.isDementor === undefined &&
     input.isActivist === undefined
   ) {
-    return 'Specify at least one role flag (isManager/isSupervisor/isDementor/isActivist); this replaces the full role set, so an empty call would revoke every role.';
+    return toolError(
+      'Specify at least one role flag (isManager/isSupervisor/isDementor/isActivist); this replaces the full role set, so an empty call would revoke every role.',
+    );
   }
   const roles = {
     isManager: input.isManager ?? false,
@@ -54,7 +56,7 @@ export async function runGrantCourseRoles(ctx: ToolContext, input: GrantCourseRo
     roles,
   );
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   const granted = Object.entries(roles)
     .filter(([, value]) => value)

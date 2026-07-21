@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { apiFail, apiOk, makeCtx } from '../test-utils.js';
+import { apiFail, apiOk, makeCtx, toText } from '../test-utils.js';
 import { runGrantCourseRoles } from './grant-course-roles.js';
 
 describe('grant_course_roles', () => {
   it('puts the full role set with omitted roles as false', async () => {
     const { ctx, calls } = makeCtx({ put: () => apiOk({}) });
-    const text = await runGrantCourseRoles(ctx, { courseId: 5, githubId: 'octo', isManager: true });
+    const text = toText(await runGrantCourseRoles(ctx, { courseId: 5, githubId: 'octo', isManager: true }));
     expect(calls).toEqual([
       {
         method: 'PUT',
@@ -18,7 +18,9 @@ describe('grant_course_roles', () => {
 
   it('reports an empty role set when all roles are explicitly false', async () => {
     const { ctx } = makeCtx({ put: () => apiOk({}) });
-    expect(await runGrantCourseRoles(ctx, { courseId: 5, githubId: 'octo', isManager: false })).toContain('(none)');
+    expect(toText(await runGrantCourseRoles(ctx, { courseId: 5, githubId: 'octo', isManager: false }))).toContain(
+      '(none)',
+    );
   });
 
   it('defaults an unspecified role flag to false', async () => {
@@ -42,13 +44,15 @@ describe('grant_course_roles', () => {
 
   it('refuses a call that names no role flag (would revoke everything)', async () => {
     const { ctx, calls } = makeCtx({ put: () => apiOk({}) });
-    expect(await runGrantCourseRoles(ctx, { courseId: 5, githubId: 'octo' })).toContain('at least one role flag');
+    expect(toText(await runGrantCourseRoles(ctx, { courseId: 5, githubId: 'octo' }))).toContain(
+      'at least one role flag',
+    );
     expect(calls).toEqual([]);
   });
 
   it('surfaces API errors', async () => {
     const { ctx } = makeCtx({ put: () => apiFail(400, 'User with githubid ghost is not found') });
-    expect(await runGrantCourseRoles(ctx, { courseId: 5, githubId: 'ghost', isManager: true })).toContain(
+    expect(toText(await runGrantCourseRoles(ctx, { courseId: 5, githubId: 'ghost', isManager: true }))).toContain(
       'is not found',
     );
   });

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 
 export const searchUsersInputSchema = z.object({
   query: z.string().min(1).describe('Search string: name, GitHub login, or numeric user ID'),
@@ -33,17 +33,17 @@ type UserRow = {
   name?: string | null;
 };
 
-export async function runSearchUsers(ctx: ToolContext, input: SearchUsersInput): Promise<string> {
+export async function runSearchUsers(ctx: ToolContext, input: SearchUsersInput): Promise<ToolResult> {
   const params = new URLSearchParams({ query: input.query });
   // `includeSystem` exposes system/service accounts — admin-only. Enforce it
   // here rather than trusting the backend, since the tool is granted to managers.
   if (input.includeSystem && !ctx.user.isAdmin) {
-    return 'Not authorized: includeSystem is admin-only.';
+    return toolError('Not authorized: includeSystem is admin-only.');
   }
   if (input.includeSystem) params.set('includeSystem', 'true');
   const result = await ctx.client.get<UserRow[]>(`/users/search?${params.toString()}`);
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   if (result.data.length === 0) {
     return `No users matched "${input.query}".`;

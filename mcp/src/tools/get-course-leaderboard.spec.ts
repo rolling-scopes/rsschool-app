@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { apiFail, apiOk, makeCtx } from '../test-utils.js';
+import { apiFail, apiOk, makeCtx, toText } from '../test-utils.js';
 import { runGetCourseLeaderboard } from './get-course-leaderboard.js';
 
 describe('get_course_leaderboard', () => {
@@ -22,6 +22,6 @@ describe('get_course_leaderboard', () => {
 
   it('surfaces API errors', async () => {
     const { ctx } = makeCtx({ get: () => apiFail(401) });
-    expect(await runGetCourseLeaderboard(ctx, { courseId: 5 })).toContain('Authentication failed');
+    expect(toText(await runGetCourseLeaderboard(ctx, { courseId: 5 }))).toContain('Authentication failed');
   });
 });

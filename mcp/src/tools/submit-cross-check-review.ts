@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 
 export const submitCrossCheckReviewInputSchema = z.object({
   courseId: z.number().int().positive().describe('Numeric ID of the course'),
@@ -32,13 +32,16 @@ export const SUBMIT_CROSS_CHECK_REVIEW_TOOL = {
   },
 } as const;
 
-export async function runSubmitCrossCheckReview(ctx: ToolContext, input: SubmitCrossCheckReviewInput): Promise<string> {
+export async function runSubmitCrossCheckReview(
+  ctx: ToolContext,
+  input: SubmitCrossCheckReviewInput,
+): Promise<ToolResult> {
   const result = await ctx.client.post<unknown>(
     `/courses/${input.courseId}/cross-checks/${input.courseTaskId}/results/${encodeURIComponent(input.studentGithubId)}`,
     { score: input.score, comment: input.comment, anonymous: input.anonymous ?? false },
   );
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   return `Cross-check review submitted for ${input.studentGithubId}: score ${input.score}.`;
 }

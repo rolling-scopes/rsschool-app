@@ -1,7 +1,7 @@
 import { createServer, type Server as HttpServer } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
-import { createMcpHttpHandler, errorMessage, UserRoleCache } from './http.js';
+import { closeQuietly, createMcpHttpHandler, errorMessage, UserRoleCache } from './http.js';
 import type { ResolvedUser } from './types.js';
 import { createRequestListener } from './http-server.js';
 
@@ -158,5 +158,79 @@ describe('UserRoleCache', () => {
     const cached = await cache.getUser('token', resolve);
     expect(cached.id).toBe(1);
     expect(resolves).toBe(1);
+  });
+});
+
+describe('UserRoleCache eviction order', () => {
+  const user = (id: number): ResolvedUser => ({
+    id,
+    githubId: `u${id}`,
+    isAdmin: false,
+    roles: new Set(),
+    courses: [],
+  });
+
+  it('drops expired entries before fresh ones when at capacity', async () => {
+    // ttl 1ms: the first two entries expire, the third must survive eviction.
+    const cache = new UserRoleCache(1, 2);
+    await cache.getUser('stale-a', async () => user(1));
+    await cache.getUser('stale-b', async () => user(2));
+    await new Promise(resolve => setTimeout(resolve, 5));
+
+    await cache.getUser('fresh', async () => user(3));
+    // Both stale entries were reaped, so the newcomer is the only survivor —
+    // plain FIFO would have dropped exactly one and left the cache full.
+    expect(cache.size).toBe(1);
+  });
+
+  it('falls back to dropping the oldest when nothing is expired', async () => {
+    const cache = new UserRoleCache(60_000, 2);
+    let resolved = 0;
+    const make = (id: number) => async () => {
+      resolved += 1;
+      return user(id);
+    };
+    await cache.getUser('a', make(1));
+    await cache.getUser('b', make(2));
+    await cache.getUser('c', make(3));
+    expect(cache.size).toBe(2);
+    await cache.getUser('a', make(1)); // evicted earlier, must re-resolve
+    expect(resolved).toBe(4);
+  });
+});
+
+describe('closeQuietly', () => {
+  it('swallows a teardown failure and logs it', async () => {
+    const warnings: Array<Record<string, unknown> | undefined> = [];
+    const logger = {
+      info: () => undefined,
+      warn: (_message: string, fields?: Record<string, unknown>) => void warnings.push(fields),
+      error: () => undefined,
+    };
+    await closeQuietly(
+      async () => {
+        throw new Error('socket already gone');
+      },
+      logger,
+      'req-9',
+    );
+    expect(warnings[0]).toMatchObject({ requestId: 'req-9', error: 'socket already gone' });
+  });
+
+  it('stringifies a non-Error rejection', async () => {
+    const warnings: Array<Record<string, unknown> | undefined> = [];
+    const logger = {
+      info: () => undefined,
+      warn: (_message: string, fields?: Record<string, unknown>) => void warnings.push(fields),
+      error: () => undefined,
+    };
+    await closeQuietly(async () => Promise.reject('plain'), logger, 'req-10');
+    expect(warnings[0]).toMatchObject({ error: 'plain' });
+  });
+
+  it('does nothing when close succeeds', async () => {
+    const warn = vi.fn();
+    await closeQuietly(async () => undefined, { info: vi.fn(), warn, error: vi.fn() }, 'req-11');
+    expect(warn).not.toHaveBeenCalled();
   });
 });

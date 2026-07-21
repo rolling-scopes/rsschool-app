@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 import { courseTaskFieldsJsonSchemaProperties, courseTaskFieldsSchema } from './course-task-fields.js';
 
 export const createCourseTaskInputSchema = z.object({
@@ -23,7 +23,7 @@ export type CreateCourseTaskInput = z.infer<typeof createCourseTaskInputSchema>;
 export const CREATE_COURSE_TASK_TOOL = {
   name: 'create_course_task',
   description:
-    'Add a task from the tasks catalog to a course schedule with dates, checker and scoring. Confirm the task and dates with the user before calling.',
+    'Add a task from the tasks catalog to a course schedule with dates, checker and scoring. Find the taskId with list_task_catalog first. Confirm the task and dates with the user before calling.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -36,11 +36,11 @@ export const CREATE_COURSE_TASK_TOOL = {
   },
 } as const;
 
-export async function runCreateCourseTask(ctx: ToolContext, input: CreateCourseTaskInput): Promise<string> {
+export async function runCreateCourseTask(ctx: ToolContext, input: CreateCourseTaskInput): Promise<ToolResult> {
   const { courseId, ...body } = input;
   const result = await ctx.client.post<unknown>(`/courses/${courseId}/tasks`, body);
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   return `Course task created in course ${courseId} (taskId=${input.taskId}).`;
 }

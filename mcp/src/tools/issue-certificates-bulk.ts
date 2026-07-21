@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 import { certificateCriteriaJsonSchemaProperties, certificateCriteriaSchema } from './certificate-criteria.js';
 
 export const issueCertificatesBulkInputSchema = z.object({
@@ -36,10 +36,13 @@ type BulkResult = {
 
 const SUMMARY_DISPLAY_LIMIT = 20;
 
-export async function runIssueCertificatesBulk(ctx: ToolContext, input: IssueCertificatesBulkInput): Promise<string> {
+export async function runIssueCertificatesBulk(
+  ctx: ToolContext,
+  input: IssueCertificatesBulkInput,
+): Promise<ToolResult> {
   const result = await ctx.client.post<BulkResult>(`/certificate/course/${input.courseId}/bulk`, input.criteria);
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   const { issued, students } = result.data;
   if (issued === 0) {

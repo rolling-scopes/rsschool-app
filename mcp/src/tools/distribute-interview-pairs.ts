@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
 import { toJsonBlock } from '../format.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 
 export const distributeInterviewPairsInputSchema = z.object({
   courseId: z.number().int().positive().describe('Numeric ID of the course'),
@@ -32,13 +32,13 @@ export const DISTRIBUTE_INTERVIEW_PAIRS_TOOL = {
 export async function runDistributeInterviewPairs(
   ctx: ToolContext,
   input: DistributeInterviewPairsInput,
-): Promise<string> {
+): Promise<ToolResult> {
   const result = await ctx.client.post<unknown[]>(
     `/courses/${input.courseId}/interviews/${input.courseTaskId}/auto-distribute`,
     { clean: input.clean ?? false, registrationEnabled: input.registrationEnabled ?? true },
   );
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   const count = Array.isArray(result.data) ? result.data.length : 0;
   return [`Created ${count} interview pair(s).`, toJsonBlock(result.data)].join('\n');

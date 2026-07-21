@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 
 export const updateStudentStatusInputSchema = z.object({
   courseId: z.number().int().positive().describe('Numeric ID of the course'),
@@ -28,13 +28,13 @@ export const UPDATE_STUDENT_STATUS_TOOL = {
   },
 } as const;
 
-export async function runUpdateStudentStatus(ctx: ToolContext, input: UpdateStudentStatusInput): Promise<string> {
+export async function runUpdateStudentStatus(ctx: ToolContext, input: UpdateStudentStatusInput): Promise<ToolResult> {
   const result = await ctx.client.post<unknown>(
     `/courses/${input.courseId}/students/${encodeURIComponent(input.githubId)}/status`,
     { status: input.status, comment: input.comment },
   );
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   return `Status of ${input.githubId} in course ${input.courseId} changed to "${input.status}".`;
 }

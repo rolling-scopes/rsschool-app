@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
 import { toJsonBlock } from '../format.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 
 export const getMentorDashboardInputSchema = z.object({
   courseId: z.number().int().positive().describe('Numeric ID of the course where the PAT user is a mentor'),
@@ -23,14 +23,14 @@ export const GET_MENTOR_DASHBOARD_TOOL = {
   },
 } as const;
 
-export async function runGetMentorDashboard(ctx: ToolContext, input: GetMentorDashboardInput): Promise<string> {
+export async function runGetMentorDashboard(ctx: ToolContext, input: GetMentorDashboardInput): Promise<ToolResult> {
   const mentorId = ctx.user.courses.find(c => c.courseId === input.courseId)?.mentorId;
   if (!mentorId) {
-    return `You are not a mentor of course ${input.courseId}.`;
+    return toolError(`You are not a mentor of course ${input.courseId}.`);
   }
   const result = await ctx.client.get<unknown[]>(`/mentors/${mentorId}/course/${input.courseId}/dashboard`);
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   if (Array.isArray(result.data) && result.data.length === 0) {
     return 'Nothing to review right now — the dashboard is empty.';

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
 import { toJsonBlock } from '../format.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 
 export const getMyScoreInputSchema = z.object({
   courseId: z.number().int().positive().describe('Numeric ID of the course'),
@@ -23,15 +23,15 @@ export const GET_MY_SCORE_TOOL = {
   },
 } as const;
 
-export async function runGetMyScore(ctx: ToolContext, input: GetMyScoreInput): Promise<string> {
+export async function runGetMyScore(ctx: ToolContext, input: GetMyScoreInput): Promise<ToolResult> {
   const result = await ctx.client.get<unknown>(
     `/course/${input.courseId}/students/score/${encodeURIComponent(ctx.user.githubId)}`,
   );
   if (!result.ok) {
     if (result.status === 404) {
-      return `You are not a student of course ${input.courseId}, or the score is not available.`;
+      return toolError(`You are not a student of course ${input.courseId}, or the score is not available.`);
     }
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   return toJsonBlock(result.data);
 }

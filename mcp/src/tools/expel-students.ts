@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
 import { toJsonBlock } from '../format.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 
 export const expelStudentsInputSchema = z.object({
   courseId: z.number().int().positive().describe('Numeric ID of the course'),
@@ -43,13 +43,13 @@ export const EXPEL_STUDENTS_TOOL = {
   },
 } as const;
 
-export async function runExpelStudents(ctx: ToolContext, input: ExpelStudentsInput): Promise<string> {
+export async function runExpelStudents(ctx: ToolContext, input: ExpelStudentsInput): Promise<ToolResult> {
   const result = await ctx.client.post<unknown>(`/courses/${input.courseId}/students/expel`, {
     criteria: input.criteria,
     options: { keepWithMentor: input.keepWithMentor },
   });
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   return ['Expulsion completed.', toJsonBlock(result.data)].join('\n');
 }

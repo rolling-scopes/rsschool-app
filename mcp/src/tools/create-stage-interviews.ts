@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 
 export const createStageInterviewsInputSchema = z.object({
   courseId: z.number().int().positive().describe('Numeric ID of the course'),
@@ -30,12 +30,15 @@ export const CREATE_STAGE_INTERVIEWS_TOOL = {
   },
 } as const;
 
-export async function runCreateStageInterviews(ctx: ToolContext, input: CreateStageInterviewsInput): Promise<string> {
+export async function runCreateStageInterviews(
+  ctx: ToolContext,
+  input: CreateStageInterviewsInput,
+): Promise<ToolResult> {
   const result = await ctx.client.post<unknown>(`/courses/${input.courseId}/interviews/stage`, {
     noRegistration: input.noRegistration ?? false,
   });
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   return `Stage interview pairs created for course ${input.courseId}.`;
 }

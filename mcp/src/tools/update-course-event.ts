@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 import { courseEventFieldsJsonSchemaProperties, courseEventFieldsSchema } from './course-event-fields.js';
 
 export const updateCourseEventInputSchema = z.object({
@@ -27,15 +27,15 @@ export const UPDATE_COURSE_EVENT_TOOL = {
   },
 } as const;
 
-export async function runUpdateCourseEvent(ctx: ToolContext, input: UpdateCourseEventInput): Promise<string> {
+export async function runUpdateCourseEvent(ctx: ToolContext, input: UpdateCourseEventInput): Promise<ToolResult> {
   const { courseId, courseEventId, ...fields } = input;
   const body = Object.fromEntries(Object.entries(fields).filter(([, value]) => value !== undefined));
   if (Object.keys(body).length === 0) {
-    return 'Nothing to update: provide at least one field.';
+    return toolError('Nothing to update: provide at least one field.');
   }
   const result = await ctx.client.put<unknown>(`/courses/${courseId}/events/${courseEventId}`, body);
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   return `Course event ${courseEventId} updated (${Object.keys(body).join(', ')}).`;
 }

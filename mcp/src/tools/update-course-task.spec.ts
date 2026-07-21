@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { apiFail, apiOk, makeCtx } from '../test-utils.js';
+import { apiFail, apiOk, makeCtx, toText } from '../test-utils.js';
 import { runUpdateCourseTask } from './update-course-task.js';
 
 describe('update_course_task', () => {
@@ -10,7 +10,7 @@ describe('update_course_task', () => {
       get: () => apiOk({ studentStartDate: '2020-01-01', studentEndDate: '2020-02-01' }),
       put: () => apiOk({}),
     });
-    const text = await runUpdateCourseTask(ctx, { courseId: 5, courseTaskId: 11, maxScore: 200 });
+    const text = toText(await runUpdateCourseTask(ctx, { courseId: 5, courseTaskId: 11, maxScore: 200 }));
     expect(calls).toEqual([
       { method: 'GET', path: '/courses/5/tasks/11' },
       {
@@ -44,13 +44,15 @@ describe('update_course_task', () => {
 
   it('rejects an empty update without calling the API', async () => {
     const { ctx, calls } = makeCtx({});
-    expect(await runUpdateCourseTask(ctx, { courseId: 5, courseTaskId: 11 })).toContain('Nothing to update');
+    expect(toText(await runUpdateCourseTask(ctx, { courseId: 5, courseTaskId: 11 }))).toContain('Nothing to update');
     expect(calls).toHaveLength(0);
   });
 
   it('surfaces an error from the current-task fetch', async () => {
     const { ctx, calls } = makeCtx({ get: () => apiFail(404) });
-    expect(await runUpdateCourseTask(ctx, { courseId: 5, courseTaskId: 11, maxScore: 1 })).toContain('not found');
+    expect(toText(await runUpdateCourseTask(ctx, { courseId: 5, courseTaskId: 11, maxScore: 1 }))).toContain(
+      'not found',
+    );
     expect(calls).toEqual([{ method: 'GET', path: '/courses/5/tasks/11' }]);
   });
 
@@ -59,7 +61,7 @@ describe('update_course_task', () => {
       get: () => apiOk({ studentStartDate: 'a', studentEndDate: 'b' }),
       put: () => apiFail(403),
     });
-    expect(await runUpdateCourseTask(ctx, { courseId: 5, courseTaskId: 11, maxScore: 1 })).toContain(
+    expect(toText(await runUpdateCourseTask(ctx, { courseId: 5, courseTaskId: 11, maxScore: 1 }))).toContain(
       'Permission denied',
     );
   });

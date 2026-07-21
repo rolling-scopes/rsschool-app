@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 import { courseTaskFieldsJsonSchemaProperties, courseTaskFieldsSchema } from './course-task-fields.js';
 
 export const updateCourseTaskInputSchema = z.object({
@@ -27,11 +27,11 @@ export const UPDATE_COURSE_TASK_TOOL = {
   },
 } as const;
 
-export async function runUpdateCourseTask(ctx: ToolContext, input: UpdateCourseTaskInput): Promise<string> {
+export async function runUpdateCourseTask(ctx: ToolContext, input: UpdateCourseTaskInput): Promise<ToolResult> {
   const { courseId, courseTaskId, ...fields } = input;
   const provided = Object.fromEntries(Object.entries(fields).filter(([, value]) => value !== undefined));
   if (Object.keys(provided).length === 0) {
-    return 'Nothing to update: provide at least one field.';
+    return toolError('Nothing to update: provide at least one field.');
   }
   const body: Record<string, unknown> = { ...provided };
   // The backend PUT requires studentStartDate and studentEndDate on every call
@@ -42,14 +42,14 @@ export async function runUpdateCourseTask(ctx: ToolContext, input: UpdateCourseT
       `/courses/${courseId}/tasks/${courseTaskId}`,
     );
     if (!current.ok) {
-      return describeError(current.status, current.message);
+      return toolError(describeError(current.status, current.message));
     }
     body.studentStartDate ??= current.data?.studentStartDate;
     body.studentEndDate ??= current.data?.studentEndDate;
   }
   const result = await ctx.client.put<unknown>(`/courses/${courseId}/tasks/${courseTaskId}`, body);
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   // Report only the fields the caller actually changed, not the carried-over dates.
   return `Course task ${courseTaskId} updated (${Object.keys(provided).join(', ')}).`;

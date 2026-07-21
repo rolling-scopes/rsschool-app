@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 
 export const issueCertificateInputSchema = z.object({
   courseId: z.number().int().positive().describe('Numeric ID of the course'),
@@ -23,7 +23,7 @@ export const ISSUE_CERTIFICATE_TOOL = {
   },
 } as const;
 
-export async function runIssueCertificate(ctx: ToolContext, input: IssueCertificateInput): Promise<string> {
+export async function runIssueCertificate(ctx: ToolContext, input: IssueCertificateInput): Promise<ToolResult> {
   const result = await ctx.client.post<{ studentId: number; courseName: string; studentName: string }>(
     `/certificate/course/${input.courseId}/student/${encodeURIComponent(input.studentGithubId)}`,
   );
@@ -31,13 +31,17 @@ export async function runIssueCertificate(ctx: ToolContext, input: IssueCertific
   if (!result.ok) {
     switch (result.status) {
       case 401:
-        return `Authentication failed (401). Check that RSAPP_PAT is valid and not revoked. Detail: ${result.message}`;
+        return toolError(
+          `Authentication failed (401). Check that RSAPP_PAT is valid and not revoked. Detail: ${result.message}`,
+        );
       case 403:
-        return `Permission denied (403). The PAT user must be course manager of course ${input.courseId} or an admin. Detail: ${result.message}`;
+        return toolError(
+          `Permission denied (403). The PAT user must be course manager of course ${input.courseId} or an admin. Detail: ${result.message}`,
+        );
       case 404:
-        return `Student "${input.studentGithubId}" not found in course ${input.courseId}.`;
+        return toolError(`Student "${input.studentGithubId}" not found in course ${input.courseId}.`);
       default:
-        return `Certificate issuance failed (HTTP ${result.status}): ${result.message}`;
+        return toolError(`Certificate issuance failed (HTTP ${result.status}): ${result.message}`);
     }
   }
 

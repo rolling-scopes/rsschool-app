@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 
 export const completeCrossCheckInputSchema = z.object({
   courseId: z.number().int().positive().describe('Numeric ID of the course'),
@@ -24,12 +24,12 @@ export const COMPLETE_CROSS_CHECK_TOOL = {
   },
 } as const;
 
-export async function runCompleteCrossCheck(ctx: ToolContext, input: CompleteCrossCheckInput): Promise<string> {
+export async function runCompleteCrossCheck(ctx: ToolContext, input: CompleteCrossCheckInput): Promise<ToolResult> {
   const result = await ctx.client.post<unknown>(
     `/courses/${input.courseId}/cross-checks/${input.courseTaskId}/completion`,
   );
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   return `Cross-check completion started for task ${input.courseTaskId}.`;
 }

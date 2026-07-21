@@ -20,6 +20,9 @@ export class AuditLogEntryDto {
   @ApiProperty()
   public action: string;
 
+  @ApiProperty({ required: false, nullable: true })
+  public toolName: string | null;
+
   @ApiProperty()
   public method: string;
 
@@ -51,6 +54,7 @@ export class AuditLogEntryDto {
     this.tokenId = entry.tokenId;
     this.tokenName = entry.token?.name ?? null;
     this.action = entry.action;
+    this.toolName = entry.toolName ?? null;
     this.method = entry.method;
     this.path = entry.path;
     this.responseStatus = entry.responseStatus;

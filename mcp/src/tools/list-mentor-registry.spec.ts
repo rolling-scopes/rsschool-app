@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { apiFail, apiOk, makeCtx } from '../test-utils.js';
+import { apiFail, apiOk, makeCtx, toText } from '../test-utils.js';
 import { runListMentorRegistry } from './list-mentor-registry.js';
 
 describe('list_mentor_registry', () => {
@@ -17,6 +17,6 @@ describe('list_mentor_registry', () => {
 
   it('surfaces API errors', async () => {
     const { ctx } = makeCtx({ get: () => apiFail(403) });
-    expect(await runListMentorRegistry(ctx, {})).toContain('Permission denied');
+    expect(toText(await runListMentorRegistry(ctx, {}))).toContain('Permission denied');
   });
 });

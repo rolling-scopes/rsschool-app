@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
 import { toJsonBlock } from '../format.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 
 export const getMyProfileInputSchema = z.object({});
 
@@ -18,10 +18,10 @@ export const GET_MY_PROFILE_TOOL = {
   },
 } as const;
 
-export async function runGetMyProfile(ctx: ToolContext, _input: GetMyProfileInput): Promise<string> {
+export async function runGetMyProfile(ctx: ToolContext, _input: GetMyProfileInput): Promise<ToolResult> {
   const result = await ctx.client.get<unknown>('/profile/me');
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   return toJsonBlock(result.data);
 }

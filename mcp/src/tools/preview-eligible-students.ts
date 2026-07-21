@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 import { certificateCriteriaJsonSchemaProperties, certificateCriteriaSchema } from './certificate-criteria.js';
 
 export const previewEligibleStudentsInputSchema = z.object({
@@ -46,10 +46,10 @@ const PREVIEW_DISPLAY_LIMIT = 50;
 export async function runPreviewEligibleStudents(
   ctx: ToolContext,
   input: PreviewEligibleStudentsInput,
-): Promise<string> {
+): Promise<ToolResult> {
   const result = await ctx.client.post<PreviewResult>(`/certificate/course/${input.courseId}/eligible`, input.criteria);
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   const { count, students } = result.data;
   if (count === 0) {

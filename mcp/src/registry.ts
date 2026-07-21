@@ -116,6 +116,12 @@ import {
   updateCourseTaskInputSchema,
   runUpdateCourseTask,
 } from './tools/update-course-task.js';
+import {
+  LIST_EVENT_CATALOG_TOOL,
+  listEventCatalogInputSchema,
+  runListEventCatalog,
+} from './tools/list-event-catalog.js';
+import { LIST_TASK_CATALOG_TOOL, listTaskCatalogInputSchema, runListTaskCatalog } from './tools/list-task-catalog.js';
 import { EXPEL_STUDENTS_TOOL, expelStudentsInputSchema, runExpelStudents } from './tools/expel-students.js';
 import {
   GET_COURSE_INTERVIEWS_TOOL,
@@ -197,11 +203,39 @@ import {
   runUpdateStudentStatus,
 } from './tools/update-student-status.js';
 
-const readOnly = { readOnlyHint: true };
-const write = { readOnlyHint: false };
-const destructive = { readOnlyHint: false, destructiveHint: true };
+// `openWorldHint` defaults to true in the spec, which is wrong for every tool
+// here: they all talk to exactly one closed API. Set it explicitly everywhere.
+const closedWorld = { openWorldHint: false } as const;
 
-export const TOOLS: ToolBinding[] = [
+const readOnly = { ...closedWorld, readOnlyHint: true };
+const write = { ...closedWorld, readOnlyHint: false };
+/** Write whose repetition with the same arguments changes nothing further. */
+const idempotentWrite = { ...closedWorld, readOnlyHint: false, idempotentHint: true };
+const destructive = { ...closedWorld, readOnlyHint: false, destructiveHint: true };
+/** Destructive but state-setting: re-applying the same state is a no-op. */
+const destructiveIdempotent = { ...destructive, idempotentHint: true };
+
+/** `list_my_courses` -> `List my courses`: clients show this instead of the raw name. */
+function humanizeToolName(name: string): string {
+  const words = name.split('_').join(' ');
+  return words.charAt(0).toUpperCase() + words.slice(1);
+}
+
+/** Fills in a display title for every tool that didn't set one explicitly. */
+function withDefaultTitles(bindings: ToolBinding[]): ToolBinding[] {
+  return bindings.map(binding => ({
+    ...binding,
+    tool: {
+      ...binding.tool,
+      annotations: {
+        ...binding.tool.annotations,
+        title: binding.tool.annotations?.title ?? humanizeToolName(binding.tool.name),
+      },
+    },
+  }));
+}
+
+export const TOOLS: ToolBinding[] = withDefaultTitles([
   // common — any authenticated user
   {
     tool: { ...LIST_MY_COURSES_TOOL, annotations: readOnly },
@@ -306,7 +340,7 @@ export const TOOLS: ToolBinding[] = [
     run: runGetMyInterviewStudents as never,
   },
   {
-    tool: { ...UPDATE_STUDENT_STATUS_TOOL, annotations: destructive },
+    tool: { ...UPDATE_STUDENT_STATUS_TOOL, annotations: destructiveIdempotent },
     schema: updateStudentStatusInputSchema,
     roles: ['mentor', 'supervisor', 'dementor', 'manager'],
     toolset: 'mentor',
@@ -329,7 +363,7 @@ export const TOOLS: ToolBinding[] = [
     run: runIssueCertificate as never,
   },
   {
-    tool: { ...ISSUE_CERTIFICATES_BULK_TOOL, annotations: write },
+    tool: { ...ISSUE_CERTIFICATES_BULK_TOOL, annotations: destructive },
     schema: issueCertificatesBulkInputSchema,
     roles: ['manager'],
     toolset: 'course-management',
@@ -479,7 +513,7 @@ export const TOOLS: ToolBinding[] = [
     run: runCreateCourseTask as never,
   },
   {
-    tool: { ...UPDATE_COURSE_TASK_TOOL, annotations: write },
+    tool: { ...UPDATE_COURSE_TASK_TOOL, annotations: idempotentWrite },
     schema: updateCourseTaskInputSchema,
     roles: ['manager'],
     toolset: 'course-admin',
@@ -500,7 +534,7 @@ export const TOOLS: ToolBinding[] = [
     run: runCreateCourseEvent as never,
   },
   {
-    tool: { ...UPDATE_COURSE_EVENT_TOOL, annotations: write },
+    tool: { ...UPDATE_COURSE_EVENT_TOOL, annotations: idempotentWrite },
     schema: updateCourseEventInputSchema,
     roles: ['manager'],
     toolset: 'course-admin',
@@ -549,17 +583,31 @@ export const TOOLS: ToolBinding[] = [
     run: runListMentorRegistry as never,
   },
   {
-    tool: { ...APPROVE_MENTOR_TOOL, annotations: write },
+    tool: { ...APPROVE_MENTOR_TOOL, annotations: idempotentWrite },
     schema: approveMentorInputSchema,
     roles: ['manager', 'supervisor'],
     toolset: 'course-admin',
     run: runApproveMentor as never,
   },
   {
-    tool: { ...GRANT_COURSE_ROLES_TOOL, annotations: write },
+    tool: { ...GRANT_COURSE_ROLES_TOOL, annotations: idempotentWrite },
     schema: grantCourseRolesInputSchema,
     roles: ['manager'],
     toolset: 'course-admin',
     run: runGrantCourseRoles as never,
   },
-];
+  {
+    tool: { ...LIST_TASK_CATALOG_TOOL, annotations: readOnly },
+    schema: listTaskCatalogInputSchema,
+    roles: ['manager'],
+    toolset: 'course-admin',
+    run: runListTaskCatalog as never,
+  },
+  {
+    tool: { ...LIST_EVENT_CATALOG_TOOL, annotations: readOnly },
+    schema: listEventCatalogInputSchema,
+    roles: ['manager'],
+    toolset: 'course-admin',
+    run: runListEventCatalog as never,
+  },
+]);

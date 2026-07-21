@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 
 export const listMyCoursesInputSchema = z.object({});
 
@@ -42,10 +42,10 @@ function formatCourse(c: CourseRow, roles?: string[]): string {
     .join(' | ');
 }
 
-export async function runListMyCourses(ctx: ToolContext, _input: ListMyCoursesInput): Promise<string> {
+export async function runListMyCourses(ctx: ToolContext, _input: ListMyCoursesInput): Promise<ToolResult> {
   const result = await ctx.client.get<CourseRow[]>('/courses');
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
 
   if (ctx.user.isAdmin) {

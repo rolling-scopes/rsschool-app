@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { apiFail, apiOk, makeCtx } from '../test-utils.js';
+import { apiFail, apiOk, makeCtx, toText } from '../test-utils.js';
 import { runDistributeInterviewPairs } from './distribute-interview-pairs.js';
 
 describe('distribute_interview_pairs', () => {
   it('posts with defaults clean=false, registrationEnabled=true', async () => {
     const { ctx, calls } = makeCtx({ post: () => apiOk([{ pair: 1 }, { pair: 2 }]) });
-    const text = await runDistributeInterviewPairs(ctx, { courseId: 5, courseTaskId: 11 });
+    const text = toText(await runDistributeInterviewPairs(ctx, { courseId: 5, courseTaskId: 11 }));
     expect(calls).toEqual([
       {
         method: 'POST',
@@ -24,13 +24,13 @@ describe('distribute_interview_pairs', () => {
 
   it('handles a non-array response defensively', async () => {
     const { ctx } = makeCtx({ post: () => apiOk({ unexpected: true }) });
-    const text = await runDistributeInterviewPairs(ctx, { courseId: 5, courseTaskId: 11 });
+    const text = toText(await runDistributeInterviewPairs(ctx, { courseId: 5, courseTaskId: 11 }));
     expect(text).toContain('Created 0 interview pair(s)');
   });
 
   it('surfaces API errors', async () => {
     const { ctx } = makeCtx({ post: () => apiFail(400, 'No interview pairs were created') });
-    expect(await runDistributeInterviewPairs(ctx, { courseId: 5, courseTaskId: 11 })).toContain(
+    expect(toText(await runDistributeInterviewPairs(ctx, { courseId: 5, courseTaskId: 11 }))).toContain(
       'No interview pairs were created',
     );
   });

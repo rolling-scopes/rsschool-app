@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { describeError } from '../api-client.js';
 import { toJsonBlock } from '../format.js';
-import type { ToolContext } from '../types.js';
+import { toolError, type ToolContext, type ToolResult } from '../types.js';
 
 export const getCourseScheduleInputSchema = z.object({
   courseId: z.number().int().positive().describe('Numeric ID of the course'),
@@ -38,10 +38,10 @@ type ScheduleItem = {
   tag?: string;
 };
 
-export async function runGetCourseSchedule(ctx: ToolContext, input: GetCourseScheduleInput): Promise<string> {
+export async function runGetCourseSchedule(ctx: ToolContext, input: GetCourseScheduleInput): Promise<ToolResult> {
   const result = await ctx.client.get<ScheduleItem[]>(`/courses/${input.courseId}/schedule`);
   if (!result.ok) {
-    return describeError(result.status, result.message);
+    return toolError(describeError(result.status, result.message));
   }
   let items = result.data;
   if (input.upcomingOnly) {

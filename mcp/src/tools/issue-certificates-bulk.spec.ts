@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { apiFail, apiOk, makeCtx } from '../test-utils.js';
+import { apiFail, apiOk, makeCtx, toText } from '../test-utils.js';
 import { runIssueCertificatesBulk } from './issue-certificates-bulk.js';
 
 const criteria = { minTotalScore: 100 };
@@ -16,7 +16,7 @@ describe('issue_certificates_bulk', () => {
           ],
         }),
     });
-    const text = await runIssueCertificatesBulk(ctx, { courseId: 5, criteria });
+    const text = toText(await runIssueCertificatesBulk(ctx, { courseId: 5, criteria }));
     expect(calls).toEqual([{ method: 'POST', path: '/certificate/course/5/bulk', body: criteria }]);
     expect(text).toContain('Issuance started for 2 student(s)');
     expect(text).toContain('- A (a) — studentId=1');
@@ -25,17 +25,17 @@ describe('issue_certificates_bulk', () => {
   it('truncates long student lists', async () => {
     const students = Array.from({ length: 25 }, (_, i) => ({ studentId: i, githubId: `u${i}`, name: `U${i}` }));
     const { ctx } = makeCtx({ post: () => apiOk({ issued: 25, students }) });
-    const text = await runIssueCertificatesBulk(ctx, { courseId: 5, criteria });
+    const text = toText(await runIssueCertificatesBulk(ctx, { courseId: 5, criteria }));
     expect(text).toContain('…and 5 more');
   });
 
   it('reports when nothing matched', async () => {
     const { ctx } = makeCtx({ post: () => apiOk({ issued: 0, students: [] }) });
-    expect(await runIssueCertificatesBulk(ctx, { courseId: 5, criteria })).toContain('No students matched');
+    expect(toText(await runIssueCertificatesBulk(ctx, { courseId: 5, criteria }))).toContain('No students matched');
   });
 
   it('surfaces API errors', async () => {
     const { ctx } = makeCtx({ post: () => apiFail(403) });
-    expect(await runIssueCertificatesBulk(ctx, { courseId: 5, criteria })).toContain('Permission denied');
+    expect(toText(await runIssueCertificatesBulk(ctx, { courseId: 5, criteria }))).toContain('Permission denied');
   });
 });
