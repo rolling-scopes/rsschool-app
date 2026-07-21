@@ -8,7 +8,7 @@ import { DoneSection, GeneralSection } from '@client/modules/Registry/components
 import { Form, Modal, theme, Typography } from 'antd';
 import { useRouter } from 'next/router';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { DisciplinesApi, ProfileApi } from '@client/api';
+import { AuthApi, DisciplinesApi, ProfileApi } from '@client/api';
 import { TYPES } from '@client/configs/registry';
 import { ERROR_MESSAGES } from '@client/modules/Registry/constants';
 import { useMessage } from '@client/hooks';
@@ -26,8 +26,9 @@ const cdnService = new CdnService();
 const profileApi = new ProfileApi();
 const userService = new UserService();
 const disciplinesApi = new DisciplinesApi();
+const authApi = new AuthApi();
 
-export function useStudentData(githubId: string, courseAlias?: string) {
+export function useStudentData(githubId: string, userId: number, courseAlias?: string) {
   const { message } = useMessage();
   const router = useRouter();
   const [form] = Form.useForm<StudentFormData>();
@@ -148,6 +149,10 @@ export function useStudentData(githubId: string, courseAlias?: string) {
 
         try {
           await Promise.all(requests);
+          // The auth user (and its course roles) is cached server-side for 10 minutes, so without
+          // resetting it a freshly registered student keeps a role-less session and sees no course
+          // data. Registration already succeeded here, so a failed reset must not look like an error.
+          await authApi.clearAuthUserSessionCache(userId).catch(() => undefined);
           setCurrentStep(previousStep => previousStep + 1);
         } catch {
           message.error(ERROR_MESSAGES.tryLater);
@@ -156,7 +161,7 @@ export function useStudentData(githubId: string, courseAlias?: string) {
         }
       }
     },
-    [loading, dataLoading, student?.registeredForCourses],
+    [loading, dataLoading, userId, student?.registeredForCourses],
   );
 
   function getCourseName() {
