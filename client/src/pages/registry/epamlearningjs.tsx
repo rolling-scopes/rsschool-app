@@ -2,7 +2,7 @@ import { Button, Col, Form, Input, message, Result, Row, Typography } from 'antd
 import { PageLayout } from '@client/shared/components/PageLayout';
 import { GdprCheckbox, LocationSelect } from '@client/shared/components/Forms';
 import { withGoogleMaps } from '@client/components/withGoogleMaps';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useAsync, useUpdate } from 'react-use';
 import { CoursesService } from '@client/services/courses';
 import { Course } from '@client/services/models';
@@ -11,8 +11,8 @@ import { emailPattern, englishNamePattern } from '@client/services/validators';
 import { TYPES } from './../../configs/registry';
 import { ProfileApi } from '@client/api';
 import { Location } from '@common/models/profile';
-import { SessionProvider } from '@client/modules/Course/contexts';
-import { CreateRegistrationDtoTypeEnum, RegistryApi } from '@client/api';
+import { SessionContext, SessionProvider } from '@client/modules/Course/contexts';
+import { AuthApi, CreateRegistrationDtoTypeEnum, RegistryApi } from '@client/api';
 
 const defaultColumnSizes = { xs: 18, sm: 10, md: 8, lg: 6 };
 const defaultRowGutter = 24;
@@ -20,6 +20,7 @@ const defaultRowGutter = 24;
 const courseAlias = 'epamlearningjs';
 const profileApi = new ProfileApi();
 const registryApi = new RegistryApi();
+const authApi = new AuthApi();
 
 type FormData = {
   firstName: string;
@@ -31,6 +32,7 @@ type FormData = {
 
 function EpamLearningJSPage() {
   const [form] = Form.useForm<FormData>();
+  const session = useContext(SessionContext);
 
   const update = useUpdate();
   const [submitted, setSubmitted] = useState(false);
@@ -71,6 +73,10 @@ function EpamLearningJSPage() {
     try {
       await profileApi.updateUser(userModel);
       await registryApi.createRegistration(registryModel);
+      // The auth user (and its course roles) is cached server-side for 10 minutes, so without
+      // resetting it a freshly registered student keeps a role-less session and sees no course
+      // data. Registration already succeeded here, so a failed reset must not look like an error.
+      await authApi.clearAuthUserSessionCache(session.id).catch(() => undefined);
       setSubmitted(true);
     } catch {
       message.error('An error occured. Please try later.');
