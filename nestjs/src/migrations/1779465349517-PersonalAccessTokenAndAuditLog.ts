@@ -5,7 +5,7 @@ export class PersonalAccessTokenAndAuditLog1779465349517 implements MigrationInt
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE "personal_access_tokens" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "userId" integer NOT NULL, "name" character varying(100) NOT NULL, "prefix" character(8) NOT NULL, "tokenHash" character(64) NOT NULL, "expiresAt" TIMESTAMP WITH TIME ZONE NOT NULL, "lastUsedAt" TIMESTAMP WITH TIME ZONE, "revokedAt" TIMESTAMP WITH TIME ZONE, "revokedById" integer, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), CONSTRAINT "PK_b6dc462fa11dbbb897eb8419735" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "personal_access_tokens" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "userId" integer NOT NULL, "name" character varying(100) NOT NULL, "prefix" character(8) NOT NULL, "tokenHash" character(64) NOT NULL, "expiresAt" TIMESTAMP WITH TIME ZONE NOT NULL, "lastUsedAt" TIMESTAMP WITH TIME ZONE, "createdById" integer NOT NULL, "revokedAt" TIMESTAMP WITH TIME ZONE, "revokedById" integer, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), CONSTRAINT "PK_b6dc462fa11dbbb897eb8419735" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(`CREATE INDEX "IDX_39d8e8e9f17b1d4d4ebe0d8835" ON "personal_access_tokens" ("userId") `);
     await queryRunner.query(
@@ -24,6 +24,9 @@ export class PersonalAccessTokenAndAuditLog1779465349517 implements MigrationInt
       `ALTER TABLE "personal_access_tokens" ADD CONSTRAINT "FK_5c1a8ffb1a64a10d73ad7a18392" FOREIGN KEY ("revokedById") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
     );
     await queryRunner.query(
+      `ALTER TABLE "personal_access_tokens" ADD CONSTRAINT "FK_8a7ac1f0c5d4b6e9f3a2d1c0b91" FOREIGN KEY ("createdById") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
       `ALTER TABLE "audit_log" ADD CONSTRAINT "FK_2621409ebc295c5da7ff3e41396" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
     );
     await queryRunner.query(
@@ -34,6 +37,7 @@ export class PersonalAccessTokenAndAuditLog1779465349517 implements MigrationInt
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`ALTER TABLE "audit_log" DROP CONSTRAINT "FK_29cc7e21d5133c7400aedd89ff0"`);
     await queryRunner.query(`ALTER TABLE "audit_log" DROP CONSTRAINT "FK_2621409ebc295c5da7ff3e41396"`);
+    await queryRunner.query(`ALTER TABLE "personal_access_tokens" DROP CONSTRAINT "FK_8a7ac1f0c5d4b6e9f3a2d1c0b91"`);
     await queryRunner.query(`ALTER TABLE "personal_access_tokens" DROP CONSTRAINT "FK_5c1a8ffb1a64a10d73ad7a18392"`);
     await queryRunner.query(`ALTER TABLE "personal_access_tokens" DROP CONSTRAINT "FK_39d8e8e9f17b1d4d4ebe0d88356"`);
     await queryRunner.query(`ALTER TABLE "user" DROP COLUMN "isSystem"`);

@@ -313,6 +313,12 @@ export interface AuditLogEntryDto {
     'action': string;
     /**
      * 
+     * @type {object}
+     * @memberof AuditLogEntryDto
+     */
+    'toolName'?: object | null;
+    /**
+     * 
      * @type {string}
      * @memberof AuditLogEntryDto
      */
@@ -3307,6 +3313,18 @@ export interface CreatedPersonalAccessTokenDto {
      * @memberof CreatedPersonalAccessTokenDto
      */
     'revokedAt'?: object | null;
+    /**
+     * User id of whoever issued the token
+     * @type {number}
+     * @memberof CreatedPersonalAccessTokenDto
+     */
+    'createdById': number;
+    /**
+     * GitHub login of whoever issued the token. Null when the relation was not joined.
+     * @type {object}
+     * @memberof CreatedPersonalAccessTokenDto
+     */
+    'createdByGithubId'?: object | null;
     /**
      * 
      * @type {string}
@@ -6344,6 +6362,18 @@ export interface PersonalAccessTokenDto {
      * @memberof PersonalAccessTokenDto
      */
     'revokedAt'?: object | null;
+    /**
+     * User id of whoever issued the token
+     * @type {number}
+     * @memberof PersonalAccessTokenDto
+     */
+    'createdById': number;
+    /**
+     * GitHub login of whoever issued the token. Null when the relation was not joined.
+     * @type {object}
+     * @memberof PersonalAccessTokenDto
+     */
+    'createdByGithubId'?: object | null;
     /**
      * 
      * @type {string}
@@ -18236,6 +18266,41 @@ export const CoursesTasksApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        notifyCrossCheckDeadlines: async (checkTasksDeadlineDto: CheckTasksDeadlineDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'checkTasksDeadlineDto' is not null or undefined
+            assertParamExists('notifyCrossCheckDeadlines', 'checkTasksDeadlineDto', checkTasksDeadlineDto)
+            const localVarPath = `/tasks/notify/cross-check`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(checkTasksDeadlineDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {CheckTasksDeadlineDto} checkTasksDeadlineDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         notifyTasksDeadlines: async (checkTasksDeadlineDto: CheckTasksDeadlineDto, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'checkTasksDeadlineDto' is not null or undefined
             assertParamExists('notifyTasksDeadlines', 'checkTasksDeadlineDto', checkTasksDeadlineDto)
@@ -18641,6 +18706,16 @@ export const CoursesTasksApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
+        async notifyCrossCheckDeadlines(checkTasksDeadlineDto: CheckTasksDeadlineDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.notifyCrossCheckDeadlines(checkTasksDeadlineDto, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {CheckTasksDeadlineDto} checkTasksDeadlineDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
         async notifyTasksDeadlines(checkTasksDeadlineDto: CheckTasksDeadlineDto, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.notifyTasksDeadlines(checkTasksDeadlineDto, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
@@ -18926,6 +19001,15 @@ export const CoursesTasksApiFactory = function (configuration?: Configuration, b
          */
         getMyCrossCheckFeedbacks(courseId: number, courseTaskId: number, options?: any): AxiosPromise<CrossCheckFeedbackDto> {
             return localVarFp.getMyCrossCheckFeedbacks(courseId, courseTaskId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {CheckTasksDeadlineDto} checkTasksDeadlineDto 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        notifyCrossCheckDeadlines(checkTasksDeadlineDto: CheckTasksDeadlineDto, options?: any): AxiosPromise<void> {
+            return localVarFp.notifyCrossCheckDeadlines(checkTasksDeadlineDto, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -19260,6 +19344,17 @@ export class CoursesTasksApi extends BaseAPI {
      */
     public getMyCrossCheckFeedbacks(courseId: number, courseTaskId: number, options?: AxiosRequestConfig) {
         return CoursesTasksApiFp(this.configuration).getMyCrossCheckFeedbacks(courseId, courseTaskId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {CheckTasksDeadlineDto} checkTasksDeadlineDto 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesTasksApi
+     */
+    public notifyCrossCheckDeadlines(checkTasksDeadlineDto: CheckTasksDeadlineDto, options?: AxiosRequestConfig) {
+        return CoursesTasksApiFp(this.configuration).notifyCrossCheckDeadlines(checkTasksDeadlineDto, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

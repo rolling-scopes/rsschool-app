@@ -59,7 +59,13 @@ export class PersonalAccessTokensService {
     private readonly repo: Repository<PersonalAccessToken>,
   ) {}
 
-  public async create(params: { userId: number; name: string; expiresInDays?: number }): Promise<CreatePatResult> {
+  public async create(params: {
+    userId: number;
+    name: string;
+    expiresInDays?: number;
+    /** Who issued the token — differs from `userId` when an admin issues for someone else. */
+    createdById: number;
+  }): Promise<CreatePatResult> {
     const prefix = base62(randomBytes(PREFIX_LENGTH), PREFIX_LENGTH);
     const secret = base62(randomBytes(SECRET_LENGTH), SECRET_LENGTH);
     const tokenHash = sha256Hex(secret);
@@ -72,6 +78,7 @@ export class PersonalAccessTokensService {
         prefix,
         tokenHash,
         expiresAt,
+        createdById: params.createdById,
       }),
     );
 
@@ -109,7 +116,9 @@ export class PersonalAccessTokensService {
   }
 
   public listByUser(userId: number): Promise<PersonalAccessToken[]> {
-    return this.repo.find({ where: { userId }, order: { createdAt: 'DESC' } });
+    // `createdBy` is joined so the UI can show who issued each token — the
+    // interesting case being a token issued by an admin for someone else.
+    return this.repo.find({ where: { userId }, relations: { createdBy: true }, order: { createdAt: 'DESC' } });
   }
 
   public async revoke(params: { tokenId: string; ownerId: number; revokedById: number }): Promise<boolean> {

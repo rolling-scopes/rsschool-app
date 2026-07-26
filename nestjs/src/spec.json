@@ -2391,7 +2391,8 @@
           "200": {
             "description": "",
             "content": { "application/json": { "schema": { "type": "array", "items": { "type": "object" } } } }
-          }
+          },
+          "403": { "description": "" }
         },
         "summary": "",
         "tags": ["students"]
@@ -6310,9 +6311,15 @@
           "expiresAt": { "type": "string" },
           "lastUsedAt": { "type": "object", "nullable": true },
           "revokedAt": { "type": "object", "nullable": true },
+          "createdById": { "type": "number", "description": "User id of whoever issued the token" },
+          "createdByGithubId": {
+            "type": "object",
+            "nullable": true,
+            "description": "GitHub login of whoever issued the token. Null when the relation was not joined."
+          },
           "createdAt": { "type": "string" }
         },
-        "required": ["id", "userId", "name", "prefix", "expiresAt", "createdAt"]
+        "required": ["id", "userId", "name", "prefix", "expiresAt", "createdById", "createdAt"]
       },
       "CreatePersonalAccessTokenDto": {
         "type": "object",
@@ -6337,10 +6344,16 @@
           "expiresAt": { "type": "string" },
           "lastUsedAt": { "type": "object", "nullable": true },
           "revokedAt": { "type": "object", "nullable": true },
+          "createdById": { "type": "number", "description": "User id of whoever issued the token" },
+          "createdByGithubId": {
+            "type": "object",
+            "nullable": true,
+            "description": "GitHub login of whoever issued the token. Null when the relation was not joined."
+          },
           "createdAt": { "type": "string" },
           "token": { "type": "string", "description": "The full token. Shown only once; cannot be retrieved later." }
         },
-        "required": ["id", "userId", "name", "prefix", "expiresAt", "createdAt", "token"]
+        "required": ["id", "userId", "name", "prefix", "expiresAt", "createdById", "createdAt", "token"]
       },
       "ProfileCourseDto": {
         "type": "object",
@@ -6884,6 +6897,7 @@
           "tokenId": { "type": "string" },
           "tokenName": { "type": "object", "nullable": true },
           "action": { "type": "string" },
+          "toolName": { "type": "object", "nullable": true },
           "method": { "type": "string" },
           "path": { "type": "string" },
           "responseStatus": { "type": "number" },

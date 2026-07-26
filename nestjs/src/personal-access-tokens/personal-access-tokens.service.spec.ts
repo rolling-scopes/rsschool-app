@@ -1,4 +1,7 @@
-import { PAT_TOKEN_PREFIX, parseToken, sha256Hex } from './personal-access-tokens.service';
+import type { PersonalAccessToken } from '@entities/personalAccessToken';
+import type { Repository } from 'typeorm';
+import { vi } from 'vitest';
+import { PAT_TOKEN_PREFIX, PersonalAccessTokensService, parseToken, sha256Hex } from './personal-access-tokens.service';
 
 describe('parseToken', () => {
   it('parses a well-formed token', () => {
@@ -37,5 +40,51 @@ describe('sha256Hex', () => {
 
   it('differs for different inputs', () => {
     expect(sha256Hex('a')).not.toBe(sha256Hex('b'));
+  });
+});
+
+describe('PersonalAccessTokensService.create', () => {
+  function makeService() {
+    const saved: Partial<PersonalAccessToken>[] = [];
+    const repo = {
+      create: (entity: Partial<PersonalAccessToken>) => entity,
+      save: async (entity: Partial<PersonalAccessToken>) => {
+        saved.push(entity);
+        return { ...entity, id: 'token-uuid', createdAt: new Date() } as PersonalAccessToken;
+      },
+      find: vi.fn(),
+    } as unknown as Repository<PersonalAccessToken>;
+    return { service: new PersonalAccessTokensService(repo), saved, repo };
+  }
+
+  it('stores the issuer for a self-service token', async () => {
+    const { service, saved } = makeService();
+    await service.create({ userId: 7, name: 'mine', createdById: 7 });
+    expect(saved[0]).toMatchObject({ userId: 7, createdById: 7 });
+  });
+
+  it('stores the admin as issuer when the owner is someone else', async () => {
+    const { service, saved } = makeService();
+    await service.create({ userId: 42, name: 'for a service account', createdById: 1 });
+    expect(saved[0]).toMatchObject({ userId: 42, createdById: 1 });
+  });
+
+  it('returns a token matching the stored prefix and hash', async () => {
+    const { service, saved } = makeService();
+    const { token } = await service.create({ userId: 1, name: 'x', createdById: 1 });
+    const parsed = parseToken(token);
+    expect(parsed?.prefix).toBe(saved[0]?.prefix);
+    expect(sha256Hex(parsed!.secret)).toBe(saved[0]?.tokenHash);
+  });
+});
+
+describe('PersonalAccessTokensService.listByUser', () => {
+  it('joins the issuer so the UI can show who handed out the token', async () => {
+    const find = vi.fn().mockResolvedValue([]);
+    const service = new PersonalAccessTokensService({ find } as unknown as Repository<PersonalAccessToken>);
+    await service.listByUser(5);
+    expect(find).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { userId: 5 }, relations: { createdBy: true } }),
+    );
   });
 });

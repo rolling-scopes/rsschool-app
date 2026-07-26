@@ -44,6 +44,7 @@ export class PersonalAccessTokensController {
       userId: req.user.id,
       name: dto.name,
       expiresInDays: dto.expiresInDays,
+      createdById: req.user.id,
     });
     return new CreatedPersonalAccessTokenDto(record, token);
   }
@@ -77,11 +78,15 @@ export class PersonalAccessTokensController {
   public async createForUser(
     @Param('userId', ParseIntPipe) userId: number,
     @Body() dto: CreatePersonalAccessTokenDto,
+    @Req() req: CurrentRequest,
   ): Promise<CreatedPersonalAccessTokenDto> {
     const { record, token } = await this.service.create({
       userId,
       name: dto.name,
       expiresInDays: dto.expiresInDays,
+      // Record the issuing admin: without it a token handed to another user is
+      // indistinguishable from one they created themselves.
+      createdById: req.user.id,
     });
     return new CreatedPersonalAccessTokenDto(record, token);
   }

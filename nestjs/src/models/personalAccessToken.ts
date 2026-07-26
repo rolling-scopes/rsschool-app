@@ -39,6 +39,19 @@ export class PersonalAccessToken {
   @Column({ type: 'timestamptz', nullable: true })
   lastUsedAt: Date | null;
 
+  /**
+   * Who issued the token. Equals `userId` for self-service tokens; differs when
+   * an admin issues a token for someone else, which is exactly the case that
+   * would otherwise be untraceable (the audit log only covers PAT-authenticated
+   * requests, and this controller denies PAT auth outright).
+   */
+  @Column({ type: 'integer' })
+  createdById: number;
+
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'createdById' })
+  createdBy: User;
+
   @Column({ type: 'timestamptz', nullable: true })
   revokedAt: Date | null;
 

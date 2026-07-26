@@ -95,6 +95,18 @@ export function UserTokensAdminPage() {
               { title: 'Name', dataIndex: 'name' },
               { title: 'Prefix', dataIndex: 'prefix', render: v => <code>{v}…</code> },
               { title: 'Created', dataIndex: 'createdAt', render: v => new Date(v).toLocaleString() },
+              {
+                title: 'Issued by',
+                dataIndex: 'createdByGithubId',
+                // The tag flags the interesting case: an admin issuing a token
+                // for somebody else.
+                render: (githubId, record) => (
+                  <Space size={4}>
+                    {String(githubId)}
+                    {record.createdById !== record.userId && <Tag color="orange">on behalf</Tag>}
+                  </Space>
+                ),
+              },
               { title: 'Expires', dataIndex: 'expiresAt', render: v => new Date(v).toLocaleDateString() },
               {
                 title: 'Last used',
