@@ -14,7 +14,6 @@ function makePair(overrides: Partial<CrossCheckPairDto> = {}): CrossCheckPairDto
     comment: 'a comment',
     url: 'https://github.com/student/solution',
     reviewedDate: '2024-03-02T10:00:00.000Z',
-    privateRepository: 'https://github.com/student/private',
     submittedDate: '2024-03-01T10:00:00.000Z',
     historicalScores: [{ comment: 'hist', dateTime: '2024-03-02T10:00:00.000Z' }],
     messages: [],
@@ -42,19 +41,6 @@ describe('getCrossCheckPairsColumns', () => {
 
     expect(screen.getByText('Task 1')).toBeInTheDocument();
     expect(screen.getByText('https://github.com/student/solution')).toBeInTheDocument();
-  });
-
-  it('renders a private-repository link when present', () => {
-    renderTable([makePair()]);
-
-    const privateLink = screen.getByRole('link', { name: /Private Repository/ });
-    expect(privateLink).toHaveAttribute('href', 'https://github.com/student/private');
-  });
-
-  it('omits the private-repository link when not present', () => {
-    renderTable([makePair({ privateRepository: '' })]);
-
-    expect(screen.queryByRole('link', { name: /Private Repository/ })).not.toBeInTheDocument();
   });
 
   it('renders the score value', () => {

@@ -85,7 +85,6 @@ Used when `CourseTask.checker = crossCheck`.
 ## Audit and integrations
 
 - `History` stores audit records for inserts/updates/removals with before/after snapshots.
-- `RepositoryEvent` stores webhook-like activity from GitHub repositories.
 - `Prompt` stores configurable text prompts for AI-assisted features.
 
 ## Relationship map (high level)
