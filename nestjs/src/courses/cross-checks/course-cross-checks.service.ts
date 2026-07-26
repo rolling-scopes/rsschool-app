@@ -28,7 +28,6 @@ export type CrossCheckPair = {
   comment: string;
   student: Pick<User, 'githubId' | 'id' | 'firstName' | 'lastName'>;
   checker: Pick<User, 'githubId' | 'id' | 'firstName' | 'lastName'>;
-  privateRepository?: string;
   historicalScores: null | ScoreRecord[];
   messages: null | CrossCheckMessage[];
   url: string;
@@ -693,7 +692,6 @@ export class CourseCrossCheckService {
           id: e.tsc_courseTaskId,
         },
         url: e.ts_url,
-        privateRepository: e.st_repository,
         score: e.tsr_score,
         comment: e.tsr_comment,
         submittedDate: e.ts_updatedDate,
