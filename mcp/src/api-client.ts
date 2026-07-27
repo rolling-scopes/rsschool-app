@@ -1,15 +1,13 @@
 import { SERVER_NAME, SERVER_VERSION } from './version.js';
 
 export type ApiClientConfig = {
+  /**
+   * Root of the RS School API, path included. Public deployments sit behind
+   * nginx and need `https://app.rs.school/api/v2`; a NestJS instance addressed
+   * directly (localhost, docker network) serves routes at its root.
+   */
   baseUrl: string;
   token: string;
-  /**
-   * Path prefix between the base URL and API paths. Public deployments sit
-   * behind nginx which strips `/api/v2`, so the default is '/api/v2'; when
-   * talking to the NestJS container directly (docker network, localhost) set
-   * it to '' because NestJS serves routes without the prefix.
-   */
-  apiPrefix?: string;
   /** Per-request timeout. A hung backend must not pin the MCP request forever. */
   timeoutMs?: number;
   /** Backoff delays for retried GETs. Overridden in tests to keep them fast. */
@@ -22,7 +20,6 @@ export type ApiClientConfig = {
   toolName?: string;
 };
 
-export const DEFAULT_API_PREFIX = '/api/v2';
 export const DEFAULT_TIMEOUT_MS = 15_000;
 export const DEFAULT_RETRY_DELAYS_MS = [200, 600];
 
@@ -87,8 +84,7 @@ export class RsappApiClient {
     path: string,
     body?: unknown,
   ): Promise<ApiResult<T>> {
-    const prefix = this.config.apiPrefix ?? DEFAULT_API_PREFIX;
-    const url = `${this.config.baseUrl.replace(/\/$/, '')}${prefix}${path}`;
+    const url = `${this.config.baseUrl.replace(/\/$/, '')}${path}`;
     const timeoutMs = this.config.timeoutMs ?? DEFAULT_TIMEOUT_MS;
     const headers: Record<string, string> = {
       Authorization: `Bearer ${this.config.token}`,

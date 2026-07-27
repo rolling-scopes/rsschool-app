@@ -9,14 +9,9 @@ describe('readStdioConfig', () => {
     expect(config).toEqual({
       baseUrl: 'https://app.rs.school',
       token: 'rsapp_pat_abc',
-      apiPrefix: '/api/v2',
       timeoutMs: 15_000,
       toolsets: undefined,
     });
-  });
-
-  it('honors RSAPP_API_PREFIX including empty string', () => {
-    expect(readStdioConfig({ ...BASE_ENV, RSAPP_API_PREFIX: '' }).apiPrefix).toBe('');
   });
 
   it('parses RSAPP_TOOLSETS', () => {

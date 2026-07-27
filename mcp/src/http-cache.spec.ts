@@ -54,7 +54,7 @@ async function withMcpServer(
   options: { userCacheTtlMs?: number },
   run: (mcpUrl: string) => Promise<void>,
 ): Promise<void> {
-  const handler = createMcpHttpHandler({ baseUrl: backendUrl, apiPrefix: '', ...options });
+  const handler = createMcpHttpHandler({ baseUrl: backendUrl, ...options });
   const server = createServer((req, res) => void createRequestListener(handler)(req, res));
   await new Promise<void>(resolve => server.listen(0, resolve));
   try {

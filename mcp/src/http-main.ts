@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import { DEFAULT_API_PREFIX } from './api-client.js';
 import { readTimeoutMs } from './config.js';
 import { createMcpHttpHandler } from './http.js';
 import { createRequestListener, parseCsvList } from './http-server.js';
@@ -17,7 +16,6 @@ function main() {
   const allowedOrigins = parseCsvList(process.env.RSAPP_ALLOWED_ORIGINS);
   const handler = createMcpHttpHandler({
     baseUrl,
-    apiPrefix: process.env.RSAPP_API_PREFIX ?? DEFAULT_API_PREFIX,
     toolsets: parseToolsets(process.env.RSAPP_TOOLSETS),
     allowedHosts,
     allowedOrigins,

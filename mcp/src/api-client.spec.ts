@@ -14,20 +14,20 @@ describe('RsappApiClient', () => {
     fetchMock.mockReset();
   });
 
-  it('prepends the default /api/v2 prefix', async () => {
-    const client = new RsappApiClient({ baseUrl: 'https://app.rs.school', token: 't' });
+  it('appends the path to the configured API root', async () => {
+    const client = new RsappApiClient({ baseUrl: 'https://app.rs.school/api/v2', token: 't' });
     await client.get('/session');
     expect(fetchMock).toHaveBeenCalledWith('https://app.rs.school/api/v2/session', expect.anything());
   });
 
-  it('honors an empty prefix for direct NestJS access', async () => {
-    const client = new RsappApiClient({ baseUrl: 'http://nestjs:8080', token: 't', apiPrefix: '' });
+  it('works against a NestJS instance addressed at its root', async () => {
+    const client = new RsappApiClient({ baseUrl: 'http://nestjs:8080', token: 't' });
     await client.get('/session');
     expect(fetchMock).toHaveBeenCalledWith('http://nestjs:8080/session', expect.anything());
   });
 
   it('strips a trailing slash from the base URL', async () => {
-    const client = new RsappApiClient({ baseUrl: 'https://app.rs.school/', token: 't' });
+    const client = new RsappApiClient({ baseUrl: 'https://app.rs.school/api/v2/', token: 't' });
     await client.get('/session');
     expect(fetchMock).toHaveBeenCalledWith('https://app.rs.school/api/v2/session', expect.anything());
   });
@@ -51,7 +51,7 @@ describe('RsappApiClient', () => {
     const client = new RsappApiClient({ baseUrl: 'https://x', token: 't' });
     await client.put('/registry/mentor/octo', { preselectedCourses: [] });
     const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
-    expect(url).toBe('https://x/api/v2/registry/mentor/octo');
+    expect(url).toBe('https://x/registry/mentor/octo');
     expect(init.method).toBe('PUT');
     expect(init.body).toBe(JSON.stringify({ preselectedCourses: [] }));
   });
@@ -60,7 +60,7 @@ describe('RsappApiClient', () => {
     const client = new RsappApiClient({ baseUrl: 'https://x', token: 't' });
     await client.delete('/courses/5/tasks/1');
     const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
-    expect(url).toBe('https://x/api/v2/courses/5/tasks/1');
+    expect(url).toBe('https://x/courses/5/tasks/1');
     expect(init.method).toBe('DELETE');
     expect(init.body).toBeUndefined();
   });

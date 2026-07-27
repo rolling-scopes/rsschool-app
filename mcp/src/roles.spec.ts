@@ -160,3 +160,16 @@ describe('parseToolsets', () => {
     expect(() => parseToolsets('common,bogus')).toThrow(/Unknown toolset\(s\): bogus/);
   });
 });
+
+describe('resolveUser misconfiguration hint', () => {
+  it('points at RSAPP_BASE_URL on 404, the usual cause of a wrong API root', async () => {
+    const notFound = {
+      get: async () => ({ ok: false, status: 404, message: 'Not Found' }) as ApiResult<never>,
+    } as unknown as RsappApiClient;
+    await expect(resolveUser(notFound)).rejects.toThrow(/RSAPP_BASE_URL/);
+  });
+
+  it('does not add the hint for other failures', async () => {
+    await expect(resolveUser(fakeClient(null, false))).rejects.not.toThrow(/RSAPP_BASE_URL/);
+  });
+});

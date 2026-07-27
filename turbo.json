@@ -50,7 +50,6 @@
         "RSSHCOOL_PG_USERNAME",
         "RSAPP_BASE_URL",
         "RSAPP_PAT",
-        "RSAPP_API_PREFIX",
         "RSAPP_TOOLSETS",
         "RSAPP_REQUEST_TIMEOUT_MS",
         "RSAPP_ALLOWED_HOSTS",

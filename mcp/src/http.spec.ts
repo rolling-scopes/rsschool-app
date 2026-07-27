@@ -45,7 +45,6 @@ beforeAll(async () => {
 
   const handler = createMcpHttpHandler({
     baseUrl: `http://127.0.0.1:${(backend.address() as AddressInfo).port}`,
-    apiPrefix: '',
     userCacheTtlMs: 0,
   });
   mcp = createServer(async (req, res) => {

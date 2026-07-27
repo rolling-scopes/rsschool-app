@@ -9,7 +9,6 @@ import type { ResolvedUser, Toolset } from './types.js';
 
 export type McpHttpConfig = {
   baseUrl: string;
-  apiPrefix: string;
   toolsets?: Toolset[];
   /** TTL of the per-token role cache, ms. 0 disables caching. */
   userCacheTtlMs?: number;
@@ -116,7 +115,6 @@ export function createMcpHttpHandler(config: McpHttpConfig) {
     const client = new RsappApiClient({
       baseUrl: config.baseUrl,
       token,
-      apiPrefix: config.apiPrefix,
       timeoutMs: config.timeoutMs,
     });
 

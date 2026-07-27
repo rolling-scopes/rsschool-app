@@ -1,11 +1,10 @@
-import { DEFAULT_API_PREFIX, DEFAULT_TIMEOUT_MS } from './api-client.js';
+import { DEFAULT_TIMEOUT_MS } from './api-client.js';
 import { parseToolsets } from './roles.js';
 import type { Toolset } from './types.js';
 
 export type StdioConfig = {
   baseUrl: string;
   token: string;
-  apiPrefix: string;
   timeoutMs: number;
   toolsets?: Toolset[];
 };
@@ -37,7 +36,6 @@ export function readStdioConfig(env: NodeJS.ProcessEnv = process.env): StdioConf
   return {
     baseUrl,
     token,
-    apiPrefix: env.RSAPP_API_PREFIX ?? DEFAULT_API_PREFIX,
     timeoutMs: readTimeoutMs(env.RSAPP_REQUEST_TIMEOUT_MS),
     toolsets: parseToolsets(env.RSAPP_TOOLSETS),
   };

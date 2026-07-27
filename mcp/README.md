@@ -124,18 +124,17 @@ the list of valid toolsets.
 
 | Variable                | Required   | Description                                                                                                           |
 | ----------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------- |
-| `RSAPP_BASE_URL`        | yes        | RS School app URL, e.g. `https://app.rs.school`                                                                       |
+| `RSAPP_BASE_URL`        | yes        | Root of the RS School API, path included — `https://app.rs.school/api/v2` in production                               |
 | `RSAPP_PAT`             | stdio only | Personal Access Token (`rsapp_pat_…`)                                                                                 |
-| `RSAPP_API_PREFIX`      | no         | API path prefix, default `/api/v2`. Set to empty when pointing directly at the NestJS container/localhost (no nginx)  |
 | `RSAPP_TOOLSETS`        | no         | Comma-separated toolset filter                                                                                        |
 | `RSAPP_ALLOWED_HOSTS`   | no         | HTTP server only. Comma-separated `Host` allow-list. Setting this (or origins) enables DNS-rebinding protection       |
 | `RSAPP_ALLOWED_ORIGINS` | no         | HTTP server only. Comma-separated CORS/Origin allow-list. When unset, CORS stays `*` (safe: auth is a non-cookie PAT) |
 
-> **Deployment note:** in `docker-compose.yml` the `mcp` service sets
-> `RSAPP_API_PREFIX=''`, so it talks to NestJS directly and **bypasses the
-> nginx `/api/v2` layer**. Public rate-limiting must therefore be applied at
-> the nginx `/mcp` proxy — verify that rule exists before exposing the endpoint.
-> For production also set `RSAPP_ALLOWED_HOSTS` / `RSAPP_ALLOWED_ORIGINS`.
+> **Deployment note:** in `docker-compose.yml` the `mcp` service points at
+> `http://nestjs:8080`, so it talks to NestJS directly and **bypasses nginx**.
+> Public rate-limiting must therefore be applied at the nginx `/mcp` proxy —
+> verify that rule exists before exposing the endpoint. For production also set
+> `RSAPP_ALLOWED_HOSTS` / `RSAPP_ALLOWED_ORIGINS`.
 
 ## Generate a PAT
 
@@ -169,7 +168,71 @@ JSON (no SSE stream). The tool list is computed per request from your roles.
 }
 ```
 
-## Local server (stdio)
+## Running from this checkout (local development)
+
+The package is not on npm yet, so point your client at the built file in this repo.
+
+```bash
+npm run db:up && npm run db:restore && npm start   # backend on :3000 (UI) and :3002 (API)
+npm run build --workspace=@rsschool/mcp-server     # rebuild after every source change
+```
+
+Create a PAT at `http://localhost:3000/profile/api-tokens` (shown once), then:
+
+```json
+{
+  "mcpServers": {
+    "rsschool": {
+      "command": "node",
+      "args": ["/absolute/path/to/rsschool-app/mcp/dist/server.js"],
+      "env": {
+        "RSAPP_BASE_URL": "http://localhost:3002",
+        "RSAPP_PAT": "rsapp_pat_..."
+      }
+    }
+  }
+}
+```
+
+`http://localhost:3002` is NestJS itself, which serves the API at its root. Use
+`http://localhost:3000/api/v2` instead if you would rather go through the Next
+dev server — either works, the URL is the only thing that changes.
+
+### Poking at it without an MCP client
+
+```bash
+RSAPP_BASE_URL=http://localhost:3002 RSAPP_PAT=rsapp_pat_... \
+  npx @modelcontextprotocol/inspector node mcp/dist/server.js
+```
+
+### Trying the hosted (HTTP) mode locally
+
+```bash
+RSAPP_BASE_URL=http://localhost:3002 npm run start:http --workspace=@rsschool/mcp-server
+```
+
+It listens on `http://localhost:8080` (`NODE_PORT` overrides), serving `/mcp` and
+`/health`, with the PAT passed per request:
+
+```bash
+curl -s http://localhost:8080/mcp \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json, text/event-stream' \
+  -H 'Authorization: Bearer rsapp_pat_...' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+```
+
+The tool list depends on the PAT owner's roles, so comparing a student PAT with a
+manager PAT is the quickest check that role filtering works.
+
+## Client configs once the package is published
+
+> **Not usable yet.** `@rsschool/mcp-server` is not on npm, and `package.json`
+> sets `"private": true` so it cannot be published by accident while the
+> integration is being tested. The `npx` snippets below are the target shape for
+> after publication — flip `private` to `false` then. Until then use the
+> `command: "node"` form from
+> [Running from this checkout](#running-from-this-checkout-local-development).
 
 ### Claude Desktop
 
@@ -183,7 +246,7 @@ JSON (no SSE stream). The tool list is computed per request from your roles.
       "command": "npx",
       "args": ["-y", "@rsschool/mcp-server"],
       "env": {
-        "RSAPP_BASE_URL": "https://app.rs.school",
+        "RSAPP_BASE_URL": "https://app.rs.school/api/v2",
         "RSAPP_PAT": "rsapp_pat_..."
       }
     }
@@ -202,7 +265,7 @@ JSON (no SSE stream). The tool list is computed per request from your roles.
       "command": "npx",
       "args": ["-y", "@rsschool/mcp-server"],
       "env": {
-        "RSAPP_BASE_URL": "https://app.rs.school",
+        "RSAPP_BASE_URL": "https://app.rs.school/api/v2",
         "RSAPP_PAT": "rsapp_pat_..."
       }
     }
@@ -220,7 +283,7 @@ command = "npx"
 args = ["-y", "@rsschool/mcp-server"]
 
 [mcp_servers.rsschool.env]
-RSAPP_BASE_URL = "https://app.rs.school"
+RSAPP_BASE_URL = "https://app.rs.school/api/v2"
 RSAPP_PAT = "rsapp_pat_..."
 ```
 
@@ -243,8 +306,8 @@ tool name in the audit log, so `/admin/audit-log` shows which tool did what.
 The hosted server runs as the `mcp` container next to `client`/`nestjs` in
 `docker-compose.yml`; nginx proxies `location /mcp` to it (rate-limited). It
 talks to NestJS over the internal docker network
-(`RSAPP_BASE_URL=http://nestjs:8080`, `RSAPP_API_PREFIX=` empty because nginx
-is not in the path). The image is built by the `build_mcp` job in
+(`RSAPP_BASE_URL=http://nestjs:8080` — NestJS serves the API at its root; the
+`/api/v2` path only exists on the public nginx vhost). The image is built by the `build_mcp` job in
 `.github/workflows/deploy.yaml` and published as
 `ghcr.io/rolling-scopes/rsschool-app-mcp:master`.
 

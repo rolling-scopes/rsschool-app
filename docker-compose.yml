@@ -57,8 +57,9 @@ services:
     container_name: mcp
     image: ghcr.io/rolling-scopes/rsschool-app-mcp:master
     environment:
+      # NestJS is addressed directly over the docker network, so no /api/v2
+      # prefix here — that path only exists on the public nginx vhost.
       RSAPP_BASE_URL: http://nestjs:8080
-      RSAPP_API_PREFIX: ''
       # Activates DNS-rebinding protection and the CORS allow-list. Without
       # these the transport keeps both switched off (Access-Control-Allow-Origin: *).
       RSAPP_ALLOWED_HOSTS: ${RSAPP_ALLOWED_HOSTS:-app.rs.school}

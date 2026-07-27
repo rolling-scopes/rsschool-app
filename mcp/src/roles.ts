@@ -28,7 +28,13 @@ const COURSE_ROLE_MAP: Record<string, ToolRole> = {
 export async function resolveUser(client: RsappApiClient): Promise<ResolvedUser> {
   const result = await client.get<SessionPayload>('/session');
   if (!result.ok) {
-    throw new Error(`Failed to resolve the PAT user. ${describeError(result.status, result.message)}`);
+    // A 404 here is nearly always a misconfigured base URL rather than a real
+    // missing resource: the public app serves the API under /api/v2.
+    const hint =
+      result.status === 404
+        ? ' Check RSAPP_BASE_URL — it must point at the API root, e.g. https://app.rs.school/api/v2.'
+        : '';
+    throw new Error(`Failed to resolve the PAT user. ${describeError(result.status, result.message)}${hint}`);
   }
   const session = result.data;
   const courses: CourseMembership[] = Object.entries(session.courses ?? {}).map(([courseId, info]) => ({
