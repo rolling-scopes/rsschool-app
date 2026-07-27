@@ -84,7 +84,91 @@ describe('PersonalAccessTokensService.listByUser', () => {
     const service = new PersonalAccessTokensService({ find } as unknown as Repository<PersonalAccessToken>);
     await service.listByUser(5);
     expect(find).toHaveBeenCalledWith(
-      expect.objectContaining({ where: { userId: 5 }, relations: { createdBy: true } }),
+      expect.objectContaining({ where: { userId: 5 }, relations: { createdBy: true, user: true } }),
     );
+  });
+});
+
+describe('PersonalAccessTokensService.listAll', () => {
+  function makeQb() {
+    const qb = {
+      leftJoinAndSelect: vi.fn(() => qb),
+      andWhere: vi.fn(() => qb),
+      orderBy: vi.fn(() => qb),
+      take: vi.fn(() => qb),
+      skip: vi.fn(() => qb),
+      getManyAndCount: vi.fn().mockResolvedValue([[], 0]),
+    };
+    return qb;
+  }
+
+  function makeService() {
+    const qb = makeQb();
+    const repo = { createQueryBuilder: vi.fn(() => qb) } as unknown as Repository<PersonalAccessToken>;
+    return { service: new PersonalAccessTokensService(repo), qb };
+  }
+
+  const wheres = (qb: ReturnType<typeof makeQb>) => qb.andWhere.mock.calls.map(call => String(call[0]));
+
+  it('joins owner and issuer so both logins can be shown', async () => {
+    const { service, qb } = makeService();
+    await service.listAll({ page: 1, pageSize: 50 });
+    expect(qb.leftJoinAndSelect).toHaveBeenCalledWith('token.user', 'user');
+    expect(qb.leftJoinAndSelect).toHaveBeenCalledWith('token.createdBy', 'createdBy');
+  });
+
+  it('defaults to newest first with no filters', async () => {
+    const { service, qb } = makeService();
+    await service.listAll({ page: 1, pageSize: 50 });
+    expect(qb.orderBy).toHaveBeenCalledWith('token.createdAt', 'DESC');
+    expect(qb.andWhere).not.toHaveBeenCalled();
+  });
+
+  it('filters by owner, name and issuer with partial matches', async () => {
+    const { service, qb } = makeService();
+    await service.listAll({ githubId: 'oct', name: 'ci', issuedBy: 'adm', page: 1, pageSize: 50 });
+    expect(wheres(qb)).toEqual([
+      'user.githubId ILIKE :githubId',
+      'token.name ILIKE :name',
+      'createdBy.githubId ILIKE :issuedBy',
+    ]);
+    expect(qb.andWhere).toHaveBeenCalledWith('user.githubId ILIKE :githubId', { githubId: '%oct%' });
+  });
+
+  it('treats active as neither revoked nor expired', async () => {
+    const { service, qb } = makeService();
+    await service.listAll({ status: 'active', page: 1, pageSize: 50 });
+    expect(wheres(qb)).toEqual(['token.revokedAt IS NULL', 'token.expiresAt > NOW()']);
+  });
+
+  it('treats expired as past-expiry but not revoked', async () => {
+    const { service, qb } = makeService();
+    await service.listAll({ status: 'expired', page: 1, pageSize: 50 });
+    expect(wheres(qb)).toEqual(['token.revokedAt IS NULL', 'token.expiresAt <= NOW()']);
+  });
+
+  it('filters revoked tokens regardless of expiry', async () => {
+    const { service, qb } = makeService();
+    await service.listAll({ status: 'revoked', page: 1, pageSize: 50 });
+    expect(wheres(qb)).toEqual(['token.revokedAt IS NOT NULL']);
+  });
+
+  it('maps the sort field through the whitelist', async () => {
+    const { service, qb } = makeService();
+    await service.listAll({ orderBy: 'githubId', orderDirection: 'asc', page: 1, pageSize: 50 });
+    expect(qb.orderBy).toHaveBeenCalledWith('user.githubId', 'ASC');
+  });
+
+  it('never passes an unknown sort field to SQL', async () => {
+    const { service, qb } = makeService();
+    await service.listAll({ orderBy: 'name; DROP TABLE users' as never, page: 1, pageSize: 50 });
+    expect(qb.orderBy).toHaveBeenCalledWith('token.createdAt', 'DESC');
+  });
+
+  it('paginates with the requested page and size', async () => {
+    const { service, qb } = makeService();
+    await service.listAll({ page: 3, pageSize: 20 });
+    expect(qb.take).toHaveBeenCalledWith(20);
+    expect(qb.skip).toHaveBeenCalledWith(40);
   });
 });

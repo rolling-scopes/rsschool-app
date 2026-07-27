@@ -2823,6 +2823,64 @@
         "tags": ["personal-access-tokens"]
       }
     },
+    "/personal-access-tokens/admin": {
+      "get": {
+        "operationId": "getAllPersonalAccessTokens",
+        "parameters": [
+          {
+            "name": "githubId",
+            "required": false,
+            "in": "query",
+            "description": "Owner GitHub login, partial match",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "name",
+            "required": false,
+            "in": "query",
+            "description": "Token name, partial match",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "issuedBy",
+            "required": false,
+            "in": "query",
+            "description": "Issuer GitHub login, partial match",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": { "enum": ["active", "revoked", "expired"], "type": "string" }
+          },
+          {
+            "name": "orderBy",
+            "required": false,
+            "in": "query",
+            "schema": { "enum": ["createdAt", "expiresAt", "lastUsedAt", "name", "githubId"], "type": "string" }
+          },
+          {
+            "name": "orderDirection",
+            "required": false,
+            "in": "query",
+            "schema": { "enum": ["asc", "desc"], "type": "string" }
+          },
+          { "name": "page", "required": false, "in": "query", "schema": { "type": "number" } },
+          { "name": "pageSize", "required": false, "in": "query", "schema": { "type": "number" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/PersonalAccessTokenListDto" } }
+            }
+          }
+        },
+        "summary": "",
+        "tags": ["personal-access-tokens"]
+      }
+    },
     "/personal-access-tokens/admin/users/{userId}": {
       "get": {
         "operationId": "getPersonalAccessTokensForUser",
@@ -6304,6 +6362,11 @@
         "properties": {
           "id": { "type": "string" },
           "userId": { "type": "number" },
+          "userGithubId": {
+            "type": "object",
+            "nullable": true,
+            "description": "GitHub login of the token owner. Null when the relation was not joined."
+          },
           "name": { "type": "string" },
           "prefix": { "type": "string", "description": "First 8 characters of the token, safe to display" },
           "expiresAt": { "type": "string" },
@@ -6337,6 +6400,11 @@
         "properties": {
           "id": { "type": "string" },
           "userId": { "type": "number" },
+          "userGithubId": {
+            "type": "object",
+            "nullable": true,
+            "description": "GitHub login of the token owner. Null when the relation was not joined."
+          },
           "name": { "type": "string" },
           "prefix": { "type": "string", "description": "First 8 characters of the token, safe to display" },
           "expiresAt": { "type": "string" },
@@ -6352,6 +6420,25 @@
           "token": { "type": "string", "description": "The full token. Shown only once; cannot be retrieved later." }
         },
         "required": ["id", "userId", "name", "prefix", "expiresAt", "createdById", "createdAt", "token"]
+      },
+      "PersonalAccessTokenPaginationMetaDto": {
+        "type": "object",
+        "properties": {
+          "itemCount": { "type": "number" },
+          "total": { "type": "number" },
+          "pageSize": { "type": "number" },
+          "totalPages": { "type": "number" },
+          "current": { "type": "number" }
+        },
+        "required": ["itemCount", "total", "pageSize", "totalPages", "current"]
+      },
+      "PersonalAccessTokenListDto": {
+        "type": "object",
+        "properties": {
+          "items": { "type": "array", "items": { "$ref": "#/components/schemas/PersonalAccessTokenDto" } },
+          "meta": { "$ref": "#/components/schemas/PersonalAccessTokenPaginationMetaDto" }
+        },
+        "required": ["items", "meta"]
       },
       "ProfileCourseDto": {
         "type": "object",

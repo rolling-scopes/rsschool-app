@@ -8,6 +8,13 @@ export class PersonalAccessTokenDto {
   @ApiProperty()
   public userId: number;
 
+  @ApiProperty({
+    required: false,
+    nullable: true,
+    description: 'GitHub login of the token owner. Null when the relation was not joined.',
+  })
+  public userGithubId: string | null;
+
   @ApiProperty()
   public name: string;
 
@@ -39,6 +46,7 @@ export class PersonalAccessTokenDto {
   constructor(token: PersonalAccessToken) {
     this.id = token.id;
     this.userId = token.userId;
+    this.userGithubId = token.user?.githubId ?? null;
     this.name = token.name;
     this.prefix = token.prefix;
     this.expiresAt = token.expiresAt.toISOString();

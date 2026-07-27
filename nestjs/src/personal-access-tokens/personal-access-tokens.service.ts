@@ -2,7 +2,8 @@ import { PersonalAccessToken } from '@entities/personalAccessToken';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
-import { Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
+import { paginate } from '../core/paginate';
 
 export const PAT_TOKEN_PREFIX = 'rsapp_pat_';
 export const PAT_DEFAULT_EXPIRY_DAYS = 90;
@@ -49,6 +50,43 @@ export type CreatePatResult = {
 export type PatValidationResult =
   | { ok: true; record: PersonalAccessToken }
   | { ok: false; reason: 'malformed' | 'not_found' | 'revoked' | 'expired' | 'invalid_secret' };
+
+export const PAT_SORTABLE_FIELDS = {
+  createdAt: 'token.createdAt',
+  expiresAt: 'token.expiresAt',
+  lastUsedAt: 'token.lastUsedAt',
+  name: 'token.name',
+  githubId: 'user.githubId',
+} as const;
+
+export type PatSortField = keyof typeof PAT_SORTABLE_FIELDS;
+export type PatStatus = 'active' | 'revoked' | 'expired';
+
+export type PatListParams = {
+  githubId?: string;
+  name?: string;
+  issuedBy?: string;
+  status?: PatStatus;
+  orderBy?: PatSortField;
+  orderDirection?: 'asc' | 'desc';
+  page: number;
+  pageSize: number;
+};
+
+/** "Active" means neither revoked nor past its expiry — the two are independent. */
+function applyStatusFilter(qb: SelectQueryBuilder<PersonalAccessToken>, status: PatStatus | undefined): void {
+  if (status === 'revoked') {
+    qb.andWhere('token.revokedAt IS NOT NULL');
+    return;
+  }
+  if (status === 'expired') {
+    qb.andWhere('token.revokedAt IS NULL').andWhere('token.expiresAt <= NOW()');
+    return;
+  }
+  if (status === 'active') {
+    qb.andWhere('token.revokedAt IS NULL').andWhere('token.expiresAt > NOW()');
+  }
+}
 
 @Injectable()
 export class PersonalAccessTokensService {
@@ -118,7 +156,40 @@ export class PersonalAccessTokensService {
   public listByUser(userId: number): Promise<PersonalAccessToken[]> {
     // `createdBy` is joined so the UI can show who issued each token — the
     // interesting case being a token issued by an admin for someone else.
-    return this.repo.find({ where: { userId }, relations: { createdBy: true }, order: { createdAt: 'DESC' } });
+    return this.repo.find({
+      where: { userId },
+      relations: { createdBy: true, user: true },
+      order: { createdAt: 'DESC' },
+    });
+  }
+
+  /**
+   * Admin listing across every user: paginated, filterable and sortable so the
+   * table itself is the search UI (no separate "pick a user first" step).
+   */
+  public listAll(params: PatListParams) {
+    const qb = this.repo
+      .createQueryBuilder('token')
+      .leftJoinAndSelect('token.user', 'user')
+      .leftJoinAndSelect('token.createdBy', 'createdBy');
+
+    if (params.githubId) {
+      qb.andWhere('user.githubId ILIKE :githubId', { githubId: `%${params.githubId}%` });
+    }
+    if (params.name) {
+      qb.andWhere('token.name ILIKE :name', { name: `%${params.name}%` });
+    }
+    if (params.issuedBy) {
+      qb.andWhere('createdBy.githubId ILIKE :issuedBy', { issuedBy: `%${params.issuedBy}%` });
+    }
+    applyStatusFilter(qb, params.status);
+
+    // Whitelisted mapping: the sort field reaches SQL, so it must never be
+    // taken from the query string verbatim.
+    const orderBy = PAT_SORTABLE_FIELDS[params.orderBy ?? 'createdAt'] ?? PAT_SORTABLE_FIELDS.createdAt;
+    qb.orderBy(orderBy, params.orderDirection === 'asc' ? 'ASC' : 'DESC');
+
+    return paginate(qb, { page: params.page, limit: params.pageSize });
   }
 
   public async revoke(params: { tokenId: string; ownerId: number; revokedById: number }): Promise<boolean> {

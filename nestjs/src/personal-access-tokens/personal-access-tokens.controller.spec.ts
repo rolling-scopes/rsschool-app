@@ -104,3 +104,74 @@ describe('PersonalAccessTokensController revocation', () => {
     );
   });
 });
+
+describe('PersonalAccessTokensController.listAll', () => {
+  function makeController(listAll = vi.fn().mockResolvedValue({ items: [], meta: { total: 0 } })) {
+    return {
+      listAll,
+      controller: new PersonalAccessTokensController({ listAll } as unknown as PersonalAccessTokensService),
+    };
+  }
+
+  it('applies sane defaults for an unparameterised request', async () => {
+    const { controller, listAll } = makeController();
+    await controller.listAll();
+    expect(listAll).toHaveBeenCalledWith({
+      githubId: undefined,
+      name: undefined,
+      issuedBy: undefined,
+      status: undefined,
+      orderBy: undefined,
+      orderDirection: 'desc',
+      page: 1,
+      pageSize: 50,
+    });
+  });
+
+  it('passes filters, sorting and paging through', async () => {
+    const { controller, listAll } = makeController();
+    await controller.listAll('oct', 'ci', 'admin', 'active', 'githubId', 'asc', '3', '20');
+    expect(listAll).toHaveBeenCalledWith(
+      expect.objectContaining({
+        githubId: 'oct',
+        name: 'ci',
+        issuedBy: 'admin',
+        status: 'active',
+        orderBy: 'githubId',
+        orderDirection: 'asc',
+        page: 3,
+        pageSize: 20,
+      }),
+    );
+  });
+
+  it('drops an unknown status or sort field instead of trusting the query string', async () => {
+    const { controller, listAll } = makeController();
+    await controller.listAll(undefined, undefined, undefined, 'bogus', 'name; DROP TABLE users');
+    expect(listAll).toHaveBeenCalledWith(expect.objectContaining({ status: undefined, orderBy: undefined }));
+  });
+
+  it('clamps paging to protect the backend', async () => {
+    const { controller, listAll } = makeController();
+    await controller.listAll(undefined, undefined, undefined, undefined, undefined, undefined, '0', '5000');
+    expect(listAll).toHaveBeenCalledWith(expect.objectContaining({ page: 1, pageSize: 200 }));
+  });
+
+  it('returns items and pagination meta', async () => {
+    const meta = { itemCount: 1, total: 1, pageSize: 50, totalPages: 1, current: 1 };
+    const listAll = vi.fn().mockResolvedValue({ items: [makeRecord()], meta });
+    const { controller } = makeController(listAll);
+    const result = await controller.listAll();
+    expect(result.meta).toEqual(meta);
+    expect(result.items).toHaveLength(1);
+    expect(result.items[0]).toMatchObject({ id: 'token-uuid', userId: 7 });
+  });
+
+  it('exposes the owner login from the joined relation', async () => {
+    const record = makeRecord({ user: { githubId: 'owner-user' } as PersonalAccessToken['user'] });
+    const listAll = vi.fn().mockResolvedValue({ items: [record], meta: { total: 1 } });
+    const { controller } = makeController(listAll);
+    const result = await controller.listAll();
+    expect(result.items[0]).toMatchObject({ userGithubId: 'owner-user' });
+  });
+});

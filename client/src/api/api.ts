@@ -3284,6 +3284,12 @@ export interface CreatedPersonalAccessTokenDto {
      */
     'userId': number;
     /**
+     * GitHub login of the token owner. Null when the relation was not joined.
+     * @type {object}
+     * @memberof CreatedPersonalAccessTokenDto
+     */
+    'userGithubId'?: object | null;
+    /**
      * 
      * @type {string}
      * @memberof CreatedPersonalAccessTokenDto
@@ -6327,6 +6333,12 @@ export interface PersonalAccessTokenDto {
      */
     'userId': number;
     /**
+     * GitHub login of the token owner. Null when the relation was not joined.
+     * @type {object}
+     * @memberof PersonalAccessTokenDto
+     */
+    'userGithubId'?: object | null;
+    /**
      * 
      * @type {string}
      * @memberof PersonalAccessTokenDto
@@ -6374,6 +6386,62 @@ export interface PersonalAccessTokenDto {
      * @memberof PersonalAccessTokenDto
      */
     'createdAt': string;
+}
+/**
+ * 
+ * @export
+ * @interface PersonalAccessTokenListDto
+ */
+export interface PersonalAccessTokenListDto {
+    /**
+     * 
+     * @type {Array<PersonalAccessTokenDto>}
+     * @memberof PersonalAccessTokenListDto
+     */
+    'items': Array<PersonalAccessTokenDto>;
+    /**
+     * 
+     * @type {PersonalAccessTokenPaginationMetaDto}
+     * @memberof PersonalAccessTokenListDto
+     */
+    'meta': PersonalAccessTokenPaginationMetaDto;
+}
+/**
+ * 
+ * @export
+ * @interface PersonalAccessTokenPaginationMetaDto
+ */
+export interface PersonalAccessTokenPaginationMetaDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof PersonalAccessTokenPaginationMetaDto
+     */
+    'itemCount': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PersonalAccessTokenPaginationMetaDto
+     */
+    'total': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PersonalAccessTokenPaginationMetaDto
+     */
+    'pageSize': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PersonalAccessTokenPaginationMetaDto
+     */
+    'totalPages': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof PersonalAccessTokenPaginationMetaDto
+     */
+    'current': number;
 }
 /**
  * 
@@ -22947,6 +23015,75 @@ export const PersonalAccessTokensApiAxiosParamCreator = function (configuration?
         },
         /**
          * 
+         * @param {string} [githubId] Owner GitHub login, partial match
+         * @param {string} [name] Token name, partial match
+         * @param {string} [issuedBy] Issuer GitHub login, partial match
+         * @param {'active' | 'revoked' | 'expired'} [status] 
+         * @param {'createdAt' | 'expiresAt' | 'lastUsedAt' | 'name' | 'githubId'} [orderBy] 
+         * @param {'asc' | 'desc'} [orderDirection] 
+         * @param {number} [page] 
+         * @param {number} [pageSize] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAllPersonalAccessTokens: async (githubId?: string, name?: string, issuedBy?: string, status?: 'active' | 'revoked' | 'expired', orderBy?: 'createdAt' | 'expiresAt' | 'lastUsedAt' | 'name' | 'githubId', orderDirection?: 'asc' | 'desc', page?: number, pageSize?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/personal-access-tokens/admin`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (githubId !== undefined) {
+                localVarQueryParameter['githubId'] = githubId;
+            }
+
+            if (name !== undefined) {
+                localVarQueryParameter['name'] = name;
+            }
+
+            if (issuedBy !== undefined) {
+                localVarQueryParameter['issuedBy'] = issuedBy;
+            }
+
+            if (status !== undefined) {
+                localVarQueryParameter['status'] = status;
+            }
+
+            if (orderBy !== undefined) {
+                localVarQueryParameter['orderBy'] = orderBy;
+            }
+
+            if (orderDirection !== undefined) {
+                localVarQueryParameter['orderDirection'] = orderDirection;
+            }
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (pageSize !== undefined) {
+                localVarQueryParameter['pageSize'] = pageSize;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -23106,6 +23243,23 @@ export const PersonalAccessTokensApiFp = function(configuration?: Configuration)
         },
         /**
          * 
+         * @param {string} [githubId] Owner GitHub login, partial match
+         * @param {string} [name] Token name, partial match
+         * @param {string} [issuedBy] Issuer GitHub login, partial match
+         * @param {'active' | 'revoked' | 'expired'} [status] 
+         * @param {'createdAt' | 'expiresAt' | 'lastUsedAt' | 'name' | 'githubId'} [orderBy] 
+         * @param {'asc' | 'desc'} [orderDirection] 
+         * @param {number} [page] 
+         * @param {number} [pageSize] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getAllPersonalAccessTokens(githubId?: string, name?: string, issuedBy?: string, status?: 'active' | 'revoked' | 'expired', orderBy?: 'createdAt' | 'expiresAt' | 'lastUsedAt' | 'name' | 'githubId', orderDirection?: 'asc' | 'desc', page?: number, pageSize?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PersonalAccessTokenListDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllPersonalAccessTokens(githubId, name, issuedBy, status, orderBy, orderDirection, page, pageSize, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -23174,6 +23328,22 @@ export const PersonalAccessTokensApiFactory = function (configuration?: Configur
         },
         /**
          * 
+         * @param {string} [githubId] Owner GitHub login, partial match
+         * @param {string} [name] Token name, partial match
+         * @param {string} [issuedBy] Issuer GitHub login, partial match
+         * @param {'active' | 'revoked' | 'expired'} [status] 
+         * @param {'createdAt' | 'expiresAt' | 'lastUsedAt' | 'name' | 'githubId'} [orderBy] 
+         * @param {'asc' | 'desc'} [orderDirection] 
+         * @param {number} [page] 
+         * @param {number} [pageSize] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAllPersonalAccessTokens(githubId?: string, name?: string, issuedBy?: string, status?: 'active' | 'revoked' | 'expired', orderBy?: 'createdAt' | 'expiresAt' | 'lastUsedAt' | 'name' | 'githubId', orderDirection?: 'asc' | 'desc', page?: number, pageSize?: number, options?: any): AxiosPromise<PersonalAccessTokenListDto> {
+            return localVarFp.getAllPersonalAccessTokens(githubId, name, issuedBy, status, orderBy, orderDirection, page, pageSize, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -23238,6 +23408,24 @@ export class PersonalAccessTokensApi extends BaseAPI {
      */
     public createPersonalAccessTokenForUser(userId: number, createPersonalAccessTokenDto: CreatePersonalAccessTokenDto, options?: AxiosRequestConfig) {
         return PersonalAccessTokensApiFp(this.configuration).createPersonalAccessTokenForUser(userId, createPersonalAccessTokenDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} [githubId] Owner GitHub login, partial match
+     * @param {string} [name] Token name, partial match
+     * @param {string} [issuedBy] Issuer GitHub login, partial match
+     * @param {'active' | 'revoked' | 'expired'} [status] 
+     * @param {'createdAt' | 'expiresAt' | 'lastUsedAt' | 'name' | 'githubId'} [orderBy] 
+     * @param {'asc' | 'desc'} [orderDirection] 
+     * @param {number} [page] 
+     * @param {number} [pageSize] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PersonalAccessTokensApi
+     */
+    public getAllPersonalAccessTokens(githubId?: string, name?: string, issuedBy?: string, status?: 'active' | 'revoked' | 'expired', orderBy?: 'createdAt' | 'expiresAt' | 'lastUsedAt' | 'name' | 'githubId', orderDirection?: 'asc' | 'desc', page?: number, pageSize?: number, options?: AxiosRequestConfig) {
+        return PersonalAccessTokensApiFp(this.configuration).getAllPersonalAccessTokens(githubId, name, issuedBy, status, orderBy, orderDirection, page, pageSize, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
