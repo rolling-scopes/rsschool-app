@@ -9,7 +9,7 @@ export function StudentRegistry() {
   const session = useContext(SessionContext);
   const router = useRouter();
   const { courses, loading, registered, steps, currentStep, form, handleSubmit, modalContext, missingDisciplines } =
-    useStudentData(session.githubId, router.query.course as string | undefined);
+    useStudentData(session.githubId, session.id, router.query.course as string | undefined);
 
   let content: React.ReactNode;
   if (loading || registered) {

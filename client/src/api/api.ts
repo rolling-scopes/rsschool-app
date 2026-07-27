@@ -3615,12 +3615,6 @@ export interface CrossCheckPairDto {
      * @type {string}
      * @memberof CrossCheckPairDto
      */
-    'privateRepository': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CrossCheckPairDto
-     */
     'submittedDate': string;
     /**
      * 

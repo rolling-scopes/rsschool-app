@@ -12,7 +12,6 @@ function makePair(overrides: Partial<CrossCheckPairDto> = {}): CrossCheckPairDto
     comment: 'a comment',
     url: 'https://github.com/student/solution',
     reviewedDate: '2024-03-02T10:00:00.000Z',
-    privateRepository: '',
     submittedDate: '2024-03-01T10:00:00.000Z',
     historicalScores: [],
     messages: [],

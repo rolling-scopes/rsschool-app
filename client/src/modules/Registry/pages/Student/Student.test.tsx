@@ -49,7 +49,7 @@ function setData(overrides: Partial<typeof baseData> = {}) {
   mockedUseStudentData.mockReturnValue({ ...baseData, ...overrides });
 }
 
-function renderPage(session: Partial<Session> = { githubId: 'octocat' }) {
+function renderPage(session: Partial<Session> = { githubId: 'octocat', id: 1 }) {
   return render(
     <SessionContext.Provider value={session as Session}>
       <StudentRegistry />
@@ -64,13 +64,13 @@ beforeEach(() => {
 });
 
 describe('StudentRegistry', () => {
-  test('passes the session githubId and course query param to useStudentData', () => {
+  test('passes session data and course query param to useStudentData', () => {
     vi.mocked(useRouter).mockReturnValue({ query: { course: 'js-2024' }, push: vi.fn() } as never);
     setData({ courses: [{ id: 1 } as never] });
 
-    renderPage({ githubId: 'octocat' });
+    renderPage({ githubId: 'octocat', id: 1 });
 
-    expect(mockedUseStudentData).toHaveBeenCalledWith('octocat', 'js-2024');
+    expect(mockedUseStudentData).toHaveBeenCalledWith('octocat', 1, 'js-2024');
   });
 
   test('renders nothing but the modal context while loading', () => {

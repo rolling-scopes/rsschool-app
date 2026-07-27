@@ -8,16 +8,25 @@ import { useStudentData } from './useStudentData';
 // CdnService (courses + student registration) and DisciplinesApi (certificate gating),
 // then submits through ProfileApi + CdnService. We mock those service classes so the
 // real eligibility/registration/modal logic runs against deterministic fixtures.
-const { getMyProfile, getProfileInfo, getCourses, registerStudent, getDisciplinesByIds, updateUser, messageError } =
-  vi.hoisted(() => ({
-    getMyProfile: vi.fn(),
-    getProfileInfo: vi.fn(),
-    getCourses: vi.fn(),
-    registerStudent: vi.fn(),
-    getDisciplinesByIds: vi.fn(),
-    updateUser: vi.fn(),
-    messageError: vi.fn(),
-  }));
+const {
+  getMyProfile,
+  getProfileInfo,
+  getCourses,
+  registerStudent,
+  getDisciplinesByIds,
+  updateUser,
+  clearAuthUserSessionCache,
+  messageError,
+} = vi.hoisted(() => ({
+  getMyProfile: vi.fn(),
+  getProfileInfo: vi.fn(),
+  getCourses: vi.fn(),
+  registerStudent: vi.fn(),
+  getDisciplinesByIds: vi.fn(),
+  updateUser: vi.fn(),
+  clearAuthUserSessionCache: vi.fn(),
+  messageError: vi.fn(),
+}));
 
 // Stable message mock so the error assertion sees the exact spy the hook called
 // (the shared `@client/hooks` mock returns a fresh object per call).
@@ -50,6 +59,9 @@ vi.mock('@client/api', async importOriginal => {
     },
     ProfileApi: class {
       updateUser = updateUser;
+    },
+    AuthApi: class {
+      clearAuthUserSessionCache = clearAuthUserSessionCache;
     },
   };
 });
@@ -98,7 +110,7 @@ const enrolledCourse = {
 // so Modal.useModal's confirm dialog can actually render and be clicked.
 type Api = ReturnType<typeof useStudentData>;
 function Harness({ courseAlias, onReady }: { courseAlias?: string; onReady: (api: Api) => void }) {
-  const api = useStudentData('octocat', courseAlias);
+  const api = useStudentData('octocat', 42, courseAlias);
   onReady(api);
   return (<>{api.modalContext}</>) as ReactNode;
 }
@@ -122,6 +134,7 @@ beforeEach(() => {
   getDisciplinesByIds.mockResolvedValue({ data: [] });
   updateUser.mockResolvedValue({});
   registerStudent.mockResolvedValue({});
+  clearAuthUserSessionCache.mockResolvedValue({});
 });
 
 describe('useStudentData', () => {
@@ -195,6 +208,47 @@ describe('useStudentData', () => {
     });
     expect(registerStudent).toHaveBeenCalledWith({ type: 'student', courseId: 1 });
     await waitFor(() => expect(view.current.currentStep).toBe(1));
+  });
+
+  test('resets the cached auth session so the new course is visible right away', async () => {
+    const view = renderHookView();
+    await waitFor(() => expect(view.current.loading).toBe(false));
+
+    await act(async () => {
+      await view.current.handleSubmit({
+        courseId: 1,
+        location: { countryName: 'Poland', cityName: 'Warsaw' },
+        primaryEmail: 'a@b.c',
+        contactsEpamEmail: 'a@epam.com',
+        firstName: 'Ada',
+        lastName: 'L',
+        languagesMentoring: ['English'],
+      } as never);
+    });
+
+    expect(clearAuthUserSessionCache).toHaveBeenCalledWith(42);
+  });
+
+  test('still completes registration when the session cache reset fails', async () => {
+    clearAuthUserSessionCache.mockRejectedValueOnce(new Error('boom'));
+    const view = renderHookView();
+    await waitFor(() => expect(view.current.loading).toBe(false));
+
+    await act(async () => {
+      await view.current.handleSubmit({
+        courseId: 1,
+        location: { countryName: 'Poland', cityName: 'Warsaw' },
+        primaryEmail: 'a@b.c',
+        contactsEpamEmail: 'a@epam.com',
+        firstName: 'Ada',
+        lastName: 'L',
+        languagesMentoring: ['English'],
+      } as never);
+    });
+
+    // Registration itself succeeded, so the user must reach the Done step without an error.
+    await waitFor(() => expect(view.current.currentStep).toBe(1));
+    expect(messageError).not.toHaveBeenCalled();
   });
 
   test('warns about existing enrollments and registers only after confirming', async () => {
