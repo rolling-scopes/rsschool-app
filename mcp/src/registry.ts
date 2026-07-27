@@ -145,10 +145,10 @@ import {
   runGetMentorReviews,
 } from './tools/get-mentor-reviews.js';
 import {
-  GET_MY_CROSS_CHECK_RESULT_TOOL,
-  getMyCrossCheckResultInputSchema,
-  runGetMyCrossCheckResult,
-} from './tools/get-my-cross-check-result.js';
+  GET_MY_CROSS_CHECK_REVIEW_TOOL,
+  getMyCrossCheckReviewInputSchema,
+  runGetMyCrossCheckReview,
+} from './tools/get-my-cross-check-review.js';
 import {
   GET_MY_CROSS_CHECK_REVIEW_STATS_TOOL,
   getMyCrossCheckReviewStatsInputSchema,
@@ -289,11 +289,11 @@ export const TOOLS: ToolBinding[] = withDefaultTitles([
     run: runGetMyCrossCheckReviewStats as never,
   },
   {
-    tool: { ...GET_MY_CROSS_CHECK_RESULT_TOOL, annotations: readOnly },
-    schema: getMyCrossCheckResultInputSchema,
+    tool: { ...GET_MY_CROSS_CHECK_REVIEW_TOOL, annotations: readOnly },
+    schema: getMyCrossCheckReviewInputSchema,
     roles: ['student'],
     toolset: 'student',
-    run: runGetMyCrossCheckResult as never,
+    run: runGetMyCrossCheckReview as never,
   },
   {
     tool: { ...GET_COURSE_INTERVIEWS_TOOL, annotations: readOnly },

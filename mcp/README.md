@@ -34,18 +34,18 @@ app-level `admin`.
 
 ### student
 
-| Tool                              | Type  | Description                                  |
-| --------------------------------- | ----- | -------------------------------------------- |
-| `get_my_score`                    | read  | Your score, rank and per-task results        |
-| `submit_task_solution`            | write | Submit/update a solution URL for a task      |
-| `get_my_cross_check_review_stats` | read  | Cross-check reviews you still need to do     |
-| `get_my_cross_check_result`       | read  | Feedback you received for a cross-check task |
-| `get_my_cross_check_feedbacks`    | read  | Reviews received for your own solution       |
-| `get_my_cross_check_assignments`  | read  | Solutions assigned to you for peer review    |
-| `submit_cross_check_review`       | write | Submit a peer review (score + comment)       |
-| `get_course_interviews`           | read  | Interview events and registration windows    |
-| `get_my_interviews`               | read  | Your interviews as a student                 |
-| `register_to_interview`           | write | Register yourself for an interview           |
+| Tool                              | Type  | Description                               |
+| --------------------------------- | ----- | ----------------------------------------- |
+| `get_my_score`                    | read  | Your score, rank and per-task results     |
+| `submit_task_solution`            | write | Submit/update a solution URL for a task   |
+| `get_my_cross_check_review_stats` | read  | Cross-check reviews you still need to do  |
+| `get_my_cross_check_review`       | read  | The review **you submitted** for a peer   |
+| `get_my_cross_check_feedbacks`    | read  | Reviews **you received** on your solution |
+| `get_my_cross_check_assignments`  | read  | Solutions assigned to you for peer review |
+| `submit_cross_check_review`       | write | Submit a peer review (score + comment)    |
+| `get_course_interviews`           | read  | Interview events and registration windows |
+| `get_my_interviews`               | read  | Your interviews as a student              |
+| `register_to_interview`           | write | Register yourself for an interview        |
 
 ### mentor
 
