@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CourseStudentsController } from './course-students.controller';
 import { CourseStudentsService } from './course-students.service';
@@ -6,6 +6,12 @@ import { UserNotificationsService } from 'src/users-notifications/users.notifica
 
 const courseId = 5;
 const githubId = 'john-doe';
+
+// Request stubs for the summary authz check: an admin (staff), the student
+// themselves (self), and an unrelated non-staff user.
+const adminReq = { user: { isAdmin: true, githubId: 'admin', courses: {} } } as never;
+const selfReq = { user: { isAdmin: false, githubId, courses: {} } } as never;
+const strangerReq = { user: { isAdmin: false, githubId: 'stranger', courses: {} } } as never;
 
 const service = {
   getStudentByGithubId: vi.fn(),
@@ -40,7 +46,7 @@ describe('CourseStudentsController read/list/csv/expel routes', () => {
     it('throws NotFoundException when the student does not exist', async () => {
       service.getStudentByGithubId.mockResolvedValue(null);
 
-      await expect(controller.getStudentSummary(courseId, githubId)).rejects.toThrow(NotFoundException);
+      await expect(controller.getStudentSummary(adminReq, courseId, githubId)).rejects.toThrow(NotFoundException);
       expect(service.getStudentScore).not.toHaveBeenCalled();
     });
 
@@ -50,7 +56,7 @@ describe('CourseStudentsController read/list/csv/expel routes', () => {
       const mentor = { githubId: 'mentor-x', name: 'Mentor X' };
       service.getMentorWithContacts.mockResolvedValue(mentor);
 
-      const result = await controller.getStudentSummary(courseId, githubId);
+      const result = await controller.getStudentSummary(adminReq, courseId, githubId);
 
       expect(service.getStudentScore).toHaveBeenCalledWith(42);
       expect(service.getMentorWithContacts).toHaveBeenCalledWith(9);
@@ -61,11 +67,25 @@ describe('CourseStudentsController read/list/csv/expel routes', () => {
       service.getStudentByGithubId.mockResolvedValue({ id: 42, mentorId: null, isExpelled: true, isFailed: false });
       service.getStudentScore.mockResolvedValue(undefined);
 
-      const result = await controller.getStudentSummary(courseId, githubId);
+      const result = await controller.getStudentSummary(adminReq, courseId, githubId);
 
       expect(service.getMentorWithContacts).not.toHaveBeenCalled();
       // falls back to DTO defaults when score is missing
       expect(result).toMatchObject({ totalScore: 0, rank: 999999, isActive: false, mentor: null });
+    });
+
+    it('lets a student read their own summary', async () => {
+      service.getStudentByGithubId.mockResolvedValue({ id: 42, mentorId: null, isExpelled: false, isFailed: false });
+      service.getStudentScore.mockResolvedValue({ totalScore: 10, results: [], rank: 1 });
+
+      const result = await controller.getStudentSummary(selfReq, courseId, githubId);
+
+      expect(result).toMatchObject({ totalScore: 10, isActive: true });
+    });
+
+    it('forbids a non-staff user from reading another student summary', async () => {
+      await expect(controller.getStudentSummary(strangerReq, courseId, githubId)).rejects.toThrow(ForbiddenException);
+      expect(service.getStudentByGithubId).not.toHaveBeenCalled();
     });
   });
 

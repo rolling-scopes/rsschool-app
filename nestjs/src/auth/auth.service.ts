@@ -1,7 +1,7 @@
 import { LoginData, LoginState } from '@entities/loginState';
 import { User } from '@entities/user';
 import { HttpService } from '@nestjs/axios';
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { Request } from 'express';
 import { customAlphabet } from 'nanoid/async';
@@ -66,6 +66,10 @@ export class AuthService {
     const result =
       (provider ? await this.userService.getUserByProvider(provider, providerUserId) : undefined) ??
       (await this.userService.getByGithubId(username!));
+
+    if (result?.isSystem) {
+      throw new UnauthorizedException('System accounts cannot sign in via GitHub');
+    }
 
     if (result != null && (result.githubId !== username || !result.provider)) {
       await this.userService.saveUser({

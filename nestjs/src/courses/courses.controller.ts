@@ -37,6 +37,16 @@ export class CoursesController {
     return data.map(it => new CourseDto(it));
   }
 
+  @Get('/managed-by-me')
+  @ApiOperation({ operationId: 'getCoursesManagedByMe' })
+  @ApiOkResponse({ type: [CourseDto] })
+  @UseGuards(DefaultGuard, RoleGuard)
+  @RequiredRoles([Role.Admin, CourseRole.Manager])
+  public async getCoursesManagedByMe(@Req() req: CurrentRequest) {
+    const data = await this.courseService.findManagedByUser(req.user);
+    return data.map(it => new CourseDto(it));
+  }
+
   @Post('/')
   @ApiOperation({ operationId: 'createCourse' })
   @UseGuards(DefaultGuard, RoleGuard)
@@ -108,8 +118,8 @@ export class CoursesController {
   @ApiOperation({ operationId: 'copyCourse' })
   @ApiBody({ type: CreateCourseDto, required: true })
   @UseGuards(DefaultGuard, RoleGuard)
-  @RequiredRoles([CourseRole.Manager, Role.Admin])
-  public async copyCourse(@Param('courseId') courseId: number, @Body() body: CreateCourseDto) {
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  public async copyCourse(@Param('courseId', ParseIntPipe) courseId: number, @Body() body: CreateCourseDto) {
     const created = await this.courseService.create(body);
     if (created.id) {
       await this.courseScheduleService.copyFromTo(courseId, created.id);

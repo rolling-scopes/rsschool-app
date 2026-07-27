@@ -102,6 +102,9 @@ export class User {
   @Column({ default: false })
   opportunitiesConsent: boolean;
 
+  @Column({ default: false })
+  isSystem: boolean;
+
   @Column({ nullable: true, type: 'text' })
   cvLink?: string | null;
 

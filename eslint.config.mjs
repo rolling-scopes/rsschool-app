@@ -14,6 +14,16 @@ export default tsEslint.config(
     ...vitest.configs.recommended,
   },
   {
+    // In stdio mode the MCP server's stdout carries the JSON-RPC stream, so a
+    // stray console.log corrupts the protocol. Logging goes through
+    // mcp/src/logger.ts, which picks the right stream per transport.
+    files: ['mcp/src/**/*.ts'],
+    ignores: ['mcp/src/**/?(*.)+(spec|test).ts', 'mcp/src/server.ts'],
+    rules: {
+      'no-console': 'error',
+    },
+  },
+  {
     ignores: ['node_modules', 'dist'],
     languageOptions: {
       globals: {
