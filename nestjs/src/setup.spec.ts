@@ -17,6 +17,7 @@ function createAppMock(host: string) {
     useLogger: vi.fn(),
     use: vi.fn(),
     useGlobalFilters: vi.fn(),
+    useGlobalInterceptors: vi.fn(),
     useGlobalPipes: vi.fn(),
   } as unknown as INestApplication;
 
