@@ -1,11 +1,9 @@
 import { ArgumentsHost, NotFoundException } from '@nestjs/common';
+import { HttpAdapterHost } from '@nestjs/core';
 import { EntityNotFoundError } from 'typeorm';
 import { EntityNotFoundFilter } from './entity-not-found.filter';
 
-const mockResponse = {
-  status: vi.fn().mockReturnThis(),
-  json: vi.fn(),
-};
+const mockResponse = {};
 
 const mockHost = {
   switchToHttp: () => ({
@@ -16,11 +14,10 @@ const mockHost = {
 
 describe('EntityNotFoundFilter', () => {
   let filter: EntityNotFoundFilter;
+  const reply = vi.fn();
 
   beforeEach(() => {
-    filter = new EntityNotFoundFilter();
-    mockResponse.status.mockClear().mockReturnThis();
-    mockResponse.json.mockClear();
+    filter = new EntityNotFoundFilter({ httpAdapter: { reply } } as unknown as HttpAdapterHost);
   });
 
   it('should be defined', () => {
@@ -30,27 +27,11 @@ describe('EntityNotFoundFilter', () => {
   describe('catch', () => {
     const exception = new EntityNotFoundError('SomeEntity', {});
 
-    it('should respond with a 404 status code', () => {
+    it('should reply with a 404 status code and the NotFoundException body', () => {
       filter.catch(exception, mockHost);
 
-      expect(mockResponse.status).toHaveBeenCalledWith(404);
-    });
-
-    it('should respond with the NotFoundException body as JSON', () => {
-      filter.catch(exception, mockHost);
-
-      expect(mockResponse.json).toHaveBeenCalledWith(new NotFoundException().getResponse());
-      expect(mockResponse.json).toHaveBeenCalledWith({
-        message: 'Not Found',
-        statusCode: 404,
-      });
-    });
-
-    it('should chain status().json() on the same response object', () => {
-      filter.catch(exception, mockHost);
-
-      expect(mockResponse.status).toHaveBeenCalledTimes(1);
-      expect(mockResponse.json).toHaveBeenCalledTimes(1);
+      expect(reply).toHaveBeenCalledExactlyOnceWith(mockResponse, new NotFoundException().getResponse(), 404);
+      expect(reply).toHaveBeenCalledWith(mockResponse, { message: 'Not Found', statusCode: 404 }, 404);
     });
   });
 });
