@@ -1,8 +1,7 @@
 import type { Mocked } from 'vitest';
 import { Readable } from 'stream';
-import { NotFoundException } from '@nestjs/common';
+import { NotFoundException, StreamableFile } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import type { Response } from 'express';
 import { CertificatesController } from './certificates.controller';
 import { CertificationsService } from './certificates.service';
 import { StudentsService } from '../courses/students';
@@ -14,12 +13,6 @@ describe('CertificatesController', () => {
   let certificatesService: Mocked<CertificationsService>;
   let notificationService: Mocked<UserNotificationsService>;
   let studentsService: Mocked<StudentsService>;
-
-  const makeRes = () =>
-    ({
-      json: vi.fn(),
-      set: vi.fn(),
-    }) as unknown as Response;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -60,9 +53,8 @@ describe('CertificatesController', () => {
   describe('getCertificate', () => {
     it('throws NotFoundException when no certificate matches the public id', async () => {
       certificatesService.getByPublicId.mockResolvedValue(null);
-      const res = makeRes();
 
-      await expect(controller.getCertificate('abc', res)).rejects.toThrow(NotFoundException);
+      await expect(controller.getCertificate('abc')).rejects.toThrow(NotFoundException);
       expect(certificatesService.getByPublicId).toHaveBeenCalledWith('abc');
     });
 
@@ -71,46 +63,44 @@ describe('CertificatesController', () => {
       const metadata = { id: 'abc', name: 'John Doe' } as never;
       certificatesService.getByPublicId.mockResolvedValue(certificate);
       certificatesService.getCertificateMetadata.mockResolvedValue(metadata);
-      const res = makeRes();
 
-      await controller.getCertificate('abc.json', res);
+      const result = await controller.getCertificate('abc.json');
 
       // .json suffix is stripped before lookup
       expect(certificatesService.getByPublicId).toHaveBeenCalledWith('abc');
       expect(certificatesService.getCertificateMetadata).toHaveBeenCalledWith(certificate);
-      expect(res.json).toHaveBeenCalledWith(metadata);
+      expect(result).toEqual(metadata);
     });
 
     it('streams the pdf for a non-json public id', async () => {
       const certificate = { s3Bucket: 'bucket', s3Key: 'key.pdf' } as never;
       certificatesService.getByPublicId.mockResolvedValue(certificate);
-      const stream = { pipe: vi.fn() } as unknown as Readable;
+      const stream = Readable.from(['%PDF']);
       certificatesService.getFileStream.mockResolvedValue(stream);
-      const res = makeRes();
 
-      await controller.getCertificate('abc', res);
+      const file = await controller.getCertificate('abc');
 
       expect(certificatesService.getFileStream).toHaveBeenCalledWith('bucket', 'key.pdf');
-      expect(res.set).toHaveBeenCalledWith('Content-Type', 'application/pdf');
-      expect(stream.pipe).toHaveBeenCalledWith(res);
+      expect(file).toBeInstanceOf(StreamableFile);
+      expect((file as StreamableFile).getHeaders()).toEqual({ type: 'application/pdf' });
+      // the controller wraps the exact service stream without re-reading it
+      expect((file as StreamableFile).getStream()).toBe(stream);
     });
 
     it('throws NotFoundException when fetching the artifact fails', async () => {
       const certificate = { s3Bucket: 'bucket', s3Key: 'key.pdf' } as never;
       certificatesService.getByPublicId.mockResolvedValue(certificate);
       certificatesService.getFileStream.mockRejectedValue(new Error('S3 down'));
-      const res = makeRes();
 
-      await expect(controller.getCertificate('abc', res)).rejects.toThrow(NotFoundException);
+      await expect(controller.getCertificate('abc')).rejects.toThrow(NotFoundException);
     });
 
     it('throws NotFoundException when building json metadata fails', async () => {
       const certificate = { s3Bucket: 'b', s3Key: 'k' } as never;
       certificatesService.getByPublicId.mockResolvedValue(certificate);
       certificatesService.getCertificateMetadata.mockRejectedValue(new Error('no course'));
-      const res = makeRes();
 
-      await expect(controller.getCertificate('abc.json', res)).rejects.toThrow(NotFoundException);
+      await expect(controller.getCertificate('abc.json')).rejects.toThrow(NotFoundException);
     });
   });
 

@@ -11,13 +11,12 @@ import {
   Post,
   Query,
   Req,
-  Res,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
-import { Response } from 'express';
 import { parseAsync, transforms } from 'json2csv';
+import { toCsvFile } from 'src/core/csv';
 
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { isAdmin, isManager, isTaskOwner } from '@entities/session';
@@ -76,7 +75,6 @@ export class ScoreController {
   @ApiQuery({ name: 'mentor.githubId', required: false, type: String })
   public async getScoreCsv(
     @Req() req: CurrentRequest,
-    @Res() res: Response,
     @Param('courseId', ParseIntPipe) courseId: number,
     @Query('cityName') cityName?: string,
     @Query('mentor.githubId') mentor?: string,
@@ -96,9 +94,7 @@ export class ScoreController {
     });
     const csv = await parseAsync(result, { transforms: [transforms.flatten()] });
 
-    res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-disposition', `filename="score.csv"`);
-    res.end(csv);
+    return toCsvFile(csv, `filename="score.csv"`);
   }
 
   @Post('/task/:courseTaskId/multiple')
