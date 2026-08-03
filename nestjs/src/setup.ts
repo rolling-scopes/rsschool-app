@@ -8,17 +8,45 @@ import { ValidationFilter } from './core/validation';
 import { HttpAdapterHost } from '@nestjs/core';
 import { ConfigService } from './config';
 
-export function setupApp(app: INestApplication) {
-  const logger = app.get(Logger);
-  const config = app.get(ConfigService);
+type ValidationLogger = Pick<Logger, 'warn'>;
+
+/**
+ * Adapter-agnostic HTTP behavior: CORS, global filters and the global
+ * validation pipe. Shared between the production bootstrap (setupApp) and the
+ * HTTP smoke suite (test/http) so both always exercise identical wiring.
+ */
+export function configureHttp(app: INestApplication, options: { host?: string; logger?: ValidationLogger } = {}) {
+  const { host, logger } = options;
   // Scope CORS to the app origin and allow credentials. The registry endpoint is
   // called cross-origin (app.rs.school -> cdn.rs.school) with the auth-token cookie,
   // so a wildcard `Access-Control-Allow-Origin: *` (the bare enableCors() default) is
   // rejected by the browser. Mirrors the legacy koa config: origin = RSSHCOOL_HOST.
   app.enableCors({
-    origin: config.host || 'http://localhost:3000',
+    origin: host || 'http://localhost:3000',
     credentials: true,
   });
+
+  const httpAdapterHost = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new SentryFilter(httpAdapterHost.httpAdapter), new EntityNotFoundFilter());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      skipMissingProperties: false,
+      forbidUnknownValues: true,
+      forbidNonWhitelisted: true,
+      exceptionFactory: (errors: ValidationError[]) => {
+        const message = errors.map(error => Object.values(error?.constraints ?? {}).join('\n')).join('\n');
+        logger?.warn('Validation Pipe Error', errors);
+        return new BadRequestException(message);
+      },
+    }),
+  );
+  app.useGlobalFilters(new ValidationFilter());
+}
+
+export function setupApp(app: INestApplication) {
+  const logger = app.get(Logger);
+  const config = app.get(ConfigService);
   app.useLogger(logger);
   app.use(cookieParser());
   // Register a global JSON body parser. NestJS skips registering its own default
@@ -45,20 +73,5 @@ export function setupApp(app: INestApplication) {
     });
   }
 
-  const httpAdapterHost = app.get(HttpAdapterHost);
-  app.useGlobalFilters(new SentryFilter(httpAdapterHost.httpAdapter), new EntityNotFoundFilter());
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      skipMissingProperties: false,
-      forbidUnknownValues: true,
-      forbidNonWhitelisted: true,
-      exceptionFactory: (errors: ValidationError[]) => {
-        const message = errors.map(error => Object.values(error?.constraints ?? {}).join('\n')).join('\n');
-        logger.warn('Validation Pipe Error', errors);
-        return new BadRequestException(message);
-      },
-    }),
-  );
-  app.useGlobalFilters(new ValidationFilter());
+  configureHttp(app, { host: config.host, logger });
 }
