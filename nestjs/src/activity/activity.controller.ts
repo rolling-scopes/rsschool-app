@@ -10,7 +10,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import * as crypto from 'crypto';
-import type { Request } from 'express';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { DefaultGuard, CurrentRequest } from 'src/auth';
 import { UsersService } from 'src/users/users.service';
@@ -61,7 +60,7 @@ export class ActivityController {
   @ApiBody({ type: CreateActivityWebhookDto })
   public async createActivityWebhook(
     @Body() body: CreateActivityWebhookDto,
-    @Req() req: Request,
+    @Req() req: Pick<CurrentRequest, 'headers'>,
   ): Promise<ActivityDto> {
     const signature = req.headers['x-hub-signature'] as string;
 
