@@ -19,6 +19,14 @@ const config: DataSourceOptions = {
   migrations,
   synchronize: false,
   migrationsRun: true,
+  // node-postgres pool options. The pool was never configured (pg default: 10
+  // connections, no acquire timeout), so under load requests queue indefinitely
+  // on the driver. The size stays env-tunable to match the RDS instance class.
+  extra: {
+    max: Number(process.env.RSSHCOOL_PG_POOL_SIZE) || 20,
+    idleTimeoutMillis: 30 * 1000,
+    connectionTimeoutMillis: 10 * 1000,
+  },
   subscribers: [path.resolve(__dirname, '**/*.subscriber.ts'), path.resolve(__dirname, '**/*.subscriber.js')],
   logging: ['migration', 'error', 'warn'],
 };
