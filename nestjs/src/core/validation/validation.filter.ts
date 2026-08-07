@@ -1,17 +1,23 @@
 import { ArgumentsHost, Catch, ExceptionFilter, Logger } from '@nestjs/common';
+import { HttpAdapterHost } from '@nestjs/core';
 import { ValidationException } from './validation.exception';
 
 @Catch(ValidationException)
 export class ValidationFilter implements ExceptionFilter {
   private logger = new Logger(ValidationFilter.name);
 
+  constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
+
   catch(exception: ValidationException, host: ArgumentsHost) {
-    const context = host.switchToHttp();
-    const response = context.getResponse();
+    const response = host.switchToHttp().getResponse();
     this.logger.warn(exception.validationErrors.join('\n'));
-    return response.status(400).json({
-      statusCode: 400,
-      errors: exception.validationErrors,
-    });
+    this.httpAdapterHost.httpAdapter.reply(
+      response,
+      {
+        statusCode: 400,
+        errors: exception.validationErrors,
+      },
+      400,
+    );
   }
 }
