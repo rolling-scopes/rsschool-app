@@ -50,6 +50,14 @@ describe.each(ADAPTERS)('error shapes and CORS over HTTP [%s]', adapter => {
     expect(response.body).toEqual({ ok: true });
   });
 
+  it('sets Cache-Control: no-cache on GET responses only', async () => {
+    const getResponse = await request(app.getHttpServer()).get('/smoke/ok').expect(200);
+    expect(getResponse.headers['cache-control']).toBe('no-cache');
+
+    const postResponse = await request(app.getHttpServer()).post('/smoke/echo').send({ name: 'ok' }).expect(201);
+    expect(postResponse.headers['cache-control']).toBeUndefined();
+  });
+
   it('returns the EntityNotFoundFilter 404 body shape', async () => {
     const response = await request(app.getHttpServer()).get('/smoke/entity-not-found').expect(404);
 
