@@ -1,3 +1,4 @@
+import { StreamableFile } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Test } from '@nestjs/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -23,7 +24,6 @@ const mockGetScore = vi.fn();
 const mockGetStudentScore = vi.fn();
 
 const createReq = (user: Record<string, unknown>) => ({ user }) as never;
-const createRes = () => ({ setHeader: vi.fn(), end: vi.fn() });
 
 describe('ScoreController.getScoreCsv', () => {
   let controller: ScoreController;
@@ -46,19 +46,21 @@ describe('ScoreController.getScoreCsv', () => {
   });
 
   it('responds with flattened csv content and csv headers', async () => {
-    const res = createRes();
+    const file = await controller.getScoreCsv(createReq({ isAdmin: false, isHirer: false, courses: {} }), 11);
 
-    await controller.getScoreCsv(createReq({ isAdmin: false, isHirer: false, courses: {} }), res as never, 11);
-
-    expect(res.setHeader).toHaveBeenCalledWith('Content-Type', 'text/csv');
-    expect(res.setHeader).toHaveBeenCalledWith('Content-disposition', 'filename="score.csv"');
-    expect(res.end).toHaveBeenCalledWith(expectedCsv);
+    expect(file).toBeInstanceOf(StreamableFile);
+    expect(file.getHeaders()).toEqual({
+      type: 'text/csv',
+      disposition: 'filename="score.csv"',
+      length: expect.any(Number),
+    });
+    const content = Buffer.concat(await file.getStream().toArray()).toString();
+    expect(content).toBe(expectedCsv);
   });
 
   it('passes courseId and filters (activeOnly=false, cityName, mentor.githubId) to the service', async () => {
     await controller.getScoreCsv(
       createReq({ isAdmin: false, isHirer: false, courses: {} }),
-      createRes() as never,
       11,
       'Minsk',
       'mentor-mike',
@@ -77,7 +79,7 @@ describe('ScoreController.getScoreCsv', () => {
     ['hirer', { isAdmin: false, isHirer: true, courses: {} }, true, true],
     ['course manager', { isAdmin: false, isHirer: false, courses: { 11: { roles: ['manager'] } } }, false, true],
   ])('derives export options for %s', async (_, user, includeContacts, includeCertificate) => {
-    await controller.getScoreCsv(createReq(user), createRes() as never, 11);
+    await controller.getScoreCsv(createReq(user), 11);
 
     expect(mockGetStudentsScoreForExport).toHaveBeenCalledWith(11, expect.anything(), {
       includeContacts,
@@ -87,7 +89,7 @@ describe('ScoreController.getScoreCsv', () => {
 
   it('treats a missing course entry as not-a-manager (no certificate access)', async () => {
     // courses has no entry for courseId 11 -> isCourseManager is undefined -> ?? false branch
-    await controller.getScoreCsv(createReq({ isAdmin: false, isHirer: false, courses: {} }), createRes() as never, 11);
+    await controller.getScoreCsv(createReq({ isAdmin: false, isHirer: false, courses: {} }), 11);
 
     expect(mockGetStudentsScoreForExport).toHaveBeenCalledWith(11, expect.anything(), {
       includeContacts: false,
@@ -97,7 +99,7 @@ describe('ScoreController.getScoreCsv', () => {
 
   it('defaults include flags to false when isAdmin/isHirer are undefined', async () => {
     // isAdmin and isHirer absent -> (undefined || undefined) -> undefined -> ?? false fallback
-    await controller.getScoreCsv(createReq({ courses: {} }), createRes() as never, 11);
+    await controller.getScoreCsv(createReq({ courses: {} }), 11);
 
     expect(mockGetStudentsScoreForExport).toHaveBeenCalledWith(11, expect.anything(), {
       includeContacts: false,

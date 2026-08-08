@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import { json } from 'express';
 import { Logger } from 'nestjs-pino';
 import { EntityNotFoundFilter, SentryFilter } from './core/filters';
+import { LoggingInterceptor, NoCacheInterceptor } from './core/interceptors';
 import { ValidationFilter } from './core/validation';
 import { HttpAdapterHost } from '@nestjs/core';
 import { ConfigService } from './config';
@@ -27,7 +28,8 @@ export function configureHttp(app: INestApplication, options: { host?: string; l
   });
 
   const httpAdapterHost = app.get(HttpAdapterHost);
-  app.useGlobalFilters(new SentryFilter(httpAdapterHost.httpAdapter), new EntityNotFoundFilter());
+  app.useGlobalInterceptors(new LoggingInterceptor(), new NoCacheInterceptor(httpAdapterHost));
+  app.useGlobalFilters(new SentryFilter(httpAdapterHost.httpAdapter), new EntityNotFoundFilter(httpAdapterHost));
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -41,7 +43,7 @@ export function configureHttp(app: INestApplication, options: { host?: string; l
       },
     }),
   );
-  app.useGlobalFilters(new ValidationFilter());
+  app.useGlobalFilters(new ValidationFilter(httpAdapterHost));
 }
 
 export function setupApp(app: INestApplication) {

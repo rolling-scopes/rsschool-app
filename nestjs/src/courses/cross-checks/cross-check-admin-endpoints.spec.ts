@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, StreamableFile } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CourseCrossCheckController } from './course-cross-checks.controller';
 import { CourseCrossCheckService, OrderField, OrderDirection } from './course-cross-checks.service';
@@ -192,20 +192,21 @@ describe('CourseCrossCheckController admin/stats/csv/feedback endpoints', () => 
   });
 
   describe('getSolutionsUrls (csv)', () => {
-    const createRes = () => ({ setHeader: vi.fn(), end: vi.fn() });
-
     it('streams the csv of solution urls with task-name filename headers', async () => {
       mockCourseTasksService.getById.mockResolvedValue({ task: { name: 'My Task' } });
       mockService.getSolutionsUrls.mockResolvedValue([{ githubId: 'john', solutionUrl: 'https://s' }]);
-      const res = createRes();
 
-      await controller.getSolutionsUrls(11, 15, res as never);
+      const file = await controller.getSolutionsUrls(11, 15);
 
       expect(mockCourseTasksService.getById).toHaveBeenCalledWith(15);
       expect(mockService.getSolutionsUrls).toHaveBeenCalledWith(11, 15);
-      expect(res.setHeader).toHaveBeenCalledWith('Content-Type', 'text/csv');
-      expect(res.setHeader).toHaveBeenCalledWith('Content-disposition', 'filename=My Task.csv');
-      const csv = res.end.mock.calls[0][0] as string;
+      expect(file).toBeInstanceOf(StreamableFile);
+      expect(file.getHeaders()).toEqual({
+        type: 'text/csv',
+        disposition: 'filename=My Task.csv',
+        length: expect.any(Number),
+      });
+      const csv = Buffer.concat(await file.getStream().toArray()).toString();
       expect(csv).toContain('"githubId","solutionUrl"');
       expect(csv).toContain('"john","https://s"');
     });

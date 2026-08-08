@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ForbiddenException } from '@nestjs/common';
+import { ForbiddenException, StreamableFile } from '@nestjs/common';
 import { GratitudesController } from './gratitudes.controller';
 import { GratitudesService } from './gratitudes.service';
 import { CurrentRequest } from '../auth';
@@ -133,14 +133,16 @@ describe('GratitudesController', () => {
     it('parses the radar content to csv and writes csv headers to the response', async () => {
       const query = { current: 1, pageSize: 20 } as never;
       mockService.getHeroesRadar.mockResolvedValue(mockHeroesRadarResult);
-      const res = { setHeader: vi.fn(), end: vi.fn() };
 
-      await controller.getHeroesRadarCsv(query, res as never);
+      const file = await controller.getHeroesRadarCsv(query);
 
       expect(mockService.getHeroesRadar).toHaveBeenCalledWith(query);
-      expect(res.setHeader).toHaveBeenCalledWith('Content-Type', 'text/csv');
-      expect(res.setHeader).toHaveBeenCalledWith('Content-disposition', 'filename=heroes-radar.csv');
-      expect(res.end).toHaveBeenCalledTimes(1);
+      expect(file).toBeInstanceOf(StreamableFile);
+      expect(file.getHeaders()).toEqual({
+        type: 'text/csv',
+        disposition: 'filename=heroes-radar.csv',
+        length: expect.any(Number),
+      });
     });
   });
 
