@@ -14,7 +14,6 @@ import {
   Put,
   Query,
   Req,
-  Res,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -44,7 +43,7 @@ import {
 } from './dto';
 import { AvailableReviewStatsDto } from './dto/available-review-stats.dto';
 import { parseAsync } from 'json2csv';
-import { Response } from 'express';
+import { toCsvFile } from 'src/core/csv';
 import { StudentId } from 'src/core/decorators';
 import { FeedbackGuard } from './cross-check-feedback.guard';
 
@@ -170,7 +169,6 @@ export class CourseCrossCheckController {
   public async getSolutionsUrls(
     @Param('courseId', ParseIntPipe) courseId: number,
     @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
-    @Res() res: Response,
   ) {
     const [courseTask, solutionUrls] = await Promise.all([
       this.courseTasksService.getById(courseTaskId),
@@ -179,10 +177,7 @@ export class CourseCrossCheckController {
 
     const parsedData = await parseAsync(solutionUrls, { fields: ['githubId', 'solutionUrl'] });
 
-    res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-disposition', `filename=${courseTask.task.name}.csv`);
-
-    res.end(parsedData);
+    return toCsvFile(parsedData, `filename=${courseTask.task.name}.csv`);
   }
 
   @Post(':courseTaskId/messages/:taskSolutionResultId')

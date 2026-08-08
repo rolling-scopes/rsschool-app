@@ -1,19 +1,8 @@
 import { CacheTTL } from '@nestjs/cache-manager';
-import {
-  Body,
-  Controller,
-  ForbiddenException,
-  Get,
-  Param,
-  ParseIntPipe,
-  Post,
-  Req,
-  Res,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, ForbiddenException, Get, Param, ParseIntPipe, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Response } from 'express';
 import { parseAsync, transforms } from 'json2csv';
+import { toCsvFile } from 'src/core/csv';
 import { DEFAULT_CACHE_TTL } from 'src/constants';
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
 import { CourseMentorsService } from './course-mentors.service';
@@ -80,14 +69,11 @@ export class CourseMentorsController {
   @ApiForbiddenResponse()
   @UseGuards(DefaultGuard, RoleGuard)
   @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor], true)
-  public async getMentorsDetailsCsv(@Param('courseId', ParseIntPipe) courseId: number, @Res() res: Response) {
+  public async getMentorsDetailsCsv(@Param('courseId', ParseIntPipe) courseId: number) {
     const results = await this.courseMentorsService.getMentorsWithStats(courseId);
     const parsedData = await parseAsync(results, { transforms: [transforms.flatten()] });
 
-    res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-disposition', `filename=mentors.csv`);
-
-    res.end(parsedData);
+    return toCsvFile(parsedData, `filename=mentors.csv`);
   }
 
   @Get('search/:searchText')

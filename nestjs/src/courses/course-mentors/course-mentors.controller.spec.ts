@@ -1,4 +1,4 @@
-import { ForbiddenException } from '@nestjs/common';
+import { ForbiddenException, StreamableFile } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CourseMentorsController } from './course-mentors.controller';
 import { CourseMentorsService } from './course-mentors.service';
@@ -14,7 +14,6 @@ const courseMentorsService = {
 };
 
 const createReq = (user: Record<string, unknown>) => ({ user }) as never;
-const createRes = () => ({ setHeader: vi.fn(), end: vi.fn() });
 
 describe('CourseMentorsController', () => {
   let controller: CourseMentorsController;
@@ -108,14 +107,17 @@ describe('CourseMentorsController', () => {
       courseMentorsService.getMentorsWithStats.mockResolvedValue([
         { githubId: 'john-doe', screenings: { total: 2, completed: 1 } },
       ]);
-      const res = createRes();
 
-      await controller.getMentorsDetailsCsv(5, res as never);
+      const file = await controller.getMentorsDetailsCsv(5);
 
       expect(courseMentorsService.getMentorsWithStats).toHaveBeenCalledWith(5);
-      expect(res.setHeader).toHaveBeenCalledWith('Content-Type', 'text/csv');
-      expect(res.setHeader).toHaveBeenCalledWith('Content-disposition', 'filename=mentors.csv');
-      const csv = res.end.mock.calls[0][0] as string;
+      expect(file).toBeInstanceOf(StreamableFile);
+      expect(file.getHeaders()).toEqual({
+        type: 'text/csv',
+        disposition: 'filename=mentors.csv',
+        length: expect.any(Number),
+      });
+      const csv = Buffer.concat(await file.getStream().toArray()).toString();
       // json2csv flattens nested objects with dot-notation headers
       expect(csv).toContain('"githubId"');
       expect(csv).toContain('"screenings.total"');

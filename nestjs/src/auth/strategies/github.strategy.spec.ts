@@ -1,7 +1,6 @@
 import type { Mocked } from 'vitest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UnauthorizedException } from '@nestjs/common';
-import { Strategy as OAuth2Strategy } from 'passport-oauth2';
 import type { Profile } from 'passport-github2';
 import { GithubStrategy } from './github.strategy';
 import { ConfigService } from '../../config';
@@ -63,73 +62,13 @@ describe('GithubStrategy', () => {
     authService = module.get(AuthService);
   });
 
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   it('should be defined', () => {
     expect(strategy).toBeDefined();
   });
 
-  describe('authenticate', () => {
-    let superAuthenticate: ReturnType<typeof vi.spyOn>;
-
-    beforeEach(() => {
-      // super.authenticate resolves to passport-oauth2's prototype method.
-      superAuthenticate = vi.spyOn(OAuth2Strategy.prototype, 'authenticate').mockImplementation(() => undefined);
-    });
-
-    it('creates a login state and injects it as `state` when no code is present', async () => {
-      authService.createLoginState.mockResolvedValue('new-state-id');
-      const req = { query: { url: 'https://app.example/dashboard' } } as unknown as CurrentRequest;
-      const options = { scope: ['user:email'] };
-
-      await strategy.authenticate(req, options);
-
-      expect(authService.createLoginState).toHaveBeenCalledWith({
-        data: { redirectUrl: 'https://app.example/dashboard' },
-        expires: expect.any(String),
-      });
-      expect(superAuthenticate).toHaveBeenCalledWith(req, { scope: ['user:email'], state: 'new-state-id' });
-    });
-
-    it('does not create a login state and forwards the original options when a code is present', async () => {
-      const req = { query: { code: 'oauth-code', url: 'https://app.example/dashboard' } } as unknown as CurrentRequest;
-      const options = { scope: ['user:email'] };
-
-      await strategy.authenticate(req, options);
-
-      expect(authService.createLoginState).not.toHaveBeenCalled();
-      expect(superAuthenticate).toHaveBeenCalledWith(req, { scope: ['user:email'] });
-    });
-
-    it('passes undefined redirectUrl through when the url query param is missing', async () => {
-      authService.createLoginState.mockResolvedValue('new-state-id');
-      const req = { query: {} } as unknown as CurrentRequest;
-
-      await strategy.authenticate(req, {});
-
-      expect(authService.createLoginState).toHaveBeenCalledWith({
-        data: { redirectUrl: undefined },
-        expires: expect.any(String),
-      });
-      expect(superAuthenticate).toHaveBeenCalledWith(req, { state: 'new-state-id' });
-    });
-
-    it('sets the state expiry roughly one hour in the future', async () => {
-      authService.createLoginState.mockResolvedValue('new-state-id');
-      const req = { query: { url: '/x' } } as unknown as CurrentRequest;
-      const before = Date.now();
-
-      await strategy.authenticate(req, {});
-
-      const arg = authService.createLoginState.mock.calls[0][0];
-      const expiresMs = new Date(arg.expires as string).getTime();
-      // ~1 hour ahead (allow a wide window for test execution time).
-      expect(expiresMs).toBeGreaterThan(before + 59 * 60 * 1000);
-      expect(expiresMs).toBeLessThan(before + 61 * 60 * 1000);
-    });
-  });
+  // The `authenticate` override is gone: the login-initiation flow (login
+  // state creation + authorize redirect) now lives in the auth controller and
+  // is covered by auth.controller.spec.ts / the http smoke suite.
 
   describe('validate', () => {
     it('throws UnauthorizedException when the login state is not found', async () => {
@@ -201,6 +140,7 @@ describe('GithubStrategy', () => {
 
       expect(authService.createLoginState).toHaveBeenCalledWith(params);
       expect(getAuthorizeUrl).toHaveBeenCalledWith({
+        response_type: 'code',
         redirect_uri: 'https://app.example/callback',
         state: 'state-id',
         scope: ['user:email'],
