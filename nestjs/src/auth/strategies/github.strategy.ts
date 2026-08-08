@@ -4,8 +4,6 @@ import { ConfigService } from '../../config';
 import { Strategy, Profile } from 'passport-github2';
 import { AuthService, LoginStateParams } from '../auth.service';
 import { AuthUser, CurrentRequest } from '..';
-import { addHours } from 'date-fns';
-import passport from 'passport';
 
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
@@ -22,23 +20,6 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
       scope: config.auth.github.scope,
       passReqToCallback: true,
     });
-  }
-
-  async authenticate(req: CurrentRequest, options: passport.AuthenticateOptions) {
-    const { url, code } = req.query;
-    const opts = { ...options };
-
-    if (!code) {
-      const id = await this.authService.createLoginState({
-        data: {
-          redirectUrl: url as string,
-        },
-        expires: addHours(new Date(), 1).toISOString(),
-      });
-      opts.state = id;
-    }
-
-    super.authenticate(req, opts);
   }
 
   public async validate(
@@ -66,7 +47,10 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
   public async getAuthorizeUrl(params: LoginStateParams) {
     const id = await this.authService.createLoginState(params);
 
+    // response_type=code matches the authorize url passport-oauth2 used to
+    // build for the login redirect (github also defaults to it).
     const url = this._oauth2.getAuthorizeUrl({
+      response_type: 'code',
       redirect_uri: this.config.auth.github.callbackUrl,
       state: id,
       scope: this.config.auth.github.scope,

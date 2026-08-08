@@ -7,15 +7,14 @@ import {
   Param,
   Put,
   Req,
-  Res,
   UseGuards,
   Query,
   ParseArrayPipe,
   Post,
 } from '@nestjs/common';
 import { ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Response } from 'express';
 import { parseAsync } from 'json2csv';
+import { toCsvFile } from 'src/core/csv';
 import { uniq } from 'lodash';
 import { CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { UserNotificationsService } from 'src/users-notifications/users.notifications.service';
@@ -198,13 +197,11 @@ export class RegistryController {
   @ApiOperation({ operationId: 'getMentorRegistriesCsv' })
   @RequiredRoles([Role.Admin, CourseRole.Manager, CourseRole.Supervisor])
   @ApiForbiddenResponse()
-  public async getMentorRegistriesCsv(@Res() res: Response) {
+  public async getMentorRegistriesCsv() {
     const data = await this.registryService.getMentorRegistriesForExport();
     const csv = await parseAsync(data);
 
-    res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-disposition', `filename="mentors.csv"`);
-    res.end(csv);
+    return toCsvFile(csv, `filename="mentors.csv"`);
   }
 
   private async getDisciplineNamesByCourseIds(userCourses: Record<number, CourseInfo>): Promise<string[]> {

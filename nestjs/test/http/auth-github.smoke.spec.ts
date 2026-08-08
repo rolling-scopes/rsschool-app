@@ -4,13 +4,16 @@ import { ADAPTERS, createHttpApp } from './harness';
 import { createTestUser, testConfig } from './fixtures';
 
 /**
- * Production-mode auth flow: `isDev` in auth.controller is a module-load
- * constant, so the module graph is re-imported with NODE_ENV=production to get
- * the real 'github' guard and the rs.school cookie domain. These pins are the
- * contract the Fastify migration (#1123) must reproduce: today the redirect is
- * written by passport's strategy.redirect straight onto the Express response.
+ * Production-mode auth flow: the callback guard's strategy name is a
+ * module-load constant, so the module graph is re-imported with
+ * NODE_ENV=production to get the real 'github' guard; everything else
+ * (cookie domain, dev-login shortcut) derives from ConfigService.isDev, so the
+ * shared testConfig is overridden with isDev:false. These pins are the
+ * contract the Fastify migration (#1123) must reproduce.
  */
 describe.each(ADAPTERS)('github oauth in production mode [%s]', adapter => {
+  const prodConfig = { ...testConfig, isDev: false } as typeof testConfig;
+
   // Fresh module graph (created in beforeAll after NODE_ENV is stubbed).
   let modules: {
     AuthController: typeof import('src/auth/auth.controller').AuthController;
@@ -53,7 +56,7 @@ describe.each(ADAPTERS)('github oauth in production mode [%s]', adapter => {
           controllers: [modules.AuthController],
           providers: [
             modules.GithubStrategy,
-            { provide: modules.ConfigService, useValue: testConfig },
+            { provide: modules.ConfigService, useValue: prodConfig },
             { provide: modules.AuthService, useValue: authServiceMock },
           ],
         },
@@ -115,7 +118,7 @@ describe.each(ADAPTERS)('github oauth in production mode [%s]', adapter => {
           controllers: [modules.AuthController],
           providers: [
             { provide: modules.GithubStrategy, useValue: {} },
-            { provide: modules.ConfigService, useValue: testConfig },
+            { provide: modules.ConfigService, useValue: prodConfig },
             { provide: modules.AuthService, useValue: authServiceMock },
           ],
         },

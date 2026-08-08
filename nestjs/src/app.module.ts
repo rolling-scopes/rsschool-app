@@ -1,4 +1,4 @@
-import { Logger, Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ScheduleModule as NestScheduleModule } from '@nestjs/schedule';
 import { EventEmitterModule } from '@nestjs/event-emitter';
@@ -7,7 +7,6 @@ import { LoggerModule } from 'nestjs-pino';
 import { AlertsModule } from './alerts/alerts.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from './config';
-import { LoggingMiddleware, NoCacheMiddleware } from './core/middlewares';
 import { getPinoHttp } from './core/pino';
 import { CoursesModule } from './courses/courses.module';
 import { DisciplinesModule } from './disciplines';
@@ -86,9 +85,4 @@ import { DevtoolsModule } from './devtools/devtools.module';
   controllers: [],
   providers: [Logger, ConfigService],
 })
-export class AppModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggingMiddleware).forRoutes({ path: '/*', method: RequestMethod.ALL });
-    consumer.apply(NoCacheMiddleware).forRoutes({ path: '/*', method: RequestMethod.GET });
-  }
-}
+export class AppModule {}

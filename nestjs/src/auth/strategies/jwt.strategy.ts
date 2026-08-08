@@ -1,12 +1,17 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '../../config';
 import { PassportStrategy } from '@nestjs/passport';
-import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { JWT_COOKIE_NAME } from '../constants';
 import { AuthService } from '../auth.service';
 import { AuthUser, JwtToken } from '../auth-user.model';
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
+
+/** Structural shape instead of the express Request type: works on any adapter. */
+type RequestWithAuth = {
+  cookies?: Record<string, string | undefined>;
+  headers: Record<string, string | string[] | undefined>;
+};
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -16,7 +21,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     private authService: AuthService,
   ) {
     super({
-      jwtFromRequest: (req: Request) => req.cookies?.[JWT_COOKIE_NAME] || ExtractJwt.fromAuthHeaderAsBearerToken()(req),
+      jwtFromRequest: (req: RequestWithAuth) =>
+        req.cookies?.[JWT_COOKIE_NAME] || ExtractJwt.fromAuthHeaderAsBearerToken()(req as never),
       ignoreExpiration: false,
       secretOrKey: config.auth.jwt.secretKey,
     });
