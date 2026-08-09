@@ -8,7 +8,6 @@ import {
   Post,
   Query,
   Req,
-  Res,
   UseGuards,
 } from '@nestjs/common';
 import { ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -25,7 +24,7 @@ import { GratitudesService } from './gratitudes.service';
 import { HeroesRadarDto } from './dto/heroes-radar.dto';
 import { CountryDto } from './dto/country.dto';
 import { parseAsync, transforms } from 'json2csv';
-import { Response } from 'express';
+import { toCsvFile } from '../core/csv';
 
 @Controller('gratitudes')
 @ApiTags('gratitudes')
@@ -76,15 +75,12 @@ export class GratitudesController {
   @ApiForbiddenResponse()
   @UseGuards(DefaultGuard, RoleGuard)
   @RequiredRoles([Role.Admin], true)
-  public async getHeroesRadarCsv(@Query() query: HeroesRadarQueryDto, @Res() res: Response) {
+  public async getHeroesRadarCsv(@Query() query: HeroesRadarQueryDto) {
     const heroes = await this.service.getHeroesRadar(query);
 
     const parsedData = await parseAsync(new HeroesRadarDto(heroes).content, { transforms: [transforms.flatten()] });
 
-    res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-disposition', `filename=heroes-radar.csv`);
-
-    res.end(parsedData);
+    return toCsvFile(parsedData, `filename=heroes-radar.csv`);
   }
 
   @Get('/heroes/countries')

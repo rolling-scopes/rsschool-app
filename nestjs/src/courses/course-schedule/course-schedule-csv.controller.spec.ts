@@ -1,3 +1,4 @@
+import { StreamableFile } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { CourseScheduleController } from './course-schedule.controller';
@@ -75,8 +76,6 @@ const expectedCsv = [
 
 const mockGetScheduleAsCsvRows = vi.fn();
 
-const createRes = () => ({ setHeader: vi.fn(), end: vi.fn() });
-
 describe('CourseScheduleController.getScheduleAsCsv', () => {
   let controller: CourseScheduleController;
 
@@ -92,23 +91,26 @@ describe('CourseScheduleController.getScheduleAsCsv', () => {
   });
 
   it('responds with csv content and csv headers', async () => {
-    const res = createRes();
+    const file = await controller.getScheduleAsCsv(11, 'Europe_Minsk');
 
-    await controller.getScheduleAsCsv(11, 'Europe_Minsk', res as never);
-
-    expect(res.setHeader).toHaveBeenCalledWith('Content-Type', 'text/csv');
-    expect(res.setHeader).toHaveBeenCalledWith('Content-disposition', 'filename="schedule_11.csv"');
-    expect(res.end).toHaveBeenCalledWith(expectedCsv);
+    expect(file).toBeInstanceOf(StreamableFile);
+    expect(file.getHeaders()).toEqual({
+      type: 'text/csv',
+      disposition: 'filename="schedule_11.csv"',
+      length: expect.any(Number),
+    });
+    const content = Buffer.concat(await file.getStream().toArray()).toString();
+    expect(content).toBe(expectedCsv);
   });
 
   it('decodes the timezone path param (underscore to slash) before calling the service', async () => {
-    await controller.getScheduleAsCsv(11, 'America_New_York', createRes() as never);
+    await controller.getScheduleAsCsv(11, 'America_New_York');
 
     expect(mockGetScheduleAsCsvRows).toHaveBeenCalledWith(11, 'America/New_York');
   });
 
   it('falls back to Europe/Minsk when the timezone is empty', async () => {
-    await controller.getScheduleAsCsv(11, '', createRes() as never);
+    await controller.getScheduleAsCsv(11, '');
 
     expect(mockGetScheduleAsCsvRows).toHaveBeenCalledWith(11, 'Europe/Minsk');
   });
