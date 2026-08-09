@@ -1,11 +1,9 @@
 import { ArgumentsHost, Logger } from '@nestjs/common';
+import { HttpAdapterHost } from '@nestjs/core';
 import { ValidationFilter } from './validation.filter';
 import { ValidationException } from './validation.exception';
 
-const mockResponse = {
-  status: vi.fn().mockReturnThis(),
-  json: vi.fn(),
-};
+const mockResponse = {};
 
 const mockHost = {
   switchToHttp: () => ({
@@ -17,11 +15,10 @@ const mockHost = {
 describe('ValidationFilter', () => {
   let filter: ValidationFilter;
   let warnSpy: ReturnType<typeof vi.spyOn>;
+  const reply = vi.fn();
 
   beforeEach(() => {
-    filter = new ValidationFilter();
-    mockResponse.status.mockClear().mockReturnThis();
-    mockResponse.json.mockClear();
+    filter = new ValidationFilter({ httpAdapter: { reply } } as unknown as HttpAdapterHost);
     warnSpy = vi.spyOn(Logger.prototype, 'warn').mockImplementation(() => undefined);
   });
 
@@ -34,24 +31,13 @@ describe('ValidationFilter', () => {
   });
 
   describe('catch', () => {
-    it('should respond with a 400 status code', () => {
-      const exception = new ValidationException(['name must be a string']);
-
-      filter.catch(exception, mockHost);
-
-      expect(mockResponse.status).toHaveBeenCalledWith(400);
-    });
-
-    it('should respond with the validation errors in the JSON body', () => {
+    it('should reply with a 400 status code and the validation errors in the body', () => {
       const errors = ['name must be a string', 'age must be a number'];
       const exception = new ValidationException(errors);
 
       filter.catch(exception, mockHost);
 
-      expect(mockResponse.json).toHaveBeenCalledWith({
-        statusCode: 400,
-        errors,
-      });
+      expect(reply).toHaveBeenCalledExactlyOnceWith(mockResponse, { statusCode: 400, errors }, 400);
     });
 
     it('should handle an empty validation errors array', () => {
@@ -59,11 +45,7 @@ describe('ValidationFilter', () => {
 
       filter.catch(exception, mockHost);
 
-      expect(mockResponse.status).toHaveBeenCalledWith(400);
-      expect(mockResponse.json).toHaveBeenCalledWith({
-        statusCode: 400,
-        errors: [],
-      });
+      expect(reply).toHaveBeenCalledExactlyOnceWith(mockResponse, { statusCode: 400, errors: [] }, 400);
     });
 
     it('should log the validation errors joined by newlines as a warning', () => {
@@ -73,15 +55,6 @@ describe('ValidationFilter', () => {
       filter.catch(exception, mockHost);
 
       expect(warnSpy).toHaveBeenCalledWith('name must be a string\nage must be a number');
-    });
-
-    it('should chain status().json() on the same response object', () => {
-      const exception = new ValidationException(['boom']);
-
-      filter.catch(exception, mockHost);
-
-      expect(mockResponse.status).toHaveBeenCalledTimes(1);
-      expect(mockResponse.json).toHaveBeenCalledTimes(1);
     });
   });
 });
