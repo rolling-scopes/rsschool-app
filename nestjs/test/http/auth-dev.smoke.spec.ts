@@ -11,9 +11,9 @@ import { ConfigService } from 'src/config';
 import { ADAPTERS, createHttpApp } from './harness';
 import { createTestUser, ROOT_PASSWORD, ROOT_USERNAME, testConfig } from './fixtures';
 
-// NODE_ENV is not 'production' under vitest, so auth.controller's module-load
-// `isDev` is true: the login/callback routes are guarded by the 'dev' strategy
-// and cookies are set without a Domain attribute.
+// NODE_ENV is not 'production' under vitest (callback guard uses the 'dev'
+// strategy) and testConfig.isDev is true: the login route mints the dev token
+// directly in the controller and cookies are set without a Domain attribute.
 describe.each(ADAPTERS)('auth endpoints in dev mode [%s]', adapter => {
   let app: INestApplication;
 
@@ -51,8 +51,23 @@ describe.each(ADAPTERS)('auth endpoints in dev mode [%s]', adapter => {
   it('dev login responds with a 302, the jwt cookie and a redirect to /', async () => {
     const response = await request(app.getHttpServer()).get('/auth/github/login').expect(302);
 
-    // Pins the dev.strategy req.res.writeHead behavior byte-exact.
-    expect(response.headers['set-cookie']).toEqual(['auth-token=dev-jwt-token; HttpOnly; path=/;']);
+    // Deliberate change from the dev.strategy req.res.writeHead bytes
+    // (`auth-token=...; HttpOnly; path=/;`): the cookie is now serialized by
+    // cookie.serialize in the controller — functionally identical cookie,
+    // different attribute casing/order.
+    expect(response.headers['set-cookie']).toEqual(['auth-token=dev-jwt-token; Path=/; HttpOnly']);
+    expect(response.headers.location).toBe('/');
+  });
+
+  it('dev callback runs the full callback flow: full jwt cookie and a redirect to /', async () => {
+    const response = await request(app.getHttpServer()).get('/auth/github/callback').expect(302);
+
+    // The 'dev' strategy guard authenticates the dev user; the controller then
+    // sets the full auth cookie (no Domain because testConfig.isDev is true).
+    const [cookie] = response.headers['set-cookie'] as unknown as string[];
+    expect(cookie).toMatch(
+      /^auth-token=dev-jwt-token; Path=\/; Expires=[A-Z][a-z]{2}, \d{2} [A-Z][a-z]{2} \d{4} \d{2}:\d{2}:\d{2} GMT; HttpOnly; Secure; SameSite=None$/,
+    );
     expect(response.headers.location).toBe('/');
   });
 
