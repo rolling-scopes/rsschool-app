@@ -1,7 +1,6 @@
 import type { Mocked } from 'vitest';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as crypto from 'crypto';
-import type { Request } from 'express';
 import { BadRequestException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { User } from '@entities/user';
 import { CurrentRequest } from 'src/auth';
@@ -93,7 +92,7 @@ describe('ActivityController', () => {
 
   describe('createActivityWebhook', () => {
     const buildReq = (signature?: string) =>
-      ({ headers: signature ? { 'x-hub-signature': signature } : {} }) as unknown as Request;
+      ({ headers: signature ? { 'x-hub-signature': signature } : {} }) as Pick<CurrentRequest, 'headers'>;
 
     it('throws Unauthorized when the signature header is missing', async () => {
       const body = { sender: { login: { githubId: 'john-doe' } } } as CreateActivityWebhookDto;
