@@ -25,8 +25,9 @@ describe('CertificateCriteriaModal', () => {
     vi.spyOn(ReactUse, 'useAsync').mockReturnValue({
       value: [
         {
-          name: 'course 1',
+          name: 'task 1',
           id: 1,
+          maxScore: 100,
         },
       ],
       loading: false,
@@ -53,16 +54,41 @@ describe('CertificateCriteriaModal', () => {
     expect(alert).toBeInTheDocument();
   });
 
-  test.each`
-    label
-    ${'Tasks'}
-    ${'Minimum Score Per Task'}
-    ${'Minimum Total Score'}
-  `('should render field with $label label', async ({ label }) => {
+  test('should render "add task" button', async () => {
     renderCertificateCriteriaModal();
 
-    const field = await screen.findByText(label);
+    const button = await screen.findByRole('button', { name: /add task/i });
+    expect(button).toBeInTheDocument();
+  });
+
+  test('should render "minimum total score" field', async () => {
+    renderCertificateCriteriaModal();
+
+    const field = await screen.findByText('Minimum Total Score');
     expect(field).toBeInTheDocument();
+  });
+
+  test('should render task criteria row on "add task" button click', async () => {
+    renderCertificateCriteriaModal();
+
+    const addButton = await screen.findByRole('button', { name: /add task/i });
+    await user.click(addButton);
+
+    expect(await screen.findByText('Task')).toBeInTheDocument();
+    expect(await screen.findByText('Minimum Score')).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: /remove task/i })).toBeInTheDocument();
+  });
+
+  test('should remove task criteria row on "remove task" button click', async () => {
+    renderCertificateCriteriaModal();
+
+    const addButton = await screen.findByRole('button', { name: /add task/i });
+    await user.click(addButton);
+
+    const removeButton = await screen.findByRole('button', { name: /remove task/i });
+    await user.click(removeButton);
+
+    expect(screen.queryByText('Minimum Score')).not.toBeInTheDocument();
   });
 
   test('should render "cancel" button', async () => {
@@ -95,6 +121,23 @@ describe('CertificateCriteriaModal', () => {
     expect(button).toBeEnabled();
   });
 
+  test('should keep "issue certificates" button disabled with an incomplete task row', async () => {
+    renderCertificateCriteriaModal();
+
+    const minTotalScoreInput = await screen.findByLabelText('Minimum Total Score');
+    fireEvent.change(minTotalScoreInput, {
+      target: {
+        value: 5,
+      },
+    });
+
+    const addButton = await screen.findByRole('button', { name: /add task/i });
+    await user.click(addButton);
+
+    const button = await screen.findByRole('button', { name: /issue certificates/i });
+    expect(button).toBeDisabled();
+  });
+
   test('should call "onClose" function on "cancel" button click', async () => {
     renderCertificateCriteriaModal();
 
@@ -118,7 +161,43 @@ describe('CertificateCriteriaModal', () => {
     const button = await screen.findByRole('button', { name: /issue certificates/i });
     await user.click(button);
 
-    expect(props.onSubmit).toHaveBeenCalled();
+    expect(props.onSubmit).toHaveBeenCalledWith(expect.objectContaining({ taskCriteria: [], minTotalScore: 5 }));
+  });
+
+  test('should submit per-task criteria rows', async () => {
+    renderCertificateCriteriaModal();
+
+    const minTotalScoreInput = await screen.findByLabelText('Minimum Total Score');
+    fireEvent.change(minTotalScoreInput, {
+      target: {
+        value: 5,
+      },
+    });
+
+    const addButton = await screen.findByRole('button', { name: /add task/i });
+    await user.click(addButton);
+
+    const taskSelect = await screen.findByRole('combobox');
+    await user.click(taskSelect);
+    await user.click(await screen.findByTitle('task 1 (max 100)'));
+
+    const minScoreInput = await screen.findByPlaceholderText('Min score');
+    fireEvent.change(minScoreInput, {
+      target: {
+        value: 42,
+      },
+    });
+
+    const button = await screen.findByRole('button', { name: /issue certificates/i });
+    expect(button).toBeEnabled();
+    await user.click(button);
+
+    expect(props.onSubmit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        taskCriteria: [{ courseTaskId: 1, minScore: 42 }],
+        minTotalScore: 5,
+      }),
+    );
   });
 });
 
@@ -132,32 +211,41 @@ describe('hasValidCriteria', () => {
   });
 
   describe('tasksCriteriaValid (with minTotalScore > 0)', () => {
-    test('should return "true" on empty courseTaskIds array', () => {
+    test('should return "true" on empty taskCriteria array', () => {
       const values = {
-        minScore: 0,
-        courseTaskIds: [],
+        taskCriteria: [],
         minTotalScore: 5,
-      };
+      } as unknown as FormValues;
 
       expect(hasValidCriteria(values)).toBe(true);
     });
 
-    test('should return "true" on not empty courseTaskIds array & minScore per task > 0', () => {
+    test('should return "true" on complete taskCriteria rows', () => {
       const values = {
-        minScore: 5,
-        courseTaskIds: [1, 2],
+        taskCriteria: [
+          { courseTaskId: 1, minScore: 5 },
+          { courseTaskId: 2, minScore: 350 },
+        ],
         minTotalScore: 5,
-      };
+      } as unknown as FormValues;
 
       expect(hasValidCriteria(values)).toBe(true);
     });
 
-    test('should return "false" on not empty courseTaskIds array & minScore per task = 0', () => {
+    test('should return "false" on a row without a task', () => {
       const values = {
-        minScore: 0,
-        courseTaskIds: [1, 2],
+        taskCriteria: [{ minScore: 5 }],
         minTotalScore: 5,
-      };
+      } as unknown as FormValues;
+
+      expect(hasValidCriteria(values)).toBe(false);
+    });
+
+    test('should return "false" on a row with minScore = 0', () => {
+      const values = {
+        taskCriteria: [{ courseTaskId: 1, minScore: 0 }],
+        minTotalScore: 5,
+      } as unknown as FormValues;
 
       expect(hasValidCriteria(values)).toBe(false);
     });
@@ -166,20 +254,18 @@ describe('hasValidCriteria', () => {
   describe('minTotalScore (with truthy tasksCriteriaValid)', () => {
     test('should return "false" on minTotalScore = 0', () => {
       const values = {
-        minScore: 5,
-        courseTaskIds: [1, 2],
+        taskCriteria: [{ courseTaskId: 1, minScore: 5 }],
         minTotalScore: 0,
-      };
+      } as unknown as FormValues;
 
       expect(hasValidCriteria(values)).toBe(false);
     });
 
     test('should return "true" on minTotalScore > 0', () => {
       const values = {
-        minScore: 5,
-        courseTaskIds: [1, 2],
+        taskCriteria: [{ courseTaskId: 1, minScore: 5 }],
         minTotalScore: 5,
-      };
+      } as unknown as FormValues;
 
       expect(hasValidCriteria(values)).toBe(true);
     });

@@ -750,6 +750,12 @@ export interface BasicAutoTestTaskDto {
 export interface CertificateCriteriaDto {
     /**
      * 
+     * @type {Array<CertificateTaskCriteriaDto>}
+     * @memberof CertificateCriteriaDto
+     */
+    'taskCriteria'?: Array<CertificateTaskCriteriaDto>;
+    /**
+     * 
      * @type {Array<number>}
      * @memberof CertificateCriteriaDto
      */
@@ -821,6 +827,25 @@ export interface CertificateRequestDto {
      * @memberof CertificateRequestDto
      */
     'templateId': string;
+}
+/**
+ * 
+ * @export
+ * @interface CertificateTaskCriteriaDto
+ */
+export interface CertificateTaskCriteriaDto {
+    /**
+     * 
+     * @type {number}
+     * @memberof CertificateTaskCriteriaDto
+     */
+    'courseTaskId': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CertificateTaskCriteriaDto
+     */
+    'minScore': number;
 }
 /**
  * 
