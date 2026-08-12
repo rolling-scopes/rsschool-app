@@ -271,7 +271,7 @@ export class CourseService {
   }
 
   async postCertificateStudents(
-    criteria: { courseTaskIds?: number[]; minScore?: number; minTotalScore?: number },
+    criteria: { taskCriteria?: { courseTaskId: number; minScore: number }[]; minTotalScore?: number },
     templateId?: string,
   ) {
     await certificateApi.createCourseCertificates(this.courseId, { criteria, templateId });
