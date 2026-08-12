@@ -32,6 +32,11 @@
     "lodash": "4.17.21",
     "typeorm": "0.3.20"
   },
+  "overrides": {
+    "@nestjs/common": "11.1.29",
+    "@nestjs/core": "11.1.29",
+    "@nestjs/platform-express": "11.1.29"
+  },
   "devDependencies": {
     "@eslint/js": "10.0.1",
     "@swc/core": "^1.15.18",
