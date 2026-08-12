@@ -1,40 +1,20 @@
 import { BadRequestException, INestApplication, ValidationError, ValidationPipe } from '@nestjs/common';
-import { HttpAdapterHost } from '@nestjs/core';
-import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import * as Sentry from '@sentry/node';
-import fastifyCookie from '@fastify/cookie';
+import cookieParser from 'cookie-parser';
+import { json } from 'express';
 import { Logger } from 'nestjs-pino';
 import { EntityNotFoundFilter, SentryFilter } from './core/filters';
 import { LoggingInterceptor, NoCacheInterceptor } from './core/interceptors';
 import { ValidationFilter } from './core/validation';
+import { HttpAdapterHost } from '@nestjs/core';
 import { ConfigService } from './config';
 
 type ValidationLogger = Pick<Logger, 'warn'>;
 
 /**
- * The single source of truth for the fastify configuration — shared by the
- * production bootstrap (main.ts), the openapi spec generator and the HTTP
- * smoke suite, so all of them run the exact same adapter.
- */
-export function createAdapter() {
-  return new FastifyAdapter({
-    // 20mb matches the legacy limit (jupyter notebook uploads to /files/upload).
-    bodyLimit: 20 * 1024 * 1024,
-    // Express was trailing-slash tolerant and case-insensitive; keep url
-    // matching behavior identical after the swap (#1123).
-    ignoreTrailingSlash: true,
-    caseSensitive: false,
-    // Client ip/protocol come through nginx (prod) or the Lambda web adapter
-    // (staging), so trust the x-forwarded-* headers like Express did.
-    trustProxy: true,
-  });
-}
-
-/**
- * Adapter-agnostic HTTP behavior: CORS, global interceptors/filters and the
- * global validation pipe. Shared between the production bootstrap (setupApp)
- * and the HTTP smoke suite (test/http) so both always exercise identical
- * wiring.
+ * Adapter-agnostic HTTP behavior: CORS, global filters and the global
+ * validation pipe. Shared between the production bootstrap (setupApp) and the
+ * HTTP smoke suite (test/http) so both always exercise identical wiring.
  */
 export function configureHttp(app: INestApplication, options: { host?: string; logger?: ValidationLogger } = {}) {
   const { host, logger } = options;
@@ -66,13 +46,16 @@ export function configureHttp(app: INestApplication, options: { host?: string; l
   app.useGlobalFilters(new ValidationFilter(httpAdapterHost));
 }
 
-export async function setupApp(app: NestFastifyApplication) {
+export function setupApp(app: INestApplication) {
   const logger = app.get(Logger);
   const config = app.get(ConfigService);
   app.useLogger(logger);
-  // Populates request.cookies (the jwt strategy reads the auth-token cookie);
-  // replaces the express cookie-parser middleware.
-  await app.register(fastifyCookie);
+  app.use(cookieParser());
+  // Register a global JSON body parser. NestJS skips registering its own default
+  // body parsers once any json middleware is applied, so this must be global —
+  // a path-scoped json() would leave every other route without a parsed JSON body.
+  // 20mb limit matches the legacy koa server (jupyter notebook uploads to /files/upload).
+  app.use(json({ limit: '20mb' }));
 
   if (process.env.SENTRY_DSN) {
     const ignoredExceptions = ['UnauthorizedException', 'TokenExpiredError', 'NotFoundException'];
