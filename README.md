@@ -18,7 +18,7 @@ https://status.rs.school/
 
 - Language: [TypeScript](https://www.typescriptlang.org/)
 - Front-end: [Next.js](https://nextjs.org/) / [React](https://reactjs.org/)
-- Back-end: [NestJS](https://nestjs.com/) and [Koa.js](https://koajs.com/) (deprecated backend) / [Node.js](https://nodejs.org/en/)
+- Back-end: [NestJS](https://nestjs.com/) ([Fastify](https://fastify.dev/)) / [Node.js](https://nodejs.org/en/)
 - End-to-end: [Playwright](https://playwright.dev/)
 - Database: [PostgreSQL](https://www.postgresql.org/)
 - Deployment: [Podman](https://podman.io/)
@@ -31,7 +31,7 @@ https://status.rs.school/
 
 ## Getting Started
 
-Repository is organized into 3 workspaces: `server`, `nestjs`, `client`. Each workspace has its own package.json and npm scripts. We use [Turbo](https://turbo.build/) to run scripts across workspaces.
+Repository is organized into 2 workspaces: `nestjs`, `client`. Each workspace has its own package.json and npm scripts. We use [Turbo](https://turbo.build/) to run scripts across workspaces.
 
 ### Prerequisites
 
@@ -45,10 +45,10 @@ Please install the following software before starting development:
 ### Steps
 
 - Clone [repository](https://github.com/rolling-scopes/rsschool-app)
-- Run `npm install` (installs dependencies in the root folder and `client` / `server` folders.)
+- Run `npm install` (installs dependencies in the root folder and `client` / `nestjs` folders.)
 - Run `npm run db:up` (starts local database)
 - Run `npm run db:restore` (restores a test DB snapshot)
-- Make copies of `server/.env.example` and `nestjs/.env.example`, then rename them to `server/.env` and `nestjs/.env` respectively
+- Make a copy of `nestjs/.env.example` and rename it to `nestjs/.env`
 - Run `npm start` (starts application by running Next.js and REST API server)
 - Open `http://localhost:3000` in a browser
 - See more in [CONTRIBUTING](https://github.com/rolling-scopes/rsschool-app/blob/master/CONTRIBUTING.md) guide

@@ -2,11 +2,8 @@
 
 ## Project Structure
 
-- `client` - Next.js frontend (active)
-- `nestjs` - NestJS backend (active)
-- `server` - Old Koa.js backend. Still used for legacy endpoints and TypeORM entities
-
-New features should be implemented in `nestjs`. If changes need to be made to functionality in `server/`, migrate it to `nestjs` first (exception: small critical hotfixes). Only allowed to modify TypeORM entities in `server`
+- `client` - Next.js frontend
+- `nestjs` - NestJS backend (Fastify)
 
 ### Path Aliases
 

@@ -60,7 +60,7 @@
 
 7. Do hacking 👩‍💻👨‍💻
 
-8. You could specify any environment variable during development using `.env` file. Make a copy of `server/.env.example` and `nestjs/.env.example` and rename it to `server/.env` or `nestjs/.env` respectively. We support it via `dotenv` package. More information about usage here: <https://github.com/motdotla/dotenv>
+8. You could specify any environment variable during development using `.env` file. Make a copy of `nestjs/.env.example` and rename it to `nestjs/.env`. We support it via `dotenv` package. More information about usage here: <https://github.com/motdotla/dotenv>
 
 9. By default locally, you will be logged with `admin` access. If you want to change it, need to set `RSSCHOOL_AUTH_DEV_ADMIN` to `false` in `nestjs/.env` file
 
