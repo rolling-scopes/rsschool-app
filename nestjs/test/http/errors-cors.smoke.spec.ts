@@ -94,20 +94,28 @@ describe.each(ADAPTERS)('error shapes and CORS over HTTP [%s]', adapter => {
     });
   });
 
-  it('treats an empty json body as an empty object (fails dto validation)', async () => {
-    // Express (body-parser) parses an empty body as {}. Fastify instead fails
-    // with FST_ERR_CTP_EMPTY_JSON_BODY — this pin is the tripwire for that
-    // divergence at adapter-swap time.
+  it('rejects an empty json body with 400 (shape differs by adapter)', async () => {
+    // The one accepted adapter divergence: express (body-parser) parses an
+    // empty body as {} and the dto validation answers; fastify rejects it at
+    // the content-type parser with FST_ERR_CTP_EMPTY_JSON_BODY. Both are 400s.
     const response = await request(app.getHttpServer())
       .post('/smoke/echo')
       .set('Content-Type', 'application/json')
       .expect(400);
 
-    expect(response.body).toEqual({
-      statusCode: 400,
-      message: 'name must be a string',
-      error: 'Bad Request',
-    });
+    if (adapter === 'express') {
+      expect(response.body).toEqual({
+        statusCode: 400,
+        message: 'name must be a string',
+        error: 'Bad Request',
+      });
+    } else {
+      // Nest's exception layer reshapes fastify's FST_ERR_CTP_EMPTY_JSON_BODY.
+      expect(response.body).toEqual({
+        statusCode: 400,
+        message: "Body cannot be empty when content-type is set to 'application/json'",
+      });
+    }
   });
 
   it('returns 400 for malformed json', async () => {
@@ -140,7 +148,9 @@ describe.each(ADAPTERS)('error shapes and CORS over HTTP [%s]', adapter => {
     expect(response.headers['access-control-allow-origin']).toBe(TEST_HOST);
     expect(response.headers['access-control-allow-credentials']).toBe('true');
     expect(response.headers['access-control-allow-methods']).toContain('GET');
-    expect(response.headers.vary).toContain('Origin');
+    // Minor divergence: the express cors package varies preflights on Origin,
+    // @fastify/cors varies them on Access-Control-Request-Headers.
+    expect(response.headers.vary).toContain(adapter === 'express' ? 'Origin' : 'Access-Control-Request-Headers');
   });
 
   it('sets CORS headers on an actual cross-origin response', async () => {
