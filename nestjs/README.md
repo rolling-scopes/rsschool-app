@@ -19,5 +19,3 @@ This workspace contains the active NestJS backend for RS School App.
 - Commit the generated changes
 
 ## Notes
-
-- The deprecated Koa backend lives in `server/`
