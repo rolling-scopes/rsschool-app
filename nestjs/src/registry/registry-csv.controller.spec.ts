@@ -1,3 +1,4 @@
+import { StreamableFile } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { RegistryController } from './registry.controller';
@@ -75,13 +76,16 @@ describe('RegistryController.getMentorRegistriesCsv', () => {
   });
 
   it('responds with csv content and csv headers', async () => {
-    const res = { setHeader: vi.fn(), end: vi.fn() };
-
-    await controller.getMentorRegistriesCsv(res as never);
+    const file = await controller.getMentorRegistriesCsv();
 
     expect(mockGetMentorRegistriesForExport).toHaveBeenCalled();
-    expect(res.setHeader).toHaveBeenCalledWith('Content-Type', 'text/csv');
-    expect(res.setHeader).toHaveBeenCalledWith('Content-disposition', 'filename="mentors.csv"');
-    expect(res.end).toHaveBeenCalledWith(expectedCsv);
+    expect(file).toBeInstanceOf(StreamableFile);
+    expect(file.getHeaders()).toEqual({
+      type: 'text/csv',
+      disposition: 'filename="mentors.csv"',
+      length: expect.any(Number),
+    });
+    const content = Buffer.concat(await file.getStream().toArray()).toString();
+    expect(content).toBe(expectedCsv);
   });
 });

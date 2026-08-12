@@ -1,8 +1,8 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Response } from 'express';
 import { parseAsync } from 'json2csv';
 import { CourseGuard, CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../../auth';
+import { toCsvFile } from '../../core/csv';
 import { CourseScheduleService } from './course-schedule.service';
 import { CourseScheduleItemDto } from './dto';
 import { CourseCopyFromDto } from './dto/course-copy-from.dto';
@@ -35,15 +35,12 @@ export class CourseScheduleController {
   public async getScheduleAsCsv(
     @Param('courseId', ParseIntPipe) courseId: number,
     @Param('timeZone') timeZone: string,
-    @Res() res: Response,
   ) {
     const tz = timeZone ? timeZone.replace('_', '/') : DEFAULT_TIMEZONE;
     const rows = await this.courseScheduleService.getScheduleAsCsvRows(courseId, tz);
     const csv = await parseAsync(rows);
 
-    res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-disposition', `filename="schedule_${courseId}.csv"`);
-    res.end(csv);
+    return toCsvFile(csv, `filename="schedule_${courseId}.csv"`);
   }
 
   @Post('/copy')

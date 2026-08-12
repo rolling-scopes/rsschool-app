@@ -455,9 +455,53 @@ describe('CertificationsService', () => {
       });
 
       const taskJoin = selectionQb.leftJoin.mock.calls.find(call => call[1] === 'tr');
-      expect(taskJoin?.[3]).toMatchObject({ minScore: 1 });
+      expect(taskJoin?.[3]).toMatchObject({ courseTaskId0: 10, minScore0: 1 });
       // minTotalScore was not provided => no totalScore andWhere clause
       expect(selectionQb.andWhere).not.toHaveBeenCalledWith('student.totalScore >= :minTotalScore', expect.anything());
+      expect(result.shortCircuit).toBe(false);
+    });
+
+    it('applies a per-task minimum score for each taskCriteria entry', async () => {
+      const selectionQb = {
+        select: vi.fn().mockReturnThis(),
+        leftJoin: vi.fn().mockReturnThis(),
+        addSelect: vi.fn().mockReturnThis(),
+        where: vi.fn().mockReturnThis(),
+        andWhere: vi.fn().mockReturnThis(),
+        groupBy: vi.fn().mockReturnThis(),
+        getRawMany: vi.fn().mockResolvedValue([{ student_id: 1, tasks: [10, 20], interviews: [] }]),
+      };
+      const materializeQb = {
+        innerJoin: vi.fn().mockReturnThis(),
+        addSelect: vi.fn().mockReturnThis(),
+        leftJoinAndSelect: vi.fn().mockReturnThis(),
+        where: vi.fn().mockReturnThis(),
+        getMany: vi.fn().mockResolvedValue([]),
+      };
+      studentRepository.createQueryBuilder.mockReturnValueOnce(selectionQb).mockReturnValueOnce(materializeQb);
+
+      const result = await service.buildCourseCertificateRequests(5, {
+        criteria: {
+          taskCriteria: [
+            { courseTaskId: 10, minScore: 8 },
+            { courseTaskId: 20, minScore: 350 },
+          ],
+          minTotalScore: 80,
+        },
+      });
+
+      const taskJoin = selectionQb.leftJoin.mock.calls.find(call => call[1] === 'tr');
+      expect(taskJoin?.[2]).toContain('"tr"."courseTaskId" = :courseTaskId0 AND "tr"."score" >= :minScore0');
+      expect(taskJoin?.[2]).toContain('"tr"."courseTaskId" = :courseTaskId1 AND "tr"."score" >= :minScore1');
+      expect(taskJoin?.[3]).toEqual({ courseTaskId0: 10, minScore0: 8, courseTaskId1: 20, minScore1: 350 });
+
+      const interviewJoin = selectionQb.leftJoin.mock.calls.find(call => call[1] === 'interviewResults');
+      expect(interviewJoin?.[2]).toContain(
+        '"interviewResults"."courseTaskId" = :courseTaskId0 AND "interviewResults"."score" >= :minScore0',
+      );
+      expect(interviewJoin?.[3]).toEqual({ courseTaskId0: 10, minScore0: 8, courseTaskId1: 20, minScore1: 350 });
+
+      expect(materializeQb.where).toHaveBeenCalledWith('student."id" IN (:...ids)', { ids: [1] });
       expect(result.shortCircuit).toBe(false);
     });
   });

@@ -1625,6 +1625,7 @@
             "required": true,
             "in": "query",
             "schema": {
+              "type": "string",
               "enum": [
                 "rank",
                 "totalScore",
@@ -1634,15 +1635,14 @@
                 "cityName",
                 "mentor",
                 "totalScoreChangeDate"
-              ],
-              "type": "string"
+              ]
             }
           },
           {
             "name": "orderDirection",
             "required": true,
             "in": "query",
-            "schema": { "enum": ["asc", "desc"], "type": "string" }
+            "schema": { "type": "string", "enum": ["asc", "desc"] }
           },
           { "name": "current", "required": true, "in": "query", "schema": { "type": "string" } },
           { "name": "pageSize", "required": true, "in": "query", "schema": { "type": "string" } },
@@ -4503,7 +4503,7 @@
           "content": { "$ref": "#/components/schemas/StudentFeedbackContentDto" },
           "recommendation": { "type": "string", "enum": ["hire", "not-hire"] },
           "author": { "$ref": "#/components/schemas/PersonDto" },
-          "mentor": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/PersonDto" }] },
+          "mentor": { "nullable": true, "type": "object", "allOf": [{ "$ref": "#/components/schemas/PersonDto" }] },
           "englishLevel": { "type": "string", "enum": ["unknown", "a0", "a1", "a2", "b1", "b2", "c1", "c2"] }
         },
         "required": [
@@ -4558,7 +4558,7 @@
           "personalMentoringStartDate": { "type": "string", "nullable": true },
           "personalMentoringEndDate": { "type": "string", "nullable": true },
           "logo": { "type": "string" },
-          "discipline": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/IdNameDto" }] },
+          "discipline": { "nullable": true, "type": "object", "allOf": [{ "$ref": "#/components/schemas/IdNameDto" }] },
           "minStudentsPerMentor": { "type": "number" },
           "certificateThreshold": { "type": "number" },
           "wearecommunityUrl": { "type": "string", "nullable": true },
@@ -4875,14 +4875,18 @@
           "studentRegistrationStartDate": { "type": "string", "nullable": true },
           "crossCheckEndDate": { "type": "string", "nullable": true },
           "descriptionUrl": { "type": "string" },
-          "taskOwner": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/PersonDto" }] },
+          "taskOwner": { "nullable": true, "type": "object", "allOf": [{ "$ref": "#/components/schemas/PersonDto" }] },
           "taskSolutions": { "type": "object", "nullable": true },
           "maxScore": { "type": "number" },
           "scoreWeight": { "type": "number" },
           "pairsCount": { "type": "number", "nullable": true },
           "crossCheckStatus": { "allOf": [{ "$ref": "#/components/schemas/CrossCheckStatusEnum" }] },
           "submitText": { "type": "string", "nullable": true },
-          "validations": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/Validations" }] }
+          "validations": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [{ "$ref": "#/components/schemas/Validations" }]
+          }
         },
         "required": [
           "id",
@@ -4936,14 +4940,18 @@
           "studentRegistrationStartDate": { "type": "string", "nullable": true },
           "crossCheckEndDate": { "type": "string", "nullable": true },
           "descriptionUrl": { "type": "string" },
-          "taskOwner": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/PersonDto" }] },
+          "taskOwner": { "nullable": true, "type": "object", "allOf": [{ "$ref": "#/components/schemas/PersonDto" }] },
           "taskSolutions": { "type": "object", "nullable": true },
           "maxScore": { "type": "number" },
           "scoreWeight": { "type": "number" },
           "pairsCount": { "type": "number", "nullable": true },
           "crossCheckStatus": { "allOf": [{ "$ref": "#/components/schemas/CrossCheckStatusEnum" }] },
           "submitText": { "type": "string", "nullable": true },
-          "validations": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/Validations" }] },
+          "validations": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [{ "$ref": "#/components/schemas/Validations" }]
+          },
           "publicAttributes": { "type": "object" },
           "githubRepoName": { "type": "string" },
           "sourceGithubRepoUrl": { "type": "string" },
@@ -5079,7 +5087,7 @@
           "comment": { "type": "string", "nullable": true },
           "special": { "type": "string" },
           "disciplineId": { "type": "number", "nullable": true },
-          "organizer": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/PersonDto" }] }
+          "organizer": { "nullable": true, "type": "object", "allOf": [{ "$ref": "#/components/schemas/PersonDto" }] }
         },
         "required": [
           "id",
@@ -5450,7 +5458,11 @@
       "CrossCheckMessageDto": {
         "type": "object",
         "properties": {
-          "author": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/CrossCheckMessageAuthorDto" }] },
+          "author": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [{ "$ref": "#/components/schemas/CrossCheckMessageAuthorDto" }]
+          },
           "content": { "type": "string" },
           "timestamp": { "type": "string" },
           "isReviewerRead": { "type": "boolean" },
@@ -5542,7 +5554,7 @@
           "id": { "type": "number" },
           "name": { "type": "string" },
           "githubId": { "type": "string" },
-          "discord": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/Discord" }] }
+          "discord": { "nullable": true, "type": "object", "allOf": [{ "$ref": "#/components/schemas/Discord" }] }
         },
         "required": ["id", "name", "githubId", "discord"]
       },
@@ -5553,7 +5565,11 @@
           "dateTime": { "type": "number" },
           "comment": { "type": "string" },
           "criteria": { "type": "array", "items": { "$ref": "#/components/schemas/CrossCheckCriteriaDataDto" } },
-          "author": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/CrossCheckAuthorDto" }] },
+          "author": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [{ "$ref": "#/components/schemas/CrossCheckAuthorDto" }]
+          },
           "score": { "type": "number" },
           "messages": { "type": "array", "items": { "$ref": "#/components/schemas/CrossCheckMessageDto" } }
         },
@@ -5601,7 +5617,7 @@
           "countryName": { "type": "string", "nullable": true },
           "totalScore": { "type": "number" },
           "rank": { "type": "number" },
-          "mentor": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/MentorDto" }] },
+          "mentor": { "nullable": true, "type": "object", "allOf": [{ "$ref": "#/components/schemas/MentorDto" }] },
           "totalScoreChangeDate": { "format": "date-time", "type": "string" },
           "crossCheckScore": { "type": "number" },
           "taskResults": { "type": "array", "items": { "$ref": "#/components/schemas/TaskResultsDto" } },
@@ -5672,7 +5688,7 @@
           "startDate": { "type": "string" },
           "endDate": { "type": "string" },
           "crossCheckEndDate": { "type": "string" },
-          "organizer": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/PersonDto" }] },
+          "organizer": { "nullable": true, "type": "object", "allOf": [{ "$ref": "#/components/schemas/PersonDto" }] },
           "maxScore": { "type": "number", "nullable": true },
           "scoreWeight": { "type": "number", "nullable": true },
           "descriptionUrl": { "type": "string", "nullable": true },
@@ -5811,7 +5827,7 @@
           "id": { "type": "number" },
           "fullName": { "type": "string" },
           "cvLink": { "type": "string" },
-          "discord": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/Discord" }] },
+          "discord": { "nullable": true, "type": "object", "allOf": [{ "$ref": "#/components/schemas/Discord" }] },
           "telegram": { "type": "string" },
           "email": { "type": "string" },
           "githubId": { "type": "string" },
@@ -6083,7 +6099,11 @@
           "totalScore": { "type": "number" },
           "results": { "type": "array", "items": { "$ref": "#/components/schemas/ResultDto" } },
           "isActive": { "type": "boolean" },
-          "mentor": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/MentorStudentSummaryDto" }] },
+          "mentor": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [{ "$ref": "#/components/schemas/MentorStudentSummaryDto" }]
+          },
           "rank": { "type": "number" }
         },
         "required": ["totalScore", "results", "isActive", "mentor", "rank"]
@@ -6467,7 +6487,7 @@
           "personalMentoringStartDate": { "type": "string", "nullable": true },
           "personalMentoringEndDate": { "type": "string", "nullable": true },
           "logo": { "type": "string" },
-          "discipline": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/IdNameDto" }] },
+          "discipline": { "nullable": true, "type": "object", "allOf": [{ "$ref": "#/components/schemas/IdNameDto" }] },
           "minStudentsPerMentor": { "type": "number" },
           "certificateThreshold": { "type": "number" },
           "wearecommunityUrl": { "type": "string", "nullable": true },
@@ -6592,7 +6612,7 @@
           "contactsTelegram": { "type": "string", "nullable": true },
           "contactsNotes": { "type": "string", "nullable": true },
           "contactsLinkedIn": { "type": "string", "nullable": true },
-          "discord": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/Discord" }] }
+          "discord": { "nullable": true, "type": "object", "allOf": [{ "$ref": "#/components/schemas/Discord" }] }
         }
       },
       "ProfileInfoExtendedDto": {
@@ -6909,9 +6929,15 @@
           "templateId"
         ]
       },
+      "CertificateTaskCriteriaDto": {
+        "type": "object",
+        "properties": { "courseTaskId": { "type": "number" }, "minScore": { "type": "number" } },
+        "required": ["courseTaskId", "minScore"]
+      },
       "CertificateCriteriaDto": {
         "type": "object",
         "properties": {
+          "taskCriteria": { "type": "array", "items": { "$ref": "#/components/schemas/CertificateTaskCriteriaDto" } },
           "courseTaskIds": { "type": "array", "items": { "type": "number" } },
           "minScore": { "type": "number" },
           "minTotalScore": { "type": "number" }
@@ -7058,7 +7084,11 @@
           "totalScore": { "type": "number" },
           "certificateId": { "type": "string", "nullable": true },
           "completed": { "type": "boolean" },
-          "mentor": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/ResumeCourseMentor" }] },
+          "mentor": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [{ "$ref": "#/components/schemas/ResumeCourseMentor" }]
+          },
           "locationName": { "type": "string" }
         },
         "required": [
@@ -7496,7 +7526,7 @@
               "special"
             ]
           },
-          "discipline": { "nullable": true, "allOf": [{ "$ref": "#/components/schemas/IdNameDto" }] }
+          "discipline": { "nullable": true, "type": "object", "allOf": [{ "$ref": "#/components/schemas/IdNameDto" }] }
         },
         "required": ["id", "name", "descriptionUrl", "description", "type", "discipline"]
       },

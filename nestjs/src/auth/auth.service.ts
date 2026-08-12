@@ -3,7 +3,6 @@ import { User } from '@entities/user';
 import { HttpService } from '@nestjs/axios';
 import { Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import type { Request } from 'express';
 import { customAlphabet } from 'nanoid/async';
 import type { Profile } from 'passport';
 import { MoreThanOrEqual, Repository } from 'typeorm';
@@ -19,9 +18,18 @@ import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 
 const nanoid = customAlphabet('1234567890abcdef', 10);
 
-export type CurrentRequest = Request & {
+/**
+ * Structural request shape shared by controllers and guards. Deliberately not
+ * the express Request type: only the properties the app actually reads, all of
+ * which exist on every Nest http adapter's request object (#1123).
+ */
+export type CurrentRequest = {
   user: AuthUser;
   loginState?: LoginData;
+  query: Record<string, string | string[] | undefined>;
+  params: Record<string, string | undefined>;
+  headers: Record<string, string | string[] | undefined>;
+  cookies?: Record<string, string | undefined>;
 };
 
 export type LoginStateParams = {

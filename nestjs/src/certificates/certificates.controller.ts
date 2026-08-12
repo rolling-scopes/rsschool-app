@@ -8,11 +8,10 @@ import {
   Param,
   ParseIntPipe,
   Post,
-  Res,
+  StreamableFile,
   UseGuards,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Response } from 'express';
 import { CourseRole, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { StudentsService } from '../courses/students';
 import { UserNotificationsService } from 'src/users-notifications/users.notifications.service';
@@ -83,7 +82,7 @@ export class CertificatesController {
    */
   @Get('/:publicId')
   @ApiOperation({ operationId: 'getCertificate' })
-  public async getCertificate(@Param('publicId') publicId: string, @Res() res: Response) {
+  public async getCertificate(@Param('publicId') publicId: string) {
     const normalizedPublicId = publicId.endsWith('.json') ? publicId.slice(0, -5) : publicId;
     const responseType = publicId.endsWith('.json') ? 'json' : 'pdf';
 
@@ -93,15 +92,11 @@ export class CertificatesController {
     try {
       switch (responseType) {
         case 'json': {
-          const metadata = await this.certificatesService.getCertificateMetadata(certificate);
-          res.json(metadata);
-          break;
+          return await this.certificatesService.getCertificateMetadata(certificate);
         }
         case 'pdf': {
           const stream = await this.certificatesService.getFileStream(certificate.s3Bucket, certificate.s3Key);
-          res.set('Content-Type', 'application/pdf');
-          stream.pipe(res);
-          break;
+          return new StreamableFile(stream, { type: 'application/pdf' });
         }
       }
     } catch {

@@ -1,6 +1,5 @@
 import type { Mocked } from 'vitest';
 import { Test, TestingModule } from '@nestjs/testing';
-import type { Request } from 'express';
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 import { JwtStrategy } from './jwt.strategy';
 import { ConfigService } from '../../config';
@@ -67,13 +66,13 @@ describe('JwtStrategy', () => {
     // The extractor is the function passed to passport-jwt via super();
     // passport-jwt stores it on the instance as `_jwtFromRequest`.
     const getExtractor = () =>
-      (strategy as unknown as { _jwtFromRequest: (req: Request) => string | null })._jwtFromRequest;
+      (strategy as unknown as { _jwtFromRequest: (req: unknown) => string | null })._jwtFromRequest;
 
     it('extracts the token from the auth cookie when present', () => {
       const req = {
         cookies: { [JWT_COOKIE_NAME]: 'cookie-token' },
         headers: {},
-      } as unknown as Request;
+      };
 
       expect(getExtractor()(req)).toBe('cookie-token');
     });
@@ -82,7 +81,7 @@ describe('JwtStrategy', () => {
       const req = {
         cookies: {},
         headers: { authorization: 'Bearer header-token' },
-      } as unknown as Request;
+      };
 
       expect(getExtractor()(req)).toBe('header-token');
     });
@@ -90,7 +89,7 @@ describe('JwtStrategy', () => {
     it('falls back to the bearer header when cookies object is undefined (?. short-circuit)', () => {
       const req = {
         headers: { authorization: 'Bearer header-token' },
-      } as unknown as Request;
+      };
 
       expect(getExtractor()(req)).toBe('header-token');
     });
@@ -99,7 +98,7 @@ describe('JwtStrategy', () => {
       const req = {
         cookies: {},
         headers: {},
-      } as unknown as Request;
+      };
 
       expect(getExtractor()(req)).toBeNull();
     });
@@ -108,7 +107,7 @@ describe('JwtStrategy', () => {
       const req = {
         cookies: { [JWT_COOKIE_NAME]: 'cookie-token' },
         headers: { authorization: 'Bearer header-token' },
-      } as unknown as Request;
+      };
 
       expect(getExtractor()(req)).toBe('cookie-token');
     });

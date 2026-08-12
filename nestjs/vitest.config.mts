@@ -18,7 +18,9 @@ export default mergeConfig(
       },
     },
     test: {
-      include: ['src/**/*.spec.ts', 'src/**/*.test.ts'],
+      // test/http is the HTTP-level smoke suite (parity oracle for the Fastify
+      // migration, #1123); coverage stays scoped to src/** below.
+      include: ['src/**/*.spec.ts', 'src/**/*.test.ts', 'test/**/*.spec.ts'],
       // Pin the timezone so date/calendar assertions are deterministic and match
       // CI (GitHub runners are UTC); otherwise tests bake in the dev's local TZ.
       env: { TZ: 'UTC' },

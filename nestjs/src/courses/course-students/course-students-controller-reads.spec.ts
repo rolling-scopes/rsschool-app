@@ -1,4 +1,4 @@
-import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, NotFoundException, StreamableFile } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CourseStudentsController } from './course-students.controller';
 import { CourseStudentsService } from './course-students.service';
@@ -22,8 +22,6 @@ const service = {
   getStudentsForCsv: vi.fn(),
   expelStudents: vi.fn(),
 };
-
-const createRes = () => ({ setHeader: vi.fn(), end: vi.fn() });
 
 describe('CourseStudentsController read/list/csv/expel routes', () => {
   let controller: CourseStudentsController;
@@ -129,15 +127,17 @@ describe('CourseStudentsController read/list/csv/expel routes', () => {
   describe('getCourseStudentsCsv', () => {
     it('streams a CSV attachment built from the service rows', async () => {
       service.getStudentsForCsv.mockResolvedValue([{ githubId: 'john-doe', totalScore: 10 }]);
-      const res = createRes();
 
-      await controller.getCourseStudentsCsv(courseId, res as never, 'active');
+      const file = await controller.getCourseStudentsCsv(courseId, 'active');
 
       expect(service.getStudentsForCsv).toHaveBeenCalledWith(courseId, true);
-      expect(res.setHeader).toHaveBeenCalledWith('Content-Type', 'text/csv');
-      expect(res.setHeader).toHaveBeenCalledWith('Content-Disposition', 'attachment; filename=students.csv');
-      expect(res.end).toHaveBeenCalledTimes(1);
-      const csv = res.end.mock.calls[0][0] as string;
+      expect(file).toBeInstanceOf(StreamableFile);
+      expect(file.getHeaders()).toEqual({
+        type: 'text/csv',
+        disposition: 'attachment; filename=students.csv',
+        length: expect.any(Number),
+      });
+      const csv = Buffer.concat(await file.getStream().toArray()).toString();
       expect(csv).toContain('"githubId"');
       expect(csv).toContain('john-doe');
     });
@@ -145,7 +145,7 @@ describe('CourseStudentsController read/list/csv/expel routes', () => {
     it('requests all students when status query is absent', async () => {
       service.getStudentsForCsv.mockResolvedValue([{ githubId: 'a', totalScore: 1 }]);
 
-      await controller.getCourseStudentsCsv(courseId, createRes() as never);
+      await controller.getCourseStudentsCsv(courseId);
 
       expect(service.getStudentsForCsv).toHaveBeenCalledWith(courseId, false);
     });

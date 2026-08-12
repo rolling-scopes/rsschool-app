@@ -2,7 +2,24 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsArray, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
 
+export class CertificateTaskCriteriaDto {
+  @ApiProperty()
+  @IsNumber()
+  courseTaskId: number;
+
+  @ApiProperty()
+  @IsNumber()
+  minScore: number;
+}
+
 export class CertificateCriteriaDto {
+  @ApiPropertyOptional({ type: [CertificateTaskCriteriaDto] })
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CertificateTaskCriteriaDto)
+  taskCriteria?: CertificateTaskCriteriaDto[];
+
   @ApiPropertyOptional({ type: [Number] })
   @IsOptional()
   @IsArray()

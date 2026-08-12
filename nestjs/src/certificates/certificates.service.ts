@@ -267,14 +267,30 @@ export class CertificationsService {
 
   public async buildCourseCertificateRequests(
     courseId: number,
-    data: { criteria?: { courseTaskIds?: number[]; minScore?: number; minTotalScore?: number }; templateId?: string },
+    data: {
+      criteria?: {
+        taskCriteria?: { courseTaskId: number; minScore: number }[];
+        courseTaskIds?: number[];
+        minScore?: number;
+        minTotalScore?: number;
+      };
+      templateId?: string;
+    },
   ) {
     const templateId = this.resolveTemplateId(data.templateId);
-    const { courseTaskIds, minScore, minTotalScore } = data.criteria ?? {};
-    const emptyCriteria = !minScore && !minTotalScore && (!courseTaskIds || !courseTaskIds?.length);
+    const { taskCriteria, courseTaskIds, minScore, minTotalScore } = data.criteria ?? {};
+    const normalizedTaskCriteria = taskCriteria?.length
+      ? taskCriteria.map(({ courseTaskId, minScore }) => ({
+          courseTaskId: Number(courseTaskId),
+          minScore: minScore ? Number(minScore) : 1,
+        }))
+      : (courseTaskIds ?? []).map(courseTaskId => ({
+          courseTaskId: Number(courseTaskId),
+          minScore: minScore ? Number(minScore) : 1,
+        }));
+    const emptyCriteria = !minScore && !minTotalScore && normalizedTaskCriteria.length === 0;
     const studentIds = await this.findStudentIdsByCriteria(courseId, {
-      courseTaskIds: courseTaskIds ?? [],
-      minScore: minScore != null ? Number(minScore) : null,
+      taskCriteria: normalizedTaskCriteria,
       minTotalScore: minTotalScore != null ? Number(minTotalScore) : null,
     });
 
@@ -348,24 +364,34 @@ export class CertificationsService {
   private async findStudentIdsByCriteria(
     courseId: number,
     criteria: {
-      courseTaskIds: number[];
-      minScore: number | null;
+      taskCriteria: { courseTaskId: number; minScore: number }[];
       minTotalScore: number | null;
     },
   ): Promise<number[]> {
-    const tasksCount = criteria.courseTaskIds.length;
+    const tasksCount = criteria.taskCriteria.length;
 
     let query = this.studentRepository.createQueryBuilder('student').select(['student.id']);
     if (tasksCount > 0) {
+      const taskParams = Object.fromEntries(
+        criteria.taskCriteria.flatMap(({ courseTaskId, minScore }, index) => [
+          [`courseTaskId${index}`, courseTaskId],
+          [`minScore${index}`, minScore],
+        ]),
+      );
+      const buildTaskConditions = (alias: string) =>
+        criteria.taskCriteria
+          .map(
+            (_, index) =>
+              `("${alias}"."courseTaskId" = :courseTaskId${index} AND "${alias}"."score" >= :minScore${index})`,
+          )
+          .join(' OR ');
+
       query = query
         .leftJoin(
           'student.taskResults',
           'tr',
-          'tr.studentId = student.id AND tr.score >= :minScore AND tr.courseTaskId IN (:...requiredCourseTaskIds)',
-          {
-            requiredCourseTaskIds: criteria.courseTaskIds,
-            minScore: criteria.minScore ? criteria.minScore : 1,
-          },
+          `tr.studentId = student.id AND (${buildTaskConditions('tr')})`,
+          taskParams,
         )
         .addSelect('array_remove(ARRAY_AGG (DISTINCT "tr"."courseTaskId"), NULL) AS "tasks"');
 
@@ -373,11 +399,8 @@ export class CertificationsService {
         .leftJoin(
           'student.taskInterviewResults',
           'interviewResults',
-          'interviewResults.studentId = student.id AND interviewResults.score >= :minScore AND interviewResults.courseTaskId IN (:...requiredCourseTaskIds)',
-          {
-            requiredCourseTaskIds: criteria.courseTaskIds,
-            minScore: criteria.minScore ? criteria.minScore : 1,
-          },
+          `interviewResults.studentId = student.id AND (${buildTaskConditions('interviewResults')})`,
+          taskParams,
         )
         .addSelect('array_remove(ARRAY_AGG (DISTINCT "interviewResults"."courseTaskId"), NULL) AS "interviews"');
     }

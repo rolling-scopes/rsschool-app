@@ -27,8 +27,7 @@ const { Text } = Typography;
 type Stats = { activeStudentsCount: number; studentsCount: number; countries: unknown[] };
 
 type CertificateCriteria = {
-  courseTaskIds?: number[];
-  minScore?: number;
+  taskCriteria?: { courseTaskId: number; minScore: number }[];
   minTotalScore?: number;
   templateId?: string;
 };
