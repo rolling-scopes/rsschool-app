@@ -4011,7 +4011,13 @@ export interface EligibleStudentDto {
  */
 export interface EligibleStudentsCriteriaDto {
     /**
-     * 
+     * Per-task minimum scores. Takes precedence over courseTaskIds/minScore when non-empty.
+     * @type {Array<CertificateTaskCriteriaDto>}
+     * @memberof EligibleStudentsCriteriaDto
+     */
+    'taskCriteria'?: Array<CertificateTaskCriteriaDto>;
+    /**
+     * Legacy flat form: every listed task shares the same minScore. Ignored when taskCriteria is given.
      * @type {Array<number>}
      * @memberof EligibleStudentsCriteriaDto
      */

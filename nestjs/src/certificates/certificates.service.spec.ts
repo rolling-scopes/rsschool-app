@@ -664,6 +664,73 @@ describe('CertificationsService.findEligibleStudents / previewEligibleStudents',
     expect(students).toEqual([{ studentId: 1, githubId: 'ada', name: 'Ada', totalScore: 90 }]);
   });
 
+  it('expands the flat form into one shared threshold per task', async () => {
+    const idsQb = makeQb({ getRawMany: [] });
+    studentRepo.createQueryBuilder.mockReturnValueOnce(idsQb);
+
+    await service.findEligibleStudents(1, { courseTaskIds: [10, 20], minScore: 5, minTotalScore: 50 });
+
+    expect(idsQb.setParameters).toHaveBeenCalledWith({ ct0: 10, ms0: 5, ct1: 20, ms1: 5 });
+    expect(idsQb.leftJoin).toHaveBeenCalledWith(
+      'student.taskResults',
+      'tr',
+      'tr.courseTaskId IN (:...courseTaskIds)',
+      { courseTaskIds: [10, 20] },
+    );
+  });
+
+  it('defaults the flat minScore to 1 when it is omitted', async () => {
+    const idsQb = makeQb({ getRawMany: [] });
+    studentRepo.createQueryBuilder.mockReturnValueOnce(idsQb);
+
+    await service.findEligibleStudents(1, { courseTaskIds: [10], minTotalScore: 50 });
+
+    expect(idsQb.setParameters).toHaveBeenCalledWith({ ct0: 10, ms0: 1 });
+  });
+
+  it('applies a distinct threshold per task when taskCriteria is given', async () => {
+    const idsQb = makeQb({ getRawMany: [] });
+    studentRepo.createQueryBuilder.mockReturnValueOnce(idsQb);
+
+    await service.findEligibleStudents(1, {
+      taskCriteria: [
+        { courseTaskId: 10, minScore: 50 },
+        { courseTaskId: 20, minScore: 80 },
+      ],
+      minTotalScore: 50,
+    });
+
+    expect(idsQb.setParameters).toHaveBeenCalledWith({ ct0: 10, ms0: 50, ct1: 20, ms1: 80 });
+    // The FILTER must pair each task with its own bar, not reuse a shared one.
+    const filters = idsQb.addSelect.mock.calls.map(([sql]: [string]) => sql);
+    expect(filters[0]).toContain('("tr"."courseTaskId" = :ct0 AND "tr"."score" >= :ms0)');
+    expect(filters[0]).toContain('("tr"."courseTaskId" = :ct1 AND "tr"."score" >= :ms1)');
+    expect(filters[1]).toContain('("ir"."courseTaskId" = :ct1 AND "ir"."score" >= :ms1)');
+  });
+
+  it('takes taskCriteria over the legacy flat fields when both are present', async () => {
+    const idsQb = makeQb({ getRawMany: [] });
+    studentRepo.createQueryBuilder.mockReturnValueOnce(idsQb);
+
+    await service.findEligibleStudents(1, {
+      taskCriteria: [{ courseTaskId: 99, minScore: 70 }],
+      courseTaskIds: [10, 20],
+      minScore: 5,
+      minTotalScore: 50,
+    });
+
+    expect(idsQb.setParameters).toHaveBeenCalledWith({ ct0: 99, ms0: 70 });
+  });
+
+  it('defaults a per-task minScore of 0 to 1', async () => {
+    const idsQb = makeQb({ getRawMany: [] });
+    studentRepo.createQueryBuilder.mockReturnValueOnce(idsQb);
+
+    await service.findEligibleStudents(1, { taskCriteria: [{ courseTaskId: 10, minScore: 0 }], minTotalScore: 50 });
+
+    expect(idsQb.setParameters).toHaveBeenCalledWith({ ct0: 10, ms0: 1 });
+  });
+
   it('previewEligibleStudents wraps eligible students into the preview dto', async () => {
     const eligible = [{ studentId: 1, githubId: 'ada', name: 'Ada', totalScore: 90 }];
     vi.spyOn(service, 'findEligibleStudents').mockResolvedValue(eligible);

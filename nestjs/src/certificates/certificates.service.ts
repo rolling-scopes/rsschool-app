@@ -20,6 +20,25 @@ import { CloudApiService } from '../cloud-api/cloud-api.service';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
 
+type TaskCriteria = { courseTaskId: number; minScore: number };
+
+/**
+ * Collapses both accepted criteria shapes into per-task thresholds: explicit
+ * `taskCriteria` wins, otherwise the legacy flat form is expanded by giving
+ * every listed task the shared `minScore`. Mirrors buildCourseCertificateRequests
+ * so the preview/bulk endpoints and the UI issue path agree on who is eligible.
+ */
+function normalizeTaskCriteria(criteria: EligibleStudentsCriteriaDto): TaskCriteria[] {
+  if (criteria.taskCriteria?.length) {
+    return criteria.taskCriteria.map(({ courseTaskId, minScore }) => ({
+      courseTaskId: Number(courseTaskId),
+      minScore: minScore ? Number(minScore) : 1,
+    }));
+  }
+  const minScore = criteria.minScore ?? 1;
+  return (criteria.courseTaskIds ?? []).map(courseTaskId => ({ courseTaskId: Number(courseTaskId), minScore }));
+}
+
 @Injectable()
 export class CertificationsService {
   private s3: S3;
@@ -152,15 +171,9 @@ export class CertificationsService {
     courseId: number,
     criteria: EligibleStudentsCriteriaDto,
   ): Promise<EligibleStudentDto[]> {
-    const taskIds = criteria.courseTaskIds ?? [];
-    const tasksCount = taskIds.length;
-    const minScore = criteria.minScore ?? 1;
-
     const ids = await this.findEligibleStudentIds(courseId, {
-      courseTaskIds: taskIds,
-      minScore,
+      taskCriteria: normalizeTaskCriteria(criteria),
       minTotalScore: criteria.minTotalScore,
-      tasksCount,
     });
 
     if (ids.length === 0) return [];
@@ -188,9 +201,11 @@ export class CertificationsService {
 
   private async findEligibleStudentIds(
     courseId: number,
-    params: { courseTaskIds: number[]; minScore: number; minTotalScore: number; tasksCount: number },
+    params: { taskCriteria: TaskCriteria[]; minTotalScore: number },
   ): Promise<number[]> {
-    const { courseTaskIds, minScore, minTotalScore, tasksCount } = params;
+    const { taskCriteria, minTotalScore } = params;
+    const tasksCount = taskCriteria.length;
+    const courseTaskIds = taskCriteria.map(c => c.courseTaskId);
 
     if (tasksCount === 0) {
       const rows = await this.studentRepository
@@ -206,15 +221,26 @@ export class CertificationsService {
       return rows.map(r => r.id);
     }
 
+    // Each task carries its own threshold, so the FILTER is an OR over
+    // (task, minScore) pairs rather than one shared `score >= :minScore`.
+    const scoreParams = Object.fromEntries(
+      taskCriteria.flatMap(({ courseTaskId, minScore }, i) => [
+        [`ct${i}`, courseTaskId],
+        [`ms${i}`, minScore],
+      ]),
+    );
+    const passesCriteria = (alias: string) =>
+      taskCriteria.map((_, i) => `("${alias}"."courseTaskId" = :ct${i} AND "${alias}"."score" >= :ms${i})`).join(' OR ');
+
     const raw = await this.studentRepository
       .createQueryBuilder('student')
       .select('student.id', 'student_id')
       .addSelect(
-        `array_remove(ARRAY_AGG(DISTINCT "tr"."courseTaskId") FILTER (WHERE "tr"."score" >= :minScore), NULL)`,
+        `array_remove(ARRAY_AGG(DISTINCT "tr"."courseTaskId") FILTER (WHERE ${passesCriteria('tr')}), NULL)`,
         'tasks',
       )
       .addSelect(
-        `array_remove(ARRAY_AGG(DISTINCT "ir"."courseTaskId") FILTER (WHERE "ir"."score" >= :minScore), NULL)`,
+        `array_remove(ARRAY_AGG(DISTINCT "ir"."courseTaskId") FILTER (WHERE ${passesCriteria('ir')}), NULL)`,
         'interviews',
       )
       .leftJoin('student.taskResults', 'tr', 'tr.courseTaskId IN (:...courseTaskIds)', { courseTaskIds })
@@ -223,7 +249,7 @@ export class CertificationsService {
       .andWhere('student.isExpelled = false')
       .andWhere('student.isFailed = false')
       .andWhere('student.totalScore >= :minTotalScore', { minTotalScore })
-      .setParameters({ minScore })
+      .setParameters(scoreParams)
       .groupBy('student.id')
       .getRawMany<{ student_id: number; tasks: number[] | null; interviews: number[] | null }>();
 

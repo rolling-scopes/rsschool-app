@@ -15,6 +15,18 @@ describe('preview_eligible_students', () => {
     expect(text).toContain('totalScore=77');
   });
 
+  it('forwards per-task thresholds untouched', async () => {
+    const taskCriteria = [
+      { courseTaskId: 10, minScore: 50 },
+      { courseTaskId: 20, minScore: 80 },
+    ];
+    const { ctx, calls } = makeCtx({ post: () => apiOk({ count: 0, students: [] }) });
+
+    await runPreviewEligibleStudents(ctx, { courseId: 5, criteria: { minTotalScore: 50, taskCriteria } });
+
+    expect(calls[0]?.body).toEqual({ minTotalScore: 50, taskCriteria });
+  });
+
   it('truncates previews longer than the display limit', async () => {
     const students = Array.from({ length: 60 }, (_, i) => ({
       studentId: i,

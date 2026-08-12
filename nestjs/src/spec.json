@@ -6964,7 +6964,16 @@
       "EligibleStudentsCriteriaDto": {
         "type": "object",
         "properties": {
-          "courseTaskIds": { "type": "array", "items": { "type": "number" } },
+          "taskCriteria": {
+            "description": "Per-task minimum scores. Takes precedence over courseTaskIds/minScore when non-empty.",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/CertificateTaskCriteriaDto" }
+          },
+          "courseTaskIds": {
+            "description": "Legacy flat form: every listed task shares the same minScore. Ignored when taskCriteria is given.",
+            "type": "array",
+            "items": { "type": "number" }
+          },
           "minScore": {
             "type": "number",
             "description": "Required if courseTaskIds is non-empty: minimum score per task"
