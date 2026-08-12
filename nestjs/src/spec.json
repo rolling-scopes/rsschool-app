@@ -6524,9 +6524,15 @@
           "templateId"
         ]
       },
+      "CertificateTaskCriteriaDto": {
+        "type": "object",
+        "properties": { "courseTaskId": { "type": "number" }, "minScore": { "type": "number" } },
+        "required": ["courseTaskId", "minScore"]
+      },
       "CertificateCriteriaDto": {
         "type": "object",
         "properties": {
+          "taskCriteria": { "type": "array", "items": { "$ref": "#/components/schemas/CertificateTaskCriteriaDto" } },
           "courseTaskIds": { "type": "array", "items": { "type": "number" } },
           "minScore": { "type": "number" },
           "minTotalScore": { "type": "number" }
