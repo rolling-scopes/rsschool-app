@@ -57,6 +57,13 @@ services:
     container_name: nginx
     image: nginx:1.21-alpine
     restart: unless-stopped
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: eu-central-1
+        awslogs-group: rsschool-app
+        awslogs-stream: nginx
+        awslogs-create-group: 'true'
     volumes:
       - ./nginx:/etc/nginx
       - ./letsencrypt:/etc/letsencrypt
