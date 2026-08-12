@@ -121,6 +121,27 @@ describe('CertificateCriteriaModal', () => {
     expect(button).toBeEnabled();
   });
 
+  test('should enable "issue certificates" button on complete task row without total score', async () => {
+    renderCertificateCriteriaModal();
+
+    const addButton = await screen.findByRole('button', { name: /add task/i });
+    await user.click(addButton);
+
+    const taskSelect = await screen.findByRole('combobox');
+    await user.click(taskSelect);
+    await user.click(await screen.findByTitle('task 1 (max 100)'));
+
+    const minScoreInput = await screen.findByPlaceholderText('Min score');
+    fireEvent.change(minScoreInput, {
+      target: {
+        value: 42,
+      },
+    });
+
+    const button = await screen.findByRole('button', { name: /issue certificates/i });
+    expect(button).toBeEnabled();
+  });
+
   test('should keep "issue certificates" button disabled with an incomplete task row', async () => {
     renderCertificateCriteriaModal();
 
@@ -251,10 +272,19 @@ describe('hasValidCriteria', () => {
     });
   });
 
-  describe('minTotalScore (with truthy tasksCriteriaValid)', () => {
-    test('should return "false" on minTotalScore = 0', () => {
+  describe('minTotalScore', () => {
+    test('should return "true" on complete task rows without minTotalScore', () => {
       const values = {
         taskCriteria: [{ courseTaskId: 1, minScore: 5 }],
+        minTotalScore: 0,
+      } as unknown as FormValues;
+
+      expect(hasValidCriteria(values)).toBe(true);
+    });
+
+    test('should return "false" on no criteria at all', () => {
+      const values = {
+        taskCriteria: [],
         minTotalScore: 0,
       } as unknown as FormValues;
 

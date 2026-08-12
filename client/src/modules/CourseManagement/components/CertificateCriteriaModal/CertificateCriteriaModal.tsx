@@ -224,7 +224,9 @@ export function CertificateCriteriaModal({ courseId, onSubmit, onClose, isModalO
 }
 
 export function hasValidCriteria({ taskCriteria, minTotalScore }: FormValues) {
-  const tasksCriteriaValid = (taskCriteria ?? []).every(row => row?.courseTaskId != null && !!row?.minScore);
+  const rows = taskCriteria ?? [];
+  const tasksCriteriaValid = rows.every(row => row?.courseTaskId != null && !!row?.minScore);
+  const hasAnyCriteria = rows.length > 0 || !!minTotalScore;
 
-  return tasksCriteriaValid && !!minTotalScore;
+  return tasksCriteriaValid && hasAnyCriteria;
 }
