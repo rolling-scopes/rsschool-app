@@ -67,7 +67,7 @@ export class MentorsController {
   @ApiOperation({ operationId: 'getCourseStudentsCount' })
   @ApiOkResponse({ type: Number })
   @ApiBadRequestResponse()
-  @RequiredRoles([CourseRole.Mentor, CourseRole.Supervisor, CourseRole.Manager])
+  @RequiredRoles([CourseRole.Mentor, CourseRole.Supervisor, CourseRole.Manager], true)
   public async getCourseStudentsCount(
     @Param('mentorId', ParseIntPipe) mentorId: number,
     @Param('courseId', ParseIntPipe) courseId: number,
@@ -79,7 +79,7 @@ export class MentorsController {
   @ApiOperation({ operationId: 'getMentorDashboardData' })
   @ApiOkResponse({ type: [MentorDashboardDto] })
   @ApiBadRequestResponse()
-  @RequiredRoles([CourseRole.Mentor, CourseRole.Supervisor, CourseRole.Manager])
+  @RequiredRoles([CourseRole.Mentor, CourseRole.Supervisor, CourseRole.Manager], true)
   public async getMentorDashboardData(
     @Param('mentorId', ParseIntPipe) mentorId: number,
     @Param('courseId', ParseIntPipe) courseId: number,
@@ -91,7 +91,7 @@ export class MentorsController {
   @ApiOperation({ operationId: 'getRandomTask' })
   @ApiOkResponse({})
   @ApiBadRequestResponse()
-  @RequiredRoles([CourseRole.Mentor, CourseRole.Supervisor, CourseRole.Manager])
+  @RequiredRoles([CourseRole.Mentor, CourseRole.Supervisor, CourseRole.Manager], true)
   public async getRandomTask(
     @Param('mentorId', ParseIntPipe) mentorId: number,
     @Param('courseId', ParseIntPipe) courseId: number,

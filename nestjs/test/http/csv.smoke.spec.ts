@@ -11,7 +11,7 @@ import { RegistryController } from 'src/registry/registry.controller';
 import { RegistryService } from 'src/registry/registry.service';
 import { UserNotificationsService } from 'src/users-notifications/users.notifications.service';
 import { ADAPTERS, createHttpApp } from './harness';
-import { createTestUser, ROOT_PASSWORD, ROOT_USERNAME, signTestJwt, testConfig } from './fixtures';
+import { apiTokenProviders, createTestUser, ROOT_PASSWORD, ROOT_USERNAME, signTestJwt, testConfig } from './fixtures';
 
 describe.each(ADAPTERS)('CSV download over HTTP [%s]', adapter => {
   let app: INestApplication;
@@ -23,6 +23,7 @@ describe.each(ADAPTERS)('CSV download over HTTP [%s]', adapter => {
         providers: [
           JwtStrategy,
           BasicStrategy,
+          ...apiTokenProviders,
           { provide: ConfigService, useValue: testConfig },
           { provide: AuthService, useValue: { getAuthUser: vi.fn().mockResolvedValue(createTestUser()) } },
           { provide: CACHE_MANAGER, useValue: { get: vi.fn().mockResolvedValue(undefined), set: vi.fn() } },

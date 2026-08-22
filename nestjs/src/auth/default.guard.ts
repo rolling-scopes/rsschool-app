@@ -1,3 +1,3 @@
 import { AuthGuard } from '@nestjs/passport';
 
-export const DefaultGuard = AuthGuard(['jwt', 'basic']);
+export const DefaultGuard = AuthGuard(['jwt', 'basic', 'api-token']);

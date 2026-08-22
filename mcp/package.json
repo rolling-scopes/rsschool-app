@@ -1,0 +1,31 @@
+{
+  "name": "@rsschool/mcp-server",
+  "version": "0.1.0",
+  "description": "MCP server that exposes RS School API actions to AI agents",
+  "private": true,
+  "license": "Mozilla Public License 2.0",
+  "type": "module",
+  "bin": {
+    "rsschool-mcp": "./dist/server.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "start:http": "node dist/http-main.js",
+    "compile": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vitest run",
+    "test:ci": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "vitest": "~4.1.0"
+  }
+}

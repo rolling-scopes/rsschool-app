@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Course } from '@entities/course';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, In, Repository } from 'typeorm';
+import type { AuthUser } from '../auth';
+import { CourseRole } from '../auth';
 import { UpdateCourseDto, CreateCourseDto } from './dto';
 
 @Injectable()
@@ -46,6 +48,21 @@ export class CoursesService {
         completed: false,
       },
       relations,
+    });
+  }
+
+  public async findManagedByUser(user: AuthUser) {
+    if (user.isAdmin) {
+      return this.getAll();
+    }
+    const managedCourseIds = Object.entries(user.courses)
+      .filter(([, info]) => info.roles.includes(CourseRole.Manager))
+      .map(([id]) => Number(id));
+    if (managedCourseIds.length === 0) return [];
+    return this.repository.find({
+      where: { id: In(managedCourseIds) },
+      order: { startDate: 'DESC' },
+      relations: ['discipline'],
     });
   }
 }

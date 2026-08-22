@@ -8,7 +8,7 @@ import { JwtStrategy } from 'src/auth/strategies/jwt.strategy';
 import { ConfigService } from 'src/config';
 import { UsersService } from 'src/users/users.service';
 import { ADAPTERS, createHttpApp } from './harness';
-import { createTestUser, ROOT_PASSWORD, ROOT_USERNAME, signTestJwt, testConfig } from './fixtures';
+import { apiTokenProviders, createTestUser, ROOT_PASSWORD, ROOT_USERNAME, signTestJwt, testConfig } from './fixtures';
 
 const lastActivityTime = 1700000000000;
 
@@ -22,6 +22,7 @@ describe.each(ADAPTERS)('DefaultGuard (jwt + basic) over HTTP [%s]', adapter => 
         providers: [
           JwtStrategy,
           BasicStrategy,
+          ...apiTokenProviders,
           { provide: ConfigService, useValue: testConfig },
           { provide: AuthService, useValue: { getAuthUser: vi.fn().mockResolvedValue(createTestUser()) } },
           {

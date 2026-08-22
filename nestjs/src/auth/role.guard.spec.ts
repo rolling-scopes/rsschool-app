@@ -124,12 +124,14 @@ describe('RoleGuard', () => {
       expect(guard.canActivate(context)).toBe(false);
     });
 
-    it('falls back to any-course check when requireCourseMatch is set but courseId is missing', () => {
+    it('denies (does not fall back to any-course) when requireCourseMatch is set but courseId is missing', () => {
       reflector.getAllAndOverride.mockReturnValue({ roles: [CourseRole.Mentor], requireCourseMatch: true });
 
       const context = createContext({ appRoles: [Role.User], courses: { 7: { roles: [CourseRole.Mentor] } } });
 
-      expect(guard.canActivate(context)).toBe(true);
+      // A course-scoped route with no resolvable courseId must not degrade to
+      // the any-course check — that was the cross-course IDOR.
+      expect(guard.canActivate(context)).toBe(false);
     });
   });
 

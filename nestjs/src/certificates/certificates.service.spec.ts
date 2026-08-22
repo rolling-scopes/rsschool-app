@@ -9,6 +9,7 @@ import { Student } from '@entities/student';
 import { Course } from '@entities/course';
 import { User } from '@entities/user';
 import { ConfigService } from 'src/config';
+import { CloudApiService } from '../cloud-api/cloud-api.service';
 import { CertificationsService } from './certificates.service';
 import { CertificateMetadataDto } from './dto/certificate-metadata.dto';
 
@@ -41,6 +42,7 @@ describe('CertificationsService', () => {
   const courseRepository = { findOne: vi.fn(), findOneByOrFail: vi.fn() };
   const userRepository = { findOneByOrFail: vi.fn() };
   const studentRepository = { findOne: vi.fn(), createQueryBuilder: vi.fn() };
+  const cloudApi = { requestCertificate: vi.fn() };
   const mockPost = vi.fn();
   const mockDelete = vi.fn();
 
@@ -63,6 +65,7 @@ describe('CertificationsService', () => {
         { provide: getRepositoryToken(Student), useValue: studentRepository },
         { provide: ConfigService, useValue: configValue },
         { provide: HttpService, useValue: { post: mockPost, delete: mockDelete } },
+        { provide: CloudApiService, useValue: cloudApi },
       ],
     }).compile();
 
@@ -501,5 +504,239 @@ describe('CertificationsService', () => {
       expect(materializeQb.where).toHaveBeenCalledWith('student."id" IN (:...ids)', { ids: [1] });
       expect(result.shortCircuit).toBe(false);
     });
+  });
+});
+
+describe('CertificationsService.requestBulkCertificateIssuance', () => {
+  const course = { id: 7, name: 'Course X', certificateIssuer: 'RS School', primarySkillName: 'JS', discipline: null };
+  let courseRepoFindOne: ReturnType<typeof vi.fn>;
+  let cloudApi: { requestCertificate: ReturnType<typeof vi.fn> };
+  let service: CertificationsService;
+
+  beforeEach(async () => {
+    courseRepoFindOne = vi.fn();
+    cloudApi = {
+      requestCertificate: vi.fn().mockResolvedValue({}),
+    };
+
+    const moduleRef = await Test.createTestingModule({
+      providers: [
+        CertificationsService,
+        { provide: getRepositoryToken(Certificate), useValue: {} },
+        { provide: getRepositoryToken(Course), useValue: { findOne: courseRepoFindOne } },
+        { provide: getRepositoryToken(User), useValue: {} },
+        { provide: getRepositoryToken(Student), useValue: {} },
+        { provide: ConfigService, useValue: { awsClient: {} } },
+        { provide: HttpService, useValue: {} },
+        { provide: CloudApiService, useValue: cloudApi },
+      ],
+    }).compile();
+
+    service = moduleRef.get(CertificationsService);
+  });
+
+  it('returns zero and skips cloud API when no students match', async () => {
+    vi.spyOn(service, 'findEligibleStudents').mockResolvedValue([]);
+
+    const result = await service.requestBulkCertificateIssuance(7, { minTotalScore: 100 });
+
+    expect(result).toEqual({ issued: 0, students: [] });
+    expect(cloudApi.requestCertificate).not.toHaveBeenCalled();
+  });
+
+  it('sends a batch payload when students match', async () => {
+    vi.spyOn(service, 'findEligibleStudents').mockResolvedValue([
+      { studentId: 1, githubId: 'ada', name: 'Ada Lovelace', totalScore: 95 },
+      { studentId: 2, githubId: 'grace', name: 'Grace Hopper', totalScore: 88 },
+    ]);
+    courseRepoFindOne.mockResolvedValue(course);
+
+    const result = await service.requestBulkCertificateIssuance(7, { minTotalScore: 80 });
+
+    expect(result.issued).toBe(2);
+    expect(cloudApi.requestCertificate).toHaveBeenCalledOnce();
+    const payloads = cloudApi.requestCertificate.mock.calls[0]![0];
+    expect(payloads).toHaveLength(2);
+    expect(payloads[0]).toMatchObject({
+      courseId: 7,
+      courseName: 'Course X',
+      studentId: 1,
+      studentName: 'Ada Lovelace',
+    });
+  });
+
+  it('throws when course is missing', async () => {
+    vi.spyOn(service, 'findEligibleStudents').mockResolvedValue([
+      { studentId: 1, githubId: 'ada', name: 'Ada', totalScore: 95 },
+    ]);
+    courseRepoFindOne.mockResolvedValue(null);
+
+    await expect(service.requestBulkCertificateIssuance(999, { minTotalScore: 80 })).rejects.toBeInstanceOf(
+      NotFoundException,
+    );
+    expect(cloudApi.requestCertificate).not.toHaveBeenCalled();
+  });
+});
+
+describe('CertificationsService.findEligibleStudents / previewEligibleStudents', () => {
+  let studentRepo: { createQueryBuilder: ReturnType<typeof vi.fn> };
+  let service: CertificationsService;
+
+  beforeEach(async () => {
+    studentRepo = { createQueryBuilder: vi.fn() };
+
+    const moduleRef = await Test.createTestingModule({
+      providers: [
+        CertificationsService,
+        { provide: getRepositoryToken(Certificate), useValue: {} },
+        { provide: getRepositoryToken(Course), useValue: {} },
+        { provide: getRepositoryToken(User), useValue: {} },
+        { provide: getRepositoryToken(Student), useValue: studentRepo },
+        { provide: ConfigService, useValue: { awsClient: {} } },
+        { provide: HttpService, useValue: {} },
+        { provide: CloudApiService, useValue: { requestCertificate: vi.fn() } },
+      ],
+    }).compile();
+
+    service = moduleRef.get(CertificationsService);
+  });
+
+  const makeQb = (result: { getRawMany?: unknown[]; getMany?: unknown[] }) => ({
+    select: vi.fn().mockReturnThis(),
+    addSelect: vi.fn().mockReturnThis(),
+    innerJoinAndSelect: vi.fn().mockReturnThis(),
+    leftJoinAndSelect: vi.fn().mockReturnThis(),
+    leftJoin: vi.fn().mockReturnThis(),
+    where: vi.fn().mockReturnThis(),
+    andWhere: vi.fn().mockReturnThis(),
+    setParameters: vi.fn().mockReturnThis(),
+    groupBy: vi.fn().mockReturnThis(),
+    getRawMany: vi.fn().mockResolvedValue(result.getRawMany ?? []),
+    getMany: vi.fn().mockResolvedValue(result.getMany ?? []),
+  });
+
+  it('returns [] when no ids match the criteria (score-only path)', async () => {
+    const idsQb = makeQb({ getRawMany: [] });
+    studentRepo.createQueryBuilder.mockReturnValueOnce(idsQb);
+
+    const students = await service.findEligibleStudents(1, { minTotalScore: 50 });
+
+    expect(students).toEqual([]);
+    expect(idsQb.andWhere).toHaveBeenCalledWith('student.totalScore >= :minTotalScore', { minTotalScore: 50 });
+  });
+
+  it('materializes eligible students for matched ids', async () => {
+    const idsQb = makeQb({ getRawMany: [{ id: 11 }] });
+    const studentsQb = makeQb({
+      getMany: [
+        {
+          id: 11,
+          totalScore: 77,
+          user: { githubId: 'ada', firstName: 'Ada', lastName: 'Lovelace' },
+        },
+      ],
+    });
+    studentRepo.createQueryBuilder.mockReturnValueOnce(idsQb).mockReturnValueOnce(studentsQb);
+
+    const students = await service.findEligibleStudents(1, { minTotalScore: 50 });
+
+    expect(students).toEqual([{ studentId: 11, githubId: 'ada', name: 'Ada Lovelace', totalScore: 77 }]);
+  });
+
+  it('keeps only students covering every required task (tasks path)', async () => {
+    const idsQb = makeQb({
+      getRawMany: [
+        { student_id: 1, tasks: [10], interviews: [20] },
+        { student_id: 2, tasks: [10], interviews: null },
+      ],
+    });
+    const studentsQb = makeQb({
+      getMany: [{ id: 1, totalScore: 90, user: { githubId: 'ada', firstName: 'Ada', lastName: null } }],
+    });
+    studentRepo.createQueryBuilder.mockReturnValueOnce(idsQb).mockReturnValueOnce(studentsQb);
+
+    const students = await service.findEligibleStudents(1, {
+      courseTaskIds: [10, 20],
+      minScore: 5,
+      minTotalScore: 50,
+    });
+
+    expect(students).toEqual([{ studentId: 1, githubId: 'ada', name: 'Ada', totalScore: 90 }]);
+  });
+
+  it('expands the flat form into one shared threshold per task', async () => {
+    const idsQb = makeQb({ getRawMany: [] });
+    studentRepo.createQueryBuilder.mockReturnValueOnce(idsQb);
+
+    await service.findEligibleStudents(1, { courseTaskIds: [10, 20], minScore: 5, minTotalScore: 50 });
+
+    expect(idsQb.setParameters).toHaveBeenCalledWith({ ct0: 10, ms0: 5, ct1: 20, ms1: 5 });
+    expect(idsQb.leftJoin).toHaveBeenCalledWith(
+      'student.taskResults',
+      'tr',
+      'tr.courseTaskId IN (:...courseTaskIds)',
+      { courseTaskIds: [10, 20] },
+    );
+  });
+
+  it('defaults the flat minScore to 1 when it is omitted', async () => {
+    const idsQb = makeQb({ getRawMany: [] });
+    studentRepo.createQueryBuilder.mockReturnValueOnce(idsQb);
+
+    await service.findEligibleStudents(1, { courseTaskIds: [10], minTotalScore: 50 });
+
+    expect(idsQb.setParameters).toHaveBeenCalledWith({ ct0: 10, ms0: 1 });
+  });
+
+  it('applies a distinct threshold per task when taskCriteria is given', async () => {
+    const idsQb = makeQb({ getRawMany: [] });
+    studentRepo.createQueryBuilder.mockReturnValueOnce(idsQb);
+
+    await service.findEligibleStudents(1, {
+      taskCriteria: [
+        { courseTaskId: 10, minScore: 50 },
+        { courseTaskId: 20, minScore: 80 },
+      ],
+      minTotalScore: 50,
+    });
+
+    expect(idsQb.setParameters).toHaveBeenCalledWith({ ct0: 10, ms0: 50, ct1: 20, ms1: 80 });
+    // The FILTER must pair each task with its own bar, not reuse a shared one.
+    const filters = idsQb.addSelect.mock.calls.map(([sql]: [string]) => sql);
+    expect(filters[0]).toContain('("tr"."courseTaskId" = :ct0 AND "tr"."score" >= :ms0)');
+    expect(filters[0]).toContain('("tr"."courseTaskId" = :ct1 AND "tr"."score" >= :ms1)');
+    expect(filters[1]).toContain('("ir"."courseTaskId" = :ct1 AND "ir"."score" >= :ms1)');
+  });
+
+  it('takes taskCriteria over the legacy flat fields when both are present', async () => {
+    const idsQb = makeQb({ getRawMany: [] });
+    studentRepo.createQueryBuilder.mockReturnValueOnce(idsQb);
+
+    await service.findEligibleStudents(1, {
+      taskCriteria: [{ courseTaskId: 99, minScore: 70 }],
+      courseTaskIds: [10, 20],
+      minScore: 5,
+      minTotalScore: 50,
+    });
+
+    expect(idsQb.setParameters).toHaveBeenCalledWith({ ct0: 99, ms0: 70 });
+  });
+
+  it('defaults a per-task minScore of 0 to 1', async () => {
+    const idsQb = makeQb({ getRawMany: [] });
+    studentRepo.createQueryBuilder.mockReturnValueOnce(idsQb);
+
+    await service.findEligibleStudents(1, { taskCriteria: [{ courseTaskId: 10, minScore: 0 }], minTotalScore: 50 });
+
+    expect(idsQb.setParameters).toHaveBeenCalledWith({ ct0: 10, ms0: 1 });
+  });
+
+  it('previewEligibleStudents wraps eligible students into the preview dto', async () => {
+    const eligible = [{ studentId: 1, githubId: 'ada', name: 'Ada', totalScore: 90 }];
+    vi.spyOn(service, 'findEligibleStudents').mockResolvedValue(eligible);
+
+    const preview = await service.previewEligibleStudents(1, { minTotalScore: 50 });
+
+    expect(preview.students).toEqual(eligible);
   });
 });

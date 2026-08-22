@@ -1,5 +1,6 @@
 import { CourseLeaveSurveyResponse } from './course-leave-survey-response.entity';
 import { Alert, AlertType } from './alert';
+import { AuditLog } from './auditLog';
 import { Certificate } from './certificate';
 import { Contributor } from './contributor';
 import { Course } from './course';
@@ -21,6 +22,7 @@ import { NotificationChannel } from './notificationChannel';
 import { NotificationChannelSettings } from './notificationChannelSettings';
 import { NotificationUserConnection } from './notificationUserConnection';
 import { NotificationUserSettings } from './notificationUserSettings';
+import { PersonalAccessToken } from './personalAccessToken';
 import { PrivateFeedback } from './privateFeedback';
 import { ProfilePermissions } from './profilePermissions';
 import { Prompt } from './prompt';
@@ -51,6 +53,7 @@ export * from './session';
 export {
   Alert,
   AlertType as AlertTypes,
+  AuditLog,
   Certificate,
   Contributor,
   Course,
@@ -73,6 +76,7 @@ export {
   NotificationChannelSettings,
   NotificationUserConnection,
   NotificationUserSettings,
+  PersonalAccessToken,
   PrivateFeedback,
   ProfilePermissions,
   Prompt,
@@ -102,6 +106,7 @@ export {
 
 export const models = [
   Alert,
+  AuditLog,
   Certificate,
   Contributor,
   Course,
@@ -123,6 +128,7 @@ export const models = [
   NotificationChannelSettings,
   NotificationUserConnection,
   NotificationUserSettings,
+  PersonalAccessToken,
   PrivateFeedback,
   ProfilePermissions,
   Prompt,

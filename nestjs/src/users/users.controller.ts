@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  ForbiddenException,
   Get,
   Param,
   ParseArrayPipe,
@@ -11,7 +12,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CourseRole, CurrentRequest, DefaultGuard, RequiredRoles, Role, RoleGuard } from '../auth';
 import { OperationResultDto, UpdateActivistDto, UpsertUserDto, UserSearchBasicDto, UserSearchDto } from './dto';
 import { UsersService } from './users.service';
@@ -26,8 +27,17 @@ export class UsersController {
   @ApiOperation({ operationId: 'searchUsers' })
   @RequiredRoles([Role.Admin, CourseRole.Manager])
   @ApiOkResponse({ type: [UserSearchDto] })
-  public async searchUsers(@Req() req: CurrentRequest, @Query('query') query?: string) {
-    const users = await this.usersService.searchUsers(query);
+  @ApiQuery({ name: 'includeSystem', required: false, type: Boolean })
+  public async searchUsers(
+    @Req() req: CurrentRequest,
+    @Query('query') query?: string,
+    @Query('includeSystem') includeSystem?: string,
+  ) {
+    const wantsSystem = includeSystem === 'true';
+    if (wantsSystem && !req.user.isAdmin) {
+      throw new ForbiddenException('Only admins can search system users');
+    }
+    const users = await this.usersService.searchUsers(query, { includeSystem: wantsSystem });
     return users.map(user => new UserSearchDto(user, req.user.isAdmin || req.user.isHirer));
   }
 

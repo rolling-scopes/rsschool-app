@@ -1,6 +1,9 @@
+import { Provider } from '@nestjs/common';
 import { sign } from 'jsonwebtoken';
 import { AuthUser, JwtToken } from 'src/auth/auth-user.model';
+import { ApiTokenStrategy } from 'src/auth/strategies/api-token.strategy';
 import { ConfigService } from 'src/config';
+import { PersonalAccessTokensService } from 'src/personal-access-tokens/personal-access-tokens.service';
 import { TEST_HOST } from './harness';
 
 export const TEST_JWT_SECRET = 'test-jwt-secret';
@@ -30,6 +33,23 @@ export const testConfig = {
   host: TEST_HOST,
   isDev: true,
 } as unknown as ConfigService;
+
+/**
+ * DefaultGuard chains jwt → basic → api-token, so every spec that boots a
+ * guarded controller must provide all three strategies: passport throws
+ * (500, not 401) on an unknown strategy name, even when an earlier one would
+ * have rejected the request.
+ */
+export const apiTokenProviders: Provider[] = [
+  ApiTokenStrategy,
+  {
+    provide: PersonalAccessTokensService,
+    useValue: {
+      validateTokenString: vi.fn().mockResolvedValue({ ok: false, reason: 'not_found' }),
+      touchLastUsed: vi.fn(),
+    },
+  },
+];
 
 export function createTestUser(admin = false): AuthUser {
   return new AuthUser({ id: 1, githubId: 'octocat', students: [], mentors: [], courseUsers: [] }, [], admin);
