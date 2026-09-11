@@ -12,17 +12,15 @@ function renderModal() {
 describe('<JoinTeamModal />', () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it('renders the modal with the password field and Join button', () => {
-    renderModal();
+  it('calls onCancel when the cancel button is clicked', async () => {
+    const user = userEvent.setup();
+    const { onCancel } = renderModal();
+
     expect(screen.getByRole('dialog')).toBeInTheDocument();
     expect(screen.getByText('Join team')).toBeInTheDocument();
     expect(screen.getByLabelText('Team password')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /join/i })).toBeInTheDocument();
-  });
 
-  it('calls onCancel when the cancel button is clicked', async () => {
-    const user = userEvent.setup();
-    const { onCancel } = renderModal();
     await user.click(screen.getByRole('button', { name: /cancel/i }));
     expect(onCancel).toHaveBeenCalled();
   });
