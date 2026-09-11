@@ -2,8 +2,8 @@
 // reach into the DOM by class — direct node access is intentional and unavoidable here.
 /* eslint-disable testing-library/no-node-access */
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { ReactNode, useContext } from 'react';
+import { setupUser } from '@client/__tests__/setupUser';
 import { StepContextProvider, StepContext } from './StepContext';
 import { StepsContent } from './StepsContent';
 import { Steps } from './Steps';
@@ -117,7 +117,7 @@ function ContextProbe() {
 }
 
 // Helper: select the "Yes, it's ok." radio on the Introduction step.
-async function answerIntroductionAsConducted(user: ReturnType<typeof userEvent.setup>) {
+async function answerIntroductionAsConducted(user: ReturnType<typeof setupUser>) {
   await user.click(screen.getByRole('radio', { name: /Yes, it's ok\./i }));
 }
 
@@ -142,7 +142,7 @@ describe('<StepContextProvider /> (multi-step feedback container)', () => {
   });
 
   it('blocks Next while a required field is empty (no API call, stays on step 0)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderProvider();
 
     await user.click(screen.getByRole('button', { name: 'Next' }));
@@ -154,7 +154,7 @@ describe('<StepContextProvider /> (multi-step feedback container)', () => {
   });
 
   it('saves Introduction, updates the Theory stepper, and navigates Back without saving', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderProvider();
 
     await answerIntroductionAsConducted(user);
@@ -202,7 +202,7 @@ describe('<StepContextProvider /> (multi-step feedback container)', () => {
   });
 
   it('marks the interview as missed → becomes final, shows Submit, and completes on submit', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderProvider();
 
     // Choosing "No, interview is failed." reveals a nested required reason radio,
@@ -228,7 +228,7 @@ describe('<StepContextProvider /> (multi-step feedback container)', () => {
   });
 
   it('shows an error and stays on the step when the save API rejects', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     createInterviewFeedback.mockRejectedValueOnce(new Error('boom'));
     renderProvider();
 
@@ -286,7 +286,7 @@ describe('<StepContextProvider /> (multi-step feedback container)', () => {
   });
 
   it('keeps the index at 0 when prev() is invoked on the first step (clamp guard)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     // A consumer that exposes the context `prev` action via a button and reports the index.
     function PrevProbe() {
       const { prev, activeStepIndex } = useContext(StepContext);
@@ -329,7 +329,7 @@ describe('StepContextProvider with no template steps (defensive guards)', () => 
   });
 
   it('treats an empty-steps feedback as not-finished and no-ops onValuesChange', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     // Consumer that surfaces isFinalStep and lets us fire onValuesChange when activeStep is undefined.
     function EmptyProbe() {
       const { isFinalStep, onValuesChange, steps } = useContext(StepContext);
@@ -371,7 +371,7 @@ describe('StepContext loading spinner', () => {
   beforeEach(() => vi.clearAllMocks());
 
   it('disables the form via Spin while the save request is in flight', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     let resolveSave: (v?: unknown) => void = () => {};
     createInterviewFeedback.mockReturnValueOnce(
       new Promise(resolve => {
