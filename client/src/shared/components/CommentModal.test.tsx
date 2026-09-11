@@ -15,23 +15,21 @@ describe('CommentModal', () => {
     baseProps.onOk.mockClear();
   });
 
-  it('renders the modal title and a comment textarea when open', () => {
+  it('pre-fills the textarea and calls onCancel', async () => {
+    const user = userEvent.setup();
+    render(<CommentModal {...baseProps} initialValue="prefilled" />);
+
+    expect(screen.getByLabelText('Comment')).toHaveValue('prefilled');
+    await user.click(screen.getByRole('button', { name: /cancel/i }));
+    expect(baseProps.onCancel).toHaveBeenCalledTimes(1);
+  });
+
+  it('renders the modal and calls onOk with the typed comment when submitted', async () => {
+    const user = userEvent.setup();
     render(<CommentModal {...baseProps} />);
 
     expect(screen.getByText('Leave a comment')).toBeInTheDocument();
     expect(screen.getByLabelText('Comment')).toBeInTheDocument();
-  });
-
-  it('pre-fills the textarea with the initial value', () => {
-    render(<CommentModal {...baseProps} initialValue="prefilled" />);
-
-    expect(screen.getByLabelText('Comment')).toHaveValue('prefilled');
-  });
-
-  it('calls onOk with the typed comment when submitted', async () => {
-    const user = userEvent.setup();
-    render(<CommentModal {...baseProps} />);
-
     await user.type(screen.getByLabelText('Comment'), 'Nice work');
     await user.click(screen.getByRole('button', { name: /ok/i }));
 
@@ -55,14 +53,5 @@ describe('CommentModal', () => {
     await user.click(screen.getByRole('button', { name: /ok/i }));
 
     await waitFor(() => expect(baseProps.onOk).toHaveBeenCalledWith(''));
-  });
-
-  it('calls onCancel when the cancel button is clicked', async () => {
-    const user = userEvent.setup();
-    render(<CommentModal {...baseProps} />);
-
-    await user.click(screen.getByRole('button', { name: /cancel/i }));
-
-    expect(baseProps.onCancel).toHaveBeenCalledTimes(1);
   });
 });
