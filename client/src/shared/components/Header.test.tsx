@@ -1,4 +1,3 @@
-/* eslint-disable testing-library/no-container, testing-library/no-node-access */
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useRouter } from 'next/router';
@@ -38,24 +37,26 @@ describe('Header', () => {
     vi.mocked(useRouter).mockReturnValue({ asPath: '/' } as ReturnType<typeof useRouter>);
   });
 
-  it('renders the logo, theme switch and navigation links', () => {
+  it('renders the logo, theme switch and horizontal navigation links', () => {
     render(<Header />);
 
     expect(screen.getByAltText('Rolling Scopes School Logo')).toBeInTheDocument();
     expect(screen.getByTestId('theme-switch')).toBeInTheDocument();
     expect(screen.getByText('Schedule')).toBeInTheDocument();
+    // The menu is rendered by the same header instance and uses the same navigation item.
+    // eslint-disable-next-line testing-library/no-node-access
+    const menu = document.querySelector('.ant-menu-horizontal');
+    expect(menu).toBeInTheDocument();
+    expect(within(menu as HTMLElement).getByText('Schedule')).toBeInTheDocument();
   });
 
-  it('renders the title and the course name when showCourseName is set', () => {
-    render(<Header title="Dashboard" showCourseName />);
+  it('shows and hides the course name with the showCourseName prop', () => {
+    const { rerender } = render(<Header title="Dashboard" showCourseName />);
 
     expect(screen.getByText(/Dashboard/)).toBeInTheDocument();
     expect(screen.getByText(/JS Course/)).toBeInTheDocument();
-  });
 
-  it('does not show the course name when showCourseName is not set', () => {
-    render(<Header title="Dashboard" />);
-
+    rerender(<Header title="Dashboard" />);
     expect(screen.queryByText(/JS Course/)).not.toBeInTheDocument();
   });
 
@@ -89,14 +90,6 @@ describe('Header', () => {
     expect(screen.queryByTestId('carousel')).not.toBeInTheDocument();
   });
 
-  it('renders the horizontal course navigation menu', () => {
-    const { container } = render(<Header />);
-
-    const menu = container.querySelector('.ant-menu-horizontal');
-    expect(menu).toBeInTheDocument();
-    expect(within(menu as HTMLElement).getByText('Schedule')).toBeInTheDocument();
-  });
-
   it('does not pass the course to navigation links when the course id is empty', () => {
     // course.id === 0 -> courseNotEmpty is null (the `course.id ? course : null` and
     // `courseNotEmpty ?? null` falsy branches).
@@ -117,6 +110,7 @@ describe('Header', () => {
 
     await user.click(screen.getByRole('button'));
 
-    expect(await screen.findByRole('link', { name: /profile/i })).toBeInTheDocument();
+    const profile = await screen.findByRole('link', { name: /profile/i });
+    expect(profile.className).toMatch(/menuItemActive/);
   });
 });
