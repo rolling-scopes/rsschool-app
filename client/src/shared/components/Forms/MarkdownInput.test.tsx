@@ -34,12 +34,20 @@ function ResettableMarkdownInput() {
 const LONG_COMMENT = 'This is a detailed markdown comment well over thirty characters.';
 
 describe('MarkdownInput', () => {
-  it('renders the comment textarea and a Preview toggle in write mode', () => {
+  it('renders write controls, previews the empty warning and toggles back', async () => {
+    const user = userEvent.setup();
     renderMarkdownInput();
 
     expect(screen.getByLabelText(/Comment \(markdown syntax is supported\)/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /preview/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /about markdown/i })).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: /preview/i }));
+    expect(screen.getByText('Please leave a comment')).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /write/i }));
+
+    expect(screen.getByRole('textbox')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /preview/i })).toBeInTheDocument();
   });
 
   it('switches to preview mode and renders the typed text through react-markdown', async () => {
@@ -58,15 +66,6 @@ describe('MarkdownInput', () => {
     expect(screen.getByRole('button', { name: /write/i })).toBeInTheDocument();
   });
 
-  it('shows "Please leave a comment" in preview when the field is empty', async () => {
-    const user = userEvent.setup();
-    renderMarkdownInput();
-
-    await user.click(screen.getByRole('button', { name: /preview/i }));
-
-    expect(screen.getByText('Please leave a comment')).toBeInTheDocument();
-  });
-
   it('shows "Please leave a detailed comment" in preview when text is shorter than 30 chars', async () => {
     const user = userEvent.setup();
     const { container } = renderMarkdownInput();
@@ -79,17 +78,6 @@ describe('MarkdownInput', () => {
     // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
     const reminder = container.querySelector('.ant-typography-danger');
     expect(reminder).toHaveTextContent('Please leave a detailed comment');
-  });
-
-  it('toggles back to write mode from preview', async () => {
-    const user = userEvent.setup();
-    renderMarkdownInput();
-
-    await user.click(screen.getByRole('button', { name: /preview/i }));
-    await user.click(screen.getByRole('button', { name: /write/i }));
-
-    expect(screen.getByRole('textbox')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /preview/i })).toBeInTheDocument();
   });
 
   it('clears the text and leaves preview mode when the form is reset', async () => {
