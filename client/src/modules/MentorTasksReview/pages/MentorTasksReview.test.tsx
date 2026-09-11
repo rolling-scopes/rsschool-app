@@ -102,17 +102,12 @@ describe('MentorTasksReview page', () => {
     isCourseManagerMock.mockReset().mockReturnValue(true);
   });
 
-  it('should render the title and the active course name', async () => {
+  it('should render the initial page, manager hint and loaded reviews and request mentor tasks', async () => {
     render(<MentorTasksReview />);
 
     expect(screen.getByRole('heading', { name: 'Mentor tasks review' })).toBeInTheDocument();
     expect(screen.getByText('Submitted tasks')).toBeInTheDocument();
     expect(await screen.findByText('RS 2025')).toBeInTheDocument();
-  });
-
-  it('should show the manager hint and fetch reviews for the active course on mount', async () => {
-    render(<MentorTasksReview />);
-
     expect(screen.getByText(/You can assign a checker/i)).toBeInTheDocument();
     await waitFor(() =>
       expect(getMentorReviews).toHaveBeenCalledWith(
@@ -126,23 +121,14 @@ describe('MentorTasksReview page', () => {
         undefined,
       ),
     );
-  });
-
-  it('should render the loaded review rows inside the table', async () => {
-    render(<MentorTasksReview />);
 
     const table = await screen.findByRole('table');
     expect(within(table).getByRole('link', { name: 'Review task' })).toBeInTheDocument();
     expect(within(table).getAllByText('student-github').length).toBeGreaterThan(0);
-  });
-
-  it('should request mentor course tasks for the checker dropdown', () => {
-    render(<MentorTasksReview />);
 
     const [requestFn] = useRequestMock.mock.calls[0] as [() => Promise<unknown>];
-    return requestFn().then(() => {
-      expect(getCourseTasks).toHaveBeenCalledWith(1, undefined, CourseTaskDtoCheckerEnum.Mentor);
-    });
+    await requestFn();
+    expect(getCourseTasks).toHaveBeenCalledWith(1, undefined, CourseTaskDtoCheckerEnum.Mentor);
   });
 
   it('should hide the manager hint and the action column for non-managers', async () => {
