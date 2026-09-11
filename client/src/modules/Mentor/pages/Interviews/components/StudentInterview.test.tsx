@@ -78,49 +78,25 @@ describe('StudentInterview', () => {
     Object.defineProperty(window, 'location', { configurable: true, writable: true, value: originalLocation });
   });
 
-  it('should render the student name as a profile link', () => {
-    renderInterview();
-
-    const profileLink = screen.getByRole('link', { name: 'Student Name' });
-    expect(profileLink).toHaveAttribute('href', '/profile?githubId=student-gh');
-  });
-
   it('should fall back to githubId when the student has no name', () => {
     renderInterview({ student: { id: 7, githubId: 'student-gh', name: '' } as MentorInterview['student'] });
 
     expect(screen.getByRole('link', { name: 'student-gh' })).toBeInTheDocument();
   });
 
-  it('should show "Provide feedback" when the interview is not completed', () => {
-    renderInterview();
-
-    expect(screen.getByRole('button', { name: 'Provide feedback' })).toBeInTheDocument();
-  });
-
-  it('should show "Edit feedback" when the interview is already completed', () => {
-    renderInterview({ completed: true });
-
-    expect(screen.getByRole('button', { name: 'Edit feedback' })).toBeInTheDocument();
-  });
-
-  it('should open the reject popconfirm for an uncompleted CoreJS interview', async () => {
-    const user = userEvent.setup();
-    renderInterview();
-
-    await user.click(screen.getByRole('button', { name: 'Provide feedback' }));
-
-    expect(await screen.findByText(/You can reject the interview with a result/)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Reject/ })).toBeInTheDocument();
-    // service not called just by opening
-    expect(postStudentInterviewResult).not.toHaveBeenCalled();
-  });
-
   it('should submit a zero result and show success when the interview is rejected', async () => {
     const user = userEvent.setup();
     renderInterview();
 
+    expect(screen.getByRole('link', { name: 'Student Name' })).toHaveAttribute('href', '/profile?githubId=student-gh');
+    expect(screen.getByRole('button', { name: 'Provide feedback' })).toBeInTheDocument();
+
     await user.click(screen.getByRole('button', { name: 'Provide feedback' }));
-    await user.click(await screen.findByRole('button', { name: /Reject/ }));
+    expect(await screen.findByText(/You can reject the interview with a result/)).toBeInTheDocument();
+    const rejectButton = screen.getByRole('button', { name: /Reject/ });
+    expect(rejectButton).toBeInTheDocument();
+    expect(postStudentInterviewResult).not.toHaveBeenCalled();
+    await user.click(rejectButton);
 
     await waitFor(() =>
       expect(postStudentInterviewResult).toHaveBeenCalledWith('student-gh', 42, {
@@ -155,7 +131,9 @@ describe('StudentInterview', () => {
     const user = userEvent.setup();
     renderInterview({ completed: true });
 
-    await user.click(screen.getByRole('button', { name: 'Edit feedback' }));
+    const editButton = screen.getByRole('button', { name: 'Edit feedback' });
+    expect(editButton).toBeInTheDocument();
+    await user.click(editButton);
 
     expect(window.location.href).toContain(
       '/course/interview/core-js/feedback?course=rs-2025&githubId=student-gh&studentId=7&interviewId=42',
