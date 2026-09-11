@@ -139,6 +139,7 @@ export class ProfileController {
   @Delete(':username')
   @ApiOperation({ operationId: 'obfuscateProfile' })
   @UseGuards(DefaultGuard, RoleGuard)
+  @RequiredRoles([Role.Admin])
   public async obfuscateProfile(@Param('username') githubId: string) {
     await this.profileService.obfuscateProfile(githubId);
   }
