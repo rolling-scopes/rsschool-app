@@ -43,15 +43,12 @@ describe('<StudentsTable />', () => {
     const githubLink = screen.getByRole('link', { name: 'alice-gh' });
     expect(githubLink).toHaveAttribute('href', 'https://github.com/alice-gh');
     expect(screen.getByText('alice@example.com')).toBeInTheDocument();
-  });
-
-  it('renders the name as a CV link only when the student has a cvUuid', () => {
-    render(<StudentsTable content={students} pagination={false} />);
 
     const aliceLink = screen.getByRole('link', { name: /Alice Lead/i });
     expect(aliceLink).toHaveAttribute('href', expect.stringContaining('/cv/uuid-alice'));
     // Bob has no cvUuid -> plain text, not a link
     expect(screen.queryByRole('link', { name: /Bob Member/i })).not.toBeInTheDocument();
+    expect(screen.queryByText('Action')).not.toBeInTheDocument();
   });
 
   it('marks the team lead with a tag and renders the discord username link', () => {
@@ -66,11 +63,6 @@ describe('<StudentsTable />', () => {
     render(<StudentsTable content={students} pagination={false} notVisibleColumn={[StudentsTableColumnKey.Email]} />);
 
     expect(screen.queryByText('alice@example.com')).not.toBeInTheDocument();
-  });
-
-  it('does not render a delete column when onDelete is not provided', () => {
-    render(<StudentsTable content={students} pagination={false} />);
-    expect(screen.queryByText('Action')).not.toBeInTheDocument();
   });
 
   it('renders the combined mobile student/contacts columns on an xs viewport', () => {
