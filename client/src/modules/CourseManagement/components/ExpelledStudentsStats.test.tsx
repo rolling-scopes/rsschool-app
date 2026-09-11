@@ -72,8 +72,10 @@ describe('<ExpelledStudentsStats />', () => {
     expect(screen.queryByText('Detailed Statistics on Student Departures')).not.toBeInTheDocument();
   });
 
-  it('renders the heading, export button and data rows', () => {
-    useExpelledStats.mockReturnValue(makeHookState({ data: rows }));
+  it('calls handleDelete with the row id when a Delete button is clicked', async () => {
+    const handleDelete = vi.fn();
+    useExpelledStats.mockReturnValue(makeHookState({ data: rows, handleDelete }));
+    const user = userEvent.setup();
 
     render(<ExpelledStudentsStats courseId={1} />);
 
@@ -93,14 +95,6 @@ describe('<ExpelledStudentsStats />', () => {
     // fullName preferred, falls back to name when empty
     expect(screen.getByText('JavaScript Course')).toBeInTheDocument();
     expect(screen.getByText('React Course')).toBeInTheDocument();
-  });
-
-  it('calls handleDelete with the row id when a Delete button is clicked', async () => {
-    const handleDelete = vi.fn();
-    useExpelledStats.mockReturnValue(makeHookState({ data: rows, handleDelete }));
-    const user = userEvent.setup();
-
-    render(<ExpelledStudentsStats courseId={1} />);
 
     const firstRow = screen.getByText('js-2024').closest('tr')!;
     await user.click(within(firstRow).getByRole('button', { name: /delete/i }));
