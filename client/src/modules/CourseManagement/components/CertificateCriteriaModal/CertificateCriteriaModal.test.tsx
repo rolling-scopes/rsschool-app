@@ -62,7 +62,10 @@ describe('CertificateCriteriaModal', () => {
 
     expect(await screen.findByText('Task')).toBeInTheDocument();
     expect(await screen.findByText('Minimum Score')).toBeInTheDocument();
-    expect(await screen.findByRole('button', { name: /remove task/i })).toBeInTheDocument();
+    const removeButton = await screen.findByLabelText('Remove task');
+    expect(removeButton).toBeInTheDocument();
+    expect(removeButton).toHaveRole('button');
+    expect(removeButton).toBeVisible();
   });
 
   test('should remove task criteria row on "remove task" button click', async () => {
@@ -71,7 +74,9 @@ describe('CertificateCriteriaModal', () => {
     const addButton = await screen.findByRole('button', { name: /add task/i });
     await user.click(addButton);
 
-    const removeButton = await screen.findByRole('button', { name: /remove task/i });
+    const removeButton = await screen.findByLabelText('Remove task');
+    expect(removeButton).toHaveRole('button');
+    expect(removeButton).toBeVisible();
     await user.click(removeButton);
 
     expect(screen.queryByText('Minimum Score')).not.toBeInTheDocument();
