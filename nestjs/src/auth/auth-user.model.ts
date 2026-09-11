@@ -25,6 +25,7 @@ export interface JwtToken {
   githubId: string;
   isAdmin: boolean;
   isHirer: boolean;
+  purpose: 'authentication';
 }
 
 export class AuthUser {
