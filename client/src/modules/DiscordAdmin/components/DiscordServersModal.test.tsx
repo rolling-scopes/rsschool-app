@@ -33,23 +33,6 @@ describe('<DiscordServersModal />', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it('renders the title and three empty inputs when creating', () => {
-    render(<DiscordServersModal {...makeProps()} />);
-
-    expect(screen.getByText('Discord/Telegram channel')).toBeInTheDocument();
-    expect(screen.getByLabelText('Name')).toHaveValue('');
-    expect(screen.getByLabelText('Gratitude URL')).toHaveValue('');
-    expect(screen.getByLabelText('Mentors chat URL')).toHaveValue('');
-  });
-
-  it('prefills the inputs from getInitialValues when editing', () => {
-    render(<DiscordServersModal {...makeProps({ data: editServer })} />);
-
-    expect(screen.getByLabelText('Name')).toHaveValue('RS Discord');
-    expect(screen.getByLabelText('Gratitude URL')).toHaveValue('https://discord.gg/grat');
-    expect(screen.getByLabelText('Mentors chat URL')).toHaveValue('https://discord.gg/mentors');
-  });
-
   it('shows validation errors and does not submit when fields are empty', async () => {
     const user = userEvent.setup();
     const props = makeProps();
@@ -87,18 +70,27 @@ describe('<DiscordServersModal />', () => {
     const props = makeProps({ data: editServer });
     render(<DiscordServersModal {...props} />);
 
+    expect(screen.getByLabelText('Name')).toHaveValue('RS Discord');
+    expect(screen.getByLabelText('Gratitude URL')).toHaveValue('https://discord.gg/grat');
+    expect(screen.getByLabelText('Mentors chat URL')).toHaveValue('https://discord.gg/mentors');
+
     const name = screen.getByLabelText('Name');
     await user.clear(name);
-    await user.type(name, 'Renamed');
+    await user.type(name, 'Renamed', { skipClick: true });
     await user.click(screen.getByRole('button', { name: /save/i }));
 
     await waitFor(() => expect(props.submit).toHaveBeenCalledWith(expect.objectContaining({ name: 'Renamed' })));
   });
 
-  it('cancels immediately when the form is untouched', async () => {
+  it('renders empty create fields and cancels when untouched', async () => {
     const user = userEvent.setup();
     const props = makeProps();
     render(<DiscordServersModal {...props} />);
+
+    expect(screen.getByText('Discord/Telegram channel')).toBeInTheDocument();
+    expect(screen.getByLabelText('Name')).toHaveValue('');
+    expect(screen.getByLabelText('Gratitude URL')).toHaveValue('');
+    expect(screen.getByLabelText('Mentors chat URL')).toHaveValue('');
 
     await user.click(screen.getByRole('button', { name: /cancel/i }));
 
