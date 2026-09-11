@@ -8,20 +8,23 @@ const data = [
   { id: 2, type: 'gratitude', temperature: 0.7, text: 'B' },
 ] as unknown as PromptDto[];
 
+function getPromptRow(type: string) {
+  // eslint-disable-next-line testing-library/no-node-access -- Avoid computing accessible names for every table row.
+  const row = screen.getByText(type).closest('tr');
+  expect(row).toHaveRole('row');
+  return row!;
+}
+
 describe('<PromptTable />', () => {
-  it('renders a row per prompt with its type', () => {
-    render(<PromptTable data={data} handleUpdate={vi.fn()} handleDelete={vi.fn().mockResolvedValue(undefined)} />);
-
-    expect(screen.getByText('summary')).toBeInTheDocument();
-    expect(screen.getByText('gratitude')).toBeInTheDocument();
-  });
-
-  it('calls handleUpdate with the row record when the edit button is clicked', async () => {
+  it('renders prompt rows and calls handleUpdate for the selected record', async () => {
     const user = userEvent.setup();
     const handleUpdate = vi.fn();
     render(<PromptTable data={data} handleUpdate={handleUpdate} handleDelete={vi.fn().mockResolvedValue(undefined)} />);
 
-    const row = screen.getByRole('row', { name: /summary/ });
+    expect(screen.getByText('summary')).toBeInTheDocument();
+    expect(screen.getByText('gratitude')).toBeInTheDocument();
+
+    const row = getPromptRow('summary');
     const [editBtn] = within(row).getAllByRole('button');
     await user.click(editBtn);
 
@@ -33,7 +36,7 @@ describe('<PromptTable />', () => {
     const handleDelete = vi.fn().mockResolvedValue(undefined);
     render(<PromptTable data={data} handleUpdate={vi.fn()} handleDelete={handleDelete} />);
 
-    const row = screen.getByRole('row', { name: /gratitude/ });
+    const row = getPromptRow('gratitude');
     const buttons = within(row).getAllByRole('button');
     await user.click(buttons[1]);
 
