@@ -55,30 +55,6 @@ describe('AdminNotificationsPage', () => {
     expect(screen.getByRole('button', { name: /add notification/i })).toBeInTheDocument();
   });
 
-  it('opens the create modal when Add Notification is clicked', async () => {
-    const user = userEvent.setup();
-    render(<AdminNotificationsPage />);
-    await screen.findByText('Existing One');
-
-    await user.click(screen.getByRole('button', { name: /add notification/i }));
-
-    expect(await screen.findByRole('dialog')).toBeInTheDocument();
-    expect(screen.getByText('Notification Settings')).toBeInTheDocument();
-  });
-
-  it('opens the edit modal pre-filled with the row record', async () => {
-    const user = userEvent.setup();
-    render(<AdminNotificationsPage />);
-    await screen.findByText('Existing One');
-
-    await user.click(screen.getByText('Edit'));
-
-    expect(await screen.findByRole('dialog')).toBeInTheDocument();
-    expect(screen.getByLabelText('Id')).toHaveValue('existing');
-    // Editing an existing notification disables the Id field.
-    expect(screen.getByLabelText('Id')).toBeDisabled();
-  });
-
   it('creates a new notification and appends it to the table on submit', async () => {
     const user = userEvent.setup();
     const created = makeNotification({ id: 'fresh', name: 'Fresh One' });
@@ -113,7 +89,9 @@ describe('AdminNotificationsPage', () => {
     await screen.findByText('Existing One');
 
     await user.click(screen.getByText('Edit'));
-    await screen.findByRole('dialog');
+    expect(await screen.findByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByLabelText('Id')).toHaveValue('existing');
+    expect(screen.getByLabelText('Id')).toBeDisabled();
 
     const nameInput = screen.getByLabelText('Name');
     await user.clear(nameInput);
@@ -179,13 +157,15 @@ describe('AdminNotificationsPage', () => {
     expect(screen.getByText('Existing One')).toBeInTheDocument();
   });
 
-  it('closes the create modal on cancel without saving', async () => {
+  it('opens the create modal and cancels without saving', async () => {
     const user = userEvent.setup();
     render(<AdminNotificationsPage />);
     await screen.findByText('Existing One');
 
     await user.click(screen.getByRole('button', { name: /add notification/i }));
     const dialog = await screen.findByRole('dialog');
+    expect(dialog).toBeInTheDocument();
+    expect(screen.getByText('Notification Settings')).toBeInTheDocument();
 
     await user.click(within(dialog).getByRole('button', { name: /cancel/i }));
 
