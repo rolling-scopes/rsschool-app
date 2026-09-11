@@ -51,18 +51,14 @@ describe('<UserGroupsModal />', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it('renders the title plus name, users and roles fields when creating', () => {
-    render(<UserGroupsModal {...makeProps()} />);
-
-    expect(screen.getByText('User Group')).toBeInTheDocument();
-    expect(screen.getByLabelText('Name')).toHaveValue('');
-    expect(screen.getByLabelText('user-search')).toHaveTextContent('');
-  });
-
   it('shows validation errors and does not submit when fields are empty', async () => {
     const user = userEvent.setup();
     const props = makeProps();
     render(<UserGroupsModal {...props} />);
+
+    expect(screen.getByText('User Group')).toBeInTheDocument();
+    expect(screen.getByLabelText('Name')).toHaveValue('');
+    expect(screen.getByLabelText('user-search')).toHaveTextContent('');
 
     await user.click(screen.getByRole('button', { name: /save/i }));
 
