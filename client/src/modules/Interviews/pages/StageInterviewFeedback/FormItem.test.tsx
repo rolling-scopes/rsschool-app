@@ -1,11 +1,11 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { Form } from 'antd';
 import { ReactNode } from 'react';
 import { FormItem } from './FormItem';
 import { StepForm } from './StepForm';
 import { FeedbackStep, FeedbackStepId, StepFormItem } from '@client/data/interviews/technical-screening';
 import { InputType } from '@client/data/interviews';
+import { setupUser } from '@client/__tests__/setupUser';
 
 // FormItem only renders a non-brittle widget per branch (Radio / RadioButton / Checkbox /
 // Input / TextArea). The Rating branch delegates to QuestionList, whose Form.List +
@@ -44,7 +44,7 @@ function getRadio(label: string) {
 
 describe('FormItem branches', () => {
   it('renders a TextArea and submits its typed value', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const item: StepFormItem = {
       id: 'comment',
       type: InputType.TextArea,
@@ -62,7 +62,7 @@ describe('FormItem branches', () => {
   });
 
   it('blocks submit and shows "Required" for an empty required TextArea', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const item: StepFormItem = {
       id: 'comment',
       type: InputType.TextArea,
@@ -80,7 +80,7 @@ describe('FormItem branches', () => {
   });
 
   it('renders a text Input and submits its value', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const item: StepFormItem = {
       id: 'name',
       type: InputType.Input,
@@ -98,7 +98,7 @@ describe('FormItem branches', () => {
   });
 
   it('renders a number Input (narrow style) and submits a numeric string', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const item: StepFormItem = {
       id: 'finalScore',
       type: InputType.Input,
@@ -117,7 +117,7 @@ describe('FormItem branches', () => {
   });
 
   it('renders RadioButton options (with description) and submits the chosen id', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const item: StepFormItem = {
       id: 'englishCertificate',
       type: InputType.RadioButton,
@@ -143,7 +143,7 @@ describe('FormItem branches', () => {
   });
 
   it('shows "Required" for a required RadioButton left unselected', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const item: StepFormItem = {
       id: 'englishCertificate',
       type: InputType.RadioButton,
@@ -161,7 +161,7 @@ describe('FormItem branches', () => {
   });
 
   it('renders a Checkbox.Group and submits the checked ids as an array', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const item: StepFormItem = {
       id: 'isGoodCandidate',
       type: InputType.Checkbox,
@@ -239,7 +239,7 @@ describe('FormItem Radio + nested conditional (real form)', () => {
   };
 
   it('shows nested sub-options only after the parent option with children is selected', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(
       <RadioHarness>
         {form => <FormItem item={radioItem} form={form} stepId={FeedbackStepId.Introduction} />}
@@ -312,7 +312,7 @@ describe('<StepForm /> initial values + navigation labels', () => {
   });
 
   it('shows Back and "Submit" on a final, non-first step and calls back on click', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const back = vi.fn();
     const step = makeStep([{ id: 'comment', type: InputType.TextArea, title: 'c', placeholder: 'c' }]);
     render(<StepForm step={step} next={vi.fn()} back={back} isFirst={false} isLast onValuesChange={vi.fn()} />);
@@ -323,7 +323,7 @@ describe('<StepForm /> initial values + navigation labels', () => {
   });
 
   it('does not call next and runs onFinishFailed when a required field is empty on submit', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const next = vi.fn();
     const step = makeStep([{ id: 'comment', type: InputType.TextArea, title: 'c', required: true, placeholder: 'c' }]);
     render(<StepForm step={step} next={next} back={vi.fn()} isFirst isLast onValuesChange={vi.fn()} />);
@@ -336,7 +336,7 @@ describe('<StepForm /> initial values + navigation labels', () => {
   });
 
   it('calls next with the collected values on a valid submit', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const next = vi.fn();
     const step = makeStep([{ id: 'comment', type: InputType.TextArea, title: 'c', placeholder: 'type' }]);
     render(<StepForm step={step} next={next} back={vi.fn()} isFirst isLast onValuesChange={vi.fn()} />);
@@ -348,7 +348,7 @@ describe('<StepForm /> initial values + navigation labels', () => {
   });
 
   it('reports value changes via onValuesChange as the user types', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onValuesChange = vi.fn();
     const step = makeStep([{ id: 'comment', type: InputType.TextArea, title: 'c', placeholder: 'type here' }]);
     render(
@@ -365,7 +365,7 @@ describe('<StepForm /> initial values + navigation labels', () => {
 // A focused check that nested options live in the same group as their parent.
 describe('FormItem Radio nested group structure', () => {
   it('nests sub-options under the selected parent', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     function Harness() {
       const [form] = Form.useForm();
       return (
