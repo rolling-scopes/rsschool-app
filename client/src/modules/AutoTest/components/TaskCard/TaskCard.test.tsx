@@ -10,22 +10,6 @@ import { getAutoTestTaskRoute } from '@client/services/routes';
 const COURSE_MOCK = { alias: 'course-alias', id: 100 } as Course;
 
 describe('TaskCard', () => {
-  it.each`
-    prop                | value
-    ${'task name'}      | ${'Course Task'}
-    ${'start date'}     | ${'Sep 10'}
-    ${'end date'}       | ${'Oct 10'}
-    ${'state'}          | ${'Missed'}
-    ${'attempts count'} | ${'2 left'}
-    ${'score'}          | ${'–'}
-  `('should render $prop', ({ value }: { value: string }) => {
-    const courseTask = generateCourseTask(2);
-    render(<TaskCard course={COURSE_MOCK} courseTask={courseTask} />);
-
-    const element = screen.getByText(new RegExp(value, 'i'));
-    expect(element).toBeInTheDocument();
-  });
-
   it('should render attempts count as "No limits" when max attempts was not provided', () => {
     const courseTask = generateCourseTask();
     render(<TaskCard course={COURSE_MOCK} courseTask={courseTask} />);
@@ -63,6 +47,10 @@ describe('TaskCard', () => {
     (useRouter as unknown as ReturnType<typeof vi.fn>).mockReturnValue({ push });
     const courseTask = generateCourseTask(2);
     render(<TaskCard course={COURSE_MOCK} courseTask={courseTask} />);
+
+    for (const value of ['Course Task', 'Sep 10', 'Oct 10', 'Missed', '2 left', '–']) {
+      expect(screen.getByText(new RegExp(value, 'i'))).toBeInTheDocument();
+    }
 
     await user.click(screen.getByRole('button', { name: /open task/i }));
 
