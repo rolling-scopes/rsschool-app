@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { ReactNode } from 'react';
+import { setupUser } from '@client/__tests__/setupUser';
 import { generateTasksData } from '@client/modules/Tasks/utils/test-utils';
 import { FormValues } from '@client/modules/Tasks/types';
 import { ModalProps } from '@client/modules/Tasks/components';
@@ -123,7 +123,7 @@ describe('TasksPage', () => {
   });
 
   it('should close the modal when cancel is triggered', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TasksPage />);
 
     await waitFor(() => expect(getTasks).toHaveBeenCalled());
@@ -136,7 +136,7 @@ describe('TasksPage', () => {
   });
 
   it('should create a task and its criteria when submitting a valid new task', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TasksPage />);
 
     await waitFor(() => expect(getTasks).toHaveBeenCalled());
@@ -156,7 +156,7 @@ describe('TasksPage', () => {
   });
 
   it('should update the task and existing criteria when submitting a valid edit', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     getTaskCriteria
       .mockResolvedValueOnce({ data: { criteria: [] } }) // on edit open
       .mockResolvedValueOnce({ data: { criteria: [{ type: 'title', text: 'c1' }] } }); // during submit
@@ -173,7 +173,7 @@ describe('TasksPage', () => {
   });
 
   it('should create criteria during edit when the task has none yet', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     getTaskCriteria
       .mockResolvedValueOnce({ data: { criteria: [] } }) // on edit open
       .mockResolvedValueOnce({ data: { criteria: null } }); // during submit
@@ -188,7 +188,7 @@ describe('TasksPage', () => {
   });
 
   it('should not submit when a required field is missing', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     submitValues.current = { ...VALID_VALUES, name: undefined };
     render(<TasksPage />);
 
@@ -201,7 +201,7 @@ describe('TasksPage', () => {
   });
 
   it('should swallow API errors during submit without crashing', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     createTask.mockRejectedValue(new Error('boom'));
     render(<TasksPage />);
 
@@ -215,7 +215,7 @@ describe('TasksPage', () => {
   });
 
   it('should not call updateTask when the edited task has a falsy id', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TasksPage />);
 
     await waitFor(() => expect(getTasks).toHaveBeenCalled());
@@ -231,7 +231,7 @@ describe('TasksPage', () => {
   });
 
   it('should block submit when a non-title criterion has zero score', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     getTaskCriteria.mockResolvedValue({ data: { criteria: [{ type: 'subtask', text: 'st', max: 0 }] } });
     render(<TasksPage />);
 
@@ -245,7 +245,7 @@ describe('TasksPage', () => {
   });
 
   it('defaults criteria to an empty list when the edited task returns no criteria field', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     // getTaskCriteria with no `criteria` key on edit-open → `data.criteria ?? []` fallback.
     getTaskCriteria.mockResolvedValueOnce({ data: {} });
     render(<TasksPage />);
@@ -260,7 +260,7 @@ describe('TasksPage', () => {
   });
 
   it('applies createRecord defaults for omitted optional fields', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     // Only the required fields are present → the `?? ''` / `?? []` defaults in createRecord engage.
     submitValues.current = {
       name: 'Minimal Task',
