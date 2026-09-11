@@ -13,8 +13,7 @@ const { getContributor, createContributor, updateContributor, searchUsers } = vi
   searchUsers: vi.fn(),
 }));
 
-vi.mock('@client/api', async () => ({
-  ...(await vi.importActual('@client/api')),
+vi.mock('@client/api', () => ({
   ContributorsApi: function ContributorsApi() {
     return { getContributor, createContributor, updateContributor };
   },
@@ -45,23 +44,6 @@ describe('<ContributorModal />', () => {
     });
   });
 
-  it('renders the "Add Contributor" title and empty fields when creating', async () => {
-    render(<ContributorModal contributorId={null} onClose={vi.fn()} />);
-
-    expect(await screen.findByText('Add Contributor')).toBeInTheDocument();
-    // No fetch when there is no id.
-    expect(getContributor).not.toHaveBeenCalled();
-    expect(await screen.findByLabelText('Description')).toHaveValue('');
-  });
-
-  it('fetches and prefills the form when editing', async () => {
-    render(<ContributorModal contributorId={7} onClose={vi.fn()} />);
-
-    expect(await screen.findByText('Edit Contributor')).toBeInTheDocument();
-    await waitFor(() => expect(getContributor).toHaveBeenCalledWith(7));
-    await waitFor(() => expect(screen.getByLabelText('Description')).toHaveValue('Existing description'));
-  });
-
   it('creates a contributor from the typed values', async () => {
     const user = userEvent.setup();
     const onClose = vi.fn();
@@ -83,10 +65,12 @@ describe('<ContributorModal />', () => {
     const onClose = vi.fn();
     render(<ContributorModal contributorId={7} onClose={onClose} />);
 
+    expect(await screen.findByText('Edit Contributor')).toBeInTheDocument();
+    await waitFor(() => expect(getContributor).toHaveBeenCalledWith(7));
     await waitFor(() => expect(screen.getByLabelText('Description')).toHaveValue('Existing description'));
     const desc = screen.getByLabelText('Description');
     await user.clear(desc);
-    await user.type(desc, 'Updated description');
+    await user.type(desc, 'Updated description', { skipClick: true });
     await user.click(screen.getByRole('button', { name: /save/i }));
 
     await waitFor(() =>
@@ -116,7 +100,9 @@ describe('<ContributorModal />', () => {
     const onClose = vi.fn();
     render(<ContributorModal contributorId={null} onClose={onClose} />);
 
-    await screen.findByText('Add Contributor');
+    expect(await screen.findByText('Add Contributor')).toBeInTheDocument();
+    expect(getContributor).not.toHaveBeenCalled();
+    expect(screen.getByLabelText('Description')).toHaveValue('');
     await user.click(screen.getByRole('button', { name: /cancel/i }));
 
     expect(onClose).toHaveBeenCalled();
