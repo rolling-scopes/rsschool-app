@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { DisciplineDto, EventDto } from '@client/api';
+import { setupUser } from '@client/__tests__/setupUser';
 import { EventsModal } from './EventsModal';
 
 // Pure presentational wrapper around the shared ModalForm; no API of its own.
@@ -33,7 +33,7 @@ function makeProps(overrides: Partial<Parameters<typeof EventsModal>[0]> = {}) {
 }
 
 // Open an antd Select by label and pick an option by its visible text.
-async function selectOption(user: ReturnType<typeof userEvent.setup>, label: string, optionText: string) {
+async function selectOption(user: ReturnType<typeof setupUser>, label: string, optionText: string) {
   const combobox = screen.getByLabelText(label);
   await user.click(combobox);
   const option = await screen.findByText(optionText, { selector: '.ant-select-item-option-content' });
@@ -47,7 +47,7 @@ describe('<EventsModal />', () => {
   });
 
   it('shows validation errors and does not submit when required fields are empty', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<EventsModal {...props} />);
 
@@ -60,7 +60,7 @@ describe('<EventsModal />', () => {
   });
 
   it('submits name, selected type, discipline and optional fields', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<EventsModal {...props} />);
 
@@ -97,7 +97,7 @@ describe('<EventsModal />', () => {
   });
 
   it('renders empty create fields and cancels when untouched', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<EventsModal {...props} />);
 
