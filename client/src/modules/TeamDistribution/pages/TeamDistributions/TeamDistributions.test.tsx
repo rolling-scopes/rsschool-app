@@ -118,6 +118,7 @@ describe('<TeamDistributions />', () => {
 
     await waitFor(() => expect(getCourseTeamDistributions).toHaveBeenCalledWith(42));
     expect(await screen.findByText('Spring Distribution')).toBeInTheDocument();
+    expect(screen.queryByTestId('submit-score-modal')).not.toBeInTheDocument();
     // Welcome card shows the non-manager headline for a plain session.
     expect(screen.getByText('Become a member of the team!')).toBeInTheDocument();
   });
@@ -139,22 +140,6 @@ describe('<TeamDistributions />', () => {
     expect(screen.queryByText('Spring Distribution')).not.toBeInTheDocument();
   });
 
-  it('shows the manager welcome headline and renders the manager submit-score modal', async () => {
-    sessionValue.isAdmin = true;
-    render(<TeamDistributions />);
-
-    expect(await screen.findByText('Create student teams to solve group tasks!')).toBeInTheDocument();
-    // Manager-only SubmitScoreModal is mounted (closed initially).
-    expect(screen.getByTestId('submit-score-modal')).toHaveAttribute('data-open', 'false');
-  });
-
-  it('does not mount the submit-score modal for a non-manager', async () => {
-    render(<TeamDistributions />);
-
-    await screen.findByText('Spring Distribution');
-    expect(screen.queryByTestId('submit-score-modal')).not.toBeInTheDocument();
-  });
-
   it('opens the create-distribution modal from the welcome card (manager)', async () => {
     sessionValue.isAdmin = true;
     const user = userEvent.setup();
@@ -165,18 +150,13 @@ describe('<TeamDistributions />', () => {
     expect(modalForm.toggle).toHaveBeenCalled();
   });
 
-  it('renders the create/edit modal when the modal-form flag is open', async () => {
-    modalForm.open = true;
-    render(<TeamDistributions />);
-
-    expect(await screen.findByTestId('distribution-modal')).toBeInTheDocument();
-    expect(screen.getByText('edit:new')).toBeInTheDocument();
-  });
-
   it('cancels the create/edit modal through its onCancel handler', async () => {
     modalForm.open = true;
     const user = userEvent.setup();
     render(<TeamDistributions />);
+
+    expect(await screen.findByTestId('distribution-modal')).toBeInTheDocument();
+    expect(screen.getByText('edit:new')).toBeInTheDocument();
 
     await user.click(await screen.findByRole('button', { name: 'cancel-modal' }));
 
@@ -228,21 +208,6 @@ describe('<TeamDistributions />', () => {
     await waitFor(() =>
       expect(mockError).toHaveBeenCalledWith('Failed to delete team distribution. Please try later.'),
     );
-  });
-
-  it('opens the submit-score modal for the chosen distribution via the card action (manager)', async () => {
-    sessionValue.isAdmin = true;
-    const user = userEvent.setup();
-    render(<TeamDistributions />);
-
-    await screen.findByText('Spring Distribution');
-    // The card exposes a "Submit score" action for managers.
-    await user.click(screen.getByRole('button', { name: /submit score/i }));
-
-    await waitFor(() =>
-      expect(within(screen.getByTestId('submit-score-modal')).getByText('Spring Distribution')).toBeInTheDocument(),
-    );
-    expect(screen.getByTestId('submit-score-modal')).toHaveAttribute('data-open', 'true');
   });
 
   it('registers for a distribution and shows a success toast', async () => {
@@ -310,15 +275,20 @@ describe('<TeamDistributions />', () => {
     );
   });
 
-  it('closes the submit-score modal through its onClose handler (manager)', async () => {
+  it('shows manager welcome, opens the chosen distribution and closes its score modal', async () => {
     sessionValue.isAdmin = true;
     const user = userEvent.setup();
     render(<TeamDistributions />);
+
+    expect(await screen.findByText('Create student teams to solve group tasks!')).toBeInTheDocument();
+    expect(screen.getByTestId('submit-score-modal')).toHaveAttribute('data-open', 'false');
 
     // Open the modal for the card's distribution, then close it.
     await screen.findByText('Spring Distribution');
     await user.click(screen.getByRole('button', { name: /submit score/i }));
     await waitFor(() => expect(screen.getByTestId('submit-score-modal')).toHaveAttribute('data-open', 'true'));
+
+    expect(within(screen.getByTestId('submit-score-modal')).getByText('Spring Distribution')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'close-score' }));
 
