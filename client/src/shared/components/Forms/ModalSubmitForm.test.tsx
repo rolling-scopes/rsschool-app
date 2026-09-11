@@ -21,24 +21,10 @@ describe('ModalSubmitForm', () => {
   });
 
   describe('when form was submitted', () => {
-    it('should not render footer', () => {
+    it('should show success without a footer and close on OK', () => {
       render(<ModalSubmitForm {...PROPS_MOCK} submitted={true} />);
-
-      const footerBtn = screen.queryByText('Submit');
-
-      expect(footerBtn).not.toBeInTheDocument();
-    });
-
-    it('should render success message', () => {
-      render(<ModalSubmitForm {...PROPS_MOCK} submitted={true} />);
-
-      const success = screen.getByText('Successfully submitted');
-
-      expect(success).toBeInTheDocument();
-    });
-
-    it('should close on OK button click', () => {
-      render(<ModalSubmitForm {...PROPS_MOCK} submitted={true} />);
+      expect(screen.queryByText('Submit')).not.toBeInTheDocument();
+      expect(screen.getByText('Successfully submitted')).toBeInTheDocument();
       const okButton = screen.getByText('Ok');
 
       fireEvent.click(okButton);
