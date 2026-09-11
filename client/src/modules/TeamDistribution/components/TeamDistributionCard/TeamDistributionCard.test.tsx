@@ -34,53 +34,29 @@ function renderCard(distribution: TeamDistributionDto, isManager = false) {
 }
 
 describe('TeamDistributionCard', () => {
-  it('should render the distribution name and description', () => {
+  it('should render distribution details and read-more link without manager controls', () => {
     renderCard(distribution);
     expect(screen.getByText(distribution.name)).toBeInTheDocument();
     expect(screen.getByText(distribution.description)).toBeInTheDocument();
-  });
-
-  it('should render the distribution period', () => {
-    renderCard(distribution);
-
     expect(screen.getByText(/2022-01-01/)).toBeInTheDocument();
     expect(screen.getByText(/2022-01-31/)).toBeInTheDocument();
-  });
-
-  it('should render the edit and delete buttons for managers', () => {
-    renderCard(distribution, true);
-
-    expect(screen.getByRole('button', { name: /edit/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /delete/i })).toBeInTheDocument();
-  });
-
-  it('should not render the edit and delete buttons for non-managers', () => {
-    renderCard(distribution);
-
     expect(screen.queryByRole('button', { name: /edit/i })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /delete/i })).not.toBeInTheDocument();
-  });
-
-  it('should call the onDelete function when the delete button is clicked', () => {
-    renderCard(distribution, true);
-
-    fireEvent.click(screen.getByRole('button', { name: /delete/i }));
-
-    expect(mockOnDelete).toHaveBeenCalledWith(distribution.id);
-  });
-
-  it('should call the onEdit function when the edit button is clicked', () => {
-    renderCard(distribution, true);
-
-    fireEvent.click(screen.getByRole('button', { name: /edit/i }));
-
-    expect(mockOnEdit).toHaveBeenCalledWith(distribution);
-  });
-
-  it('should render read more link when distribution has descriptionUrl', () => {
-    renderCard(distribution);
-
     expect(screen.getByRole('link', { name: /read more/i })).toBeInTheDocument();
+  });
+
+  it('should render manager controls and call their handlers', () => {
+    renderCard(distribution, true);
+
+    const deleteButton = screen.getByRole('button', { name: /delete/i });
+    const editButton = screen.getByRole('button', { name: /edit/i });
+    expect(deleteButton).toBeInTheDocument();
+    expect(editButton).toBeInTheDocument();
+
+    fireEvent.click(deleteButton);
+    expect(mockOnDelete).toHaveBeenCalledWith(distribution.id);
+    fireEvent.click(editButton);
+    expect(mockOnEdit).toHaveBeenCalledWith(distribution);
   });
 
   it('should not render read more link when distribution has not descriptionUrl', () => {
