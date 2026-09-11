@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { UserSearch } from './UserSearch';
 import type { SearchStudent } from '@client/services/course';
@@ -10,15 +10,21 @@ const PEOPLE = [
 
 function openSelect() {
   const combobox = screen.getByRole('combobox');
-  fireMouseDown(combobox);
+  fireEvent.mouseDown(combobox);
   return combobox;
 }
 
-function fireMouseDown(el: Element) {
-  el.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+async function finishSearch() {
+  await act(async () => {
+    await vi.advanceTimersByTimeAsync(300);
+  });
 }
 
 describe('UserSearch', () => {
+  afterEach(() => {
+    if (vi.isFakeTimers()) vi.clearAllTimers();
+    vi.useRealTimers();
+  });
   it('renders a searchable combobox', () => {
     render(<UserSearch />);
 
@@ -105,28 +111,33 @@ describe('UserSearch', () => {
     // The unique search result disappearing (replaced by default values) proves the
     // else branch ran rather than the mount effect.
     const searchFn = vi.fn().mockResolvedValue([{ id: 9, githubId: 'zoe', name: 'Zoe Z' }]);
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'Date'] });
     render(<UserSearch searchFn={searchFn} defaultValues={PEOPLE} />);
 
     const combobox = openSelect();
     fireEvent.change(combobox, { target: { value: 'zoe' } });
-    expect(await screen.findByText(/Zoe Z/)).toBeInTheDocument();
+    await finishSearch();
+    expect(screen.getByText(/Zoe Z/)).toBeInTheDocument();
 
     fireEvent.change(combobox, { target: { value: '   ' } });
+    await finishSearch();
 
     // The unique searchFn result is gone and the default values are shown instead.
-    await waitFor(() => expect(screen.queryByText(/Zoe Z/)).not.toBeInTheDocument(), { timeout: 2000 });
+    expect(screen.queryByText(/Zoe Z/)).not.toBeInTheDocument();
     expect(screen.getByText(/Alice A/)).toBeInTheDocument();
   });
 
   it('returns no matches from the built-in search when there are no default values', async () => {
     // No searchFn and no defaultValues: defaultSearch's `defaultValues?.filter(...) ?? []`
     // takes the nullish fallback (line 75).
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'Date'] });
     render(<UserSearch />);
 
     const combobox = openSelect();
     fireEvent.change(combobox, { target: { value: 'abc' } });
+    await finishSearch();
 
-    await waitFor(() => expect(screen.queryByText(/Alice A/)).not.toBeInTheDocument(), { timeout: 2000 });
+    expect(screen.queryByText(/Alice A/)).not.toBeInTheDocument();
   });
 
   it('does not call searchFn for a whitespace-only query (falls back to default values)', async () => {
