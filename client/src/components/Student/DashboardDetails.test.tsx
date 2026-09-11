@@ -78,15 +78,13 @@ describe('DashboardDetails', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it('renders the drawer title with name and github id', () => {
-    render(<DashboardDetails {...makeProps()} />);
-    expect(screen.getByText('Student One , student-1')).toBeInTheDocument();
-  });
-
   it('shows the Expel button for an active student and opens the comment modal', async () => {
     const user = userEvent.setup();
     const onExpelStudent = vi.fn();
     render(<DashboardDetails {...makeProps({ onExpelStudent })} />);
+    expect(screen.getByText('Student One , student-1')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Issue Certificate/ })).not.toBeInTheDocument();
+    expect(screen.queryByTestId('pick-mentor')).not.toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: /Expel/ }));
     expect(screen.getByTestId('comment-modal')).toBeInTheDocument();
@@ -104,12 +102,6 @@ describe('DashboardDetails', () => {
     const restore = screen.getByRole('button', { name: /Restore/ });
     await user.click(restore);
     expect(onRestoreStudent).toHaveBeenCalled();
-  });
-
-  it('hides manager controls when not a manager/supervisor', () => {
-    render(<DashboardDetails {...makeProps({ courseManagerOrSupervisor: false })} />);
-    expect(screen.queryByRole('button', { name: /Issue Certificate/ })).not.toBeInTheDocument();
-    expect(screen.queryByTestId('pick-mentor')).not.toBeInTheDocument();
   });
 
   it('shows manager controls and updates the mentor', async () => {
