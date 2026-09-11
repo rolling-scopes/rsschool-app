@@ -78,22 +78,6 @@ function Harness({
 }
 
 describe('<QuestionList /> question picker + custom + remove', () => {
-  it('renders the initial questions with topic + title and a Rate per row', () => {
-    render(Harness());
-
-    expect(screen.getByText('HTML/CSS question')).toBeInTheDocument();
-    expect(screen.getByText('OOP question')).toBeInTheDocument();
-    // Two rows → two Rate widgets, each exposing 5 radio stars.
-    const rates = document.querySelectorAll('.ant-rate');
-    expect(rates).toHaveLength(2);
-  });
-
-  it('shows "Add from list" only while there are unused pool questions', () => {
-    // examples contains an extra pool question (algorithms) not in initial → button shown.
-    render(Harness());
-    expect(screen.getByRole('button', { name: /Add from list/i })).toBeInTheDocument();
-  });
-
   it('hides "Add from list" when every example is already added', () => {
     render(Harness({ question: makeQuestion({ examples: baseQuestions }) }));
     expect(screen.queryByRole('button', { name: /Add from list/i })).not.toBeInTheDocument();
@@ -101,18 +85,20 @@ describe('<QuestionList /> question picker + custom + remove', () => {
     expect(screen.getByRole('button', { name: /Custom question/i })).toBeInTheDocument();
   });
 
-  it('labels the custom button "Custom task" on the Practice step and "Custom question" otherwise', () => {
-    const { unmount } = render(Harness({ stepId: FeedbackStepId.Practice }));
+  it('labels the custom button "Custom task" on the Practice step', () => {
+    render(Harness({ stepId: FeedbackStepId.Practice }));
     expect(screen.getByRole('button', { name: /Custom task/i })).toBeInTheDocument();
-    unmount();
-
-    render(Harness({ stepId: FeedbackStepId.Theory }));
-    expect(screen.getByRole('button', { name: /Custom question/i })).toBeInTheDocument();
   });
 
   it('opens the picker modal, validates an empty selection, then adds a pooled question', async () => {
     const user = userEvent.setup();
     render(Harness());
+
+    expect(screen.getByText('HTML/CSS question')).toBeInTheDocument();
+    expect(screen.getByText('OOP question')).toBeInTheDocument();
+    expect(document.querySelectorAll('.ant-rate')).toHaveLength(2);
+    expect(screen.getByRole('button', { name: /Add from list/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Custom question/i })).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: /Add from list/i }));
 
