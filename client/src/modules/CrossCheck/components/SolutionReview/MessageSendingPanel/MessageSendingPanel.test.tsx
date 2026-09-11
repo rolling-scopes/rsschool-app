@@ -1,6 +1,6 @@
 import { Form } from 'antd';
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { CrossCheckMessageDtoRoleEnum } from '@client/api';
 import { CrossCheckMessageAuthor } from '@client/services/course';
 import MessageSendingPanel, { MessageSendingPanelProps } from './MessageSendingPanel';
@@ -35,7 +35,7 @@ function renderPanel(props: Partial<MessageSendingPanelProps> = {}) {
 
 describe('<MessageSendingPanel />', () => {
   it('renders collapsed controls, opens on click and cancels', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderPanel();
 
     const collapsed = screen.getByPlaceholderText('Leave a message');
@@ -52,18 +52,18 @@ describe('<MessageSendingPanel />', () => {
   });
 
   it('opens the editing panel when Enter is pressed on the collapsed input', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderPanel();
 
     const collapsed = screen.getByPlaceholderText('Leave a message');
-    collapsed.focus();
+    await user.click(collapsed);
     await user.keyboard('{Enter}');
 
     expect(screen.getByRole('button', { name: /Send message/ })).toBeInTheDocument();
   });
 
   it('submits the typed message content through the form', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { onFinish } = renderPanel();
 
     await user.click(screen.getByPlaceholderText('Leave a message'));
@@ -77,7 +77,7 @@ describe('<MessageSendingPanel />', () => {
   });
 
   it('blocks submitting an empty message and shows a validation error', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { onFinish } = renderPanel();
 
     await user.click(screen.getByPlaceholderText('Leave a message'));
@@ -88,7 +88,7 @@ describe('<MessageSendingPanel />', () => {
   });
 
   it('toggles the markdown preview and shows the typed content', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderPanel();
 
     await user.click(screen.getByPlaceholderText('Leave a message'));
@@ -101,7 +101,7 @@ describe('<MessageSendingPanel />', () => {
   });
 
   it('shows "Nothing to preview" when previewing an empty message', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderPanel();
 
     await user.click(screen.getByPlaceholderText('Leave a message'));
