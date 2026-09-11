@@ -23,20 +23,11 @@ const PROPS_MOCK: VerificationsTableProps = {
 };
 
 describe('VerificationsTable', () => {
-  it.each`
-    item
-    ${'Date / Time'}
-    ${'Score / Max'}
-    ${'Accuracy'}
-    ${'Details'}
-    ${'20 / 100'}
-    ${'40%'}
-    ${'Your accuracy: 40%.'}
-  `('should render $item', ({ item }: { item: string }) => {
+  it('should render table headers, score, accuracy and details', () => {
     render(<VerificationsTable {...PROPS_MOCK} />);
 
-    const element = screen.getByText(item);
-    expect(element).toBeInTheDocument();
+    const items = ['Date / Time', 'Score / Max', 'Accuracy', 'Details', '20 / 100', '40%', 'Your accuracy: 40%.'];
+    items.forEach(item => expect(screen.getByText(item)).toBeInTheDocument());
   });
 
   it('should render metadata when it was provided', () => {
