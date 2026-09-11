@@ -7,7 +7,7 @@
     "client"
   ],
   "engines": {
-    "node": ">=22",
+    "node": "^22.13.0 || ^24.0.0 || >=26.0.0",
     "npm": ">=10"
   },
   "scripts": {
@@ -44,8 +44,8 @@
     "@types/jest": "30.0.0",
     "@types/lodash": "4.17.24",
     "@types/node": "24.12.0",
-    "@vitest/coverage-v8": "~4.1.11",
-    "@vitest/eslint-plugin": "^1.6.11",
+    "@vitest/coverage-v8": "~5.0.0",
+    "@vitest/eslint-plugin": "^1.6.27",
     "dotenv": "^16.5.0",
     "eslint": "10.0.3",
     "eslint-config-turbo": "2.8.16",
@@ -53,6 +53,7 @@
     "eslint-plugin-boundaries": "5.4.0",
     "globals": "^17.4.0",
     "jest": "30.2.0",
+    "jsdom": "^29.1.1",
     "oxfmt": "0.38.0",
     "std-env": "^4.0.0",
     "ts-node": "10.9.2",
@@ -60,7 +61,8 @@
     "typescript": "5.9.3",
     "typescript-eslint": "8.57.0",
     "unplugin-swc": "^1.5.9",
-    "vitest": "~4.1.11"
+    "vite": "~8.3.0",
+    "vitest": "~5.0.0"
   },
   "packageManager": "npm@10.7.0"
 }

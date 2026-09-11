@@ -58,7 +58,6 @@ export default mergeConfig(
     test: {
       projects: [
         {
-          extends: true,
           test: {
             name: 'node',
             environment: 'node',
@@ -66,7 +65,6 @@ export default mergeConfig(
           },
         },
         {
-          extends: true,
           // Bundle ESM exports so named icon imports survive dependency optimization.
           resolve: { mainFields: ['module', 'main'] },
           test: {
@@ -119,9 +117,7 @@ export default mergeConfig(
           'src/styles/**',
           'src/shared/components/Icons/**',
           'src/**/*.stories.tsx',
-          // NOTE: do not exclude `src/**/index.ts` — v8's exclude matcher also
-          // drops component `index.tsx` files (95 real components), which must
-          // count toward the target. Pure barrels are mostly covered transitively.
+          // Keep barrels in coverage so the measured file set stays unchanged.
           'src/**/*.d.ts',
           'src/setupTests.ts',
         ],

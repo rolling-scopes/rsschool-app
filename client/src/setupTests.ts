@@ -1,5 +1,19 @@
-import '@testing-library/jest-dom/vitest';
+import { expect } from 'vitest';
+import * as matchers from '@testing-library/jest-dom/matchers';
+import type { TestingLibraryMatchers } from '@testing-library/jest-dom/matchers';
 import matchMediaPolyfill from 'mq-polyfill';
+
+// jest-dom's /vitest entry still augments the Vitest 4 Assertion type.
+declare module 'vitest' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type -- Module augmentation requires an interface.
+  interface Matchers<R extends void | Promise<void> = void | Promise<void>, T = unknown> extends TestingLibraryMatchers<
+    T,
+    R
+  > {}
+}
+
+// Legacy module resolution selects jest-dom's assertion types for these runtime matchers.
+expect.extend(matchers as unknown as Parameters<typeof expect.extend>[0]);
 
 matchMediaPolyfill(window);
 

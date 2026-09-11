@@ -5,7 +5,7 @@
 ### Prerequisites
 
 - [Git 2.10+](https://git-scm.com/downloads)
-- [NodeJS LTS](https://nodejs.org/en/)
+- [Node.js 24 LTS](https://nodejs.org/en/) (also used in CI)
 - [Podman](https://podman.io/docs/installation)
 - [podman-compose](https://github.com/containers/podman-compose)
 

@@ -43,15 +43,15 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.51.1",
-    "@testing-library/jest-dom": "6.1.4",
-    "@testing-library/react": "14.3.1",
-    "@testing-library/user-event": "14.5.1",
+    "@testing-library/dom": "10.4.1",
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "14.6.7",
     "@types/aws-lambda": "8.10.126",
     "@types/cookie": "0.5.4",
     "@types/react": "18.3.18",
     "@types/react-dom": "18.3.5",
     "eslint-plugin-testing-library": "7.16.0",
-    "jsdom": "^29.0.2",
     "mq-polyfill": "1.1.8"
   },
   "nextBundleAnalysis": {
