@@ -79,7 +79,7 @@ describe('MainCard', () => {
 
     const nameInput = screen.getByPlaceholderText('First-name Last-name');
     await user.clear(nameInput);
-    await user.type(nameInput, 'Jane Roe');
+    await user.type(nameInput, 'Jane Roe', { skipClick: true });
     await user.click(screen.getByRole('button', { name: 'Save' }));
 
     await waitFor(() => expect(updateProfile).toHaveBeenCalledWith({ name: 'Jane Roe' }));
@@ -119,7 +119,7 @@ describe('MainCard', () => {
     await user.click(screen.getByRole('img', { name: 'edit' }));
     const nameInput = screen.getByPlaceholderText('First-name Last-name');
     await user.clear(nameInput);
-    await user.type(nameInput, 'Rejected Name');
+    await user.type(nameInput, 'Rejected Name', { skipClick: true });
     await user.click(screen.getByRole('button', { name: 'Save' }));
 
     await waitFor(() => expect(updateProfile).toHaveBeenCalled());
@@ -135,7 +135,7 @@ describe('MainCard', () => {
     await user.click(screen.getByRole('img', { name: 'edit' }));
     const nameInput = screen.getByPlaceholderText('First-name Last-name');
     await user.clear(nameInput);
-    await user.type(nameInput, 'Discarded');
+    await user.type(nameInput, 'Discarded', { skipClick: true });
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
 
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
@@ -153,11 +153,11 @@ describe('MainCard', () => {
     const nameInput = screen.getByPlaceholderText('First-name Last-name');
 
     await user.clear(nameInput);
-    await user.type(nameInput, '   ');
+    await user.type(nameInput, '   ', { skipClick: true });
     expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled();
 
     await user.clear(nameInput);
-    await user.type(nameInput, 'Real Name');
+    await user.type(nameInput, 'Real Name', { skipClick: true });
     expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled();
   });
 
