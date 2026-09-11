@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import AboutCard from '../AboutCard';
 
 describe('AboutCard', () => {
@@ -18,7 +18,7 @@ describe('AboutCard', () => {
   });
 
   it('edits, saves the about text and reflects the new value on success', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn().mockResolvedValue(true);
     render(<AboutCard data="old bio" isEditingModeEnabled updateProfile={updateProfile} />);
 
@@ -34,7 +34,7 @@ describe('AboutCard', () => {
   });
 
   it('keeps the previous displayed value when the update fails', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn().mockResolvedValue(false);
     render(<AboutCard data="old bio" isEditingModeEnabled updateProfile={updateProfile} />);
 
@@ -50,7 +50,7 @@ describe('AboutCard', () => {
   });
 
   it('restores the original value when the edit is cancelled', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn().mockResolvedValue(true);
     render(<AboutCard data="original" isEditingModeEnabled updateProfile={updateProfile} />);
 
@@ -69,7 +69,7 @@ describe('AboutCard', () => {
   });
 
   it('disables Save until the text changes', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<AboutCard data="unchanged" isEditingModeEnabled updateProfile={vi.fn()} />);
 
     await user.click(screen.getByRole('img', { name: 'edit' }));
