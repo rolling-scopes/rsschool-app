@@ -1,6 +1,6 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { ReactNode } from 'react';
+import { setupUser } from '@client/__tests__/setupUser';
 import { PromptsPage } from './PromptPage';
 
 // --- Boundary mocks --------------------------------------------------------
@@ -79,7 +79,7 @@ describe('<PromptsPage />', () => {
   });
 
   it('creates a prompt and reloads the list on submit', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<PromptsPage />);
     await screen.findByText('summary');
 
@@ -96,7 +96,7 @@ describe('<PromptsPage />', () => {
   });
 
   it('opens the edit modal prefilled and updates by id', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<PromptsPage />);
     await screen.findByText('summary');
 
@@ -117,7 +117,7 @@ describe('<PromptsPage />', () => {
   });
 
   it('deletes a prompt and reloads the list', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<PromptsPage />);
     await screen.findByText('gratitude');
 
