@@ -92,11 +92,6 @@ describe('ContactsCard', () => {
     expect(screen.getByText(/Contacts aren't filled in/)).toBeInTheDocument();
   });
 
-  it('shows the EmailConfirmation prompt for an unconfirmed email in editing mode', () => {
-    render(<ContactsCard {...makeProps({ connections: { email: { value: 'vasya@tut.by', enabled: false } } })} />);
-    expect(screen.getByText('Send confirmation email?')).toBeInTheDocument();
-  });
-
   it('does not show the EmailConfirmation prompt when the email connection is enabled', () => {
     render(<ContactsCard {...makeProps({ connections: { email: { value: 'vasya@tut.by', enabled: true } } })} />);
     expect(screen.queryByText('Send confirmation email?')).not.toBeInTheDocument();
@@ -111,7 +106,9 @@ describe('ContactsCard', () => {
       />,
     );
 
-    await user.click(screen.getByText('Send confirmation email?'));
+    const confirmation = screen.getByText('Send confirmation email?');
+    expect(confirmation).toBeInTheDocument();
+    await user.click(confirmation);
     expect(sendConfirmationEmail).toHaveBeenCalledTimes(1);
   });
 
@@ -126,7 +123,7 @@ describe('ContactsCard', () => {
     // Telegram is the 3rd contact field in the form
     const telegramInput = within(dialog).getByDisplayValue('televasya');
     await user.clear(telegramInput);
-    await user.type(telegramInput, 'new_tg');
+    await user.type(telegramInput, 'new_tg', { skipClick: true });
 
     await user.click(screen.getByRole('button', { name: 'Save' }));
 
@@ -145,7 +142,7 @@ describe('ContactsCard', () => {
     const dialog = screen.getByRole('dialog');
     const telegramInput = within(dialog).getByDisplayValue('televasya');
     await user.clear(telegramInput);
-    await user.type(telegramInput, 'rejected_tg');
+    await user.type(telegramInput, 'rejected_tg', { skipClick: true });
     await user.click(screen.getByRole('button', { name: 'Save' }));
 
     await waitFor(() => expect(updateProfile).toHaveBeenCalled());
@@ -162,7 +159,7 @@ describe('ContactsCard', () => {
     const dialog = screen.getByRole('dialog');
     const telegramInput = within(dialog).getByDisplayValue('televasya');
     await user.clear(telegramInput);
-    await user.type(telegramInput, 'discarded_tg');
+    await user.type(telegramInput, 'discarded_tg', { skipClick: true });
     expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled();
 
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
