@@ -64,20 +64,6 @@ describe('<SubmitTaskSolution />', () => {
     expect(screen.getByRole('button', { name: /submit task/i })).toBeInTheDocument();
   });
 
-  it('opens the modal and loads mentor-checked course tasks when the trigger is clicked', async () => {
-    const user = userEvent.setup();
-    getCourseTasksWithStudentSolution.mockResolvedValue({ data: tasks });
-    render(<SubmitTaskSolution courseId={10} />);
-
-    await user.click(screen.getByRole('button', { name: /submit task/i }));
-
-    const dialog = await screen.findByRole('dialog', { name: /submit task for mentor review/i });
-    expect(dialog).toBeInTheDocument();
-    expect(getCourseTasksWithStudentSolution).toHaveBeenCalledWith(10);
-    // The solution link input is present.
-    expect(within(dialog).getByLabelText(/add a solution link/i)).toBeInTheDocument();
-  });
-
   it('submits the selected task and solution url, then shows the success result', async () => {
     const user = userEvent.setup();
     getCourseTasksWithStudentSolution.mockResolvedValue({ data: tasks });
@@ -86,6 +72,9 @@ describe('<SubmitTaskSolution />', () => {
 
     await user.click(screen.getByRole('button', { name: /submit task/i }));
     const dialog = await screen.findByRole('dialog', { name: /submit task for mentor review/i });
+    expect(dialog).toBeInTheDocument();
+    expect(getCourseTasksWithStudentSolution).toHaveBeenCalledWith(10);
+    expect(within(dialog).getByLabelText(/add a solution link/i)).toBeInTheDocument();
 
     // Select a task via the antd Select. antd opens its dropdown on mouseDown (matching the
     // ManualSubmitTab reference test). CourseTaskSelect renders the task name inside a <span>
