@@ -96,18 +96,6 @@ describe('StudentFeedback page', () => {
     } as never);
   });
 
-  it('should render the page title', () => {
-    renderPage();
-
-    expect(screen.getByText('Recommendation Letter')).toBeInTheDocument();
-  });
-
-  it('should render the feedback form for the student id from the query', () => {
-    renderPage();
-
-    expect(screen.getByText('form for 7')).toBeInTheDocument();
-  });
-
   it('should not render the form when there is no studentId in the query', () => {
     vi.mocked(useRouter).mockReturnValue({
       push: vi.fn(),
@@ -125,6 +113,8 @@ describe('StudentFeedback page', () => {
   it('should create feedback and reload on submit without an existing feedback id', async () => {
     const user = userEvent.setup();
     renderPage();
+    expect(screen.getByText('Recommendation Letter')).toBeInTheDocument();
+    expect(screen.getByText('form for 7')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'create-feedback' }));
 
