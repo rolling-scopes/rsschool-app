@@ -38,31 +38,6 @@ describe('<SettingsDrawer />', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
-  it('renders the drawer title and the collapsible "Columns visibility" section', () => {
-    render(<SettingsDrawer {...makeProps()} />);
-
-    expect(screen.getByText('Score settings')).toBeInTheDocument();
-    expect(screen.getByText('Columns visibility')).toBeInTheDocument();
-  });
-
-  it('renders a checkbox per course task seeded from isVisible once expanded', async () => {
-    const user = userEvent.setup();
-    render(<SettingsDrawer {...makeProps()} />);
-
-    await openPanel(user);
-
-    expect(screen.getByText('Task A')).toBeInTheDocument();
-    expect(screen.getByText('Task B')).toBeInTheDocument();
-    expect(screen.getByText('Task C')).toBeInTheDocument();
-
-    const checkboxes = screen.getAllByRole('checkbox');
-    expect(checkboxes).toHaveLength(3);
-    // Initial values mirror `isVisible`.
-    expect(checkboxes[0]).toBeChecked();
-    expect(checkboxes[1]).not.toBeChecked();
-    expect(checkboxes[2]).toBeChecked();
-  });
-
   it('calls onCancel when the Cancel action is clicked', async () => {
     const user = userEvent.setup();
     const props = makeProps();
@@ -80,7 +55,20 @@ describe('<SettingsDrawer />', () => {
     const props = makeProps();
     render(<SettingsDrawer {...props} />);
 
+    expect(screen.getByText('Score settings')).toBeInTheDocument();
+    expect(screen.getByText('Columns visibility')).toBeInTheDocument();
+
     await openPanel(user);
+
+    expect(screen.getByText('Task A')).toBeInTheDocument();
+    expect(screen.getByText('Task B')).toBeInTheDocument();
+    expect(screen.getByText('Task C')).toBeInTheDocument();
+
+    const checkboxes = screen.getAllByRole('checkbox');
+    expect(checkboxes).toHaveLength(3);
+    expect(checkboxes[0]).toBeChecked();
+    expect(checkboxes[1]).not.toBeChecked();
+    expect(checkboxes[2]).toBeChecked();
 
     // Uncheck Task A (was visible) → now hidden.
     await user.click(screen.getByRole('checkbox', { name: 'Task A' }));
