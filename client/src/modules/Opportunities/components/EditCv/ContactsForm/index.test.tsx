@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { ContactsForm } from './index';
 
 const mockContactsList = {
@@ -35,7 +35,7 @@ describe('ContactsForm', () => {
   });
 
   test('shows a validation error for an invalid phone number', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<ContactsForm contactsList={{} as never} />);
 
     const phone = await screen.findByLabelText('Phone');
@@ -46,7 +46,7 @@ describe('ContactsForm', () => {
   });
 
   test('accepts a valid phone number (no validation error)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<ContactsForm contactsList={{} as never} />);
 
     const phone = await screen.findByLabelText('Phone');
@@ -56,7 +56,7 @@ describe('ContactsForm', () => {
   });
 
   test('shows a validation error for an invalid github username', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<ContactsForm contactsList={{} as never} />);
 
     const github = await screen.findByLabelText('GitHub');
