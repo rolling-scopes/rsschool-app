@@ -46,23 +46,6 @@ describe('<EventsModal />', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it('renders the title and an empty name input when creating', () => {
-    render(<EventsModal {...makeProps()} />);
-
-    expect(screen.getByText('Event')).toBeInTheDocument();
-    expect(screen.getByLabelText('Name')).toHaveValue('');
-  });
-
-  it('lists the supplied disciplines as options', async () => {
-    const user = userEvent.setup();
-    render(<EventsModal {...makeProps()} />);
-
-    await user.click(screen.getByLabelText('Discipline'));
-
-    expect(await screen.findByText('Frontend', { selector: '.ant-select-item-option-content' })).toBeInTheDocument();
-    expect(screen.getByText('Backend', { selector: '.ant-select-item-option-content' })).toBeInTheDocument();
-  });
-
   it('shows validation errors and does not submit when required fields are empty', async () => {
     const user = userEvent.setup();
     const props = makeProps();
@@ -83,7 +66,11 @@ describe('<EventsModal />', () => {
 
     await user.type(screen.getByLabelText('Name'), 'Kickoff');
     await selectOption(user, 'Event Type', 'Online Lecture');
-    await selectOption(user, 'Discipline', 'Backend');
+    await user.click(screen.getByLabelText('Discipline'));
+    expect(await screen.findByText('Frontend', { selector: '.ant-select-item-option-content' })).toBeInTheDocument();
+    const backendOption = screen.getByText('Backend', { selector: '.ant-select-item-option-content' });
+    expect(backendOption).toBeInTheDocument();
+    await user.click(backendOption);
     await user.type(screen.getByLabelText('Description URL'), 'https://u');
     await user.type(screen.getByLabelText('Description'), 'desc body');
     await user.click(screen.getByRole('button', { name: /save/i }));
@@ -109,10 +96,13 @@ describe('<EventsModal />', () => {
     expect(screen.getByText('Frontend')).toBeInTheDocument();
   });
 
-  it('cancels when the form is untouched', async () => {
+  it('renders empty create fields and cancels when untouched', async () => {
     const user = userEvent.setup();
     const props = makeProps();
     render(<EventsModal {...props} />);
+
+    expect(screen.getByText('Event')).toBeInTheDocument();
+    expect(screen.getByLabelText('Name')).toHaveValue('');
 
     await user.click(screen.getByRole('button', { name: /cancel/i }));
 
