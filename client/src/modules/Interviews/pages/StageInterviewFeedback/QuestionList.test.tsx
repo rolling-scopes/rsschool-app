@@ -2,8 +2,8 @@
 // row-count and delete-icon assertions reach into the DOM by class — intentional here.
 /* eslint-disable testing-library/no-node-access */
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { ReactNode } from 'react';
+import { setupUser } from '@client/__tests__/setupUser';
 import { FeedbackStepId, QuestionItem } from '@client/data/interviews/technical-screening';
 import { InputType } from '@client/data/interviews';
 
@@ -91,7 +91,7 @@ describe('<QuestionList /> question picker + custom + remove', () => {
   });
 
   it('opens the picker modal, validates an empty selection, then adds a pooled question', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(Harness());
 
     expect(screen.getByText('HTML/CSS question')).toBeInTheDocument();
@@ -122,7 +122,7 @@ describe('<QuestionList /> question picker + custom + remove', () => {
   });
 
   it('cancels the picker modal without adding anything', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(Harness());
 
     await user.click(screen.getByRole('button', { name: /Add from list/i }));
@@ -134,7 +134,7 @@ describe('<QuestionList /> question picker + custom + remove', () => {
   });
 
   it('adds a custom question (typed) as a new row and ignores blank input', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(Harness());
 
     await user.click(screen.getByRole('button', { name: /Custom question/i }));
@@ -152,7 +152,7 @@ describe('<QuestionList /> question picker + custom + remove', () => {
   });
 
   it('adds a custom question via Enter key (onPressEnter)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(Harness());
 
     await user.click(screen.getByRole('button', { name: /Custom question/i }));
@@ -164,7 +164,7 @@ describe('<QuestionList /> question picker + custom + remove', () => {
   });
 
   it('cancels the custom-question card without adding', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(Harness());
 
     await user.click(screen.getByRole('button', { name: /Custom question/i }));
@@ -176,7 +176,7 @@ describe('<QuestionList /> question picker + custom + remove', () => {
   });
 
   it('removes a question row (delete icon shown only when more than one row)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(Harness());
 
     // Two rows → delete icons present.
@@ -191,7 +191,7 @@ describe('<QuestionList /> question picker + custom + remove', () => {
   });
 
   it('submits the rated question values through the form', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onFinish = vi.fn();
     render(Harness({ onFinish }));
 
