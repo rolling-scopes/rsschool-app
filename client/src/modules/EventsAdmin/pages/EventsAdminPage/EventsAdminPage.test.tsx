@@ -55,6 +55,13 @@ const events = [
   },
 ] as unknown as EventDto[];
 
+function getEventRow(name: string) {
+  // eslint-disable-next-line testing-library/no-node-access -- Avoid computing accessible names for every table row.
+  const row = screen.getByText(name).closest('tr');
+  expect(row).toHaveRole('row');
+  return row!;
+}
+
 async function selectOption(
   user: ReturnType<typeof userEvent.setup>,
   dialog: HTMLElement,
@@ -116,7 +123,7 @@ describe('<EventsAdminPage />', () => {
     render(<EventsAdminPage />);
     await screen.findByText('Alpha');
 
-    const row = screen.getByRole('row', { name: /Alpha/ });
+    const row = getEventRow('Alpha');
     await user.click(within(row).getByText('Edit'));
     await screen.findByText('Event');
     const dialog = screen.getByRole('dialog');
@@ -135,7 +142,7 @@ describe('<EventsAdminPage />', () => {
     render(<EventsAdminPage />);
     await screen.findByText('Alpha');
 
-    const row = screen.getByRole('row', { name: /Alpha/ });
+    const row = getEventRow('Alpha');
     await user.click(within(row).getByText('Delete'));
     await user.click(await screen.findByRole('button', { name: /^ok$/i }));
 
@@ -150,7 +157,7 @@ describe('<EventsAdminPage />', () => {
     render(<EventsAdminPage />);
     await screen.findByText('Alpha');
 
-    const row = screen.getByRole('row', { name: /Alpha/ });
+    const row = getEventRow('Alpha');
     await user.click(within(row).getByText('Delete'));
     await user.click(await screen.findByRole('button', { name: /^ok$/i }));
 
@@ -166,7 +173,7 @@ describe('<EventsAdminPage />', () => {
     render(<EventsAdminPage />);
     await screen.findByText('Alpha');
 
-    const row = screen.getByRole('row', { name: /Alpha/ });
+    const row = getEventRow('Alpha');
     await user.click(within(row).getByText('Edit'));
     await screen.findByText('Event');
     await user.click(screen.getByRole('button', { name: /save/i }));
