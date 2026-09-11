@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { message } from 'antd';
+import { setupUser } from '@client/__tests__/setupUser';
 import { ContributorModal } from './ContributorModal';
 
 // --- Boundary mocks --------------------------------------------------------
@@ -45,7 +45,7 @@ describe('<ContributorModal />', () => {
   });
 
   it('creates a contributor from the typed values', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onClose = vi.fn();
     render(<ContributorModal contributorId={null} onClose={onClose} />);
 
@@ -61,7 +61,7 @@ describe('<ContributorModal />', () => {
   });
 
   it('updates the existing contributor by id when editing', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onClose = vi.fn();
     render(<ContributorModal contributorId={7} onClose={onClose} />);
 
@@ -80,7 +80,7 @@ describe('<ContributorModal />', () => {
   });
 
   it('shows an error and stays open when validation fails (no user)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const errorSpy = vi.spyOn(message, 'error').mockImplementation(() => ({}) as never);
     const onClose = vi.fn();
     render(<ContributorModal contributorId={null} onClose={onClose} />);
@@ -96,7 +96,7 @@ describe('<ContributorModal />', () => {
   });
 
   it('calls onClose when Cancel is clicked', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onClose = vi.fn();
     render(<ContributorModal contributorId={null} onClose={onClose} />);
 
