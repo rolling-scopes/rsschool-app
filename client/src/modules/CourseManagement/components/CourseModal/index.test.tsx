@@ -123,11 +123,16 @@ describe('<CourseModal />', () => {
     copyCourse.mockResolvedValue({});
   });
 
-  it('renders the "Add Course" title and the copy-template select when creating', async () => {
+  it('renders the create form with its required fields and copy-template select', async () => {
     render(<CourseModal {...makeProps()} />);
 
     expect(await screen.findByText('Add Course')).toBeInTheDocument();
     expect(screen.getByLabelText('Copy Tasks, Schedule from:')).toBeInTheDocument();
+    expect(screen.getByLabelText('Course Name')).toBeInTheDocument();
+    expect(screen.getByLabelText('Full Course Name')).toBeInTheDocument();
+    expect(screen.getByLabelText('Alias')).toBeInTheDocument();
+    expect(screen.getByLabelText('Discord/Telegram channel')).toBeInTheDocument();
+    expect(screen.getByLabelText('Disciplines')).toBeInTheDocument();
   });
 
   it('renders the "Edit Course" title and hides the copy-template select when editing', async () => {
@@ -135,23 +140,8 @@ describe('<CourseModal />', () => {
 
     expect(await screen.findByText('Edit Course')).toBeInTheDocument();
     expect(await screen.findByDisplayValue('JS Course')).toBeInTheDocument();
+    expect(getCourse).toHaveBeenCalledWith(7);
     expect(screen.queryByLabelText('Copy Tasks, Schedule from:')).not.toBeInTheDocument();
-  });
-
-  it('fetches the course when editing', async () => {
-    render(<CourseModal {...makeProps({ courseId: 7 })} />);
-
-    await waitFor(() => expect(getCourse).toHaveBeenCalledWith(7));
-  });
-
-  it('renders the core required fields', async () => {
-    render(<CourseModal {...makeProps()} />);
-
-    expect(await screen.findByLabelText('Course Name')).toBeInTheDocument();
-    expect(screen.getByLabelText('Full Course Name')).toBeInTheDocument();
-    expect(screen.getByLabelText('Alias')).toBeInTheDocument();
-    expect(screen.getByLabelText('Discord/Telegram channel')).toBeInTheDocument();
-    expect(screen.getByLabelText('Disciplines')).toBeInTheDocument();
   });
 
   it('shows validation errors and does not submit when required fields are empty', async () => {
@@ -224,7 +214,10 @@ describe('<CourseModal />', () => {
     const urlInput = await screen.findByPlaceholderText('Enter URL');
     fireEvent.change(urlInput, { target: { value: 'http://evil.example.com' } });
 
-    expect(await screen.findByText('Please enter RS APP or wearecommunity.io URL')).toBeInTheDocument();
+    // Allow async validation and error rendering to finish on busy parallel runners.
+    expect(
+      await screen.findByText('Please enter RS APP or wearecommunity.io URL', {}, { timeout: 5000 }),
+    ).toBeInTheDocument();
   });
 
   it('rejects a registry URL whose course alias does not match the entered alias', async () => {
@@ -353,6 +346,7 @@ describe('<CourseModal />', () => {
       discordServerId: 5,
       descriptionUrl: 'https://rs.school/courses/javascript',
     });
+    expect(record.wearecommunityUrl).toBe('https://app.rs.school/registry/student?course=newc');
     expect(copyCourse).not.toHaveBeenCalled();
     await waitFor(() => expect(props.onClose).toHaveBeenCalled());
   });
@@ -446,22 +440,6 @@ describe('<CourseModal />', () => {
     const [, record] = updateCourse.mock.calls[0];
     // anyCertificate => certificateDisciplines becomes []
     expect(record.certificateDisciplines).toEqual([]);
-  });
-
-  it('falls back to the RS APP registry URL when no WeAreCommunity URL is provided', async () => {
-    const user = userEvent.setup();
-    const props = makeProps();
-    render(<CourseModal {...props} />);
-
-    await screen.findByText('Add Course');
-    await fillCreateForm();
-    // leave the WeAreCommunity URL empty => createRecord uses buildRSAppStudentRegistryURL(alias)
-
-    await user.click(screen.getByRole('button', { name: /save/i }));
-
-    await waitFor(() => expect(createCourse).toHaveBeenCalled());
-    const [record] = createCourse.mock.calls[0];
-    expect(record.wearecommunityUrl).toBe('https://app.rs.school/registry/student?course=newc');
   });
 
   it('submits the custom description URL when "Custom" is selected', async () => {

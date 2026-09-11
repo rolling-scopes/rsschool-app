@@ -26,36 +26,38 @@ const PROPS_SETTINGS_MOCK: ScheduleSettings = {
 };
 
 describe('TableView', () => {
-  it.each`
-    label
-    ${ColumnName.Status}
-    ${ColumnName.Name}
-    ${ColumnName.Type}
-    ${ColumnName.Organizer}
-    ${ColumnName.Weight}
-    ${ColumnName.Score}
-    ${'End Date (UTC +03:00)'}
-    ${'Start Date (UTC +03:00)'}
-  `('should render column "$label"', ({ label }: { label: string }) => {
+  it('should render the column headers', () => {
     render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
 
-    expect(screen.getByText(label)).toBeInTheDocument();
+    for (const label of [
+      ColumnName.Status,
+      ColumnName.Name,
+      ColumnName.Type,
+      ColumnName.Organizer,
+      ColumnName.Weight,
+      ColumnName.Score,
+      'End Date (UTC +03:00)',
+      'Start Date (UTC +03:00)',
+    ]) {
+      expect(screen.getByText(label)).toBeInTheDocument();
+    }
   });
 
-  it.each`
-    value
-    ${'Course Item 0'}
-    ${'2020-02-02 00:00'}
-    ${'2020-03-15 23:59'}
-    ${'×0.2'}
-    ${'20 / 100'}
-    ${'Missed'}
-    ${'Test'}
-  `('should render data field "$value"', ({ value }: { value: string }) => {
+  it('should render the data fields', () => {
     render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
 
-    const [dataField] = screen.getAllByText(value);
-    expect(dataField).toBeInTheDocument();
+    for (const value of [
+      'Course Item 0',
+      '2020-02-02 00:00',
+      '2020-03-15 23:59',
+      '×0.2',
+      '20 / 100',
+      'Missed',
+      'Test',
+    ]) {
+      const [dataField] = screen.getAllByText(value);
+      expect(dataField).toBeInTheDocument();
+    }
   });
 
   it('should not render hidden columns', () => {
@@ -156,12 +158,7 @@ describe('TableView', () => {
     );
   });
 
-  it.each`
-    tag
-    ${TagsEnum.Coding}
-    ${TagsEnum.Test}
-    ${TagsEnum.Interview}
-  `('should check filters in dropdown when tag "$tag" was selected', async ({ tag }: { tag: string }) => {
+  it('should check the selected type filters in the dropdown', async () => {
     vi.spyOn(ReactUse, 'useLocalStorage')
       // Mock useLocalStorage for combinedFilter
       .mockReturnValueOnce([
@@ -177,9 +174,11 @@ describe('TableView', () => {
     }
 
     const filtersDropdown = await screen.findByRole('menu');
-    const menuItem = within(filtersDropdown).getByRole('menuitem', { name: new RegExp(tag, 'i') });
-    const checkbox = within(menuItem).getByRole('checkbox');
-    expect(checkbox).toBeChecked();
+    for (const tag of [TagsEnum.Coding, TagsEnum.Test, TagsEnum.Interview]) {
+      const menuItem = within(filtersDropdown).getByRole('menuitem', { name: new RegExp(tag, 'i') });
+      const checkbox = within(menuItem).getByRole('checkbox');
+      expect(checkbox).toBeChecked();
+    }
   });
 
   it('should not render filtered tags when tags is empty', () => {

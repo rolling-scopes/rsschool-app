@@ -110,7 +110,7 @@ describe('<BadReviewControllers />', () => {
     await user.click(screen.getByRole('button', { name: 'Bad comment' }));
 
     const dialog = await screen.findByRole('dialog');
-    expect(dialog).toBeVisible();
+    await waitFor(() => expect(dialog).toBeVisible());
     await user.click(within(dialog).getByRole('button', { name: 'Cancel' }));
 
     await waitFor(() => {

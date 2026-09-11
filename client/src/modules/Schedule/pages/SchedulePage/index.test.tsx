@@ -54,12 +54,15 @@ vi.mock('@client/modules/Course/contexts', async () => {
 const reactUseState = vi.hoisted(() => ({ mobile: false, retry: vi.fn() }));
 vi.mock('react-use', async () => {
   const actual = await vi.importActual<typeof import('react-use')>('react-use');
+  const React = await vi.importActual<typeof import('react')>('react');
   return {
     ...actual,
     useMedia: () => reactUseState.mobile,
-    useAsyncRetry: (fn: () => Promise<unknown>) => {
-      // Invoke once so the API boundary mocks are exercised, mirroring real behaviour.
-      fn();
+    useAsyncRetry: (fn: () => Promise<unknown>, deps: readonly unknown[]) => {
+      // Fetch after commit; fetching during render can loop when the callback sets state.
+      React.useEffect(() => {
+        void fn();
+      }, deps);
       return { retry: reactUseState.retry, value: scheduleData, loading: false, error: undefined };
     },
   };
@@ -149,6 +152,8 @@ describe('<SchedulePage />', () => {
 
     await waitFor(() => expect(getSchedule).toHaveBeenCalledWith(42));
     expect(getScheduleICalendarToken).toHaveBeenCalledWith(42);
+    expect(getSchedule).toHaveBeenCalledTimes(1);
+    expect(getScheduleICalendarToken).toHaveBeenCalledTimes(1);
   });
 
   it('shows the SettingsPanel with manager actions when the user is a course manager', async () => {

@@ -20,7 +20,10 @@ const renderCertificateCriteriaModal = () => {
 };
 
 describe('CertificateCriteriaModal', () => {
-  beforeAll(() => {
+  let user: ReturnType<typeof userEvent.setup>;
+
+  beforeEach(() => {
+    user = userEvent.setup();
     // mock CoursesTasksApi call
     vi.spyOn(ReactUse, 'useAsync').mockReturnValue({
       value: [
@@ -35,37 +38,20 @@ describe('CertificateCriteriaModal', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
-  const user = userEvent.setup();
-
-  test('should render modal title', async () => {
+  test('should render the initial form with certificate issuance disabled', async () => {
     renderCertificateCriteriaModal();
 
-    const title = await screen.findByText('Certificate Criteria');
-    expect(title).toBeInTheDocument();
-  });
-
-  test('should render alert message', async () => {
-    renderCertificateCriteriaModal();
-
-    const alert = await screen.findByText(CERTIFICATE_ALERT_MESSAGE);
-    expect(alert).toBeInTheDocument();
-  });
-
-  test('should render "add task" button', async () => {
-    renderCertificateCriteriaModal();
-
-    const button = await screen.findByRole('button', { name: /add task/i });
-    expect(button).toBeInTheDocument();
-  });
-
-  test('should render "minimum total score" field', async () => {
-    renderCertificateCriteriaModal();
-
-    const field = await screen.findByText('Minimum Total Score');
-    expect(field).toBeInTheDocument();
+    expect(await screen.findByText('Certificate Criteria')).toBeInTheDocument();
+    expect(screen.getByText(CERTIFICATE_ALERT_MESSAGE)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /add task/i })).toBeInTheDocument();
+    expect(screen.getByText('Minimum Total Score')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /cancel/i })).toBeInTheDocument();
+    const submitButton = screen.getByRole('button', { name: /issue certificates/i });
+    expect(submitButton).toBeInTheDocument();
+    expect(submitButton).toBeDisabled();
   });
 
   test('should render task criteria row on "add task" button click', async () => {
@@ -89,21 +75,6 @@ describe('CertificateCriteriaModal', () => {
     await user.click(removeButton);
 
     expect(screen.queryByText('Minimum Score')).not.toBeInTheDocument();
-  });
-
-  test('should render "cancel" button', async () => {
-    renderCertificateCriteriaModal();
-
-    const button = await screen.findByRole('button', { name: /cancel/i });
-    expect(button).toBeInTheDocument();
-  });
-
-  test('should render "issue certificates" button', async () => {
-    renderCertificateCriteriaModal();
-
-    const button = await screen.findByRole('button', { name: /issue certificates/i });
-    expect(button).toBeInTheDocument();
-    expect(button).toBeDisabled();
   });
 
   test('should enable "issue certificates" button on valid criteria', async () => {

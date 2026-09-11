@@ -1,7 +1,7 @@
 import { useSubmitTeamScore } from './useSubmitTeamScore';
 import { TeamDistributionApi } from '@client/api';
 import { renderHook } from '@testing-library/react';
-import { act } from 'react-dom/test-utils';
+import { act } from 'react';
 
 vi.mock('@client/api');
 
