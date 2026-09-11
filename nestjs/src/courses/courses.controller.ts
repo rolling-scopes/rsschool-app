@@ -18,6 +18,7 @@ import { CoursesService } from './courses.service';
 import { CourseDto, LeaveCourseRequestDto, UpdateCourseDto } from './dto';
 import { CourseScheduleService } from './course-schedule/course-schedule.service';
 import { CreateCourseDto } from './dto/create-course.dto';
+import { toCourseId, toStudentId } from '../core/types/identifiers';
 
 @Controller('courses')
 @ApiTags('courses')
@@ -54,7 +55,7 @@ export class CoursesController {
   @ApiOkResponse({ type: CourseDto })
   @UseGuards(DefaultGuard, CourseGuard)
   public async getCourse(@Req() _: CurrentRequest, @Param('courseId', ParseIntPipe) courseId: number) {
-    const data = await this.courseService.getById(courseId);
+    const data = await this.courseService.getById(toCourseId(courseId));
     return new CourseDto(data);
   }
 
@@ -72,7 +73,7 @@ export class CoursesController {
     if (!this.courseAccessService.canAccessCourseAsManager(req.user, courseId)) {
       throw new ForbiddenException('No access to edit course');
     }
-    const data = await this.courseService.update(courseId, update);
+    const data = await this.courseService.update(toCourseId(courseId), update);
     return new CourseDto(data);
   }
 
@@ -88,7 +89,7 @@ export class CoursesController {
   ) {
     const studentId = req.user.courses[courseId]?.studentId;
     if (studentId) {
-      await this.courseAccessService.leaveAsStudent(courseId, studentId, leaveCourseDto);
+      await this.courseAccessService.leaveAsStudent(toCourseId(courseId), toStudentId(studentId), leaveCourseDto);
     }
   }
 
@@ -99,7 +100,7 @@ export class CoursesController {
   public async rejoinCourse(@Req() req: CurrentRequest, @Param('courseId', ParseIntPipe) courseId: number) {
     const studentId = req.user.courses[courseId]?.studentId;
     if (studentId) {
-      await this.courseAccessService.rejoinAsStudent(courseId, studentId);
+      await this.courseAccessService.rejoinAsStudent(toCourseId(courseId), toStudentId(studentId));
     }
   }
 
@@ -109,12 +110,12 @@ export class CoursesController {
   @ApiBody({ type: CreateCourseDto, required: true })
   @UseGuards(DefaultGuard, RoleGuard)
   @RequiredRoles([CourseRole.Manager, Role.Admin])
-  public async copyCourse(@Param('courseId') courseId: number, @Body() body: CreateCourseDto) {
+  public async copyCourse(@Param('courseId', ParseIntPipe) courseId: number, @Body() body: CreateCourseDto) {
     const created = await this.courseService.create(body);
     if (created.id) {
       await this.courseScheduleService.copyFromTo(courseId, created.id);
     }
-    const course = await this.courseService.getById(created.id);
+    const course = await this.courseService.getById(toCourseId(created.id));
     return new CourseDto(course);
   }
 }
