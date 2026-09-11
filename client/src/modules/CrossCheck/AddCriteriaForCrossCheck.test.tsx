@@ -1,7 +1,6 @@
-/* eslint-disable testing-library/no-node-access */
 // Complements `__tests__/AddCriteriaForCrossCheck.test.tsx` (basic render + save)
 // by covering the per-type payload branches and the canSave validation paths.
-import { render, screen, within } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { AddCriteriaForCrossCheck } from './AddCriteriaForCrossCheck';
 
@@ -43,11 +42,9 @@ describe('<AddCriteriaForCrossCheck /> payload branches', () => {
     await user.type(screen.getByPlaceholderText('Add description'), 'Subtask text');
     expect(addButton).toBeDisabled();
 
-    const maxScoreInput = within(screen.getByText('Add Max Score').closest('.ant-form-item') as HTMLElement).getByRole(
-      'spinbutton',
-    );
+    const maxScoreInput = screen.getByRole('spinbutton');
     await user.clear(maxScoreInput);
-    await user.type(maxScoreInput, '5');
+    await user.type(maxScoreInput, '5', { skipClick: true });
 
     expect(addButton).toBeEnabled();
     await user.click(addButton);
@@ -64,11 +61,9 @@ describe('<AddCriteriaForCrossCheck /> payload branches', () => {
     expect(screen.getByText('Add Max Penalty')).toBeInTheDocument();
 
     await user.type(screen.getByPlaceholderText('Add description'), 'Penalty text');
-    const penaltyInput = within(screen.getByText('Add Max Penalty').closest('.ant-form-item') as HTMLElement).getByRole(
-      'spinbutton',
-    );
+    const penaltyInput = screen.getByRole('spinbutton');
     await user.clear(penaltyInput);
-    await user.type(penaltyInput, '4');
+    await user.type(penaltyInput, '4', { skipClick: true });
 
     await user.click(screen.getByRole('button', { name: 'Add New Criteria' }));
 
