@@ -29,8 +29,7 @@ vi.mock('@client/modules/Course/contexts', () => ({
 
 const { getUserStudents } = vi.hoisted(() => ({ getUserStudents: vi.fn() }));
 
-vi.mock('@client/api', async () => ({
-  ...(await vi.importActual('@client/api')),
+vi.mock('@client/api', () => ({
   StudentsApi: function StudentsApi() {
     return { getUserStudents };
   },
@@ -71,42 +70,17 @@ describe('<Students />', () => {
     getUserStudents.mockResolvedValue({ data: responseData });
   });
 
-  it('fetches students on mount with the initial pagination and no filters', async () => {
+  it('loads students, opens the selected details and closes the drawer', async () => {
+    const user = userEvent.setup();
     render(<Students />);
-
-    await waitFor(() => expect(getUserStudents).toHaveBeenCalled());
-    // (current, pageSize, student, country, city, ongoing, previous)
-    expect(getUserStudents).toHaveBeenCalledWith('1', '20', undefined, undefined, undefined, undefined, undefined);
-  });
-
-  it('renders the fetched students in the table', async () => {
-    render(<Students />);
-
     expect(await screen.findByText('Alice Smith')).toBeInTheDocument();
     expect(screen.getByText('Bob Jones')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /students list/i })).toBeInTheDocument();
-  });
-
-  it('opens the details drawer with the student info when a row is clicked', async () => {
-    render(<Students />);
-    await screen.findByText('Alice Smith');
+    expect(getUserStudents).toHaveBeenCalledWith('1', '20', undefined, undefined, undefined, undefined, undefined);
 
     fireEvent.click(screen.getByText('Alice Smith'));
-
-    // The Drawer renders into the body with the "Student Details" title.
-    const drawerTitle = await screen.findByText('Student Details');
-    expect(drawerTitle).toBeInTheDocument();
-    // StudentInfo renders the selected student's location in the drawer.
+    expect(await screen.findByText('Student Details')).toBeInTheDocument();
     expect(await screen.findByText('Warsaw, Poland')).toBeInTheDocument();
-  });
-
-  it('closes the drawer when its close button is clicked', async () => {
-    const user = userEvent.setup();
-    render(<Students />);
-    await screen.findByText('Alice Smith');
-
-    fireEvent.click(screen.getByText('Alice Smith'));
-    await screen.findByText('Student Details');
 
     await user.click(screen.getByRole('button', { name: /close/i }));
 
