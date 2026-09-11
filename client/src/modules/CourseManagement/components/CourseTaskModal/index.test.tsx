@@ -1,7 +1,7 @@
 /* eslint-disable testing-library/no-node-access */
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { message } from 'antd';
+import { setupUser } from '@client/__tests__/setupUser';
 import { CourseTaskModal } from './index';
 
 // Spy on antd's global message.error to assert the cross-check duration guard fires.
@@ -71,10 +71,11 @@ describe('<CourseTaskModal />', () => {
     getTasks.mockResolvedValue({ data: tasks });
   });
 
-  it('renders nothing when data is null', () => {
+  it('renders nothing when data is null', async () => {
     render(<CourseTaskModal {...makeProps({ data: null })} />);
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    await waitFor(() => expect(getTasks).toHaveBeenCalledOnce());
   });
 
   it('lists fetched tasks and auto-fills Task Type after selection', async () => {
@@ -95,7 +96,7 @@ describe('<CourseTaskModal />', () => {
   });
 
   it('shows a validation message and does not submit when Task is empty', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<CourseTaskModal {...props} />);
 
@@ -129,7 +130,7 @@ describe('<CourseTaskModal />', () => {
   });
 
   it('submits the built record (taskId, checker, scores) when the form is valid', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<CourseTaskModal {...props} />);
 
@@ -153,7 +154,7 @@ describe('<CourseTaskModal />', () => {
   });
 
   it('blocks cross-check submit when the cross-check duration is under 3 days', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     // Seed an editable record so the form already has dates close together; choosing
     // crossCheck makes the (range end → crossCheckEndDate) gap too small.
@@ -177,7 +178,7 @@ describe('<CourseTaskModal />', () => {
   });
 
   it('blocks submit and shows an error when the cross-check duration is under 3 days', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps({
       // Edit an existing cross-check task whose cross-check window is only ~1 day after the
       // task end date — getInitialValues prefills range + crossCheckEndDate, so submit reaches
@@ -209,7 +210,7 @@ describe('<CourseTaskModal />', () => {
   });
 
   it('filters the task options by typed input via filterOption', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<CourseTaskModal {...makeProps()} />);
 
     const taskSelect = await screen.findByLabelText('Task');
@@ -224,7 +225,7 @@ describe('<CourseTaskModal />', () => {
   });
 
   it('renders core fields and defaults, then cancels a pristine form', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<CourseTaskModal {...props} />);
 
