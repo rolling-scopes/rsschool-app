@@ -138,22 +138,6 @@ beforeEach(() => {
 });
 
 describe('useStudentData', () => {
-  test('loads eligible courses and clears the loading flag', async () => {
-    const view = renderHookView();
-
-    await waitFor(() => expect(view.current.loading).toBe(false));
-    expect(view.current.courses).toHaveLength(1);
-    expect(view.current.courses[0]?.id).toBe(1);
-    expect(view.current.registered).toBe(false);
-  });
-
-  test('builds the General/Done steps', async () => {
-    const view = renderHookView();
-
-    await waitFor(() => expect(view.current.loading).toBe(false));
-    expect(view.current.steps.map(s => s.title)).toEqual(['General', 'Done']);
-  });
-
   test('filters out invite-only courses', async () => {
     getCourses.mockResolvedValue([openCourse, { ...openCourse, id: 3, alias: 'x', inviteOnly: true }]);
     const view = renderHookView();
@@ -185,6 +169,11 @@ describe('useStudentData', () => {
     const view = renderHookView();
     await waitFor(() => expect(view.current.loading).toBe(false));
 
+    expect(view.current.courses).toHaveLength(1);
+    expect(view.current.courses[0]?.id).toBe(1);
+    expect(view.current.registered).toBe(false);
+    expect(view.current.steps.map(s => s.title)).toEqual(['General', 'Done']);
+
     await act(async () => {
       await view.current.handleSubmit({
         courseId: 1,
@@ -207,26 +196,8 @@ describe('useStudentData', () => {
       languages: ['English'],
     });
     expect(registerStudent).toHaveBeenCalledWith({ type: 'student', courseId: 1 });
-    await waitFor(() => expect(view.current.currentStep).toBe(1));
-  });
-
-  test('resets the cached auth session so the new course is visible right away', async () => {
-    const view = renderHookView();
-    await waitFor(() => expect(view.current.loading).toBe(false));
-
-    await act(async () => {
-      await view.current.handleSubmit({
-        courseId: 1,
-        location: { countryName: 'Poland', cityName: 'Warsaw' },
-        primaryEmail: 'a@b.c',
-        contactsEpamEmail: 'a@epam.com',
-        firstName: 'Ada',
-        lastName: 'L',
-        languagesMentoring: ['English'],
-      } as never);
-    });
-
     expect(clearAuthUserSessionCache).toHaveBeenCalledWith(42);
+    await waitFor(() => expect(view.current.currentStep).toBe(1));
   });
 
   test('still completes registration when the session cache reset fails', async () => {
