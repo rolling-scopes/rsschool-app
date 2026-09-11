@@ -159,24 +159,6 @@ describe('<CourseModal />', () => {
     expect(props.onClose).not.toHaveBeenCalled();
   });
 
-  it('reveals the Custom Url input when "Custom" description URL is selected', async () => {
-    render(<CourseModal {...makeProps()} />);
-
-    // The Description Url dropdown is long and virtualized (only ~10 options render at a
-    // time); scroll the rc-virtual list so the trailing "Custom" option mounts.
-    const descUrlSelect = await screen.findByLabelText('Description Url');
-    fireEvent.mouseDown(descUrlSelect);
-
-    await waitFor(() => expect(document.querySelector('.rc-virtual-list-holder')).toBeTruthy());
-    const list = document.querySelector('.rc-virtual-list-holder')!;
-    fireEvent.scroll(list, { target: { scrollTop: 1000 } });
-
-    const customOption = await within(document.body).findByText('Custom');
-    fireEvent.click(customOption);
-
-    expect(await screen.findByLabelText('Custom Url')).toBeInTheDocument();
-  });
-
   it('hides the certificate disciplines select when "Any course" is checked', async () => {
     const user = userEvent.setup();
     render(<CourseModal {...makeProps()} />);
@@ -220,45 +202,20 @@ describe('<CourseModal />', () => {
     ).toBeInTheDocument();
   });
 
-  it('rejects a registry URL whose course alias does not match the entered alias', async () => {
+  it('previews the registry URL and validates its course alias', async () => {
     render(<CourseModal {...makeProps()} />);
 
     const alias = await screen.findByLabelText('Alias');
     fireEvent.change(alias, { target: { value: 'my-course' } });
-    // Wait for the watched alias to propagate (the live registry-link preview confirms it).
-    await screen.findByText('https://app.rs.school/registry/student?course=my-course');
-
-    const urlInput = screen.getByPlaceholderText('Enter URL');
-    // A valid registry URL but with a different course alias → alias-mismatch rejection.
-    fireEvent.change(urlInput, { target: { value: 'https://app.rs.school/registry/student?course=other-course' } });
-
-    expect(await screen.findByText('URL must end with my-course')).toBeInTheDocument();
-  });
-
-  it('accepts a registry URL whose course alias matches the entered alias', async () => {
-    render(<CourseModal {...makeProps()} />);
-
-    const alias = await screen.findByLabelText('Alias');
-    fireEvent.change(alias, { target: { value: 'my-course' } });
-    await screen.findByText('https://app.rs.school/registry/student?course=my-course');
-
-    const urlInput = screen.getByPlaceholderText('Enter URL');
-    fireEvent.change(urlInput, { target: { value: 'https://app.rs.school/registry/student?course=my-course' } });
-
-    // No mismatch error should appear for a matching alias.
-    await waitFor(() => {
-      expect(screen.queryByText('URL must end with my-course')).not.toBeInTheDocument();
-      expect(screen.queryByText('Please enter RS APP or wearecommunity.io URL')).not.toBeInTheDocument();
-    });
-  });
-
-  it('shows the RS APP registry link preview once an alias is entered', async () => {
-    render(<CourseModal {...makeProps()} />);
-
-    const alias = await screen.findByLabelText('Alias');
-    fireEvent.change(alias, { target: { value: 'my-course' } });
-
     expect(await screen.findByText('https://app.rs.school/registry/student?course=my-course')).toBeInTheDocument();
+
+    const urlInput = screen.getByPlaceholderText('Enter URL');
+    fireEvent.change(urlInput, { target: { value: 'https://app.rs.school/registry/student?course=other-course' } });
+    expect(await screen.findByText('URL must end with my-course')).toBeInTheDocument();
+
+    fireEvent.change(urlInput, { target: { value: 'https://app.rs.school/registry/student?course=my-course' } });
+    await waitFor(() => expect(screen.queryByText('URL must end with my-course')).not.toBeInTheDocument());
+    expect(screen.queryByText('Please enter RS APP or wearecommunity.io URL')).not.toBeInTheDocument();
   });
 
   it('updates the course with the built record when editing and saving', async () => {
@@ -442,44 +399,41 @@ describe('<CourseModal />', () => {
     expect(record.certificateDisciplines).toEqual([]);
   });
 
-  it('submits the custom description URL when "Custom" is selected', async () => {
+  it('reveals and submits the custom description URL when "Custom" is selected', async () => {
     const user = userEvent.setup();
     const props = makeProps();
     render(<CourseModal {...props} />);
 
     await screen.findByText('Add Course');
 
-    // Fill required text + selects, but pick "Custom" for the description URL.
+    // Reveal the custom field before filling the rest of the form.
+    const descUrlSelect = screen.getByLabelText('Description Url');
+    fireEvent.mouseDown(descUrlSelect);
+    await waitFor(() => expect(document.querySelector('.rc-virtual-list-holder')).toBeTruthy());
+    const holder = document.querySelector('.rc-virtual-list-holder')!;
+    fireEvent.scroll(holder, { target: { scrollTop: 2000 } });
+    fireEvent.click(await screen.findByText('Custom'));
+
+    const customUrl = await screen.findByLabelText('Custom Url');
+    expect(customUrl).toBeInTheDocument();
+    fireEvent.change(customUrl, { target: { value: 'https://example.com/custom-course' } });
+
     fireEvent.change(screen.getByLabelText('Course Name'), { target: { value: 'New Course' } });
     fireEvent.change(screen.getByLabelText('Full Course Name'), { target: { value: 'New Full Course' } });
     fireEvent.change(screen.getByLabelText('Alias'), { target: { value: 'newc' } });
 
     const discord = screen.getByLabelText('Discord/Telegram channel');
     fireEvent.mouseDown(discord);
-    fireEvent.click(await within(document.body).findByText('RS Discord'));
+    fireEvent.click(await screen.findByText('RS Discord'));
 
     const disc = screen.getByLabelText('Disciplines');
     fireEvent.mouseDown(disc);
-    const fe = await within(document.body).findAllByText('Frontend');
+    const fe = await screen.findAllByText('Frontend');
     fireEvent.click(fe[fe.length - 1]);
 
     fireEvent.change(screen.getByTestId('range-start'), { target: { value: '2024-01-01' } });
     fireEvent.change(screen.getByTestId('range-end'), { target: { value: '2024-06-01' } });
-
-    // Close any dropdown left open by the previous selects so descUrl's list is the only one.
     fireEvent.keyDown(document.body, { key: 'Escape', code: 'Escape' });
-
-    // Description URL -> "Custom" (scroll the virtualized list so the trailing option mounts).
-    const descUrlSelect = screen.getByLabelText('Description Url');
-    fireEvent.mouseDown(descUrlSelect);
-    await waitFor(() => expect(document.querySelectorAll('.rc-virtual-list-holder').length).toBeGreaterThan(0));
-    const holders = document.querySelectorAll('.rc-virtual-list-holder');
-    const holder = holders[holders.length - 1];
-    fireEvent.scroll(holder, { target: { scrollTop: 2000 } });
-    fireEvent.click(await within(document.body).findByText('Custom'));
-
-    const customUrl = await screen.findByLabelText('Custom Url');
-    fireEvent.change(customUrl, { target: { value: 'https://example.com/custom-course' } });
 
     await user.click(screen.getByRole('button', { name: /save/i }));
 
