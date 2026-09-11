@@ -11,8 +11,7 @@ const { createPrompt, updatePrompt } = vi.hoisted(() => ({
   updatePrompt: vi.fn(),
 }));
 
-vi.mock('@client/api', async () => ({
-  ...(await vi.importActual('@client/api')),
+vi.mock('@client/api', () => ({
   PromptsApi: function PromptsApi() {
     return { createPrompt, updatePrompt };
   },
@@ -35,22 +34,6 @@ describe('<PromptModal />', () => {
     vi.clearAllMocks();
     createPrompt.mockResolvedValue({});
     updatePrompt.mockResolvedValue({});
-  });
-
-  it('renders the "Add prompt" title with a default temperature when creating', () => {
-    render(<PromptModal {...makeProps()} />);
-
-    expect(screen.getByText('Add prompt')).toBeInTheDocument();
-    expect(screen.getByLabelText('Type')).toHaveValue('');
-    expect(screen.getByLabelText('Temperature')).toHaveValue('0.5');
-  });
-
-  it('renders the "Edit prompt" title and prefills fields when editing', () => {
-    render(<PromptModal {...makeProps({ data: editPrompt })} />);
-
-    expect(screen.getByText('Edit prompt')).toBeInTheDocument();
-    expect(screen.getByLabelText('Type')).toHaveValue('summary');
-    expect(screen.getByLabelText('Text')).toHaveValue('Existing text');
   });
 
   it('shows validation errors and does not submit when required fields are empty', async () => {
@@ -88,7 +71,10 @@ describe('<PromptModal />', () => {
     const props = makeProps({ data: editPrompt });
     render(<PromptModal {...props} />);
 
+    expect(screen.getByText('Edit prompt')).toBeInTheDocument();
+    expect(screen.getByLabelText('Type')).toHaveValue('summary');
     const text = screen.getByLabelText('Text');
+    expect(text).toHaveValue('Existing text');
     await user.clear(text);
     await user.type(text, 'New body');
     await user.click(screen.getByRole('button', { name: /ok/i }));
@@ -115,10 +101,14 @@ describe('<PromptModal />', () => {
     errorSpy.mockRestore();
   });
 
-  it('calls onCancel when Cancel is clicked', async () => {
+  it('renders create defaults and calls onCancel when Cancel is clicked', async () => {
     const user = userEvent.setup();
     const props = makeProps();
     render(<PromptModal {...props} />);
+
+    expect(screen.getByText('Add prompt')).toBeInTheDocument();
+    expect(screen.getByLabelText('Type')).toHaveValue('');
+    expect(screen.getByLabelText('Temperature')).toHaveValue('0.5');
 
     await user.click(screen.getByRole('button', { name: /cancel/i }));
 
