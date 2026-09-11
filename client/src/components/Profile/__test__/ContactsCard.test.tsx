@@ -1,5 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import ContactsCard from '../ContactsCard';
 
 // epamEmail must match /[^@]+_[^@]+@epam.com/ and email must be a valid email so that
@@ -98,7 +98,7 @@ describe('ContactsCard', () => {
   });
 
   it('calls sendConfirmationEmail when the confirmation link is clicked', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const sendConfirmationEmail = vi.fn();
     render(
       <ContactsCard
@@ -113,7 +113,7 @@ describe('ContactsCard', () => {
   });
 
   it('edits a contact, saves and reflects the new value on success (handleSave)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn().mockResolvedValue(true);
     render(<ContactsCard {...makeProps({ updateProfile })} />);
 
@@ -134,7 +134,7 @@ describe('ContactsCard', () => {
   });
 
   it('does not commit displayed values when the update fails (handleSave early return)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn().mockResolvedValue(false);
     render(<ContactsCard {...makeProps({ updateProfile })} />);
 
@@ -151,7 +151,7 @@ describe('ContactsCard', () => {
   });
 
   it('restores the displayed contacts on cancel (handleCancel)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn();
     render(<ContactsCard {...makeProps({ updateProfile })} />);
 
