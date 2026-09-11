@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import ObfuscationModal from '../ObfuscateConfirmationModal';
 
 const { obfuscateProfile } = vi.hoisted(() => ({
@@ -43,7 +43,7 @@ function renderModal(overrides: Partial<React.ComponentProps<typeof ObfuscationM
 
 describe('ObfuscationModal', () => {
   it('obfuscates the profile and reloads when the nickname matches', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderModal({ githubId: 'octocat' });
 
     await user.type(screen.getByPlaceholderText('Enter GitHub nickname'), 'octocat');
@@ -55,7 +55,7 @@ describe('ObfuscationModal', () => {
   });
 
   it('does not obfuscate when githubId is null even if input matches text', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderModal({ githubId: null });
 
     await user.type(screen.getByPlaceholderText('Enter GitHub nickname'), 'whatever');
@@ -66,7 +66,7 @@ describe('ObfuscationModal', () => {
   });
 
   it('clears the validation error when the user types again', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderModal({ githubId: 'octocat' });
 
     const input = screen.getByPlaceholderText('Enter GitHub nickname');
@@ -82,7 +82,7 @@ describe('ObfuscationModal', () => {
   });
 
   it('calls setIsModalVisible(false) and resets state on cancel', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const setIsModalVisible = vi.fn();
     renderModal({ githubId: 'octocat', setIsModalVisible });
 
