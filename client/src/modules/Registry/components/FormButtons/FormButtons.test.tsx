@@ -23,17 +23,6 @@ describe('FormButtons', () => {
     vi.clearAllMocks();
   });
 
-  const user = userEvent.setup();
-
-  test('should render only Submit button', () => {
-    renderFormButtons();
-
-    const submitButton = screen.queryByRole('button', { name: /submit/i });
-    const previousButton = screen.queryByRole('button', { name: /previous/i });
-    expect(submitButton).toBeInTheDocument();
-    expect(previousButton).not.toBeInTheDocument();
-  });
-
   test('should render submit button with custom title', () => {
     const submitTitle = 'Continue';
     renderFormButtons({ submitTitle });
@@ -42,19 +31,12 @@ describe('FormButtons', () => {
     expect(submitButton).toBeInTheDocument();
   });
 
-  test('should render both buttons (submit & previous)', () => {
+  test('should render both buttons and call previousHandler', async () => {
+    const user = userEvent.setup();
     renderFormButtons({ onPrevious: previousHandler });
 
-    const submitButton = screen.queryByRole('button', { name: /submit/i });
-    const previousButton = screen.queryByRole('button', { name: /previous/i });
-    expect(submitButton).toBeInTheDocument();
-    expect(previousButton).toBeInTheDocument();
-  });
-
-  test('should call previousHandler', async () => {
-    renderFormButtons({ onPrevious: previousHandler });
-
-    const button = await screen.findByRole('button', { name: /previous/i });
+    expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
+    const button = screen.getByRole('button', { name: /previous/i });
     expect(button).toBeInTheDocument();
 
     await user.click(button);
@@ -62,10 +44,12 @@ describe('FormButtons', () => {
     expect(previousHandler).toHaveBeenCalled();
   });
 
-  test('should call submitHandler', async () => {
+  test('should render only Submit and call submitHandler', async () => {
+    const user = userEvent.setup();
     renderFormButtons();
 
-    const button = await screen.findByRole('button', { name: /submit/i });
+    expect(screen.queryByRole('button', { name: /previous/i })).not.toBeInTheDocument();
+    const button = screen.getByRole('button', { name: /submit/i });
     expect(button).toBeInTheDocument();
 
     await user.click(button);
