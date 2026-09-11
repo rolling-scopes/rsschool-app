@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import ContactsCardForm from '../ContactsCardForm';
 import { Contact, ContactsKeys } from '@client/services/user';
 
@@ -31,7 +31,7 @@ describe('ContactsCardForm', () => {
   });
 
   it('propagates changed values via setValues on input (handleChanges, valid input)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const setValues = vi.fn();
     const setHasError = vi.fn();
     render(<ContactsCardForm contacts={contacts} setHasError={setHasError} setValues={setValues} />);
@@ -45,7 +45,7 @@ describe('ContactsCardForm', () => {
   });
 
   it('flags an error via setHasError when an invalid email is entered (validation reject branch)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const setValues = vi.fn();
     const setHasError = vi.fn();
     render(<ContactsCardForm contacts={contacts} setHasError={setHasError} setValues={setValues} />);
