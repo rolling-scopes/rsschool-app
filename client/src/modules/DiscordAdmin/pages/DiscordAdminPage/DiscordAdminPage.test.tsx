@@ -1,7 +1,7 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { ReactNode } from 'react';
 import { message } from 'antd';
+import { setupUser } from '@client/__tests__/setupUser';
 import { DiscordServerDto } from '@client/api';
 import { DiscordAdminPage } from './DiscordAdminPage';
 
@@ -68,7 +68,7 @@ describe('<DiscordAdminPage />', () => {
   });
 
   it('creates a server and reloads the list on submit', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<DiscordAdminPage />);
     await screen.findByText('Alpha');
 
@@ -94,7 +94,7 @@ describe('<DiscordAdminPage />', () => {
   });
 
   it('opens the edit modal prefilled and updates by id', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<DiscordAdminPage />);
     await screen.findByText('Alpha');
 
@@ -115,7 +115,7 @@ describe('<DiscordAdminPage />', () => {
   });
 
   it('deletes a server after confirming and reloads', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<DiscordAdminPage />);
     await screen.findByText('Alpha');
 
@@ -128,7 +128,7 @@ describe('<DiscordAdminPage />', () => {
   });
 
   it('shows an error message when delete fails', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const errorSpy = vi.spyOn(message, 'error').mockImplementation(() => ({}) as never);
     deleteDiscordServer.mockRejectedValueOnce(new Error('boom'));
     render(<DiscordAdminPage />);
@@ -145,7 +145,7 @@ describe('<DiscordAdminPage />', () => {
   });
 
   it('shows an error message when create fails and keeps the modal open', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const errorSpy = vi.spyOn(message, 'error').mockImplementation(() => ({}) as never);
     createDiscordServer.mockRejectedValueOnce(new Error('boom'));
     render(<DiscordAdminPage />);
