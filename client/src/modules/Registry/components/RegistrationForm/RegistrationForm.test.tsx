@@ -41,18 +41,14 @@ const renderForm = (type?: 'mentor' | 'student') => {
 };
 
 describe('RegistrationForm', () => {
-  test('should render form', async () => {
+  test('should render the mentor form, steps and current content', async () => {
     renderForm();
 
     const form = await screen.findByRole('form');
     expect(form).toBeInTheDocument();
-  });
-
-  test('should render mentor form title', async () => {
-    renderForm();
-
-    const title = await screen.findByText(FORM_TITLES.mentorForm);
-    expect(title).toBeInTheDocument();
+    expect(screen.getByText(FORM_TITLES.mentorForm)).toBeInTheDocument();
+    steps.forEach(({ title }) => expect(screen.getByText(title)).toBeInTheDocument());
+    expect(screen.getByText(`${steps[0]?.title}-content`)).toBeInTheDocument();
   });
 
   test('should render student form title', async () => {
@@ -60,20 +56,6 @@ describe('RegistrationForm', () => {
 
     const title = await screen.findByText(FORM_TITLES.studentForm);
     expect(title).toBeInTheDocument();
-  });
-
-  test.each(steps)('should render step title', async ({ title }) => {
-    renderForm();
-
-    const stepTitle = await screen.findByText(title);
-    expect(stepTitle).toBeInTheDocument();
-  });
-
-  test('should render current step content', async () => {
-    renderForm();
-
-    const content = await screen.findByText(`${steps[0]?.title}-content`);
-    expect(content).toBeInTheDocument();
   });
 
   test('hides step titles on small screens', async () => {
