@@ -176,15 +176,6 @@ beforeEach(() => {
 });
 
 describe('<Teams />', () => {
-  it('renders the page title and the header when a distribution is loaded', () => {
-    render(<Teams />);
-
-    expect(screen.getByRole('heading', { name: 'RS Teams' })).toBeInTheDocument();
-    expect(screen.getByTestId('teams-header')).toBeInTheDocument();
-    // Default tab renders the teams section.
-    expect(screen.getByTestId('teams-section')).toBeInTheDocument();
-  });
-
   it('does not render the header or any section when there is no distribution', () => {
     distributionState.distribution = undefined;
     render(<Teams />);
@@ -197,19 +188,14 @@ describe('<Teams />', () => {
     const user = userEvent.setup();
     render(<Teams />);
 
+    expect(screen.getByRole('heading', { name: 'RS Teams' })).toBeInTheDocument();
+    expect(screen.getByTestId('teams-header')).toBeInTheDocument();
+    expect(screen.getByTestId('teams-section')).toBeInTheDocument();
+
     await user.click(screen.getByRole('button', { name: 'tab-students' }));
 
     expect(await screen.findByTestId('students-section')).toBeInTheDocument();
     expect(screen.queryByTestId('teams-section')).not.toBeInTheDocument();
-  });
-
-  it('switches the active tab to the my-team section', async () => {
-    const user = userEvent.setup();
-    render(<Teams />);
-
-    await user.click(screen.getByRole('button', { name: 'tab-myteam' }));
-
-    expect(await screen.findByTestId('myteam-section')).toBeInTheDocument();
   });
 
   it('opens the team modal from the header create-team action', async () => {
@@ -280,17 +266,6 @@ describe('<Teams />', () => {
     await waitFor(() => expect(screen.queryByTestId('join-modal')).not.toBeInTheDocument());
   });
 
-  it('creates a new team through the team modal when it is open', async () => {
-    modalForm.open = true;
-    const user = userEvent.setup();
-    render(<Teams />);
-
-    await user.click(await screen.findByRole('button', { name: 'modal-create-submit' }));
-
-    await waitFor(() => expect(createTeam).toHaveBeenCalledWith(42, 5, { name: 'New Team' }));
-    await waitFor(() => expect(distributionState.loadDistribution).toHaveBeenCalled());
-  });
-
   it('updates an existing team through the team modal when an id is supplied', async () => {
     modalForm.open = true;
     const user = userEvent.setup();
@@ -321,7 +296,8 @@ describe('<Teams />', () => {
     render(<Teams />);
 
     await user.click(await screen.findByRole('button', { name: 'modal-create-submit' }));
-    await waitFor(() => expect(createTeam).toHaveBeenCalled());
+    await waitFor(() => expect(createTeam).toHaveBeenCalledWith(42, 5, { name: 'New Team' }));
+    await waitFor(() => expect(distributionState.loadDistribution).toHaveBeenCalled());
 
     // The success confirm dialog offers "Copy invitation password" -> copyPassword(team.id).
     const dialog = await screen.findByRole('dialog');
@@ -341,6 +317,7 @@ describe('<Teams />', () => {
     render(<Teams />);
 
     await user.click(screen.getByRole('button', { name: 'tab-myteam' }));
+    expect(await screen.findByTestId('myteam-section')).toBeInTheDocument();
     await user.click(await screen.findByRole('button', { name: 'copy-password' }));
 
     await waitFor(() => expect(getTeamPassword).toHaveBeenCalledWith(42, 5, 8));
