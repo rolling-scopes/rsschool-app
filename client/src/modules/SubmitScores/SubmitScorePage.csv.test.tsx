@@ -32,11 +32,15 @@ const { getCourseTasks } = vi.hoisted(() => ({
   }),
 }));
 
-vi.mock('@client/api', async () => ({
-  ...(await vi.importActual('@client/api')),
+vi.mock('@client/api', () => ({
   CoursesTasksApi: function CoursesTasksApi() {
     return { getCourseTasks };
   },
+}));
+
+const { showError } = vi.hoisted(() => ({ showError: vi.fn() }));
+vi.mock('@client/hooks', () => ({
+  useMessage: () => ({ message: { error: showError, success: vi.fn() } }),
 }));
 
 const { postMultipleScores } = vi.hoisted(() => ({ postMultipleScores: vi.fn() }));
@@ -221,10 +225,12 @@ describe('<SubmitScorePage /> CSV upload flow', () => {
     await user.click(screen.getByRole('button', { name: 'mock-select' }));
     await user.click(screen.getByRole('button', { name: /^Submit$/i }));
 
-    await waitFor(() => {
-      // The component routes "Incorrect data" errors to message.error; the network call never happens.
-      expect(postMultipleScores).not.toHaveBeenCalled();
-    });
+    await waitFor(() =>
+      expect(showError).toHaveBeenCalledWith(
+        'Incorrect data: CSV file should contain the headers named "GitHub" and "Score"!',
+      ),
+    );
+    expect(postMultipleScores).not.toHaveBeenCalled();
   });
 
   it('handles a generic upload failure without rendering a results summary', async () => {
@@ -243,6 +249,7 @@ describe('<SubmitScorePage /> CSV upload flow', () => {
     await user.click(screen.getByRole('button', { name: /^Submit$/i }));
 
     await waitFor(() => expect(postMultipleScores).toHaveBeenCalled());
+    await waitFor(() => expect(showError).toHaveBeenCalledWith('An error occurred. Please try later.'));
     // The catch branch swallows the error → no Summary table is rendered.
     expect(screen.queryByText('Summary')).not.toBeInTheDocument();
   });
@@ -262,9 +269,8 @@ describe('<SubmitScorePage /> CSV upload flow', () => {
     await user.click(screen.getByRole('button', { name: /^Submit$/i }));
 
     // parseFiles rejects → handleSubmit catch → the network call never happens.
-    await waitFor(() => {
-      expect(screen.queryByText('Summary')).not.toBeInTheDocument();
-    });
+    await waitFor(() => expect(showError).toHaveBeenCalledWith('An error occurred. Please try later.'));
+    expect(screen.queryByText('Summary')).not.toBeInTheDocument();
     expect(postMultipleScores).not.toHaveBeenCalled();
   });
 
