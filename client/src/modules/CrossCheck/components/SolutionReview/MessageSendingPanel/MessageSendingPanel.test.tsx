@@ -34,22 +34,21 @@ function renderPanel(props: Partial<MessageSendingPanelProps> = {}) {
 }
 
 describe('<MessageSendingPanel />', () => {
-  it('renders a collapsed "Leave a message" input initially', () => {
-    renderPanel();
-
-    expect(screen.getByPlaceholderText('Leave a message')).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /Send message/ })).not.toBeInTheDocument();
-  });
-
-  it('opens the editing panel when the collapsed input is clicked', async () => {
+  it('renders collapsed controls, opens on click and cancels', async () => {
     const user = userEvent.setup();
     renderPanel();
 
-    await user.click(screen.getByPlaceholderText('Leave a message'));
+    const collapsed = screen.getByPlaceholderText('Leave a message');
+    expect(collapsed).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Send message/ })).not.toBeInTheDocument();
 
+    await user.click(collapsed);
     expect(screen.getByRole('button', { name: /Send message/ })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Preview' })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
+
+    expect(screen.queryByRole('button', { name: /Send message/ })).not.toBeInTheDocument();
   });
 
   it('opens the editing panel when Enter is pressed on the collapsed input', async () => {
@@ -61,16 +60,6 @@ describe('<MessageSendingPanel />', () => {
     await user.keyboard('{Enter}');
 
     expect(screen.getByRole('button', { name: /Send message/ })).toBeInTheDocument();
-  });
-
-  it('closes the panel again via Cancel', async () => {
-    const user = userEvent.setup();
-    renderPanel();
-
-    await user.click(screen.getByPlaceholderText('Leave a message'));
-    await user.click(screen.getByRole('button', { name: 'Cancel' }));
-
-    expect(screen.queryByRole('button', { name: /Send message/ })).not.toBeInTheDocument();
   });
 
   it('submits the typed message content through the form', async () => {
