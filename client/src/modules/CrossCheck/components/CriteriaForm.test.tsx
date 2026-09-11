@@ -32,33 +32,17 @@ describe('<CriteriaForm />', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it('renders the title, criteria texts and max-score avatars', () => {
-    render(<CriteriaForm {...makeProps()} />);
-
-    expect(screen.getByRole('heading', { name: 'Section A' })).toBeInTheDocument();
-    expect(screen.getByText('Has tests')).toBeInTheDocument();
-    expect(screen.getByText('Has docs')).toBeInTheDocument();
-    // max-score avatars
-    expect(screen.getByText('5')).toBeInTheDocument();
-    expect(screen.getByText('3')).toBeInTheDocument();
-  });
-
-  it('does not render a Self Review column when no self review is provided', () => {
-    render(<CriteriaForm {...makeProps()} />);
-
-    expect(screen.queryByText('Self Review')).not.toBeInTheDocument();
-  });
-
-  it('renders a Self Review column when a self review is provided', () => {
-    render(<CriteriaForm {...makeProps({ selfReview: [{ criteriaId: 'c1', percentage: 1 }] })} />);
-
-    expect(screen.getAllByText('Self Review').length).toBeGreaterThan(0);
-  });
-
   it('reports a percentage for each non-title criteria when the reviewer rates one', async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(<CriteriaForm {...makeProps({ onChange })} />);
+
+    expect(screen.getByRole('heading', { name: 'Section A' })).toBeInTheDocument();
+    expect(screen.getByText('Has tests')).toBeInTheDocument();
+    expect(screen.getByText('Has docs')).toBeInTheDocument();
+    expect(screen.getByText('5')).toBeInTheDocument();
+    expect(screen.getByText('3')).toBeInTheDocument();
+    expect(screen.queryByText('Self Review')).not.toBeInTheDocument();
 
     // The first criteria's rate group; pick the third star ("Done" => 100%).
     const firstCard = screen.getByText('Has tests').closest('.ant-card') as HTMLElement;
@@ -72,6 +56,12 @@ describe('<CriteriaForm />', () => {
       ]),
       [],
     );
+  });
+
+  it('renders a Self Review column when a self review is provided', () => {
+    render(<CriteriaForm {...makeProps({ selfReview: [{ criteriaId: 'c1', percentage: 1 }] })} />);
+
+    expect(screen.getAllByText('Self Review').length).toBeGreaterThan(0);
   });
 
   it('emits a partial percentage when the reviewer picks the middle rating', async () => {
