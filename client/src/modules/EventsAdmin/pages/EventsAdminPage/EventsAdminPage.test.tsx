@@ -1,7 +1,7 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { ReactNode } from 'react';
 import { message } from 'antd';
+import { setupUser } from '@client/__tests__/setupUser';
 import { DisciplineDto, EventDto } from '@client/api';
 import { EventsAdminPage } from './EventsAdminPage';
 
@@ -63,7 +63,7 @@ function getEventRow(name: string) {
 }
 
 async function selectOption(
-  user: ReturnType<typeof userEvent.setup>,
+  user: ReturnType<typeof setupUser>,
   dialog: HTMLElement,
   label: string,
   text: string,
@@ -93,7 +93,7 @@ describe('<EventsAdminPage />', () => {
   });
 
   it('creates an event with the mapped CreateEventDto payload', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<EventsAdminPage />);
     await screen.findByText('Alpha');
 
@@ -119,7 +119,7 @@ describe('<EventsAdminPage />', () => {
   });
 
   it('opens the edit modal prefilled and updates by id', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<EventsAdminPage />);
     await screen.findByText('Alpha');
 
@@ -138,7 +138,7 @@ describe('<EventsAdminPage />', () => {
   });
 
   it('deletes an event after confirming and reloads', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<EventsAdminPage />);
     await screen.findByText('Alpha');
 
@@ -151,7 +151,7 @@ describe('<EventsAdminPage />', () => {
   });
 
   it('shows an error message when delete fails', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const errorSpy = vi.spyOn(message, 'error').mockImplementation(() => ({}) as never);
     deleteEvent.mockRejectedValueOnce(new Error('boom'));
     render(<EventsAdminPage />);
@@ -166,7 +166,7 @@ describe('<EventsAdminPage />', () => {
   });
 
   it('shows an error message when save fails', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const errorSpy = vi.spyOn(message, 'error').mockImplementation(() => ({}) as never);
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
     updateEvent.mockRejectedValueOnce(new Error('boom'));
