@@ -66,20 +66,6 @@ describe('AssignReviewerModal', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
-  it('should render the modal title with the student name and the review details', () => {
-    renderModal();
-
-    expect(screen.getByText(/Assign Reviewer for student-github/i)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: REVIEW_MOCK.taskName })).toHaveAttribute(
-      'href',
-      REVIEW_MOCK.taskDescriptionUrl,
-    );
-    expect(screen.getByRole('link', { name: REVIEW_MOCK.solutionUrl })).toHaveAttribute(
-      'href',
-      REVIEW_MOCK.solutionUrl,
-    );
-  });
-
   it('should assign the reviewer and show the success result on submit', async () => {
     const user = userEvent.setup();
     const { onSubmit } = renderModal();
@@ -126,6 +112,16 @@ describe('AssignReviewerModal', () => {
   it('should reset state and call onClose when cancelled', async () => {
     const user = userEvent.setup();
     const { onClose } = renderModal();
+
+    expect(screen.getByText(/Assign Reviewer for student-github/i)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: REVIEW_MOCK.taskName })).toHaveAttribute(
+      'href',
+      REVIEW_MOCK.taskDescriptionUrl,
+    );
+    expect(screen.getByRole('link', { name: REVIEW_MOCK.solutionUrl })).toHaveAttribute(
+      'href',
+      REVIEW_MOCK.solutionUrl,
+    );
 
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
 
