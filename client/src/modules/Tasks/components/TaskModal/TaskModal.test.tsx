@@ -14,68 +14,33 @@ import { ModalProps, TaskModal } from './TaskModal';
 const mockData = generateData();
 
 describe('TaskModal', () => {
-  test('should render modal with proper title', () => {
+  test('should render the edit title, fields, placeholders and settings panels', () => {
     render(<TaskModal {...mockData} />);
 
-    const modal = screen.getByRole('dialog');
-    expect(modal).toBeInTheDocument();
-
-    const title = screen.getByText(MODAL_TITLES.edit);
-    expect(title).toBeInTheDocument();
-  });
-
-  test('should render labels', () => {
-    render(<TaskModal {...mockData} />);
-
-    const name = screen.getByLabelText(LABELS.name);
-    const taskType = screen.getByLabelText(LABELS.taskType);
-    const discipline = screen.getByLabelText(LABELS.discipline);
-    const tags = screen.getByLabelText(LABELS.tags);
-    const descriptionUrl = screen.getByLabelText(LABELS.descriptionUrl);
-    const summary = screen.getByLabelText(LABELS.summary);
-    const skills = screen.getByLabelText(LABELS.skills);
-
-    expect(name).toBeInTheDocument();
-    expect(taskType).toBeInTheDocument();
-    expect(discipline).toBeInTheDocument();
-    expect(tags).toBeInTheDocument();
-    expect(descriptionUrl).toBeInTheDocument();
-    expect(summary).toBeInTheDocument();
-    expect(skills).toBeInTheDocument();
-  });
-
-  test('should render "Used in courses" card', () => {
-    render(<TaskModal {...mockData} />);
-
-    const card = screen.getByText(LABELS.usedInCourses);
-    expect(card).toBeInTheDocument();
-  });
-
-  // Inputs
-  test('should render input placeholders', () => {
-    render(<TaskModal {...mockData} />);
-
-    const name = screen.getByPlaceholderText(PLACEHOLDERS.name);
-    const descriptionUrl = screen.getByPlaceholderText(PLACEHOLDERS.descriptionUrl);
-    const summary = screen.getByPlaceholderText(PLACEHOLDERS.summary);
-
-    expect(name).toBeInTheDocument();
-    expect(descriptionUrl).toBeInTheDocument();
-    expect(summary).toBeInTheDocument();
-  });
-
-  // Selects
-  test('should render select placeholders', () => {
-    render(<TaskModal {...generateData(true)} />);
-    const taskType = screen.getByText(PLACEHOLDERS.taskType);
-    const discipline = screen.getByText(PLACEHOLDERS.discipline);
-    const tags = screen.getByText(PLACEHOLDERS.tags);
-    const skills = screen.getByText(PLACEHOLDERS.skills);
-
-    expect(taskType).toBeInTheDocument();
-    expect(discipline).toBeInTheDocument();
-    expect(tags).toBeInTheDocument();
-    expect(skills).toBeInTheDocument();
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByText(MODAL_TITLES.edit)).toBeInTheDocument();
+    for (const label of [
+      LABELS.name,
+      LABELS.taskType,
+      LABELS.discipline,
+      LABELS.tags,
+      LABELS.descriptionUrl,
+      LABELS.summary,
+      LABELS.skills,
+    ]) {
+      expect(screen.getByLabelText(label)).toBeInTheDocument();
+    }
+    for (const placeholder of [PLACEHOLDERS.name, PLACEHOLDERS.descriptionUrl, PLACEHOLDERS.summary]) {
+      expect(screen.getByPlaceholderText(placeholder)).toBeInTheDocument();
+    }
+    for (const title of [
+      LABELS.usedInCourses,
+      TASK_SETTINGS_HEADERS.crossCheckCriteria,
+      TASK_SETTINGS_HEADERS.github,
+      TASK_SETTINGS_HEADERS.jsonAttributes,
+    ]) {
+      expect(screen.getByText(title)).toBeInTheDocument();
+    }
   });
 
   describe('incorrect input handling', () => {
@@ -103,6 +68,15 @@ describe('TaskModal', () => {
       const user = userEvent.setup();
       render(<TaskModal {...generateData(true)} />);
 
+      for (const placeholder of [
+        PLACEHOLDERS.taskType,
+        PLACEHOLDERS.discipline,
+        PLACEHOLDERS.tags,
+        PLACEHOLDERS.skills,
+      ]) {
+        expect(screen.getByText(placeholder)).toBeInTheDocument();
+      }
+
       const save = screen.getByRole('button', { name: /save/i });
       expect(save).toBeInTheDocument();
 
@@ -121,18 +95,6 @@ describe('TaskModal', () => {
         expect(error).toBeInTheDocument();
       });
     });
-  });
-
-  test('should render task setting panel headers', () => {
-    render(<TaskModal {...mockData} />);
-
-    const crossCheckCriteria = screen.getByText(TASK_SETTINGS_HEADERS.crossCheckCriteria);
-    const github = screen.getByText(TASK_SETTINGS_HEADERS.github);
-    const jsonAttributes = screen.getByText(TASK_SETTINGS_HEADERS.jsonAttributes);
-
-    expect(crossCheckCriteria).toBeInTheDocument();
-    expect(github).toBeInTheDocument();
-    expect(jsonAttributes).toBeInTheDocument();
   });
 
   test('renders an empty courses card when the task is not used in any course', () => {
