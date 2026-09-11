@@ -137,7 +137,7 @@ describe('<SchedulePage />', () => {
     isCourseManager.mockReturnValue(true);
   });
 
-  it('renders the page title, status tabs and the schedule table rows', async () => {
+  it('fetches the active course schedule and renders its rows, tabs and manager actions', async () => {
     render(<SchedulePage />);
 
     // PageLayout's Header renders the title (+ course name) as plain text, not a heading role.
@@ -145,20 +145,11 @@ describe('<SchedulePage />', () => {
     expect(screen.getByRole('tab', { name: /all/i })).toBeInTheDocument();
     expect(screen.getByText('Course Item 0')).toBeInTheDocument();
     expect(screen.getByText('Course Item 1')).toBeInTheDocument();
-  });
-
-  it('fetches the schedule and the ical token for the active course on mount', async () => {
-    render(<SchedulePage />);
 
     await waitFor(() => expect(getSchedule).toHaveBeenCalledWith(42));
     expect(getScheduleICalendarToken).toHaveBeenCalledWith(42);
     expect(getSchedule).toHaveBeenCalledTimes(1);
     expect(getScheduleICalendarToken).toHaveBeenCalledTimes(1);
-  });
-
-  it('shows the SettingsPanel with manager actions when the user is a course manager', async () => {
-    render(<SchedulePage />);
-
     expect(await screen.findByTestId('Task')).toBeInTheDocument();
     expect(screen.getByTestId('Event')).toBeInTheDocument();
   });
