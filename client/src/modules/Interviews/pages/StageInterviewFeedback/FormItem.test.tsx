@@ -36,6 +36,12 @@ function renderItem(
 // We pass `form={undefined}` for items that never touch `form` (every branch except Radio,
 // whose NestedRadio child needs a real form). For the Radio case we render with a real form.
 
+function getRadio(label: string) {
+  const radio = screen.getByLabelText(label);
+  expect(radio).toHaveRole('radio');
+  return radio;
+}
+
 describe('FormItem branches', () => {
   it('renders a TextArea and submits its typed value', async () => {
     const user = userEvent.setup();
@@ -240,29 +246,18 @@ describe('FormItem Radio + nested conditional (real form)', () => {
       </RadioHarness>,
     );
 
+    expect(screen.getAllByRole('radio')).toHaveLength(2);
     // Initially nested reasons are hidden.
     expect(screen.queryByRole('radio', { name: 'Has a reason.' })).not.toBeInTheDocument();
 
     // Selecting "No, failed." (which has child options) reveals the nested radios.
-    await user.click(screen.getByRole('radio', { name: 'No, failed.' }));
+    await user.click(getRadio('No, failed.'));
     expect(await screen.findByRole('radio', { name: 'Has a reason.' })).toBeInTheDocument();
-    expect(screen.getByRole('radio', { name: 'Ignores mentor.' })).toBeInTheDocument();
+    expect(getRadio('Ignores mentor.')).toBeInTheDocument();
 
     // Selecting the option WITHOUT children hides the nested group again.
-    await user.click(screen.getByRole('radio', { name: "Yes, it's ok." }));
+    await user.click(getRadio("Yes, it's ok."));
     await waitFor(() => expect(screen.queryByRole('radio', { name: 'Has a reason.' })).not.toBeInTheDocument());
-  });
-
-  it('does not render a nested group for a childless option', () => {
-    const user = userEvent.setup();
-    render(
-      <RadioHarness>
-        {form => <FormItem item={radioItem} form={form} stepId={FeedbackStepId.Introduction} />}
-      </RadioHarness>,
-    );
-    // "Yes, it's ok." has no `options`, so NestedRadio returns null → no extra radios.
-    void user;
-    expect(screen.getAllByRole('radio')).toHaveLength(2); // only the two top-level options
   });
 });
 
@@ -397,7 +392,7 @@ describe('FormItem Radio nested group structure', () => {
     }
     render(<Harness />);
 
-    await user.click(screen.getByRole('radio', { name: 'No, failed.' }));
+    await user.click(getRadio('No, failed.'));
     const groups = screen.getAllByRole('radiogroup');
     // Outer group + the revealed nested group.
     expect(groups.length).toBeGreaterThanOrEqual(2);
