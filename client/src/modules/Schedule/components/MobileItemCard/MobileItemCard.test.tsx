@@ -39,7 +39,9 @@ describe('<MobileItemCard />', () => {
   it('falls back to an empty href when the item has no description URL', () => {
     render(<MobileItemCard item={makeItem({ descriptionUrl: '' })} timezone="Europe/Moscow" />);
 
-    const link = screen.getByRole('link', { name: 'Intro to JS' });
+    const heading = screen.getByRole('heading', { name: 'Intro to JS' });
+    // eslint-disable-next-line testing-library/no-node-access -- Empty-href anchors have no link role in DOM queries.
+    const link = heading.closest('a');
     expect(link).toHaveAttribute('href', '');
   });
 
