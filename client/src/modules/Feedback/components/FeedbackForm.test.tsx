@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { setupUser } from '@client/__tests__/setupUser';
 import {
   CreateStudentFeedbackDtoEnglishLevelEnum as EnglishLevelEnum,
   CreateStudentFeedbackDtoRecommendationEnum as RecommendationEnum,
@@ -86,7 +86,7 @@ describe('<FeedbackForm />', () => {
 
   it('renders the form fields and blocks submission when required fields are empty', async () => {
     const onSubmit = vi.fn().mockResolvedValue(undefined);
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<FeedbackForm studentId={1} students={[makeStudent()]} onSubmit={onSubmit} />);
 
     // Recommendation radios.
@@ -120,7 +120,7 @@ describe('<FeedbackForm />', () => {
 
   it('submits the full payload to onSubmit when required fields are filled (Hire, english level, soft skills)', async () => {
     const onSubmit = vi.fn().mockResolvedValue(undefined);
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<FeedbackForm studentId={1} students={[makeStudent()]} onSubmit={onSubmit} />);
 
     // antd Radio.Button inner input has `pointer-events: none` in jsdom, which
@@ -158,7 +158,7 @@ describe('<FeedbackForm />', () => {
 
   it('defaults englishLevel to Unknown and suggestions to empty string when left blank', async () => {
     const onSubmit = vi.fn().mockResolvedValue(undefined);
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<FeedbackForm studentId={1} students={[makeStudent()]} onSubmit={onSubmit} />);
 
     fireEvent.click(getRadio(/not hire/i));
@@ -175,7 +175,7 @@ describe('<FeedbackForm />', () => {
 
   it('prefills values from an existing feedback and submits with the existing feedback id', async () => {
     const onSubmit = vi.fn().mockResolvedValue(undefined);
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<FeedbackForm studentId={2} students={[studentWithFeedback]} onSubmit={onSubmit} />);
 
     // Prefilled comment and suggestions.
@@ -244,7 +244,7 @@ describe('<FeedbackForm />', () => {
 
   it('shows an error message when onSubmit rejects', async () => {
     const onSubmit = vi.fn().mockRejectedValue(new Error('boom'));
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<FeedbackForm studentId={1} students={[makeStudent()]} onSubmit={onSubmit} />);
 
     fireEvent.click(getRadio(/^hire$/i));
