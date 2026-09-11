@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { Button, Form } from 'antd';
+import { setupUser } from '@client/__tests__/setupUser';
 import MarkdownInput from './MarkdownInput';
 
 // react-markdown is an ESM micromark pipeline that is heavy and brittle under jsdom.
@@ -35,7 +35,7 @@ const LONG_COMMENT = 'This is a detailed markdown comment well over thirty chara
 
 describe('MarkdownInput', () => {
   it('renders write controls, previews the empty warning and toggles back', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderMarkdownInput();
 
     expect(screen.getByLabelText(/Comment \(markdown syntax is supported\)/i)).toBeInTheDocument();
@@ -51,7 +51,7 @@ describe('MarkdownInput', () => {
   });
 
   it('switches to preview mode and renders the typed text through react-markdown', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderMarkdownInput();
 
     await user.type(screen.getByRole('textbox'), LONG_COMMENT);
@@ -67,7 +67,7 @@ describe('MarkdownInput', () => {
   });
 
   it('shows "Please leave a detailed comment" in preview when text is shorter than 30 chars', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { container } = renderMarkdownInput();
 
     await user.type(screen.getByRole('textbox'), 'short text');
@@ -81,7 +81,7 @@ describe('MarkdownInput', () => {
   });
 
   it('clears the text and leaves preview mode when the form is reset', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<ResettableMarkdownInput />);
 
     // Type, switch to preview, then reset the form (fires the Form.Item onReset -> resetText).
@@ -99,7 +99,7 @@ describe('MarkdownInput', () => {
   });
 
   it('seeds the preview text from a non-empty historicalCommentSelected prop', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderMarkdownInput('Historical pre-filled comment longer than thirty chars.');
 
     await user.click(screen.getByRole('button', { name: /preview/i }));
@@ -108,7 +108,7 @@ describe('MarkdownInput', () => {
   });
 
   it('updates the previewed text when a new historical comment is selected', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { rerender } = renderMarkdownInput('');
 
     rerender(
