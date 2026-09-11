@@ -27,39 +27,19 @@ const renderGeneralSection = (courses?: CourseDto[]) => {
 };
 
 describe('GeneralSection', () => {
-  test.each`
-    title
-    ${CARD_TITLES.personalInfo}
-    ${CARD_TITLES.contactInfo}
-  `('should render mentor form card with $title title', async ({ title }) => {
+  test('renders personal and contact cards without course details on the mentor form', () => {
     renderGeneralSection();
 
-    const card = await screen.findByRole('heading', { name: title });
-    expect(card).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: CARD_TITLES.personalInfo })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: CARD_TITLES.contactInfo })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: CARD_TITLES.courseDetails })).not.toBeInTheDocument();
   });
 
-  test('should not render CourseDetails card on mentor form', async () => {
-    renderGeneralSection();
-
-    const card = screen.queryByRole('heading', { name: CARD_TITLES.courseDetails });
-    expect(card).not.toBeInTheDocument();
-  });
-
-  test.each`
-    title
-    ${CARD_TITLES.courseDetails}
-    ${CARD_TITLES.personalInfo}
-  `('should render student form card with $title title', async ({ title }) => {
+  test('renders course and personal cards without contact information on the student form', () => {
     renderGeneralSection([]);
 
-    const card = await screen.findByRole('heading', { name: title });
-    expect(card).toBeInTheDocument();
-  });
-
-  test('should not render ContactInfo card on student form', async () => {
-    renderGeneralSection([]);
-
-    const card = screen.queryByRole('heading', { name: CARD_TITLES.contactInfo });
-    expect(card).not.toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: CARD_TITLES.courseDetails })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: CARD_TITLES.personalInfo })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: CARD_TITLES.contactInfo })).not.toBeInTheDocument();
   });
 });
