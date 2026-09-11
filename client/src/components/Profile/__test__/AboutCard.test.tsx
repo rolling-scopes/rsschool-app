@@ -26,7 +26,7 @@ describe('AboutCard', () => {
 
     const textarea = screen.getByRole('textbox');
     await user.clear(textarea);
-    await user.type(textarea, 'new bio');
+    await user.type(textarea, 'new bio', { skipClick: true });
     await user.click(screen.getByRole('button', { name: 'Save' }));
 
     await waitFor(() => expect(updateProfile).toHaveBeenCalledWith({ aboutMyself: 'new bio' }));
@@ -41,7 +41,7 @@ describe('AboutCard', () => {
     await user.click(screen.getByRole('img', { name: 'edit' }));
     const textarea = screen.getByRole('textbox');
     await user.clear(textarea);
-    await user.type(textarea, 'failed bio');
+    await user.type(textarea, 'failed bio', { skipClick: true });
     await user.click(screen.getByRole('button', { name: 'Save' }));
 
     await waitFor(() => expect(updateProfile).toHaveBeenCalledWith({ aboutMyself: 'failed bio' }));
@@ -57,7 +57,7 @@ describe('AboutCard', () => {
     await user.click(screen.getByRole('img', { name: 'edit' }));
     const textarea = screen.getByRole('textbox');
     await user.clear(textarea);
-    await user.type(textarea, 'discarded');
+    await user.type(textarea, 'discarded', { skipClick: true });
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
 
     expect(updateProfile).not.toHaveBeenCalled();
