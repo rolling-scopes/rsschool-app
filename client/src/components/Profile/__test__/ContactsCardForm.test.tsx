@@ -36,8 +36,8 @@ describe('ContactsCardForm', () => {
     const setHasError = vi.fn();
     render(<ContactsCardForm contacts={contacts} setHasError={setHasError} setValues={setValues} />);
 
-    const inputs = screen.getAllByRole('textbox') as HTMLInputElement[];
-    await user.type(inputs[1], 'valid@example.com');
+    const email = screen.getByLabelText('E-mail:');
+    await user.type(email, 'valid@example.com');
 
     await waitFor(() => expect(setValues).toHaveBeenCalled());
     const lastCall = setValues.mock.calls.at(-1)?.[0];
@@ -50,8 +50,8 @@ describe('ContactsCardForm', () => {
     const setHasError = vi.fn();
     render(<ContactsCardForm contacts={contacts} setHasError={setHasError} setValues={setValues} />);
 
-    const inputs = screen.getAllByRole('textbox') as HTMLInputElement[];
-    await user.type(inputs[1], 'not-an-email');
+    const email = screen.getByLabelText('E-mail:');
+    await user.type(email, 'not-an-email');
 
     // validateFields rejects -> setHasError(true) eventually called
     await waitFor(() => expect(setHasError).toHaveBeenCalledWith(true));
