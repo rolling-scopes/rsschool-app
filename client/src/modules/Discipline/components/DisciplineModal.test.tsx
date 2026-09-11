@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { message } from 'antd';
+import { setupUser } from '@client/__tests__/setupUser';
 import { DisciplineDto } from '@client/api';
 import { DisciplineModal } from './DisciplineModal';
 
@@ -46,7 +46,7 @@ describe('<DisciplineModal />', () => {
   });
 
   it('shows a validation error and does not submit when the name is empty', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<DisciplineModal {...props} />);
 
@@ -59,7 +59,7 @@ describe('<DisciplineModal />', () => {
   });
 
   it('creates a discipline with the typed name, reloads and closes', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<DisciplineModal {...props} />);
 
@@ -73,7 +73,7 @@ describe('<DisciplineModal />', () => {
   });
 
   it('updates the existing discipline by id when editing', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps({ discipline: editDiscipline });
     render(<DisciplineModal {...props} />);
 
@@ -91,7 +91,7 @@ describe('<DisciplineModal />', () => {
   });
 
   it('shows an error message and stays open when the API rejects', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const errorSpy = vi.spyOn(message, 'error').mockImplementation(() => ({}) as never);
     createDiscipline.mockRejectedValueOnce(new Error('boom'));
     const props = makeProps();
@@ -106,7 +106,7 @@ describe('<DisciplineModal />', () => {
   });
 
   it('calls onCancel when the Cancel button is clicked', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<DisciplineModal {...props} />);
 
