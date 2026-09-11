@@ -8,8 +8,7 @@ const { getCourses } = vi.hoisted(() => ({
   getCourses: vi.fn(),
 }));
 
-vi.mock('@client/api', async () => ({
-  ...(await vi.importActual('@client/api')),
+vi.mock('@client/api', () => ({
   CoursesApi: function CoursesApi() {
     return { getCourses };
   },
@@ -41,14 +40,6 @@ describe('<CoursesListModal />', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
-  it('renders the modal with title and the course select field', async () => {
-    render(<CoursesListModal {...makeProps()} />);
-
-    expect(await screen.findByRole('dialog')).toBeInTheDocument();
-    expect(screen.getByText('Courses')).toBeInTheDocument();
-    expect(screen.getByLabelText('Course')).toBeInTheDocument();
-  });
-
   it('uses the provided okText for the submit button', async () => {
     render(<CoursesListModal {...makeProps({ okText: 'Copy' })} />);
 
@@ -63,18 +54,6 @@ describe('<CoursesListModal />', () => {
     );
 
     expect(await screen.findByText('extra child content')).toBeInTheDocument();
-  });
-
-  it('renders the fetched courses as select options', async () => {
-    render(<CoursesListModal {...makeProps()} />);
-
-    const combobox = await screen.findByRole('combobox');
-    fireEvent.mouseDown(combobox);
-
-    await waitFor(() => {
-      expect(within(document.body).getByText('JavaScript')).toBeInTheDocument();
-      expect(within(document.body).getByText('React')).toBeInTheDocument();
-    });
   });
 
   it('does not submit and shows a validation message when no course is selected', async () => {
@@ -98,6 +77,8 @@ describe('<CoursesListModal />', () => {
     fireEvent.mouseDown(combobox);
 
     const option = await within(document.body).findByText('React');
+    expect(option).toBeInTheDocument();
+    expect(within(document.body).getByText('JavaScript')).toBeInTheDocument();
     fireEvent.click(option);
 
     await user.click(screen.getByRole('button', { name: /save/i }));
@@ -107,10 +88,14 @@ describe('<CoursesListModal />', () => {
     });
   });
 
-  it('calls onCancel when the modal cancel button is clicked', async () => {
+  it('renders the title and course selector and calls onCancel', async () => {
     const user = userEvent.setup();
     const props = makeProps();
     render(<CoursesListModal {...props} />);
+
+    expect(await screen.findByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByText('Courses')).toBeInTheDocument();
+    expect(screen.getByLabelText('Course')).toBeInTheDocument();
 
     const cancel = await screen.findByRole('button', { name: /cancel/i });
     await user.click(cancel);
