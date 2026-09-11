@@ -1,6 +1,6 @@
 import { render, screen, waitFor, within, fireEvent } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { setupUser } from '@client/__tests__/setupUser';
 import { CheckerEnum, CourseTaskDto } from '@client/api';
 import SubmitTaskSolution from './SubmitTaskSolution';
 
@@ -65,7 +65,7 @@ describe('<SubmitTaskSolution />', () => {
   });
 
   it('submits the selected task and solution url, then shows the success result', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     getCourseTasksWithStudentSolution.mockResolvedValue({ data: tasks });
     createTaskSolution.mockResolvedValue({});
     render(<SubmitTaskSolution courseId={10} />);
@@ -97,7 +97,7 @@ describe('<SubmitTaskSolution />', () => {
   });
 
   it('shows an error alert when loading the tasks fails', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     getCourseTasksWithStudentSolution.mockRejectedValue({ message: 'Network down' });
     render(<SubmitTaskSolution courseId={10} />);
 
