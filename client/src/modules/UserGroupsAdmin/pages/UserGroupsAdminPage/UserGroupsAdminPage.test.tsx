@@ -1,7 +1,7 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { ReactNode } from 'react';
 import { message } from 'antd';
+import { setupUser } from '@client/__tests__/setupUser';
 import { UserGroupDto } from '@client/api';
 import { UserGroupsAdminPage } from './UserGroupsAdminPage';
 
@@ -93,7 +93,7 @@ describe('<UserGroupsAdminPage />', () => {
   });
 
   it('creates a group with mapped user ids and a role', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<UserGroupsAdminPage />);
     await screen.findByText('Admins');
 
@@ -117,7 +117,7 @@ describe('<UserGroupsAdminPage />', () => {
   });
 
   it('opens the edit modal prefilled and updates by id', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<UserGroupsAdminPage />);
     await screen.findByText('Admins');
 
@@ -136,7 +136,7 @@ describe('<UserGroupsAdminPage />', () => {
   });
 
   it('deletes a group after confirming and reloads', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<UserGroupsAdminPage />);
     await screen.findByText('Admins');
 
@@ -149,7 +149,7 @@ describe('<UserGroupsAdminPage />', () => {
   });
 
   it('shows an error message when delete fails', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const errorSpy = vi.spyOn(message, 'error').mockImplementation(() => ({}) as never);
     deleteUserGroup.mockRejectedValueOnce(new Error('boom'));
     render(<UserGroupsAdminPage />);
@@ -164,7 +164,7 @@ describe('<UserGroupsAdminPage />', () => {
   });
 
   it('shows an error message when save fails', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const errorSpy = vi.spyOn(message, 'error').mockImplementation(() => ({}) as never);
     updateUserGroup.mockRejectedValueOnce(new Error('boom'));
     render(<UserGroupsAdminPage />);
