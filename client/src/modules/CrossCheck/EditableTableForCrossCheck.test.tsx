@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { setupUser } from '@client/__tests__/setupUser';
 import { CriteriaDto, CriteriaDtoTypeEnum } from '@client/api';
 import { EditableTable } from './EditableTableForCrossCheck';
 
@@ -57,7 +57,7 @@ function getRow(text: string) {
 
 describe('<EditableTable /> (CrossCheck editable criteria)', () => {
   it('renders rows, enters edit mode, disables other edits and saves changed text', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Host />);
 
     expect(screen.getByText('First criteria')).toBeInTheDocument();
@@ -86,7 +86,7 @@ describe('<EditableTable /> (CrossCheck editable criteria)', () => {
   });
 
   it('cancels an edit and restores the original value', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Host />);
 
     const row = getRow('First criteria');
@@ -102,7 +102,7 @@ describe('<EditableTable /> (CrossCheck editable criteria)', () => {
   });
 
   it('deletes a row through the Delete confirmation popconfirm', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Host />);
 
     expect(screen.getByTestId('count').textContent).toBe('2');
@@ -119,7 +119,7 @@ describe('<EditableTable /> (CrossCheck editable criteria)', () => {
   });
 
   it('changes a row type via the type selector and clears Max when Title is chosen', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Host />);
 
     const row = getRow('First criteria');
@@ -140,7 +140,7 @@ describe('<EditableTable /> (CrossCheck editable criteria)', () => {
   });
 
   it('keeps the existing max when a row type changes to a non-Title type', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     // A subtask row keeps its max when re-typed to Penalty.
     render(<Host initial={[{ key: 'k1', index: 0, type: CriteriaDtoTypeEnum.Subtask, max: 7, text: 'Keep max' }]} />);
 
@@ -163,7 +163,7 @@ describe('<EditableTable /> (CrossCheck editable criteria)', () => {
 
     expect(dragEndHandlers[0]).toBeTypeOf('function');
     // Simulate dropping row k1 onto k2's position.
-    dragEndHandlers[0]({ active: { id: 'k1' }, over: { id: 'k2' } });
+    act(() => dragEndHandlers[0]({ active: { id: 'k1' }, over: { id: 'k2' } }));
 
     await waitFor(() => {
       const dump = JSON.parse(screen.getByTestId('dump').textContent || '[]');
