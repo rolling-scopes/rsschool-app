@@ -39,42 +39,24 @@ describe('<BadReviewControllers />', () => {
     getData.mockResolvedValue(badReviews);
   });
 
-  it('disables the action buttons until a task is selected', () => {
+  it('enables actions after task selection, shows bad comments and closes the modal', async () => {
+    const user = userEvent.setup();
     render(<BadReviewControllers courseTasks={courseTasks} courseId={42} />);
 
-    // antd Button with href renders an <a>; when disabled it has aria-disabled="true".
     const downloadLink = screen.getByText('Download solutions urls').closest('a') as HTMLElement;
     expect(downloadLink).toHaveAttribute('aria-disabled', 'true');
-    expect(screen.getByRole('button', { name: 'Bad comment' })).toBeDisabled();
+    const badCommentButton = screen.getByRole('button', { name: 'Bad comment' });
+    expect(badCommentButton).toBeDisabled();
     expect(screen.getByRole('button', { name: "Didn't check" })).toBeDisabled();
-  });
-
-  it('lists the course tasks as select options', async () => {
-    const user = userEvent.setup();
-    render(<BadReviewControllers courseTasks={courseTasks} courseId={42} />);
 
     await user.click(screen.getByRole('combobox'));
-
-    expect(await screen.findByText('Task One', { selector: '.ant-select-item-option-content' })).toBeInTheDocument();
+    const taskOne = await screen.findByText('Task One', { selector: '.ant-select-item-option-content' });
+    expect(taskOne).toBeInTheDocument();
     expect(screen.getByText('Task Two', { selector: '.ant-select-item-option-content' })).toBeInTheDocument();
-  });
+    await user.click(taskOne);
 
-  it('enables the actions and points the download link to the selected task', async () => {
-    const user = userEvent.setup();
-    render(<BadReviewControllers courseTasks={courseTasks} courseId={42} />);
-
-    await selectTask(user, 'Task One');
-
-    expect(screen.getByRole('button', { name: 'Bad comment' })).toBeEnabled();
-    const downloadLink = screen.getByText('Download solutions urls').closest('a') as HTMLElement;
+    expect(badCommentButton).toBeEnabled();
     expect(downloadLink).toHaveAttribute('href', '/api/v2/courses/42/cross-checks/1/csv');
-  });
-
-  it('opens the "Bad comment" modal and shows the fetched data', async () => {
-    const user = userEvent.setup();
-    render(<BadReviewControllers courseTasks={courseTasks} courseId={42} />);
-
-    await selectTask(user, 'Task One');
     await user.click(screen.getByRole('button', { name: 'Bad comment' }));
 
     const dialog = await screen.findByRole('dialog');
@@ -84,6 +66,10 @@ describe('<BadReviewControllers />', () => {
       expect(getData).toHaveBeenCalledWith(1, 'Bad comment', 42);
     });
     expect(await within(dialog).findByText('too short')).toBeInTheDocument();
+
+    await waitFor(() => expect(dialog).toBeVisible());
+    await user.click(within(dialog).getByRole('button', { name: 'Cancel' }));
+    await waitFor(() => expect(screen.getByText('Bad checkers in Bad comment')).not.toBeVisible());
   });
 
   it('opens the "Didn\'t check" modal with the matching check type', async () => {
@@ -99,22 +85,6 @@ describe('<BadReviewControllers />', () => {
 
     await waitFor(() => {
       expect(getData).toHaveBeenCalledWith(1, 'Did not check', 42);
-    });
-  });
-
-  it('closes the modal via the Cancel button', async () => {
-    const user = userEvent.setup();
-    render(<BadReviewControllers courseTasks={courseTasks} courseId={42} />);
-
-    await selectTask(user, 'Task One');
-    await user.click(screen.getByRole('button', { name: 'Bad comment' }));
-
-    const dialog = await screen.findByRole('dialog');
-    await waitFor(() => expect(dialog).toBeVisible());
-    await user.click(within(dialog).getByRole('button', { name: 'Cancel' }));
-
-    await waitFor(() => {
-      expect(screen.getByText('Bad checkers in Bad comment')).not.toBeVisible();
     });
   });
 });
