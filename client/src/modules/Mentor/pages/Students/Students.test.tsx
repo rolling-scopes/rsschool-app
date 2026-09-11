@@ -68,26 +68,10 @@ describe('Students page', () => {
     } as never);
   });
 
-  it('should render the page title and a card per student with score and rank', () => {
-    renderStudents([buildStudent()]);
-
-    expect(screen.getByText('Your students')).toBeInTheDocument();
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
-    expect(screen.getByText('250')).toBeInTheDocument();
-    expect(screen.getByText('5')).toBeInTheDocument();
-    expect(screen.getByText('Minsk, Belarus')).toBeInTheDocument();
-  });
-
   it('should show the empty state when the mentor has no students', () => {
     renderStudents([]);
 
     expect(screen.getByText('You do not have students')).toBeInTheDocument();
-  });
-
-  it('should label the feedback action "Give Feedback" when there is no feedback yet', () => {
-    renderStudents([buildStudent({ feedbacks: [] })]);
-
-    expect(screen.getByRole('button', { name: /give feedback/i })).toBeInTheDocument();
   });
 
   it('should label the feedback action "Edit Feedback" when feedback exists', () => {
@@ -96,11 +80,19 @@ describe('Students page', () => {
     expect(screen.getByRole('button', { name: /edit feedback/i })).toBeInTheDocument();
   });
 
-  it('should navigate to the feedback route for the student on click', async () => {
+  it('should render student details and navigate to Give Feedback on click', async () => {
     const user = userEvent.setup();
     renderStudents([buildStudent({ id: 11 })]);
 
-    await user.click(screen.getByRole('button', { name: /give feedback/i }));
+    expect(screen.getByText('Your students')).toBeInTheDocument();
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    expect(screen.getByText('250')).toBeInTheDocument();
+    expect(screen.getByText('5')).toBeInTheDocument();
+    expect(screen.getByText('Minsk, Belarus')).toBeInTheDocument();
+    const feedbackButton = screen.getByRole('button', { name: /give feedback/i });
+    expect(feedbackButton).toBeInTheDocument();
+
+    await user.click(feedbackButton);
 
     expect(push).toHaveBeenCalledWith(
       expect.objectContaining({ pathname: '/course/mentor/feedback', query: { course: 'rs-2025', studentId: 11 } }),
