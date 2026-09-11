@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { CourseEventModal } from './index';
 
 // --- Boundary mocks --------------------------------------------------------
@@ -157,7 +157,7 @@ describe('<CourseEventModal />', () => {
   });
 
   it('shows a validation error and does not submit when required fields are empty', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<CourseEventModal {...props} />);
 
@@ -179,7 +179,7 @@ describe('<CourseEventModal />', () => {
   });
 
   it('filters event template options by typed input via filterOption', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<CourseEventModal {...makeProps()} />);
 
     const eventSelect = await screen.findByLabelText('Event');
@@ -194,7 +194,7 @@ describe('<CourseEventModal />', () => {
   });
 
   it('submits via submitEvent and then calls onSubmit when the form is valid', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<CourseEventModal {...props} />);
 
@@ -223,7 +223,7 @@ describe('<CourseEventModal />', () => {
   });
 
   it('renders the new-event fields and cancels a pristine form', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<CourseEventModal {...props} />);
 
