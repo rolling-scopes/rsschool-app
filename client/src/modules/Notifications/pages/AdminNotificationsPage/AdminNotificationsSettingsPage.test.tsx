@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { NotificationDto, NotificationType } from '@client/api';
+import { setupUser } from '@client/__tests__/setupUser';
 import { AdminNotificationsPage } from './AdminNotificationsSettingsPage';
 
 // --- Mocks -----------------------------------------------------------------
@@ -56,7 +56,7 @@ describe('AdminNotificationsPage', () => {
   });
 
   it('creates a new notification and appends it to the table on submit', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const created = makeNotification({ id: 'fresh', name: 'Fresh One' });
     createNotification.mockResolvedValue({ data: created });
 
@@ -81,7 +81,7 @@ describe('AdminNotificationsPage', () => {
   });
 
   it('saves (updates) an existing notification on submit', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updated = makeNotification({ id: 'existing', name: 'Renamed' });
     saveNotification.mockResolvedValue({ data: updated });
 
@@ -106,7 +106,7 @@ describe('AdminNotificationsPage', () => {
   });
 
   it('shows an error message when saving fails', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     createNotification.mockRejectedValue(new Error('boom'));
 
     render(<AdminNotificationsPage />);
@@ -127,7 +127,7 @@ describe('AdminNotificationsPage', () => {
   });
 
   it('deletes a notification after confirmation and removes its row', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     deleteNotification.mockResolvedValue(undefined);
 
     render(<AdminNotificationsPage />);
@@ -143,7 +143,7 @@ describe('AdminNotificationsPage', () => {
   });
 
   it('shows an error message when deletion fails', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     deleteNotification.mockRejectedValue(new Error('nope'));
 
     render(<AdminNotificationsPage />);
@@ -158,7 +158,7 @@ describe('AdminNotificationsPage', () => {
   });
 
   it('opens the create modal and cancels without saving', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<AdminNotificationsPage />);
     await screen.findByText('Existing One');
 
