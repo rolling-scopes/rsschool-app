@@ -62,8 +62,7 @@ const { getHeroesRadar, getHeroesCountries } = vi.hoisted(() => ({
   getHeroesCountries: vi.fn(),
 }));
 
-vi.mock('@client/api', async () => ({
-  ...(await vi.importActual('@client/api')),
+vi.mock('@client/api', () => ({
   GratitudesApi: function GratitudesApi() {
     return { getHeroesRadar, getHeroesCountries };
   },
@@ -92,7 +91,13 @@ function renderTab({ isAdmin = false, setLoading = vi.fn() } = {}) {
   );
 }
 
+const originalLocation = Object.getOwnPropertyDescriptor(window, 'location')!;
+
 describe('HeroesRadarTab', () => {
+  afterEach(() => {
+    Object.defineProperty(window, 'location', originalLocation);
+  });
+
   beforeEach(() => {
     vi.clearAllMocks();
     getHeroesRadar.mockResolvedValue({ data: heroesResponse });
@@ -106,46 +111,17 @@ describe('HeroesRadarTab', () => {
   });
 
   it('fetches the heroes radar on mount with the initial query params', async () => {
-    renderTab();
-
-    await waitFor(() => expect(getHeroesRadar).toHaveBeenCalled());
-    expect(getHeroesRadar).toHaveBeenCalledWith(1, 20, undefined, undefined, undefined, undefined, undefined);
-    expect(await screen.findByTestId('radar-table')).toHaveTextContent('rows:1');
-  });
-
-  it('toggles the loading flag around the fetch', async () => {
     const setLoading = vi.fn();
     renderTab({ setLoading });
 
     await waitFor(() => expect(getHeroesRadar).toHaveBeenCalled());
+    expect(getHeroesRadar).toHaveBeenCalledWith(1, 20, undefined, undefined, undefined, undefined, undefined);
+    expect(await screen.findByTestId('radar-table')).toHaveTextContent('rows:1');
     expect(setLoading).toHaveBeenCalledWith(true);
     await waitFor(() => expect(setLoading).toHaveBeenCalledWith(false));
-  });
-
-  it('does not load countries, country filter or export for non-admins', async () => {
-    renderTab({ isAdmin: false });
-
-    await waitFor(() => expect(getHeroesRadar).toHaveBeenCalled());
     expect(getHeroesCountries).not.toHaveBeenCalled();
     expect(screen.queryByText('Countries')).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /Export CSV/ })).not.toBeInTheDocument();
-  });
-
-  it('loads countries and shows admin-only controls for admins', async () => {
-    renderTab({ isAdmin: true });
-
-    await waitFor(() => expect(getHeroesCountries).toHaveBeenCalled());
-    expect(screen.getByText('Countries')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Export CSV/ })).toBeInTheDocument();
-  });
-
-  it('renders the course filter options', async () => {
-    renderTab();
-    await waitFor(() => expect(getHeroesRadar).toHaveBeenCalled());
-
-    fireEvent.mouseDown(screen.getByText('Select course'));
-    expect(await screen.findByTitle('RS 2024')).toBeInTheDocument();
-    expect(screen.getByTitle('RS 2023')).toBeInTheDocument();
   });
 
   it('refetches with selected filters on Filter submit', async () => {
@@ -154,7 +130,10 @@ describe('HeroesRadarTab', () => {
     await waitFor(() => expect(getHeroesRadar).toHaveBeenCalledTimes(1));
 
     fireEvent.mouseDown(screen.getByText('Select course'));
-    fireEvent.click(await screen.findByTitle('RS 2024'));
+    const courseOption = await screen.findByTitle('RS 2024');
+    expect(courseOption).toBeInTheDocument();
+    expect(screen.getByTitle('RS 2023')).toBeInTheDocument();
+    fireEvent.click(courseOption);
 
     await user.click(screen.getByRole('button', { name: 'Filter' }));
 
@@ -235,6 +214,10 @@ describe('HeroesRadarTab', () => {
 
     renderTab({ isAdmin: true });
     await waitFor(() => expect(getHeroesRadar).toHaveBeenCalled());
+
+    await waitFor(() => expect(getHeroesCountries).toHaveBeenCalled());
+    expect(screen.getByText('Countries')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Export CSV/ })).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: /Export CSV/ }));
 
