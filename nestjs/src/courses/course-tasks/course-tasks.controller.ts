@@ -145,9 +145,8 @@ export class CourseTasksController {
     @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
     @Body() dto: UpdateCourseTaskDto,
   ) {
-    await this.courseTasksService.updateCourseTask(courseTaskId, {
+    await this.courseTasksService.updateCourseTask(courseId, courseTaskId, {
       ...dto,
-      courseId,
       id: courseTaskId,
     } as Partial<CourseTask>);
   }
@@ -159,9 +158,9 @@ export class CourseTasksController {
   @ApiOperation({ operationId: 'deleteCourseTask' })
   @RequiredRoles([Role.Admin, CourseRole.Manager], true)
   public async deleteCourseTask(
-    @Param('courseId', ParseIntPipe) _: number,
+    @Param('courseId', ParseIntPipe) courseId: number,
     @Param('courseTaskId', ParseIntPipe) courseTaskId: number,
   ) {
-    await this.courseTasksService.disable(courseTaskId);
+    await this.courseTasksService.disable(courseId, courseTaskId);
   }
 }

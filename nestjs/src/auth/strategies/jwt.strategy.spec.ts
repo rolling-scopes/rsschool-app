@@ -18,6 +18,7 @@ const mockPayload: JwtToken = {
   githubId: 'johndoe',
   isAdmin: false,
   isHirer: false,
+  purpose: 'authentication',
 };
 
 const mockAuthUser = {
@@ -114,6 +115,21 @@ describe('JwtStrategy', () => {
   });
 
   describe('validate', () => {
+    it('rejects calendar tokens before reading the cache', async () => {
+      await expect(strategy.validate({ githubId: 'johndoe', courseId: 1 } as unknown as JwtToken)).rejects.toThrow(
+        'Invalid authentication token',
+      );
+
+      expect(cacheManager.get).not.toHaveBeenCalled();
+      expect(authService.getAuthUser).not.toHaveBeenCalled();
+    });
+
+    it('rejects authentication tokens without a valid user id', async () => {
+      await expect(strategy.validate({ ...mockPayload, id: 0 })).rejects.toThrow('Invalid authentication token');
+
+      expect(cacheManager.get).not.toHaveBeenCalled();
+    });
+
     it('returns the cached user on a cache hit without calling AuthService', async () => {
       cacheManager.get.mockResolvedValue(mockAuthUser);
 
