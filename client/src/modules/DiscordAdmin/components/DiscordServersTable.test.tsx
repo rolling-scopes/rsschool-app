@@ -8,22 +8,26 @@ const data: DiscordServerDto[] = [
   { id: 2, name: 'Beta', gratitudeUrl: 'https://b/grat', mentorsChatUrl: 'https://b/mentors' },
 ];
 
+function getServerRow(name: string) {
+  // Avoid computing accessible names for every table row.
+  // eslint-disable-next-line testing-library/no-node-access
+  const row = screen.getByText(name).closest('tr') as HTMLTableRowElement;
+  expect(row).toHaveRole('row');
+  return row;
+}
+
 describe('<DiscordServersTable />', () => {
-  it('renders a row per server with its name and urls', () => {
-    render(<DiscordServersTable data={data} onEdit={vi.fn()} onDelete={vi.fn()} />);
-
-    expect(screen.getByText('Alpha')).toBeInTheDocument();
-    expect(screen.getByText('Beta')).toBeInTheDocument();
-    expect(screen.getByText('https://a/grat')).toBeInTheDocument();
-    expect(screen.getByText('https://b/mentors')).toBeInTheDocument();
-  });
-
   it('calls onEdit with the row record when Edit is clicked', async () => {
     const user = userEvent.setup();
     const onEdit = vi.fn();
     render(<DiscordServersTable data={data} onEdit={onEdit} onDelete={vi.fn()} />);
 
-    const alphaRow = screen.getByRole('row', { name: /Alpha/ });
+    expect(screen.getByText('Alpha')).toBeInTheDocument();
+    expect(screen.getByText('Beta')).toBeInTheDocument();
+    expect(screen.getByText('https://a/grat')).toBeInTheDocument();
+    expect(screen.getByText('https://b/mentors')).toBeInTheDocument();
+
+    const alphaRow = getServerRow('Alpha');
     await user.click(within(alphaRow).getByText('Edit'));
 
     expect(onEdit).toHaveBeenCalledWith(data[0]);
@@ -34,7 +38,7 @@ describe('<DiscordServersTable />', () => {
     const onDelete = vi.fn();
     render(<DiscordServersTable data={data} onEdit={vi.fn()} onDelete={onDelete} />);
 
-    const betaRow = screen.getByRole('row', { name: /Beta/ });
+    const betaRow = getServerRow('Beta');
     await user.click(within(betaRow).getByText('Delete'));
 
     // Popconfirm bubble appears; clicking its OK fires the confirm.
