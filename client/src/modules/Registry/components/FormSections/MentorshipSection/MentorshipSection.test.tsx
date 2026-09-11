@@ -12,15 +12,10 @@ const renderMentorshipSection = () => {
 };
 
 describe('MentorshipSection', () => {
-  test.each`
-    title
-    ${CARD_TITLES.disciplines}
-    ${CARD_TITLES.preferences}
-    ${CARD_TITLES.additionalInfo}
-  `('should render card with $title title', async ({ title }) => {
+  test('should render discipline, preference and additional information cards', () => {
     renderMentorshipSection();
 
-    const card = await screen.findByRole('heading', { name: title });
-    expect(card).toBeInTheDocument();
+    const titles = [CARD_TITLES.disciplines, CARD_TITLES.preferences, CARD_TITLES.additionalInfo];
+    titles.forEach(title => expect(screen.getByRole('heading', { name: title })).toBeInTheDocument());
   });
 });
