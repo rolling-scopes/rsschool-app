@@ -40,45 +40,18 @@ describe('AdditionalInfo', () => {
     vi.clearAllMocks();
   });
 
-  const user = userEvent.setup();
-
-  test.each`
-    label
-    ${LABELS.courses}
-    ${LABELS.aboutYourself}
-  `('should render field with $label label', async ({ label }) => {
+  test('should render populated fields and navigation, then call only submitHandler', async () => {
+    const user = userEvent.setup();
     renderAdditionalInfo(mockValues);
 
-    const field = await screen.findByText(label);
-    expect(field).toBeInTheDocument();
-  });
-
-  test('should render data processing checkbox', async () => {
-    renderAdditionalInfo(mockValues);
-
-    const checkbox = await screen.findByRole('checkbox');
-    expect(checkbox).toBeInTheDocument();
-  });
-
-  test('should render Previous button', async () => {
-    renderAdditionalInfo(mockValues);
-
-    const button = await screen.findByRole('button', { name: /previous/i });
-    expect(button).toBeInTheDocument();
-  });
-
-  test('should render Submit button', async () => {
-    renderAdditionalInfo(mockValues);
-
-    const button = await screen.findByRole('button', { name: /submit/i });
-    expect(button).toBeInTheDocument();
-  });
-
-  test('should call only submitHandler', async () => {
-    renderAdditionalInfo(mockValues);
+    expect(screen.getByText(LABELS.courses)).toBeInTheDocument();
+    expect(screen.getByText(LABELS.aboutYourself)).toBeInTheDocument();
+    expect(screen.getByRole('checkbox')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /previous/i })).toBeInTheDocument();
 
     const button = await screen.findByRole('button', { name: /submit/i });
 
+    expect(button).toBeInTheDocument();
     await user.click(button);
 
     expect(submitHandler).toHaveBeenCalled();
@@ -86,6 +59,7 @@ describe('AdditionalInfo', () => {
   });
 
   test('should call only submitFailedHandler', async () => {
+    const user = userEvent.setup();
     renderAdditionalInfo({ ...mockValues, dataProcessing: 0 });
 
     const button = await screen.findByRole('button', { name: /submit/i });
