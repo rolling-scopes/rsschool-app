@@ -45,18 +45,6 @@ describe('Exercise', () => {
     changeMock.mockClear();
   });
 
-  it('should render the Coding exercise for a jstask', () => {
-    renderExercise(CourseTaskDetailedDtoTypeEnum.Jstask);
-
-    expect(screen.getByText(/will run tests in the following repository/i)).toBeInTheDocument();
-  });
-
-  it('should render the SelfEducation exercise', () => {
-    renderExercise(CourseTaskDetailedDtoTypeEnum.Selfeducation);
-
-    expect(screen.getByRole('heading', { name: /Q1/ })).toBeInTheDocument();
-  });
-
   it('should render the Jupyter upload exercise for an ipynb task', () => {
     renderExercise(CourseTaskDetailedDtoTypeEnum.Ipynb);
 
@@ -69,15 +57,12 @@ describe('Exercise', () => {
     expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
   });
 
-  it('should render the submit button', () => {
-    renderExercise(CourseTaskDetailedDtoTypeEnum.Jstask);
-
-    expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
-  });
-
   it('should call submit when the form is submitted for a coding task', async () => {
     const user = userEvent.setup();
     renderExercise(CourseTaskDetailedDtoTypeEnum.Jstask);
+
+    expect(screen.getByText(/will run tests in the following repository/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: /submit/i }));
 
@@ -88,36 +73,28 @@ describe('Exercise', () => {
     const user = userEvent.setup();
     renderExercise(CourseTaskDetailedDtoTypeEnum.Selfeducation);
 
+    expect(screen.getByRole('heading', { name: /Q1/ })).toBeInTheDocument();
+
     await user.click(screen.getAllByRole('radio')[0] as HTMLElement);
 
     await waitFor(() => expect(changeMock).toHaveBeenCalled());
+    expect(
+      screen.queryByText(/Form has validation errors! Check that all required fields are filled!/i),
+    ).not.toBeInTheDocument();
   });
 
-  it('should surface the validation-error tooltip when submitting the self-education form with no answer', async () => {
+  it('should show the missing-answer error and clear it after a valid answer', async () => {
     const user = userEvent.setup();
     renderExercise(CourseTaskDetailedDtoTypeEnum.Selfeducation);
 
     await user.click(screen.getByRole('button', { name: /submit/i }));
 
     // onFinishFailed fires because the required answer field is empty.
-    expect(
-      await screen.findByText(/Form has validation errors! Check that all required fields are filled!/i),
-    ).toBeInTheDocument();
-  });
+    const error = await screen.findByText(/Form has validation errors! Check that all required fields are filled!/i);
+    await waitFor(() => expect(error).toBeVisible());
 
-  it('should clear the validation error once every required field is filled and valid', async () => {
-    const user = userEvent.setup();
-    renderExercise(CourseTaskDetailedDtoTypeEnum.Selfeducation);
-
-    // pick a valid answer so all watched values become truthy and validateFields resolves,
-    // hitting the success callback that sets validationError back to false.
-    await user.click(screen.getAllByRole('radio')[0] as HTMLElement);
-
-    await waitFor(() => {
-      expect(
-        screen.queryByText(/Form has validation errors! Check that all required fields are filled!/i),
-      ).not.toBeInTheDocument();
-    });
+    await user.click(screen.getAllByRole('radio')[1] as HTMLElement);
+    await waitFor(() => expect(error).not.toBeVisible());
   });
 
   it('should set a validation error when a watched field is truthy but fails validation', async () => {
