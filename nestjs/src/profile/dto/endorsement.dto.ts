@@ -62,15 +62,15 @@ export class EndorsementDto {
 
 export class EndorsementDataDto {
   constructor(data: Data) {
-    this.user = data.user;
+    this.user = new EndorsementUserDto(data.user);
     this.courses = data.courses.map(course => new CourseDto(course));
     this.studentsCount = data.studentsCount;
     this.interviewsCount = data.interviewsCount;
-    this.feedbacks = data.feedbacks;
+    this.feedbacks = data.feedbacks.map(feedback => new FeedbackDto(feedback));
   }
 
   @ApiProperty({ type: EndorsementUserDto })
-  public user: User;
+  public user: EndorsementUserDto;
 
   @ApiProperty({ type: CourseDto, isArray: true, description: `User's courses` })
   public courses: CourseDto[];
@@ -81,5 +81,6 @@ export class EndorsementDataDto {
   @ApiProperty({ type: Number, description: `Number of interviews` })
   public interviewsCount: number;
 
+  @ApiProperty({ type: FeedbackDto, isArray: true })
   public feedbacks: FeedbackDto[];
 }
