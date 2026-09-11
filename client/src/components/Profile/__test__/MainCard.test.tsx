@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { ProfileMainCardData } from '@client/services/user';
+import { setupUser } from '@client/__tests__/setupUser';
 import MainCard from '../MainCard';
 
 // Stub the remote (Google Maps) LocationSelect with a simple value-emitting control so
@@ -71,7 +71,7 @@ describe('MainCard', () => {
   });
 
   it('edits the name, saves and reflects the new value on success', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn().mockResolvedValue(true);
     render(<MainCard {...makeProps({ updateProfile })} />);
 
@@ -87,7 +87,7 @@ describe('MainCard', () => {
   });
 
   it('edits the location and includes city/country in the update payload', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn().mockResolvedValue(true);
     render(<MainCard {...makeProps({ updateProfile })} />);
 
@@ -100,7 +100,7 @@ describe('MainCard', () => {
   });
 
   it('sends null city/country when the location is cleared (hits the `?? null` branch)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn().mockResolvedValue(true);
     render(<MainCard {...makeProps({ updateProfile })} />);
 
@@ -112,7 +112,7 @@ describe('MainCard', () => {
   });
 
   it('keeps the previous displayed values when the update fails', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn().mockResolvedValue(false);
     render(<MainCard {...makeProps({ updateProfile })} />);
 
@@ -129,7 +129,7 @@ describe('MainCard', () => {
   });
 
   it('restores the original name when the edit is cancelled', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<MainCard {...makeProps()} />);
 
     await user.click(screen.getByRole('img', { name: 'edit' }));
@@ -146,7 +146,7 @@ describe('MainCard', () => {
   });
 
   it('keeps Save disabled when the name is only whitespace and enables it on a real change', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<MainCard {...makeProps()} />);
 
     await user.click(screen.getByRole('img', { name: 'edit' }));
@@ -162,7 +162,7 @@ describe('MainCard', () => {
   });
 
   it('opens the obfuscate modal for admins', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<MainCard {...makeProps({ isAdmin: true, isEditingModeEnabled: false })} />);
 
     await user.click(screen.getByRole('button', { name: 'Obfuscate' }));
