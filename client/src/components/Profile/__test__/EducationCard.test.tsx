@@ -118,23 +118,12 @@ describe('EducationCard', () => {
     expect(screen.getByText('(Empty)')).toBeInTheDocument();
   });
 
-  it('deletes a university entry (handleDelete)', async () => {
+  it('deletes a university and restores it on cancel', async () => {
     const user = userEvent.setup();
     render(<EducationCard data={makeData()} isEditingModeEnabled updateProfile={vi.fn()} />);
 
     await openSettings(user);
     expect(screen.getByDisplayValue('MIT')).toBeInTheDocument();
-
-    await user.click(screen.getByRole('button', { name: /Delete/ }));
-
-    expect(screen.queryByDisplayValue('MIT')).not.toBeInTheDocument();
-  });
-
-  it('restores the universities on cancel (handleCancel)', async () => {
-    const user = userEvent.setup();
-    render(<EducationCard data={makeData()} isEditingModeEnabled updateProfile={vi.fn()} />);
-
-    await openSettings(user);
     // delete the only entry, then cancel to restore it
     await user.click(screen.getByRole('button', { name: /Delete/ }));
     expect(screen.queryByDisplayValue('MIT')).not.toBeInTheDocument();
