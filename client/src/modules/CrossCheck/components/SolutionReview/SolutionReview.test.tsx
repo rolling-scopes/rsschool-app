@@ -64,6 +64,7 @@ describe('<SolutionReview />', () => {
     expect(screen.getByText('80')).toBeInTheDocument();
     expect(screen.getByText('maximum score: 100')).toBeInTheDocument();
     expect(screen.getByText('Nice solution')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Show detailed feedback' })).not.toBeInTheDocument();
   });
 
   it('shows "unknown" when no max score is provided', () => {
@@ -96,12 +97,6 @@ describe('<SolutionReview />', () => {
 
     expect(await screen.findByText('Feedback')).toBeInTheDocument();
     expect(screen.getByText('Subtask in feedback')).toBeInTheDocument();
-  });
-
-  it('does not render the detailed-feedback button when there are no criteria', () => {
-    render(<SolutionReview {...makeProps()} />);
-
-    expect(screen.queryByRole('button', { name: 'Show detailed feedback' })).not.toBeInTheDocument();
   });
 
   it('sends a message through the course service with the markdown label', async () => {
