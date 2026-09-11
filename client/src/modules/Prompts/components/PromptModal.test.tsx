@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { message } from 'antd';
 import { PromptDto } from '@client/api';
+import { setupUser } from '@client/__tests__/setupUser';
 import { PromptModal } from './PromptModal';
 
 // --- Boundary mock ---------------------------------------------------------
@@ -37,7 +37,7 @@ describe('<PromptModal />', () => {
   });
 
   it('shows validation errors and does not submit when required fields are empty', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<PromptModal {...props} />);
 
@@ -48,7 +48,7 @@ describe('<PromptModal />', () => {
   });
 
   it('creates a prompt from the typed values, reloads and closes', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<PromptModal {...props} />);
 
@@ -67,7 +67,7 @@ describe('<PromptModal />', () => {
   });
 
   it('updates the existing prompt by id when editing', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps({ data: editPrompt });
     render(<PromptModal {...props} />);
 
@@ -86,7 +86,7 @@ describe('<PromptModal />', () => {
   });
 
   it('shows an error message when the API rejects', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const errorSpy = vi.spyOn(message, 'error').mockImplementation(() => ({}) as never);
     createPrompt.mockRejectedValueOnce(new Error('boom'));
     const props = makeProps();
@@ -102,7 +102,7 @@ describe('<PromptModal />', () => {
   });
 
   it('renders create defaults and calls onCancel when Cancel is clicked', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<PromptModal {...props} />);
 
