@@ -1,7 +1,7 @@
 /* eslint-disable testing-library/no-node-access */
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { NotificationDto, NotificationType } from '@client/api';
+import { setupUser } from '@client/__tests__/setupUser';
 import { NotificationSettingsModal } from './NotificationSettingsModal';
 
 function makeNotification(overrides: Partial<NotificationDto> = {}): NotificationDto {
@@ -51,7 +51,7 @@ describe('NotificationSettingsModal', () => {
   });
 
   it('switches between Settings and channel template tabs', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(
       <NotificationSettingsModal
         notification={makeNotification()}
@@ -72,7 +72,7 @@ describe('NotificationSettingsModal', () => {
   });
 
   it('shows validation errors and does not call onOk when required fields are empty', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onOk = vi.fn();
     render(<NotificationSettingsModal notifications={[]} onCancel={vi.fn()} onOk={onOk} />);
 
@@ -86,7 +86,7 @@ describe('NotificationSettingsModal', () => {
   });
 
   it('submits the filled form and calls onOk with the entered values', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onOk = vi.fn();
     render(<NotificationSettingsModal notifications={[]} onCancel={vi.fn()} onOk={onOk} />);
 
@@ -114,7 +114,7 @@ describe('NotificationSettingsModal', () => {
   });
 
   it('prefills existing settings and channel fields, then submits their values', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onOk = vi.fn();
     render(
       <NotificationSettingsModal notification={makeNotification()} notifications={[]} onCancel={vi.fn()} onOk={onOk} />,
@@ -142,7 +142,7 @@ describe('NotificationSettingsModal', () => {
   });
 
   it('updates a channel template body and submits the new value', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onOk = vi.fn();
     render(
       <NotificationSettingsModal notification={makeNotification()} notifications={[]} onCancel={vi.fn()} onOk={onOk} />,
@@ -162,7 +162,7 @@ describe('NotificationSettingsModal', () => {
   });
 
   it('renders the new notification fields and tabs, then cancels without changes', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onCancel = vi.fn();
     render(<NotificationSettingsModal notifications={[]} onCancel={onCancel} onOk={vi.fn()} />);
 
