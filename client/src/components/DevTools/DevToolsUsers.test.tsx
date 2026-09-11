@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useRouter } from 'next/navigation';
 import DevToolsUsers from './DevToolsUsers';
@@ -23,6 +23,14 @@ const users = [
   { id: 2, githubId: 'bob', student: [], mentor: [20, 30] },
 ];
 
+function getLoginButton(githubId: string) {
+  // Scope the action to its user instead of relying on table order.
+  // eslint-disable-next-line testing-library/no-node-access
+  const row = screen.getByText(githubId).closest('tr') as HTMLTableRowElement;
+  expect(row).toHaveRole('row');
+  return within(row).getByRole('button', { name: 'Login' });
+}
+
 describe('DevToolsUsers', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -31,21 +39,14 @@ describe('DevToolsUsers', () => {
     getDevUserLogin.mockResolvedValue({ data: {} });
   });
 
-  it('loads and renders the users table', async () => {
+  it('logs in as a user and redirects on the Login action', async () => {
+    const user = userEvent.setup();
     render(<DevToolsUsers />);
 
     expect(await screen.findByText('alice')).toBeInTheDocument();
     expect(screen.getByText('bob')).toBeInTheDocument();
     expect(getDevUsers).toHaveBeenCalledTimes(1);
-  });
-
-  it('logs in as a user and redirects on the Login action', async () => {
-    const user = userEvent.setup();
-    render(<DevToolsUsers />);
-
-    await screen.findByText('alice');
-    const loginButtons = screen.getAllByRole('button', { name: 'Login' });
-    await user.click(loginButtons[0]);
+    await user.click(getLoginButton('alice'));
 
     await waitFor(() => expect(getDevUserLogin).toHaveBeenCalledWith('alice'));
     expect(push).toHaveBeenCalledWith('/api/v2/auth/github/login');
@@ -58,7 +59,7 @@ describe('DevToolsUsers', () => {
     render(<DevToolsUsers />);
 
     await screen.findByText('alice');
-    await user.click(screen.getAllByRole('button', { name: 'Login' })[0]);
+    await user.click(getLoginButton('alice'));
 
     await waitFor(() => expect(errorSpy).toHaveBeenCalledWith('Failed to login user'));
     expect(push).not.toHaveBeenCalled();
