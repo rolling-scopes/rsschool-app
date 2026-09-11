@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { DiscordServerDto, UpdateDiscordServerDto } from '@client/api';
+import { setupUser } from '@client/__tests__/setupUser';
 import { DiscordServersModal } from './DiscordServersModal';
 
 // --- Boundary ---------------------------------------------------------------
@@ -34,7 +34,7 @@ describe('<DiscordServersModal />', () => {
   });
 
   it('shows validation errors and does not submit when fields are empty', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<DiscordServersModal {...props} />);
 
@@ -47,7 +47,7 @@ describe('<DiscordServersModal />', () => {
   });
 
   it('submits the typed values when all fields are valid', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<DiscordServersModal {...props} />);
 
@@ -66,7 +66,7 @@ describe('<DiscordServersModal />', () => {
   });
 
   it('submits edited values keyed off the existing record', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps({ data: editServer });
     render(<DiscordServersModal {...props} />);
 
@@ -83,7 +83,7 @@ describe('<DiscordServersModal />', () => {
   });
 
   it('renders empty create fields and cancels when untouched', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<DiscordServersModal {...props} />);
 
