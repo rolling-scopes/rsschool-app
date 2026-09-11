@@ -17,17 +17,12 @@ function renderCard(overrides: Partial<Parameters<typeof ActionCard>[0]> = {}) {
 }
 
 describe('<ActionCard />', () => {
-  it('renders the title, text and button caption', () => {
-    renderCard();
-    expect(screen.getByText('Become a leader')).toBeInTheDocument();
-    expect(screen.getByText('Create a team and lead it')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Create team' })).toBeInTheDocument();
-  });
-
-  it('asks for confirmation and calls onClick only after confirming', async () => {
+  it('renders its content, asks for confirmation and calls onClick only after confirming', async () => {
     const user = userEvent.setup();
     const { onClick } = renderCard();
 
+    expect(screen.getByText('Become a leader')).toBeInTheDocument();
+    expect(screen.getByText('Create a team and lead it')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Create team' }));
 
     // Popconfirm uses lowercased caption in its prompt.
