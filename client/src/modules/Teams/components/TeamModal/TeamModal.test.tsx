@@ -1,6 +1,6 @@
 import { screen, render, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { message } from 'antd';
+import { setupUser } from '@client/__tests__/setupUser';
 import { TeamDto } from '@client/api';
 import TeamModal from './TeamModal';
 
@@ -48,7 +48,7 @@ describe('<TeamModal />', () => {
   });
 
   it('renders the non-manager create modal and handles cancellation', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { onCancel } = renderModal();
     expect(screen.getByText('Create Team')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /^create$/i })).toBeInTheDocument();
@@ -58,7 +58,7 @@ describe('<TeamModal />', () => {
   });
 
   it('does not submit and shows validation errors when required fields are empty', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { onSubmit } = renderModal();
 
     await user.click(screen.getByRole('button', { name: /^create$/i }));
@@ -70,7 +70,7 @@ describe('<TeamModal />', () => {
   });
 
   it('rejects an invalid Discord URL', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { onSubmit } = renderModal();
 
     await user.type(screen.getByLabelText('Name'), 'Dream Team');
@@ -83,7 +83,7 @@ describe('<TeamModal />', () => {
   });
 
   it('submits the create payload (without studentIds for non-managers)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { onSubmit } = renderModal({ isManager: false });
 
     await user.type(screen.getByLabelText('Name'), 'Dream Team');
@@ -104,7 +104,7 @@ describe('<TeamModal />', () => {
   });
 
   it('passes the existing team id as the second submit argument in edit mode', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const data: Partial<TeamDto> = {
       id: 42,
       name: 'Old Name',
@@ -123,7 +123,7 @@ describe('<TeamModal />', () => {
   });
 
   it('pre-fills student ids from data in manager edit mode', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const data: Partial<TeamDto> = {
       id: 5,
       name: 'Edited Team',
@@ -146,7 +146,7 @@ describe('<TeamModal />', () => {
   });
 
   it('requires students for managers and submits after they are selected', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { onSubmit } = renderModal({ isManager: true });
 
     expect(screen.getByTestId('student-search')).toBeInTheDocument();
@@ -166,7 +166,7 @@ describe('<TeamModal />', () => {
   });
 
   it('warns and does not set the field when more than maxStudentsCount students are selected', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const warnSpy = vi.spyOn(message, 'warning').mockImplementation(() => ({}) as never);
     renderModal({ isManager: true, maxStudentsCount: 3 });
 
