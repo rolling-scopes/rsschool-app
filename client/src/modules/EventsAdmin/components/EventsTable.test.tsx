@@ -22,22 +22,26 @@ const data = [
   },
 ] as unknown as EventDto[];
 
+function eventRow(name: string) {
+  // Resolve by event text to avoid computing accessible names for every row.
+  // eslint-disable-next-line testing-library/no-node-access
+  const row = screen.getByText(name).closest('tr');
+  expect(row).toHaveRole('row');
+  return row!;
+}
+
 describe('<EventsTable />', () => {
-  it('renders a row per event with name, discipline and type', () => {
-    render(<EventsTable data={data} onEdit={vi.fn()} onDelete={vi.fn()} />);
-
-    expect(screen.getByText('Alpha')).toBeInTheDocument();
-    expect(screen.getByText('Beta')).toBeInTheDocument();
-    expect(screen.getByText('Frontend')).toBeInTheDocument();
-    expect(screen.getByText('webinar')).toBeInTheDocument();
-  });
-
   it('calls onEdit with the row record when Edit is clicked', async () => {
     const user = userEvent.setup();
     const onEdit = vi.fn();
     render(<EventsTable data={data} onEdit={onEdit} onDelete={vi.fn()} />);
 
-    const alphaRow = screen.getByRole('row', { name: /Alpha/ });
+    expect(screen.getByText('Alpha')).toBeInTheDocument();
+    expect(screen.getByText('Beta')).toBeInTheDocument();
+    expect(screen.getByText('Frontend')).toBeInTheDocument();
+    expect(screen.getByText('webinar')).toBeInTheDocument();
+
+    const alphaRow = eventRow('Alpha');
     await user.click(within(alphaRow).getByText('Edit'));
 
     expect(onEdit).toHaveBeenCalledWith(data[0]);
@@ -48,7 +52,7 @@ describe('<EventsTable />', () => {
     const onDelete = vi.fn();
     render(<EventsTable data={data} onEdit={vi.fn()} onDelete={onDelete} />);
 
-    const betaRow = screen.getByRole('row', { name: /Beta/ });
+    const betaRow = eventRow('Beta');
     await user.click(within(betaRow).getByText('Delete'));
     await user.click(await screen.findByRole('button', { name: /^ok$/i }));
 
