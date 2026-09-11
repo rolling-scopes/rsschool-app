@@ -110,46 +110,16 @@ describe('TasksPage', () => {
     createTaskCriteria.mockResolvedValue({ data: {} });
   });
 
-  it('should render the page title and the Add Task button', () => {
+  it('should fetch and render the tasks in the table', async () => {
     render(<TasksPage />);
 
     expect(screen.getByRole('heading', { name: 'Manage Tasks' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /add task/i })).toBeInTheDocument();
-  });
-
-  it('should fetch and render the tasks in the table', async () => {
-    render(<TasksPage />);
 
     await waitFor(() => expect(getTasks).toHaveBeenCalled());
 
     const firstTaskName = TASKS[0]?.name ?? '';
     expect(await screen.findByText(firstTaskName)).toBeInTheDocument();
-  });
-
-  it('should open the create modal when Add Task is clicked', async () => {
-    const user = userEvent.setup();
-    render(<TasksPage />);
-
-    await waitFor(() => expect(getTasks).toHaveBeenCalled());
-
-    await user.click(screen.getByRole('button', { name: /add task/i }));
-
-    const dialog = await screen.findByRole('dialog');
-    expect(dialog).toHaveTextContent('mode: create');
-  });
-
-  it('should fetch criteria and open the edit modal when Edit is clicked', async () => {
-    const user = userEvent.setup();
-    render(<TasksPage />);
-
-    await waitFor(() => expect(getTasks).toHaveBeenCalled());
-
-    const [editLink] = await screen.findAllByText('Edit');
-    await user.click(editLink as HTMLElement);
-
-    await waitFor(() => expect(getTaskCriteria).toHaveBeenCalledWith(TASKS[0]?.id));
-    const dialog = await screen.findByRole('dialog');
-    expect(dialog).toHaveTextContent('mode: edit');
   });
 
   it('should close the modal when cancel is triggered', async () => {
@@ -158,6 +128,8 @@ describe('TasksPage', () => {
 
     await waitFor(() => expect(getTasks).toHaveBeenCalled());
     await user.click(screen.getByRole('button', { name: /add task/i }));
+
+    expect(await screen.findByRole('dialog')).toHaveTextContent('mode: create');
 
     await user.click(await screen.findByRole('button', { name: 'cancel-modal' }));
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
@@ -250,6 +222,8 @@ describe('TasksPage', () => {
     // First task has id 0 (falsy) → handleModalSubmit returns before updating.
     const editLinks = await screen.findAllByText('Edit');
     await user.click(editLinks[0] as HTMLElement);
+    await waitFor(() => expect(getTaskCriteria).toHaveBeenCalledWith(TASKS[0]?.id));
+    expect(await screen.findByRole('dialog')).toHaveTextContent('mode: edit');
     await user.click(await screen.findByRole('button', { name: 'submit-modal' }));
 
     await waitFor(() => expect(getTaskCriteria).toHaveBeenCalled());
