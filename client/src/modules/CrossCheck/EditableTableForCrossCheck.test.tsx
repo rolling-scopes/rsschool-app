@@ -56,36 +56,23 @@ function getRow(text: string) {
 }
 
 describe('<EditableTable /> (CrossCheck editable criteria)', () => {
-  it('renders a row per criteria with Type/Max/Text and Edit/Delete actions', () => {
+  it('renders rows, enters edit mode, disables other edits and saves changed text', async () => {
+    const user = userEvent.setup();
     render(<Host />);
 
     expect(screen.getByText('First criteria')).toBeInTheDocument();
     expect(screen.getByText('A title row')).toBeInTheDocument();
     expect(screen.getAllByText('Edit')).toHaveLength(2);
     expect(screen.getAllByText('Delete')).toHaveLength(2);
-  });
-
-  it('enters edit mode for a row and shows Save/Cancel plus editable inputs', async () => {
-    const user = userEvent.setup();
-    render(<Host />);
 
     const row = getRow('First criteria');
     await user.click(within(row).getByText('Edit'));
 
-    // Save/Cancel replace Edit/Delete for the editing row.
     expect(within(row).getByText('Save')).toBeInTheDocument();
     expect(within(row).getByText('Cancel')).toBeInTheDocument();
-    // Editable Text becomes a textarea and Max becomes a spinbutton.
     expect(within(row).getByRole('textbox')).toBeInTheDocument();
     expect(within(row).getByRole('spinbutton')).toBeInTheDocument();
-  });
-
-  it('saves an edited Text value back into the data', async () => {
-    const user = userEvent.setup();
-    render(<Host />);
-
-    const row = getRow('First criteria');
-    await user.click(within(row).getByText('Edit'));
+    expect(within(getRow('A title row')).getByText('Edit')).toHaveClass('ant-typography-disabled');
 
     const textarea = within(row).getByRole('textbox');
     await user.clear(textarea);
@@ -169,18 +156,6 @@ describe('<EditableTable /> (CrossCheck editable criteria)', () => {
       expect(edited.type).toBe('penalty');
       expect(edited.max).toBe(7);
     });
-  });
-
-  it('disables Edit/Delete on other rows while one row is being edited', async () => {
-    const user = userEvent.setup();
-    render(<Host />);
-
-    await user.click(within(getRow('First criteria')).getByText('Edit'));
-
-    // The other row's Edit link is disabled (antd marks it with a disabled class).
-    const otherRow = getRow('A title row');
-    const otherEdit = within(otherRow).getByText('Edit');
-    expect(otherEdit).toHaveClass('ant-typography-disabled');
   });
 
   it('reorders rows when a drag-end event fires (dnd handler wiring)', async () => {
