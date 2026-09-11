@@ -1,6 +1,6 @@
 import { screen, render, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import dayjs from 'dayjs';
+import { setupUser } from '@client/__tests__/setupUser';
 import { TeamDistributionDto } from '@client/api';
 import TeamDistributionModal from './TeamDistributionModal';
 
@@ -56,7 +56,7 @@ describe('<TeamDistributionModal />', () => {
   });
 
   it('calls onCancel when the cancel button is clicked', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { onCancel } = renderModal();
     expect(screen.getByText(/you are creating a group distribution event/i)).toBeInTheDocument();
     const dialog = screen.getByRole('dialog');
@@ -65,7 +65,7 @@ describe('<TeamDistributionModal />', () => {
   });
 
   it('blocks submit and shows validation errors for empty required fields', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderModal();
 
     await user.click(screen.getByRole('button', { name: /^ok$/i }));
@@ -76,7 +76,7 @@ describe('<TeamDistributionModal />', () => {
   });
 
   it('rejects an invalid description URL', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderModal();
 
     await user.type(screen.getByLabelText('Description Url'), 'not-a-url');
@@ -87,7 +87,7 @@ describe('<TeamDistributionModal />', () => {
   });
 
   it('creates a new distribution with the mapped payload when no id is present', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { onSubmit } = renderModal();
 
     await user.type(screen.getByLabelText('Name'), 'New Distribution');
@@ -109,7 +109,7 @@ describe('<TeamDistributionModal />', () => {
   });
 
   it('updates an existing distribution when an id is present', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const data = {
       id: 9,
       name: 'Existing Event',
