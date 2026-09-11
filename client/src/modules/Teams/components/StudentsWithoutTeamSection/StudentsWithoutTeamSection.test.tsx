@@ -52,25 +52,15 @@ describe('<StudentsWithoutTeamSection />', () => {
     deleteStudent.mockResolvedValue({} as never);
   });
 
-  it('loads and renders students without a team', async () => {
-    renderSection();
-    expect(await screen.findByText('Lonely Student')).toBeInTheDocument();
-    expect(getStudentsWithoutTeam).toHaveBeenCalledWith(100, 5, 10, 1, '');
-  });
-
   it('re-fetches with the search term when searching', async () => {
     const user = userEvent.setup();
     renderSection();
-    await screen.findByText('Lonely Student');
+    expect(await screen.findByText('Lonely Student')).toBeInTheDocument();
+    expect(getStudentsWithoutTeam).toHaveBeenCalledWith(100, 5, 10, 1, '');
+    expect(screen.queryByRole('button', { name: /delete/i })).not.toBeInTheDocument();
 
     await user.type(screen.getByPlaceholderText('input search text'), 'Lonely{enter}');
     await waitFor(() => expect(getStudentsWithoutTeam).toHaveBeenCalledWith(100, 5, 10, 1, 'Lonely'));
-  });
-
-  it('does not render a delete action for non-managers', async () => {
-    renderSection(false);
-    await screen.findByText('Lonely Student');
-    expect(screen.queryByRole('button', { name: /delete/i })).not.toBeInTheDocument();
   });
 
   it('confirms and deletes a student for managers', async () => {
