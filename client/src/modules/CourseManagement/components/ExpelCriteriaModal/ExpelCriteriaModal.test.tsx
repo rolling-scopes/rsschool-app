@@ -32,72 +32,8 @@ describe('ExpelCriteriaModal', () => {
     vi.clearAllMocks();
   });
 
-  const user = userEvent.setup();
-
-  test('should render modal title', async () => {
-    renderExpelCriteriaModal();
-
-    const title = await screen.findByText('Expel Criteria');
-    expect(title).toBeInTheDocument();
-  });
-
-  test('should render alert message', async () => {
-    renderExpelCriteriaModal();
-
-    const alert = await screen.findByText(EXPEL_ALERT_MESSAGE);
-    expect(alert).toBeInTheDocument();
-  });
-
-  test.each`
-    label
-    ${"Didn't Complete Following Tasks"}
-    ${'Minimum Total Score'}
-    ${'Expel Reason'}
-  `('should render field with $label label', async ({ label }) => {
-    renderExpelCriteriaModal();
-
-    const field = await screen.findByText(label);
-    expect(field).toBeInTheDocument();
-  });
-
-  test('should render checkbox', async () => {
-    renderExpelCriteriaModal();
-
-    const checkbox = await screen.findByRole('checkbox');
-    expect(checkbox).toBeInTheDocument();
-  });
-
-  test('should render "cancel" button', async () => {
-    renderExpelCriteriaModal();
-
-    const button = await screen.findByRole('button', { name: /cancel/i });
-    expect(button).toBeInTheDocument();
-  });
-
-  test('should render "expel students" button', async () => {
-    renderExpelCriteriaModal();
-
-    const button = await screen.findByRole('button', { name: /expel students/i });
-    expect(button).toBeInTheDocument();
-    expect(button).toBeDisabled();
-  });
-
-  test('should enable "expel students" button on valid criteria', async () => {
-    renderExpelCriteriaModal();
-
-    const button = await screen.findByRole('button', { name: /expel students/i });
-    expect(button).toBeDisabled();
-
-    const minTotalScoreInput = await screen.findByLabelText('Minimum Total Score');
-    fireEvent.change(minTotalScoreInput, {
-      target: {
-        value: 5,
-      },
-    });
-    expect(button).toBeEnabled();
-  });
-
   test('should call "onClose" function on "cancel" button click', async () => {
+    const user = userEvent.setup();
     renderExpelCriteriaModal();
 
     const button = await screen.findByRole('button', { name: /cancel/i });
@@ -106,8 +42,24 @@ describe('ExpelCriteriaModal', () => {
     expect(props.onClose).toHaveBeenCalled();
   });
 
-  test('should render error message when expel reason not provided', async () => {
+  test('renders the criteria form, enables submission for valid criteria and requires a reason', async () => {
+    const user = userEvent.setup();
     renderExpelCriteriaModal();
+
+    for (const text of [
+      'Expel Criteria',
+      EXPEL_ALERT_MESSAGE,
+      "Didn't Complete Following Tasks",
+      'Minimum Total Score',
+      'Expel Reason',
+    ]) {
+      expect(screen.getByText(text)).toBeInTheDocument();
+    }
+    expect(screen.getByRole('checkbox')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /cancel/i })).toBeInTheDocument();
+    const button = screen.getByRole('button', { name: /expel students/i });
+    expect(button).toBeInTheDocument();
+    expect(button).toBeDisabled();
 
     // Enable "expel students" button
     const minTotalScoreInput = await screen.findByLabelText('Minimum Total Score');
@@ -117,7 +69,7 @@ describe('ExpelCriteriaModal', () => {
       },
     });
 
-    const button = await screen.findByRole('button', { name: /expel students/i });
+    expect(button).toBeEnabled();
     await user.click(button);
 
     const errorMessage = await screen.findByText('Please provide the expel reason');
@@ -127,6 +79,7 @@ describe('ExpelCriteriaModal', () => {
   });
 
   test('should call "onSubmit" function on "expel students" button click', async () => {
+    const user = userEvent.setup();
     renderExpelCriteriaModal();
 
     // Enable "expel students" button
