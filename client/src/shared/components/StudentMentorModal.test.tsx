@@ -39,16 +39,6 @@ describe('StudentMentorModal', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it('renders the Student and Mentor fields when open', () => {
-    render(<StudentMentorModal {...baseProps} />);
-
-    expect(screen.getByText('Student/Mentor')).toBeInTheDocument();
-    expect(screen.getByText('Student')).toBeInTheDocument();
-    expect(screen.getByText('Mentor')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /pick student/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /pick mentor/i })).toBeInTheDocument();
-  });
-
   it('shows validation errors when submitting without selections', async () => {
     const user = userEvent.setup();
     render(<StudentMentorModal {...baseProps} />);
@@ -64,8 +54,16 @@ describe('StudentMentorModal', () => {
     const user = userEvent.setup();
     render(<StudentMentorModal {...baseProps} />);
 
-    await user.click(screen.getByRole('button', { name: /pick student/i }));
-    await user.click(screen.getByRole('button', { name: /pick mentor/i }));
+    expect(screen.getByText('Student/Mentor')).toBeInTheDocument();
+    expect(screen.getByText('Student')).toBeInTheDocument();
+    expect(screen.getByText('Mentor')).toBeInTheDocument();
+    const studentButton = screen.getByRole('button', { name: /pick student/i });
+    const mentorButton = screen.getByRole('button', { name: /pick mentor/i });
+    expect(studentButton).toBeInTheDocument();
+    expect(mentorButton).toBeInTheDocument();
+
+    await user.click(studentButton);
+    await user.click(mentorButton);
 
     await user.click(screen.getByRole('button', { name: /save/i }));
 
