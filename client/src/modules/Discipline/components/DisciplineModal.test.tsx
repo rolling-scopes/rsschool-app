@@ -13,8 +13,7 @@ const { createDiscipline, updateDiscipline } = vi.hoisted(() => ({
   updateDiscipline: vi.fn(),
 }));
 
-vi.mock('@client/api', async () => ({
-  ...(await vi.importActual('@client/api')),
+vi.mock('@client/api', () => ({
   DisciplinesApi: function DisciplinesApi() {
     return { createDiscipline, updateDiscipline };
   },
@@ -37,22 +36,6 @@ describe('<DisciplineModal />', () => {
     vi.clearAllMocks();
     createDiscipline.mockResolvedValue({});
     updateDiscipline.mockResolvedValue({});
-  });
-
-  it('renders the "Add discipline" title and an empty input when creating', () => {
-    render(<DisciplineModal {...makeProps()} />);
-
-    expect(screen.getByText('Add discipline')).toBeInTheDocument();
-    const input = screen.getByLabelText('Discipline');
-    expect(input).toBeInTheDocument();
-    expect(input).toHaveValue('');
-  });
-
-  it('renders the "Edit discipline" title and prefills the input when editing', () => {
-    render(<DisciplineModal {...makeProps({ discipline: editDiscipline })} />);
-
-    expect(screen.getByText('Edit discipline')).toBeInTheDocument();
-    expect(screen.getByLabelText('Discipline')).toHaveValue('Frontend');
   });
 
   it('does not render the modal body when not visible', () => {
@@ -94,9 +77,11 @@ describe('<DisciplineModal />', () => {
     const props = makeProps({ discipline: editDiscipline });
     render(<DisciplineModal {...props} />);
 
+    expect(screen.getByText('Edit discipline')).toBeInTheDocument();
     const input = screen.getByLabelText('Discipline');
+    expect(input).toHaveValue('Frontend');
     await user.clear(input);
-    await user.type(input, 'Fullstack');
+    await user.type(input, 'Fullstack', { skipClick: true });
     await user.click(screen.getByRole('button', { name: /ok/i }));
 
     await waitFor(() => expect(updateDiscipline).toHaveBeenCalledWith(7, { name: 'Fullstack' }));
@@ -124,6 +109,11 @@ describe('<DisciplineModal />', () => {
     const user = userEvent.setup();
     const props = makeProps();
     render(<DisciplineModal {...props} />);
+
+    expect(screen.getByText('Add discipline')).toBeInTheDocument();
+    const input = screen.getByLabelText('Discipline');
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveValue('');
 
     await user.click(screen.getByRole('button', { name: /cancel/i }));
 
