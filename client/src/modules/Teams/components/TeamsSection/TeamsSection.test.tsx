@@ -1,4 +1,4 @@
-import { screen, render, waitFor } from '@testing-library/react';
+import { screen, render, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TeamApi, TeamDistributionDetailedDto, TeamDto } from '@client/api';
 import TeamSection from './TeamsSection';
@@ -67,16 +67,7 @@ describe('<TeamsSection />', () => {
     // member count "1 of 3"
     expect(screen.getByText(/1 of 3/)).toBeInTheDocument();
     expect(getTeams).toHaveBeenCalledWith(100, 5, 10, 1, '');
-  });
-
-  it('renders the distribution name in the section title', async () => {
-    renderSection();
-    expect(await screen.findByText('Spring teams')).toBeInTheDocument();
-  });
-
-  it('hides the Action column (Edit team) for non-managers', async () => {
-    renderSection(false);
-    await screen.findByText('Alpha Team');
+    expect(screen.getByText('Spring teams')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /edit team/i })).not.toBeInTheDocument();
   });
 
@@ -85,9 +76,13 @@ describe('<TeamsSection />', () => {
     const { toggleTeamModal } = renderSection(true);
     await screen.findByText('Alpha Team');
 
-    const editButtons = screen.getAllByRole('button', { name: /edit team/i });
-    expect(editButtons.length).toBeGreaterThan(0);
-    await user.click(editButtons[0]);
+    // Scope the action to its team instead of scanning every row's buttons.
+    // eslint-disable-next-line testing-library/no-node-access
+    const row = screen.getByText('Alpha Team').closest('tr');
+    expect(row).toHaveRole('row');
+    const editButton = within(row!).getByRole('button', { name: /edit team/i });
+    expect(editButton).toBeInTheDocument();
+    await user.click(editButton);
     expect(toggleTeamModal).toHaveBeenCalledWith(teams[0]);
   });
 
