@@ -1,10 +1,18 @@
 import { screen, render, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import dayjs from 'dayjs';
-import { TeamDistributionApi, TeamDistributionDto } from '@client/api';
+import { TeamDistributionDto } from '@client/api';
 import TeamDistributionModal from './TeamDistributionModal';
 
-vi.mock('@client/api');
+const { updateTeamDistribution, createTeamDistribution } = vi.hoisted(() => ({
+  updateTeamDistribution: vi.fn(),
+  createTeamDistribution: vi.fn(),
+}));
+vi.mock('@client/api', () => ({
+  TeamDistributionApi: function TeamDistributionApi() {
+    return { updateTeamDistribution, createTeamDistribution };
+  },
+}));
 
 // DatePicker.RangePicker is a brittle widget in jsdom — stub it with a button that
 // emits a fixed [start, end] dayjs range through the onChange that Form.Item injects.
@@ -26,9 +34,6 @@ vi.mock('antd', async () => {
   return { ...antd, DatePicker };
 });
 
-const updateTeamDistribution = vi.mocked(TeamDistributionApi.prototype.updateTeamDistribution);
-const createTeamDistribution = vi.mocked(TeamDistributionApi.prototype.createTeamDistribution);
-
 function renderModal(overrides: Partial<Parameters<typeof TeamDistributionModal>[0]> = {}) {
   const onSubmit = vi.fn().mockResolvedValue(undefined);
   const onCancel = vi.fn();
@@ -43,11 +48,6 @@ describe('<TeamDistributionModal />', () => {
     updateTeamDistribution.mockResolvedValue({} as never);
   });
 
-  it('renders the create copy when no data is provided', () => {
-    renderModal();
-    expect(screen.getByText(/you are creating a group distribution event/i)).toBeInTheDocument();
-  });
-
   it('renders the edit copy and pre-fills the name when editing', () => {
     const data = { id: 9, name: 'Existing Event', description: 'desc' } as TeamDistributionDto;
     renderModal({ data });
@@ -58,6 +58,7 @@ describe('<TeamDistributionModal />', () => {
   it('calls onCancel when the cancel button is clicked', async () => {
     const user = userEvent.setup();
     const { onCancel } = renderModal();
+    expect(screen.getByText(/you are creating a group distribution event/i)).toBeInTheDocument();
     const dialog = screen.getByRole('dialog');
     await user.click(within(dialog).getByRole('button', { name: /cancel/i }));
     expect(onCancel).toHaveBeenCalled();
