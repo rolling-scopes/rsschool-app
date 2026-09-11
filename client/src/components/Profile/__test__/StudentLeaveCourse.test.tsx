@@ -19,14 +19,6 @@ function renderModal(overrides: Partial<React.ComponentProps<typeof StudentLeave
 }
 
 describe('StudentLeaveCourse', () => {
-  it('renders the confirmation messages and reason options', () => {
-    renderModal();
-    expect(screen.getByText('Are you sure you want to leave the course?')).toBeInTheDocument();
-    expect(screen.getByText('Your learning will be stopped.')).toBeInTheDocument();
-    expect(screen.getByRole('checkbox', { name: /Too difficult/ })).toBeInTheDocument();
-    expect(screen.getByRole('checkbox', { name: /No time/ })).toBeInTheDocument();
-  });
-
   it('does not call onOk when no reason is selected (validation fails)', async () => {
     const user = userEvent.setup();
     const onOk = vi.fn();
@@ -54,6 +46,11 @@ describe('StudentLeaveCourse', () => {
     const user = userEvent.setup();
     const onCancel = vi.fn();
     renderModal({ onCancel });
+
+    expect(screen.getByText('Are you sure you want to leave the course?')).toBeInTheDocument();
+    expect(screen.getByText('Your learning will be stopped.')).toBeInTheDocument();
+    expect(screen.getByRole('checkbox', { name: /Too difficult/ })).toBeInTheDocument();
+    expect(screen.getByRole('checkbox', { name: /No time/ })).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Continue studying' }));
     expect(onCancel).toHaveBeenCalledTimes(1);
