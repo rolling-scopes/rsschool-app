@@ -13,25 +13,25 @@ const mockContactsList = {
 };
 
 describe('ContactsForm', () => {
-  test.each`
-    value                              | placeholder                 | labelText
-    ${mockContactsList.email}          | ${'Email'}                  | ${'Email'}
-    ${mockContactsList.githubUsername} | ${'GitHub username'}        | ${'GitHub'}
-    ${mockContactsList.linkedin}       | ${'LinkedIn username'}      | ${'LinkedIn'}
-    ${mockContactsList.phone}          | ${'+12025550111'}           | ${'Phone'}
-    ${mockContactsList.skype}          | ${'Skype id'}               | ${'Skype'}
-    ${mockContactsList.telegram}       | ${'Telegram public name'}   | ${'Telegram'}
-    ${mockContactsList.website}        | ${'Enter your website URL'} | ${'Website'}
-  `('form field should have proper value, placeholder and label', async ({ value, placeholder, labelText }) => {
+  test('renders each contact with its value, placeholder and label', () => {
     render(<ContactsForm contactsList={mockContactsList} />);
 
-    const fieldDisplayedValue = await screen.findByDisplayValue(value);
-    const fieldPlaceholder = await screen.findByPlaceholderText(placeholder);
-    const fieldLabel = await screen.findByLabelText(labelText);
+    const fields = [
+      [mockContactsList.email, 'Email', 'Email'],
+      [mockContactsList.githubUsername, 'GitHub username', 'GitHub'],
+      [mockContactsList.linkedin, 'LinkedIn username', 'LinkedIn'],
+      [mockContactsList.phone, '+12025550111', 'Phone'],
+      [mockContactsList.skype, 'Skype id', 'Skype'],
+      [mockContactsList.telegram, 'Telegram public name', 'Telegram'],
+      [mockContactsList.website, 'Enter your website URL', 'Website'],
+    ];
 
-    expect(fieldDisplayedValue).toBeInTheDocument();
-    expect(fieldPlaceholder).toBeInTheDocument();
-    expect(fieldLabel).toBeInTheDocument();
+    for (const [value, placeholder, labelText] of fields) {
+      const field = screen.getByLabelText(labelText);
+      expect(field).toBeInTheDocument();
+      expect(field).toHaveValue(value);
+      expect(field).toHaveAttribute('placeholder', placeholder);
+    }
   });
 
   test('shows a validation error for an invalid phone number', async () => {
