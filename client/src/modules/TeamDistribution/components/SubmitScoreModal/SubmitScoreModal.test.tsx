@@ -1,10 +1,22 @@
 import { screen, render, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { message } from 'antd';
-import { CoursesTasksApi, TeamDistributionApi, TeamDistributionDto } from '@client/api';
+import { TeamDistributionDto } from '@client/api';
 import SubmitScoreModal from './SubmitScoreModal';
 
-vi.mock('@client/api');
+const { getCourseTasks, submitScore } = vi.hoisted(() => ({
+  getCourseTasks: vi.fn(),
+  submitScore: vi.fn(),
+}));
+
+vi.mock('@client/api', () => ({
+  CoursesTasksApi: function CoursesTasksApi() {
+    return { getCourseTasks };
+  },
+  TeamDistributionApi: function TeamDistributionApi() {
+    return { submitScore };
+  },
+}));
 
 const mockError = vi.fn();
 const mockSuccess = vi.fn();
@@ -15,9 +27,6 @@ vi.mock('@client/hooks', () => ({
 vi.mock('@client/modules/Course/contexts', () => ({
   useActiveCourseContext: () => ({ course: { id: 42, name: 'RS Course' } }),
 }));
-
-const getCourseTasks = vi.mocked(CoursesTasksApi.prototype.getCourseTasks);
-const submitScore = vi.mocked(TeamDistributionApi.prototype.submitScore);
 
 const distribution = { id: 7, name: 'Spring distribution' } as TeamDistributionDto;
 
@@ -36,14 +45,6 @@ describe('<SubmitScoreModal />', () => {
   it('is closed (not rendered) when distribution is null', () => {
     render(<SubmitScoreModal distribution={null} onClose={vi.fn()} />);
     expect(screen.queryByText('Submit Score')).not.toBeInTheDocument();
-  });
-
-  it('opens and loads the course task options when a distribution is provided', async () => {
-    render(<SubmitScoreModal distribution={distribution} onClose={vi.fn()} />);
-
-    expect(await screen.findByText('Submit Score')).toBeInTheDocument();
-    await waitFor(() => expect(getCourseTasks).toHaveBeenCalledWith(42));
-    expect(screen.getByRole('combobox')).toBeInTheDocument();
   });
 
   it('shows an empty-state message when there are no tasks', async () => {
@@ -107,7 +108,9 @@ describe('<SubmitScoreModal />', () => {
     const user = userEvent.setup();
     const onClose = vi.fn();
     render(<SubmitScoreModal distribution={distribution} onClose={onClose} />);
-    await screen.findByRole('combobox');
+    expect(await screen.findByRole('combobox')).toBeInTheDocument();
+    expect(screen.getByText('Submit Score')).toBeInTheDocument();
+    expect(getCourseTasks).toHaveBeenCalledWith(42);
 
     const dialog = screen.getByRole('dialog');
     await user.click(within(dialog).getByRole('button', { name: /cancel/i }));
