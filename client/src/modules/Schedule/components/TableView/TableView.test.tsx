@@ -26,7 +26,7 @@ const PROPS_SETTINGS_MOCK: ScheduleSettings = {
 };
 
 describe('TableView', () => {
-  it('should render the column headers', () => {
+  it('should render the column headers and data fields', () => {
     render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
 
     for (const label of [
@@ -41,10 +41,6 @@ describe('TableView', () => {
     ]) {
       expect(screen.getByText(label)).toBeInTheDocument();
     }
-  });
-
-  it('should render the data fields', () => {
-    render(<TableView settings={PROPS_SETTINGS_MOCK} data={generateCourseData()} />);
 
     for (const value of [
       'Course Item 0',
