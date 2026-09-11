@@ -85,29 +85,16 @@ describe('<CrossCheckPairs page />', () => {
     Modal.destroyAll();
   });
 
-  it('loads the cross-check pairs and renders them in the table', async () => {
-    render(<Page />);
-
-    expect(await screen.findByText('https://github.com/student/solution')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'checker-gh' })).toBeInTheDocument();
-
-    await waitFor(() => {
-      expect(getCrossCheckPairs).toHaveBeenCalledWith(42, 50, 1, 'task', 'ASC');
-    });
-  });
-
-  it('passes only tasks that have pairs to the bad-review controllers', async () => {
-    render(<Page />);
-
-    // Only the task with pairsCount > 0 is forwarded.
-    expect(await screen.findByText('tasks:1')).toBeInTheDocument();
-  });
-
   it('opens the comment modal with the historical feedback for a pair', async () => {
     const user = userEvent.setup();
     render(<Page />);
 
-    const showButton = await screen.findByRole('button', { name: 'Show' });
+    const solution = await screen.findByText('https://github.com/student/solution');
+    // Scope the action query to the pair instead of table filter controls.
+    // eslint-disable-next-line testing-library/no-node-access
+    const row = solution.closest('tr') as HTMLTableRowElement;
+    expect(row).toHaveRole('row');
+    const showButton = within(row).getByRole('button', { name: 'Show' });
     await user.click(showButton);
 
     const dialog = await screen.findByRole('dialog');
@@ -120,7 +107,10 @@ describe('<CrossCheckPairs page />', () => {
     render(<Page />);
 
     // Wait for the initial load to finish.
-    await screen.findByText('https://github.com/student/solution');
+    expect(await screen.findByText('https://github.com/student/solution')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'checker-gh' })).toBeInTheDocument();
+    await waitFor(() => expect(getCrossCheckPairs).toHaveBeenCalledWith(42, 50, 1, 'task', 'ASC'));
+    expect(await screen.findByText('tasks:1')).toBeInTheDocument();
     getCrossCheckPairs.mockClear();
 
     // Click a sortable column header (e.g. Score) to trigger onChange.
