@@ -31,8 +31,7 @@ const { getDiscordServers, createDiscordServer, updateDiscordServer, deleteDisco
   deleteDiscordServer: vi.fn(),
 }));
 
-vi.mock('@client/api', async () => ({
-  ...(await vi.importActual('@client/api')),
+vi.mock('@client/api', () => ({
   DiscordServersApi: function DiscordServersApi() {
     return { getDiscordServers, createDiscordServer, updateDiscordServer, deleteDiscordServer };
   },
@@ -42,6 +41,13 @@ const servers: DiscordServerDto[] = [
   { id: 1, name: 'Alpha', gratitudeUrl: 'https://a/grat', mentorsChatUrl: 'https://a/mentors' },
   { id: 2, name: 'Beta', gratitudeUrl: 'https://b/grat', mentorsChatUrl: 'https://b/mentors' },
 ];
+
+function getServerRow(name: string) {
+  // eslint-disable-next-line testing-library/no-node-access -- Avoid computing accessible names for every table row.
+  const row = screen.getByText(name).closest('tr');
+  expect(row).toHaveRole('row');
+  return row!;
+}
 
 describe('<DiscordAdminPage />', () => {
   beforeEach(() => {
@@ -61,20 +67,6 @@ describe('<DiscordAdminPage />', () => {
     expect(screen.getByRole('heading', { name: /manage discord\/telegram/i })).toBeInTheDocument();
   });
 
-  it('opens an empty create modal when the add button is clicked', async () => {
-    const user = userEvent.setup();
-    render(<DiscordAdminPage />);
-    await screen.findByText('Alpha');
-
-    await user.click(screen.getByRole('button', { name: /add discord\/telegram channel/i }));
-
-    expect(await screen.findByText('Discord/Telegram channel')).toBeInTheDocument();
-    // The Table renders sortable <th aria-label="Name">, so scope the field lookup
-    // to the modal dialog to avoid colliding with the column header.
-    const dialog = screen.getByRole('dialog');
-    expect(within(dialog).getByLabelText('Name')).toHaveValue('');
-  });
-
   it('creates a server and reloads the list on submit', async () => {
     const user = userEvent.setup();
     render(<DiscordAdminPage />);
@@ -83,7 +75,9 @@ describe('<DiscordAdminPage />', () => {
     await user.click(screen.getByRole('button', { name: /add discord\/telegram channel/i }));
     await screen.findByText('Discord/Telegram channel');
 
+    expect(screen.getByText('Discord/Telegram channel')).toBeInTheDocument();
     const dialog = screen.getByRole('dialog');
+    expect(within(dialog).getByLabelText('Name')).toHaveValue('');
     await user.type(within(dialog).getByLabelText('Name'), 'Gamma');
     await user.type(within(dialog).getByLabelText('Gratitude URL'), 'https://g/grat');
     await user.type(within(dialog).getByLabelText('Mentors chat URL'), 'https://g/mentors');
@@ -104,7 +98,7 @@ describe('<DiscordAdminPage />', () => {
     render(<DiscordAdminPage />);
     await screen.findByText('Alpha');
 
-    const alphaRow = screen.getByRole('row', { name: /Alpha/ });
+    const alphaRow = getServerRow('Alpha');
     await user.click(within(alphaRow).getByText('Edit'));
 
     await screen.findByText('Discord/Telegram channel');
@@ -125,7 +119,7 @@ describe('<DiscordAdminPage />', () => {
     render(<DiscordAdminPage />);
     await screen.findByText('Alpha');
 
-    const betaRow = screen.getByRole('row', { name: /Beta/ });
+    const betaRow = getServerRow('Beta');
     await user.click(within(betaRow).getByText('Delete'));
     await user.click(await screen.findByRole('button', { name: /^ok$/i }));
 
@@ -140,7 +134,7 @@ describe('<DiscordAdminPage />', () => {
     render(<DiscordAdminPage />);
     await screen.findByText('Alpha');
 
-    const betaRow = screen.getByRole('row', { name: /Beta/ });
+    const betaRow = getServerRow('Beta');
     await user.click(within(betaRow).getByText('Delete'));
     await user.click(await screen.findByRole('button', { name: /^ok$/i }));
 
