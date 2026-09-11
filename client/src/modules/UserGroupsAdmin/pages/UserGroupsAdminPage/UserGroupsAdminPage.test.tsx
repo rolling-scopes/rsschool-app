@@ -68,6 +68,13 @@ const groups = [
   },
 ] as unknown as UserGroupDto[];
 
+function getGroupRow(name: string) {
+  // eslint-disable-next-line testing-library/no-node-access -- Avoid computing accessible names for every table row.
+  const row = screen.getByText(name).closest('tr');
+  expect(row).toHaveRole('row');
+  return row!;
+}
+
 describe('<UserGroupsAdminPage />', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -114,7 +121,7 @@ describe('<UserGroupsAdminPage />', () => {
     render(<UserGroupsAdminPage />);
     await screen.findByText('Admins');
 
-    const row = screen.getByRole('row', { name: /Admins/ });
+    const row = getGroupRow('Admins');
     await user.click(within(row).getByText('Edit'));
     await screen.findByText('User Group');
     const dialog = screen.getByRole('dialog');
@@ -133,7 +140,7 @@ describe('<UserGroupsAdminPage />', () => {
     render(<UserGroupsAdminPage />);
     await screen.findByText('Admins');
 
-    const row = screen.getByRole('row', { name: /Admins/ });
+    const row = getGroupRow('Admins');
     await user.click(within(row).getByText('Delete'));
     await user.click(await screen.findByRole('button', { name: /^ok$/i }));
 
@@ -148,7 +155,7 @@ describe('<UserGroupsAdminPage />', () => {
     render(<UserGroupsAdminPage />);
     await screen.findByText('Admins');
 
-    const row = screen.getByRole('row', { name: /Admins/ });
+    const row = getGroupRow('Admins');
     await user.click(within(row).getByText('Delete'));
     await user.click(await screen.findByRole('button', { name: /^ok$/i }));
 
@@ -163,7 +170,7 @@ describe('<UserGroupsAdminPage />', () => {
     render(<UserGroupsAdminPage />);
     await screen.findByText('Admins');
 
-    const row = screen.getByRole('row', { name: /Admins/ });
+    const row = getGroupRow('Admins');
     await user.click(within(row).getByText('Edit'));
     await screen.findByText('User Group');
     await user.click(screen.getByRole('button', { name: /save/i }));
