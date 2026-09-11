@@ -29,66 +29,6 @@ function getChannelPanel(channelId: string): HTMLElement {
 }
 
 describe('NotificationSettingsModal', () => {
-  it('renders the modal with its title and Settings-tab fields', () => {
-    render(<NotificationSettingsModal notifications={[]} onCancel={vi.fn()} onOk={vi.fn()} />);
-
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
-    expect(screen.getByText('Notification Settings')).toBeInTheDocument();
-    expect(screen.getByLabelText('Id')).toBeInTheDocument();
-    expect(screen.getByLabelText('Name')).toBeInTheDocument();
-    expect(screen.getByText('Active')).toBeInTheDocument();
-    expect(screen.getByLabelText('Type')).toBeInTheDocument();
-  });
-
-  it('renders a Settings tab plus one tab per channel (email, telegram, discord)', () => {
-    render(<NotificationSettingsModal notifications={[]} onCancel={vi.fn()} onOk={vi.fn()} />);
-
-    expect(screen.getByRole('tab', { name: 'Settings' })).toBeInTheDocument();
-    expect(screen.getByRole('tab', { name: 'email' })).toBeInTheDocument();
-    expect(screen.getByRole('tab', { name: 'telegram' })).toBeInTheDocument();
-    expect(screen.getByRole('tab', { name: 'discord' })).toBeInTheDocument();
-  });
-
-  it('leaves the Id field editable when creating a new notification', () => {
-    render(<NotificationSettingsModal notifications={[]} onCancel={vi.fn()} onOk={vi.fn()} />);
-
-    expect(screen.getByLabelText('Id')).not.toBeDisabled();
-  });
-
-  it('disables the Id field when editing an existing notification', () => {
-    render(
-      <NotificationSettingsModal
-        notification={makeNotification()}
-        notifications={[]}
-        onCancel={vi.fn()}
-        onOk={vi.fn()}
-      />,
-    );
-
-    expect(screen.getByLabelText('Id')).toBeDisabled();
-  });
-
-  it('pre-fills the form from the existing notification', () => {
-    render(
-      <NotificationSettingsModal
-        notification={makeNotification()}
-        notifications={[]}
-        onCancel={vi.fn()}
-        onOk={vi.fn()}
-      />,
-    );
-
-    expect(screen.getByLabelText('Id')).toHaveValue('task-deadline');
-    expect(screen.getByLabelText('Name')).toHaveValue('Task Deadline');
-    expect(screen.getByRole('checkbox', { name: 'Active' })).toBeChecked();
-  });
-
-  it('does not render the Active checkbox as checked for a brand-new notification', () => {
-    render(<NotificationSettingsModal notifications={[]} onCancel={vi.fn()} onOk={vi.fn()} />);
-
-    expect(screen.getByRole('checkbox', { name: 'Active' })).not.toBeChecked();
-  });
-
   it('hides the Parent select when there is one or fewer notifications', () => {
     render(<NotificationSettingsModal notifications={[{ id: 'a', name: 'A' }]} onCancel={vi.fn()} onOk={vi.fn()} />);
 
@@ -108,25 +48,6 @@ describe('NotificationSettingsModal', () => {
     );
 
     expect(screen.getByLabelText('Parent')).toBeInTheDocument();
-  });
-
-  it('renders subject + body on the email tab and only body on the telegram tab', () => {
-    render(
-      <NotificationSettingsModal
-        notification={makeNotification()}
-        notifications={[]}
-        onCancel={vi.fn()}
-        onOk={vi.fn()}
-      />,
-    );
-
-    const emailPanel = getChannelPanel('email');
-    expect(within(emailPanel).getByLabelText('subject')).toHaveValue('Hi');
-    expect(within(emailPanel).getByLabelText('body')).toBeInTheDocument();
-
-    const telegramPanel = getChannelPanel('telegram');
-    expect(within(telegramPanel).queryByLabelText('subject')).toBeNull();
-    expect(within(telegramPanel).getByLabelText('body')).toBeInTheDocument();
   });
 
   it('switches between Settings and channel template tabs', async () => {
@@ -150,17 +71,6 @@ describe('NotificationSettingsModal', () => {
     expect(settingsTab).toHaveAttribute('aria-selected', 'false');
   });
 
-  it('toggles the Active checkbox', async () => {
-    const user = userEvent.setup();
-    render(<NotificationSettingsModal notifications={[]} onCancel={vi.fn()} onOk={vi.fn()} />);
-
-    const active = screen.getByRole('checkbox', { name: 'Active' });
-    expect(active).not.toBeChecked();
-
-    await user.click(active);
-    expect(active).toBeChecked();
-  });
-
   it('shows validation errors and does not call onOk when required fields are empty', async () => {
     const user = userEvent.setup();
     const onOk = vi.fn();
@@ -182,7 +92,10 @@ describe('NotificationSettingsModal', () => {
 
     await user.type(screen.getByLabelText('Id'), 'new-notification');
     await user.type(screen.getByLabelText('Name'), 'New Notification');
-    await user.click(screen.getByRole('checkbox', { name: 'Active' }));
+    const active = screen.getByRole('checkbox', { name: 'Active' });
+    expect(active).not.toBeChecked();
+    await user.click(active);
+    expect(active).toBeChecked();
 
     // Type select (antd Select → role combobox; open via mouseDown, options in body).
     const typeSelect = screen.getByLabelText('Type');
@@ -200,12 +113,23 @@ describe('NotificationSettingsModal', () => {
     expect(submitted.type).toBe(NotificationType.Message);
   });
 
-  it('includes a channel entry with the template body when submitting', async () => {
+  it('prefills existing settings and channel fields, then submits their values', async () => {
     const user = userEvent.setup();
     const onOk = vi.fn();
     render(
       <NotificationSettingsModal notification={makeNotification()} notifications={[]} onCancel={vi.fn()} onOk={onOk} />,
     );
+
+    expect(screen.getByLabelText('Id')).toBeDisabled();
+    expect(screen.getByLabelText('Id')).toHaveValue('task-deadline');
+    expect(screen.getByLabelText('Name')).toHaveValue('Task Deadline');
+    expect(screen.getByRole('checkbox', { name: 'Active' })).toBeChecked();
+    const emailPanel = getChannelPanel('email');
+    expect(within(emailPanel).getByLabelText('subject')).toHaveValue('Hi');
+    expect(within(emailPanel).getByLabelText('body')).toBeInTheDocument();
+    const telegramPanel = getChannelPanel('telegram');
+    expect(within(telegramPanel).queryByLabelText('subject')).toBeNull();
+    expect(within(telegramPanel).getByLabelText('body')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: /save/i }));
 
@@ -237,10 +161,22 @@ describe('NotificationSettingsModal', () => {
     expect(telegramChannel.template.body).toBe('Telegram message');
   });
 
-  it('calls onCancel when the modal is dismissed without changes', async () => {
+  it('renders the new notification fields and tabs, then cancels without changes', async () => {
     const user = userEvent.setup();
     const onCancel = vi.fn();
     render(<NotificationSettingsModal notifications={[]} onCancel={onCancel} onOk={vi.fn()} />);
+
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByText('Notification Settings')).toBeInTheDocument();
+    for (const label of ['Id', 'Name', 'Type']) {
+      expect(screen.getByLabelText(label)).toBeInTheDocument();
+    }
+    expect(screen.getByText('Active')).toBeInTheDocument();
+    expect(screen.getByLabelText('Id')).not.toBeDisabled();
+    expect(screen.getByRole('checkbox', { name: 'Active' })).not.toBeChecked();
+    for (const name of ['Settings', 'email', 'telegram', 'discord']) {
+      expect(screen.getByRole('tab', { name })).toBeInTheDocument();
+    }
 
     await user.click(screen.getByRole('button', { name: /cancel/i }));
 
