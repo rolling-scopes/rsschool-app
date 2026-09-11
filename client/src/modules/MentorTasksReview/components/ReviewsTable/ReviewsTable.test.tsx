@@ -62,24 +62,21 @@ function renderTable(props: Partial<React.ComponentProps<typeof MentorReviewsTab
 }
 
 describe('MentorReviewsTable', () => {
-  it.each`
-    columnName
-    ${'Task Name'}
-    ${'Student'}
-    ${'Submitted Date'}
-    ${'Submitted Link'}
-    ${'Checker'}
-    ${'Reviewed Date'}
-    ${'Score'}
-    ${'Actions'}
-  `('should render the "$columnName" column header for a manager', ({ columnName }: { columnName: string }) => {
+  it('should render manager headers and row data: task link, github links, dates and score', () => {
     renderTable();
 
-    expect(screen.getByText(columnName)).toBeInTheDocument();
-  });
-
-  it('should render the row data: task link, github links, dates and score', () => {
-    renderTable();
+    for (const columnName of [
+      'Task Name',
+      'Student',
+      'Submitted Date',
+      'Submitted Link',
+      'Checker',
+      'Reviewed Date',
+      'Score',
+      'Actions',
+    ]) {
+      expect(screen.getByText(columnName)).toBeInTheDocument();
+    }
 
     const table = screen.getByRole('table');
     expect(within(table).getByRole('link', { name: 'Cross-check task' })).toHaveAttribute(
@@ -113,7 +110,7 @@ describe('MentorReviewsTable', () => {
     expect(within(table).queryByText('checker-github')).not.toBeInTheDocument();
   });
 
-  it('should open the assign-reviewer modal with the clicked review', async () => {
+  it('should open the clicked review and close the modal from inside it', async () => {
     const user = userEvent.setup();
     renderTable();
 
@@ -122,13 +119,6 @@ describe('MentorReviewsTable', () => {
 
     const dialog = screen.getByRole('dialog', { name: 'assign-reviewer' });
     expect(within(dialog).getByText('assigning: student-github')).toBeInTheDocument();
-  });
-
-  it('should close the modal again from inside it', async () => {
-    const user = userEvent.setup();
-    renderTable();
-
-    await user.click(screen.getByRole('button', { name: 'Assign Reviewer' }));
     await user.click(screen.getByRole('button', { name: 'close-modal' }));
 
     expect(screen.queryByRole('dialog', { name: 'assign-reviewer' })).not.toBeInTheDocument();
