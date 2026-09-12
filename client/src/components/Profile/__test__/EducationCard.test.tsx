@@ -40,8 +40,7 @@ describe('EducationCard', () => {
     });
   });
 
-  const openSettings = (user: ReturnType<typeof setupUser>) =>
-    user.click(screen.getByRole('img', { name: 'edit' }));
+  const openSettings = (user: ReturnType<typeof setupUser>) => user.click(screen.getByRole('img', { name: 'edit' }));
 
   // Fill all three fields of the (single) university in an open dialog.
   const fillNewUniversity = async (
