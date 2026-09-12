@@ -19,35 +19,17 @@ function makeSummary(overrides: Partial<StudentSummaryDto> = {}): StudentSummary
 }
 
 describe('<HomeSummary />', () => {
-  it('renders nothing when there is no summary', () => {
-    const { container } = render(<HomeSummary summary={null} courseTasks={[]} />);
+  it('renders summary status, score, and optional mentor details', () => {
+    const { container, rerender } = render(<HomeSummary summary={null} courseTasks={[]} />);
     expect(container).toBeEmptyDOMElement();
-  });
 
-  it('shows score points and completed-task ratio (only positive scores count)', () => {
-    render(<HomeSummary summary={makeSummary()} courseTasks={[{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]} />);
+    rerender(<HomeSummary summary={makeSummary()} courseTasks={[{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]} />);
     expect(screen.getByText('Score Points')).toBeInTheDocument();
     expect(screen.getByText('120')).toBeInTheDocument();
-    // 2 of 3 results have score > 0, total tasks = 4.
     expect(screen.getByText('2/4')).toBeInTheDocument();
-  });
-
-  it('shows an Active status when the student is active', () => {
-    render(<HomeSummary summary={makeSummary({ isActive: true })} courseTasks={[]} />);
     expect(screen.getByText('Active')).toBeInTheDocument();
-  });
-
-  it('shows an Inactive status when the student is inactive', () => {
-    render(<HomeSummary summary={makeSummary({ isActive: false })} courseTasks={[]} />);
-    expect(screen.getByText('Inactive')).toBeInTheDocument();
-  });
-
-  it('hides the mentor card when there is no mentor', () => {
-    render(<HomeSummary summary={makeSummary({ mentor: null })} courseTasks={[]} />);
     expect(screen.queryByText('Your mentor')).not.toBeInTheDocument();
-  });
 
-  it('renders mentor name, github link and only the populated contacts', () => {
     const mentor = {
       name: 'Jane Mentor',
       githubId: 'jane',
@@ -58,12 +40,12 @@ describe('<HomeSummary />', () => {
       contactsNotes: null,
       contactsWhatsApp: null,
     };
-    render(<HomeSummary summary={makeSummary({ mentor: mentor as any })} courseTasks={[]} />);
+    rerender(<HomeSummary summary={makeSummary({ isActive: false, mentor: mentor as any })} courseTasks={[]} />);
 
+    expect(screen.getByText('Inactive')).toBeInTheDocument();
     expect(screen.getByText('Your mentor')).toBeInTheDocument();
     expect(screen.getByText('Jane Mentor')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'jane' })).toBeInTheDocument();
-    // Populated contacts render; empty ones are skipped.
     expect(screen.getByText('jane@example.com')).toBeInTheDocument();
     expect(screen.getByText('jane_tg')).toBeInTheDocument();
     expect(screen.getByText('Email:')).toBeInTheDocument();
