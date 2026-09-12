@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { Form } from 'antd';
 import { UpdateUserDtoLanguagesEnum } from '@client/api';
-import { getLanguageName } from '@client/components/SelectLanguages';
 import { LABELS } from '@client/modules/Registry/constants';
 import { LanguagesMentoring } from './LanguagesMentoring';
 
@@ -15,11 +14,12 @@ const renderLanguages = (isStudentForm = false) =>
   );
 
 describe('LanguagesMentoring', () => {
-  test(`should render field with "${LABELS.languagesMentor}" label on mentor form`, async () => {
+  test(`should render mentor languages and the "${LABELS.languagesMentor}" label`, async () => {
     renderLanguages();
 
-    const field = await screen.findByLabelText(LABELS.languagesMentor);
-    expect(field).toBeInTheDocument();
+    expect(await screen.findByLabelText(LABELS.languagesMentor)).toBeInTheDocument();
+    expect(screen.getByText('English')).toBeInTheDocument();
+    expect(screen.getByText('Russian')).toBeInTheDocument();
   });
 
   test(`should render field with "${LABELS.languagesStudent}" label on student form`, async () => {
@@ -27,16 +27,5 @@ describe('LanguagesMentoring', () => {
 
     const field = await screen.findByLabelText(LABELS.languagesStudent);
     expect(field).toBeInTheDocument();
-  });
-
-  test.each`
-    value
-    ${getLanguageName(UpdateUserDtoLanguagesEnum.En)}
-    ${getLanguageName(UpdateUserDtoLanguagesEnum.Ru)}
-  `('should render pre-selected option with $value value', async ({ value }) => {
-    renderLanguages();
-
-    const option = await screen.findByText(value);
-    expect(option).toBeInTheDocument();
   });
 });
