@@ -5,50 +5,26 @@ import { CourseTaskStatus } from '@client/modules/AutoTest/types';
 describe('StatusTabs', () => {
   const onTabChangeMock = vi.fn();
 
-  it('should render status tabs', () => {
-    const statuses = generateStatuses();
-
-    render(<StatusTabs statuses={statuses} onTabChange={onTabChangeMock} />);
-
-    expect(screen.getAllByRole('tab')).toHaveLength(3);
-  });
-
-  it('should render status tabs when statuses were not provided', () => {
-    render(<StatusTabs statuses={[]} onTabChange={onTabChangeMock} />);
-
-    expect(screen.getAllByRole('tab')).toHaveLength(3);
-  });
-
-  it.each`
-    status                        | count
-    ${CourseTaskStatus.Available} | ${2}
-    ${CourseTaskStatus.Missed}    | ${3}
-    ${CourseTaskStatus.Done}      | ${4}
-  `(
-    'should render badge with count of $count for "$status" tab',
-    ({ status, count }: { status: string; count: number }) => {
-      const statuses = generateStatuses(undefined, { [status]: count });
-
-      render(<StatusTabs statuses={statuses} onTabChange={onTabChangeMock} />);
-
-      expect(screen.getByText(count)).toBeInTheDocument();
-    },
-  );
-
-  describe('when active tab was changed', () => {
-    it.each`
-      tabName
-      ${CourseTaskStatus.Missed}
-      ${CourseTaskStatus.Done}
-    `('should call onTabChange with tab name "$tabName"', ({ tabName }: { tabName: string }) => {
-      const statuses = generateStatuses(undefined, { [tabName]: 2 });
-      render(<StatusTabs statuses={statuses} onTabChange={onTabChangeMock} />);
-
-      const selectedTab = screen.getByText(new RegExp(tabName, 'i'));
-      fireEvent.click(selectedTab);
-
-      expect(onTabChangeMock).toHaveBeenCalledWith(tabName);
+  it('renders counts, handles empty statuses, and reports tab changes', () => {
+    const statuses = generateStatuses(undefined, {
+      [CourseTaskStatus.Available]: 2,
+      [CourseTaskStatus.Missed]: 3,
+      [CourseTaskStatus.Done]: 4,
     });
+    const { rerender } = render(<StatusTabs statuses={statuses} onTabChange={onTabChangeMock} />);
+
+    expect(screen.getAllByRole('tab')).toHaveLength(3);
+    expect(screen.getByText('2')).toBeInTheDocument();
+    expect(screen.getByText('3')).toBeInTheDocument();
+    expect(screen.getByText('4')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText(new RegExp(CourseTaskStatus.Missed, 'i')));
+    fireEvent.click(screen.getByText(new RegExp(CourseTaskStatus.Done, 'i')));
+    expect(onTabChangeMock).toHaveBeenCalledWith(CourseTaskStatus.Missed);
+    expect(onTabChangeMock).toHaveBeenCalledWith(CourseTaskStatus.Done);
+
+    rerender(<StatusTabs statuses={[]} onTabChange={onTabChangeMock} />);
+    expect(screen.getAllByRole('tab')).toHaveLength(3);
   });
 });
 
