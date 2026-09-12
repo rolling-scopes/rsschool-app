@@ -20,7 +20,7 @@ function renderTable() {
 }
 
 describe('<DragSortTable />', () => {
-  it('renders rows through the custom draggable row component (not dragging)', () => {
+  it('applies styles based on the row drag state', () => {
     useSortable.mockReturnValue({
       attributes: {},
       setNodeRef: vi.fn(),
@@ -28,16 +28,13 @@ describe('<DragSortTable />', () => {
       transition: undefined,
       isDragging: false,
     });
-    renderTable();
+    const { rerender } = renderTable();
 
     const cell = screen.getByText('Alpha');
     const row = cell.closest('tr')!;
     // Not dragging → no elevated z-index / relative positioning.
     expect(row.style.zIndex).toBe('');
     expect(row.style.position).toBe('');
-  });
-
-  it('applies the elevated dragging styles while a row is being dragged', () => {
     useSortable.mockReturnValue({
       attributes: {},
       setNodeRef: vi.fn(),
@@ -45,10 +42,10 @@ describe('<DragSortTable />', () => {
       transition: undefined,
       isDragging: true,
     });
-    renderTable();
+    rerender(<DragSortTable<Row> rowKey="key" columns={columns} dataSource={data} pagination={false} />);
 
-    const row = screen.getByText('Alpha').closest('tr')!;
-    expect(row.style.position).toBe('relative');
-    expect(row.style.zIndex).toBe('9999');
+    const draggingRow = screen.getByText('Alpha').closest('tr')!;
+    expect(draggingRow.style.position).toBe('relative');
+    expect(draggingRow.style.zIndex).toBe('9999');
   });
 });
