@@ -14,37 +14,20 @@ describe('MessageProvider', () => {
     );
   }
 
-  it('provides message and notification instances from the antd hooks', () => {
-    render(
-      <MessageProvider>
-        <Consumer />
-      </MessageProvider>,
-    );
-
-    expect(screen.getByTestId('has-message')).toHaveTextContent('true');
-    expect(screen.getByTestId('has-notification')).toHaveTextContent('true');
-  });
-
-  it('renders its children', () => {
-    render(
-      <MessageProvider>
-        <div>child-content</div>
-      </MessageProvider>,
-    );
-
-    expect(screen.getByText('child-content')).toBeInTheDocument();
-  });
-
-  it('the provided instances come from the hook APIs (not the static antd singletons)', () => {
+  it('provides hook instances and renders children', () => {
     const spyMessage = vi.spyOn(message, 'useMessage');
     const spyNotification = vi.spyOn(notification, 'useNotification');
 
     render(
       <MessageProvider>
-        <div>child</div>
+        <Consumer />
+        <div>child-content</div>
       </MessageProvider>,
     );
 
+    expect(screen.getByTestId('has-message')).toHaveTextContent('true');
+    expect(screen.getByTestId('has-notification')).toHaveTextContent('true');
+    expect(screen.getByText('child-content')).toBeInTheDocument();
     expect(spyMessage).toHaveBeenCalled();
     expect(spyNotification).toHaveBeenCalled();
 
