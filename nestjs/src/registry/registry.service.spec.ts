@@ -256,7 +256,7 @@ describe('RegistryService (uncovered methods)', () => {
 
       await service.filterMentorRegistries({ ...baseArgs, preselectedCourses: [1, 2] });
 
-      const call = calls.andWhere.find(([sql]) => typeof sql === 'string' && sql.includes('preselectedCourses'));
+      const call = calls.andWhere!.find(([sql]) => typeof sql === 'string' && sql.includes('preselectedCourses'));
       expect(call).toBeDefined();
       expect(call?.[1]).toEqual({ preselectedCourses: [1, 2] });
     });
@@ -274,7 +274,7 @@ describe('RegistryService (uncovered methods)', () => {
 
       await service.filterMentorRegistries({ ...baseArgs, preferedCourses: [3] });
 
-      const call = calls.andWhere.find(
+      const call = calls.andWhere!.find(
         ([sql]) => typeof sql === 'string' && sql.includes('preferedCourses') && !sql.includes('&&'),
       );
       expect(call?.[1]).toEqual({ preferedCourses: [3] });
@@ -285,7 +285,7 @@ describe('RegistryService (uncovered methods)', () => {
 
       await service.filterMentorRegistries({ ...baseArgs, technicalMentoring: ['nodejs'] });
 
-      const call = calls.andWhere.find(([sql]) => typeof sql === 'string' && sql.includes('technicalMentoring'));
+      const call = calls.andWhere!.find(([sql]) => typeof sql === 'string' && sql.includes('technicalMentoring'));
       expect(call?.[1]).toEqual({ technicalMentoring: ['nodejs'] });
     });
 
@@ -295,7 +295,7 @@ describe('RegistryService (uncovered methods)', () => {
       const bracketsArg = await runFilterAndExtractBrackets(service, { ...baseArgs, coursesIds: [5] }, qb, calls);
 
       expect(bracketsArg).toBeDefined();
-      const whereCall = calls.where.find(([sql]) => typeof sql === 'string' && sql.includes('&&'));
+      const whereCall = calls.where!.find(([sql]) => typeof sql === 'string' && sql.includes('&&'));
       expect(whereCall?.[1]).toEqual({ coursesIds: [5] });
       // orWhere (disciplineNames branch) must not fire
       expect(calls.orWhere ?? []).toEqual([]);
@@ -320,7 +320,7 @@ describe('RegistryService (uncovered methods)', () => {
         calls,
       );
 
-      expect(calls.where.some(([sql]) => typeof sql === 'string' && sql.includes('&&'))).toBe(true);
+      expect(calls.where!.some(([sql]) => typeof sql === 'string' && sql.includes('&&'))).toBe(true);
       expect(calls.orWhere?.some(([sql]) => typeof sql === 'string' && sql.includes('technicalMentoring'))).toBe(true);
     });
 

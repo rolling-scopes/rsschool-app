@@ -376,10 +376,10 @@ describe('ScheduleService', () => {
 
       expect(courseService.getByIds).toHaveBeenCalledWith([5], expect.any(Object));
       expect(result).toHaveLength(1);
-      const [userId, courses] = result[0];
+      const [userId, courses] = result[0]!;
       expect(userId).toBe(42);
-      expect(courses[0].course).toBe(course);
-      expect(courses[0].changes[0]).toMatchObject({ isNew: true, type: 'task', name: 'Task 200' });
+      expect(courses[0]!.course).toBe(course);
+      expect(courses[0]!.changes[0]).toMatchObject({ isNew: true, type: 'task', name: 'Task 200' });
     });
 
     it('skips users that have no matching course aliases', async () => {
@@ -416,7 +416,7 @@ describe('ScheduleService', () => {
 
       const result = await service.getChangedCoursesRecipients(2);
 
-      expect(result[0][1][0].changes[0]).toMatchObject({ isRemoved: true, type: 'task' });
+      expect(result[0]![1][0]!.changes[0]).toMatchObject({ isRemoved: true, type: 'task' });
     });
 
     it('treats a disabled-task update as a removal', async () => {
@@ -434,7 +434,7 @@ describe('ScheduleService', () => {
 
       const result = await service.getChangedCoursesRecipients(2);
 
-      expect(result[0][1][0].changes[0]).toMatchObject({ isRemoved: true });
+      expect(result[0]![1][0]!.changes[0]).toMatchObject({ isRemoved: true });
     });
 
     it('records an updated entry merging previous and new fields', async () => {
@@ -452,7 +452,7 @@ describe('ScheduleService', () => {
 
       const result = await service.getChangedCoursesRecipients(2);
 
-      expect(result[0][1][0].changes[0]).toMatchObject({
+      expect(result[0]![1][0]!.changes[0]).toMatchObject({
         type: 'event',
         place: 'New',
         placeOld: 'Old',
@@ -477,7 +477,7 @@ describe('ScheduleService', () => {
       const result = await service.getChangedCoursesRecipients(2);
 
       expect(courseService.getByIds).toHaveBeenCalledWith([5], expect.any(Object));
-      expect(result[0][1][0].changes[0]).toMatchObject({ isRemoved: true, name: 'Event 300' });
+      expect(result[0]![1][0]!.changes[0]).toMatchObject({ isRemoved: true, name: 'Event 300' });
     });
 
     it('reuses an existing course bucket for multiple changes of the same course', async () => {
@@ -509,7 +509,7 @@ describe('ScheduleService', () => {
 
       // both changes land in the single course-a bucket for user 42
       expect(courseService.getByIds).toHaveBeenCalledWith([5], expect.any(Object));
-      expect(result[0][1][0].changes).toHaveLength(2);
+      expect(result[0]![1][0]!.changes).toHaveLength(2);
     });
 
     it('merges a later update onto an earlier change for the same entry key', async () => {
@@ -537,7 +537,7 @@ describe('ScheduleService', () => {
       const result = await service.getChangedCoursesRecipients(2);
 
       // single entry key -> one merged change carrying the place update over the insert
-      const changes = result[0][1][0].changes;
+      const changes = result[0]![1][0]!.changes;
       expect(changes).toHaveLength(1);
       expect(changes[0]).toMatchObject({ isNew: true, place: 'New', placeOld: 'Old' });
     });
@@ -616,7 +616,7 @@ describe('ScheduleService', () => {
 
       const result = await service.getChangedCoursesRecipients(2);
 
-      expect(result[0][1][0].changes[0]).toMatchObject({ isCrossCheckStarted: true, type: 'task', name: 'Task 200' });
+      expect(result[0]![1][0]!.changes[0]).toMatchObject({ isCrossCheckStarted: true, type: 'task', name: 'Task 200' });
     });
 
     it('defaults the change name to an empty string when no task/event entry is found', async () => {
@@ -635,7 +635,7 @@ describe('ScheduleService', () => {
 
       const result = await service.getChangedCoursesRecipients(2);
 
-      expect(result[0][1][0].changes[0]).toMatchObject({ name: '' });
+      expect(result[0]![1][0]!.changes[0]).toMatchObject({ name: '' });
     });
   });
 });

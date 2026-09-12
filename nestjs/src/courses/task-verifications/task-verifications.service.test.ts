@@ -182,8 +182,8 @@ describe('TaskVerificationsService', () => {
       const result = await service.getAnswersByAttempts(1, 2);
 
       expect(result).toHaveLength(1);
-      expect(result[0].questions).toHaveLength(1);
-      expect(result[0].questions[0]).toMatchObject({
+      expect(result[0]!.questions).toHaveLength(1);
+      expect(result[0]!.questions[0]).toMatchObject({
         question: 'Q1',
         answers: ['a', 'b'],
         selectedAnswers: [1],
@@ -191,8 +191,8 @@ describe('TaskVerificationsService', () => {
         answersType: 'image',
         questionImage: 'i.png',
       });
-      expect(result[0].score).toBe(50);
-      expect(result[0].maxScore).toBe(100);
+      expect(result[0]!.score).toBe(50);
+      expect(result[0]!.maxScore).toBe(100);
     });
 
     it('should wrap a non-array incorrect answer value into an array of selected answers', async () => {
@@ -203,7 +203,7 @@ describe('TaskVerificationsService', () => {
 
       const result = await service.getAnswersByAttempts(1, 2);
 
-      expect(result[0].questions[0].selectedAnswers).toEqual([1, 2]);
+      expect(result[0]!.questions[0]!.selectedAnswers).toEqual([1, 2]);
     });
 
     it('should drop incorrect answers whose question is missing from the task attributes', async () => {
@@ -217,7 +217,7 @@ describe('TaskVerificationsService', () => {
 
       const result = await service.getAnswersByAttempts(1, 2);
 
-      expect(result[0].questions).toHaveLength(0);
+      expect(result[0]!.questions).toHaveLength(0);
     });
   });
 

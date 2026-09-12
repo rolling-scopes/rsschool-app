@@ -115,7 +115,10 @@ describe('certificate requests', () => {
 
   describe('createCourseCertificates', () => {
     it('returns empty list without AWS call when criteria matched no students', async () => {
-      vi.spyOn(service as never, 'findStudentIdsByCriteria' as never).mockResolvedValue([] as never);
+      vi.spyOn(
+        service as unknown as { findStudentIdsByCriteria: CertificationsService['findStudentIdsByCriteria'] },
+        'findStudentIdsByCriteria',
+      ).mockResolvedValue([]);
 
       const result = await controller.createCourseCertificates(5, { criteria: { minTotalScore: 100 } });
 
@@ -124,7 +127,10 @@ describe('certificate requests', () => {
     });
 
     it('builds requests for matched students and posts them to the AWS gateway', async () => {
-      vi.spyOn(service as never, 'findStudentIdsByCriteria' as never).mockResolvedValue([42] as never);
+      vi.spyOn(
+        service as unknown as { findStudentIdsByCriteria: CertificationsService['findStudentIdsByCriteria'] },
+        'findStudentIdsByCriteria',
+      ).mockResolvedValue([42]);
       const qb = createQb([mockStudent]);
       studentRepository.createQueryBuilder.mockReturnValue(qb);
 
@@ -139,7 +145,10 @@ describe('certificate requests', () => {
     });
 
     it('targets students without certificates when criteria are empty', async () => {
-      vi.spyOn(service as never, 'findStudentIdsByCriteria' as never).mockResolvedValue([] as never);
+      vi.spyOn(
+        service as unknown as { findStudentIdsByCriteria: CertificationsService['findStudentIdsByCriteria'] },
+        'findStudentIdsByCriteria',
+      ).mockResolvedValue([]);
       const qb = createQb([]);
       studentRepository.createQueryBuilder.mockReturnValue(qb);
 

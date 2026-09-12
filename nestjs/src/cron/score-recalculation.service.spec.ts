@@ -76,7 +76,7 @@ describe('ScoreRecalculationService.recalculateTotalScore', () => {
     await service.recalculateTotalScore([{ id: 1, name: 'c' } as never]);
 
     expect(save).toHaveBeenCalledTimes(1);
-    const saved = save.mock.calls[0][0] as Array<{
+    const saved = save.mock.calls[0]![0] as Array<{
       id: number;
       totalScore: number;
       crossCheckScore: number;
@@ -92,9 +92,9 @@ describe('ScoreRecalculationService.recalculateTotalScore', () => {
     expect(byId[103]).toMatchObject({ totalScore: 3, crossCheckScore: 0 });
 
     // ranks: 10,10,3 -> 101 & 102 tie at rank 1, 103 at rank 3
-    expect(byId[101].rank).toBe(1);
-    expect(byId[102].rank).toBe(1);
-    expect(byId[103].rank).toBe(3);
+    expect(byId[101]!.rank).toBe(1);
+    expect(byId[102]!.rank).toBe(1);
+    expect(byId[103]!.rank).toBe(3);
   });
 
   it('saves only changed students (skips those whose score and rank are already correct)', async () => {
@@ -151,7 +151,7 @@ describe('ScoreRecalculationService.recalculateTotalScore', () => {
 
     await service.recalculateTotalScore([{ id: 1, name: 'c' } as never]);
 
-    const saved = save.mock.calls[0][0] as Array<{ id: number; totalScore: number }>;
+    const saved = save.mock.calls[0]![0] as Array<{ id: number; totalScore: number }>;
     // pre-screening score 7 floored, weight of courseTask 1 = 1 -> total 7
     expect(saved.find(s => s.id === 300)).toMatchObject({ totalScore: 7 });
   });
@@ -181,7 +181,7 @@ describe('ScoreRecalculationService.recalculateTotalScore', () => {
 
     await service.recalculateTotalScore([{ id: 1, name: 'c' } as never]);
 
-    const saved = save.mock.calls[0][0] as Array<{ id: number; totalScore: number }>;
+    const saved = save.mock.calls[0]![0] as Array<{ id: number; totalScore: number }>;
     // pre-screening (7) is filtered out because courseTaskId 1 already exists -> only existing 4 counts
     expect(saved.find(s => s.id === 301)).toMatchObject({ totalScore: 4 });
   });
@@ -203,7 +203,7 @@ describe('ScoreRecalculationService.recalculateTotalScore', () => {
 
     await service.recalculateTotalScore([{ id: 1, name: 'c' } as never]);
 
-    const saved = save.mock.calls[0][0] as Array<{ id: number; totalScore: number; rank: number }>;
+    const saved = save.mock.calls[0]![0] as Array<{ id: number; totalScore: number; rank: number }>;
     expect(saved.find(s => s.id === 302)).toMatchObject({ totalScore: 0, rank: 1 });
   });
 
@@ -230,8 +230,8 @@ describe('ScoreRecalculationService.recalculateTotalScore', () => {
     await promise;
 
     expect(save).toHaveBeenCalledTimes(2); // 500 + 1
-    expect(save.mock.calls[0][0]).toHaveLength(500);
-    expect(save.mock.calls[1][0]).toHaveLength(1);
+    expect(save.mock.calls[0]![0]).toHaveLength(500);
+    expect(save.mock.calls[1]![0]).toHaveLength(1);
     expect(setTimeoutSpy).toHaveBeenCalledWith(expect.any(Function), 10_000);
   });
 });

@@ -71,7 +71,7 @@ describe('CourseTasksService', () => {
 
       await service.getAll(5, Status.Started);
 
-      const where = courseTaskRepository.find.mock.calls[0][0].where;
+      const where = courseTaskRepository.find.mock.calls[0]![0].where;
       expect(where.studentStartDate).toEqual(LessThanOrEqual(expect.any(String)));
       expect(where.studentEndDate).toBeUndefined();
     });
@@ -81,7 +81,7 @@ describe('CourseTasksService', () => {
 
       await service.getAll(5, Status.InProgress);
 
-      const where = courseTaskRepository.find.mock.calls[0][0].where;
+      const where = courseTaskRepository.find.mock.calls[0]![0].where;
       expect(where.studentStartDate).toEqual(LessThanOrEqual(expect.any(String)));
       expect(where.studentEndDate).toEqual(MoreThan(expect.any(String)));
     });
@@ -91,7 +91,7 @@ describe('CourseTasksService', () => {
 
       await service.getAll(5, Status.Finished);
 
-      const where = courseTaskRepository.find.mock.calls[0][0].where;
+      const where = courseTaskRepository.find.mock.calls[0]![0].where;
       expect(where.studentEndDate).toEqual(LessThan(expect.any(String)));
       expect(where.studentStartDate).toBeUndefined();
     });
@@ -101,7 +101,7 @@ describe('CourseTasksService', () => {
 
       await service.getAll(5, undefined, true);
 
-      expect(courseTaskRepository.find.mock.calls[0][0].cache).toBe(60 * 1000);
+      expect(courseTaskRepository.find.mock.calls[0]![0].cache).toBe(60 * 1000);
     });
 
     it('passes a checker filter through', async () => {
@@ -109,7 +109,7 @@ describe('CourseTasksService', () => {
 
       await service.getAll(5, undefined, false, Checker.AutoTest);
 
-      expect(courseTaskRepository.find.mock.calls[0][0].where.checker).toBe(Checker.AutoTest);
+      expect(courseTaskRepository.find.mock.calls[0]![0].where.checker).toBe(Checker.AutoTest);
     });
   });
 
@@ -219,7 +219,7 @@ describe('CourseTasksService', () => {
 
       const result = await service.getUpdatedTasks(5, 3);
 
-      const args = courseTaskRepository.find.mock.calls[0][0];
+      const args = courseTaskRepository.find.mock.calls[0]![0];
       expect(args.where.courseId).toBe(5);
       expect(args.where.updatedDate).toEqual(MoreThanOrEqual(expect.any(String)));
       expect(args.relations).toEqual(['task']);
@@ -233,12 +233,12 @@ describe('CourseTasksService', () => {
 
       await service.getTasksPendingDeadline(5);
 
-      const where = courseTaskRepository.find.mock.calls[0][0].where;
+      const where = courseTaskRepository.find.mock.calls[0]![0].where;
       expect(where).toMatchObject({ courseId: 5, disabled: false });
       expect(where.studentStartDate).toEqual(LessThanOrEqual(expect.any(String)));
       expect(where.studentEndDate).toEqual(Between(expect.any(String), expect.any(String)));
-      expect(courseTaskRepository.find.mock.calls[0][0].relations).toEqual(['task', 'taskSolutions']);
-      expect(courseTaskRepository.find.mock.calls[0][0].order).toEqual({ studentEndDate: 'ASC' });
+      expect(courseTaskRepository.find.mock.calls[0]![0].relations).toEqual(['task', 'taskSolutions']);
+      expect(courseTaskRepository.find.mock.calls[0]![0].order).toEqual({ studentEndDate: 'ASC' });
     });
 
     it('honours custom deadlineWithinHours and safeBuffer options', async () => {
@@ -246,7 +246,7 @@ describe('CourseTasksService', () => {
 
       await service.getTasksPendingDeadline(5, { deadlineWithinHours: 48, safeBuffer: 2 });
 
-      const where = courseTaskRepository.find.mock.calls[0][0].where;
+      const where = courseTaskRepository.find.mock.calls[0]![0].where;
       expect(where.studentEndDate).toEqual(Between(expect.any(String), expect.any(String)));
     });
   });
@@ -257,7 +257,7 @@ describe('CourseTasksService', () => {
 
       await service.getCrossCheckTasksPendingDeadline(5);
 
-      const args = courseTaskRepository.find.mock.calls[0][0];
+      const args = courseTaskRepository.find.mock.calls[0]![0];
       expect(args.where).toMatchObject({
         courseId: 5,
         disabled: false,
@@ -275,7 +275,7 @@ describe('CourseTasksService', () => {
 
       await service.getCrossCheckTasksPendingDeadline(5, { deadlineWithinHours: 48, safeBuffer: 2 });
 
-      const where = courseTaskRepository.find.mock.calls[0][0].where;
+      const where = courseTaskRepository.find.mock.calls[0]![0].where;
       expect(where.crossCheckEndDate).toEqual(Between(expect.any(String), expect.any(String)));
     });
   });

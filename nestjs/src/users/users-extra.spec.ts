@@ -310,9 +310,9 @@ describe('UsersController.searchUsers', () => {
 
     // Admin visibility => UserSearchDto exposes the real contact/city fields
     expect(result).toHaveLength(1);
-    expect(result[0].contactsEmail).toBe('john@contact.com');
-    expect(result[0].primaryEmail).toBe('john@example.com');
-    expect(result[0].cityName).toBe('Minsk');
+    expect(result[0]!.contactsEmail).toBe('john@contact.com');
+    expect(result[0]!.primaryEmail).toBe('john@example.com');
+    expect(result[0]!.cityName).toBe('Minsk');
   });
 
   it('passes elevated visibility (true) for hirers, exposing contacts', async () => {
@@ -321,7 +321,7 @@ describe('UsersController.searchUsers', () => {
     const result = await controller.searchUsers(hirerReq, 'john');
 
     expect(result).toHaveLength(1);
-    expect(result[0].contactsEmail).toBe('john@contact.com');
+    expect(result[0]!.contactsEmail).toBe('john@contact.com');
   });
 
   it('passes restricted visibility (false) for regular users, masking contacts', async () => {
@@ -330,9 +330,9 @@ describe('UsersController.searchUsers', () => {
     const result = await controller.searchUsers(plainReq, 'john');
 
     expect(result).toHaveLength(1);
-    expect(result[0].contactsEmail).toBeNull();
-    expect(result[0].primaryEmail).toBeNull();
-    expect(result[0].cityName).toBeNull();
+    expect(result[0]!.contactsEmail).toBeNull();
+    expect(result[0]!.primaryEmail).toBeNull();
+    expect(result[0]!.cityName).toBeNull();
   });
 
   it('maps an empty result list to an empty array', async () => {

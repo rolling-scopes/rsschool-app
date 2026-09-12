@@ -79,7 +79,7 @@ describe('ProfileInfoService raw queries', () => {
   describe('getStudentCourses', () => {
     it('returns the raw rows', async () => {
       ds.getRepository({ name: 'User' } as never); // prime builder
-      ds.builders.User.getRawMany.mockResolvedValue([{ courseId: 1 }, { courseId: 2 }]);
+      ds.builders.User!.getRawMany!.mockResolvedValue([{ courseId: 1 }, { courseId: 2 }]);
 
       const result = await service.getStudentCourses('john-doe');
 
@@ -88,7 +88,7 @@ describe('ProfileInfoService raw queries', () => {
 
     it('returns null when the query yields a nullish result', async () => {
       ds.getRepository({ name: 'User' } as never);
-      ds.builders.User.getRawMany.mockResolvedValue(null);
+      ds.builders.User!.getRawMany!.mockResolvedValue(null);
 
       const result = await service.getStudentCourses('john-doe');
 
@@ -100,18 +100,18 @@ describe('ProfileInfoService raw queries', () => {
     it('merges registered + registry courses, dedupes, and returns the list', async () => {
       // registered mentor course ids (Mentor.getMany)
       ds.getRepository({ name: 'Mentor' } as never);
-      ds.builders.Mentor.getMany.mockResolvedValue([{ courseId: 1 }]);
+      ds.builders.Mentor!.getMany!.mockResolvedValue([{ courseId: 1 }]);
       // registry record (MentorRegistry.getOne)
       ds.getRepository({ name: 'MentorRegistry' } as never);
-      ds.builders.MentorRegistry.getOne.mockResolvedValue({
+      ds.builders.MentorRegistry!.getOne!.mockResolvedValue({
         preferedCourses: ['2', '1'],
         technicalMentoring: ['JS'],
       });
       // disciplines + courses-by-discipline use repository.find
       ds.getRepository({ name: 'Discipline' } as never);
-      ds.finds.Discipline.mockResolvedValue([{ id: 10 }]);
+      ds.finds.Discipline!.mockResolvedValue([{ id: 10 }]);
       ds.getRepository({ name: 'Course' } as never);
-      ds.finds.Course.mockResolvedValue([{ id: 3 }]);
+      ds.finds.Course!.mockResolvedValue([{ id: 3 }]);
 
       const result = await service.getMentorCourses('john-doe');
 
@@ -124,13 +124,13 @@ describe('ProfileInfoService raw queries', () => {
 
     it('returns null when no mentor courses exist anywhere', async () => {
       ds.getRepository({ name: 'Mentor' } as never);
-      ds.builders.Mentor.getMany.mockResolvedValue([]);
+      ds.builders.Mentor!.getMany!.mockResolvedValue([]);
       ds.getRepository({ name: 'MentorRegistry' } as never);
-      ds.builders.MentorRegistry.getOne.mockResolvedValue(null);
+      ds.builders.MentorRegistry!.getOne!.mockResolvedValue(null);
       ds.getRepository({ name: 'Discipline' } as never);
-      ds.finds.Discipline.mockResolvedValue([]);
+      ds.finds.Discipline!.mockResolvedValue([]);
       ds.getRepository({ name: 'Course' } as never);
-      ds.finds.Course.mockResolvedValue([]);
+      ds.finds.Course!.mockResolvedValue([]);
 
       const result = await service.getMentorCourses('john-doe');
 
@@ -141,7 +141,7 @@ describe('ProfileInfoService raw queries', () => {
   describe('getConfigurableProfilePermissions', () => {
     it('returns the raw permissions row', async () => {
       ds.getRepository({ name: 'ProfilePermissions' } as never);
-      ds.builders.ProfilePermissions.getRawOne.mockResolvedValue({ isProfileVisible: true });
+      ds.builders.ProfilePermissions!.getRawOne!.mockResolvedValue({ isProfileVisible: true });
 
       const result = await service.getConfigurableProfilePermissions('john-doe');
 
@@ -150,7 +150,7 @@ describe('ProfileInfoService raw queries', () => {
 
     it('falls back to an empty object when there is no row', async () => {
       ds.getRepository({ name: 'ProfilePermissions' } as never);
-      ds.builders.ProfilePermissions.getRawOne.mockResolvedValue(undefined);
+      ds.builders.ProfilePermissions!.getRawOne!.mockResolvedValue(undefined);
 
       const result = await service.getConfigurableProfilePermissions('john-doe');
 
@@ -162,7 +162,7 @@ describe('ProfileInfoService raw queries', () => {
     it('returns the raw relations row', async () => {
       ds.getRepository({ name: 'Student' } as never);
       const row = { student: 'john-doe', mentors: ['m1'] };
-      ds.builders.Student.getRawOne.mockResolvedValue(row);
+      ds.builders.Student!.getRawOne!.mockResolvedValue(row);
 
       const result = await service.getRelationsRoles('viewer', 'john-doe');
 
@@ -171,7 +171,7 @@ describe('ProfileInfoService raw queries', () => {
 
     it('returns null when there are no relations', async () => {
       ds.getRepository({ name: 'Student' } as never);
-      ds.builders.Student.getRawOne.mockResolvedValue(undefined);
+      ds.builders.Student!.getRawOne!.mockResolvedValue(undefined);
 
       const result = await service.getRelationsRoles('viewer', 'john-doe');
 
@@ -202,7 +202,7 @@ describe('ProfileInfoService raw queries', () => {
 
     it('returns full info with contacts when all permissions are visible', async () => {
       ds.getRepository({ name: 'User' } as never);
-      ds.builders.User.getRawOne.mockResolvedValue(rawUser);
+      ds.builders.User!.getRawOne!.mockResolvedValue(rawUser);
 
       const result = await service.getUserInfo('john-doe', allTrue);
 
@@ -230,7 +230,7 @@ describe('ProfileInfoService raw queries', () => {
     it('omits gated fields and returns undefined contacts when nothing is visible', async () => {
       ds.getRepository({ name: 'User' } as never);
       // Simulate a query that only selected the always-present columns.
-      ds.builders.User.getRawOne.mockResolvedValue({
+      ds.builders.User!.getRawOne!.mockResolvedValue({
         firstName: '',
         lastName: '',
         countryName: 'Poland',
@@ -252,7 +252,7 @@ describe('ProfileInfoService raw queries', () => {
 
     it('shows contacts when only one contact permission (e.g. phone) is visible', async () => {
       ds.getRepository({ name: 'User' } as never);
-      ds.builders.User.getRawOne.mockResolvedValue({
+      ds.builders.User!.getRawOne!.mockResolvedValue({
         firstName: 'John',
         lastName: 'Doe',
         countryName: null,
@@ -268,7 +268,7 @@ describe('ProfileInfoService raw queries', () => {
 
     it('throws NotFoundException when the user row is missing', async () => {
       ds.getRepository({ name: 'User' } as never);
-      ds.builders.User.getRawOne.mockResolvedValue(null);
+      ds.builders.User!.getRawOne!.mockResolvedValue(null);
 
       await expect(service.getUserInfo('ghost', allTrue)).rejects.toBeInstanceOf(NotFoundException);
       await expect(service.getUserInfo('ghost', allTrue)).rejects.toThrow('User with githubId ghost not found');
@@ -278,7 +278,7 @@ describe('ProfileInfoService raw queries', () => {
   describe('getMentorStats', () => {
     it('maps aggregated mentor rows into per-course stats with students', async () => {
       ds.getRepository({ name: 'Mentor' } as never);
-      ds.builders.Mentor.getRawMany.mockResolvedValue([
+      ds.builders.Mentor!.getRawMany!.mockResolvedValue([
         {
           courseName: 'RS 2024',
           courseLocationName: 'Minsk',
@@ -306,7 +306,7 @@ describe('ProfileInfoService raw queries', () => {
 
     it('returns undefined students when the course has no students (first id is falsy)', async () => {
       ds.getRepository({ name: 'Mentor' } as never);
-      ds.builders.Mentor.getRawMany.mockResolvedValue([
+      ds.builders.Mentor!.getRawMany!.mockResolvedValue([
         {
           courseName: 'RS 2024',
           courseLocationName: 'Minsk',
@@ -327,7 +327,7 @@ describe('ProfileInfoService raw queries', () => {
   describe('getPublicFeedback', () => {
     it('maps feedback rows including the resolved author name', async () => {
       ds.getRepository({ name: 'Feedback' } as never);
-      ds.builders.Feedback.getRawMany.mockResolvedValue([
+      ds.builders.Feedback!.getRawMany!.mockResolvedValue([
         {
           feedbackDate: '2024-01-01',
           badgeId: 'badge',
@@ -352,7 +352,7 @@ describe('ProfileInfoService raw queries', () => {
 
     it('returns an empty array when there is no feedback', async () => {
       ds.getRepository({ name: 'Feedback' } as never);
-      ds.builders.Feedback.getRawMany.mockResolvedValue([]);
+      ds.builders.Feedback!.getRawMany!.mockResolvedValue([]);
 
       const result = await service.getPublicFeedback('john-doe');
 
@@ -363,7 +363,7 @@ describe('ProfileInfoService raw queries', () => {
   describe('getStageInterviewFeedback', () => {
     it('maps a modern feedback (with version) using the stored interview score', async () => {
       ds.getRepository({ name: 'StageInterview' } as never);
-      ds.builders.StageInterview.getRawMany.mockResolvedValue([
+      ds.builders.StageInterview!.getRawMany!.mockResolvedValue([
         {
           feedbackVersion: 2,
           decision: 'yes',
@@ -400,7 +400,7 @@ describe('ProfileInfoService raw queries', () => {
 
     it('defaults a modern feedback score to 0 when interviewScore is nullish', async () => {
       ds.getRepository({ name: 'StageInterview' } as never);
-      ds.builders.StageInterview.getRawMany.mockResolvedValue([
+      ds.builders.StageInterview!.getRawMany!.mockResolvedValue([
         {
           feedbackVersion: 1,
           decision: 'no',
@@ -419,8 +419,8 @@ describe('ProfileInfoService raw queries', () => {
 
       const result = await service.getStageInterviewFeedback('john-doe');
 
-      expect(result[0].score).toBe(0);
-      expect(result[0].version).toBe(1);
+      expect(result[0]!.score).toBe(0);
+      expect(result[0]!.version).toBe(1);
     });
 
     it('parses a legacy feedback (no version) via the legacy ratings calculator', async () => {
@@ -435,7 +435,7 @@ describe('ProfileInfoService raw queries', () => {
           dataStructures: { b: 5 },
         },
       };
-      ds.builders.StageInterview.getRawMany.mockResolvedValue([
+      ds.builders.StageInterview!.getRawMany!.mockResolvedValue([
         {
           feedbackVersion: null,
           decision: 'yes',
@@ -454,10 +454,10 @@ describe('ProfileInfoService raw queries', () => {
 
       const result = await service.getStageInterviewFeedback('john-doe');
 
-      expect(result[0].version).toBe(0);
+      expect(result[0]!.version).toBe(0);
       // resume.score short-circuits getInterviewRatings -> score === resume.score
-      expect(result[0].score).toBe(80);
-      expect(result[0].feedback).toMatchObject({
+      expect(result[0]!.score).toBe(80);
+      expect(result[0]!.feedback).toMatchObject({
         english: 'b2',
         comment: 'good resume',
         skills: { htmlCss: 5 },
@@ -472,7 +472,7 @@ describe('ProfileInfoService raw queries', () => {
         resume: { score: 0 },
         skills: { htmlCss: { level: 5 }, common: { a: 5 }, dataStructures: { b: 5 } },
       };
-      ds.builders.StageInterview.getRawMany.mockResolvedValue([
+      ds.builders.StageInterview!.getRawMany!.mockResolvedValue([
         {
           feedbackVersion: null,
           decision: 'yes',
@@ -491,7 +491,7 @@ describe('ProfileInfoService raw queries', () => {
 
       const result = await service.getStageInterviewFeedback('john-doe');
 
-      expect(result[0].feedback).toMatchObject({ english: 'a2' });
+      expect(result[0]!.feedback).toMatchObject({ english: 'a2' });
     });
   });
 
@@ -522,7 +522,7 @@ describe('ProfileInfoService raw queries', () => {
 
     it('maps and orders tasks by end date, exposing expelling reason when permitted', async () => {
       ds.getRepository({ name: 'Student' } as never);
-      ds.builders.Student.getRawMany.mockResolvedValue([{ ...baseRow }]);
+      ds.builders.Student!.getRawMany!.mockResolvedValue([{ ...baseRow }]);
 
       const result = await service.getStudentStats('john-doe', allTrue);
 
@@ -538,14 +538,14 @@ describe('ProfileInfoService raw queries', () => {
         mentor: { githubId: 'max', name: 'Max M' },
       });
       // tasks ordered ascending by end date: t2 (Jan 1) then t1 (Jan 2)
-      expect(stat.tasks.map(t => t.name)).toEqual(['t2', 't1']);
+      expect(stat!.tasks.map(t => t.name)).toEqual(['t2', 't1']);
       // endDate is stripped from the output
-      expect(stat.tasks[0]).not.toHaveProperty('endDate');
+      expect(stat!.tasks[0]).not.toHaveProperty('endDate');
     });
 
     it('hides the expelling reason when not permitted but still flags self-expelled', async () => {
       ds.getRepository({ name: 'Student' } as never);
-      ds.builders.Student.getRawMany.mockResolvedValue([
+      ds.builders.Student!.getRawMany!.mockResolvedValue([
         { ...baseRow, expellingReason: 'Self expelled from the course - bored' },
       ]);
 
@@ -554,13 +554,13 @@ describe('ProfileInfoService raw queries', () => {
         isExpellingReasonVisible: false,
       });
 
-      expect(result[0].expellingReason).toBeUndefined();
-      expect(result[0].isSelfExpelled).toBe(true);
+      expect(result[0]!.expellingReason).toBeUndefined();
+      expect(result[0]!.isSelfExpelled).toBe(true);
     });
 
     it('includes core-js interview details when isCoreJsFeedbackVisible is true', async () => {
       ds.getRepository({ name: 'Student' } as never);
-      ds.builders.Student.getRawMany.mockResolvedValue([
+      ds.builders.Student!.getRawMany!.mockResolvedValue([
         {
           ...baseRow,
           taskInterviewFormAnswers: [{ q: 'a' }, null],
@@ -573,17 +573,17 @@ describe('ProfileInfoService raw queries', () => {
 
       const result = await service.getStudentStats('john-doe', allTrue);
 
-      const orderedFirst = result[0].tasks[0]; // t2 (Jan 1) — second array index, all interview data null
-      const orderedSecond = result[0].tasks[1]; // t1 (Jan 2) — first array index, has interview data
-      expect(orderedFirst.interviewer).toBeUndefined();
-      expect(orderedSecond.interviewer).toEqual({ name: 'Ivan I', githubId: 'ivan' });
-      expect(orderedSecond.interviewFormAnswers).toEqual({ q: 'a' });
-      expect(orderedSecond.interviewDate).toBe('2024-01-03');
+      const orderedFirst = result[0]!.tasks[0]; // t2 (Jan 1) — second array index, all interview data null
+      const orderedSecond = result[0]!.tasks[1]; // t1 (Jan 2) — first array index, has interview data
+      expect(orderedFirst!.interviewer).toBeUndefined();
+      expect(orderedSecond!.interviewer).toEqual({ name: 'Ivan I', githubId: 'ivan' });
+      expect(orderedSecond!.interviewFormAnswers).toEqual({ q: 'a' });
+      expect(orderedSecond!.interviewDate).toBe('2024-01-03');
     });
 
     it('returns an empty array when the student has no rows', async () => {
       ds.getRepository({ name: 'Student' } as never);
-      ds.builders.Student.getRawMany.mockResolvedValue([]);
+      ds.builders.Student!.getRawMany!.mockResolvedValue([]);
 
       const result = await service.getStudentStats('john-doe', allFalse);
 

@@ -2,7 +2,7 @@ import type { Mocked } from 'vitest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Alert } from '@entities/alert';
+import { Alert, AlertType } from '@entities/alert';
 import { AlertsService } from './alerts.service';
 import { CreateAlertDto } from './dto/create-alert.dto';
 import { UpdateAlertDto } from './dto/update-alert.dto';
@@ -10,7 +10,7 @@ import { UpdateAlertDto } from './dto/update-alert.dto';
 const mockAlert = {
   id: 1,
   text: 'Maintenance window tonight',
-  type: 'warning',
+  type: AlertType.WARN,
   courseId: 5,
   enabled: true,
 } as Partial<Alert> as Alert;
