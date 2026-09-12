@@ -26,21 +26,31 @@ function renderCoding(type: CourseTaskDetailedDtoTypeEnum) {
 }
 
 describe('Coding', () => {
-  it.each`
-    type                                        | text
-    ${CourseTaskDetailedDtoTypeEnum.Codewars}   | ${/Please use the next username in your/i}
-    ${CourseTaskDetailedDtoTypeEnum.Codewars}   | ${/codewars profile/i}
-    ${CourseTaskDetailedDtoTypeEnum.Jstask}     | ${/Tests run on Node.js version 22. Please make sure your solution works on Node.js version 22./i}
-    ${CourseTaskDetailedDtoTypeEnum.Jstask}     | ${/The system will run tests in the following repository and will update the score based on the result:/i}
-    ${CourseTaskDetailedDtoTypeEnum.Jstask}     | ${/https:\/\/github.com\/github-id\/github-repo-name/i}
-    ${CourseTaskDetailedDtoTypeEnum.Kotlintask} | ${/The system will run tests in the following repository and will update the score based on the result:/i}
-    ${CourseTaskDetailedDtoTypeEnum.Kotlintask} | ${/https:\/\/github.com\/github-id\/github-repo-name/i}
-  `(
-    'should render $type task with $text',
-    async ({ type, text }: { type: CourseTaskDetailedDtoTypeEnum; text: RegExp | string }) => {
-      renderCoding(type);
-
-      expect(await screen.findByText(text)).toBeInTheDocument();
+  it.each([
+    {
+      type: CourseTaskDetailedDtoTypeEnum.Codewars,
+      texts: [/Please use the next username in your/i, /codewars profile/i],
     },
-  );
+    {
+      type: CourseTaskDetailedDtoTypeEnum.Jstask,
+      texts: [
+        /Tests run on Node.js version 22. Please make sure your solution works on Node.js version 22./i,
+        /The system will run tests in the following repository and will update the score based on the result:/i,
+        /https:\/\/github.com\/github-id\/github-repo-name/i,
+      ],
+    },
+    {
+      type: CourseTaskDetailedDtoTypeEnum.Kotlintask,
+      texts: [
+        /The system will run tests in the following repository and will update the score based on the result:/i,
+        /https:\/\/github.com\/github-id\/github-repo-name/i,
+      ],
+    },
+  ])('should render $type task instructions', async ({ type, texts }) => {
+    renderCoding(type);
+
+    for (const text of texts) {
+      expect(await screen.findByText(text)).toBeInTheDocument();
+    }
+  });
 });
