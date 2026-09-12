@@ -1,21 +1,10 @@
 /* eslint-disable testing-library/no-node-access */
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { CustomPopconfirm } from './CustomPopconfirm';
 
 describe('CustomPopconfirm', () => {
-  it('renders its trigger children', () => {
-    render(
-      <CustomPopconfirm title="Are you sure?">
-        <button>Delete</button>
-      </CustomPopconfirm>,
-    );
-
-    expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
-  });
-
-  it('opens the confirmation popup on click and fires onConfirm', async () => {
-    const user = userEvent.setup();
+  it('renders, opens, and confirms through the default placement', () => {
+    vi.useFakeTimers();
     const onConfirm = vi.fn();
     render(
       <CustomPopconfirm title="Remove item?" onConfirm={onConfirm}>
@@ -23,28 +12,28 @@ describe('CustomPopconfirm', () => {
       </CustomPopconfirm>,
     );
 
-    await user.click(screen.getByRole('button', { name: 'Delete' }));
-
-    expect(await screen.findByText('Remove item?')).toBeInTheDocument();
-
-    await user.click(screen.getByRole('button', { name: /yes|ok/i }));
-
-    await waitFor(() => expect(onConfirm).toHaveBeenCalled());
+    const trigger = screen.getByRole('button', { name: 'Delete' });
+    expect(trigger).toBeInTheDocument();
+    fireEvent.click(trigger);
+    act(() => vi.runOnlyPendingTimers());
+    expect(screen.getByText('Remove item?')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /yes|ok/i }));
+    act(() => vi.runOnlyPendingTimers());
+    expect(onConfirm).toHaveBeenCalled();
+    vi.useRealTimers();
   });
 
-  it('honors an explicitly provided placement', async () => {
-    const user = userEvent.setup();
+  it('honors an explicitly provided placement', () => {
+    vi.useFakeTimers();
     render(
       <CustomPopconfirm title="Confirm" placement="bottomLeft">
         <button>Trigger</button>
       </CustomPopconfirm>,
     );
 
-    await user.click(screen.getByRole('button', { name: 'Trigger' }));
-
-    // popup renders with the placement reflected in the overlay class
-    await waitFor(() => {
-      expect(document.querySelector('.ant-popover-placement-bottomLeft')).not.toBeNull();
-    });
+    fireEvent.click(screen.getByRole('button', { name: 'Trigger' }));
+    act(() => vi.runOnlyPendingTimers());
+    expect(document.querySelector('.ant-popover-placement-bottomLeft')).not.toBeNull();
+    vi.useRealTimers();
   });
 });
