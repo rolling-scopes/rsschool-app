@@ -62,12 +62,7 @@ function getEventRow(name: string) {
   return row!;
 }
 
-async function selectOption(
-  user: ReturnType<typeof setupUser>,
-  dialog: HTMLElement,
-  label: string,
-  text: string,
-) {
+async function selectOption(user: ReturnType<typeof setupUser>, dialog: HTMLElement, label: string, text: string) {
   await user.click(within(dialog).getByLabelText(label));
   const option = await screen.findByText(text, { selector: '.ant-select-item-option-content' });
   await user.click(option);
