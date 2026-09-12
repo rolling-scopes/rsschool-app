@@ -1,4 +1,4 @@
-import { act, renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react';
 import { message } from 'antd';
 import { useVerificationsAnswers } from './useVerificationsAnswers';
 
@@ -35,7 +35,7 @@ describe('useVerificationsAnswers', () => {
     });
 
     expect(getAnswers).toHaveBeenCalledWith(10, 20);
-    await waitFor(() => expect(result.current.answers).toEqual(answers));
+    expect(result.current.answers).toEqual(answers);
   });
 
   it('clears the answers when hideAnswers is called', async () => {
@@ -45,7 +45,7 @@ describe('useVerificationsAnswers', () => {
     await act(async () => {
       await result.current.showAnswers();
     });
-    await waitFor(() => expect(result.current.answers).not.toBeNull());
+    expect(result.current.answers).not.toBeNull();
 
     act(() => result.current.hideAnswers());
     expect(result.current.answers).toBeNull();
