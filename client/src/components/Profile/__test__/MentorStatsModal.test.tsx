@@ -22,8 +22,9 @@ describe('MentorStatsModal', () => {
     ],
   } as const;
 
-  it('renders title and student items with proper links and score', () => {
-    render(<MentorStatsModal stats={stats as unknown as MentorStats} isVisible={true} onHide={vi.fn()} />);
+  it('renders student statistics and calls onHide when closed', () => {
+    const onHide = vi.fn();
+    render(<MentorStatsModal stats={stats as unknown as MentorStats} isVisible={true} onHide={onHide} />);
 
     expect(screen.getByText('RS 2018 Q1 statistics')).toBeInTheDocument();
 
@@ -36,14 +37,8 @@ describe('MentorStatsModal', () => {
 
     expect(screen.getByRole('link', { name: 'alex' })).toHaveAttribute('href', 'https://github.com/alex');
     expect(screen.getByRole('link', { name: 'vasya' })).toHaveAttribute('href', 'https://github.com/vasya');
-  });
 
-  it('calls onHide when close button is clicked', () => {
-    const onHide = vi.fn();
-    render(<MentorStatsModal stats={stats as unknown as MentorStats} isVisible={true} onHide={onHide} />);
-
-    const closeBtn = screen.getByRole('button', { name: 'Close' });
-    fireEvent.click(closeBtn);
+    fireEvent.click(screen.getByRole('button', { name: 'Close' }));
     expect(onHide).toHaveBeenCalled();
   });
 });
