@@ -1,5 +1,5 @@
 import { screen, render, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import JoinTeamModal from './JoinTeamModal';
 
 function renderModal() {
@@ -12,23 +12,21 @@ function renderModal() {
 describe('<JoinTeamModal />', () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it('renders the modal with the password field and Join button', () => {
-    renderModal();
+  it('calls onCancel when the cancel button is clicked', async () => {
+    const user = setupUser();
+    const { onCancel } = renderModal();
+
     expect(screen.getByRole('dialog')).toBeInTheDocument();
     expect(screen.getByText('Join team')).toBeInTheDocument();
     expect(screen.getByLabelText('Team password')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /join/i })).toBeInTheDocument();
-  });
 
-  it('calls onCancel when the cancel button is clicked', async () => {
-    const user = userEvent.setup();
-    const { onCancel } = renderModal();
     await user.click(screen.getByRole('button', { name: /cancel/i }));
     expect(onCancel).toHaveBeenCalled();
   });
 
   it('shows a required error and does not submit when the password is empty', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { onSubmit } = renderModal();
 
     await user.click(screen.getByRole('button', { name: /join/i }));
@@ -38,7 +36,7 @@ describe('<JoinTeamModal />', () => {
   });
 
   it('rejects a password that does not match the id_password pattern', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { onSubmit } = renderModal();
 
     await user.type(screen.getByLabelText('Team password'), 'no-underscore');
@@ -49,7 +47,7 @@ describe('<JoinTeamModal />', () => {
   });
 
   it('parses "id_password" and calls onSubmit with the numeric id and password', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { onSubmit } = renderModal();
 
     await user.type(screen.getByLabelText('Team password'), '17_secretPass1');

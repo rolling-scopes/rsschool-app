@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { TopMentorDto } from '@client/api';
 
 vi.mock('next/config', () => () => ({}));
@@ -43,22 +43,15 @@ describe('MentorsHallOfFamePage', () => {
     mockedGetTopMentors.mockResolvedValue([]);
   });
 
-  it('renders page title', async () => {
+  it('loads and renders the page title and mentors list', async () => {
     mockedGetTopMentors.mockResolvedValueOnce(lastYearMentors);
 
     render(<MentorsHallOfFamePage />);
 
     expect(await screen.findByText('Mentors Hall of Fame')).toBeInTheDocument();
-  });
-
-  it('loads mentors data on mount', async () => {
-    mockedGetTopMentors.mockResolvedValueOnce(lastYearMentors);
-
-    render(<MentorsHallOfFamePage />);
-
-    await waitFor(() => {
-      expect(mockedGetTopMentors).toHaveBeenCalledWith(false);
-    });
+    expect(await screen.findByText('Last Year Mentor')).toBeInTheDocument();
+    expect(screen.getByText('@mentor-last-year')).toBeInTheDocument();
+    expect(mockedGetTopMentors).toHaveBeenCalledWith(false);
   });
 
   it('shows loading state during request', async () => {
@@ -76,22 +69,18 @@ describe('MentorsHallOfFamePage', () => {
     expect(await screen.findByText('Last Year Mentor')).toBeInTheDocument();
   });
 
-  it('renders mentors list after successful load', async () => {
-    mockedGetTopMentors.mockResolvedValueOnce(lastYearMentors);
-
-    render(<MentorsHallOfFamePage />);
-
-    expect(await screen.findByText('Last Year Mentor')).toBeInTheDocument();
-    expect(screen.getByText('@mentor-last-year')).toBeInTheDocument();
-  });
-
-  it('switches period from lastYear to allTime', async () => {
-    const user = userEvent.setup();
+  it('switches period, updates the description and refetches all-time mentors', async () => {
+    const user = setupUser();
     mockedGetTopMentors.mockResolvedValueOnce(lastYearMentors).mockResolvedValueOnce(allTimeMentors);
 
     render(<MentorsHallOfFamePage />);
 
     await screen.findByText('Last Year Mentor');
+    expect(
+      screen.getByText(
+        'Celebrating our top mentors who guided the most students to receive certificates in the last year',
+      ),
+    ).toBeInTheDocument();
 
     await user.click(screen.getByText('All Time'));
 
@@ -99,25 +88,12 @@ describe('MentorsHallOfFamePage', () => {
       expect(mockedGetTopMentors).toHaveBeenNthCalledWith(2, true);
     });
     expect(await screen.findByText('All Time Mentor')).toBeInTheDocument();
-  });
-
-  it('updates description when period changes', async () => {
-    const user = userEvent.setup();
-    mockedGetTopMentors.mockResolvedValueOnce(lastYearMentors).mockResolvedValueOnce(allTimeMentors);
-
-    render(<MentorsHallOfFamePage />);
-
     expect(
-      await screen.findByText(
-        'Celebrating our top mentors who guided the most students to receive certificates in the last year',
-      ),
+      screen.getByText('Celebrating our top mentors who guided the most students to receive certificates'),
     ).toBeInTheDocument();
 
-    await user.click(screen.getByText('All Time'));
-
-    expect(
-      await screen.findByText('Celebrating our top mentors who guided the most students to receive certificates'),
-    ).toBeInTheDocument();
+    expect(mockedGetTopMentors).toHaveBeenCalledTimes(2);
+    expect(mockedGetTopMentors).toHaveBeenNthCalledWith(1, false);
   });
 
   it('renders empty state when there are no mentors', async () => {
@@ -138,22 +114,5 @@ describe('MentorsHallOfFamePage', () => {
     expect(consoleErrorSpy).toHaveBeenCalledWith('Failed to fetch top mentors:', expect.any(Error));
 
     consoleErrorSpy.mockRestore();
-  });
-
-  it('refetches mentors when period changes', async () => {
-    const user = userEvent.setup();
-    mockedGetTopMentors.mockResolvedValueOnce(lastYearMentors).mockResolvedValueOnce(allTimeMentors);
-
-    render(<MentorsHallOfFamePage />);
-
-    await screen.findByText('Last Year Mentor');
-
-    await user.click(screen.getByText('All Time'));
-
-    await waitFor(() => {
-      expect(mockedGetTopMentors).toHaveBeenCalledTimes(2);
-    });
-    expect(mockedGetTopMentors).toHaveBeenNthCalledWith(1, false);
-    expect(mockedGetTopMentors).toHaveBeenNthCalledWith(2, true);
   });
 });

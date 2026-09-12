@@ -99,6 +99,9 @@ describe('CourseCrossCheckService.getTaskSolutionAssignments', () => {
       {} as never,
       {} as never,
       {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
     );
 
     const result = await service.getTaskSolutionAssignments(32, 15);

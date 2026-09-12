@@ -1,7 +1,7 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { ReactNode } from 'react';
 import { message } from 'antd';
+import { setupUser } from '@client/__tests__/setupUser';
 import { DisciplineDto, EventDto } from '@client/api';
 import { EventsAdminPage } from './EventsAdminPage';
 
@@ -55,12 +55,14 @@ const events = [
   },
 ] as unknown as EventDto[];
 
-async function selectOption(
-  user: ReturnType<typeof userEvent.setup>,
-  dialog: HTMLElement,
-  label: string,
-  text: string,
-) {
+function getEventRow(name: string) {
+  // eslint-disable-next-line testing-library/no-node-access -- Avoid computing accessible names for every table row.
+  const row = screen.getByText(name).closest('tr');
+  expect(row).toHaveRole('row');
+  return row!;
+}
+
+async function selectOption(user: ReturnType<typeof setupUser>, dialog: HTMLElement, label: string, text: string) {
   await user.click(within(dialog).getByLabelText(label));
   const option = await screen.findByText(text, { selector: '.ant-select-item-option-content' });
   await user.click(option);
@@ -86,7 +88,7 @@ describe('<EventsAdminPage />', () => {
   });
 
   it('creates an event with the mapped CreateEventDto payload', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<EventsAdminPage />);
     await screen.findByText('Alpha');
 
@@ -112,11 +114,11 @@ describe('<EventsAdminPage />', () => {
   });
 
   it('opens the edit modal prefilled and updates by id', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<EventsAdminPage />);
     await screen.findByText('Alpha');
 
-    const row = screen.getByRole('row', { name: /Alpha/ });
+    const row = getEventRow('Alpha');
     await user.click(within(row).getByText('Edit'));
     await screen.findByText('Event');
     const dialog = screen.getByRole('dialog');
@@ -131,11 +133,11 @@ describe('<EventsAdminPage />', () => {
   });
 
   it('deletes an event after confirming and reloads', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<EventsAdminPage />);
     await screen.findByText('Alpha');
 
-    const row = screen.getByRole('row', { name: /Alpha/ });
+    const row = getEventRow('Alpha');
     await user.click(within(row).getByText('Delete'));
     await user.click(await screen.findByRole('button', { name: /^ok$/i }));
 
@@ -144,13 +146,13 @@ describe('<EventsAdminPage />', () => {
   });
 
   it('shows an error message when delete fails', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const errorSpy = vi.spyOn(message, 'error').mockImplementation(() => ({}) as never);
     deleteEvent.mockRejectedValueOnce(new Error('boom'));
     render(<EventsAdminPage />);
     await screen.findByText('Alpha');
 
-    const row = screen.getByRole('row', { name: /Alpha/ });
+    const row = getEventRow('Alpha');
     await user.click(within(row).getByText('Delete'));
     await user.click(await screen.findByRole('button', { name: /^ok$/i }));
 
@@ -159,14 +161,14 @@ describe('<EventsAdminPage />', () => {
   });
 
   it('shows an error message when save fails', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const errorSpy = vi.spyOn(message, 'error').mockImplementation(() => ({}) as never);
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
     updateEvent.mockRejectedValueOnce(new Error('boom'));
     render(<EventsAdminPage />);
     await screen.findByText('Alpha');
 
-    const row = screen.getByRole('row', { name: /Alpha/ });
+    const row = getEventRow('Alpha');
     await user.click(within(row).getByText('Edit'));
     await screen.findByText('Event');
     await user.click(screen.getByRole('button', { name: /save/i }));

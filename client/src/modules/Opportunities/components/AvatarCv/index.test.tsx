@@ -4,15 +4,13 @@ import { AvatarCv } from './index';
 const mockUrl = 'https://example.com';
 
 describe('AvatarCv', () => {
-  test('should render img with proper src if provided', () => {
-    render(<AvatarCv src={mockUrl} />);
+  test('renders an image when provided and an icon otherwise', () => {
+    const { rerender } = render(<AvatarCv src={mockUrl} />);
     const img = screen.getByRole('img');
     expect(img).toHaveAttribute('src', mockUrl);
-  });
 
-  test('should render icon if src is not provided', () => {
-    render(<AvatarCv src={null} />);
-    const img = screen.queryByRole('img');
-    expect(img).not.toHaveAttribute('src');
+    rerender(<AvatarCv src={null} />);
+
+    expect(screen.getByRole('img')).not.toHaveAttribute('src');
   });
 });

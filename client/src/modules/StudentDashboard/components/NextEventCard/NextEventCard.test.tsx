@@ -10,18 +10,12 @@ const PROPS_MOCK = {
 };
 
 describe('NextEventCard', () => {
-  it.each`
-    text
-    ${'Available tasks'}
-    ${'View all'}
-    ${NEXT_EVENTS[0]?.name}
-    ${NEXT_EVENTS[0]?.tag}
-    ${'Feb 01'}
-  `('should render $text', ({ text }: { text: string }) => {
+  it('renders the available task summary', () => {
     render(<NextEventCard {...PROPS_MOCK} />);
 
-    const match = new RegExp(text, 'i');
-    expect(screen.getByText(match)).toBeInTheDocument();
+    for (const text of ['Available tasks', 'View all', NEXT_EVENTS[0]?.name, NEXT_EVENTS[0]?.tag, 'Feb 01']) {
+      expect(screen.getByText(new RegExp(text ?? '', 'i'))).toBeInTheDocument();
+    }
   });
 });
 

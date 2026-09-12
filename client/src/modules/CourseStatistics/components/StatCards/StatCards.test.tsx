@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import { CourseAggregateStatsDto } from '@client/api';
 import { StatCards } from './StatCards';
 
@@ -7,9 +7,10 @@ import { StatCards } from './StatCards';
 // with a marker so we assert *which* cards are rendered for a given data shape and what
 // counts they receive — without pulling charts into jsdom.
 
-vi.mock('@client/modules/Course/contexts', () => ({
-  useActiveCourseContext: () => ({ course: { id: 42 } }),
-}));
+vi.mock('@client/modules/Course/contexts', () => {
+  const activeCourse = { course: { id: 42 } };
+  return { useActiveCourseContext: () => activeCourse };
+});
 
 const { getCourseTasks } = vi.hoisted(() => ({
   getCourseTasks: vi.fn().mockResolvedValue({ data: [{ id: 1, name: 'T1' }] }),
@@ -81,15 +82,21 @@ function makeData(overrides: Partial<CourseAggregateStatsDto> = {}): CourseAggre
 describe('<StatCards />', () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it('renders nothing-meaningful when no data is provided', () => {
-    render(<StatCards />);
+  it('renders nothing-meaningful when no data is provided', async () => {
+    // eslint-disable-next-line testing-library/no-unnecessary-act -- Await mount effects after the synchronous render
+    await act(async () => {
+      render(<StatCards />);
+    });
 
     expect(screen.queryByTestId('card-students-stats')).not.toBeInTheDocument();
     expect(screen.queryByTestId('card-epam-mentors')).not.toBeInTheDocument();
   });
 
   it('renders the full set of cards for fully-populated data with certified students', async () => {
-    render(<StatCards coursesData={makeData()} />);
+    // eslint-disable-next-line testing-library/no-unnecessary-act -- Await mount effects after the synchronous render
+    await act(async () => {
+      render(<StatCards coursesData={makeData()} />);
+    });
 
     expect(screen.getByTestId('card-students-countries')).toHaveTextContent('80');
     expect(screen.getByTestId('card-students-stats')).toBeInTheDocument();
@@ -108,7 +115,7 @@ describe('<StatCards />', () => {
     await waitFor(() => expect(getCourseTasks).toHaveBeenCalledWith(42));
   });
 
-  it('shows the eligible card (and hides certificate cards) when no students are certified', () => {
+  it('shows the eligible card (and hides certificate cards) when no students are certified', async () => {
     const data = makeData({
       studentsStats: {
         activeStudentsCount: 80,
@@ -118,18 +125,24 @@ describe('<StatCards />', () => {
         eligibleForCertificationCount: 40,
       },
     });
-    render(<StatCards coursesData={data} />);
+    // eslint-disable-next-line testing-library/no-unnecessary-act -- Await mount effects after the synchronous render
+    await act(async () => {
+      render(<StatCards coursesData={data} />);
+    });
 
     expect(screen.getByTestId('card-eligible')).toBeInTheDocument();
     expect(screen.queryByTestId('card-with-certificate')).not.toBeInTheDocument();
     expect(screen.queryByTestId('card-certificates-countries')).not.toBeInTheDocument();
   });
 
-  it('hides the mentors-countries card when there are no active mentors', () => {
+  it('hides the mentors-countries card when there are no active mentors', async () => {
     const data = makeData({
       mentorsStats: { mentorsActiveCount: 0, mentorsTotalCount: 0, epamMentorsCount: 0 },
     });
-    render(<StatCards coursesData={data} />);
+    // eslint-disable-next-line testing-library/no-unnecessary-act -- Await mount effects after the synchronous render
+    await act(async () => {
+      render(<StatCards coursesData={data} />);
+    });
 
     expect(screen.queryByTestId('card-mentors-countries')).not.toBeInTheDocument();
     expect(screen.queryByTestId('card-epam-mentors')).not.toBeInTheDocument();

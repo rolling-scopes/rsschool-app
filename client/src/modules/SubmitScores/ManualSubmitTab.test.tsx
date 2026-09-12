@@ -10,6 +10,12 @@ vi.mock('@client/shared/components/StudentSearch', () => ({
   ),
 }));
 
+const { showError } = vi.hoisted(() => ({ showError: vi.fn() }));
+
+vi.mock('@client/hooks', () => ({
+  useMessage: () => ({ message: { error: showError, success: vi.fn() } }),
+}));
+
 const courseTasks = [
   { id: 1, name: 'Task A', studentStartDate: '2024-01-01', studentEndDate: '2024-12-31', maxScore: 100 },
   { id: 2, name: 'Task B', studentStartDate: '2024-01-01', studentEndDate: '2024-12-31', maxScore: 50 },
@@ -29,7 +35,7 @@ function makeProps(overrides: Partial<Parameters<typeof ManualSubmitTab>[0]> = {
 describe('<ManualSubmitTab />', () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it('renders one initial row with student input, task select, score input and remove button', () => {
+  it('renders the initial row and appends rows with "Add row"', () => {
     render(<ManualSubmitTab {...makeProps()} />);
 
     expect(screen.getAllByTestId('student-input')).toHaveLength(1);
@@ -39,10 +45,6 @@ describe('<ManualSubmitTab />', () => {
     expect(screen.getAllByRole('spinbutton')).toHaveLength(1);
     expect(screen.getByRole('button', { name: /add row/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /^submit$/i })).toBeInTheDocument();
-  });
-
-  it('"Add row" button appends a new row', () => {
-    render(<ManualSubmitTab {...makeProps()} />);
 
     fireEvent.click(screen.getByRole('button', { name: /add row/i }));
     fireEvent.click(screen.getByRole('button', { name: /add row/i }));
@@ -52,20 +54,17 @@ describe('<ManualSubmitTab />', () => {
     expect(screen.getAllByRole('spinbutton')).toHaveLength(3);
   });
 
-  it('disables the remove button when only one row exists', () => {
-    render(<ManualSubmitTab {...makeProps()} />);
-
-    const removeBtn = screen.getByRole('button', { name: /remove row/i });
-    expect(removeBtn).toBeDisabled();
-  });
-
   it('removes a row when the remove button is clicked (with >1 rows)', () => {
     render(<ManualSubmitTab {...makeProps()} />);
+
+    expect(screen.getByLabelText('Remove row')).toHaveRole('button');
+    expect(screen.getByLabelText('Remove row')).toBeDisabled();
 
     fireEvent.click(screen.getByRole('button', { name: /add row/i }));
     expect(screen.getAllByTestId('student-input')).toHaveLength(2);
 
-    const [firstRemove] = screen.getAllByRole('button', { name: /remove row/i });
+    const [firstRemove] = screen.getAllByLabelText('Remove row');
+    expect(firstRemove).toHaveRole('button');
     fireEvent.click(firstRemove);
 
     expect(screen.getAllByTestId('student-input')).toHaveLength(1);
@@ -77,16 +76,12 @@ describe('<ManualSubmitTab />', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /^submit$/i }));
 
-    // antd validation fires asynchronously; postMultipleScores should never be called.
-    await waitFor(() => {
-      expect(props.courseService.postMultipleScores).not.toHaveBeenCalled();
-    });
+    expect(await screen.findByText('Select a student')).toBeInTheDocument();
+    expect(screen.getByText('Select a task')).toBeInTheDocument();
+    expect(screen.getByText('Enter score')).toBeInTheDocument();
+    expect(props.courseService.postMultipleScores).not.toHaveBeenCalled();
     expect(props.onResults).not.toHaveBeenCalled();
   });
-
-  // Note: the (student, task) duplicate-detection logic itself is covered by unit tests
-  // for `findDuplicateRow` in utils.test.ts. Driving antd Select/InputNumber through
-  // jsdom is too brittle to be worth a parallel integration test here.
 
   it('renders the configured task options in each row select', () => {
     render(<ManualSubmitTab {...makeProps()} />);
@@ -156,9 +151,10 @@ describe('<ManualSubmitTab />', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /^submit$/i }));
 
-    await waitFor(() => {
-      expect(props.onResults).not.toHaveBeenCalled();
-    });
+    await waitFor(() =>
+      expect(showError).toHaveBeenCalledWith('Duplicate row: Alice for the same task. Remove one of them.'),
+    );
+    expect(props.onResults).not.toHaveBeenCalled();
     expect(postMultipleScores).not.toHaveBeenCalled();
     expect(props.onLoadingChange).not.toHaveBeenCalled();
   });

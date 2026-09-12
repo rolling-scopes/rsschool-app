@@ -122,11 +122,12 @@ describe('MentorsService', () => {
     });
 
     it('falls back to empty strings/array for null user fields and missing students', () => {
-      const result = MentorsService.convertMentorToMentorBasic({
+      const mentor = Object.assign(new Mentor(), {
         id: 8,
         isExpelled: false,
         user: { githubId: 'no-name', firstName: null, lastName: null, cityName: null, countryName: null },
-      } as Partial<Mentor> as Mentor);
+      });
+      const result = MentorsService.convertMentorToMentorBasic(mentor);
 
       expect(result).toMatchObject({
         name: '(Empty)',
@@ -276,8 +277,8 @@ describe('MentorsService', () => {
 
       const [dto] = await service.getStudentsTasks(7, 5);
 
-      expect(dto.status).toBe(SolutionItemStatus.InReview);
-      expect(dto.resultScore).toBeNull();
+      expect(dto!.status).toBe(SolutionItemStatus.InReview);
+      expect(dto!.resultScore).toBeNull();
     });
 
     it('returns RandomTask when no mentor is assigned and there is no score', async () => {
@@ -289,7 +290,7 @@ describe('MentorsService', () => {
 
       const [dto] = await service.getStudentsTasks(7, 5);
 
-      expect(dto.status).toBe(SolutionItemStatus.RandomTask);
+      expect(dto!.status).toBe(SolutionItemStatus.RandomTask);
     });
 
     it('treats a zero score as Done (0 is a real result, not "no score")', async () => {
@@ -301,8 +302,8 @@ describe('MentorsService', () => {
 
       const [dto] = await service.getStudentsTasks(7, 5);
 
-      expect(dto.status).toBe(SolutionItemStatus.Done);
-      expect(dto.resultScore).toBe(0);
+      expect(dto!.status).toBe(SolutionItemStatus.Done);
+      expect(dto!.resultScore).toBe(0);
     });
 
     it('returns an empty list when there are no solutions', async () => {

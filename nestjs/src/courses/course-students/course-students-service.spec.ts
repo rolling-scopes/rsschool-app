@@ -191,7 +191,7 @@ describe('CourseStudentsService', () => {
 
       const result = await service.getStudentsWithDetails(5, true);
 
-      expect(result[0].mentor).toEqual({
+      expect(result[0]!.mentor).toEqual({
         isActive: false, // mentor.isExpelled => inactive
         name: '',
         id: 9,
@@ -329,7 +329,7 @@ describe('CourseStudentsService', () => {
 
       const result = await service.searchCourseStudents(5, 'do', false);
 
-      expect(result[0].name).toBe('Doe');
+      expect(result[0]!.name).toBe('Doe');
     });
   });
 

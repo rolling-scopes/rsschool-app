@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { UserGroupDto } from '@client/api';
 import { UserGroupsModal } from './UserGroupsModal';
 
@@ -51,18 +51,14 @@ describe('<UserGroupsModal />', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it('renders the title plus name, users and roles fields when creating', () => {
-    render(<UserGroupsModal {...makeProps()} />);
+  it('shows validation errors and does not submit when fields are empty', async () => {
+    const user = setupUser();
+    const props = makeProps();
+    render(<UserGroupsModal {...props} />);
 
     expect(screen.getByText('User Group')).toBeInTheDocument();
     expect(screen.getByLabelText('Name')).toHaveValue('');
     expect(screen.getByLabelText('user-search')).toHaveTextContent('');
-  });
-
-  it('shows validation errors and does not submit when fields are empty', async () => {
-    const user = userEvent.setup();
-    const props = makeProps();
-    render(<UserGroupsModal {...props} />);
 
     await user.click(screen.getByRole('button', { name: /save/i }));
 
@@ -73,7 +69,7 @@ describe('<UserGroupsModal />', () => {
   });
 
   it('submits the name, selected users and a chosen role', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<UserGroupsModal {...props} />);
 

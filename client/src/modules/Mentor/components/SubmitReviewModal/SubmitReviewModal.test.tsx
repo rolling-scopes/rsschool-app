@@ -56,32 +56,6 @@ describe('SubmitReviewModal', () => {
     mockAxios.reset();
   });
 
-  it.each`
-    text                           | role
-    ${MODAL_DATA_MOCK.taskName}    | ${'link'}
-    ${MODAL_DATA_MOCK.solutionUrl} | ${'link'}
-    ${'Submit'}                    | ${'button'}
-    ${'Cancel'}                    | ${'button'}
-  `('should render $role "$text"', ({ text, role }: { text: string; role: string }) => {
-    render(<SubmitReviewModal {...PROPS_MOCK} />);
-
-    const element = screen.getByRole(role, { name: new RegExp(text) });
-
-    expect(element).toBeInTheDocument();
-  });
-
-  it.each`
-    text
-    ${MODAL_DATA_MOCK.maxScore}
-    ${MODAL_DATA_MOCK.studentName}
-  `('should render field "$text"', ({ text }: { text: string }) => {
-    render(<SubmitReviewModal {...PROPS_MOCK} />);
-
-    const element = screen.getByText(new RegExp(text));
-
-    expect(element).toBeInTheDocument();
-  });
-
   it('should not render fields when data was not provided', () => {
     render(<SubmitReviewModal {...PROPS_MOCK} data={null} />);
 
@@ -132,9 +106,17 @@ describe('SubmitReviewModal', () => {
     expect(screen.queryByText(SUCCESS_MESSAGE)).not.toBeInTheDocument();
   });
 
-  it('should call onClose when "Cancel" button was clicked', async () => {
+  it('should render review details and call onClose when Cancel is clicked', async () => {
     render(<SubmitReviewModal {...PROPS_MOCK} />);
+    for (const text of [MODAL_DATA_MOCK.taskName, MODAL_DATA_MOCK.solutionUrl]) {
+      expect(screen.getByRole('link', { name: new RegExp(text) })).toBeInTheDocument();
+    }
+    expect(screen.getByRole('button', { name: 'Submit' })).toBeInTheDocument();
+    for (const text of [MODAL_DATA_MOCK.maxScore, MODAL_DATA_MOCK.studentName]) {
+      expect(screen.getByText(new RegExp(String(text)))).toBeInTheDocument();
+    }
     const cancelBtn = screen.getByRole('button', { name: 'Cancel' });
+    expect(cancelBtn).toBeInTheDocument();
 
     fireEvent.click(cancelBtn);
 

@@ -2,8 +2,8 @@
 // row-count and delete-icon assertions reach into the DOM by class — intentional here.
 /* eslint-disable testing-library/no-node-access */
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { ReactNode } from 'react';
+import { setupUser } from '@client/__tests__/setupUser';
 import { FeedbackStepId, QuestionItem } from '@client/data/interviews/technical-screening';
 import { InputType } from '@client/data/interviews';
 
@@ -78,22 +78,6 @@ function Harness({
 }
 
 describe('<QuestionList /> question picker + custom + remove', () => {
-  it('renders the initial questions with topic + title and a Rate per row', () => {
-    render(Harness());
-
-    expect(screen.getByText('HTML/CSS question')).toBeInTheDocument();
-    expect(screen.getByText('OOP question')).toBeInTheDocument();
-    // Two rows → two Rate widgets, each exposing 5 radio stars.
-    const rates = document.querySelectorAll('.ant-rate');
-    expect(rates).toHaveLength(2);
-  });
-
-  it('shows "Add from list" only while there are unused pool questions', () => {
-    // examples contains an extra pool question (algorithms) not in initial → button shown.
-    render(Harness());
-    expect(screen.getByRole('button', { name: /Add from list/i })).toBeInTheDocument();
-  });
-
   it('hides "Add from list" when every example is already added', () => {
     render(Harness({ question: makeQuestion({ examples: baseQuestions }) }));
     expect(screen.queryByRole('button', { name: /Add from list/i })).not.toBeInTheDocument();
@@ -101,18 +85,20 @@ describe('<QuestionList /> question picker + custom + remove', () => {
     expect(screen.getByRole('button', { name: /Custom question/i })).toBeInTheDocument();
   });
 
-  it('labels the custom button "Custom task" on the Practice step and "Custom question" otherwise', () => {
-    const { unmount } = render(Harness({ stepId: FeedbackStepId.Practice }));
+  it('labels the custom button "Custom task" on the Practice step', () => {
+    render(Harness({ stepId: FeedbackStepId.Practice }));
     expect(screen.getByRole('button', { name: /Custom task/i })).toBeInTheDocument();
-    unmount();
-
-    render(Harness({ stepId: FeedbackStepId.Theory }));
-    expect(screen.getByRole('button', { name: /Custom question/i })).toBeInTheDocument();
   });
 
   it('opens the picker modal, validates an empty selection, then adds a pooled question', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(Harness());
+
+    expect(screen.getByText('HTML/CSS question')).toBeInTheDocument();
+    expect(screen.getByText('OOP question')).toBeInTheDocument();
+    expect(document.querySelectorAll('.ant-rate')).toHaveLength(2);
+    expect(screen.getByRole('button', { name: /Add from list/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Custom question/i })).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: /Add from list/i }));
 
@@ -136,7 +122,7 @@ describe('<QuestionList /> question picker + custom + remove', () => {
   });
 
   it('cancels the picker modal without adding anything', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(Harness());
 
     await user.click(screen.getByRole('button', { name: /Add from list/i }));
@@ -148,7 +134,7 @@ describe('<QuestionList /> question picker + custom + remove', () => {
   });
 
   it('adds a custom question (typed) as a new row and ignores blank input', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(Harness());
 
     await user.click(screen.getByRole('button', { name: /Custom question/i }));
@@ -166,7 +152,7 @@ describe('<QuestionList /> question picker + custom + remove', () => {
   });
 
   it('adds a custom question via Enter key (onPressEnter)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(Harness());
 
     await user.click(screen.getByRole('button', { name: /Custom question/i }));
@@ -178,7 +164,7 @@ describe('<QuestionList /> question picker + custom + remove', () => {
   });
 
   it('cancels the custom-question card without adding', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(Harness());
 
     await user.click(screen.getByRole('button', { name: /Custom question/i }));
@@ -190,7 +176,7 @@ describe('<QuestionList /> question picker + custom + remove', () => {
   });
 
   it('removes a question row (delete icon shown only when more than one row)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(Harness());
 
     // Two rows → delete icons present.
@@ -205,7 +191,7 @@ describe('<QuestionList /> question picker + custom + remove', () => {
   });
 
   it('submits the rated question values through the form', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onFinish = vi.fn();
     render(Harness({ onFinish }));
 

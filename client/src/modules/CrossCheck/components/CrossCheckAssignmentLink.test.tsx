@@ -10,24 +10,20 @@ const assignment: AssignmentLink = {
 };
 
 describe('<CrossCheckAssignmentLink />', () => {
-  it('renders nothing when there is no assignment', () => {
-    const { container } = render(<CrossCheckAssignmentLink assignment={undefined} />);
+  it('renders empty, assigned, and missing-Discord states', () => {
+    const { container, rerender } = render(<CrossCheckAssignmentLink assignment={undefined} />);
 
     expect(container).toBeEmptyDOMElement();
-  });
 
-  it('renders the student discord and the solution link', () => {
-    render(<CrossCheckAssignmentLink assignment={assignment} />);
+    rerender(<CrossCheckAssignmentLink assignment={assignment} />);
 
     expect(screen.getByText('Student Discord:', { exact: false })).toBeInTheDocument();
     expect(screen.getByText('@octocat')).toBeInTheDocument();
 
     const link = screen.getByRole('link', { name: assignment.url });
     expect(link).toHaveAttribute('href', assignment.url);
-  });
 
-  it('renders "unknown" discord when the student has no discord', () => {
-    render(
+    rerender(
       <CrossCheckAssignmentLink
         assignment={{ student: { discord: null } as StudentBasic, url: 'https://example.com' }}
       />,

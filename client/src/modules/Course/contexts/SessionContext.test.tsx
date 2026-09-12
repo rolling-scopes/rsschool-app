@@ -28,10 +28,17 @@ describe('<SessionProvider />', () => {
     vi.mocked(useActiveCourseContext).mockReturnValue(mockActiveCourse);
   });
 
-  it('should render loading screen', () => {
+  it('renders loading and uses the SessionApi fetcher', async () => {
+    const getSession = vi.spyOn(SessionApi.prototype, 'getSession').mockResolvedValue({
+      data: mockSession,
+    } as never);
     vi.mocked(useRequest).mockReturnValue({ loading: true });
     render(<SessionProvider>{mockChildren}</SessionProvider>);
+
     expect(screen.getByText(/loading/i)).toBeInTheDocument();
+    const fetcher = vi.mocked(useRequest).mock.calls[0][0] as () => Promise<unknown>;
+    await expect(fetcher()).resolves.toEqual(mockSession);
+    expect(getSession).toHaveBeenCalledTimes(1);
   });
 
   it('should handle error and redirect to login', () => {
@@ -40,41 +47,38 @@ describe('<SessionProvider />', () => {
     expect(Router.push).toHaveBeenCalledWith('/login', expect.anything());
   });
 
-  it('should render children for admin user for admin-only pages', () => {
+  it('allows admin-only pages for admins and denies other users', () => {
     vi.mocked(useRequest).mockReturnValue({ data: mockSession });
-    render(<SessionProvider adminOnly={true}>{mockChildren}</SessionProvider>);
+    const { rerender } = render(<SessionProvider adminOnly={true}>{mockChildren}</SessionProvider>);
     expect(screen.getByText('Child Component')).toBeInTheDocument();
-  });
 
-  it('should render warning for non-admin user for admin-only pages', () => {
     vi.mocked(useRequest).mockReturnValue({ data: { ...mockSession, isAdmin: false } });
-    render(<SessionProvider adminOnly={true}>{mockChildren}</SessionProvider>);
+    rerender(<SessionProvider adminOnly={true}>{mockChildren}</SessionProvider>);
     expect(screen.getByText(/You don't have required role to access this page/)).toBeInTheDocument();
   });
 
-  it('should render children for user with allowed roles', () => {
+  it('checks active-course roles and any-course power-user access', () => {
     vi.mocked(useRequest).mockReturnValue({ data: mockSession });
-    render(<SessionProvider allowedRoles={['student']}>{mockChildren}</SessionProvider>);
+    const { rerender } = render(<SessionProvider allowedRoles={['student']}>{mockChildren}</SessionProvider>);
     expect(screen.getByText('Child Component')).toBeInTheDocument();
-  });
 
-  it('should render warning for user without allowed roles', () => {
     vi.mocked(useRequest).mockReturnValue({ data: { ...mockSession, isAdmin: false } });
-    render(<SessionProvider allowedRoles={['mentor']}>{mockChildren}</SessionProvider>);
+    rerender(<SessionProvider allowedRoles={['mentor']}>{mockChildren}</SessionProvider>);
     expect(screen.getByText(/You don't have required role to access this page/)).toBeInTheDocument();
-  });
 
-  it('fetches the session via SessionApi.getSession in the useRequest fetcher', async () => {
-    const getSession = vi.spyOn(SessionApi.prototype, 'getSession').mockResolvedValue({
-      data: mockSession,
-    } as never);
-    vi.mocked(useRequest).mockReturnValue({ loading: true });
-    render(<SessionProvider>{mockChildren}</SessionProvider>);
+    vi.mocked(useRequest).mockReturnValue({ data: { isAdmin: false, courses: {} } });
+    rerender(<SessionProvider allowedRoles={['mentor']}>{mockChildren}</SessionProvider>);
+    expect(screen.getByText(/You don't have required role to access this page/)).toBeInTheDocument();
 
-    // Capture the fetcher passed to useRequest and invoke it to exercise getSession().
-    const fetcher = vi.mocked(useRequest).mock.calls[0][0] as () => Promise<unknown>;
-    await expect(fetcher()).resolves.toEqual(mockSession);
-    expect(getSession).toHaveBeenCalledTimes(1);
+    vi.mocked(useRequest).mockReturnValue({
+      data: { isAdmin: false, courses: { 2: { roles: ['mentor'] } } },
+    });
+    rerender(
+      <SessionProvider allowedRoles={['mentor']} anyCoursePowerUser={true}>
+        {mockChildren}
+      </SessionProvider>,
+    );
+    expect(screen.getByText('Child Component')).toBeInTheDocument();
   });
 
   it('renders the AccessDenied warning with a working "Go Back" button', async () => {
@@ -86,37 +90,13 @@ describe('<SessionProvider />', () => {
     expect(back).toHaveBeenCalledTimes(1);
   });
 
-  it('denies access to a hirer-only page for a non-hirer, non-admin user', () => {
+  it('checks hirer-only access for non-hirers and hirers', () => {
     vi.mocked(useRequest).mockReturnValue({ data: { ...mockSession, isAdmin: false, isHirer: false } });
-    render(<SessionProvider hirerOnly={true}>{mockChildren}</SessionProvider>);
+    const { rerender } = render(<SessionProvider hirerOnly={true}>{mockChildren}</SessionProvider>);
     expect(screen.getByText(/You don't have required role to access this page/)).toBeInTheDocument();
-  });
 
-  it('allows a hirer-only page for a hirer user', () => {
     vi.mocked(useRequest).mockReturnValue({ data: { ...mockSession, isAdmin: false, isHirer: true } });
-    render(<SessionProvider hirerOnly={true}>{mockChildren}</SessionProvider>);
-    expect(screen.getByText('Child Component')).toBeInTheDocument();
-  });
-
-  it('falls back to no roles when the current course is absent from the session', () => {
-    // Non-admin, allowedRoles set, but session.courses has no entry for the active course id
-    // → `courses?.[id]?.roles ?? []` resolves to [] and access is denied.
-    vi.mocked(useRequest).mockReturnValue({ data: { isAdmin: false, courses: {} } });
-    render(<SessionProvider allowedRoles={['mentor']}>{mockChildren}</SessionProvider>);
-    expect(screen.getByText(/You don't have required role to access this page/)).toBeInTheDocument();
-  });
-
-  it('grants access to a power user when anyCoursePowerUser is enabled (role in another course)', () => {
-    // No role in the active course (id 1), but the user is a mentor in another course (id 2),
-    // and anyCoursePowerUser lets that count → access granted.
-    vi.mocked(useRequest).mockReturnValue({
-      data: { isAdmin: false, courses: { 2: { roles: ['mentor'] } } },
-    });
-    render(
-      <SessionProvider allowedRoles={['mentor']} anyCoursePowerUser={true}>
-        {mockChildren}
-      </SessionProvider>,
-    );
+    rerender(<SessionProvider hirerOnly={true}>{mockChildren}</SessionProvider>);
     expect(screen.getByText('Child Component')).toBeInTheDocument();
   });
 });

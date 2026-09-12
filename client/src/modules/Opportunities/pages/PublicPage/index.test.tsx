@@ -18,23 +18,19 @@ vi.mock('next/head', () => ({
 }));
 
 describe('<PublicPage />', () => {
-  it('renders the CV in public mode and a title built from the resume name', () => {
-    render(<PublicPage data={{ name: 'Jane Doe', uuid: 'abc', avatarLink: '' } as ResumeDto} />);
+  it('renders the public CV and each title fallback', () => {
+    const { rerender } = render(<PublicPage data={{ name: 'Jane Doe', uuid: 'abc', avatarLink: '' } as ResumeDto} />);
 
     const view = screen.getByTestId('view-cv');
     expect(view).toHaveAttribute('data-public', 'true');
     expect(view).toHaveTextContent('Jane Doe');
-  });
 
-  it('falls back to the github username when the name is missing', () => {
-    render(<PublicPage data={{ name: undefined, githubUsername: 'jane-gh', uuid: 'abc' } as ResumeDto} />);
+    rerender(<PublicPage data={{ name: undefined, githubUsername: 'jane-gh', uuid: 'abc' } as ResumeDto} />);
 
     // The document <title> is composed from the github username fallback.
     expect(document.title).toContain('jane-gh');
-  });
 
-  it('uses the "(Empty)" placeholder title when neither name nor github username exist', () => {
-    render(<PublicPage data={{ uuid: 'abc' } as ResumeDto} />);
+    rerender(<PublicPage data={{ uuid: 'abc' } as ResumeDto} />);
 
     expect(document.title).toContain('(Empty)');
   });

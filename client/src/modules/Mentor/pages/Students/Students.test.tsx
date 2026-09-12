@@ -1,5 +1,5 @@
 import { render, screen, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { MentorStudentDto } from '@client/api';
 import { Session, CourseInfo } from '@client/components/withSession';
 import { SessionContext } from '@client/modules/Course/contexts';
@@ -68,26 +68,10 @@ describe('Students page', () => {
     } as never);
   });
 
-  it('should render the page title and a card per student with score and rank', () => {
-    renderStudents([buildStudent()]);
-
-    expect(screen.getByText('Your students')).toBeInTheDocument();
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
-    expect(screen.getByText('250')).toBeInTheDocument();
-    expect(screen.getByText('5')).toBeInTheDocument();
-    expect(screen.getByText('Minsk, Belarus')).toBeInTheDocument();
-  });
-
   it('should show the empty state when the mentor has no students', () => {
     renderStudents([]);
 
     expect(screen.getByText('You do not have students')).toBeInTheDocument();
-  });
-
-  it('should label the feedback action "Give Feedback" when there is no feedback yet', () => {
-    renderStudents([buildStudent({ feedbacks: [] })]);
-
-    expect(screen.getByRole('button', { name: /give feedback/i })).toBeInTheDocument();
   });
 
   it('should label the feedback action "Edit Feedback" when feedback exists', () => {
@@ -96,11 +80,19 @@ describe('Students page', () => {
     expect(screen.getByRole('button', { name: /edit feedback/i })).toBeInTheDocument();
   });
 
-  it('should navigate to the feedback route for the student on click', async () => {
-    const user = userEvent.setup();
+  it('should render student details and navigate to Give Feedback on click', async () => {
+    const user = setupUser();
     renderStudents([buildStudent({ id: 11 })]);
 
-    await user.click(screen.getByRole('button', { name: /give feedback/i }));
+    expect(screen.getByText('Your students')).toBeInTheDocument();
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    expect(screen.getByText('250')).toBeInTheDocument();
+    expect(screen.getByText('5')).toBeInTheDocument();
+    expect(screen.getByText('Minsk, Belarus')).toBeInTheDocument();
+    const feedbackButton = screen.getByRole('button', { name: /give feedback/i });
+    expect(feedbackButton).toBeInTheDocument();
+
+    await user.click(feedbackButton);
 
     expect(push).toHaveBeenCalledWith(
       expect.objectContaining({ pathname: '/course/mentor/feedback', query: { course: 'rs-2025', studentId: 11 } }),
@@ -108,7 +100,7 @@ describe('Students page', () => {
   });
 
   it('should render the "Change Status" action for active students and navigate to expel', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderStudents([buildStudent({ active: true })]);
 
     const changeStatusBtn = screen.getByRole('button', { name: /change status/i });

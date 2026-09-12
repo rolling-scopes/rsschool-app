@@ -1,7 +1,7 @@
 /* eslint-disable testing-library/no-node-access */
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { message } from 'antd';
+import { setupUser } from '@client/__tests__/setupUser';
 import { CourseTaskModal } from './index';
 
 // Spy on antd's global message.error to assert the cross-check duration guard fires.
@@ -71,51 +71,22 @@ describe('<CourseTaskModal />', () => {
     getTasks.mockResolvedValue({ data: tasks });
   });
 
-  it('renders nothing when data is null', () => {
+  it('renders nothing when data is null', async () => {
     render(<CourseTaskModal {...makeProps({ data: null })} />);
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    await waitFor(() => expect(getTasks).toHaveBeenCalledOnce());
   });
 
-  it('renders the Course Task modal with its core fields', async () => {
-    render(<CourseTaskModal {...makeProps()} />);
-
-    expect(await screen.findByText('Course Task')).toBeInTheDocument();
-    expect(screen.getByLabelText('Task')).toBeInTheDocument();
-    expect(screen.getByLabelText('Task Type')).toBeInTheDocument();
-    expect(screen.getByLabelText('Checker')).toBeInTheDocument();
-    expect(screen.getByLabelText('Score')).toBeInTheDocument();
-    expect(screen.getByLabelText('Score Weight')).toBeInTheDocument();
-  });
-
-  it('seeds default Score (100) and Score Weight (1) from getInitialValues', async () => {
-    render(<CourseTaskModal {...makeProps()} />);
-
-    await screen.findByText('Course Task');
-    // antd InputNumber exposes the numeric value via aria-valuenow on role="spinbutton".
-    expect(screen.getByLabelText('Score')).toHaveAttribute('aria-valuenow', '100');
-    expect(screen.getByLabelText('Score Weight')).toHaveAttribute('aria-valuenow', '1');
-  });
-
-  it('lists the fetched tasks as options in the Task select', async () => {
-    render(<CourseTaskModal {...makeProps()} />);
-
-    const taskSelect = await screen.findByLabelText('Task');
-    fireEvent.mouseDown(taskSelect);
-
-    await waitFor(() => {
-      expect(within(document.body).getByText(/HTML Task/)).toBeInTheDocument();
-      expect(within(document.body).getByText(/Interview/)).toBeInTheDocument();
-    });
-  });
-
-  it('auto-fills Task Type when a task is selected', async () => {
+  it('lists fetched tasks and auto-fills Task Type after selection', async () => {
     render(<CourseTaskModal {...makeProps()} />);
 
     const taskSelect = await screen.findByLabelText('Task');
     fireEvent.mouseDown(taskSelect);
 
     const option = await within(document.body).findByText(/HTML Task/);
+    expect(option).toBeInTheDocument();
+    expect(within(document.body).getByText(/Interview/)).toBeInTheDocument();
     fireEvent.click(option);
 
     // The task's type ("htmltask" → "HTML task") flows into the Type select.
@@ -125,7 +96,7 @@ describe('<CourseTaskModal />', () => {
   });
 
   it('shows a validation message and does not submit when Task is empty', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<CourseTaskModal {...props} />);
 
@@ -159,7 +130,7 @@ describe('<CourseTaskModal />', () => {
   });
 
   it('submits the built record (taskId, checker, scores) when the form is valid', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<CourseTaskModal {...props} />);
 
@@ -183,7 +154,7 @@ describe('<CourseTaskModal />', () => {
   });
 
   it('blocks cross-check submit when the cross-check duration is under 3 days', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     // Seed an editable record so the form already has dates close together; choosing
     // crossCheck makes the (range end → crossCheckEndDate) gap too small.
@@ -207,7 +178,7 @@ describe('<CourseTaskModal />', () => {
   });
 
   it('blocks submit and shows an error when the cross-check duration is under 3 days', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps({
       // Edit an existing cross-check task whose cross-check window is only ~1 day after the
       // task end date — getInitialValues prefills range + crossCheckEndDate, so submit reaches
@@ -239,7 +210,7 @@ describe('<CourseTaskModal />', () => {
   });
 
   it('filters the task options by typed input via filterOption', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<CourseTaskModal {...makeProps()} />);
 
     const taskSelect = await screen.findByLabelText('Task');
@@ -253,12 +224,19 @@ describe('<CourseTaskModal />', () => {
     expect(within(document.body).queryByText(/HTML Task/)).not.toBeInTheDocument();
   });
 
-  it('calls onCancel when the cancel button is clicked on a pristine form', async () => {
-    const user = userEvent.setup();
+  it('renders core fields and defaults, then cancels a pristine form', async () => {
+    const user = setupUser();
     const props = makeProps();
     render(<CourseTaskModal {...props} />);
 
-    await screen.findByText('Course Task');
+    expect(await screen.findByText('Course Task')).toBeInTheDocument();
+    expect(screen.getByLabelText('Task')).toBeInTheDocument();
+    expect(screen.getByLabelText('Task Type')).toBeInTheDocument();
+    expect(screen.getByLabelText('Checker')).toBeInTheDocument();
+    expect(screen.getByLabelText('Score')).toBeInTheDocument();
+    expect(screen.getByLabelText('Score Weight')).toBeInTheDocument();
+    expect(screen.getByLabelText('Score')).toHaveAttribute('aria-valuenow', '100');
+    expect(screen.getByLabelText('Score Weight')).toHaveAttribute('aria-valuenow', '1');
     await user.click(screen.getByRole('button', { name: /cancel/i }));
 
     expect(props.onCancel).toHaveBeenCalled();

@@ -25,8 +25,8 @@ function makeMentor(overrides: Partial<MentorStudentSummaryDto> = {}): MentorStu
 }
 
 describe('<MentorInfo />', () => {
-  it('renders the mentor name, github link to the profile, and location', () => {
-    render(<MentorInfo mentor={makeMentor()} />);
+  it('renders populated details and omits missing contact values', () => {
+    const { rerender } = render(<MentorInfo mentor={makeMentor()} />);
 
     expect(screen.getByText('Mentor Name')).toBeInTheDocument();
 
@@ -35,10 +35,6 @@ describe('<MentorInfo />', () => {
     expect(link).toHaveAttribute('target', '_blank');
 
     expect(screen.getByText('Minsk, Belarus')).toBeInTheDocument();
-  });
-
-  it('renders every populated contact row', () => {
-    render(<MentorInfo mentor={makeMentor()} />);
 
     expect(screen.getByText('E-mail:')).toBeInTheDocument();
     expect(screen.getByText('mentor@example.com')).toBeInTheDocument();
@@ -48,10 +44,8 @@ describe('<MentorInfo />', () => {
     expect(screen.getByText('Skype:')).toBeInTheDocument();
     expect(screen.getByText('Notes:')).toBeInTheDocument();
     expect(screen.getByText('some notes')).toBeInTheDocument();
-  });
 
-  it('omits contact rows and the name when those values are missing', () => {
-    render(
+    rerender(
       <MentorInfo
         mentor={makeMentor({
           name: undefined,
@@ -67,7 +61,6 @@ describe('<MentorInfo />', () => {
     expect(screen.queryByText('Mentor Name')).not.toBeInTheDocument();
     expect(screen.queryByText('E-mail:')).not.toBeInTheDocument();
     expect(screen.queryByText('Notes:')).not.toBeInTheDocument();
-    // github link still rendered
     expect(screen.getByRole('link', { name: /mentor-gh/ })).toBeInTheDocument();
   });
 });

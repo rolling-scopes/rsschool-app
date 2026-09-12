@@ -118,7 +118,7 @@ export default function Page() {
   const handleViewComment = ({ historicalScores, checker, messages }: CrossCheckPairDto) => {
     modal.info({
       width: 1020,
-      maskClosable: true,
+      mask: { closable: true },
       title: `Comment from ${checker.githubId}`,
       content: historicalScores.map((historicalScore, index) => (
         <Space orientation="vertical" key={historicalScore.dateTime} style={{ width: '100%' }}>

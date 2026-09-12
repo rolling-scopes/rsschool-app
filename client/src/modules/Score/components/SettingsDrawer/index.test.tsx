@@ -1,5 +1,5 @@
 import { render, screen, within, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { Form } from 'antd';
 import { SettingsDrawer } from './index';
@@ -24,7 +24,7 @@ function makeProps(overrides: Partial<Parameters<typeof SettingsDrawer>[0]> = {}
 // The drawer body wraps the form + action buttons in a collapsed antd Collapse panel
 // ("Columns visibility"). Expand it so the checkboxes and action buttons mount/become
 // interactive, then return the dialog body for scoped queries.
-async function openPanel(user: ReturnType<typeof userEvent.setup>) {
+async function openPanel(user: ReturnType<typeof setupUser>) {
   await user.click(screen.getByText('Columns visibility'));
   // Action buttons live below the checkboxes once expanded.
   await screen.findByText('Save');
@@ -38,33 +38,8 @@ describe('<SettingsDrawer />', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
-  it('renders the drawer title and the collapsible "Columns visibility" section', () => {
-    render(<SettingsDrawer {...makeProps()} />);
-
-    expect(screen.getByText('Score settings')).toBeInTheDocument();
-    expect(screen.getByText('Columns visibility')).toBeInTheDocument();
-  });
-
-  it('renders a checkbox per course task seeded from isVisible once expanded', async () => {
-    const user = userEvent.setup();
-    render(<SettingsDrawer {...makeProps()} />);
-
-    await openPanel(user);
-
-    expect(screen.getByText('Task A')).toBeInTheDocument();
-    expect(screen.getByText('Task B')).toBeInTheDocument();
-    expect(screen.getByText('Task C')).toBeInTheDocument();
-
-    const checkboxes = screen.getAllByRole('checkbox');
-    expect(checkboxes).toHaveLength(3);
-    // Initial values mirror `isVisible`.
-    expect(checkboxes[0]).toBeChecked();
-    expect(checkboxes[1]).not.toBeChecked();
-    expect(checkboxes[2]).toBeChecked();
-  });
-
   it('calls onCancel when the Cancel action is clicked', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<SettingsDrawer {...props} />);
 
@@ -76,11 +51,24 @@ describe('<SettingsDrawer />', () => {
   });
 
   it('toggles a checkbox and saves the current field map via onOk', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<SettingsDrawer {...props} />);
 
+    expect(screen.getByText('Score settings')).toBeInTheDocument();
+    expect(screen.getByText('Columns visibility')).toBeInTheDocument();
+
     await openPanel(user);
+
+    expect(screen.getByText('Task A')).toBeInTheDocument();
+    expect(screen.getByText('Task B')).toBeInTheDocument();
+    expect(screen.getByText('Task C')).toBeInTheDocument();
+
+    const checkboxes = screen.getAllByRole('checkbox');
+    expect(checkboxes).toHaveLength(3);
+    expect(checkboxes[0]).toBeChecked();
+    expect(checkboxes[1]).not.toBeChecked();
+    expect(checkboxes[2]).toBeChecked();
 
     // Uncheck Task A (was visible) → now hidden.
     await user.click(screen.getByRole('checkbox', { name: 'Task A' }));
@@ -92,7 +80,7 @@ describe('<SettingsDrawer />', () => {
   });
 
   it('"All" checks every checkbox', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<SettingsDrawer {...makeProps()} />);
 
     await openPanel(user);
@@ -104,7 +92,7 @@ describe('<SettingsDrawer />', () => {
   });
 
   it('"None" unchecks every checkbox and saves them all as hidden', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<SettingsDrawer {...props} />);
 
@@ -121,7 +109,7 @@ describe('<SettingsDrawer />', () => {
   });
 
   it('closes via the drawer close (X) button', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<SettingsDrawer {...props} />);
 
@@ -137,7 +125,7 @@ describe('<SettingsDrawer />', () => {
     afterEach(() => spy?.mockRestore());
 
     it('does not call onOk if validateFields rejects', async () => {
-      const user = userEvent.setup();
+      const user = setupUser();
       // Keep the real form (so <Form> still works) but force validateFields to reject →
       // `await ….catch(() => null)` yields null → the `if (!values) return` guard short-circuits.
       const realUseForm = Form.useForm;

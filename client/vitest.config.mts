@@ -1,13 +1,48 @@
 import path from 'node:path';
+import { isBuiltin } from 'node:module';
 import { defineConfig, mergeConfig } from 'vitest/config';
 import shared from '../vitest.shared.mjs';
 
-// Pin the timezone in the MAIN vitest process so worker threads inherit UTC at
-// init. The `threads` pool (set below) starts ~2x faster than `forks`, but
-// threads inherit the parent process timezone — vitest's `test.env.TZ` only
-// reliably applies to `forks`. Setting it here (before the pool is created) keeps
-// date/calendar assertions deterministic under threads. Cross-platform, no shell prefix.
+// Set UTC before workers start because threads inherit the parent timezone.
 process.env.TZ = 'UTC';
+
+// Keep this list explicit: some service and .test.ts files need browser APIs.
+const nodeTests = [
+  'src/data/interviews/__tests__/templateValidator.test.ts',
+  'src/domain/course.test.ts',
+  'src/domain/interview.test.ts',
+  'src/domain/user.helpers.test.ts',
+  'src/modules/AutoTest/utils/map.test.ts',
+  'src/modules/CrossCheck/components/SolutionReview/helpers.test.ts',
+  'src/modules/CrossCheck/utils/arrayMoveImmutable.test.ts',
+  'src/modules/CrossCheck/utils/getCriteriaStatusColor.test.ts',
+  'src/modules/Home/data/loadHomeData.test.ts',
+  'src/modules/Interviews/data/getInterviewData.test.ts',
+  'src/modules/Interviews/data/getStageInterviewData.test.ts',
+  'src/modules/Interviews/pages/StageInterviewFeedback/feedbackTemplateHandler.test.ts',
+  'src/modules/MentorsHallOfFame/services/mentors-hall-of-fame.service.test.ts',
+  'src/modules/Opportunities/pages/PublicPage/getServerSideProps.test.ts',
+  'src/modules/Opportunities/transformers/splitDataForForms.test.ts',
+  'src/modules/Opportunities/transformers/transformFieldsData.test.ts',
+  'src/modules/Opportunities/transformers/transformInitialCvData.test.ts',
+  'src/modules/Score/data/getExportCsvUrl.test.ts',
+  'src/modules/Score/data/isExportEnabled.test.ts',
+  'src/modules/SubmitScores/utils.test.ts',
+  'src/modules/Tasks/utils/test-utils.test.ts',
+  'src/services/cdn.test.ts',
+  'src/services/courses.test.ts',
+  'src/services/features.test.ts',
+  'src/services/files.test.ts',
+  'src/services/formatter.test.ts',
+  'src/services/gratitude.test.ts',
+  'src/services/mentorRegistry.test.ts',
+  'src/services/routes.test.ts',
+  'src/services/validators.test.ts',
+  'src/shared/utils/queryParams-utils.test.ts',
+  'src/shared/utils/text-utils.test.ts',
+  'src/utils/optionalQueryString.test.ts',
+  'src/utils/profilePageUtils.test.ts',
+];
 
 export default mergeConfig(
   shared,
@@ -21,21 +56,48 @@ export default mergeConfig(
       },
     },
     test: {
-      environment: 'jsdom',
-      include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
-      setupFiles: ['src/setupTests.ts'],
-      // `threads` starts workers far faster than the default `forks` pool and
-      // shares the V8 code cache across files, roughly halving module-import time
-      // for this antd-heavy suite. (Per-file isolation is kept — the suite's
-      // per-file vi.mock usage is not safe with isolate:false.)
+      projects: [
+        {
+          test: {
+            name: 'node',
+            environment: 'node',
+            include: nodeTests,
+          },
+        },
+        {
+          // Bundle ESM exports so named icon imports survive dependency optimization.
+          resolve: { mainFields: ['module', 'main'] },
+          test: {
+            name: 'dom',
+            environment: 'jsdom',
+            include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
+            exclude: nodeTests,
+            setupFiles: ['src/setupTests.ts'],
+            deps: {
+              optimizer: {
+                client: {
+                  enabled: true,
+                  // Share dayjs plugin state and React contexts with unbundled imports.
+                  exclude: ['react-dom', '@ant-design/cssinjs'],
+                  rolldownOptions: {
+                    platform: 'node',
+                    external: id => id === 'dayjs' || isBuiltin(id),
+                  },
+                  include: ['antd', '@ant-design/icons', 'react-markdown', 'remark-gfm'],
+                },
+              },
+            },
+          },
+        },
+      ],
+      // Keep file isolation: tests use different module mocks and browser state.
       pool: 'threads',
       // antd v6 in jsdom is CPU-heavy; under coverage instrumentation + parallelism
       // the slowest Table/Form-validation tests can exceed 30s on busy/CI runners.
       testTimeout: 60000,
       hookTimeout: 60000,
-      // Retry transient flakes (antd async validation/Table renders occasionally
-      // timing out under load). A genuine failure still fails all attempts.
-      retry: 2,
+      // Surface flaky failures instead of hiding them behind repeated minute-long attempts.
+      retry: 0,
       env: {
         TZ: 'UTC',
       },
@@ -55,55 +117,17 @@ export default mergeConfig(
           'src/styles/**',
           'src/shared/components/Icons/**',
           'src/**/*.stories.tsx',
-          // NOTE: do not exclude `src/**/index.ts` — v8's exclude matcher also
-          // drops component `index.tsx` files (95 real components), which must
-          // count toward the target. Pure barrels are mostly covered transitively.
+          // Keep barrels in coverage so the measured file set stays unchanged.
           'src/**/*.d.ts',
           'src/setupTests.ts',
         ],
         reportsDirectory: './coverage',
-        // Coverage floor enforced in CI via `test:ci`. Actual coverage is
-        // ~95.8% stmts / 93.4% branches / 95.7% funcs / 95.8% lines — all four
-        // metrics clear the flat-90 goal with margin. Floor is a flat 90 (free
-        // above 90, fail below); remaining uncovered branches are genuinely
-        // unreachable defensive code (jsdom-impossible guards, antd internals,
-        // dead `?? []`/`|| ''` fallbacks).
+        // Enforce the same coverage floor across both projects in CI.
         thresholds: {
           statements: 90,
           branches: 90,
           functions: 90,
           lines: 90,
-        },
-      },
-      deps: {
-        optimizer: {
-          web: {
-            include: [
-              'react-markdown',
-              'vfile',
-              'unist-util-stringify-position',
-              'remark-parse',
-              'remark-rehype',
-              'mdast-util-from-markdown',
-              'mdast-util-to-hast',
-              'unified',
-              'bail',
-              'is-plain-obj',
-              'trough',
-              'micromark',
-              'parse-entities',
-              'character-entities',
-              'property-information',
-              'comma-separated-tokens',
-              'hast-util-whitespace',
-              'space-separated-tokens',
-              'decode-named-character-reference',
-              'ccount',
-              'escape-string-regexp',
-              'markdown-table',
-              'trim-lines',
-            ],
-          },
         },
       },
     },

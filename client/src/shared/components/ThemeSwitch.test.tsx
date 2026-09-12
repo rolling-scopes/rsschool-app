@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { AppTheme } from '@client/providers/ThemeProvider';
 import ThemeSwitch from './ThemeSwitch';
 import { useTheme } from '@client/hooks';
@@ -27,62 +27,43 @@ describe('ThemeSwitch', () => {
     mockTheme();
   });
 
-  it('shows the auto-theme icon when autoTheme is enabled', () => {
+  it('shows the icon for auto, light, and dark themes', () => {
     mockTheme({ autoTheme: true });
-    render(<ThemeSwitch />);
+    const { rerender } = render(<ThemeSwitch />);
 
     expect(screen.getByRole('img', { name: 'skin' })).toBeInTheDocument();
-  });
 
-  it('shows the light-theme icon when a light theme is active and autoTheme is off', () => {
     mockTheme({ autoTheme: false, theme: AppTheme.Light });
-    render(<ThemeSwitch />);
-
+    rerender(<ThemeSwitch />);
     expect(screen.getByRole('img', { name: 'sun' })).toBeInTheDocument();
-  });
 
-  it('shows the dark-theme icon when a dark theme is active and autoTheme is off', () => {
     mockTheme({ autoTheme: false, theme: AppTheme.Dark });
-    render(<ThemeSwitch />);
-
+    rerender(<ThemeSwitch />);
     expect(screen.getByRole('img', { name: 'moon' })).toBeInTheDocument();
   });
 
   // The dropdown trigger shows the active-theme icon (skin when autoTheme is on).
   // Menu items are labelled only by their icons (moon/sun/skin), so we open the
   // menu and pick items by order: [0] dark, [1] light, [2] auto.
-  async function openMenuItems(user: ReturnType<typeof userEvent.setup>) {
+  async function openMenuItems(user: ReturnType<typeof setupUser>) {
     await user.click(screen.getByRole('img', { name: 'skin' }));
     return screen.findAllByRole('menuitem');
   }
 
-  it('switches to dark theme from the dropdown menu', async () => {
-    const user = userEvent.setup();
+  it('switches among dark, light, and automatic themes', async () => {
+    const user = setupUser();
     render(<ThemeSwitch />);
 
-    const items = await openMenuItems(user);
+    let items = await openMenuItems(user);
     await user.click(items[0]);
-
     expect(themeChange).toHaveBeenCalledWith(AppTheme.Dark);
-  });
 
-  it('switches to light theme from the dropdown menu', async () => {
-    const user = userEvent.setup();
-    render(<ThemeSwitch />);
-
-    const items = await openMenuItems(user);
+    items = await openMenuItems(user);
     await user.click(items[1]);
-
     expect(themeChange).toHaveBeenCalledWith(AppTheme.Light);
-  });
 
-  it('toggles auto theme from the dropdown menu', async () => {
-    const user = userEvent.setup();
-    render(<ThemeSwitch />);
-
-    const items = await openMenuItems(user);
+    items = await openMenuItems(user);
     await user.click(items[2]);
-
     expect(changeAutoTheme).toHaveBeenCalledTimes(1);
   });
 });

@@ -1,6 +1,6 @@
 /* eslint-disable testing-library/no-node-access */
 import { fireEvent, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import ChangeTagColors from './ChangeTagColors';
 import { CourseScheduleItemDtoTagEnum as TagEnum } from '@client/api';
 import { TAG_NAME_MAP } from '../../constants';
@@ -26,60 +26,39 @@ const tags = [TagEnum.Coding, TagEnum.Test];
 // ChangeTagColors content lives inside a collapsed SettingsItem (antd Collapse) —
 // expand its header before reaching the tag chips / color pickers.
 async function renderExpanded(props: Parameters<typeof ChangeTagColors>[0]) {
-  const user = userEvent.setup();
-  render(<ChangeTagColors {...props} />);
+  const user = setupUser();
+  const utils = render(<ChangeTagColors {...props} />);
   await user.click(document.querySelector('.ant-collapse-header') as HTMLElement);
-  return user;
+  return { ...utils, user };
 }
 
 describe('<ChangeTagColors />', () => {
-  it('renders a labelled tag chip and a color picker for each tag', async () => {
-    await renderExpanded({ tags, tagColors: {}, setTagColors: vi.fn() });
-
-    expect(screen.getByText(TAG_NAME_MAP[TagEnum.Coding])).toBeInTheDocument();
-    expect(screen.getByText(TAG_NAME_MAP[TagEnum.Test])).toBeInTheDocument();
-    expect(screen.getAllByTestId('color-picker')).toHaveLength(tags.length);
-  });
-
-  it('seeds each picker with its current color from tagColors', async () => {
-    await renderExpanded({
-      tags,
-      tagColors: { [TagEnum.Coding]: '#111111', [TagEnum.Test]: '#222222' },
-      setTagColors: vi.fn(),
-    });
-
-    const [coding, test] = screen.getAllByTestId('color-picker');
-    expect(coding).toHaveValue('#111111');
-    expect(test).toHaveValue('#222222');
-  });
-
-  it('merges the new hex value for the changed tag and preserves the others', async () => {
+  it('renders, seeds, changes, and handles tag variants', async () => {
     const setTagColors = vi.fn();
-    await renderExpanded({
+    const { rerender } = await renderExpanded({
       tags,
       tagColors: { [TagEnum.Coding]: '#111111', [TagEnum.Test]: '#222222' },
       setTagColors,
     });
 
-    const [coding] = screen.getAllByTestId('color-picker');
-    fireEvent.change(coding, { target: { value: '#abcdef' } });
+    expect(screen.getByText(TAG_NAME_MAP[TagEnum.Coding])).toBeInTheDocument();
+    expect(screen.getByText(TAG_NAME_MAP[TagEnum.Test])).toBeInTheDocument();
+    expect(screen.getAllByTestId('color-picker')).toHaveLength(tags.length);
 
+    const [coding, test] = screen.getAllByTestId('color-picker') as HTMLInputElement[];
+    expect(coding).toHaveValue('#111111');
+    expect(test).toHaveValue('#222222');
+    fireEvent.change(coding!, { target: { value: '#abcdef' } });
     expect(setTagColors).toHaveBeenCalledWith({
       [TagEnum.Coding]: '#abcdef',
       [TagEnum.Test]: '#222222',
     });
-  });
 
-  it('falls back to the raw tag name when no friendly label exists', async () => {
     const unknownTag = 'mystery-tag' as TagEnum;
-    await renderExpanded({ tags: [unknownTag], tagColors: {}, setTagColors: vi.fn() });
-
+    rerender(<ChangeTagColors tags={[unknownTag]} tagColors={{}} setTagColors={setTagColors} />);
     expect(screen.getByText('mystery-tag')).toBeInTheDocument();
-  });
 
-  it('renders nothing in the list when there are no tags', async () => {
-    await renderExpanded({ tags: [], tagColors: {}, setTagColors: vi.fn() });
-
+    rerender(<ChangeTagColors tags={[]} tagColors={{}} setTagColors={setTagColors} />);
     expect(screen.queryByTestId('color-picker')).not.toBeInTheDocument();
   });
 });

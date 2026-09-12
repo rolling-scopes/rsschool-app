@@ -1,5 +1,5 @@
-import { screen, render, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { screen, render, waitFor, within } from '@testing-library/react';
+import { setupUser } from '@client/__tests__/setupUser';
 import { TeamApi, TeamDistributionDetailedDto, TeamDto } from '@client/api';
 import TeamSection from './TeamsSection';
 
@@ -67,32 +67,27 @@ describe('<TeamsSection />', () => {
     // member count "1 of 3"
     expect(screen.getByText(/1 of 3/)).toBeInTheDocument();
     expect(getTeams).toHaveBeenCalledWith(100, 5, 10, 1, '');
-  });
-
-  it('renders the distribution name in the section title', async () => {
-    renderSection();
-    expect(await screen.findByText('Spring teams')).toBeInTheDocument();
-  });
-
-  it('hides the Action column (Edit team) for non-managers', async () => {
-    renderSection(false);
-    await screen.findByText('Alpha Team');
+    expect(screen.getByText('Spring teams')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /edit team/i })).not.toBeInTheDocument();
   });
 
   it('shows the Edit team action for managers and calls toggleTeamModal with the team', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { toggleTeamModal } = renderSection(true);
     await screen.findByText('Alpha Team');
 
-    const editButtons = screen.getAllByRole('button', { name: /edit team/i });
-    expect(editButtons.length).toBeGreaterThan(0);
-    await user.click(editButtons[0]);
+    // Scope the action to its team instead of scanning every row's buttons.
+    // eslint-disable-next-line testing-library/no-node-access
+    const row = screen.getByText('Alpha Team').closest('tr');
+    expect(row).toHaveRole('row');
+    const editButton = within(row!).getByRole('button', { name: /edit team/i });
+    expect(editButton).toBeInTheDocument();
+    await user.click(editButton);
     expect(toggleTeamModal).toHaveBeenCalledWith(teams[0]);
   });
 
   it('re-fetches teams with the search term when searching', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderSection();
     await screen.findByText('Alpha Team');
 
@@ -103,7 +98,7 @@ describe('<TeamsSection />', () => {
   });
 
   it('expands a team with students to reveal the nested students table', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderSection();
     await screen.findByText('Alpha Team');
 

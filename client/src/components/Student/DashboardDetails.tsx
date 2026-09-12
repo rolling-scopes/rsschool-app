@@ -42,7 +42,7 @@ export function DashboardDetails(props: Props) {
   return (
     <>
       <Drawer
-        width={props.isAdmin ? 660 : 600}
+        size={props.isAdmin ? 660 : 600}
         title={`${details.name} , ${details.githubId}`}
         placement="right"
         closable={false}

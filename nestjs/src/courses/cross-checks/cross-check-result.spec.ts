@@ -48,6 +48,8 @@ describe('CourseCrossCheckService.getResult', () => {
       {} as never,
       { createQueryBuilder: vi.fn(() => mockStudentQb) } as never,
       { findOne: mockUserFindOne } as never,
+      {} as never,
+      {} as never,
     );
   }
 
@@ -123,6 +125,8 @@ describe('CourseCrossCheckService.getTaskSolutionChecker', () => {
     qb.getOne = vi.fn(async () => taskChecker);
     const service = new CourseCrossCheckService(
       { createQueryBuilder: vi.fn(() => qb) } as never,
+      {} as never,
+      {} as never,
       {} as never,
       {} as never,
       {} as never,

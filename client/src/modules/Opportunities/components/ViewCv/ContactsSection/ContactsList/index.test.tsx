@@ -26,8 +26,9 @@ const mockContacts = {
 };
 
 describe('ContactsList', () => {
-  test('should display proper values', () => {
-    render(<ContactsList contacts={mockContacts} />);
+  test('renders contacts and copies populated and missing values', async () => {
+    const user = userEvent.setup();
+    const { rerender } = render(<ContactsList contacts={mockContacts} />);
 
     const email = screen.getByText(mockContacts.email);
     const githubUsername = screen.getByText(mockContacts.githubUsername);
@@ -44,10 +45,6 @@ describe('ContactsList', () => {
     expect(skype).toBeInTheDocument();
     expect(telegram).toBeInTheDocument();
     expect(website).toBeInTheDocument();
-  });
-
-  test('should display corresponding icons', () => {
-    render(<ContactsList contacts={mockContacts} />);
 
     const emailIcon = screen.getByRole('img', { name: 'mail' });
     const githubIcon = screen.getByRole('img', { name: 'github' });
@@ -64,41 +61,27 @@ describe('ContactsList', () => {
     expect(skypeIcon).toBeInTheDocument();
     expect(telegramIcon).toBeInTheDocument();
     expect(websiteIcon).toBeInTheDocument();
-  });
-
-  test('should have corresponding links', () => {
-    render(<ContactsList contacts={mockContacts} />);
 
     const links = screen.getAllByRole('link');
     expect(links).toHaveLength(7);
 
-    const [emailIcon, githubIcon, linkedinIcon, phoneIcon, skypeIcon, telegramIcon, websiteIcon] = links;
+    const [emailLink, githubLink, linkedinLink, phoneLink, skypeLink, telegramLink, websiteLink] = links;
 
-    expect(emailIcon).toHaveAttribute('title', 'E-mail');
-    expect(githubIcon).toHaveAttribute('title', 'GitHub');
-    expect(linkedinIcon).toHaveAttribute('title', 'LinkedIn');
-    expect(phoneIcon).toHaveAttribute('title', 'Phone');
-    expect(skypeIcon).toHaveAttribute('title', 'Skype');
-    expect(telegramIcon).toHaveAttribute('title', 'Telegram');
-    expect(websiteIcon).toHaveAttribute('title', 'Website');
-  });
+    expect(emailLink).toHaveAttribute('title', 'E-mail');
+    expect(githubLink).toHaveAttribute('title', 'GitHub');
+    expect(linkedinLink).toHaveAttribute('title', 'LinkedIn');
+    expect(phoneLink).toHaveAttribute('title', 'Phone');
+    expect(skypeLink).toHaveAttribute('title', 'Skype');
+    expect(telegramLink).toHaveAttribute('title', 'Telegram');
+    expect(websiteLink).toHaveAttribute('title', 'Website');
 
-  test('copies a contact value to the clipboard and shows a notification', async () => {
-    const user = userEvent.setup();
-    render(<ContactsList contacts={{ email: 'copy@me.com' }} />);
-
+    rerender(<ContactsList contacts={{ email: 'copy@me.com' }} />);
     await user.click(screen.getByRole('button'));
 
     expect(copyToClipboard).toHaveBeenCalledWith('copy@me.com');
     expect(notificationSuccess).toHaveBeenCalledWith({ message: 'Copied to clipboard' });
-  });
 
-  test('copies an empty string when a kept contact value is undefined', async () => {
-    const user = userEvent.setup();
-    // getContactsToRender drops only null values; an `undefined` value is kept and
-    // exercises the `value ?? ''` fallback on copy.
-    render(<ContactsList contacts={{ email: undefined } as never} />);
-
+    rerender(<ContactsList contacts={{ email: undefined } as never} />);
     await user.click(screen.getByRole('button'));
 
     expect(copyToClipboard).toHaveBeenCalledWith('');

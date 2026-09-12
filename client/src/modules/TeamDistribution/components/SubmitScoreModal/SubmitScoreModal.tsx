@@ -46,7 +46,7 @@ export default function SubmitScoreModal({ distribution, onClose }: Props) {
     >
       <Spin spinning={loading}>
         <Space orientation="vertical">
-          <Card bordered>
+          <Card variant="outlined">
             <Text type="warning" strong>
               After submission, reverting changes will be impossible. Please be careful when selecting the task. The
               same score will be given to all team members.

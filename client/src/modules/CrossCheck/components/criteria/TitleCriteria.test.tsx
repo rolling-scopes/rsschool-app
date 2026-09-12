@@ -2,6 +2,11 @@ import { render, screen } from '@testing-library/react';
 import { CrossCheckCriteriaDataDto, CrossCheckCriteriaDataDtoTypeEnum } from '@client/api';
 import { TitleCriteria } from './TitleCriteria';
 
+vi.mock('antd', () => ({
+  theme: { useToken: () => ({ token: { blue2: '#e6f4ff' } }) },
+  Typography: { Text: ({ children }: React.PropsWithChildren) => children },
+}));
+
 const titleData: CrossCheckCriteriaDataDto = {
   key: 'title-1',
   text: 'Section: Layout',

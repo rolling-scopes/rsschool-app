@@ -1,5 +1,5 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { act, render, screen } from '@testing-library/react';
+import { setupUser } from '@client/__tests__/setupUser';
 import { StudentSearch } from './StudentSearch';
 
 // Use vi.hoisted so the mocked class can reference the spy at module-eval time.
@@ -14,36 +14,36 @@ vi.mock('@client/services/course', () => ({
 
 describe('StudentSearch', () => {
   beforeEach(() => {
+    vi.useFakeTimers();
     searchStudents.mockReset();
     searchStudents.mockResolvedValue([{ id: 1, githubId: 'student-x', name: 'Student X', mentor: null }]);
   });
 
-  it('renders a combobox', () => {
-    render(<StudentSearch courseId={7} />);
-
-    expect(screen.getByRole('combobox')).toBeInTheDocument();
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   it('searches students via the course service and renders the results', async () => {
-    const user = userEvent.setup();
+    const user = setupUser({ advanceTimers: vi.advanceTimersByTimeAsync });
     render(<StudentSearch courseId={7} />);
 
     const combobox = screen.getByRole('combobox');
-    combobox.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+    expect(combobox).toBeInTheDocument();
     await user.type(combobox, 'stu');
 
-    await waitFor(() => expect(searchStudents).toHaveBeenCalledWith('stu', false));
-    expect(await screen.findByText(/Student X/)).toBeInTheDocument();
+    await act(() => vi.advanceTimersByTimeAsync(300));
+    expect(searchStudents).toHaveBeenCalledWith('stu', false);
+    expect(screen.getByText(/Student X/)).toBeInTheDocument();
   });
 
   it('forwards the onlyStudentsWithoutMentorShown flag to the service', async () => {
-    const user = userEvent.setup();
+    const user = setupUser({ advanceTimers: vi.advanceTimersByTimeAsync });
     render(<StudentSearch courseId={7} onlyStudentsWithoutMentorShown />);
 
     const combobox = screen.getByRole('combobox');
-    combobox.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
     await user.type(combobox, 'stu');
 
-    await waitFor(() => expect(searchStudents).toHaveBeenCalledWith('stu', true));
+    await act(() => vi.advanceTimersByTimeAsync(300));
+    expect(searchStudents).toHaveBeenCalledWith('stu', true);
   });
 });

@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import {
   CrossCheckCriteriaDataDtoTypeEnum,
   CrossCheckMessageDtoRoleEnum,
@@ -64,6 +64,7 @@ describe('<SolutionReview />', () => {
     expect(screen.getByText('80')).toBeInTheDocument();
     expect(screen.getByText('maximum score: 100')).toBeInTheDocument();
     expect(screen.getByText('Nice solution')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Show detailed feedback' })).not.toBeInTheDocument();
   });
 
   it('shows "unknown" when no max score is provided', () => {
@@ -73,7 +74,7 @@ describe('<SolutionReview />', () => {
   });
 
   it('opens a detailed-feedback modal when criteria are present', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(
       <SolutionReview
         {...makeProps({
@@ -98,14 +99,8 @@ describe('<SolutionReview />', () => {
     expect(screen.getByText('Subtask in feedback')).toBeInTheDocument();
   });
 
-  it('does not render the detailed-feedback button when there are no criteria', () => {
-    render(<SolutionReview {...makeProps()} />);
-
-    expect(screen.queryByRole('button', { name: 'Show detailed feedback' })).not.toBeInTheDocument();
-  });
-
   it('sends a message through the course service with the markdown label', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<SolutionReview {...makeProps()} />);
 
     await user.click(screen.getByPlaceholderText('Leave a message'));

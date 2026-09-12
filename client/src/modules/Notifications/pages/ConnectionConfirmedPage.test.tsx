@@ -21,24 +21,14 @@ function setSearch(search: string) {
 }
 
 describe('ConnectionConfirmed', () => {
-  it('renders a success alert naming the connection type from the URL', () => {
+  it('renders the connection type, settings link, title, and footer', () => {
     setSearch('?connectionType=telegram');
     render(<ConnectionConfirmed />);
 
     expect(screen.getByText(/successfully connected your telegram/i)).toBeInTheDocument();
-  });
-
-  it('links to the notifications settings page', () => {
-    setSearch('?connectionType=discord');
-    render(<ConnectionConfirmed />);
 
     const link = screen.getByRole('link', { name: /notifications/i });
     expect(link).toHaveAttribute('href', '/profile/notifications');
-  });
-
-  it('renders the page title and footer', () => {
-    setSearch('?connectionType=email');
-    render(<ConnectionConfirmed />);
 
     expect(screen.getByRole('heading', { name: /connection confirmed/i })).toBeInTheDocument();
     expect(screen.getByText('footer')).toBeInTheDocument();

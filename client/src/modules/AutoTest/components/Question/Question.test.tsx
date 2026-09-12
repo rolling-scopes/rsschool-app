@@ -22,23 +22,20 @@ function renderQuestion(question: Partial<SelfEducationQuestionSelectedAnswersDt
 }
 
 describe('Question', () => {
-  it('should render the question title and its answers', () => {
+  it('should render the question title, answers and radio inputs', () => {
     renderQuestion({});
 
     expect(screen.getByRole('heading', { name: 'What is 2 + 2?' })).toBeInTheDocument();
     expect(screen.getByText('3')).toBeInTheDocument();
     expect(screen.getByText('4')).toBeInTheDocument();
     expect(screen.getByText('5')).toBeInTheDocument();
+    expect(screen.getAllByRole('radio')).toHaveLength(3);
   });
 
-  it.each`
-    multiple | role
-    ${false} | ${'radio'}
-    ${true}  | ${'checkbox'}
-  `('should render $role inputs when multiple is $multiple', ({ multiple, role }) => {
-    renderQuestion({ multiple });
+  it('should render checkbox inputs when multiple is true', () => {
+    renderQuestion({ multiple: true });
 
-    expect(screen.getAllByRole(role)).toHaveLength(3);
+    expect(screen.getAllByRole('checkbox')).toHaveLength(3);
   });
 
   it('should mark the selected answer as checked', () => {

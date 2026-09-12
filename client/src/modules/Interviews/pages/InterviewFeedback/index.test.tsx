@@ -1,9 +1,14 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useRouter } from 'next/router';
 import { InterviewFeedback } from './index';
 import type { FeedbackProps } from '../../data/getInterviewData';
+
+const { showError } = vi.hoisted(() => ({ showError: vi.fn() }));
+vi.mock('@client/hooks', () => ({
+  useMessage: () => ({ message: { success: vi.fn(), error: showError } }),
+}));
 
 // Boundary: CourseService (the only network call this page makes).
 const { postStudentInterviewResult } = vi.hoisted(() => ({
@@ -88,33 +93,8 @@ function makeProps(overrides: Partial<FeedbackProps> = {}): FeedbackProps {
 describe('<InterviewFeedback />', () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it('renders the template heading, sample-questions link and student github link', () => {
-    render(<InterviewFeedback {...makeProps()} />);
-
-    expect(screen.getByRole('heading', { name: /Tiny Track: Interview Feedback/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Sample interview questions/i })).toHaveAttribute(
-      'href',
-      'https://example.com/questions',
-    );
-    expect(screen.getByRole('link', { name: /candidate-gh/i })).toHaveAttribute(
-      'href',
-      '/profile?githubId=candidate-gh',
-    );
-  });
-
-  it('renders both the checkbox and textarea question inputs for the category', () => {
-    render(<InterviewFeedback {...makeProps()} />);
-
-    // Category title (name is wrapped with its description, so match loosely).
-    expect(screen.getByText('Category One')).toBeInTheDocument();
-    // Checkbox-type question.
-    expect(screen.getByRole('checkbox', { name: /Checkbox question/i })).toBeInTheDocument();
-    // Input-type question renders a labelled textarea.
-    expect(screen.getByLabelText('Text question')).toBeInTheDocument();
-  });
-
   it('does not submit when no score is selected (required validation blocks it)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<InterviewFeedback {...makeProps()} />);
 
     await user.click(screen.getByRole('button', { name: /^Submit$/i }));
@@ -126,7 +106,7 @@ describe('<InterviewFeedback />', () => {
   });
 
   it('submits the feedback with score, answers and comment, then resets the form', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     postStudentInterviewResult.mockResolvedValue({});
     render(<InterviewFeedback {...makeProps()} />);
 
@@ -138,10 +118,8 @@ describe('<InterviewFeedback />', () => {
     await user.click(screen.getByText('8'));
 
     // Fill the required comment (min length 30).
-    await user.type(
-      screen.getByLabelText('Comment'),
-      'Solid candidate with good fundamentals and clear communication.',
-    );
+    await user.click(screen.getByLabelText('Comment'));
+    await user.paste('Solid candidate with good fundamentals and clear communication.');
 
     await user.click(screen.getByRole('button', { name: /^Submit$/i }));
 
@@ -157,16 +135,18 @@ describe('<InterviewFeedback />', () => {
         { questionId: '102', questionText: 'Text question', answer: 'Answered well' },
       ]),
     );
+    await waitFor(() => expect(screen.getByLabelText('Comment')).toHaveValue(''));
   });
 
   it('does not call the API when there is no githubId', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<InterviewFeedback {...makeProps({ githubId: '' })} />);
 
     await user.click(screen.getByText('8'));
     // Fill the required comment so form validation passes and handleSubmit actually runs;
     // it must then early-return because githubId is empty.
-    await user.type(screen.getByLabelText('Comment'), 'A sufficiently long comment to satisfy validation.');
+    await user.click(screen.getByLabelText('Comment'));
+    await user.paste('A sufficiently long comment to satisfy validation.');
     await user.click(screen.getByRole('button', { name: /^Submit$/i }));
 
     await waitFor(() => {
@@ -176,7 +156,7 @@ describe('<InterviewFeedback />', () => {
   });
 
   it('keeps the form when the submission request fails', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     postStudentInterviewResult.mockRejectedValue({
       response: { data: { data: { message: 'Server exploded' } } },
     });
@@ -184,19 +164,38 @@ describe('<InterviewFeedback />', () => {
 
     await user.click(screen.getByText('8'));
     // Comment is required (min 30 chars) — fill it so validation passes and submit reaches the API.
-    await user.type(screen.getByLabelText('Comment'), 'A sufficiently long comment to satisfy validation.');
+    await user.click(screen.getByLabelText('Comment'));
+    await user.paste('A sufficiently long comment to satisfy validation.');
     await user.click(screen.getByRole('button', { name: /^Submit$/i }));
 
     await waitFor(() => {
       expect(postStudentInterviewResult).toHaveBeenCalled();
     });
-    // Comment field still present (form not reset on the error path).
+    await waitFor(() => expect(showError).toHaveBeenCalledWith('Server exploded'));
     expect(screen.getByLabelText('Comment')).toBeInTheDocument();
+    expect(screen.getByLabelText('Comment')).toHaveValue('A sufficiently long comment to satisfy validation.');
   });
 
-  it('navigates back when the "Back" button is clicked', async () => {
-    const user = userEvent.setup();
+  it('renders the template links and inputs, then navigates Back', async () => {
+    const user = setupUser();
     render(<InterviewFeedback {...makeProps()} />);
+
+    expect(screen.getByRole('heading', { name: /Tiny Track: Interview Feedback/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Sample interview questions/i })).toHaveAttribute(
+      'href',
+      'https://example.com/questions',
+    );
+    expect(screen.getByRole('link', { name: /candidate-gh/i })).toHaveAttribute(
+      'href',
+      '/profile?githubId=candidate-gh',
+    );
+
+    // Category title (name is wrapped with its description, so match loosely).
+    expect(screen.getByText('Category One')).toBeInTheDocument();
+    // Checkbox-type question.
+    expect(screen.getByRole('checkbox', { name: /Checkbox question/i })).toBeInTheDocument();
+    // Input-type question renders a labelled textarea.
+    expect(screen.getByLabelText('Text question')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: /^Back$/i }));
     expect(back).toHaveBeenCalledTimes(1);
@@ -220,17 +219,19 @@ describe('<InterviewFeedback />', () => {
   });
 
   it('shows a generic error message when the failure carries no server message', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     // Reject with a bare error (no response.data.data.message) → `?? 'An error occurred…'` fallback.
     postStudentInterviewResult.mockRejectedValue(new Error('network down'));
     render(<InterviewFeedback {...makeProps()} />);
 
     await user.click(screen.getByText('8'));
-    await user.type(screen.getByLabelText('Comment'), 'A sufficiently long comment to satisfy validation.');
+    await user.click(screen.getByLabelText('Comment'));
+    await user.paste('A sufficiently long comment to satisfy validation.');
     await user.click(screen.getByRole('button', { name: /^Submit$/i }));
 
     await waitFor(() => expect(postStudentInterviewResult).toHaveBeenCalled());
-    // Form is not reset on error (comment remains).
+    await waitFor(() => expect(showError).toHaveBeenCalledWith('An error occurred. Please try later.'));
     expect(screen.getByLabelText('Comment')).toBeInTheDocument();
+    expect(screen.getByLabelText('Comment')).toHaveValue('A sufficiently long comment to satisfy validation.');
   });
 });

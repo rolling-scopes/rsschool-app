@@ -1,5 +1,5 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { setupUser } from '@client/__tests__/setupUser';
 import { UserSearch } from './UserSearch';
 import type { SearchStudent } from '@client/services/course';
 
@@ -10,15 +10,21 @@ const PEOPLE = [
 
 function openSelect() {
   const combobox = screen.getByRole('combobox');
-  fireMouseDown(combobox);
+  fireEvent.mouseDown(combobox);
   return combobox;
 }
 
-function fireMouseDown(el: Element) {
-  el.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+async function finishSearch() {
+  await act(async () => {
+    await vi.advanceTimersByTimeAsync(300);
+  });
 }
 
 describe('UserSearch', () => {
+  afterEach(() => {
+    if (vi.isFakeTimers()) vi.clearAllTimers();
+    vi.useRealTimers();
+  });
   it('renders a searchable combobox', () => {
     render(<UserSearch />);
 
@@ -26,7 +32,7 @@ describe('UserSearch', () => {
   });
 
   it('uses the default values to filter locally when no searchFn is provided', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<UserSearch defaultValues={PEOPLE} />);
 
     const combobox = openSelect();
@@ -41,7 +47,7 @@ describe('UserSearch', () => {
   });
 
   it('calls the provided searchFn and renders the returned options', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const searchFn = vi.fn().mockResolvedValue(PEOPLE);
     render(<UserSearch searchFn={searchFn} />);
 
@@ -54,7 +60,7 @@ describe('UserSearch', () => {
   });
 
   it('passes onlyStudentsWithoutMentorShown to the searchFn', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const searchFn = vi.fn().mockResolvedValue([]);
     render(<UserSearch searchFn={searchFn} onlyStudentsWithoutMentorShown />);
 
@@ -65,7 +71,7 @@ describe('UserSearch', () => {
   });
 
   it('shows the current mentor warning when showMentor is set and a mentor exists', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const withMentor: SearchStudent[] = [
       {
         id: 3,
@@ -84,7 +90,7 @@ describe('UserSearch', () => {
   });
 
   it('selects an option by github id when keyField is githubId', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onChange = vi.fn();
     const searchFn = vi.fn().mockResolvedValue(PEOPLE);
     render(<UserSearch searchFn={searchFn} keyField="githubId" onChange={onChange} />);
@@ -105,32 +111,37 @@ describe('UserSearch', () => {
     // The unique search result disappearing (replaced by default values) proves the
     // else branch ran rather than the mount effect.
     const searchFn = vi.fn().mockResolvedValue([{ id: 9, githubId: 'zoe', name: 'Zoe Z' }]);
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'Date'] });
     render(<UserSearch searchFn={searchFn} defaultValues={PEOPLE} />);
 
     const combobox = openSelect();
     fireEvent.change(combobox, { target: { value: 'zoe' } });
-    expect(await screen.findByText(/Zoe Z/)).toBeInTheDocument();
+    await finishSearch();
+    expect(screen.getByText(/Zoe Z/)).toBeInTheDocument();
 
     fireEvent.change(combobox, { target: { value: '   ' } });
+    await finishSearch();
 
     // The unique searchFn result is gone and the default values are shown instead.
-    await waitFor(() => expect(screen.queryByText(/Zoe Z/)).not.toBeInTheDocument(), { timeout: 2000 });
+    expect(screen.queryByText(/Zoe Z/)).not.toBeInTheDocument();
     expect(screen.getByText(/Alice A/)).toBeInTheDocument();
   });
 
   it('returns no matches from the built-in search when there are no default values', async () => {
     // No searchFn and no defaultValues: defaultSearch's `defaultValues?.filter(...) ?? []`
     // takes the nullish fallback (line 75).
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'Date'] });
     render(<UserSearch />);
 
     const combobox = openSelect();
     fireEvent.change(combobox, { target: { value: 'abc' } });
+    await finishSearch();
 
-    await waitFor(() => expect(screen.queryByText(/Alice A/)).not.toBeInTheDocument(), { timeout: 2000 });
+    expect(screen.queryByText(/Alice A/)).not.toBeInTheDocument();
   });
 
   it('does not call searchFn for a whitespace-only query (falls back to default values)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const searchFn = vi.fn().mockResolvedValue(PEOPLE);
     render(<UserSearch searchFn={searchFn} defaultValues={PEOPLE} />);
 

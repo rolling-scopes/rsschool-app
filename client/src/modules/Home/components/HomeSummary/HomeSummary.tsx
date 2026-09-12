@@ -50,7 +50,7 @@ export default function HomeSummary({ summary, courseTasks }: HomeSummaryProps) 
             <Col span={24} style={{ marginTop: 16 }}>
               <Statistic
                 title="Status"
-                valueStyle={{ color: summary.isActive ? token.green6 : token.red6 }}
+                styles={{ content: { color: summary.isActive ? token.green6 : token.red6 } }}
                 value={summary.isActive ? 'Active' : 'Inactive'}
               />
             </Col>

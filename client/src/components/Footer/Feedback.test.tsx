@@ -2,14 +2,10 @@ import { render, screen } from '@testing-library/react';
 import { Feedback } from './Feedback';
 
 describe('Footer Feedback', () => {
-  it('renders the Feedback section title', () => {
+  it('renders the section title and feedback links', () => {
     render(<Feedback />);
+
     expect(screen.getByText('Feedback')).toBeInTheDocument();
-  });
-
-  it('renders the gratitude, heroes and feedback links', () => {
-    render(<Feedback />);
-
     expect(screen.getByRole('link', { name: /Say Thank you/ })).toHaveAttribute('href', '/gratitude');
 
     const heroes = screen.getByRole('link', { name: /Heroes page/ });

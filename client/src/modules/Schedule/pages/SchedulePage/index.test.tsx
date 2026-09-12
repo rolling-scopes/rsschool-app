@@ -1,5 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { SchedulePage } from './index';
 import {
   CourseScheduleItemDtoStatusEnum as StatusEnum,
@@ -54,12 +54,15 @@ vi.mock('@client/modules/Course/contexts', async () => {
 const reactUseState = vi.hoisted(() => ({ mobile: false, retry: vi.fn() }));
 vi.mock('react-use', async () => {
   const actual = await vi.importActual<typeof import('react-use')>('react-use');
+  const React = await vi.importActual<typeof import('react')>('react');
   return {
     ...actual,
     useMedia: () => reactUseState.mobile,
-    useAsyncRetry: (fn: () => Promise<unknown>) => {
-      // Invoke once so the API boundary mocks are exercised, mirroring real behaviour.
-      fn();
+    useAsyncRetry: (fn: () => Promise<unknown>, deps: readonly unknown[]) => {
+      // Fetch after commit; fetching during render can loop when the callback sets state.
+      React.useEffect(() => {
+        void fn();
+      }, deps);
       return { retry: reactUseState.retry, value: scheduleData, loading: false, error: undefined };
     },
   };
@@ -134,7 +137,7 @@ describe('<SchedulePage />', () => {
     isCourseManager.mockReturnValue(true);
   });
 
-  it('renders the page title, status tabs and the schedule table rows', async () => {
+  it('fetches the active course schedule and renders its rows, tabs and manager actions', async () => {
     render(<SchedulePage />);
 
     // PageLayout's Header renders the title (+ course name) as plain text, not a heading role.
@@ -142,18 +145,11 @@ describe('<SchedulePage />', () => {
     expect(screen.getByRole('tab', { name: /all/i })).toBeInTheDocument();
     expect(screen.getByText('Course Item 0')).toBeInTheDocument();
     expect(screen.getByText('Course Item 1')).toBeInTheDocument();
-  });
-
-  it('fetches the schedule and the ical token for the active course on mount', async () => {
-    render(<SchedulePage />);
 
     await waitFor(() => expect(getSchedule).toHaveBeenCalledWith(42));
     expect(getScheduleICalendarToken).toHaveBeenCalledWith(42);
-  });
-
-  it('shows the SettingsPanel with manager actions when the user is a course manager', async () => {
-    render(<SchedulePage />);
-
+    expect(getSchedule).toHaveBeenCalledTimes(1);
+    expect(getScheduleICalendarToken).toHaveBeenCalledTimes(1);
     expect(await screen.findByTestId('Task')).toBeInTheDocument();
     expect(screen.getByTestId('Event')).toBeInTheDocument();
   });
@@ -176,7 +172,7 @@ describe('<SchedulePage />', () => {
   });
 
   it('opens the task modal, submits it, creates the task and refreshes', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<SchedulePage />);
 
     await user.click(await screen.findByTestId('Task'));
@@ -189,7 +185,7 @@ describe('<SchedulePage />', () => {
   });
 
   it('closes the task modal without creating a task when cancelled', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<SchedulePage />);
 
     await user.click(await screen.findByTestId('Task'));
@@ -201,7 +197,7 @@ describe('<SchedulePage />', () => {
   });
 
   it('opens the event modal, submits it and refreshes', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<SchedulePage />);
 
     await user.click(await screen.findByTestId('Event'));
@@ -213,7 +209,7 @@ describe('<SchedulePage />', () => {
   });
 
   it('closes the event modal without refreshing when cancelled', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<SchedulePage />);
 
     await user.click(await screen.findByTestId('Event'));
@@ -224,7 +220,7 @@ describe('<SchedulePage />', () => {
   });
 
   it('closes the copy modal without copying when cancelled', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<SchedulePage />);
 
     await user.click(await screen.findByTestId('More'));
@@ -238,7 +234,7 @@ describe('<SchedulePage />', () => {
   });
 
   it('copies the schedule from another course and refreshes', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<SchedulePage />);
 
     // The "Copy from another course" action lives in the SettingsPanel "More" menu.

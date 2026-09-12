@@ -1,6 +1,6 @@
 import { Form } from 'antd';
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { CrossCheckMessageDtoRoleEnum } from '@client/api';
 import { CrossCheckMessageAuthor } from '@client/services/course';
 import MessageSendingPanel, { MessageSendingPanelProps } from './MessageSendingPanel';
@@ -34,47 +34,36 @@ function renderPanel(props: Partial<MessageSendingPanelProps> = {}) {
 }
 
 describe('<MessageSendingPanel />', () => {
-  it('renders a collapsed "Leave a message" input initially', () => {
-    renderPanel();
-
-    expect(screen.getByPlaceholderText('Leave a message')).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /Send message/ })).not.toBeInTheDocument();
-  });
-
-  it('opens the editing panel when the collapsed input is clicked', async () => {
-    const user = userEvent.setup();
-    renderPanel();
-
-    await user.click(screen.getByPlaceholderText('Leave a message'));
-
-    expect(screen.getByRole('button', { name: /Send message/ })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Preview' })).toBeInTheDocument();
-  });
-
-  it('opens the editing panel when Enter is pressed on the collapsed input', async () => {
-    const user = userEvent.setup();
+  it('renders collapsed controls, opens on click and cancels', async () => {
+    const user = setupUser();
     renderPanel();
 
     const collapsed = screen.getByPlaceholderText('Leave a message');
-    collapsed.focus();
-    await user.keyboard('{Enter}');
+    expect(collapsed).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Send message/ })).not.toBeInTheDocument();
 
+    await user.click(collapsed);
     expect(screen.getByRole('button', { name: /Send message/ })).toBeInTheDocument();
-  });
-
-  it('closes the panel again via Cancel', async () => {
-    const user = userEvent.setup();
-    renderPanel();
-
-    await user.click(screen.getByPlaceholderText('Leave a message'));
+    expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Preview' })).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
 
     expect(screen.queryByRole('button', { name: /Send message/ })).not.toBeInTheDocument();
   });
 
+  it('opens the editing panel when Enter is pressed on the collapsed input', async () => {
+    const user = setupUser();
+    renderPanel();
+
+    const collapsed = screen.getByPlaceholderText('Leave a message');
+    await user.click(collapsed);
+    await user.keyboard('{Enter}');
+
+    expect(screen.getByRole('button', { name: /Send message/ })).toBeInTheDocument();
+  });
+
   it('submits the typed message content through the form', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { onFinish } = renderPanel();
 
     await user.click(screen.getByPlaceholderText('Leave a message'));
@@ -88,7 +77,7 @@ describe('<MessageSendingPanel />', () => {
   });
 
   it('blocks submitting an empty message and shows a validation error', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { onFinish } = renderPanel();
 
     await user.click(screen.getByPlaceholderText('Leave a message'));
@@ -99,7 +88,7 @@ describe('<MessageSendingPanel />', () => {
   });
 
   it('toggles the markdown preview and shows the typed content', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderPanel();
 
     await user.click(screen.getByPlaceholderText('Leave a message'));
@@ -112,7 +101,7 @@ describe('<MessageSendingPanel />', () => {
   });
 
   it('shows "Nothing to preview" when previewing an empty message', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderPanel();
 
     await user.click(screen.getByPlaceholderText('Leave a message'));

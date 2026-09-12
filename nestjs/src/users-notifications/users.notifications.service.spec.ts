@@ -265,9 +265,7 @@ describe('UserNotificationsService', () => {
       await service.sendEventNotification(dto);
 
       // discord channel is filtered out before buildChannelMessage
-      const builtChannelIds = notificationsService.buildChannelMessage.mock.calls.map(
-        (call: [{ channelId: string }]) => call[0].channelId,
-      );
+      const builtChannelIds = notificationsService.buildChannelMessage.mock.calls.map(call => call[0].channelId);
       expect(builtChannelIds).toContain('email');
       expect(builtChannelIds).toContain('telegram');
       expect(builtChannelIds).not.toContain('discord');

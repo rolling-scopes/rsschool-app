@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { setupUser } from '@client/__tests__/setupUser';
 import { PersonSelect } from './PersonSelect';
 
 const DATA = [
@@ -9,31 +9,18 @@ const DATA = [
 
 function openSelect() {
   const combobox = screen.getByRole('combobox');
-  combobox.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+  fireEvent.mouseDown(combobox);
   return combobox;
 }
 
 describe('PersonSelect', () => {
-  it('renders a searchable combobox with a placeholder', () => {
-    render(<PersonSelect data={DATA} />);
+  it('renders, preselects, and selects people by id', async () => {
+    const user = setupUser();
+    const onChange = vi.fn();
+    render(<PersonSelect data={DATA} defaultValue={2} onChange={onChange} />);
 
     expect(screen.getByRole('combobox')).toBeInTheDocument();
-  });
-
-  it('renders an option per person keyed by id by default', async () => {
-    render(<PersonSelect data={DATA} />);
-
-    openSelect();
-
-    expect(await screen.findByText(/Alice A/)).toBeInTheDocument();
     expect(screen.getByText(/Bob B/)).toBeInTheDocument();
-  });
-
-  it('selects a person by id and calls onChange', async () => {
-    const user = userEvent.setup();
-    const onChange = vi.fn();
-    render(<PersonSelect data={DATA} onChange={onChange} />);
-
     openSelect();
     await user.click(await screen.findByText(/Alice A/));
 
@@ -42,7 +29,7 @@ describe('PersonSelect', () => {
   });
 
   it('keys options by githubId when keyField is githubId', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onChange = vi.fn();
     render(<PersonSelect data={DATA} keyField="githubId" onChange={onChange} />);
 
@@ -50,12 +37,5 @@ describe('PersonSelect', () => {
     await user.click(await screen.findByText(/Bob B/));
 
     expect(onChange.mock.calls[0][0]).toBe('bob');
-  });
-
-  it('preselects the provided default value', () => {
-    render(<PersonSelect data={DATA} defaultValue={2} />);
-
-    // antd renders the selected option's content in the selector
-    expect(screen.getByText(/Bob B/)).toBeInTheDocument();
   });
 });

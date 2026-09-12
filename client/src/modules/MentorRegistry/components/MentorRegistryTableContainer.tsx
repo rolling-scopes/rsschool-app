@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, Fragment, SetStateAction } from 'react';
 import { GithubUserLink } from '@client/shared/components/GithubUserLink';
 import { SafetyCertificateTwoTone } from '@ant-design/icons';
 import {
@@ -92,9 +92,9 @@ export const MentorRegistryTableContainer = ({
   const renderTagWithCopyButton = (value: string, alias: string) => {
     const link = `${window.location.origin}/course/mentor/confirm?course=${alias}`;
     return (
-      <>
+      <Fragment key={value}>
         {colorTagRenderer(value)} <CopyToClipboardButton value={link} type="link" />
-      </>
+      </Fragment>
     );
   };
 

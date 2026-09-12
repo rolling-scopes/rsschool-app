@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { act, render, screen } from '@testing-library/react';
+import { setupUser } from '@client/__tests__/setupUser';
 import type { UploadFile, UploadProps } from 'antd';
 import { Button, Form } from 'antd';
 import JupyterNotebook from './JupyterNotebook';
@@ -35,31 +35,21 @@ describe('JupyterNotebook', () => {
     capturedFileList = undefined;
   });
 
-  it('should render the upload button', () => {
-    renderJupyterNotebook();
-
-    expect(screen.getByRole('button', { name: /select jupyter notebook/i })).toBeInTheDocument();
-  });
-
-  it('should show the required validation message when submitting without a file', async () => {
-    const user = userEvent.setup();
+  it('renders, validates, and stores a selected notebook', async () => {
+    const user = setupUser();
     const onFinish = vi.fn();
     renderJupyterNotebook(onFinish);
 
+    expect(screen.getByRole('button', { name: /select jupyter notebook/i })).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: /submit/i }));
-
     expect(await screen.findByText('Please upload the file')).toBeInTheDocument();
     expect(onFinish).not.toHaveBeenCalled();
-  });
-
-  it('should add the chosen file to the upload list on change', async () => {
-    renderJupyterNotebook();
 
     const file = { uid: '1', name: 'notebook.ipynb' } as UploadFile;
-    // Simulate antd firing onChange with a selected file.
-    capturedOnChange?.({ file, fileList: [file] } as Parameters<NonNullable<UploadProps['onChange']>>[0]);
+    await act(async () => {
+      capturedOnChange?.({ file, fileList: [file] } as Parameters<NonNullable<UploadProps['onChange']>>[0]);
+    });
 
-    // The component stores the file and passes it back as the Upload fileList.
     expect(await screen.findByText('Select Jupyter Notebook')).toBeInTheDocument();
     expect(capturedFileList?.[0]?.name).toBe('notebook.ipynb');
   });

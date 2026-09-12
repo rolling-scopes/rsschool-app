@@ -60,7 +60,7 @@ exports[`CommonCardWithSettingsModal > Should render correctly > if just basic p
 </div>
 `;
 
-exports[`CommonCardWithSettingsModal > Should render correctly > if null content is passed and editing mode is disabled 1`] = `
+exports[`CommonCardWithSettingsModal > does not render the edit affordance or modal when editing is disabled 1`] = `
 <div>
   <div
     class="ant-card ant-card-bordered css-dev-only-do-not-override-1enej14 css-var-root"

@@ -24,8 +24,8 @@ describe('ActionButtons', () => {
     vi.clearAllMocks();
   });
 
-  test('should have Edit, Share, Delete buttons', () => {
-    render(<ActionButtons isExpired={false} />);
+  test('renders the actions and handles Edit and Share when a URL is provided', () => {
+    render(<ActionButtons url={mockUrl} isExpired={false} switchView={mockSwitchView} />);
 
     const editButton = screen.getByRole('button', { name: /edit cv/i });
     const shareButton = screen.getByRole('button', { name: /share/i });
@@ -34,25 +34,11 @@ describe('ActionButtons', () => {
     expect(editButton).toBeInTheDocument();
     expect(shareButton).toBeInTheDocument();
     expect(deleteButton).toBeInTheDocument();
-  });
-
-  test('should switch view by click on Edit button', () => {
-    render(<ActionButtons isExpired={false} switchView={mockSwitchView} />);
-
-    const editButton = screen.getByRole('button', { name: /edit cv/i });
 
     fireEvent.click(editButton);
-
     expect(mockSwitchView).toHaveBeenCalled();
-  });
-
-  test('should copy to clipboard by click on Share button if url is provided', async () => {
-    render(<ActionButtons url={mockUrl} isExpired={false} switchView={mockSwitchView} />);
-
-    const shareButton = screen.getByRole('button', { name: /share/i });
 
     fireEvent.click(shareButton);
-
     expect(mockCopyToClipboard).toHaveBeenCalledWith(mockUrl);
   });
 
@@ -67,15 +53,10 @@ describe('ActionButtons', () => {
     expect(mockSuccessNotification).not.toHaveBeenCalled();
   });
 
-  test('should disable Share button should if CV is expired', () => {
-    render(<ActionButtons isExpired={true} />);
-    const shareButton = screen.getByRole('button', { name: /share/i });
+  test('disables sharing and supports canceling and confirming CV deletion', async () => {
+    render(<ActionButtons isExpired={true} onRemoveConsent={mockOnRemoveConsent} />);
 
-    expect(shareButton).toBeDisabled();
-  });
-
-  test('should show and hide delete confirmation modal correctly', async () => {
-    render(<ActionButtons isExpired={true} />);
+    expect(screen.getByRole('button', { name: /share/i })).toBeDisabled();
 
     const deleteButton = screen.getByRole('button', { name: /delete/i });
 
@@ -97,20 +78,9 @@ describe('ActionButtons', () => {
     await waitFor(() => expect(modalBodyFragment).not.toBeInTheDocument());
     await waitFor(() => expect(modalConfirmButton).not.toBeInTheDocument());
     await waitFor(() => expect(modalCancelButton).not.toBeInTheDocument());
-  });
-
-  test('should delete CV after confirmation', async () => {
-    render(<ActionButtons isExpired={true} onRemoveConsent={mockOnRemoveConsent} />);
-
-    const deleteButton = screen.getByRole('button', { name: /delete/i });
 
     fireEvent.click(deleteButton);
-
-    const modalConfirmButton = await screen.findByRole('button', { name: /delete cv/i });
-
-    expect(modalConfirmButton).toBeInTheDocument();
-
-    fireEvent.click(modalConfirmButton);
+    fireEvent.click(await screen.findByRole('button', { name: /delete cv/i }));
 
     expect(mockOnRemoveConsent).toHaveBeenCalled();
   });

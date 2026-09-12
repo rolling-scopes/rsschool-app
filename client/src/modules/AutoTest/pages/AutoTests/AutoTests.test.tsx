@@ -1,5 +1,5 @@
 import { render, screen, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { ReactNode } from 'react';
 import { CheckerEnum } from '@client/api';
 import { CourseTaskState, CourseTaskStatus, CourseTaskVerifications } from '@client/modules/AutoTest/types';
@@ -63,29 +63,17 @@ describe('AutoTests page', () => {
     });
   });
 
-  it('should render the page title', () => {
+  it('should render initial tabs and tasks, then switch the visible tasks', async () => {
+    const user = setupUser();
     render(<AutoTests />);
 
     expect(screen.getByRole('heading', { name: 'Auto-tests' })).toBeInTheDocument();
-  });
-
-  it('should render the status tabs', () => {
-    render(<AutoTests />);
-
     expect(screen.getAllByRole('tab')).toHaveLength(3);
-  });
-
-  it('should show only the tasks of the active (Available) tab by default', () => {
-    render(<AutoTests />);
-
     expect(screen.getByText('Available Task')).toBeInTheDocument();
     expect(screen.queryByText('Missed Task')).not.toBeInTheDocument();
     expect(screen.queryByText('Completed Task')).not.toBeInTheDocument();
-  });
-
-  it('should switch the visible tasks when another tab is selected', async () => {
-    const user = userEvent.setup();
-    render(<AutoTests />);
+    const availableTab = screen.getByRole('tab', { name: /available/i });
+    expect(within(availableTab).getByText('1')).toBeInTheDocument();
 
     const missedTab = screen.getByRole('tab', { name: /missed/i });
     await user.click(missedTab);
@@ -95,7 +83,7 @@ describe('AutoTests page', () => {
   });
 
   it('calls markTaskAsDone with the task id when "Done Task" is clicked on the Available tab', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const passedTask = {
       ...task(1, 'Available Task', CourseTaskStatus.Available),
       verifications: [{ score: 90 }],
@@ -115,13 +103,6 @@ describe('AutoTests page', () => {
 
     expect(screen.queryByRole('link', { name: /preview/i })).not.toBeInTheDocument();
     expect(screen.getAllByRole('tab')).toHaveLength(3);
-  });
-
-  it('should count statuses in the tab badges', () => {
-    render(<AutoTests />);
-
-    const availableTab = screen.getByRole('tab', { name: /available/i });
-    expect(within(availableTab).getByText('1')).toBeInTheDocument();
   });
 
   it('should fall back to empty lists when the hook returns no tasks (undefined)', () => {

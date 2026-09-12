@@ -1,5 +1,5 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { act, render, screen, waitFor } from '@testing-library/react';
+import { setupUser } from '@client/__tests__/setupUser';
 import { ContactsForm } from './index';
 
 const mockContactsList = {
@@ -13,29 +13,32 @@ const mockContactsList = {
 };
 
 describe('ContactsForm', () => {
-  test.each`
-    value                              | placeholder                 | labelText
-    ${mockContactsList.email}          | ${'Email'}                  | ${'Email'}
-    ${mockContactsList.githubUsername} | ${'GitHub username'}        | ${'GitHub'}
-    ${mockContactsList.linkedin}       | ${'LinkedIn username'}      | ${'LinkedIn'}
-    ${mockContactsList.phone}          | ${'+12025550111'}           | ${'Phone'}
-    ${mockContactsList.skype}          | ${'Skype id'}               | ${'Skype'}
-    ${mockContactsList.telegram}       | ${'Telegram public name'}   | ${'Telegram'}
-    ${mockContactsList.website}        | ${'Enter your website URL'} | ${'Website'}
-  `('form field should have proper value, placeholder and label', async ({ value, placeholder, labelText }) => {
-    render(<ContactsForm contactsList={mockContactsList} />);
+  test('renders each contact with its value, placeholder and label', async () => {
+    // eslint-disable-next-line testing-library/no-unnecessary-act -- Await mount effects after the synchronous render
+    await act(async () => {
+      render(<ContactsForm contactsList={mockContactsList} />);
+    });
 
-    const fieldDisplayedValue = await screen.findByDisplayValue(value);
-    const fieldPlaceholder = await screen.findByPlaceholderText(placeholder);
-    const fieldLabel = await screen.findByLabelText(labelText);
+    const fields = [
+      [mockContactsList.email, 'Email', 'Email'],
+      [mockContactsList.githubUsername, 'GitHub username', 'GitHub'],
+      [mockContactsList.linkedin, 'LinkedIn username', 'LinkedIn'],
+      [mockContactsList.phone, '+12025550111', 'Phone'],
+      [mockContactsList.skype, 'Skype id', 'Skype'],
+      [mockContactsList.telegram, 'Telegram public name', 'Telegram'],
+      [mockContactsList.website, 'Enter your website URL', 'Website'],
+    ];
 
-    expect(fieldDisplayedValue).toBeInTheDocument();
-    expect(fieldPlaceholder).toBeInTheDocument();
-    expect(fieldLabel).toBeInTheDocument();
+    for (const [value, placeholder, labelText] of fields) {
+      const field = screen.getByLabelText(labelText);
+      expect(field).toBeInTheDocument();
+      expect(field).toHaveValue(value);
+      expect(field).toHaveAttribute('placeholder', placeholder);
+    }
   });
 
   test('shows a validation error for an invalid phone number', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<ContactsForm contactsList={{} as never} />);
 
     const phone = await screen.findByLabelText('Phone');
@@ -46,7 +49,7 @@ describe('ContactsForm', () => {
   });
 
   test('accepts a valid phone number (no validation error)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<ContactsForm contactsList={{} as never} />);
 
     const phone = await screen.findByLabelText('Phone');
@@ -56,7 +59,7 @@ describe('ContactsForm', () => {
   });
 
   test('shows a validation error for an invalid github username', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<ContactsForm contactsList={{} as never} />);
 
     const github = await screen.findByLabelText('GitHub');

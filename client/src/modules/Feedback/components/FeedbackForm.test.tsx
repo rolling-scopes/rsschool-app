@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { setupUser } from '@client/__tests__/setupUser';
 import {
   CreateStudentFeedbackDtoEnglishLevelEnum as EnglishLevelEnum,
   CreateStudentFeedbackDtoRecommendationEnum as RecommendationEnum,
@@ -75,15 +75,23 @@ const studentWithFeedback = makeStudent({
   ] as MentorStudentDto['feedbacks'],
 });
 
+function getRadio(label: string | RegExp) {
+  const radio = screen.getByLabelText(label);
+  expect(radio).toHaveRole('radio');
+  return radio;
+}
+
 describe('<FeedbackForm />', () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it('renders the recommendation radios, comment field, english levels and soft-skill rates', () => {
-    render(<FeedbackForm studentId={1} students={[makeStudent()]} onSubmit={vi.fn()} />);
+  it('renders the form fields and blocks submission when required fields are empty', async () => {
+    const onSubmit = vi.fn().mockResolvedValue(undefined);
+    const user = setupUser();
+    render(<FeedbackForm studentId={1} students={[makeStudent()]} onSubmit={onSubmit} />);
 
     // Recommendation radios.
-    expect(screen.getByRole('radio', { name: /^hire$/i })).toBeInTheDocument();
-    expect(screen.getByRole('radio', { name: /not hire/i })).toBeInTheDocument();
+    expect(getRadio(/^hire$/i)).toBeInTheDocument();
+    expect(getRadio(/not hire/i)).toBeInTheDocument();
 
     // Conditional comment field is always present (label "What was good").
     expect(screen.getByLabelText(/what was good/i)).toBeInTheDocument();
@@ -91,7 +99,7 @@ describe('<FeedbackForm />', () => {
 
     // English levels rendered uppercased.
     ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].forEach(level => {
-      expect(screen.getByRole('radio', { name: level })).toBeInTheDocument();
+      expect(getRadio(level)).toBeInTheDocument();
     });
 
     // Three soft-skill Rate widgets, labelled by their skill names.
@@ -100,12 +108,6 @@ describe('<FeedbackForm />', () => {
     expect(screen.getByText('Communicable')).toBeInTheDocument();
 
     expect(screen.getByRole('button', { name: /^submit$/i })).toBeInTheDocument();
-  });
-
-  it('blocks submit and shows required errors when recommendation and comment are empty', async () => {
-    const onSubmit = vi.fn().mockResolvedValue(undefined);
-    const user = userEvent.setup();
-    render(<FeedbackForm studentId={1} students={[makeStudent()]} onSubmit={onSubmit} />);
 
     await user.click(screen.getByRole('button', { name: /^submit$/i }));
 
@@ -118,15 +120,15 @@ describe('<FeedbackForm />', () => {
 
   it('submits the full payload to onSubmit when required fields are filled (Hire, english level, soft skills)', async () => {
     const onSubmit = vi.fn().mockResolvedValue(undefined);
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<FeedbackForm studentId={1} students={[makeStudent()]} onSubmit={onSubmit} />);
 
     // antd Radio.Button inner input has `pointer-events: none` in jsdom, which
     // userEvent.click rejects; fireEvent.click on the radio is the supported path.
-    fireEvent.click(screen.getByRole('radio', { name: /^hire$/i }));
+    fireEvent.click(getRadio(/^hire$/i));
     await user.type(screen.getByLabelText(/what was good/i), 'Excellent communication');
     await user.type(screen.getByLabelText(/what could be improved/i), 'More tests');
-    fireEvent.click(screen.getByRole('radio', { name: 'B1' }));
+    fireEvent.click(getRadio('B1'));
 
     // Rate the first soft-skill star = 1 (-> Poor). In antd v6 a Rate exposes its
     // stars as elements with role="radio" and accessible name "star star"; the
@@ -156,10 +158,10 @@ describe('<FeedbackForm />', () => {
 
   it('defaults englishLevel to Unknown and suggestions to empty string when left blank', async () => {
     const onSubmit = vi.fn().mockResolvedValue(undefined);
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<FeedbackForm studentId={1} students={[makeStudent()]} onSubmit={onSubmit} />);
 
-    fireEvent.click(screen.getByRole('radio', { name: /not hire/i }));
+    fireEvent.click(getRadio(/not hire/i));
     await user.type(screen.getByLabelText(/what was good/i), 'ok');
 
     await user.click(screen.getByRole('button', { name: /^submit$/i }));
@@ -173,7 +175,7 @@ describe('<FeedbackForm />', () => {
 
   it('prefills values from an existing feedback and submits with the existing feedback id', async () => {
     const onSubmit = vi.fn().mockResolvedValue(undefined);
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<FeedbackForm studentId={2} students={[studentWithFeedback]} onSubmit={onSubmit} />);
 
     // Prefilled comment and suggestions.
@@ -182,9 +184,9 @@ describe('<FeedbackForm />', () => {
     });
     expect(screen.getByLabelText(/what could be improved/i)).toHaveValue('Keep practicing');
     // Prefilled Hire radio is checked.
-    expect(screen.getByRole('radio', { name: /^hire$/i })).toBeChecked();
+    expect(getRadio(/^hire$/i)).toBeChecked();
     // Prefilled english level B2 is checked.
-    expect(screen.getByRole('radio', { name: 'B2' })).toBeChecked();
+    expect(getRadio('B2')).toBeChecked();
 
     await user.click(screen.getByRole('button', { name: /^submit$/i }));
 
@@ -242,10 +244,10 @@ describe('<FeedbackForm />', () => {
 
   it('shows an error message when onSubmit rejects', async () => {
     const onSubmit = vi.fn().mockRejectedValue(new Error('boom'));
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<FeedbackForm studentId={1} students={[makeStudent()]} onSubmit={onSubmit} />);
 
-    fireEvent.click(screen.getByRole('radio', { name: /^hire$/i }));
+    fireEvent.click(getRadio(/^hire$/i));
     await user.type(screen.getByLabelText(/what was good/i), 'ok');
     await user.click(screen.getByRole('button', { name: /^submit$/i }));
 

@@ -1,5 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import ContactsCard from '../ContactsCard';
 
 // epamEmail must match /[^@]+_[^@]+@epam.com/ and email must be a valid email so that
@@ -92,18 +92,13 @@ describe('ContactsCard', () => {
     expect(screen.getByText(/Contacts aren't filled in/)).toBeInTheDocument();
   });
 
-  it('shows the EmailConfirmation prompt for an unconfirmed email in editing mode', () => {
-    render(<ContactsCard {...makeProps({ connections: { email: { value: 'vasya@tut.by', enabled: false } } })} />);
-    expect(screen.getByText('Send confirmation email?')).toBeInTheDocument();
-  });
-
   it('does not show the EmailConfirmation prompt when the email connection is enabled', () => {
     render(<ContactsCard {...makeProps({ connections: { email: { value: 'vasya@tut.by', enabled: true } } })} />);
     expect(screen.queryByText('Send confirmation email?')).not.toBeInTheDocument();
   });
 
   it('calls sendConfirmationEmail when the confirmation link is clicked', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const sendConfirmationEmail = vi.fn();
     render(
       <ContactsCard
@@ -111,12 +106,14 @@ describe('ContactsCard', () => {
       />,
     );
 
-    await user.click(screen.getByText('Send confirmation email?'));
+    const confirmation = screen.getByText('Send confirmation email?');
+    expect(confirmation).toBeInTheDocument();
+    await user.click(confirmation);
     expect(sendConfirmationEmail).toHaveBeenCalledTimes(1);
   });
 
   it('edits a contact, saves and reflects the new value on success (handleSave)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn().mockResolvedValue(true);
     render(<ContactsCard {...makeProps({ updateProfile })} />);
 
@@ -126,7 +123,7 @@ describe('ContactsCard', () => {
     // Telegram is the 3rd contact field in the form
     const telegramInput = within(dialog).getByDisplayValue('televasya');
     await user.clear(telegramInput);
-    await user.type(telegramInput, 'new_tg');
+    await user.type(telegramInput, 'new_tg', { skipClick: true });
 
     await user.click(screen.getByRole('button', { name: 'Save' }));
 
@@ -137,7 +134,7 @@ describe('ContactsCard', () => {
   });
 
   it('does not commit displayed values when the update fails (handleSave early return)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn().mockResolvedValue(false);
     render(<ContactsCard {...makeProps({ updateProfile })} />);
 
@@ -145,7 +142,7 @@ describe('ContactsCard', () => {
     const dialog = screen.getByRole('dialog');
     const telegramInput = within(dialog).getByDisplayValue('televasya');
     await user.clear(telegramInput);
-    await user.type(telegramInput, 'rejected_tg');
+    await user.type(telegramInput, 'rejected_tg', { skipClick: true });
     await user.click(screen.getByRole('button', { name: 'Save' }));
 
     await waitFor(() => expect(updateProfile).toHaveBeenCalled());
@@ -154,7 +151,7 @@ describe('ContactsCard', () => {
   });
 
   it('restores the displayed contacts on cancel (handleCancel)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn();
     render(<ContactsCard {...makeProps({ updateProfile })} />);
 
@@ -162,7 +159,7 @@ describe('ContactsCard', () => {
     const dialog = screen.getByRole('dialog');
     const telegramInput = within(dialog).getByDisplayValue('televasya');
     await user.clear(telegramInput);
-    await user.type(telegramInput, 'discarded_tg');
+    await user.type(telegramInput, 'discarded_tg', { skipClick: true });
     expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled();
 
     await user.click(screen.getByRole('button', { name: 'Cancel' }));

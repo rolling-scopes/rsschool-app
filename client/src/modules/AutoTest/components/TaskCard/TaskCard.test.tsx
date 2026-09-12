@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { useRouter } from 'next/router';
 import { TaskCard } from '..';
 import { CheckerEnum } from '@client/api';
@@ -10,22 +10,6 @@ import { getAutoTestTaskRoute } from '@client/services/routes';
 const COURSE_MOCK = { alias: 'course-alias', id: 100 } as Course;
 
 describe('TaskCard', () => {
-  it.each`
-    prop                | value
-    ${'task name'}      | ${'Course Task'}
-    ${'start date'}     | ${'Sep 10'}
-    ${'end date'}       | ${'Oct 10'}
-    ${'state'}          | ${'Missed'}
-    ${'attempts count'} | ${'2 left'}
-    ${'score'}          | ${'–'}
-  `('should render $prop', ({ value }: { value: string }) => {
-    const courseTask = generateCourseTask(2);
-    render(<TaskCard course={COURSE_MOCK} courseTask={courseTask} />);
-
-    const element = screen.getByText(new RegExp(value, 'i'));
-    expect(element).toBeInTheDocument();
-  });
-
   it('should render attempts count as "No limits" when max attempts was not provided', () => {
     const courseTask = generateCourseTask();
     render(<TaskCard course={COURSE_MOCK} courseTask={courseTask} />);
@@ -58,11 +42,15 @@ describe('TaskCard', () => {
   });
 
   it('should navigate to the task route when "Open Task" is clicked', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const push = vi.fn();
     (useRouter as unknown as ReturnType<typeof vi.fn>).mockReturnValue({ push });
     const courseTask = generateCourseTask(2);
     render(<TaskCard course={COURSE_MOCK} courseTask={courseTask} />);
+
+    for (const value of ['Course Task', 'Sep 10', 'Oct 10', 'Missed', '2 left', '–']) {
+      expect(screen.getByText(new RegExp(value, 'i'))).toBeInTheDocument();
+    }
 
     await user.click(screen.getByRole('button', { name: /open task/i }));
 
@@ -77,7 +65,7 @@ describe('TaskCard', () => {
   });
 
   it('enables "Done Task" and calls onMarkAsDone with the task id when the score reaches the threshold', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onMarkAsDone = vi.fn();
     const courseTask = generateCourseTask(2, passingScore());
     render(<TaskCard course={COURSE_MOCK} courseTask={courseTask} isAvailableTab onMarkAsDone={onMarkAsDone} />);

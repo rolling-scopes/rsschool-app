@@ -8,15 +8,6 @@ const StatusEnum = CourseScheduleItemDtoStatusEnum;
 describe('StatusTabs', () => {
   const onTabChangeMock = vi.fn();
 
-  it('should render status tabs', () => {
-    const statuses = generateStatuses();
-
-    render(<StatusTabs statuses={statuses} onTabChange={onTabChangeMock} />);
-
-    const expectedStatusCount = SCHEDULE_STATUSES.length + 1; // +1 is for 'All' tab
-    expect(screen.getAllByRole('tab')).toHaveLength(expectedStatusCount);
-  });
-
   it('should render status tabs when statuses were not provided', () => {
     render(<StatusTabs statuses={[]} onTabChange={onTabChangeMock} />);
 
@@ -41,13 +32,14 @@ describe('StatusTabs', () => {
     },
   );
 
-  it('should order tabs', () => {
+  it('should render all status tabs in order', () => {
     const statuses = generateStatuses();
 
     render(<StatusTabs statuses={statuses} onTabChange={onTabChangeMock} />);
 
-    const [all, available, review, future, missed, done, registered, unAvailable, archived] =
-      screen.getAllByRole('tab');
+    const tabs = screen.getAllByRole('tab');
+    expect(tabs).toHaveLength(SCHEDULE_STATUSES.length + 1);
+    const [all, available, review, future, missed, done, registered, unAvailable, archived] = tabs;
     expect(all).toHaveTextContent(new RegExp(ALL_TAB_KEY, 'i'));
     expect(available).toHaveTextContent(new RegExp(StatusEnum.Available, 'i'));
     expect(review).toHaveTextContent(new RegExp(StatusEnum.Review, 'i'));

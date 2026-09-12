@@ -99,14 +99,14 @@ export const EditCV = (props: Props) => {
 
     setLoading(false);
 
-    notification.success({ message: 'CV successfully updated', duration: 2 });
+    notification.success({ title: 'CV successfully updated', duration: 2 });
   };
 
   return (
     <LoadingScreen show={loading}>
       <Content>
         <Space
-          direction="horizontal"
+          orientation="horizontal"
           align="start"
           style={{
             width: '100%',

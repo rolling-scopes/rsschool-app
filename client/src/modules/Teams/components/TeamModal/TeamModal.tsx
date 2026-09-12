@@ -54,7 +54,7 @@ export default function TeamModal({ onCancel, onSubmit, data, courseId, isManage
   );
 
   const handleChangeStudents = (value: number[]) => {
-    if (value.length <= maxStudentsCount) {
+    if ((value?.length ?? 0) <= maxStudentsCount) {
       form.setFieldsValue({
         studentIds: value,
       });
@@ -120,7 +120,7 @@ export default function TeamModal({ onCancel, onSubmit, data, courseId, isManage
               { required: true, message: 'Please select students' },
               {
                 validator: (_, value) =>
-                  value.length <= maxStudentsCount
+                  (value?.length ?? 0) <= maxStudentsCount
                     ? Promise.resolve()
                     : Promise.reject(`You can only select a maximum of ${maxStudentsCount} students.`),
                 message: `You can only select a maximum of ${maxStudentsCount} students.`,

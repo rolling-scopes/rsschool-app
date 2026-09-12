@@ -46,30 +46,21 @@ function makeItem(overrides: Partial<InterviewDetails> = {}): InterviewDetails {
 describe('<InterviewCard />', () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it('renders the interview name as an external link to its description', () => {
-    render(<InterviewCard interview={makeInterview()} item={null} isRegistered={false} onRegister={vi.fn()} />);
-
-    const link = screen.getByRole('link', { name: 'JS Interview' });
-    expect(link).toHaveAttribute('href', 'https://example.com/interview');
-    expect(link).toHaveAttribute('target', '_blank');
-  });
-
   describe('not registered, registration open (no pair)', () => {
-    it('shows an enabled Register button and prompts to register', () => {
-      render(<InterviewCard interview={makeInterview()} item={null} isRegistered={false} onRegister={vi.fn()} />);
-
-      const register = screen.getByRole('button', { name: /^register$/i });
-      expect(register).toBeEnabled();
-      expect(screen.getByText(/register and get ready for your exciting interview/i)).toBeInTheDocument();
-    });
-
     it('calls onRegister with the interview id (as string) on click', () => {
       const onRegister = vi.fn();
       render(
         <InterviewCard interview={makeInterview({ id: 7 })} item={null} isRegistered={false} onRegister={onRegister} />,
       );
 
-      fireEvent.click(screen.getByRole('button', { name: /^register$/i }));
+      const link = screen.getByRole('link', { name: 'JS Interview' });
+      expect(link).toHaveAttribute('href', 'https://example.com/interview');
+      expect(link).toHaveAttribute('target', '_blank');
+      const register = screen.getByRole('button', { name: /^register$/i });
+      expect(register).toBeEnabled();
+      expect(screen.getByText(/register and get ready for your exciting interview/i)).toBeInTheDocument();
+
+      fireEvent.click(register);
 
       expect(onRegister).toHaveBeenCalledTimes(1);
       expect(onRegister).toHaveBeenCalledWith('7');
@@ -129,18 +120,6 @@ describe('<InterviewCard />', () => {
       // Completed status label + accepted result.
       expect(screen.getByText('Completed')).toBeInTheDocument();
       expect(screen.getByText('Mentor accepted')).toBeInTheDocument();
-    });
-
-    it('shows the congratulations message when the interview passed with a "yes" result', () => {
-      render(
-        <InterviewCard
-          interview={makeInterview()}
-          item={makeItem({ status: InterviewStatus.Completed, result: Decision.Yes })}
-          isRegistered={true}
-          onRegister={vi.fn()}
-        />,
-      );
-
       expect(screen.getByText(/you have your interview result\. congratulations/i)).toBeInTheDocument();
     });
 

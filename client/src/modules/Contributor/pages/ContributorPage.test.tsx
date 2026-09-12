@@ -1,5 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { ReactNode } from 'react';
 import { ContributorPage } from './ContributorPage';
 
@@ -32,8 +32,7 @@ const { getContributors, deleteContributor, getContributor, createContributor, s
   searchUsers: vi.fn(),
 }));
 
-vi.mock('@client/api', async () => ({
-  ...(await vi.importActual('@client/api')),
+vi.mock('@client/api', () => ({
   ContributorsApi: function ContributorsApi() {
     return { getContributors, deleteContributor, getContributor, createContributor };
   },
@@ -46,6 +45,13 @@ const contributors = [
   { id: 1, description: 'First', user: { githubId: 'gh-one' } },
   { id: 2, description: 'Second', user: { githubId: 'gh-two' } },
 ];
+
+function getContributorRow(githubId: string) {
+  // eslint-disable-next-line testing-library/no-node-access -- Avoid computing accessible names for every table row.
+  const row = screen.getByText(githubId).closest('tr');
+  expect(row).toHaveRole('row');
+  return row!;
+}
 
 describe('<ContributorPage />', () => {
   beforeEach(() => {
@@ -66,25 +72,12 @@ describe('<ContributorPage />', () => {
     expect(screen.getByRole('heading', { name: /manage contributors/i })).toBeInTheDocument();
   });
 
-  it('opens the create modal when "Add Contributor" is clicked', async () => {
-    const user = userEvent.setup();
-    render(<ContributorPage />);
-    await screen.findByText('gh-one');
-
-    await user.click(screen.getByRole('button', { name: /add contributor/i }));
-
-    // "Add Contributor" is both the trigger button and the modal title; assert the
-    // modal one by scoping to the dialog.
-    const dialog = await screen.findByRole('dialog');
-    expect(within(dialog).getByText('Add Contributor')).toBeInTheDocument();
-  });
-
   it('opens the edit modal when a row edit button is clicked', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<ContributorPage />);
     await screen.findByText('gh-one');
 
-    const row = screen.getByRole('row', { name: /gh-one/ });
+    const row = getContributorRow('gh-one');
     const [editBtn] = within(row).getAllByRole('button');
     await user.click(editBtn);
 
@@ -93,11 +86,11 @@ describe('<ContributorPage />', () => {
   });
 
   it('deletes a contributor and reloads the list', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<ContributorPage />);
     await screen.findByText('gh-two');
 
-    const row = screen.getByRole('row', { name: /gh-two/ });
+    const row = getContributorRow('gh-two');
     const buttons = within(row).getAllByRole('button');
     await user.click(buttons[1]);
 
@@ -105,13 +98,14 @@ describe('<ContributorPage />', () => {
     await waitFor(() => expect(getContributors).toHaveBeenCalledTimes(2));
   });
 
-  it('reloads the list after the modal closes', async () => {
-    const user = userEvent.setup();
+  it('opens the create modal and reloads the list after it closes', async () => {
+    const user = setupUser();
     render(<ContributorPage />);
     await screen.findByText('gh-one');
 
     await user.click(screen.getByRole('button', { name: /add contributor/i }));
     const dialog = await screen.findByRole('dialog');
+    expect(within(dialog).getByText('Add Contributor')).toBeInTheDocument();
     await user.click(within(dialog).getByRole('button', { name: /cancel/i }));
 
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());

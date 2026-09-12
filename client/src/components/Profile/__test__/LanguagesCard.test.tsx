@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { UpdateUserDtoLanguagesEnum } from '@client/api';
 import { getLanguageName } from '@client/components/SelectLanguages';
 import LanguagesCard from '../LanguagesCard';
@@ -17,26 +17,19 @@ function renderCard(overrides: Partial<React.ComponentProps<typeof LanguagesCard
 }
 
 describe('LanguagesCard', () => {
-  it('renders no tags when data is empty', () => {
-    renderCard({ data: [] });
+  it('renders the empty state without an edit affordance when editing is disabled', () => {
+    renderCard({ data: [], isEditingModeEnabled: false });
     expect(screen.queryByText(String(getLanguageName(lang)))).not.toBeInTheDocument();
     expect(screen.getByText('Languages are not selected')).toBeInTheDocument();
-  });
-
-  it('renders a tag for each language when data is populated', () => {
-    renderCard({ data: [lang] });
-    expect(screen.getAllByText(String(getLanguageName(lang))).length).toBeGreaterThan(0);
-  });
-
-  it('does not show the edit affordance when editing is disabled', () => {
-    renderCard({ isEditingModeEnabled: false });
     expect(screen.queryByRole('img', { name: 'edit' })).not.toBeInTheDocument();
   });
 
   it('opens the settings modal and saves languages when updateProfile resolves true', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn().mockResolvedValue(true);
     renderCard({ data: [lang], updateProfile });
+
+    expect(screen.getAllByText(String(getLanguageName(lang))).length).toBeGreaterThan(0);
 
     await user.click(screen.getByRole('img', { name: 'edit' }));
     expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -49,7 +42,7 @@ describe('LanguagesCard', () => {
   });
 
   it('does not update languages when updateProfile resolves false', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn().mockResolvedValue(false);
     renderCard({ data: [lang], updateProfile });
 
@@ -62,7 +55,7 @@ describe('LanguagesCard', () => {
   });
 
   it('resets the form on cancel', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn().mockResolvedValue(true);
     renderCard({ data: [lang], updateProfile });
 

@@ -15,66 +15,21 @@ const renderPanel = (dataCriteria: CriteriaDto[] = [], setDataCriteria = vi.fn()
 };
 
 describe('Criteria For Cross-Check Task', () => {
-  test.each`
-    label
-    ${LABELS.crossCheckCriteria}
-  `('should render fields with $label label', async ({ label }) => {
+  test('renders the criteria fields without a table or export controls when empty', () => {
     renderPanel();
 
-    const field = await screen.findByText(label);
-    expect(field).toBeInTheDocument();
+    expect(screen.getByText(LABELS.crossCheckCriteria)).toBeInTheDocument();
+    expect(screen.getByText('Criteria Type')).toBeInTheDocument();
+    expect(screen.queryByRole('separator')).not.toBeInTheDocument();
+    expect(screen.queryByRole('table')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /export json/i })).not.toBeInTheDocument();
   });
 
-  // AddCriteriaForCrossCheck
-  test('should render "Criteria Type" field', async () => {
-    renderPanel();
-
-    const field = await screen.findByText('Criteria Type');
-    expect(field).toBeInTheDocument();
-  });
-
-  // Divider
-  test('should render divider', async () => {
+  test('renders the divider, criteria table and export button when criteria exist', () => {
     renderPanel([criteriaMock]);
 
-    const divider = await screen.findByRole('separator');
-    expect(divider).toBeInTheDocument();
-  });
-
-  test('should not render divider when no dataCriteria', async () => {
-    renderPanel();
-
-    const divider = screen.queryByRole('separator');
-    expect(divider).not.toBeInTheDocument();
-  });
-
-  // EditableTable
-  test('should render criteria table', async () => {
-    renderPanel([criteriaMock]);
-
-    const table = await screen.findByRole('table');
-    expect(table).toBeInTheDocument();
-  });
-
-  test('should not render criteria table when no dataCriteria', async () => {
-    renderPanel();
-
-    const table = screen.queryByRole('table');
-    expect(table).not.toBeInTheDocument();
-  });
-
-  // ExportJSONButton
-  test('should render "Export JSON" button', async () => {
-    renderPanel([criteriaMock]);
-
-    const button = await screen.findByRole('button', { name: /export json/i });
-    expect(button).toBeInTheDocument();
-  });
-
-  test('should not render "Export JSON" button when no dataCriteria', async () => {
-    renderPanel();
-
-    const button = screen.queryByRole('button', { name: /export json/i });
-    expect(button).not.toBeInTheDocument();
+    expect(screen.getByRole('separator')).toBeInTheDocument();
+    expect(screen.getByRole('table')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /export json/i })).toBeInTheDocument();
   });
 });

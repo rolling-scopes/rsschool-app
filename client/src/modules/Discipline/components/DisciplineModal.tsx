@@ -13,7 +13,11 @@ const disciplineService = new DisciplinesApi();
 export function DisciplineModal({ isModalVisible, onCancel, loadDisciplines, discipline }: IDisciplineModal) {
   const [form] = Form.useForm();
 
-  useEffect(() => form.resetFields, [isModalVisible]);
+  useEffect(() => {
+    if (isModalVisible) {
+      form.resetFields();
+    }
+  }, [isModalVisible, form]);
 
   const initialValues = {
     name: discipline?.name,

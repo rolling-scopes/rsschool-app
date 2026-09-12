@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { ReactNode } from 'react';
 import { UserSearchDto } from '@client/api';
 import { UsersAdminPage } from './UsersAdminPage';
@@ -22,8 +22,7 @@ vi.mock('@client/modules/Course/contexts', () => ({
 // useUsersSearch instantiates UsersApi at module scope.
 const { searchUsers } = vi.hoisted(() => ({ searchUsers: vi.fn() }));
 
-vi.mock('@client/api', async () => ({
-  ...(await vi.importActual('@client/api')),
+vi.mock('@client/api', () => ({
   UsersApi: function UsersApi() {
     return { searchUsers };
   },
@@ -51,17 +50,8 @@ describe('<UsersAdminPage />', () => {
     searchUsers.mockResolvedValue({ data: results });
   });
 
-  it('renders the search form and no list before searching', () => {
-    render(<UsersAdminPage />);
-
-    expect(screen.getByPlaceholderText('Search by github or name')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /search/i })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /users/i })).toBeInTheDocument();
-    expect(searchUsers).not.toHaveBeenCalled();
-  });
-
   it('searches and renders the returned users with their populated fields', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<UsersAdminPage />);
 
     await user.type(screen.getByPlaceholderText('Search by github or name'), 'octo');
@@ -74,27 +64,22 @@ describe('<UsersAdminPage />', () => {
     expect(screen.getByText('@octo')).toBeInTheDocument();
     // Mentor field joins course names; empty student list renders nothing.
     expect(screen.getByText('RS 2024')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'octocat' })).toHaveAttribute('href', '/profile?githubId=octocat');
   });
 
   it('does not call the API when the search box is empty', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<UsersAdminPage />);
+
+    expect(screen.getByPlaceholderText('Search by github or name')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /search/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /users/i })).toBeInTheDocument();
+    expect(searchUsers).not.toHaveBeenCalled();
 
     await user.click(screen.getByRole('button', { name: /search/i }));
 
     // searchUsers short-circuits on empty input, so the list never appears.
     await waitFor(() => expect(searchUsers).not.toHaveBeenCalled());
     expect(screen.queryByText('octocat')).not.toBeInTheDocument();
-  });
-
-  it('links each result to the user profile page', async () => {
-    const user = userEvent.setup();
-    render(<UsersAdminPage />);
-
-    await user.type(screen.getByPlaceholderText('Search by github or name'), 'octo');
-    await user.click(screen.getByRole('button', { name: /search/i }));
-
-    const link = await screen.findByRole('link', { name: 'octocat' });
-    expect(link).toHaveAttribute('href', '/profile?githubId=octocat');
   });
 });

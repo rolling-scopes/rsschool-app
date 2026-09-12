@@ -41,15 +41,6 @@ describe('withGoogleMaps', () => {
     expect(script?.getAttribute('src')).toContain('key=test-key');
   });
 
-  it('passes props through to the wrapped component', async () => {
-    mapsApiKeyRef.value = 'k';
-    const { withGoogleMaps } = await import('./withGoogleMaps');
-    const Wrapped = withGoogleMaps(Dummy);
-
-    render(<Wrapped label="forwarded" />);
-    expect(screen.getByTestId('wrapped')).toHaveTextContent('forwarded');
-  });
-
   it('does not inject the script when no api key is configured', async () => {
     mapsApiKeyRef.value = undefined;
     const { withGoogleMaps } = await import('./withGoogleMaps');

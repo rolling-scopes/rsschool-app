@@ -1,31 +1,26 @@
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { ExportCsvButton } from './index';
 
+vi.mock('antd', () => ({
+  Tooltip: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  Button: ({ children, onClick }: React.ComponentProps<'button'>) => <button onClick={onClick}>{children}</button>,
+}));
+
 describe('<ExportCsvButton />', () => {
-  it('renders nothing when not enabled', () => {
-    const { container } = render(<ExportCsvButton enabled={false} onClick={vi.fn()} />);
+  it('renders only when enabled and forwards clicks', () => {
+    const onClick = vi.fn();
+    const { container, rerender } = render(<ExportCsvButton enabled={false} onClick={onClick} />);
     expect(container).toBeEmptyDOMElement();
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
-  });
 
-  it('renders nothing when "enabled" is omitted (undefined)', () => {
-    const { container } = render(<ExportCsvButton onClick={vi.fn()} />);
+    rerender(<ExportCsvButton onClick={onClick} />);
     expect(container).toBeEmptyDOMElement();
-  });
 
-  it('renders a button when enabled', () => {
-    render(<ExportCsvButton enabled onClick={vi.fn()} />);
+    rerender(<ExportCsvButton enabled onClick={onClick} />);
     expect(screen.getByRole('button')).toBeInTheDocument();
-  });
 
-  it('calls onClick when the enabled button is clicked', async () => {
-    const user = userEvent.setup();
-    const onClick = vi.fn();
-    render(<ExportCsvButton enabled onClick={onClick} />);
-
-    await user.click(screen.getByRole('button'));
+    fireEvent.click(screen.getByRole('button'));
 
     expect(onClick).toHaveBeenCalledTimes(1);
   });

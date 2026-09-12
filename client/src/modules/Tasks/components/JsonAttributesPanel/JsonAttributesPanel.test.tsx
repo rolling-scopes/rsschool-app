@@ -12,22 +12,14 @@ const renderPanel = () => {
 };
 
 describe('JSON Attributes', () => {
-  test('should render attributes textarea', async () => {
+  test('should render attributes textarea and validate invalid JSON', async () => {
     renderPanel();
 
     const textarea = await screen.findByRole('textbox');
     expect(textarea).toBeInTheDocument();
     expect(textarea).toHaveProperty('placeholder', PLACEHOLDERS.jsonAttributes);
-  });
 
-  test('should render error message on invalid JSON input', async () => {
-    renderPanel();
-    const invalidJson = `{ name: 'Pit' }`;
-
-    const textarea = await screen.findByRole('textbox');
-    expect(textarea).toBeInTheDocument();
-
-    fireEvent.change(textarea, { target: { value: invalidJson } });
+    fireEvent.change(textarea, { target: { value: `{ name: 'Pit' }` } });
 
     const errorMessage = await screen.findByText(ERROR_MESSAGES.invalidJson);
     expect(errorMessage).toBeInTheDocument();
