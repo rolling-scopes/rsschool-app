@@ -74,25 +74,21 @@ describe('<TasksStatsCard />', () => {
     });
   });
 
-  it('renders the "Tasks Statistics" card with a chart entry per status', async () => {
+  it('renders chart entries and updates the URL when one is selected', async () => {
+    const user = userEvent.setup();
     render(<TasksStatsCard tasksByStatus={makeTasksByStatus()} courseName="Course Y" />);
 
     expect(screen.getByText('Tasks Statistics')).toBeInTheDocument();
     expect(await screen.findByTestId('tasks-chart')).toBeInTheDocument();
     expect(screen.getByText(/chart-done-1/)).toBeInTheDocument();
     expect(screen.getByText(/chart-available-1/)).toBeInTheDocument();
-  });
-
-  it('updates the URL with the chosen status when a chart segment is clicked', async () => {
-    const user = userEvent.setup();
-    render(<TasksStatsCard tasksByStatus={makeTasksByStatus()} courseName="Course Y" />);
-
     await user.click(await screen.findByText(/chart-done-1/));
 
     expect(replace).toHaveBeenCalledWith(expect.stringContaining('statType=done'));
   });
 
-  it('opens the stats modal when the router query has a valid statType', async () => {
+  it('opens the requested stats modal and clears the URL when dismissed', async () => {
+    const user = userEvent.setup();
     (useRouter as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
       query: { statType: CourseScheduleItemDtoStatusEnum.Done },
       route: '/course/student/dashboard',
@@ -103,9 +99,17 @@ describe('<TasksStatsCard />', () => {
 
     expect(await screen.findByText('Course Y statistics')).toBeInTheDocument();
     expect(screen.getByText(/DONE TASKS/i)).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: /close/i }));
+
+    await waitFor(() => {
+      // updateUrl() with no statType -> replace called with a URL without statType.
+      const lastCall = replace.mock.calls.at(-1)?.[0] as string;
+      expect(lastCall).not.toContain('statType');
+    });
   });
 
-  it('ignores an unknown statType in the query (no modal opens)', async () => {
+  it('ignores an unknown statType in the query', async () => {
     (useRouter as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
       query: { statType: 'not-a-real-status' },
       route: '/course/student/dashboard',
@@ -116,25 +120,5 @@ describe('<TasksStatsCard />', () => {
 
     expect(await screen.findByTestId('tasks-chart')).toBeInTheDocument();
     expect(screen.queryByText('Course Y statistics')).not.toBeInTheDocument();
-  });
-
-  it('closes the modal and clears statType from the URL when dismissed', async () => {
-    const user = userEvent.setup();
-    (useRouter as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-      query: { statType: CourseScheduleItemDtoStatusEnum.Done },
-      route: '/course/student/dashboard',
-      replace,
-    });
-
-    render(<TasksStatsCard tasksByStatus={makeTasksByStatus()} courseName="Course Y" />);
-    expect(await screen.findByText('Course Y statistics')).toBeInTheDocument();
-
-    await user.click(screen.getByRole('button', { name: /close/i }));
-
-    await waitFor(() => {
-      // updateUrl() with no statType -> replace called with a URL without statType.
-      const lastCall = replace.mock.calls.at(-1)?.[0] as string;
-      expect(lastCall).not.toContain('statType');
-    });
   });
 });
