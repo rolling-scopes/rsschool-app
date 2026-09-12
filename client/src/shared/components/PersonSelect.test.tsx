@@ -14,26 +14,13 @@ function openSelect() {
 }
 
 describe('PersonSelect', () => {
-  it('renders a searchable combobox with a placeholder', () => {
-    render(<PersonSelect data={DATA} />);
-
-    expect(screen.getByRole('combobox')).toBeInTheDocument();
-  });
-
-  it('renders an option per person keyed by id by default', async () => {
-    render(<PersonSelect data={DATA} />);
-
-    openSelect();
-
-    expect(await screen.findByText(/Alice A/)).toBeInTheDocument();
-    expect(screen.getByText(/Bob B/)).toBeInTheDocument();
-  });
-
-  it('selects a person by id and calls onChange', async () => {
+  it('renders, preselects, and selects people by id', async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<PersonSelect data={DATA} onChange={onChange} />);
+    render(<PersonSelect data={DATA} defaultValue={2} onChange={onChange} />);
 
+    expect(screen.getByRole('combobox')).toBeInTheDocument();
+    expect(screen.getByText(/Bob B/)).toBeInTheDocument();
     openSelect();
     await user.click(await screen.findByText(/Alice A/));
 
@@ -50,12 +37,5 @@ describe('PersonSelect', () => {
     await user.click(await screen.findByText(/Bob B/));
 
     expect(onChange.mock.calls[0][0]).toBe('bob');
-  });
-
-  it('preselects the provided default value', () => {
-    render(<PersonSelect data={DATA} defaultValue={2} />);
-
-    // antd renders the selected option's content in the selector
-    expect(screen.getByText(/Bob B/)).toBeInTheDocument();
   });
 });
