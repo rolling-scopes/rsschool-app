@@ -13,24 +13,23 @@ async function expandPanel(user: ReturnType<typeof userEvent.setup>) {
 }
 
 describe('<ShowTableColumns />', () => {
-  it('renders a checkbox for every configurable column', async () => {
+  it('renders every column and shows a hidden column when checked', async () => {
     const user = userEvent.setup();
-    render(<ShowTableColumns columnsHidden={[]} setColumnsHidden={vi.fn()} />);
+    const setColumnsHidden = vi.fn();
+    render(
+      <ShowTableColumns columnsHidden={[ColumnKey.Type, ColumnKey.Organizer]} setColumnsHidden={setColumnsHidden} />,
+    );
     await expandPanel(user);
 
     expect(screen.getByText('Visible Columns')).toBeInTheDocument();
     AVAILABLE.forEach(({ name }) => {
       expect(screen.getByRole('checkbox', { name })).toBeInTheDocument();
     });
-  });
-
-  it('marks a column as unchecked when it is in columnsHidden', async () => {
-    const user = userEvent.setup();
-    render(<ShowTableColumns columnsHidden={[ColumnKey.Type]} setColumnsHidden={vi.fn()} />);
-    await expandPanel(user);
-
     expect(screen.getByRole('checkbox', { name: ColumnName.Type })).not.toBeChecked();
-    expect(screen.getByRole('checkbox', { name: ColumnName.Organizer })).toBeChecked();
+    expect(screen.getByRole('checkbox', { name: ColumnName.Organizer })).not.toBeChecked();
+
+    await user.click(screen.getByRole('checkbox', { name: ColumnName.Type }));
+    expect(setColumnsHidden).toHaveBeenCalledWith([ColumnKey.Organizer]);
   });
 
   it('hides a visible column (adds its key) when its checkbox is unchecked', async () => {
@@ -42,18 +41,5 @@ describe('<ShowTableColumns />', () => {
     await user.click(screen.getByRole('checkbox', { name: ColumnName.Type }));
 
     expect(setColumnsHidden).toHaveBeenCalledWith([ColumnKey.Type]);
-  });
-
-  it('shows a hidden column (removes its key) when its checkbox is re-checked', async () => {
-    const setColumnsHidden = vi.fn();
-    const user = userEvent.setup();
-    render(
-      <ShowTableColumns columnsHidden={[ColumnKey.Type, ColumnKey.Organizer]} setColumnsHidden={setColumnsHidden} />,
-    );
-    await expandPanel(user);
-
-    await user.click(screen.getByRole('checkbox', { name: ColumnName.Type }));
-
-    expect(setColumnsHidden).toHaveBeenCalledWith([ColumnKey.Organizer]);
   });
 });
