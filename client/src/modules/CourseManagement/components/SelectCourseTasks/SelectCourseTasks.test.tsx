@@ -34,25 +34,12 @@ describe('SelectCourseTasks', () => {
     });
   });
 
-  test('should render field with "Task" label', async () => {
+  test('renders fetched task options', async () => {
     renderSelectCourseTasks();
 
     const field = await screen.findByLabelText('Task');
     expect(field).toBeInTheDocument();
-  });
-
-  test('should fetch the tasks for the given course', async () => {
-    renderSelectCourseTasks();
-
-    await screen.findByLabelText('Task');
     expect(getCourseTasks).toHaveBeenCalledWith(1);
-  });
-
-  test('should render options on select click', async () => {
-    renderSelectCourseTasks();
-
-    const field = await screen.findByLabelText('Task');
-
     await user.click(field);
 
     const options = await screen.findAllByRole('option');
