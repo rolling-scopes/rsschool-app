@@ -1,5 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import type { InterviewDto } from '@client/api';
 import { TaskDtoTypeEnum } from '@client/api';
 import { InterviewStatus } from '@client/domain/interview';
@@ -55,7 +54,7 @@ function makeInterview(githubId: string): MentorInterview {
 }
 
 function renderList(interviews?: MentorInterview[]) {
-  render(
+  return render(
     <InterviewsList
       interviews={interviews}
       course={COURSE}
@@ -68,52 +67,46 @@ function renderList(interviews?: MentorInterview[]) {
 describe('InterviewsList', () => {
   beforeEach(() => fetchStudentInterviews.mockReset().mockResolvedValue(undefined));
 
-  it('should render the empty-state alert when there are no interviews', () => {
-    renderList([]);
+  it('should render the empty state for empty and undefined interviews', () => {
+    const { rerender } = renderList([]);
+
+    expect(screen.getByText("You don't have any assigned interviews yet.")).toBeInTheDocument();
+
+    rerender(
+      <InterviewsList
+        interviews={undefined}
+        course={COURSE}
+        interviewTask={INTERVIEW_TASK}
+        fetchStudentInterviews={fetchStudentInterviews}
+      />,
+    );
 
     expect(screen.getByText("You don't have any assigned interviews yet.")).toBeInTheDocument();
   });
 
-  it('should render the empty-state alert when interviews is undefined', () => {
-    renderList(undefined);
-
-    expect(screen.getByText("You don't have any assigned interviews yet.")).toBeInTheDocument();
-  });
-
-  it('should render the summary but not the student list until expanded', () => {
+  it('should render the summary, toggle student details, and reload interviews', async () => {
+    let resolveReload!: () => void;
+    fetchStudentInterviews.mockReturnValueOnce(
+      new Promise<void>(resolve => {
+        resolveReload = resolve;
+      }),
+    );
     renderList([makeInterview('alice'), makeInterview('bob')]);
 
     expect(screen.getByText('summary for 2')).toBeInTheDocument();
     expect(screen.queryByText('student-alice')).not.toBeInTheDocument();
-  });
 
-  it('should reveal the per-student list after toggling details', async () => {
-    const user = userEvent.setup();
-    renderList([makeInterview('alice'), makeInterview('bob')]);
-
-    await user.click(screen.getByRole('button', { name: 'toggle-details' }));
+    fireEvent.click(screen.getByRole('button', { name: 'toggle-details' }));
 
     expect(screen.getByText('student-alice')).toBeInTheDocument();
     expect(screen.getByText('student-bob')).toBeInTheDocument();
-  });
 
-  it('should collapse the list again on a second toggle', async () => {
-    const user = userEvent.setup();
-    renderList([makeInterview('alice')]);
-
-    await user.click(screen.getByRole('button', { name: 'toggle-details' }));
-    expect(screen.getByText('student-alice')).toBeInTheDocument();
-
-    await user.click(screen.getByRole('button', { name: 'toggle-details' }));
+    fireEvent.click(screen.getByRole('button', { name: 'toggle-details' }));
     expect(screen.queryByText('student-alice')).not.toBeInTheDocument();
-  });
 
-  it('should call fetchStudentInterviews when the summary triggers a reload', async () => {
-    const user = userEvent.setup();
-    renderList([makeInterview('alice')]);
+    fireEvent.click(screen.getByRole('button', { name: 'reload' }));
+    expect(fetchStudentInterviews).toHaveBeenCalled();
 
-    await user.click(screen.getByRole('button', { name: 'reload' }));
-
-    await waitFor(() => expect(fetchStudentInterviews).toHaveBeenCalled());
+    await act(async () => resolveReload());
   });
 });
