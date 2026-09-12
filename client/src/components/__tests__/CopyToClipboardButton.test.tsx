@@ -1,4 +1,4 @@
-import { act, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import CopyToClipboardButton from '@client/shared/components/CopyToClipboardButton';
 import { useCopyToClipboard } from 'react-use';
 
@@ -22,32 +22,20 @@ describe('CopyToClipboardButton', () => {
     vi.mocked(useCopyToClipboard).mockReturnValue([{ noUserInteraction: true }, mockCopyToClipboard]);
   });
 
-  it('should render with default style', () => {
-    render(<CopyToClipboardButton value={TEST_VALUE} />);
+  it('should render, copy, and apply default and custom button types', () => {
+    const { rerender } = render(<CopyToClipboardButton value={TEST_VALUE} />);
     const button = screen.getByTestId('copy-to-clipboard');
     expect(button).toBeInTheDocument();
     expect(button).toHaveClass('ant-btn-dashed');
-  });
-
-  it('should render button with copy icon', () => {
-    render(<CopyToClipboardButton value={TEST_VALUE} />);
     const icon = screen.getByRole('img');
     expect(icon).toBeInTheDocument();
     expect(icon).toHaveClass('anticon anticon-copy');
-  });
 
-  it('should copy text to clipboard on click', async () => {
-    render(<CopyToClipboardButton value={TEST_VALUE} />);
-    const button = screen.getByTestId('copy-to-clipboard');
-
-    act(() => button.click());
+    fireEvent.click(button);
 
     expect(mockCopyToClipboard).toHaveBeenCalledWith(TEST_VALUE);
-  });
 
-  it('should render with custom button type', () => {
-    render(<CopyToClipboardButton value={TEST_VALUE} type="primary" />);
-    const button = screen.getByTestId('copy-to-clipboard');
+    rerender(<CopyToClipboardButton value={TEST_VALUE} type="primary" />);
     expect(button).toHaveAttribute('type', 'button');
     expect(button).toHaveClass('ant-btn-primary');
   });
