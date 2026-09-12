@@ -87,34 +87,15 @@ describe('ExpirationTooltip', () => {
     expect(title).toBeInTheDocument();
     expect(text).toBeInTheDocument();
 
-    // Modal is rendered outside of the container, this is custom cleanup
-    modal.remove();
-  });
-
-  test('should show expiration modal on click in case if CV is expired in no public mode', async () => {
-    const datestring1DayBefore = '2022-09-25';
-
-    render(<ExpirationTooltip expirationDate={datestring1DayBefore} expirationState={ExpirationState.Expired} />);
-
-    // Close initially opened modal
     fireEvent.click(await screen.findByText('Cancel'));
-
-    const button = await screen.findByRole('button', { name: 'Archived' });
-
     fireEvent.click(button);
 
-    const modal = await screen.findByRole('dialog');
-
-    expect(modal).toBeInTheDocument();
-
-    const title = within(modal).getAllByText('Your CV is archived')[0];
-    const text = within(modal).getByText(/You need to renew your resume/i);
-
-    expect(title).toBeInTheDocument();
-    expect(text).toBeInTheDocument();
+    const reopenedModal = await screen.findByRole('dialog');
+    expect(within(reopenedModal).getAllByText('Your CV is archived')[0]).toBeInTheDocument();
+    expect(within(reopenedModal).getByText(/You need to renew your resume/i)).toBeInTheDocument();
 
     // Modal is rendered outside of the container, this is custom cleanup
-    modal.remove();
+    reopenedModal.remove();
   });
 
   test('should not show expiration modal in public mode', async () => {
