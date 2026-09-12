@@ -1,12 +1,18 @@
 /* eslint-disable testing-library/no-container, testing-library/no-node-access */
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { message } from 'antd';
+import { setupUser } from '@client/__tests__/setupUser';
 import { MentorRegistryDto, DisciplineDto } from '@client/api';
 import { Course } from '@client/services/models';
 import { ModalDataMode } from '@client/pages/admin/mentor-registry';
 import { MentorRegistryTableContainer, CombinedFilter } from './MentorRegistryTableContainer';
 import { MentorRegistryTable } from './MentorRegistryTable';
 import { MentorRegistryTabsMode } from '../constants';
+
+vi.mock('@client/shared/components/Icons', async importOriginal => ({
+  ...(await importOriginal<typeof import('@client/shared/components/Icons')>()),
+  PublicSvgIcon: () => <span />,
+}));
 
 // Render the real table through the container's render-prop so both collaborate
 // like in production. Only props/services are supplied by the test.
@@ -115,7 +121,7 @@ describe('<MentorRegistryTableContainer /> + <MentorRegistryTable />', () => {
   });
 
   it('renders the mentor row with its copy link and opens Invite', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { container, handleModalDataChange } = renderContainer();
     expect(screen.getByText('octocat')).toBeInTheDocument();
     expect(screen.getByText('Octo Cat')).toBeInTheDocument();
@@ -194,7 +200,7 @@ describe('<MentorRegistryTableContainer /> + <MentorRegistryTable />', () => {
   it('clears all tag filters when "Clear all" is clicked', async () => {
     const setCombinedFilter = vi.fn();
     const setTagFilters = vi.fn();
-    const user = userEvent.setup();
+    const user = setupUser();
     renderContainer({
       tagFilters: ['Technologies: React'],
       setCombinedFilter,
@@ -208,6 +214,7 @@ describe('<MentorRegistryTableContainer /> + <MentorRegistryTable />', () => {
   });
 
   it('shows an error and leaves filters untouched for an unrecognized tag prefix', () => {
+    const error = vi.spyOn(message, 'error').mockImplementation(() => (() => {}) as never);
     const setCombinedFilter = vi.fn();
     const setTagFilters = vi.fn();
     renderContainer({
@@ -220,9 +227,10 @@ describe('<MentorRegistryTableContainer /> + <MentorRegistryTable />', () => {
     const closeIcon = tag.closest('.ant-tag')?.querySelector('.ant-tag-close-icon') as HTMLElement;
     fireEvent.click(closeIcon);
 
-    // Default branch hits message.error and does not call setCombinedFilter.
+    expect(error).toHaveBeenCalledWith('An error occurred. Please try again later.');
     expect(setCombinedFilter).not.toHaveBeenCalled();
     expect(setTagFilters).toHaveBeenCalled();
+    error.mockRestore();
   });
 
   it('renders extra "Additional" info icons for a mentor with a certificate and comment', () => {

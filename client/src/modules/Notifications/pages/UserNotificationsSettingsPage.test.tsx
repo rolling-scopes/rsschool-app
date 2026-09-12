@@ -1,5 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { ReactNode } from 'react';
 import { UserNotificationsPage } from './UserNotificationsSettingsPage';
 
@@ -69,7 +69,7 @@ describe('UserNotificationsPage', () => {
   });
 
   it('toggles a channel checkbox and persists all settings on Save', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<UserNotificationsPage />);
     expect(await screen.findByText('First Notification')).toBeInTheDocument();
     expect(screen.getByText('Second Notification')).toBeInTheDocument();
@@ -95,7 +95,7 @@ describe('UserNotificationsPage', () => {
   });
 
   it('turns a channel off and saves the disabled state', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<UserNotificationsPage />);
     await screen.findByText('First Notification');
 
@@ -113,7 +113,7 @@ describe('UserNotificationsPage', () => {
   });
 
   it('shows an error message when saving fails', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     saveUserNotifications.mockRejectedValue(new Error('boom'));
     render(<UserNotificationsPage />);
     await screen.findByText('First Notification');

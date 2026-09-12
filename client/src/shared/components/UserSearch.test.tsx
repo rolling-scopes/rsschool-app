@@ -1,5 +1,5 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { UserSearch } from './UserSearch';
 import type { SearchStudent } from '@client/services/course';
 
@@ -32,7 +32,7 @@ describe('UserSearch', () => {
   });
 
   it('uses the default values to filter locally when no searchFn is provided', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<UserSearch defaultValues={PEOPLE} />);
 
     const combobox = openSelect();
@@ -47,7 +47,7 @@ describe('UserSearch', () => {
   });
 
   it('calls the provided searchFn and renders the returned options', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const searchFn = vi.fn().mockResolvedValue(PEOPLE);
     render(<UserSearch searchFn={searchFn} />);
 
@@ -60,7 +60,7 @@ describe('UserSearch', () => {
   });
 
   it('passes onlyStudentsWithoutMentorShown to the searchFn', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const searchFn = vi.fn().mockResolvedValue([]);
     render(<UserSearch searchFn={searchFn} onlyStudentsWithoutMentorShown />);
 
@@ -71,7 +71,7 @@ describe('UserSearch', () => {
   });
 
   it('shows the current mentor warning when showMentor is set and a mentor exists', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const withMentor: SearchStudent[] = [
       {
         id: 3,
@@ -90,7 +90,7 @@ describe('UserSearch', () => {
   });
 
   it('selects an option by github id when keyField is githubId', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onChange = vi.fn();
     const searchFn = vi.fn().mockResolvedValue(PEOPLE);
     render(<UserSearch searchFn={searchFn} keyField="githubId" onChange={onChange} />);
@@ -141,7 +141,7 @@ describe('UserSearch', () => {
   });
 
   it('does not call searchFn for a whitespace-only query (falls back to default values)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const searchFn = vi.fn().mockResolvedValue(PEOPLE);
     render(<UserSearch searchFn={searchFn} defaultValues={PEOPLE} />);
 

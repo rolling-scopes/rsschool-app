@@ -1,5 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { EventDto } from '@client/api';
 import { EventsTable } from './EventsTable';
 
@@ -32,7 +32,7 @@ function eventRow(name: string) {
 
 describe('<EventsTable />', () => {
   it('calls onEdit with the row record when Edit is clicked', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onEdit = vi.fn();
     render(<EventsTable data={data} onEdit={onEdit} onDelete={vi.fn()} />);
 
@@ -48,7 +48,7 @@ describe('<EventsTable />', () => {
   });
 
   it('calls onDelete with the id after confirming', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onDelete = vi.fn();
     render(<EventsTable data={data} onEdit={vi.fn()} onDelete={onDelete} />);
 
@@ -60,7 +60,7 @@ describe('<EventsTable />', () => {
   });
 
   it('filters rows via the Name column search', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<EventsTable data={data} onEdit={vi.fn()} onDelete={vi.fn()} />);
 
     // The search icon in the Name column header opens the filter dropdown.

@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 import { fireEvent, render, screen, within, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { TaskDto } from '@client/api';
 import { TasksTable } from './TasksTable';
 import { ColumnName } from '@client/modules/Tasks/types';
@@ -217,7 +217,7 @@ describe('TasksTable', () => {
     });
 
     test('should filter by Name and restore all data when search is cleared', async () => {
-      const user = userEvent.setup();
+      const user = setupUser();
       const data = generateTasksData();
       const searchQuery = data[0]?.name ?? '';
       renderTasksTable(data);

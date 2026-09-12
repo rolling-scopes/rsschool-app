@@ -1,5 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { ReactNode } from 'react';
 import { message, Modal } from 'antd';
 import { DisciplineDto } from '@client/api';
@@ -68,7 +68,7 @@ describe('<DisciplinePage />', () => {
   });
 
   it('creates a discipline and reloads the list on submit', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<DisciplinePage />);
     await screen.findByText('Frontend');
 
@@ -85,7 +85,7 @@ describe('<DisciplinePage />', () => {
   });
 
   it('updates the discipline by id when editing and saving', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<DisciplinePage />);
     await screen.findByText('Frontend');
 
@@ -103,7 +103,7 @@ describe('<DisciplinePage />', () => {
   });
 
   it('deletes a discipline after confirming and reloads the list', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<DisciplinePage />);
     await screen.findByText('Frontend');
 

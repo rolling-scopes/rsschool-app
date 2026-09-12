@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { AssignStudentModal } from './AssignStudentModal';
 
 // --- boundary mocks ---
@@ -40,7 +40,7 @@ describe('AssignStudentModal', () => {
   beforeEach(() => vi.clearAllMocks());
 
   it('renders and handles guard, success, error, and cancel paths', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onClose = vi.fn();
     updateStudent.mockResolvedValueOnce(undefined);
     render(<AssignStudentModal {...baseProps} onClose={onClose} />);

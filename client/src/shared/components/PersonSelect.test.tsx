@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { setupUser } from '@client/__tests__/setupUser';
 import { PersonSelect } from './PersonSelect';
 
 const DATA = [
@@ -9,13 +9,13 @@ const DATA = [
 
 function openSelect() {
   const combobox = screen.getByRole('combobox');
-  combobox.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+  fireEvent.mouseDown(combobox);
   return combobox;
 }
 
 describe('PersonSelect', () => {
   it('renders, preselects, and selects people by id', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onChange = vi.fn();
     render(<PersonSelect data={DATA} defaultValue={2} onChange={onChange} />);
 
@@ -29,7 +29,7 @@ describe('PersonSelect', () => {
   });
 
   it('keys options by githubId when keyField is githubId', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onChange = vi.fn();
     render(<PersonSelect data={DATA} keyField="githubId" onChange={onChange} />);
 

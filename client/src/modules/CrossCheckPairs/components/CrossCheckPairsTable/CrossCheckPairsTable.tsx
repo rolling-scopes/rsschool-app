@@ -51,7 +51,7 @@ export const CrossCheckPairsTable = ({
         size="small"
         rowClassName={styles.tableRow}
         onChange={onChange}
-        key="id"
+        rowKey="id"
         columns={getCrossCheckPairsColumns(viewComment)}
       />
     </>

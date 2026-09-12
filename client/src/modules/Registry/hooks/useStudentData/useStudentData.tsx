@@ -136,8 +136,8 @@ export function useStudentData(githubId: string, userId: number, courseAlias?: s
             await confirmRegistration();
           },
           okText: 'Register',
-          maskClosable: true,
-          autoFocusButton: 'cancel',
+          mask: { closable: true },
+          focusable: { autoFocusButton: 'cancel' },
         });
       } else {
         await confirmRegistration();

@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { CreateStudentFeedbackDto } from '@client/api';
 import { Session, CourseInfo } from '@client/components/withSession';
 import { SessionContext } from '@client/modules/Course/contexts';
@@ -111,7 +111,7 @@ describe('StudentFeedback page', () => {
   });
 
   it('should create feedback and reload on submit without an existing feedback id', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderPage();
     expect(screen.getByText('Recommendation Letter')).toBeInTheDocument();
     expect(screen.getByText('form for 7')).toBeInTheDocument();
@@ -125,7 +125,7 @@ describe('StudentFeedback page', () => {
   });
 
   it('should update feedback and reload on submit with an existing feedback id', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderPage();
 
     await user.click(screen.getByRole('button', { name: 'update-feedback' }));
@@ -137,7 +137,7 @@ describe('StudentFeedback page', () => {
   });
 
   it('should show an error message when creating feedback fails', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     createStudentFeedback.mockRejectedValueOnce(new Error('boom'));
     renderPage();
 
@@ -148,7 +148,7 @@ describe('StudentFeedback page', () => {
   });
 
   it('should show an error message when updating feedback fails', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     updateStudentFeedback.mockRejectedValueOnce(new Error('boom'));
     renderPage();
 

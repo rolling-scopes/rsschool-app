@@ -5,7 +5,7 @@ import {
   FormValues,
   hasValidCriteria,
 } from './CertificateCriteriaModal';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import * as ReactUse from 'react-use';
 
 const props = {
@@ -20,10 +20,10 @@ const renderCertificateCriteriaModal = () => {
 };
 
 describe('CertificateCriteriaModal', () => {
-  let user: ReturnType<typeof userEvent.setup>;
+  let user: ReturnType<typeof setupUser>;
 
   beforeEach(() => {
-    user = userEvent.setup();
+    user = setupUser();
     // mock CoursesTasksApi call
     vi.spyOn(ReactUse, 'useAsync').mockReturnValue({
       value: [

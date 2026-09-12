@@ -1,6 +1,6 @@
 /* eslint-disable testing-library/no-node-access */
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { MentorRegistryResendModal } from './MentorRegistryResendModal';
 
 const record = { githubId: 'octocat' } as never;
@@ -8,7 +8,7 @@ const modalData = { record };
 
 describe('<MentorRegistryResendModal />', () => {
   it('renders and handles resend, cancel, and loading states', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const resendConfirmation = vi.fn();
     const onCancel = vi.fn();
     const { rerender } = render(

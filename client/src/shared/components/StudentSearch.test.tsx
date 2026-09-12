@@ -1,5 +1,5 @@
 import { act, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { StudentSearch } from './StudentSearch';
 
 // Use vi.hoisted so the mocked class can reference the spy at module-eval time.
@@ -24,7 +24,7 @@ describe('StudentSearch', () => {
   });
 
   it('searches students via the course service and renders the results', async () => {
-    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
+    const user = setupUser({ advanceTimers: vi.advanceTimersByTimeAsync });
     render(<StudentSearch courseId={7} />);
 
     const combobox = screen.getByRole('combobox');
@@ -37,7 +37,7 @@ describe('StudentSearch', () => {
   });
 
   it('forwards the onlyStudentsWithoutMentorShown flag to the service', async () => {
-    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTimeAsync });
+    const user = setupUser({ advanceTimers: vi.advanceTimersByTimeAsync });
     render(<StudentSearch courseId={7} onlyStudentsWithoutMentorShown />);
 
     const combobox = screen.getByRole('combobox');

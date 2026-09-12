@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { CrossCheckCriteriaDataDto, CrossCheckCriteriaDataDtoTypeEnum, CrossCheckSolutionReviewDto } from '@client/api';
 import { CrossCheckCriteriaForm } from './CrossCheckCriteriaForm';
 
@@ -87,7 +87,7 @@ describe('<CrossCheckCriteriaForm />', () => {
   });
 
   it('updates the running score as the reviewer scores a subtask', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Harness initialCriteria={makeCriteria()} />);
 
     expect(screen.getByRole('heading', { name: 'Criteria' })).toBeInTheDocument();
@@ -106,7 +106,7 @@ describe('<CrossCheckCriteriaForm />', () => {
   });
 
   it('lets the reviewer override the final score with the score input', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Harness initialCriteria={[]} maxScore={50} />);
 
     // No criteria -> only the final-score InputNumber is rendered.
@@ -120,7 +120,7 @@ describe('<CrossCheckCriteriaForm />', () => {
   });
 
   it('skips the form after confirming in the dialog and restores it on toggle', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Harness initialCriteria={makeCriteria()} />);
 
     await user.click(screen.getByRole('button', { name: /Skip cross check form/ }));

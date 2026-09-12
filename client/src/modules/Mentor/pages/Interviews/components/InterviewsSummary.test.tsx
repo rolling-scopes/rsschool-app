@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import type { InterviewDto } from '@client/api';
 import { InterviewStatus } from '@client/domain/interview';
 import type { MentorInterview } from '@client/services/course';
@@ -76,7 +76,7 @@ describe('InterviewsSummary', () => {
   beforeEach(() => updateStageInterview.mockReset().mockResolvedValue({}));
 
   it('should render summary actions, toggle details and cancel a transfer', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { toggleDetails } = renderSummary();
 
     expect(screen.getByText(/Interviewed students 1\(2\)/)).toBeInTheDocument();
@@ -111,7 +111,7 @@ describe('InterviewsSummary', () => {
   });
 
   it('should transfer the interview, reload the list and close the modal on confirm', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { reloadList } = renderSummary();
 
     await user.click(screen.getByRole('button', { name: /Transfer student/ }));

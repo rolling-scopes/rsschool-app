@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { UpdateUserDtoLanguagesEnum } from '@client/api';
 import { getLanguageName } from '@client/components/SelectLanguages';
 import LanguagesCard from '../LanguagesCard';
@@ -25,7 +25,7 @@ describe('LanguagesCard', () => {
   });
 
   it('opens the settings modal and saves languages when updateProfile resolves true', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn().mockResolvedValue(true);
     renderCard({ data: [lang], updateProfile });
 
@@ -42,7 +42,7 @@ describe('LanguagesCard', () => {
   });
 
   it('does not update languages when updateProfile resolves false', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn().mockResolvedValue(false);
     renderCard({ data: [lang], updateProfile });
 
@@ -55,7 +55,7 @@ describe('LanguagesCard', () => {
   });
 
   it('resets the form on cancel', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn().mockResolvedValue(true);
     renderCard({ data: [lang], updateProfile });
 

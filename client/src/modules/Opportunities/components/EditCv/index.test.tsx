@@ -118,7 +118,7 @@ describe('EditCV', () => {
 
     await waitFor(() => {
       expect(mockOnUpdateResume).toHaveBeenCalled();
-      expect(mockSuccessNotification).toHaveBeenCalledWith({ message: 'CV successfully updated', duration: 2 });
+      expect(mockSuccessNotification).toHaveBeenCalledWith({ title: 'CV successfully updated', duration: 2 });
     });
   });
 

@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { AppTheme } from '@client/providers/ThemeProvider';
 import ThemeSwitch from './ThemeSwitch';
 import { useTheme } from '@client/hooks';
@@ -45,13 +45,13 @@ describe('ThemeSwitch', () => {
   // The dropdown trigger shows the active-theme icon (skin when autoTheme is on).
   // Menu items are labelled only by their icons (moon/sun/skin), so we open the
   // menu and pick items by order: [0] dark, [1] light, [2] auto.
-  async function openMenuItems(user: ReturnType<typeof userEvent.setup>) {
+  async function openMenuItems(user: ReturnType<typeof setupUser>) {
     await user.click(screen.getByRole('img', { name: 'skin' }));
     return screen.findAllByRole('menuitem');
   }
 
   it('switches among dark, light, and automatic themes', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<ThemeSwitch />);
 
     let items = await openMenuItems(user);

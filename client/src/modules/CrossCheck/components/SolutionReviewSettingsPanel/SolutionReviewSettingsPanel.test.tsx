@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import SolutionReviewSettingsPanel from './SolutionReviewSettingsPanel';
 
 describe('<SolutionReviewSettingsPanel />', () => {
   it('renders and toggles contact visibility with optional callbacks', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const setAreContactsVisible = vi.fn();
     const { rerender } = render(
       <SolutionReviewSettingsPanel settings={{ areContactsVisible: false, setAreContactsVisible }} />,

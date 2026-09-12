@@ -3,7 +3,7 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import { CustomPopconfirm } from './CustomPopconfirm';
 
 describe('CustomPopconfirm', () => {
-  it('renders, opens, and confirms through the default placement', () => {
+  it('renders, opens, and confirms through the default placement', async () => {
     vi.useFakeTimers();
     const onConfirm = vi.fn();
     render(
@@ -15,15 +15,19 @@ describe('CustomPopconfirm', () => {
     const trigger = screen.getByRole('button', { name: 'Delete' });
     expect(trigger).toBeInTheDocument();
     fireEvent.click(trigger);
-    act(() => vi.runOnlyPendingTimers());
+    await act(async () => {
+      await vi.runOnlyPendingTimersAsync();
+    });
     expect(screen.getByText('Remove item?')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /yes|ok/i }));
-    act(() => vi.runOnlyPendingTimers());
+    await act(async () => {
+      await vi.runOnlyPendingTimersAsync();
+    });
     expect(onConfirm).toHaveBeenCalled();
     vi.useRealTimers();
   });
 
-  it('honors an explicitly provided placement', () => {
+  it('honors an explicitly provided placement', async () => {
     vi.useFakeTimers();
     render(
       <CustomPopconfirm title="Confirm" placement="bottomLeft">
@@ -32,7 +36,9 @@ describe('CustomPopconfirm', () => {
     );
 
     fireEvent.click(screen.getByRole('button', { name: 'Trigger' }));
-    act(() => vi.runOnlyPendingTimers());
+    await act(async () => {
+      await vi.runOnlyPendingTimersAsync();
+    });
     expect(document.querySelector('.ant-popover-placement-bottomLeft')).not.toBeNull();
     vi.useRealTimers();
   });

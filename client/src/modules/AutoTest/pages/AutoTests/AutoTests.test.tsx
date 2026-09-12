@@ -1,5 +1,5 @@
 import { render, screen, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { ReactNode } from 'react';
 import { CheckerEnum } from '@client/api';
 import { CourseTaskState, CourseTaskStatus, CourseTaskVerifications } from '@client/modules/AutoTest/types';
@@ -64,7 +64,7 @@ describe('AutoTests page', () => {
   });
 
   it('should render initial tabs and tasks, then switch the visible tasks', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<AutoTests />);
 
     expect(screen.getByRole('heading', { name: 'Auto-tests' })).toBeInTheDocument();
@@ -83,7 +83,7 @@ describe('AutoTests page', () => {
   });
 
   it('calls markTaskAsDone with the task id when "Done Task" is clicked on the Available tab', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const passedTask = {
       ...task(1, 'Available Task', CourseTaskStatus.Available),
       verifications: [{ score: 90 }],

@@ -1,5 +1,5 @@
 /* eslint-disable testing-library/no-container, testing-library/no-node-access */
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import axios from 'axios';
 import { CertificateTemplatePicker } from './CertificateTemplatePicker';
 
@@ -115,7 +115,10 @@ describe('<CertificateTemplatePicker />', () => {
     unmount();
 
     // Second mount reads cachedTemplates: no spinner, no second network call.
-    render(<Picker />);
+    // eslint-disable-next-line testing-library/no-unnecessary-act -- Settle image effects on the cached render
+    await act(async () => {
+      render(<Picker />);
+    });
     expect(screen.getByText('Default')).toBeInTheDocument();
     expect(mockedGet).toHaveBeenCalledTimes(1);
   });

@@ -3,9 +3,9 @@ import { SystemAlerts } from './';
 import type { AlertDto } from '@client/api';
 
 vi.mock('antd', () => ({
-  Alert: ({ message, type }: { message: React.ReactNode; type: string }) => (
+  Alert: ({ title, type }: { title: React.ReactNode; type: string }) => (
     <div role="alert" className={`ant-alert-${type}`}>
-      {message}
+      {title}
     </div>
   ),
 }));

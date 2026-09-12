@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import dayjs from 'dayjs';
 import type { Session } from '@client/components/withSession';
 import { CountryDto, HeroesRadarDto } from '@client/api';
@@ -125,7 +125,7 @@ describe('HeroesRadarTab', () => {
   });
 
   it('refetches with selected filters on Filter submit', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderTab();
     await waitFor(() => expect(getHeroesRadar).toHaveBeenCalledTimes(1));
 
@@ -143,7 +143,7 @@ describe('HeroesRadarTab', () => {
   });
 
   it('resets the form and refetches on Clear', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderTab();
     await waitFor(() => expect(getHeroesRadar).toHaveBeenCalledTimes(1));
 
@@ -154,7 +154,7 @@ describe('HeroesRadarTab', () => {
   });
 
   it('refetches the current page when the table pagination changes', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderTab();
     await waitFor(() => expect(getHeroesRadar).toHaveBeenCalledTimes(1));
 
@@ -166,7 +166,7 @@ describe('HeroesRadarTab', () => {
   });
 
   it('formats and forwards the selected date range when filtering', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderTab();
     await waitFor(() => expect(getHeroesRadar).toHaveBeenCalledTimes(1));
 
@@ -187,7 +187,7 @@ describe('HeroesRadarTab', () => {
   });
 
   it('includes the date range params in the csv export url', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const original = window.location.href;
     Object.defineProperty(window, 'location', { writable: true, value: { href: original } });
 
@@ -205,7 +205,7 @@ describe('HeroesRadarTab', () => {
   });
 
   it('exports to csv by navigating to the csv endpoint', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const original = window.location.href;
     Object.defineProperty(window, 'location', {
       writable: true,

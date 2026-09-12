@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import type { FormInstance } from 'antd';
 import { Form } from 'antd';
 import type { Session, CourseInfo } from '@client/components/withSession';
@@ -100,7 +100,7 @@ describe('MentorPreferencesModal', () => {
   });
 
   it('should start closed, load mentor options when opened and close on cancel', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderProvider();
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
@@ -116,7 +116,7 @@ describe('MentorPreferencesModal', () => {
   });
 
   it('should submit the preferences via createMentor and close on confirm', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderProvider();
 
     await user.click(screen.getByRole('button', { name: 'open-options' }));
@@ -138,7 +138,7 @@ describe('MentorPreferencesModal', () => {
     // No `students` field registered -> values.students is undefined ->
     // `values.students?.map(...) ?? []` falls back to [].
     omitStudents.value = true;
-    const user = userEvent.setup();
+    const user = setupUser();
     renderProvider();
 
     await user.click(screen.getByRole('button', { name: 'open-options' }));
@@ -156,7 +156,7 @@ describe('MentorPreferencesModal', () => {
   });
 
   it('should not call getMentorOptions when the session has no mentorId for the course', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderProvider({
       ...SESSION,
       courses: { 400: { roles: ['mentor'] } as CourseInfo },

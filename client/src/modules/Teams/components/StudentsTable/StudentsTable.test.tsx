@@ -1,5 +1,5 @@
 import { screen, render } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { TeamDistributionStudentDto } from '@client/api';
 import { StudentsTableColumnKey } from '@client/modules/Teams/constants';
 import StudentsTable from './StudentsTable';
@@ -84,7 +84,7 @@ describe('<StudentsTable />', () => {
   });
 
   it('renders delete buttons and calls onDelete with the student when clicked', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onDelete = vi.fn();
     render(<StudentsTable content={students} pagination={false} onDelete={onDelete} />);
 

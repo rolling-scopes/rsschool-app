@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { IssueCertificateModal } from './IssueCertificateModal';
 
 // Stub the CertificateTemplatePicker (axios fetch + antd Image preview = brittle in
@@ -29,7 +29,7 @@ describe('<IssueCertificateModal />', () => {
   beforeEach(() => vi.clearAllMocks());
 
   it('handles its closed, open, selected, reopened, and student states', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps({ open: false });
     const { rerender } = render(<IssueCertificateModal {...props} />);
 

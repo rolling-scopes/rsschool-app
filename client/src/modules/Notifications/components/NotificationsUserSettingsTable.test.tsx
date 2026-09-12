@@ -1,5 +1,5 @@
 import { render, screen, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { NotificationsTable } from './NotificationsUserSettingsTable';
 import { NotificationChannel, UserNotificationSettings } from '../services/notifications';
 
@@ -20,7 +20,7 @@ const notifications: UserNotificationSettings[] = [
 
 describe('NotificationsUserSettingsTable', () => {
   it('renders settings, toggles channels, and handles table variants', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onCheck = vi.fn();
     const { container, rerender } = render(<NotificationsTable notifications={notifications} onCheck={onCheck} />);
 

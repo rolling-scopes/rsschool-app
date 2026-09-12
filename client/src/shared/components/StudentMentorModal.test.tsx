@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { StudentMentorModal } from './StudentMentorModal';
 
 // The search fields are remote-search widgets with their own tests; stub them
@@ -40,7 +40,7 @@ describe('StudentMentorModal', () => {
   });
 
   it('shows validation errors when submitting without selections', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<StudentMentorModal {...baseProps} />);
 
     await user.click(screen.getByRole('button', { name: /save/i }));
@@ -51,7 +51,7 @@ describe('StudentMentorModal', () => {
   });
 
   it('calls onOk with the selected student and mentor github ids', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<StudentMentorModal {...baseProps} />);
 
     expect(screen.getByText('Student/Mentor')).toBeInTheDocument();

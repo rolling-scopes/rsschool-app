@@ -1,6 +1,6 @@
 /* eslint-disable testing-library/no-node-access -- the github link is resolved via .closest('a') */
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { UserStudentDto } from '@client/api';
 import { StudentInfo } from './index';
 
@@ -68,7 +68,7 @@ describe('<StudentInfo />', () => {
   });
 
   it('renders only the filled contacts in the Contacts panel', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(
       <StudentInfo
         student={makeStudent({

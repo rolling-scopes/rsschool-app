@@ -1,6 +1,6 @@
 /* eslint-disable testing-library/no-node-access */
 import { render, screen, fireEvent, within, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useRouter } from 'next/router';
 import { ScoreTable, getTableWidth } from './index';
@@ -170,8 +170,8 @@ describe('<ScoreTable />', () => {
     expect(screen.queryByText('alice')).not.toBeInTheDocument();
   });
 
-  it('requests the last page when the saved current page exceeds the available pages', async () => {
-    // First response says current(1) > totalPages(0) → component refetches the last page.
+  it('keeps the page positive when the API reports no available pages', async () => {
+    // An empty result must not cause a request for page zero.
     getCourseScore.mockResolvedValueOnce({
       content: twoStudents,
       pagination: { current: 1, pageSize: 100, total: 2, totalPages: 0 },
@@ -181,8 +181,8 @@ describe('<ScoreTable />', () => {
     render(<ScoreTable {...makeProps()} />);
 
     await waitFor(() => expect(getCourseScore).toHaveBeenCalledTimes(2));
-    // The refetch pins current to totalPages (0 here).
-    expect(getCourseScore.mock.calls[1][0]).toMatchObject({ current: 0 });
+    // Pagination stays one-based even when totalPages is zero.
+    expect(getCourseScore.mock.calls[1][0]).toMatchObject({ current: 1 });
   });
 
   it('calls the paging hook with the requested page on pagination change', async () => {
@@ -205,7 +205,7 @@ describe('<ScoreTable />', () => {
   });
 
   it('applies a column search filter through the paging hook with the typed value', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<ScoreTable {...makeProps()} />);
 
     await screen.findAllByText('alice');
@@ -243,7 +243,7 @@ describe('<ScoreTable />', () => {
   });
 
   it('saves hidden columns to localStorage and closes the drawer when settings are saved', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const setIsVisibleSettings = vi.fn();
     render(<ScoreTable {...makeProps({ isVisibleSetting: true, setIsVisibleSettings })} />);
 
@@ -262,7 +262,7 @@ describe('<ScoreTable />', () => {
   });
 
   it('closes the settings drawer without saving when cancelled', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const setIsVisibleSettings = vi.fn();
     render(<ScoreTable {...makeProps({ isVisibleSetting: true, setIsVisibleSettings })} />);
 

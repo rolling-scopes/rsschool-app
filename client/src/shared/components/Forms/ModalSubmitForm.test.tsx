@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { Form } from 'antd';
+import { setupUser } from '@client/__tests__/setupUser';
+import { Form, Input } from 'antd';
 import { ModalSubmitForm } from './ModalSubmitForm';
 
 const PROPS_MOCK = {
@@ -70,11 +70,11 @@ describe('ModalSubmitForm', () => {
     // Exercises the onOk handler: validateFields() resolves (no required fields),
     // then submit() is called with the gathered values.
     const submit = vi.fn();
-    const user = userEvent.setup();
+    const user = setupUser();
     render(
       <ModalSubmitForm {...PROPS_MOCK} submit={submit} data={{ name: 'Ann' }}>
         <Form.Item name="name" label="Name">
-          <input aria-label="name" />
+          <Input aria-label="name" />
         </Form.Item>
       </ModalSubmitForm>,
     );
@@ -88,11 +88,11 @@ describe('ModalSubmitForm', () => {
     // A required field left empty makes validateFields() reject; the `.catch(() => null)`
     // returns null and the `if (values == null) return` guard short-circuits submit.
     const submit = vi.fn();
-    const user = userEvent.setup();
+    const user = setupUser();
     render(
       <ModalSubmitForm {...PROPS_MOCK} submit={submit} data={{}}>
         <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Required' }]}>
-          <input aria-label="name" />
+          <Input aria-label="name" />
         </Form.Item>
       </ModalSubmitForm>,
     );
@@ -105,7 +105,7 @@ describe('ModalSubmitForm', () => {
 
   it('resets the form and calls close when the Cancel button is clicked', async () => {
     const close = vi.fn();
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<ModalSubmitForm {...PROPS_MOCK} close={close} />);
 
     await user.click(screen.getByRole('button', { name: /Cancel/ }));
@@ -116,11 +116,11 @@ describe('ModalSubmitForm', () => {
   it('forwards form value changes to onChange', async () => {
     // onValuesChange -> onChange?.(form.getFieldsValue())
     const onChange = vi.fn();
-    const user = userEvent.setup();
+    const user = setupUser();
     render(
       <ModalSubmitForm {...PROPS_MOCK} onChange={onChange}>
         <Form.Item name="name" label="Name">
-          <input aria-label="name" />
+          <Input aria-label="name" />
         </Form.Item>
       </ModalSubmitForm>,
     );
@@ -136,7 +136,7 @@ describe('ModalSubmitForm', () => {
     render(
       <ModalSubmitForm {...PROPS_MOCK} getInitialValues={getInitialValues}>
         <Form.Item name="name" label="Name">
-          <input aria-label="name" />
+          <Input aria-label="name" />
         </Form.Item>
       </ModalSubmitForm>,
     );
@@ -150,7 +150,7 @@ describe('ModalSubmitForm', () => {
     render(
       <ModalSubmitForm {...PROPS_MOCK} data={{ selectedSolutionUrl: 'https://pr/1' }}>
         <Form.Item name="url" label="Url">
-          <input aria-label="url" />
+          <Input aria-label="url" />
         </Form.Item>
       </ModalSubmitForm>,
     );

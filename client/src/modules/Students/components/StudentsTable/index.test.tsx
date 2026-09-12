@@ -1,6 +1,6 @@
 /* eslint-disable testing-library/no-node-access -- header cells are resolved via .closest('th') */
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { CourseDto, UserStudentDto } from '@client/api';
 import StudentsTable from './index';
 
@@ -131,7 +131,7 @@ describe('<StudentsTable />', () => {
   });
 
   it('passes the selected ongoing course id to handleChange when its filter is applied', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<StudentsTable {...props} />);
 
@@ -153,7 +153,7 @@ describe('<StudentsTable />', () => {
   });
 
   it('passes the typed Country search value to handleChange', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<StudentsTable {...props} />);
 
@@ -171,7 +171,7 @@ describe('<StudentsTable />', () => {
   });
 
   it('passes the typed City search value to handleChange', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<StudentsTable {...props} />);
 
@@ -188,7 +188,7 @@ describe('<StudentsTable />', () => {
   });
 
   it('passes the typed Student search value to handleChange', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<StudentsTable {...props} />);
 

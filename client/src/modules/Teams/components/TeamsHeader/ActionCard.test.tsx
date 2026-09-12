@@ -1,5 +1,5 @@
 import { screen, render } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { ActionCard } from './ActionCard';
 
 function renderCard(overrides: Partial<Parameters<typeof ActionCard>[0]> = {}) {
@@ -18,7 +18,7 @@ function renderCard(overrides: Partial<Parameters<typeof ActionCard>[0]> = {}) {
 
 describe('<ActionCard />', () => {
   it('renders its content, asks for confirmation and calls onClick only after confirming', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { onClick } = renderCard();
 
     expect(screen.getByText('Become a leader')).toBeInTheDocument();
@@ -34,7 +34,7 @@ describe('<ActionCard />', () => {
   });
 
   it('does not call onClick when the confirmation is cancelled', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { onClick } = renderCard();
 
     await user.click(screen.getByRole('button', { name: 'Create team' }));

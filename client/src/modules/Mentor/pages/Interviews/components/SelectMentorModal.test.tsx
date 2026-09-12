@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import type { MentorInterview } from '@client/services/course';
 import { SelectMentorModal } from './SelectMentorModal';
 
@@ -36,7 +36,7 @@ function renderModal(props: Partial<Parameters<typeof SelectMentorModal>[0]> = {
 
 describe('SelectMentorModal', () => {
   it('should call onCancel when the modal is cancelled', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { onCancel } = renderModal();
 
     expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -49,7 +49,7 @@ describe('SelectMentorModal', () => {
   });
 
   it('should not submit and should show validation errors when no student/mentor is chosen', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { onOk } = renderModal();
 
     await user.click(screen.getByRole('button', { name: /Save/ }));
@@ -61,7 +61,7 @@ describe('SelectMentorModal', () => {
   });
 
   it('should submit the selected student and mentor through onOk', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { onOk } = renderModal();
 
     // open the Student combobox (antd opens dropdowns on mouseDown) and pick Alice

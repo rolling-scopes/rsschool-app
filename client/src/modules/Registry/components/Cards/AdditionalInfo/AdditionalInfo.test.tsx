@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { Form } from 'antd';
 import { UpdateUserDtoLanguagesEnum } from '@client/api';
 import { LABELS } from '@client/modules/Registry/constants';
@@ -41,7 +41,7 @@ describe('AdditionalInfo', () => {
   });
 
   test('should render populated fields and navigation, then call only submitHandler', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderAdditionalInfo(mockValues);
 
     expect(screen.getByText(LABELS.courses)).toBeInTheDocument();
@@ -59,7 +59,7 @@ describe('AdditionalInfo', () => {
   });
 
   test('should call only submitFailedHandler', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderAdditionalInfo({ ...mockValues, dataProcessing: 0 });
 
     const button = await screen.findByRole('button', { name: /submit/i });

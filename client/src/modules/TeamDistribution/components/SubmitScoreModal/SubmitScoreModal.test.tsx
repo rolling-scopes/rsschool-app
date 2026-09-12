@@ -1,5 +1,5 @@
-import { screen, render, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { act, screen, render, waitFor, within } from '@testing-library/react';
+import { setupUser } from '@client/__tests__/setupUser';
 import { message } from 'antd';
 import { TeamDistributionDto } from '@client/api';
 import SubmitScoreModal from './SubmitScoreModal';
@@ -42,8 +42,11 @@ describe('<SubmitScoreModal />', () => {
     submitScore.mockResolvedValue({} as never);
   });
 
-  it('is closed (not rendered) when distribution is null', () => {
-    render(<SubmitScoreModal distribution={null} onClose={vi.fn()} />);
+  it('is closed (not rendered) when distribution is null', async () => {
+    // eslint-disable-next-line testing-library/no-unnecessary-act -- Await mount effects after the synchronous render
+    await act(async () => {
+      render(<SubmitScoreModal distribution={null} onClose={vi.fn()} />);
+    });
     expect(screen.queryByText('Submit Score')).not.toBeInTheDocument();
   });
 
@@ -66,7 +69,7 @@ describe('<SubmitScoreModal />', () => {
   });
 
   it('warns and does not submit when no task is selected', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<SubmitScoreModal distribution={distribution} onClose={vi.fn()} />);
     await screen.findByRole('combobox');
 
@@ -77,7 +80,7 @@ describe('<SubmitScoreModal />', () => {
   });
 
   it('submits the selected task score for the team distribution', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<SubmitScoreModal distribution={distribution} onClose={vi.fn()} />);
     const combobox = await screen.findByRole('combobox');
 
@@ -92,7 +95,7 @@ describe('<SubmitScoreModal />', () => {
   });
 
   it('shows an error message when score submission fails', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     submitScore.mockRejectedValue(new Error('fail'));
     render(<SubmitScoreModal distribution={distribution} onClose={vi.fn()} />);
     const combobox = await screen.findByRole('combobox');
@@ -105,7 +108,7 @@ describe('<SubmitScoreModal />', () => {
   });
 
   it('calls onClose when the modal is cancelled', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onClose = vi.fn();
     render(<SubmitScoreModal distribution={distribution} onClose={onClose} />);
     expect(await screen.findByRole('combobox')).toBeInTheDocument();

@@ -1,6 +1,6 @@
 import { Table } from 'antd';
 import { render, screen, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { CrossCheckPairDto } from '@client/api';
 import { getCrossCheckPairsColumns } from './getCrossCheckPairsColumns';
 
@@ -48,7 +48,7 @@ describe('getCrossCheckPairsColumns', () => {
   });
 
   it('enables the comment button when historical scores exist and calls viewComment', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const pair = makePair();
     const { viewComment } = renderTable([pair]);
 

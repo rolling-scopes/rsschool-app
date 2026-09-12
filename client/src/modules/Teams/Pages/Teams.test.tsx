@@ -1,5 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { message } from 'antd';
 import { TeamApi, TeamDistributionApi, TeamDistributionDetailedDto, TeamDto } from '@client/api';
 import Teams from './Teams';
@@ -185,7 +185,7 @@ describe('<Teams />', () => {
   });
 
   it('switches the active tab to the students-without-team section', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
 
     expect(screen.getByRole('heading', { name: 'RS Teams' })).toBeInTheDocument();
@@ -199,7 +199,7 @@ describe('<Teams />', () => {
   });
 
   it('opens the team modal from the header create-team action', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
 
     await user.click(screen.getByRole('button', { name: 'header-create-team' }));
@@ -208,7 +208,7 @@ describe('<Teams />', () => {
   });
 
   it('distributes students and reloads the distribution', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
 
     await user.click(screen.getByRole('button', { name: 'header-distribute' }));
@@ -220,7 +220,7 @@ describe('<Teams />', () => {
   it('shows an error when distributing students fails', async () => {
     const errorSpy = vi.spyOn(message, 'error').mockImplementation(() => ({}) as never);
     distributeStudentsToTeam.mockRejectedValue(new Error('boom'));
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
 
     await user.click(screen.getByRole('button', { name: 'header-distribute' }));
@@ -232,7 +232,7 @@ describe('<Teams />', () => {
   });
 
   it('opens and submits the join-team modal, joining the chosen team', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
 
     await user.click(screen.getByRole('button', { name: 'header-join' }));
@@ -245,7 +245,7 @@ describe('<Teams />', () => {
   it('shows an error when joining a team fails', async () => {
     const errorSpy = vi.spyOn(message, 'error').mockImplementation(() => ({}) as never);
     joinTeam.mockRejectedValue(new Error('nope'));
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
 
     await user.click(screen.getByRole('button', { name: 'header-join' }));
@@ -256,7 +256,7 @@ describe('<Teams />', () => {
   });
 
   it('closes the join-team modal on cancel', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
 
     await user.click(screen.getByRole('button', { name: 'header-join' }));
@@ -268,7 +268,7 @@ describe('<Teams />', () => {
 
   it('updates an existing team through the team modal when an id is supplied', async () => {
     modalForm.open = true;
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
 
     await user.click(await screen.findByRole('button', { name: 'modal-update-submit' }));
@@ -281,7 +281,7 @@ describe('<Teams />', () => {
     const errorSpy = vi.spyOn(message, 'error').mockImplementation(() => ({}) as never);
     updateTeam.mockRejectedValue(new Error('fail'));
     modalForm.open = true;
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
 
     await user.click(await screen.findByRole('button', { name: 'modal-update-submit' }));
@@ -292,7 +292,7 @@ describe('<Teams />', () => {
 
   it('copies a team invitation password from the create-team success dialog', async () => {
     modalForm.open = true;
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
 
     await user.click(await screen.findByRole('button', { name: 'modal-create-submit' }));
@@ -313,7 +313,7 @@ describe('<Teams />', () => {
   });
 
   it('copies the team password from the my-team section', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
 
     await user.click(screen.getByRole('button', { name: 'tab-myteam' }));
@@ -329,7 +329,7 @@ describe('<Teams />', () => {
   it('shows an error when copying the team password fails', async () => {
     const errorSpy = vi.spyOn(message, 'error').mockImplementation(() => ({}) as never);
     getTeamPassword.mockRejectedValue(new Error('boom'));
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
 
     await user.click(screen.getByRole('button', { name: 'tab-myteam' }));
@@ -340,7 +340,7 @@ describe('<Teams />', () => {
   });
 
   it('regenerates and copies a new team password from the my-team section', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
 
     await user.click(screen.getByRole('button', { name: 'tab-myteam' }));
@@ -358,7 +358,7 @@ describe('<Teams />', () => {
   it('shows an error when regenerating the team password fails', async () => {
     const errorSpy = vi.spyOn(message, 'error').mockImplementation(() => ({}) as never);
     changeTeamPassword.mockRejectedValue(new Error('boom'));
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
 
     await user.click(screen.getByRole('button', { name: 'tab-myteam' }));

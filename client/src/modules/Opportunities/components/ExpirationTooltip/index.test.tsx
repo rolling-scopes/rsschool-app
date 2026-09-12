@@ -1,4 +1,5 @@
-import { render, screen, fireEvent, within, waitFor } from '@testing-library/react';
+import { act, render, screen, fireEvent, within, waitFor } from '@testing-library/react';
+import { Modal } from 'antd';
 import { ExpirationState } from '@client/modules/Opportunities/constants';
 import { ExpirationTooltip } from './index';
 
@@ -7,6 +8,13 @@ const mockSystemTime = new Date('2022-09-26T13:41:39.161Z');
 describe('ExpirationTooltip', () => {
   beforeAll(() => {
     vi.useFakeTimers({ shouldAdvanceTime: true }).setSystemTime(mockSystemTime);
+  });
+
+  afterEach(async () => {
+    await act(async () => {
+      Modal.destroyAll();
+      await vi.runOnlyPendingTimersAsync();
+    });
   });
 
   afterAll(() => {
@@ -34,9 +42,6 @@ describe('ExpirationTooltip', () => {
     expect(title).toBeInTheDocument();
     expect(text).toBeInTheDocument();
     expect(within(modal).getAllByRole('button')).toHaveLength(2);
-
-    // Modal is rendered outside of the container, this is custom cleanup
-    modal.remove();
   });
 
   test('should show corresponding title and text in case if CV is nearly expired', async () => {
@@ -61,9 +66,6 @@ describe('ExpirationTooltip', () => {
 
     expect(title).toBeInTheDocument();
     expect(text).toBeInTheDocument();
-
-    // Modal is rendered outside of the container, this is custom cleanup
-    modal.remove();
   });
 
   test('should show expiration modal without click on button in case if CV is expired in no public mode', async () => {
@@ -93,9 +95,6 @@ describe('ExpirationTooltip', () => {
     const reopenedModal = await screen.findByRole('dialog');
     expect(within(reopenedModal).getAllByText('Your CV is archived')[0]).toBeInTheDocument();
     expect(within(reopenedModal).getByText(/You need to renew your resume/i)).toBeInTheDocument();
-
-    // Modal is rendered outside of the container, this is custom cleanup
-    reopenedModal.remove();
   });
 
   test('should not show expiration modal in public mode', async () => {

@@ -1,5 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import axios from 'axios';
 import StudentStatsCard from '../StudentStatsCard';
 import { StudentStats } from '@common/models/profile';
@@ -175,7 +175,7 @@ describe('StudentStatsCard', () => {
     [{ ...baseCourse, ...overrides }] as unknown as StudentStats[];
 
   it('cancels the leave confirmation modal (hideExpelConfirmationModal)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<StudentStatsCard isProfileOwner data={makeData()} username={githubId} />);
 
     await user.click(screen.getByRole('button', { name: /Leave Course/ }));
@@ -188,7 +188,7 @@ describe('StudentStatsCard', () => {
   });
 
   it('submits the leave survey and posts to the leave endpoint then reloads (selfExpelStudent)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<StudentStatsCard isProfileOwner data={makeData()} username={githubId} />);
 
     await user.click(screen.getByRole('button', { name: /Leave Course/ }));
@@ -203,7 +203,7 @@ describe('StudentStatsCard', () => {
   });
 
   it('renders Back to Course for a self-expelled student and rejoins on click (rejoinAsStudent)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(
       <StudentStatsCard
         isProfileOwner
@@ -251,7 +251,7 @@ describe('StudentStatsCard', () => {
   });
 
   it('hides leave controls for a non-owner and opens and closes course statistics', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<StudentStatsCard isProfileOwner={false} data={makeData()} username={githubId} />);
 
     expect(screen.queryByRole('button', { name: /Leave Course/ })).not.toBeInTheDocument();

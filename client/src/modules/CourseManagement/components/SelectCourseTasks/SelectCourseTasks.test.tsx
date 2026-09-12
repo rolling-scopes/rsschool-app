@@ -1,7 +1,7 @@
 import { Form } from 'antd';
 import { SelectCourseTasks } from './SelectCourseTasks';
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 
 // Boundary mock: drive the real useAsync callback through a mocked CoursesTasksApi
 // so the data-fetch function (and the options mapping) actually run.
@@ -22,7 +22,7 @@ const renderSelectCourseTasks = () => {
 };
 
 describe('SelectCourseTasks', () => {
-  const user = userEvent.setup();
+  const user = setupUser();
 
   beforeEach(() => {
     vi.clearAllMocks();

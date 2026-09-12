@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { act, render, screen } from '@testing-library/react';
+import { setupUser } from '@client/__tests__/setupUser';
 import { MentorEndorsement } from './MentorEndorsement';
 
 // --- Boundary mock ---------------------------------------------------------
@@ -34,13 +34,16 @@ describe('<MentorEndorsement />', () => {
     });
   });
 
-  it('does not fetch when the modal is closed', () => {
-    render(<MentorEndorsement {...makeProps({ open: false })} />);
+  it('does not fetch when the modal is closed', async () => {
+    // eslint-disable-next-line testing-library/no-unnecessary-act -- Await the closed modal's async hook
+    await act(async () => {
+      render(<MentorEndorsement {...makeProps({ open: false })} />);
+    });
     expect(getEndorsement).not.toHaveBeenCalled();
   });
 
   it('fetches and renders the cleaned endorsement, then closes on OK', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<MentorEndorsement {...props} />);
 

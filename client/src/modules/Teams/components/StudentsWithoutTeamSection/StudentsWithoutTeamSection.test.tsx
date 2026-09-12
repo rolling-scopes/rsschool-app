@@ -1,5 +1,5 @@
 import { screen, render, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { Modal } from 'antd';
 import { TeamDistributionApi, TeamDistributionDetailedDto, TeamDistributionStudentDto } from '@client/api';
 import StudentsWithoutTeamSection from './StudentsWithoutTeamSection';
@@ -53,7 +53,7 @@ describe('<StudentsWithoutTeamSection />', () => {
   });
 
   it('re-fetches with the search term when searching', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderSection();
     expect(await screen.findByText('Lonely Student')).toBeInTheDocument();
     expect(getStudentsWithoutTeam).toHaveBeenCalledWith(100, 5, 10, 1, '');
@@ -64,7 +64,7 @@ describe('<StudentsWithoutTeamSection />', () => {
   });
 
   it('confirms and deletes a student for managers', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { reloadDistribution } = renderSection(true);
     await screen.findByText('Lonely Student');
 

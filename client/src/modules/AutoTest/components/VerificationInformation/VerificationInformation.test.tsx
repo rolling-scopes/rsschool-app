@@ -104,7 +104,7 @@ describe('VerificationInformation', () => {
     renderVerificationInformation({
       type: CourseTaskDetailedDtoTypeEnum.Selfeducation,
       studentEndDate: '2000-01-01 12:00',
-      verifications: [{ score: 50 }] as CourseTaskVerifications['verifications'],
+      verifications: [{ id: 1, score: 50 }] as CourseTaskVerifications['verifications'],
     });
 
     const answersButton = screen.getByRole('button', { name: /show answers/i });

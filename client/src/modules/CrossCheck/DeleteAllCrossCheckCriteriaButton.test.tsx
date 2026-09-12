@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { DeleteAllCrossCheckCriteriaButton } from './DeleteAllCrossCheckCriteriaButton';
 
 describe('<DeleteAllCrossCheckCriteriaButton />', () => {
   it('supports cancelling and confirming deletion', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const setDataCriteria = vi.fn();
     render(<DeleteAllCrossCheckCriteriaButton setDataCriteria={setDataCriteria} />);
 

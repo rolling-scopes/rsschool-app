@@ -1,5 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { TeamDistributionApi, TeamDistributionDto } from '@client/api';
 import TeamDistributions from './TeamDistributions';
 
@@ -142,7 +142,7 @@ describe('<TeamDistributions />', () => {
 
   it('opens the create-distribution modal from the welcome card (manager)', async () => {
     sessionValue.isAdmin = true;
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TeamDistributions />);
 
     await user.click(await screen.findByRole('button', { name: /add a new distribution/i }));
@@ -152,7 +152,7 @@ describe('<TeamDistributions />', () => {
 
   it('cancels the create/edit modal through its onCancel handler', async () => {
     modalForm.open = true;
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TeamDistributions />);
 
     expect(await screen.findByTestId('distribution-modal')).toBeInTheDocument();
@@ -165,7 +165,7 @@ describe('<TeamDistributions />', () => {
 
   it('closes the modal and reloads data after a successful create/edit submit', async () => {
     modalForm.open = true;
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TeamDistributions />);
 
     await user.click(await screen.findByRole('button', { name: 'submit-modal' }));
@@ -177,7 +177,7 @@ describe('<TeamDistributions />', () => {
 
   it('opens the edit modal with the distribution data when the card edit button is clicked', async () => {
     sessionValue.isAdmin = true;
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TeamDistributions />);
 
     await user.click(await screen.findByRole('button', { name: /edit/i }));
@@ -187,7 +187,7 @@ describe('<TeamDistributions />', () => {
 
   it('deletes a distribution and reloads when the card delete button is clicked (manager)', async () => {
     sessionValue.isAdmin = true;
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TeamDistributions />);
 
     await user.click(await screen.findByRole('button', { name: /delete/i }));
@@ -200,7 +200,7 @@ describe('<TeamDistributions />', () => {
   it('shows an error toast when deleting a distribution fails (manager)', async () => {
     sessionValue.isAdmin = true;
     deleteTeamDistribution.mockRejectedValue(new Error('fail'));
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TeamDistributions />);
 
     await user.click(await screen.findByRole('button', { name: /delete/i }));
@@ -214,7 +214,7 @@ describe('<TeamDistributions />', () => {
     getCourseTeamDistributions.mockResolvedValue({
       data: [makeDistribution({ registrationStatus: 'available' })],
     } as never);
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TeamDistributions />);
 
     const registerBtn = await screen.findByRole('button', { name: /^register$/i });
@@ -229,7 +229,7 @@ describe('<TeamDistributions />', () => {
       data: [makeDistribution({ registrationStatus: 'available' })],
     } as never);
     teamDistributionRegistry.mockRejectedValue(new Error('nope'));
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TeamDistributions />);
 
     const registerBtn = await screen.findByRole('button', { name: /^register$/i });
@@ -244,7 +244,7 @@ describe('<TeamDistributions />', () => {
     getCourseTeamDistributions.mockResolvedValue({
       data: [makeDistribution({ registrationStatus: 'completed' })],
     } as never);
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TeamDistributions />);
 
     // The "Cancel" registration link (antd Typography.Link) opens a confirm dialog.
@@ -263,7 +263,7 @@ describe('<TeamDistributions />', () => {
       data: [makeDistribution({ registrationStatus: 'completed' })],
     } as never);
     teamDistributionDeleteRegistry.mockRejectedValue(new Error('nope'));
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TeamDistributions />);
 
     await user.click(await screen.findByText('Cancel'));
@@ -277,7 +277,7 @@ describe('<TeamDistributions />', () => {
 
   it('shows manager welcome, opens the chosen distribution and closes its score modal', async () => {
     sessionValue.isAdmin = true;
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TeamDistributions />);
 
     expect(await screen.findByText('Create student teams to solve group tasks!')).toBeInTheDocument();

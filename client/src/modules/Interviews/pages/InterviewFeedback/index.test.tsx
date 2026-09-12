@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useRouter } from 'next/router';
 import { InterviewFeedback } from './index';
@@ -94,7 +94,7 @@ describe('<InterviewFeedback />', () => {
   beforeEach(() => vi.clearAllMocks());
 
   it('does not submit when no score is selected (required validation blocks it)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<InterviewFeedback {...makeProps()} />);
 
     await user.click(screen.getByRole('button', { name: /^Submit$/i }));
@@ -106,7 +106,7 @@ describe('<InterviewFeedback />', () => {
   });
 
   it('submits the feedback with score, answers and comment, then resets the form', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     postStudentInterviewResult.mockResolvedValue({});
     render(<InterviewFeedback {...makeProps()} />);
 
@@ -118,10 +118,8 @@ describe('<InterviewFeedback />', () => {
     await user.click(screen.getByText('8'));
 
     // Fill the required comment (min length 30).
-    await user.type(
-      screen.getByLabelText('Comment'),
-      'Solid candidate with good fundamentals and clear communication.',
-    );
+    await user.click(screen.getByLabelText('Comment'));
+    await user.paste('Solid candidate with good fundamentals and clear communication.');
 
     await user.click(screen.getByRole('button', { name: /^Submit$/i }));
 
@@ -141,13 +139,14 @@ describe('<InterviewFeedback />', () => {
   });
 
   it('does not call the API when there is no githubId', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<InterviewFeedback {...makeProps({ githubId: '' })} />);
 
     await user.click(screen.getByText('8'));
     // Fill the required comment so form validation passes and handleSubmit actually runs;
     // it must then early-return because githubId is empty.
-    await user.type(screen.getByLabelText('Comment'), 'A sufficiently long comment to satisfy validation.');
+    await user.click(screen.getByLabelText('Comment'));
+    await user.paste('A sufficiently long comment to satisfy validation.');
     await user.click(screen.getByRole('button', { name: /^Submit$/i }));
 
     await waitFor(() => {
@@ -157,7 +156,7 @@ describe('<InterviewFeedback />', () => {
   });
 
   it('keeps the form when the submission request fails', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     postStudentInterviewResult.mockRejectedValue({
       response: { data: { data: { message: 'Server exploded' } } },
     });
@@ -165,7 +164,8 @@ describe('<InterviewFeedback />', () => {
 
     await user.click(screen.getByText('8'));
     // Comment is required (min 30 chars) — fill it so validation passes and submit reaches the API.
-    await user.type(screen.getByLabelText('Comment'), 'A sufficiently long comment to satisfy validation.');
+    await user.click(screen.getByLabelText('Comment'));
+    await user.paste('A sufficiently long comment to satisfy validation.');
     await user.click(screen.getByRole('button', { name: /^Submit$/i }));
 
     await waitFor(() => {
@@ -177,7 +177,7 @@ describe('<InterviewFeedback />', () => {
   });
 
   it('renders the template links and inputs, then navigates Back', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<InterviewFeedback {...makeProps()} />);
 
     expect(screen.getByRole('heading', { name: /Tiny Track: Interview Feedback/i })).toBeInTheDocument();
@@ -219,13 +219,14 @@ describe('<InterviewFeedback />', () => {
   });
 
   it('shows a generic error message when the failure carries no server message', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     // Reject with a bare error (no response.data.data.message) → `?? 'An error occurred…'` fallback.
     postStudentInterviewResult.mockRejectedValue(new Error('network down'));
     render(<InterviewFeedback {...makeProps()} />);
 
     await user.click(screen.getByText('8'));
-    await user.type(screen.getByLabelText('Comment'), 'A sufficiently long comment to satisfy validation.');
+    await user.click(screen.getByLabelText('Comment'));
+    await user.paste('A sufficiently long comment to satisfy validation.');
     await user.click(screen.getByRole('button', { name: /^Submit$/i }));
 
     await waitFor(() => expect(postStudentInterviewResult).toHaveBeenCalled());

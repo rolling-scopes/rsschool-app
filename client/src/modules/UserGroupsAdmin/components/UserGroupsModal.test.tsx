@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { UserGroupDto } from '@client/api';
 import { UserGroupsModal } from './UserGroupsModal';
 
@@ -52,7 +52,7 @@ describe('<UserGroupsModal />', () => {
   });
 
   it('shows validation errors and does not submit when fields are empty', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<UserGroupsModal {...props} />);
 
@@ -69,7 +69,7 @@ describe('<UserGroupsModal />', () => {
   });
 
   it('submits the name, selected users and a chosen role', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<UserGroupsModal {...props} />);
 

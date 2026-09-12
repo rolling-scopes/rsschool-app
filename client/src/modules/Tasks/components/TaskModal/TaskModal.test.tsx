@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { generateTasksData } from '@client/modules/Tasks/utils/test-utils';
 import { FormValues } from '@client/modules/Tasks/types';
 import {
@@ -65,7 +65,7 @@ describe('TaskModal', () => {
     });
 
     test('should render error messages on required fields', async () => {
-      const user = userEvent.setup();
+      const user = setupUser();
       render(<TaskModal {...generateData(true)} />);
 
       for (const placeholder of [
@@ -137,7 +137,7 @@ describe('TaskModal', () => {
   });
 
   test('resets dependent settings when the task type changes', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const setDataCriteria = vi.fn();
     const props = generateData(true);
     props.setDataCriteria = setDataCriteria;
@@ -153,7 +153,7 @@ describe('TaskModal', () => {
   });
 
   test('clears criteria and closes the modal on cancel', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const toggleModal = vi.fn();
     const setDataCriteria = vi.fn();
     const props = generateData();

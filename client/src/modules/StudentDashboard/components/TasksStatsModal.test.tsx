@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { describe, it, expect, vi } from 'vitest';
 import { TasksStatsModal } from './TasksStatsModal';
 import type { TaskStat } from './TasksStatsCard';
@@ -22,7 +22,7 @@ function makeTask(overrides: Partial<TaskStat> = {}): TaskStat {
 
 describe('<TasksStatsModal />', () => {
   it('renders hidden, populated, fallback, and cancel states', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onHide = vi.fn();
     const { rerender } = render(
       <TasksStatsModal

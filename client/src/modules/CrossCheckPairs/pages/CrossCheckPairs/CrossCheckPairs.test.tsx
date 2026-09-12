@@ -1,5 +1,5 @@
-import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { act, render, screen, waitFor, within } from '@testing-library/react';
+import { setupUser } from '@client/__tests__/setupUser';
 import { ReactNode } from 'react';
 import { Modal } from 'antd';
 import { CrossCheckPairDto } from '@client/api';
@@ -81,12 +81,14 @@ describe('<CrossCheckPairs page />', () => {
     ]);
   });
 
-  afterEach(() => {
-    Modal.destroyAll();
+  afterEach(async () => {
+    await act(async () => {
+      Modal.destroyAll();
+    });
   });
 
   it('opens the comment modal with the historical feedback for a pair', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Page />);
 
     const solution = await screen.findByText('https://github.com/student/solution');
@@ -103,7 +105,7 @@ describe('<CrossCheckPairs page />', () => {
   });
 
   it('re-fetches with sort/pagination params when the table changes', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Page />);
 
     // Wait for the initial load to finish.

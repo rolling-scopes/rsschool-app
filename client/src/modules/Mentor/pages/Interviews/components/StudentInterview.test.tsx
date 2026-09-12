@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { TaskDtoTypeEnum } from '@client/api';
 import { InterviewStatus } from '@client/domain/interview';
 import { Decision } from '@client/data/interviews/technical-screening';
@@ -85,7 +85,7 @@ describe('StudentInterview', () => {
   });
 
   it('should submit a zero result and show success when the interview is rejected', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderInterview();
 
     expect(screen.getByRole('link', { name: 'Student Name' })).toHaveAttribute('href', '/profile?githubId=student-gh');
@@ -110,7 +110,7 @@ describe('StudentInterview', () => {
   });
 
   it('should navigate to the feedback url when "Provide feedback" is chosen in the popconfirm', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderInterview();
 
     // open the popconfirm via the trigger button
@@ -128,7 +128,7 @@ describe('StudentInterview', () => {
   });
 
   it('should navigate directly to the feedback url for a completed interview without a popconfirm', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderInterview({ completed: true });
 
     const editButton = screen.getByRole('button', { name: 'Edit feedback' });
@@ -142,7 +142,7 @@ describe('StudentInterview', () => {
   });
 
   it('should navigate directly to the feedback url for a non-CoreJS interview', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderInterview({}, { interviewTaskType: TaskDtoTypeEnum.StageInterview });
 
     await user.click(screen.getByRole('button', { name: 'Provide feedback' }));

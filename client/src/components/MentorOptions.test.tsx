@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { Form } from 'antd';
 import { MentorDetailsDtoStudentsPreferenceEnum } from '@client/api';
 import { MentorOptions, Options } from './MentorOptions';
@@ -63,7 +63,7 @@ describe('MentorOptions', () => {
   });
 
   it('validates required fields and blocks submit when empty', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const handleSubmit = vi.fn().mockResolvedValue(undefined);
     render(<Wrapper handleSubmit={handleSubmit} />);
 
@@ -74,7 +74,7 @@ describe('MentorOptions', () => {
   });
 
   it('submits the selected values', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const handleSubmit = vi.fn().mockResolvedValue(undefined);
     render(<Wrapper handleSubmit={handleSubmit} />);
 

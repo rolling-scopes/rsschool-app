@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, within, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import TableView from './TableView';
 import * as ReactUse from 'react-use';
 import { ALL_TAB_KEY, ColumnKey, ColumnName } from '@client/modules/Schedule/constants';
@@ -112,7 +112,7 @@ describe('TableView', () => {
       ${ColumnName.Name}      | ${'Course Item 0'}
       ${ColumnName.Organizer} | ${'organizer 0'}
     `('by "$field" column search', async ({ field, searchQuery }: { field: string; searchQuery: string }) => {
-      const user = userEvent.setup();
+      const user = setupUser();
       const data = generateCourseData();
       render(<TableView settings={PROPS_SETTINGS_MOCK} data={data} />);
       // Check that all items rendered

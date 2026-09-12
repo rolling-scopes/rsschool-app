@@ -1,5 +1,5 @@
 import { render, screen, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { MentorStudentDto } from '@client/api';
 import { Session, CourseInfo } from '@client/components/withSession';
 import { SessionContext } from '@client/modules/Course/contexts';
@@ -81,7 +81,7 @@ describe('Students page', () => {
   });
 
   it('should render student details and navigate to Give Feedback on click', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderStudents([buildStudent({ id: 11 })]);
 
     expect(screen.getByText('Your students')).toBeInTheDocument();
@@ -100,7 +100,7 @@ describe('Students page', () => {
   });
 
   it('should render the "Change Status" action for active students and navigate to expel', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderStudents([buildStudent({ active: true })]);
 
     const changeStatusBtn = screen.getByRole('button', { name: /change status/i });

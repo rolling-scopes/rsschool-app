@@ -1,5 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { useRouter } from 'next/navigation';
 import DevToolsUsers from './DevToolsUsers';
 
@@ -40,7 +40,7 @@ describe('DevToolsUsers', () => {
   });
 
   it('logs in as a user and redirects on the Login action', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<DevToolsUsers />);
 
     expect(await screen.findByText('alice')).toBeInTheDocument();
@@ -55,7 +55,7 @@ describe('DevToolsUsers', () => {
   it('logs an error and does not redirect when login fails', async () => {
     const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     getDevUserLogin.mockRejectedValueOnce(new Error('nope'));
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<DevToolsUsers />);
 
     await screen.findByText('alice');

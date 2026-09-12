@@ -88,7 +88,7 @@ const performance = {
 describe('<TaskPerformanceCard />', () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it('shows the initial empty state and lists the provided tasks', () => {
+  it('shows the initial empty state and lists the provided tasks', async () => {
     render(<TaskPerformanceCard tasks={tasks} />);
 
     expect(screen.getByText('Task Performance')).toBeInTheDocument();
@@ -99,7 +99,7 @@ describe('<TaskPerformanceCard />', () => {
 
     fireEvent.mouseDown(screen.getByRole('combobox'));
 
-    const listbox = screen.getByRole('listbox');
+    const listbox = await screen.findByRole('listbox');
     expect(within(listbox).getByRole('option', { name: 'Task Alpha' })).toBeInTheDocument();
     expect(within(listbox).getByRole('option', { name: 'Task Beta' })).toBeInTheDocument();
   });

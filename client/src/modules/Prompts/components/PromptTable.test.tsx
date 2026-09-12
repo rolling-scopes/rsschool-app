@@ -1,5 +1,5 @@
 import { render, screen, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { PromptDto } from '@client/api';
 import { PromptTable } from './PromptTable';
 
@@ -17,7 +17,7 @@ function getPromptRow(type: string) {
 
 describe('<PromptTable />', () => {
   it('renders prompt rows and calls handleUpdate for the selected record', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const handleUpdate = vi.fn();
     render(<PromptTable data={data} handleUpdate={handleUpdate} handleDelete={vi.fn().mockResolvedValue(undefined)} />);
 
@@ -32,7 +32,7 @@ describe('<PromptTable />', () => {
   });
 
   it('calls handleDelete with the row record when the delete button is clicked', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const handleDelete = vi.fn().mockResolvedValue(undefined);
     render(<PromptTable data={data} handleUpdate={vi.fn()} handleDelete={handleDelete} />);
 

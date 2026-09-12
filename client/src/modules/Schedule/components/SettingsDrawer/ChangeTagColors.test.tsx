@@ -1,6 +1,6 @@
 /* eslint-disable testing-library/no-node-access */
 import { fireEvent, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import ChangeTagColors from './ChangeTagColors';
 import { CourseScheduleItemDtoTagEnum as TagEnum } from '@client/api';
 import { TAG_NAME_MAP } from '../../constants';
@@ -26,7 +26,7 @@ const tags = [TagEnum.Coding, TagEnum.Test];
 // ChangeTagColors content lives inside a collapsed SettingsItem (antd Collapse) —
 // expand its header before reaching the tag chips / color pickers.
 async function renderExpanded(props: Parameters<typeof ChangeTagColors>[0]) {
-  const user = userEvent.setup();
+  const user = setupUser();
   const utils = render(<ChangeTagColors {...props} />);
   await user.click(document.querySelector('.ant-collapse-header') as HTMLElement);
   return { ...utils, user };

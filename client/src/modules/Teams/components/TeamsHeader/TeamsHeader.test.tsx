@@ -1,5 +1,5 @@
 import { screen, render } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { TeamDistributionDetailedDto } from '@client/api';
 import TeamsHeader from './TeamsHeader';
 
@@ -39,7 +39,7 @@ describe('<TeamsHeader />', () => {
   });
 
   it('renders base tabs and calls setActiveTab when a tab is clicked', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { setActiveTab } = renderHeader();
     expect(screen.getByRole('tab', { name: /available teams/i })).toBeInTheDocument();
     expect(screen.getByRole('tab', { name: /students without team/i })).toBeInTheDocument();
@@ -50,7 +50,7 @@ describe('<TeamsHeader />', () => {
   });
 
   it('renders student action cards (create / join) and wires their handlers', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { handleCreateTeam, handleJoinTeam } = renderHeader({
       isStudent: true,
       isManager: false,
@@ -71,7 +71,7 @@ describe('<TeamsHeader />', () => {
   });
 
   it('renders manager action cards (create team / distribute students)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { handleCreateTeam, handleDistributeStudents } = renderHeader({ isManager: true });
 
     expect(screen.getByText('Team management')).toBeInTheDocument();

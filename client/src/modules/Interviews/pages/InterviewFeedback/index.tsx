@@ -87,18 +87,14 @@ export function InterviewFeedback({ course, type, interviewTaskId, githubId }: F
           <Typography.Title level={4}>Student: </Typography.Title>{' '}
           <GithubAvatar githubId={githubId ?? undefined} size={24} />
           <Typography.Link target="_blank" href={`/profile?githubId=${githubId}`}>
-            <Typography.Title level={4}>
-              <Typography.Link>{githubId}</Typography.Link>
-            </Typography.Title>
+            <Typography.Title level={4}>{githubId}</Typography.Title>
           </Typography.Link>
         </Space>
 
         {template.categories.map(category => (
           <Fragment key={category.id}>
-            <Typography.Title level={4}>
-              {category.name}
-              {category.description ? <Typography.Title level={5}>{category.description}</Typography.Title> : null}
-            </Typography.Title>
+            <Typography.Title level={4}>{category.name}</Typography.Title>
+            {category.description ? <Typography.Title level={5}>{category.description}</Typography.Title> : null}
             {category.questions.map(question => {
               switch (question.type) {
                 case InputType.Input:

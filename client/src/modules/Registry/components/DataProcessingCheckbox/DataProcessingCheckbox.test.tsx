@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { Form } from 'antd';
 import { ERROR_MESSAGES } from '@client/modules/Registry/constants';
 import { DataProcessingCheckbox } from './DataProcessingCheckbox';
@@ -17,7 +17,7 @@ const renderCheckbox = (checked = Checkbox.notChecked) =>
   );
 
 describe('DataProcessingCheckbox', () => {
-  const user = userEvent.setup();
+  const user = setupUser();
 
   test('renders checked state and validates when unchecked', async () => {
     renderCheckbox(Checkbox.checked);

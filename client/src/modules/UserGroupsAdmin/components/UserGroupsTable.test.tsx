@@ -1,5 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { UserGroupDto } from '@client/api';
 import { UserGroupsTable } from './UserGroupsTable';
 
@@ -31,7 +31,7 @@ function getGroupRow(name: string) {
 
 describe('<UserGroupsTable />', () => {
   it('calls onEdit with the row record when Edit is clicked', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onEdit = vi.fn();
     render(<UserGroupsTable data={data} onEdit={onEdit} onDelete={vi.fn()} />);
 
@@ -49,7 +49,7 @@ describe('<UserGroupsTable />', () => {
   });
 
   it('calls onDelete with the id after confirming', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onDelete = vi.fn();
     render(<UserGroupsTable data={data} onEdit={vi.fn()} onDelete={onDelete} />);
 

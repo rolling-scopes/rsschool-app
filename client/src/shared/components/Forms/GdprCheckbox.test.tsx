@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { Button, Form } from 'antd';
 import { GdprCheckbox } from './GdprCheckbox';
 
@@ -18,7 +18,7 @@ function renderGdprCheckbox(onFinish = vi.fn()) {
 
 describe('GdprCheckbox', () => {
   it('renders consent and submits checked and unchecked values', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { onFinish } = renderGdprCheckbox();
 
     expect(screen.getByText(/I hereby agree to the processing of my personal data/i)).toBeInTheDocument();

@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { EXPEL_ALERT_MESSAGE, ExpelCriteriaModal, FormValues, hasValidCriteria } from './ExpelCriteriaModal';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import * as ReactUse from 'react-use';
 
 const props = {
@@ -33,7 +33,7 @@ describe('ExpelCriteriaModal', () => {
   });
 
   test('should call "onClose" function on "cancel" button click', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderExpelCriteriaModal();
 
     const button = await screen.findByRole('button', { name: /cancel/i });
@@ -43,7 +43,7 @@ describe('ExpelCriteriaModal', () => {
   });
 
   test('renders the criteria form, enables submission for valid criteria and requires a reason', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderExpelCriteriaModal();
 
     for (const text of [
@@ -79,7 +79,7 @@ describe('ExpelCriteriaModal', () => {
   });
 
   test('should call "onSubmit" function on "expel students" button click', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderExpelCriteriaModal();
 
     // Enable "expel students" button

@@ -1,5 +1,5 @@
 import { screen, render, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { TeamApi, TeamDistributionDetailedDto, TeamDto } from '@client/api';
 import TeamSection from './TeamsSection';
 
@@ -72,7 +72,7 @@ describe('<TeamsSection />', () => {
   });
 
   it('shows the Edit team action for managers and calls toggleTeamModal with the team', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { toggleTeamModal } = renderSection(true);
     await screen.findByText('Alpha Team');
 
@@ -87,7 +87,7 @@ describe('<TeamsSection />', () => {
   });
 
   it('re-fetches teams with the search term when searching', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderSection();
     await screen.findByText('Alpha Team');
 
@@ -98,7 +98,7 @@ describe('<TeamsSection />', () => {
   });
 
   it('expands a team with students to reveal the nested students table', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderSection();
     await screen.findByText('Alpha Team');
 

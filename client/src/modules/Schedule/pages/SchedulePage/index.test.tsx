@@ -1,5 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { SchedulePage } from './index';
 import {
   CourseScheduleItemDtoStatusEnum as StatusEnum,
@@ -172,7 +172,7 @@ describe('<SchedulePage />', () => {
   });
 
   it('opens the task modal, submits it, creates the task and refreshes', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<SchedulePage />);
 
     await user.click(await screen.findByTestId('Task'));
@@ -185,7 +185,7 @@ describe('<SchedulePage />', () => {
   });
 
   it('closes the task modal without creating a task when cancelled', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<SchedulePage />);
 
     await user.click(await screen.findByTestId('Task'));
@@ -197,7 +197,7 @@ describe('<SchedulePage />', () => {
   });
 
   it('opens the event modal, submits it and refreshes', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<SchedulePage />);
 
     await user.click(await screen.findByTestId('Event'));
@@ -209,7 +209,7 @@ describe('<SchedulePage />', () => {
   });
 
   it('closes the event modal without refreshing when cancelled', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<SchedulePage />);
 
     await user.click(await screen.findByTestId('Event'));
@@ -220,7 +220,7 @@ describe('<SchedulePage />', () => {
   });
 
   it('closes the copy modal without copying when cancelled', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<SchedulePage />);
 
     await user.click(await screen.findByTestId('More'));
@@ -234,7 +234,7 @@ describe('<SchedulePage />', () => {
   });
 
   it('copies the schedule from another course and refreshes', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<SchedulePage />);
 
     // The "Copy from another course" action lives in the SettingsPanel "More" menu.

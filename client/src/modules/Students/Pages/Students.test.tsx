@@ -1,6 +1,6 @@
 /* eslint-disable testing-library/no-node-access -- header cells are resolved via .closest('th') */
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { ReactNode } from 'react';
 import { message } from 'antd';
 import { UserStudentDto } from '@client/api';
@@ -71,7 +71,7 @@ describe('<Students />', () => {
   });
 
   it('loads students, opens the selected details and closes the drawer', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Students />);
     expect(await screen.findByText('Alice Smith')).toBeInTheDocument();
     expect(screen.getByText('Bob Jones')).toBeInTheDocument();
@@ -88,7 +88,7 @@ describe('<Students />', () => {
   });
 
   it('refetches with the country filter when a Country search is applied', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Students />);
     await screen.findByText('Alice Smith');
     getUserStudents.mockClear();
@@ -107,7 +107,7 @@ describe('<Students />', () => {
   });
 
   it('refetches with the ongoing course filter when applied', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Students />);
     await screen.findByText('Alice Smith');
     getUserStudents.mockClear();

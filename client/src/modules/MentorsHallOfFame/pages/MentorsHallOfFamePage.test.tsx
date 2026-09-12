@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { TopMentorDto } from '@client/api';
 
 vi.mock('next/config', () => () => ({}));
@@ -70,7 +70,7 @@ describe('MentorsHallOfFamePage', () => {
   });
 
   it('switches period, updates the description and refetches all-time mentors', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     mockedGetTopMentors.mockResolvedValueOnce(lastYearMentors).mockResolvedValueOnce(allTimeMentors);
 
     render(<MentorsHallOfFamePage />);

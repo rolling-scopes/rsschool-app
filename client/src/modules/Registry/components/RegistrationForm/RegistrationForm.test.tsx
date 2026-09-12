@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { Form, Input } from 'antd';
 import { FORM_TITLES } from '@client/modules/Registry/constants';
 import { RegistrationForm } from './RegistrationForm';
@@ -74,7 +74,7 @@ describe('RegistrationForm', () => {
   });
 
   test('scrolls to the first invalid field when submit fails validation', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const scrollToField = vi.fn();
 
     const stepsWithRequired = [

@@ -1,5 +1,5 @@
 import { render, screen, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { CourseTaskDto, MentorReviewDto } from '@client/api';
 import MentorReviewsTable from '.';
 
@@ -111,7 +111,7 @@ describe('MentorReviewsTable', () => {
   });
 
   it('should open the clicked review and close the modal from inside it', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderTable();
 
     expect(screen.queryByRole('dialog', { name: 'assign-reviewer' })).not.toBeInTheDocument();
@@ -125,7 +125,7 @@ describe('MentorReviewsTable', () => {
   });
 
   it('should propagate the modal submit to handleReviewerAssigned', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { handleReviewerAssigned } = renderTable();
 
     await user.click(screen.getByRole('button', { name: 'Assign Reviewer' }));

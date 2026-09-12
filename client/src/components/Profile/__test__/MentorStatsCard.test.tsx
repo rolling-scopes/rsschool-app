@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { MentorStatsCard } from '../MentorStatsCard';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 
 vi.mock('@client/modules/Profile/components/MentorEndorsement', () => ({
   MentorEndorsement: ({ open, onClose }: { open: boolean; onClose: () => void }) => (
@@ -49,7 +49,7 @@ describe('MentorStatsCard', () => {
 
   it('closes MentorStatsModal when Close is clicked', async () => {
     render(<MentorStatsCard githubId="test" data={mentorStats} />);
-    const user = userEvent.setup();
+    const user = setupUser();
 
     expect(screen.getByText('Mentored Students:')).toBeInTheDocument();
     expect(screen.getByText('Courses as Mentor:')).toBeInTheDocument();
@@ -77,7 +77,7 @@ describe('MentorStatsCard', () => {
 
   it('opens and closes MentorEndorsement modal via the admin button', async () => {
     render(<MentorStatsCard githubId="mentor" data={mentorStats} isAdmin={true} />);
-    const user = userEvent.setup();
+    const user = setupUser();
 
     await user.click(screen.getByRole('button', { name: /Get Endorsement/i }));
     expect(screen.getByTestId('endorsement-open')).toBeInTheDocument();

@@ -1,6 +1,6 @@
 /* eslint-disable testing-library/no-node-access */
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { CourseModal } from './index';
 
 // --- Boundary mocks --------------------------------------------------------
@@ -145,7 +145,7 @@ describe('<CourseModal />', () => {
   });
 
   it('shows validation errors and does not submit when required fields are empty', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<CourseModal {...props} />);
 
@@ -160,7 +160,7 @@ describe('<CourseModal />', () => {
   });
 
   it('hides the certificate disciplines select when "Any course" is checked', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<CourseModal {...makeProps()} />);
 
     await screen.findByText('Add Course');
@@ -179,7 +179,7 @@ describe('<CourseModal />', () => {
   });
 
   it('reveals the Personal Mentoring date range when the toggle is checked', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<CourseModal {...makeProps()} />);
 
     await screen.findByText('Add Course');
@@ -219,7 +219,7 @@ describe('<CourseModal />', () => {
   });
 
   it('updates the course with the built record when editing and saving', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps({ courseId: 7 });
     render(<CourseModal {...props} />);
 
@@ -242,7 +242,7 @@ describe('<CourseModal />', () => {
   });
 
   it('marks the course completed when the Completed state radio is chosen on save', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps({ courseId: 7 });
     render(<CourseModal {...props} />);
 
@@ -284,7 +284,7 @@ describe('<CourseModal />', () => {
   }
 
   it('creates a new course with the built record when the create form is submitted', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<CourseModal {...props} />);
 
@@ -309,7 +309,7 @@ describe('<CourseModal />', () => {
   });
 
   it('copies tasks/schedule from a template course when one is chosen on create', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<CourseModal {...props} />);
 
@@ -332,7 +332,7 @@ describe('<CourseModal />', () => {
   });
 
   it('calls onClose when the modal cancel button is clicked', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<CourseModal {...props} />);
 
@@ -343,7 +343,7 @@ describe('<CourseModal />', () => {
   });
 
   it('prefills and rebuilds a richly-populated planned course (registration date, certificates, mentoring, WAC URL)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     getCourse.mockResolvedValue({
       data: {
         ...editCourse,
@@ -380,7 +380,7 @@ describe('<CourseModal />', () => {
   });
 
   it('treats an empty certificateDisciplines list as "Any course" and clears the list on save', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     getCourse.mockResolvedValue({
       data: { ...editCourse, certificateDisciplines: [] },
     });
@@ -400,7 +400,7 @@ describe('<CourseModal />', () => {
   });
 
   it('reveals and submits the custom description URL when "Custom" is selected', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<CourseModal {...props} />);
 

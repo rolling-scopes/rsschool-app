@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useRouter } from 'next/router';
 import { CourseScheduleItemDtoStatusEnum } from '@client/api';
@@ -75,7 +75,7 @@ describe('<TasksStatsCard />', () => {
   });
 
   it('renders chart entries and updates the URL when one is selected', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TasksStatsCard tasksByStatus={makeTasksByStatus()} courseName="Course Y" />);
 
     expect(screen.getByText('Tasks Statistics')).toBeInTheDocument();
@@ -88,7 +88,7 @@ describe('<TasksStatsCard />', () => {
   });
 
   it('opens the requested stats modal and clears the URL when dismissed', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     (useRouter as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
       query: { statType: CourseScheduleItemDtoStatusEnum.Done },
       route: '/course/student/dashboard',

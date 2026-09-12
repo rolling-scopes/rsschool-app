@@ -1,6 +1,6 @@
-import { ReactNode } from 'react';
+import { Form } from 'antd';
 import { render, screen, waitFor, act } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { useRouter } from 'next/router';
 import { useStudentData } from './useStudentData';
 
@@ -112,7 +112,7 @@ type Api = ReturnType<typeof useStudentData>;
 function Harness({ courseAlias, onReady }: { courseAlias?: string; onReady: (api: Api) => void }) {
   const api = useStudentData('octocat', 42, courseAlias);
   onReady(api);
-  return (<>{api.modalContext}</>) as ReactNode;
+  return <Form form={api.form}>{api.modalContext}</Form>;
 }
 
 function renderHookView(courseAlias?: string) {
@@ -223,7 +223,7 @@ describe('useStudentData', () => {
   });
 
   test('warns about existing enrollments and registers only after confirming', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     getCourses.mockResolvedValue([openCourse, enrolledCourse]);
     getProfileInfo.mockResolvedValue({
       studentStats: [{ courseId: 2, isExpelled: false, isCourseCompleted: false, certificateId: null }],
@@ -283,9 +283,13 @@ describe('useStudentData', () => {
     getProfileInfo.mockResolvedValue({
       studentStats: [{ courseId: 2, isExpelled: false, isCourseCompleted: false, certificateId: null }],
     });
-    const view = renderHookView('react-2024');
+    let view: ReturnType<typeof renderHookView>;
+    // eslint-disable-next-line testing-library/no-unnecessary-act -- Settle registration before advancing fake timers
+    await act(async () => {
+      view = renderHookView('react-2024');
+    });
 
-    await vi.waitFor(() => expect(view.current.registered).toBe(true));
+    expect(view!.current.registered).toBe(true);
     expect(push).not.toHaveBeenCalled();
 
     await act(async () => {

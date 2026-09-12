@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import CommonCardWithSettingsModal from '../CommonCardWithSettingsModal';
 
 function renderCard(overrides: Partial<React.ComponentProps<typeof CommonCardWithSettingsModal>> = {}) {
@@ -32,7 +32,7 @@ describe('CommonCardWithSettingsModal', () => {
   });
 
   it('opens the settings modal and saves changes', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const saveProfile = vi.fn();
     renderCard({ saveProfile, settingsTitle: 'Custom Settings' });
 
@@ -48,7 +48,7 @@ describe('CommonCardWithSettingsModal', () => {
   });
 
   it('opens the settings modal and discards changes on cancel', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const cancelChanges = vi.fn();
     const saveProfile = vi.fn();
     renderCard({ cancelChanges, saveProfile });
@@ -62,7 +62,7 @@ describe('CommonCardWithSettingsModal', () => {
   });
 
   it('disables the Save button when isSaveDisabled is set', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderCard({ isSaveDisabled: true });
 
     await user.click(screen.getByRole('img', { name: 'edit' }));

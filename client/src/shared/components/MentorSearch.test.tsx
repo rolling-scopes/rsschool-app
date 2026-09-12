@@ -1,5 +1,5 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { setupUser } from '@client/__tests__/setupUser';
 import { MentorSearch } from './MentorSearch';
 
 // MentorSearch instantiates CourseMentorsApi at module load, so the mocked class
@@ -22,12 +22,12 @@ describe('MentorSearch', () => {
   });
 
   it('searches mentors for the given course and renders the results', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<MentorSearch courseId={42} />);
 
     const combobox = screen.getByRole('combobox');
     expect(combobox).toBeInTheDocument();
-    combobox.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+    fireEvent.mouseDown(combobox);
     await user.type(combobox, 'men');
 
     await waitFor(() => expect(searchMentors).toHaveBeenCalledWith(42, 'men'));

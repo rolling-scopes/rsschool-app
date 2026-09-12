@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { ReactNode } from 'react';
 import { UserSearchDto } from '@client/api';
 import { UsersAdminPage } from './UsersAdminPage';
@@ -51,7 +51,7 @@ describe('<UsersAdminPage />', () => {
   });
 
   it('searches and renders the returned users with their populated fields', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<UsersAdminPage />);
 
     await user.type(screen.getByPlaceholderText('Search by github or name'), 'octo');
@@ -68,7 +68,7 @@ describe('<UsersAdminPage />', () => {
   });
 
   it('does not call the API when the search box is empty', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<UsersAdminPage />);
 
     expect(screen.getByPlaceholderText('Search by github or name')).toBeInTheDocument();

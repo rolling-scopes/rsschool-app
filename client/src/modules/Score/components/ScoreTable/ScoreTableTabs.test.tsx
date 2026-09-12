@@ -1,6 +1,6 @@
 /* eslint-disable testing-library/no-node-access */
 import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useRouter } from 'next/router';
 import { ScoreTableTabs } from './ScoreTableTabs';
@@ -55,7 +55,7 @@ describe('<ScoreTableTabs />', () => {
   });
 
   it('renders the default tab, opens settings and switches to all students', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<ScoreTableTabs {...makeProps()} />);
 
     expect(screen.getByRole('tab', { name: /all students/i })).toBeInTheDocument();
@@ -82,7 +82,7 @@ describe('<ScoreTableTabs />', () => {
   });
 
   it('navigates to the CSV export URL (built from course id + query filters) on export click', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<ScoreTableTabs {...makeProps()} />);
 
     // The export click sets window.location.href; stub the assignment to capture it.

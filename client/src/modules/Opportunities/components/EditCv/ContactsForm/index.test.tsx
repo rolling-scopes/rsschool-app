@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import { setupUser } from '@client/__tests__/setupUser';
 import { ContactsForm } from './index';
 
@@ -13,8 +13,11 @@ const mockContactsList = {
 };
 
 describe('ContactsForm', () => {
-  test('renders each contact with its value, placeholder and label', () => {
-    render(<ContactsForm contactsList={mockContactsList} />);
+  test('renders each contact with its value, placeholder and label', async () => {
+    // eslint-disable-next-line testing-library/no-unnecessary-act -- Await mount effects after the synchronous render
+    await act(async () => {
+      render(<ContactsForm contactsList={mockContactsList} />);
+    });
 
     const fields = [
       [mockContactsList.email, 'Email', 'Email'],

@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import PublicFeedbackCard from '../PublicFeedbackCard';
 
 describe('PublicFeedbackCard', () => {
@@ -78,7 +78,7 @@ describe('PublicFeedbackCard', () => {
   });
 
   it('renders feedback details and opens and closes the modal', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<PublicFeedbackCard data={data} />);
 
     expect(screen.getByText('Total badges:')).toBeInTheDocument();

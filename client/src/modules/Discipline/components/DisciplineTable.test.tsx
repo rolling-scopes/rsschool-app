@@ -1,5 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { Modal } from 'antd';
 import { DisciplineDto } from '@client/api';
 import { DisciplineTable } from './DisciplineTable';
@@ -45,7 +45,7 @@ describe('<DisciplineTable />', () => {
   });
 
   it('renders headers, rows and action buttons, then edits the selected record', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<DisciplineTable {...props} />);
 
@@ -64,7 +64,7 @@ describe('<DisciplineTable />', () => {
   });
 
   it('opens a confirm dialog and calls handleDelete on confirm', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<DisciplineTable {...props} />);
 
@@ -83,7 +83,7 @@ describe('<DisciplineTable />', () => {
   });
 
   it('does not call handleDelete when the confirm dialog is cancelled', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<DisciplineTable {...props} />);
 

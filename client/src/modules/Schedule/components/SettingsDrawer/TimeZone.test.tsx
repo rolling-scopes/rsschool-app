@@ -1,12 +1,12 @@
 /* eslint-disable testing-library/no-node-access */
 import { fireEvent, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import TimeZone from './TimeZone';
 
 // TimeZone is wrapped in a SettingsItem (antd Collapse) that starts collapsed,
 // so its Select is not rendered until the panel header is expanded.
 async function expandPanel() {
-  const user = userEvent.setup();
+  const user = setupUser();
   const header = document.querySelector('.ant-collapse-header') as HTMLElement;
   await user.click(header);
 }

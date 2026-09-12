@@ -49,61 +49,62 @@ export function CrossCheckHistory(props: Props) {
         </Row>
       )}
 
-      <Timeline>
-        {props.state.data.map((review, index) => {
+      <Timeline
+        items={props.state.data.map((review, index) => {
           const isActiveReview = index === 0;
 
-          return (
-            <Timeline.Item
-              key={index}
-              color={isActiveReview ? 'green' : 'gray'}
-              dot={<ClockCircleOutlined style={{ fontSize: '16px' }} />}
-            >
-              <Row>
-                <Col>{isActiveReview ? <Tag color="success">active review</Tag> : <Tag>outdated review</Tag>}</Col>
+          return {
+            key: review.id,
+            color: isActiveReview ? 'green' : 'gray',
+            icon: <ClockCircleOutlined style={{ fontSize: '16px' }} />,
+            content: (
+              <>
+                <Row>
+                  <Col>{isActiveReview ? <Tag color="success">active review</Tag> : <Tag>outdated review</Tag>}</Col>
 
-                {review.author && (
-                  <Col>
-                    <Tag color={isActiveReview ? 'warning' : ''}>your name is visible</Tag>
+                  {review.author && (
+                    <Col>
+                      <Tag color={isActiveReview ? 'warning' : ''}>your name is visible</Tag>
+                    </Col>
+                  )}
+                </Row>
+
+                <Row>
+                  <Col span={24}>
+                    <SolutionReview
+                      sessionId={props.sessionId}
+                      sessionGithubId={props.sessionGithubId}
+                      courseId={props.courseId}
+                      reviewNumber={0}
+                      settings={solutionReviewSettings}
+                      courseTaskId={courseTaskId}
+                      review={review}
+                      isActiveReview={isActiveReview}
+                      isMessageSendingPanelVisible={isActiveReview}
+                      currentRole={CrossCheckMessageDtoRoleEnum.Reviewer}
+                      maxScore={props.maxScore}
+                    >
+                      <Row style={{ marginTop: 16 }}>
+                        <Col>
+                          <Button
+                            size="middle"
+                            type={isActiveReview ? 'primary' : 'default'}
+                            htmlType="button"
+                            icon={isActiveReview ? <EditFilled /> : <EditOutlined />}
+                            onClick={() => handleClickAmendButton(review.comment)}
+                          >
+                            Amend comment
+                          </Button>
+                        </Col>
+                      </Row>
+                    </SolutionReview>
                   </Col>
-                )}
-              </Row>
-
-              <Row>
-                <Col span={24}>
-                  <SolutionReview
-                    sessionId={props.sessionId}
-                    sessionGithubId={props.sessionGithubId}
-                    courseId={props.courseId}
-                    reviewNumber={0}
-                    settings={solutionReviewSettings}
-                    courseTaskId={courseTaskId}
-                    review={review}
-                    isActiveReview={isActiveReview}
-                    isMessageSendingPanelVisible={isActiveReview}
-                    currentRole={CrossCheckMessageDtoRoleEnum.Reviewer}
-                    maxScore={props.maxScore}
-                  >
-                    <Row style={{ marginTop: 16 }}>
-                      <Col>
-                        <Button
-                          size="middle"
-                          type={isActiveReview ? 'primary' : 'default'}
-                          htmlType="button"
-                          icon={isActiveReview ? <EditFilled /> : <EditOutlined />}
-                          onClick={() => handleClickAmendButton(review.comment)}
-                        >
-                          Amend comment
-                        </Button>
-                      </Col>
-                    </Row>
-                  </SolutionReview>
-                </Col>
-              </Row>
-            </Timeline.Item>
-          );
+                </Row>
+              </>
+            ),
+          };
         })}
-      </Timeline>
+      />
     </Spin>
   );
 }

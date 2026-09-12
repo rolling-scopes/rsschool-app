@@ -1,6 +1,6 @@
 /* eslint-disable testing-library/no-node-access */
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { DevToolsContainer } from './DevToolsContainer';
 
 // The two tab panes are covered by their own specs; stub them so the container
@@ -12,7 +12,7 @@ vi.mock('./DevToolsCurrentUser', () => ({
 
 describe('DevToolsContainer', () => {
   it('renders children and supports opening, switching tabs, and closing', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(
       <DevToolsContainer>
         <div data-testid="app">app content</div>

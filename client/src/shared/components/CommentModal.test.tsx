@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { CommentModal } from './CommentModal';
 
 describe('CommentModal', () => {
@@ -16,7 +16,7 @@ describe('CommentModal', () => {
   });
 
   it('pre-fills the textarea and calls onCancel', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<CommentModal {...baseProps} initialValue="prefilled" />);
 
     expect(screen.getByLabelText('Comment')).toHaveValue('prefilled');
@@ -25,7 +25,7 @@ describe('CommentModal', () => {
   });
 
   it('renders the modal and calls onOk with the typed comment when submitted', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<CommentModal {...baseProps} />);
 
     expect(screen.getByText('Leave a comment')).toBeInTheDocument();
@@ -37,7 +37,7 @@ describe('CommentModal', () => {
   });
 
   it('shows a validation error and does not call onOk when the comment is required but empty', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<CommentModal {...baseProps} />);
 
     await user.click(screen.getByRole('button', { name: /ok/i }));
@@ -47,7 +47,7 @@ describe('CommentModal', () => {
   });
 
   it('allows submitting an empty comment when availableEmptyComment is set', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<CommentModal {...baseProps} availableEmptyComment />);
 
     await user.click(screen.getByRole('button', { name: /ok/i }));

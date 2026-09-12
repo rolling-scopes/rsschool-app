@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import InterviewCard from '../InterviewCard';
 import { CoreJsInterviewFeedback, StageInterviewDetailedFeedback } from '@common/models/profile';
 import { getStudentCoreJSInterviews } from '@client/utils/profilePageUtils';
@@ -47,7 +47,7 @@ describe('InterviewCard', () => {
 
     const expandButton = screen.getByTestId('expand-button');
     expect(expandButton).toBeInTheDocument();
-    await userEvent.click(expandButton);
+    await setupUser().click(expandButton);
 
     expect(
       await screen.findByText(/Rolling Scopes School 2020 Q1 Pre-Screening Interview Feedback/),
@@ -84,7 +84,7 @@ describe('InterviewCard', () => {
 
     const expandButton = screen.getByTestId('expand-button');
     expect(expandButton).toBeInTheDocument();
-    await userEvent.click(expandButton);
+    await setupUser().click(expandButton);
 
     expect(await screen.findByText(/JS Course 2021 CoreJS Interview Feedback/)).toBeInTheDocument();
   });

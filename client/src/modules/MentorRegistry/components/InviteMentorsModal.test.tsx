@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import InviteMentorsModal from './InviteMentorsModal';
 
 // --- Boundary mocks --------------------------------------------------------
@@ -54,7 +54,7 @@ describe('<InviteMentorsModal />', () => {
   });
 
   it('blocks submit and shows validation errors when required fields are empty', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<InviteMentorsModal onCancel={vi.fn()} />);
 
     await user.click(screen.getByRole('button', { name: /save/i }));
@@ -66,7 +66,7 @@ describe('<InviteMentorsModal />', () => {
 
   it('submits the filled form, calls inviteMentors with the payload and closes', async () => {
     const onCancel = vi.fn();
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<InviteMentorsModal onCancel={onCancel} />);
 
     await waitFor(() => expect(getDisciplines).toHaveBeenCalled());
@@ -98,7 +98,7 @@ describe('<InviteMentorsModal />', () => {
 
   it('calls onCancel when the modal is dismissed without changes', async () => {
     const onCancel = vi.fn();
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<InviteMentorsModal onCancel={onCancel} />);
 
     expect(screen.getByRole('dialog')).toBeInTheDocument();

@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import HeroesCountBadge from './HeroesCountBadge';
 
 describe('HeroesCountBadge', () => {
@@ -18,7 +18,7 @@ describe('HeroesCountBadge', () => {
   });
 
   it('shows the badge name, comment, and formatted date in its tooltip', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(
       <HeroesCountBadge badge={{ badgeId: 'Good_job', comment: 'Great work!', date: '2023-01-15T10:30:00.000Z' }} />,
     );

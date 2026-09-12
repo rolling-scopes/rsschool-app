@@ -1,5 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { CourseTaskDtoCheckerEnum, MentorReviewDto } from '@client/api';
 import { MentorTasksReview } from './MentorTasksReview';
 
@@ -34,16 +34,19 @@ vi.mock('ahooks/lib/useRequest', () => ({
   default: () => ({ runAsync: vi.fn().mockResolvedValue(undefined), loading: false }),
 }));
 
-vi.mock('@client/modules/Course/contexts', () => ({
-  SessionContext: {
-    Provider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-    displayName: 'Session',
-  },
-  useActiveCourseContext: () => ({
+vi.mock('@client/modules/Course/contexts', () => {
+  const activeCourse = {
     course: { id: 1, name: 'RS 2025' },
     courses: [{ id: 1, name: 'RS 2025' }],
-  }),
-}));
+  };
+  return {
+    SessionContext: {
+      Provider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+      displayName: 'Session',
+    },
+    useActiveCourseContext: () => activeCourse,
+  };
+});
 
 vi.mock('@client/domain/user', () => ({
   isCourseManager: (...args: unknown[]) => isCourseManagerMock(...args),
@@ -148,7 +151,7 @@ describe('MentorTasksReview page', () => {
   });
 
   it('should re-fetch reviews after a reviewer is assigned from the modal', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<MentorTasksReview />);
 
     await screen.findByRole('table');
@@ -163,7 +166,7 @@ describe('MentorTasksReview page', () => {
   });
 
   it('should re-fetch reviews with sort params when the table sorting changes', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<MentorTasksReview />);
 
     await screen.findByRole('table');

@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { Form } from 'antd';
 import { CheckerEnum, CourseTaskDetailedDtoTypeEnum } from '@client/api';
 import { CourseTaskVerifications } from '@client/modules/AutoTest/types';
@@ -58,7 +58,7 @@ describe('Exercise', () => {
   });
 
   it('should call submit when the form is submitted for a coding task', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderExercise(CourseTaskDetailedDtoTypeEnum.Jstask);
 
     expect(screen.getByText(/will run tests in the following repository/i)).toBeInTheDocument();
@@ -70,7 +70,7 @@ describe('Exercise', () => {
   });
 
   it('should call change when the self-education answer is selected', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderExercise(CourseTaskDetailedDtoTypeEnum.Selfeducation);
 
     expect(screen.getByRole('heading', { name: /Q1/ })).toBeInTheDocument();
@@ -84,7 +84,7 @@ describe('Exercise', () => {
   });
 
   it('should show the missing-answer error and clear it after a valid answer', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderExercise(CourseTaskDetailedDtoTypeEnum.Selfeducation);
 
     await user.click(screen.getByRole('button', { name: /submit/i }));
@@ -98,7 +98,7 @@ describe('Exercise', () => {
   });
 
   it('should set a validation error when a watched field is truthy but fails validation', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     // Checkbox.Group value is an array; toggling on then off leaves `[]`, which is
     // truthy (passing the every(Boolean) guard) yet fails the `required` rule —
     // exercising the validateFields rejection callback.

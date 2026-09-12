@@ -1,5 +1,5 @@
 import { render, screen, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { ContributorDto } from '@client/api';
 import { ContributorsTable } from './ContributorsTable';
 
@@ -17,7 +17,7 @@ function getContributorRow(githubId: string) {
 
 describe('<ContributorsTable />', () => {
   it('renders contributor details and calls handleUpdate for the selected row', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const handleUpdate = vi.fn();
     render(
       <ContributorsTable data={data} handleUpdate={handleUpdate} handleDelete={vi.fn().mockResolvedValue(undefined)} />,
@@ -35,7 +35,7 @@ describe('<ContributorsTable />', () => {
   });
 
   it('calls handleDelete with the row record when the delete button is clicked', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const handleDelete = vi.fn().mockResolvedValue(undefined);
     render(<ContributorsTable data={data} handleUpdate={vi.fn()} handleDelete={handleDelete} />);
 

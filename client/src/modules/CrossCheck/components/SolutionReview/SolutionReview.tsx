@@ -70,7 +70,7 @@ function SolutionReview(props: SolutionReviewProps) {
     if (!courseTaskId || !amountUnreadMessages) return;
 
     notification.info({
-      message: howManyUnreadMessagesText,
+      title: howManyUnreadMessagesText,
     });
 
     (async () => {

@@ -1,5 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { ReactNode } from 'react';
 import { ContributorPage } from './ContributorPage';
 
@@ -73,7 +73,7 @@ describe('<ContributorPage />', () => {
   });
 
   it('opens the edit modal when a row edit button is clicked', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<ContributorPage />);
     await screen.findByText('gh-one');
 
@@ -86,7 +86,7 @@ describe('<ContributorPage />', () => {
   });
 
   it('deletes a contributor and reloads the list', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<ContributorPage />);
     await screen.findByText('gh-two');
 
@@ -99,7 +99,7 @@ describe('<ContributorPage />', () => {
   });
 
   it('opens the create modal and reloads the list after it closes', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<ContributorPage />);
     await screen.findByText('gh-one');
 

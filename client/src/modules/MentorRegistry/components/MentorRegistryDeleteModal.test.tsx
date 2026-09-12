@@ -1,13 +1,13 @@
 /* eslint-disable testing-library/no-node-access */
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { MentorRegistryDeleteModal } from './MentorRegistryDeleteModal';
 
 const modalData = { record: { githubId: 'octocat' } };
 
 describe('<MentorRegistryDeleteModal />', () => {
   it('renders the loading confirmation dialog and calls onCancel', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onCancel = vi.fn();
     render(<MentorRegistryDeleteModal modalData={modalData} modalLoading cancelMentor={vi.fn()} onCancel={onCancel} />);
 
@@ -23,7 +23,7 @@ describe('<MentorRegistryDeleteModal />', () => {
 
   it('calls cancelMentor with the record githubId when Delete is confirmed', async () => {
     const cancelMentor = vi.fn().mockResolvedValue(undefined);
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<MentorRegistryDeleteModal modalData={modalData} cancelMentor={cancelMentor} onCancel={vi.fn()} />);
 
     await user.click(screen.getByRole('button', { name: 'Delete' }));

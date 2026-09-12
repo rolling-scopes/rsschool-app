@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { AddCriteriaForCrossCheck } from '../AddCriteriaForCrossCheck';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 
 const addCriteria = vi.fn();
 
@@ -35,7 +35,7 @@ describe('AddCriteriaForCrossCheck', () => {
 
     const textarea = screen.getByPlaceholderText<HTMLInputElement>('Add description');
     expect(textarea).toBeInTheDocument();
-    await userEvent.type(textarea, expectedString);
+    await setupUser().type(textarea, expectedString);
 
     expect(textarea.value).toEqual(expectedString);
   });

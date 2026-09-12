@@ -1,6 +1,6 @@
 /* eslint-disable testing-library/no-node-access */
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import SettingsDrawer from './SettingsDrawer';
 import { CourseScheduleItemDtoTagEnum as TagEnum } from '@client/api';
 import { ScheduleSettings } from '@client/modules/Schedule/hooks/useScheduleSettings';
@@ -28,7 +28,7 @@ const settings: ScheduleSettings = {
 
 describe('<SettingsDrawer />', () => {
   it('renders, opens, and closes the settings drawer', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<SettingsDrawer settings={settings} tags={[TagEnum.Coding]} />);
 
     expect(screen.getByTestId('Settings')).toBeInTheDocument();

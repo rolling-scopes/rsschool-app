@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { NotificationDto, NotificationType } from '@client/api';
 import { NotificationSettingsTable } from './NotificationSettingsTable';
 
@@ -51,7 +51,7 @@ describe('NotificationSettingsTable', () => {
   });
 
   it('confirms before deleting and calls onDelete with the record', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onDelete = vi.fn();
     render(<NotificationSettingsTable notifications={notifications} onEdit={vi.fn()} onDelete={onDelete} />);
 
@@ -71,7 +71,7 @@ describe('NotificationSettingsTable', () => {
   });
 
   it('does not call onDelete when the confirmation is cancelled', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onDelete = vi.fn();
     render(<NotificationSettingsTable notifications={notifications} onEdit={vi.fn()} onDelete={onDelete} />);
 

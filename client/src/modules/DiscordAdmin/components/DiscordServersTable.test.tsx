@@ -1,5 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { DiscordServerDto } from '@client/api';
 import { DiscordServersTable } from './DiscordServersTable';
 
@@ -18,7 +18,7 @@ function getServerRow(name: string) {
 
 describe('<DiscordServersTable />', () => {
   it('calls onEdit with the row record when Edit is clicked', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onEdit = vi.fn();
     render(<DiscordServersTable data={data} onEdit={onEdit} onDelete={vi.fn()} />);
 
@@ -34,7 +34,7 @@ describe('<DiscordServersTable />', () => {
   });
 
   it('calls onDelete with the id only after confirming the popconfirm', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onDelete = vi.fn();
     render(<DiscordServersTable data={data} onEdit={vi.fn()} onDelete={onDelete} />);
 
@@ -49,7 +49,7 @@ describe('<DiscordServersTable />', () => {
   });
 
   it('sorts by name when the Name column header is clicked', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<DiscordServersTable data={data} onEdit={vi.fn()} onDelete={vi.fn()} />);
 
     await user.click(screen.getByText('Name'));

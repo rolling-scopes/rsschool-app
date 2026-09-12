@@ -1,5 +1,5 @@
-import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { setupUser } from '@client/__tests__/setupUser';
 import { CoursesListModal } from './index';
 
 // Mock only the API boundary: the generated CoursesApi class. The component
@@ -34,8 +34,11 @@ describe('<CoursesListModal />', () => {
     });
   });
 
-  it('returns null (renders no modal) when data is null', () => {
-    render(<CoursesListModal {...makeProps({ data: null })} />);
+  it('returns null (renders no modal) when data is null', async () => {
+    // eslint-disable-next-line testing-library/no-unnecessary-act -- Await mount effects after the synchronous render
+    await act(async () => {
+      render(<CoursesListModal {...makeProps({ data: null })} />);
+    });
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
@@ -57,7 +60,7 @@ describe('<CoursesListModal />', () => {
   });
 
   it('does not submit and shows a validation message when no course is selected', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<CoursesListModal {...props} />);
 
@@ -69,7 +72,7 @@ describe('<CoursesListModal />', () => {
   });
 
   it('submits the selected course id mapped to { id } on save', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<CoursesListModal {...props} />);
 
@@ -89,7 +92,7 @@ describe('<CoursesListModal />', () => {
   });
 
   it('renders the title and course selector and calls onCancel', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<CoursesListModal {...props} />);
 
@@ -104,17 +107,17 @@ describe('<CoursesListModal />', () => {
   });
 
   it('filters options by typed input via filterOption', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<CoursesListModal {...makeProps()} />);
 
     const combobox = await screen.findByRole('combobox');
-    await user.click(combobox);
-    await user.type(combobox, 'react');
+    fireEvent.mouseDown(combobox);
+    await user.type(combobox, 'react', { skipClick: true });
 
     // "JavaScript" should be filtered out; only "React" remains visible.
     await waitFor(() => {
       expect(within(document.body).getByText('React')).toBeInTheDocument();
     });
-    expect(within(document.body).queryByText('JavaScript')).not.toBeInTheDocument();
+    await waitFor(() => expect(within(document.body).queryByText('JavaScript')).not.toBeInTheDocument());
   });
 });

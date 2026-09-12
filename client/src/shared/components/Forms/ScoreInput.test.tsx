@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { Button, Form } from 'antd';
 import { ScoreInput } from './ScoreInput';
 
@@ -36,7 +36,7 @@ describe('ScoreInput', () => {
   });
 
   it('lets the user type a score and submits it', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { onFinish } = renderScoreInput({ maxScore: 80 });
 
     const input = screen.getByLabelText('Score (Max 80 points)');
@@ -47,7 +47,7 @@ describe('ScoreInput', () => {
   });
 
   it('shows a required-error and blocks submit when left empty', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { onFinish } = renderScoreInput();
 
     expect(screen.getByRole('spinbutton')).toBeInTheDocument();
@@ -59,7 +59,7 @@ describe('ScoreInput', () => {
   });
 
   it('clamps a value typed above the configured max on blur', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderScoreInput({ maxScore: 50 });
 
     const input = screen.getByRole('spinbutton');
@@ -70,7 +70,7 @@ describe('ScoreInput', () => {
   });
 
   it('clamps a negative value to the configured minimum of 0 on blur', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderScoreInput({ maxScore: 50 });
 
     const input = screen.getByRole('spinbutton');

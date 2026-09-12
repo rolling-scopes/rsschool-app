@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { useRouter } from 'next/router';
 import { TaskCard } from '..';
 import { CheckerEnum } from '@client/api';
@@ -42,7 +42,7 @@ describe('TaskCard', () => {
   });
 
   it('should navigate to the task route when "Open Task" is clicked', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const push = vi.fn();
     (useRouter as unknown as ReturnType<typeof vi.fn>).mockReturnValue({ push });
     const courseTask = generateCourseTask(2);
@@ -65,7 +65,7 @@ describe('TaskCard', () => {
   });
 
   it('enables "Done Task" and calls onMarkAsDone with the task id when the score reaches the threshold', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onMarkAsDone = vi.fn();
     const courseTask = generateCourseTask(2, passingScore());
     render(<TaskCard course={COURSE_MOCK} courseTask={courseTask} isAvailableTab onMarkAsDone={onMarkAsDone} />);

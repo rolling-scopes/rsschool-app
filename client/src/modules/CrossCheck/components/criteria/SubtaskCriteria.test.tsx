@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { CrossCheckCriteriaDataDto, CrossCheckCriteriaDataDtoTypeEnum } from '@client/api';
 import { SubtaskCriteria } from './SubtaskCriteria';
 
@@ -16,7 +16,7 @@ function makeSubtask(overrides: Partial<CrossCheckCriteriaDataDto> = {}): CrossC
 
 describe('<SubtaskCriteria />', () => {
   it('renders criteria values and handles reviewer input', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateCriteriaData = vi.fn();
     render(<SubtaskCriteria subtaskData={makeSubtask({ point: 7 })} updateCriteriaData={updateCriteriaData} />);
 

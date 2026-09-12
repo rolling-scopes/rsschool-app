@@ -1,6 +1,6 @@
 /* eslint-disable testing-library/no-node-access */
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { CourseTaskDetailedDto } from '@client/api';
 import { BadReviewControllers, IBadReview } from './BadReviewControllers';
 
@@ -28,7 +28,7 @@ const badReviews: IBadReview[] = [
   },
 ];
 
-async function selectTask(user: ReturnType<typeof userEvent.setup>, optionName: string) {
+async function selectTask(user: ReturnType<typeof setupUser>, optionName: string) {
   await user.click(screen.getByRole('combobox'));
   await user.click(await screen.findByText(optionName, { selector: '.ant-select-item-option-content' }));
 }
@@ -40,7 +40,7 @@ describe('<BadReviewControllers />', () => {
   });
 
   it('enables actions after task selection, shows bad comments and closes the modal', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<BadReviewControllers courseTasks={courseTasks} courseId={42} />);
 
     const downloadLink = screen.getByText('Download solutions urls').closest('a') as HTMLElement;
@@ -73,7 +73,7 @@ describe('<BadReviewControllers />', () => {
   });
 
   it('opens the "Didn\'t check" modal with the matching check type', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     getData.mockResolvedValue([{ ...badReviews[0], studentAvgScore: 8 }]);
     render(<BadReviewControllers courseTasks={courseTasks} courseId={42} />);
 

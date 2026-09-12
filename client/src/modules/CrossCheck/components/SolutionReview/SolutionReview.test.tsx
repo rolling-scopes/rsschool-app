@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import {
   CrossCheckCriteriaDataDtoTypeEnum,
   CrossCheckMessageDtoRoleEnum,
@@ -74,7 +74,7 @@ describe('<SolutionReview />', () => {
   });
 
   it('opens a detailed-feedback modal when criteria are present', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(
       <SolutionReview
         {...makeProps({
@@ -100,7 +100,7 @@ describe('<SolutionReview />', () => {
   });
 
   it('sends a message through the course service with the markdown label', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<SolutionReview {...makeProps()} />);
 
     await user.click(screen.getByPlaceholderText('Leave a message'));

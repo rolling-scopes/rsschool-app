@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { getLanguageName, SelectLanguages } from './SelectLanguages';
 import { UpdateUserDtoLanguagesEnum } from '@client/api';
 
@@ -43,7 +43,7 @@ describe('SelectLanguages', () => {
   });
 
   it('filters options by the typed language name via optionFilterProp="label"', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<SelectLanguages />);
 
     const combobox = screen.getByRole('combobox');

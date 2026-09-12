@@ -1,5 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { message } from 'antd';
+import { setupUser } from '@client/__tests__/setupUser';
 import { MentorReviewDto } from '@client/api';
 import AssignReviewerModal from './AssignReviewerModal';
 
@@ -67,7 +68,7 @@ describe('AssignReviewerModal', () => {
   });
 
   it('should assign the reviewer and show the success result on submit', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { onSubmit } = renderModal();
 
     await user.type(screen.getByLabelText('mentor-search'), '99');
@@ -79,7 +80,7 @@ describe('AssignReviewerModal', () => {
   });
 
   it('should submit with an undefined mentorId when none is selected', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderModal();
 
     await user.click(screen.getByRole('button', { name: 'Submit' }));
@@ -90,7 +91,7 @@ describe('AssignReviewerModal', () => {
   });
 
   it('should render the server error message when the request rejects', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     runAsync.mockRejectedValueOnce({ response: { data: { message: 'Reviewer is busy' } } });
     renderModal();
 
@@ -100,7 +101,7 @@ describe('AssignReviewerModal', () => {
   });
 
   it('should fall back to the error message when the response has no body', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     runAsync.mockRejectedValueOnce(new Error('Network down'));
     renderModal();
 
@@ -110,7 +111,7 @@ describe('AssignReviewerModal', () => {
   });
 
   it('should reset state and call onClose when cancelled', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { onClose } = renderModal();
 
     expect(screen.getByText(/Assign Reviewer for student-github/i)).toBeInTheDocument();
@@ -129,10 +130,12 @@ describe('AssignReviewerModal', () => {
   });
 
   it('should show an antd error message when the request hook errors', () => {
+    const error = vi.spyOn(message, 'error').mockImplementation(() => (() => {}) as never);
     renderModal();
 
     const [, options] = useRequestMock.mock.calls[0] as [unknown, { onError: () => void }];
-    // exercising the onError callback wired into useRequest does not throw
-    expect(() => options.onError()).not.toThrow();
+    options.onError();
+    expect(error).toHaveBeenCalledWith('An unexpected error occurred. Please try later.');
+    error.mockRestore();
   });
 });

@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { act, render, screen } from '@testing-library/react';
+import { setupUser } from '@client/__tests__/setupUser';
 import type { UploadFile, UploadProps } from 'antd';
 import { Button, Form } from 'antd';
 import JupyterNotebook from './JupyterNotebook';
@@ -36,7 +36,7 @@ describe('JupyterNotebook', () => {
   });
 
   it('renders, validates, and stores a selected notebook', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onFinish = vi.fn();
     renderJupyterNotebook(onFinish);
 
@@ -46,7 +46,9 @@ describe('JupyterNotebook', () => {
     expect(onFinish).not.toHaveBeenCalled();
 
     const file = { uid: '1', name: 'notebook.ipynb' } as UploadFile;
-    capturedOnChange?.({ file, fileList: [file] } as Parameters<NonNullable<UploadProps['onChange']>>[0]);
+    await act(async () => {
+      capturedOnChange?.({ file, fileList: [file] } as Parameters<NonNullable<UploadProps['onChange']>>[0]);
+    });
 
     expect(await screen.findByText('Select Jupyter Notebook')).toBeInTheDocument();
     expect(capturedFileList?.[0]?.name).toBe('notebook.ipynb');
