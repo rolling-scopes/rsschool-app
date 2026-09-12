@@ -11,7 +11,8 @@ vi.mock('./DevToolsCurrentUser', () => ({
 }));
 
 describe('DevToolsContainer', () => {
-  it('renders children and the collapsed float button by default', () => {
+  it('renders children and supports opening, switching tabs, and closing', async () => {
+    const user = userEvent.setup();
     render(
       <DevToolsContainer>
         <div data-testid="app">app content</div>
@@ -19,40 +20,20 @@ describe('DevToolsContainer', () => {
     );
 
     expect(screen.getByTestId('app')).toBeInTheDocument();
-    // FloatButton is shown, card is not
     expect(screen.queryByText('Dev tools')).not.toBeInTheDocument();
     expect(screen.queryByTestId('users-pane')).not.toBeInTheDocument();
-  });
-
-  it('opens the dev tools card on float button click showing the users tab', async () => {
-    const user = userEvent.setup();
-    render(<DevToolsContainer />);
 
     await user.click(document.querySelector('.ant-float-btn') as HTMLElement);
 
     expect(screen.getByText('Dev tools')).toBeInTheDocument();
     expect(screen.getByTestId('users-pane')).toBeInTheDocument();
     expect(screen.queryByTestId('current-user-pane')).not.toBeInTheDocument();
-  });
-
-  it('switches to the current user session tab', async () => {
-    const user = userEvent.setup();
-    render(<DevToolsContainer />);
-    await user.click(document.querySelector('.ant-float-btn') as HTMLElement);
 
     await user.click(screen.getByText('Current user session'));
 
     expect(screen.getByTestId('current-user-pane')).toBeInTheDocument();
     expect(screen.queryByTestId('users-pane')).not.toBeInTheDocument();
-  });
 
-  it('closes the card via the close button', async () => {
-    const user = userEvent.setup();
-    render(<DevToolsContainer />);
-    await user.click(document.querySelector('.ant-float-btn') as HTMLElement);
-    expect(screen.getByText('Dev tools')).toBeInTheDocument();
-
-    // the close (icon-only) button lives in the card extra slot
     const closeButton = document.querySelector('.ant-card-extra .ant-btn') as HTMLElement;
     await user.click(closeButton);
 
