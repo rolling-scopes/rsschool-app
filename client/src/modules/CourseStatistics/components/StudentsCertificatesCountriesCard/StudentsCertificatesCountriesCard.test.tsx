@@ -48,7 +48,7 @@ const studentsCertificatesCountriesStats: CountriesStatsDto = {
 };
 
 describe('<StudentsCertificatesCountriesCard />', () => {
-  it('renders the card title', () => {
+  it('renders the title and forwards chart data', async () => {
     render(
       <StudentsCertificatesCountriesCard
         studentsCertificatesCountriesStats={studentsCertificatesCountriesStats}
@@ -57,15 +57,6 @@ describe('<StudentsCertificatesCountriesCard />', () => {
     );
 
     expect(screen.getByText('Certificates Countries')).toBeInTheDocument();
-  });
-
-  it('forwards countries, certificate count, certificates axis title and Lime color', async () => {
-    render(
-      <StudentsCertificatesCountriesCard
-        studentsCertificatesCountriesStats={studentsCertificatesCountriesStats}
-        certificatesCount={18}
-      />,
-    );
 
     const chart = await screen.findByTestId('countries-chart');
     expect(chart).toHaveAttribute('data-length', '2');
