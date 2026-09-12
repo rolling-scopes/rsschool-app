@@ -53,9 +53,7 @@ describe('useGoogleMapsPlaces', () => {
     expect(result.current.loading).toBe(false);
     expect(result.current.initialized).toBe(false);
     expect(result.current.error).toBe(null);
-    expect(usePlacesAutocompleteModule.default).toHaveBeenCalledWith(
-      expect.objectContaining({ defaultValue: '' }),
-    );
+    expect(usePlacesAutocompleteModule.default).toHaveBeenCalledWith(expect.objectContaining({ defaultValue: '' }));
     expect(useInterval).toHaveBeenCalledWith(expect.any(Function), 100);
   });
 
