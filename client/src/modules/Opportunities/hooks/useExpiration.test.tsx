@@ -1,4 +1,3 @@
-import { renderHook } from '@testing-library/react';
 import { ExpirationState } from '../constants';
 import { useExpiration } from './useExpiration';
 
@@ -16,8 +15,7 @@ describe('useExpiration', () => {
   it('should correctly return NotExpired status', () => {
     const addition = 30 * 24 * 60 * 60 * 1000;
     const mockExpiresIn30Days = String(mockCurrentTime + addition);
-    const { result } = renderHook(() => useExpiration(mockExpiresIn30Days));
-    expect(result.current).toStrictEqual({
+    expect(useExpiration(mockExpiresIn30Days)).toStrictEqual({
       expirationDateFormatted: '2022-10-30',
       expirationState: ExpirationState.NotExpired,
     });
@@ -26,8 +24,7 @@ describe('useExpiration', () => {
   it('should correctly return NearlyExpired status', () => {
     const addition = 1 * 24 * 60 * 60 * 1000;
     const mockExpiresIn1Day = String(mockCurrentTime + addition);
-    const { result } = renderHook(() => useExpiration(mockExpiresIn1Day));
-    expect(result.current).toStrictEqual({
+    expect(useExpiration(mockExpiresIn1Day)).toStrictEqual({
       expirationDateFormatted: '2022-10-01',
       expirationState: ExpirationState.NearlyExpired,
     });
@@ -36,8 +33,7 @@ describe('useExpiration', () => {
   it('should correctly return Expired status', () => {
     const addition = 1 * 24 * 60 * 60 * 1000;
     const mockExpiresIn1DayBefore = String(mockCurrentTime - addition);
-    const { result } = renderHook(() => useExpiration(mockExpiresIn1DayBefore));
-    expect(result.current).toStrictEqual({
+    expect(useExpiration(mockExpiresIn1DayBefore)).toStrictEqual({
       expirationDateFormatted: '2022-09-29',
       expirationState: ExpirationState.Expired,
     });
