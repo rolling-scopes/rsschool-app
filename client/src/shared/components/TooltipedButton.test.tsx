@@ -1,6 +1,5 @@
 /* eslint-disable testing-library/no-container, testing-library/no-node-access */
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { act, render, screen } from '@testing-library/react';
 import { TooltipedButton } from './TooltipedButton';
 
 describe('TooltipedButton', () => {
@@ -12,37 +11,23 @@ describe('TooltipedButton', () => {
     disabled: false,
   };
 
-  it('renders the button with its text', () => {
-    render(<TooltipedButton {...baseProps} />);
-
-    expect(screen.getByRole('button', { name: /confirm/i })).toBeInTheDocument();
-  });
-
-  it('shows the tooltip text when open is true', async () => {
-    render(<TooltipedButton {...baseProps} open />);
-
-    expect(await screen.findByText('Helpful hint')).toBeInTheDocument();
-  });
-
-  it('disables the button when disabled is true', () => {
-    render(<TooltipedButton {...baseProps} disabled />);
-
-    expect(screen.getByRole('button', { name: /confirm/i })).toBeDisabled();
-  });
-
-  it('shows a loading indicator when loading is true', () => {
-    const { container } = render(<TooltipedButton {...baseProps} loading />);
-
-    expect(container.querySelector('.ant-btn-loading')).toBeInTheDocument();
-  });
-
-  it('renders an enabled button that can be focused/clicked when not disabled', async () => {
-    const user = userEvent.setup();
-    render(<TooltipedButton {...baseProps} />);
+  it('renders its enabled, disabled, loading, and open-tooltip states', () => {
+    vi.useFakeTimers();
+    const { container, rerender } = render(<TooltipedButton {...baseProps} />);
 
     const button = screen.getByRole('button', { name: /confirm/i });
-    await user.click(button);
-
+    expect(button).toBeInTheDocument();
     expect(button).toBeEnabled();
+
+    rerender(<TooltipedButton {...baseProps} disabled />);
+    expect(screen.getByRole('button', { name: /confirm/i })).toBeDisabled();
+
+    rerender(<TooltipedButton {...baseProps} loading />);
+    expect(container.querySelector('.ant-btn-loading')).toBeInTheDocument();
+
+    rerender(<TooltipedButton {...baseProps} open />);
+    act(() => vi.runOnlyPendingTimers());
+    expect(screen.getByText('Helpful hint')).toBeInTheDocument();
+    vi.useRealTimers();
   });
 });
