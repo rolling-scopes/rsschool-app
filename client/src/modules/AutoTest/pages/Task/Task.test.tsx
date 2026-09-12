@@ -101,15 +101,10 @@ describe('Task page', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it('should render the task description with the task name', () => {
+  it('renders the task description and verification actions', () => {
     render(<Task />);
 
     expect(screen.getByText('My Auto Test')).toBeInTheDocument();
-  });
-
-  it('should render the verification information (start/refresh) when the table is visible', () => {
-    render(<Task />);
-
     expect(screen.getByRole('button', { name: /start task/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /refresh/i })).toBeInTheDocument();
   });
