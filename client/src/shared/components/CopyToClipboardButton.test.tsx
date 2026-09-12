@@ -1,6 +1,5 @@
 /* eslint-disable testing-library/no-container, testing-library/no-node-access */
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { fireEvent, render, screen } from '@testing-library/react';
 import CopyToClipboardButton from './CopyToClipboardButton';
 
 const copyToClipboard = vi.fn();
@@ -14,23 +13,16 @@ describe('CopyToClipboardButton', () => {
     copyToClipboard.mockClear();
   });
 
-  it('renders a copy button', () => {
-    render(<CopyToClipboardButton value="hello@rs.school" />);
+  it('renders, copies the value, and applies a custom button type', () => {
+    const { container, rerender } = render(<CopyToClipboardButton value="hello@rs.school" />);
 
     expect(screen.getByTestId('copy-to-clipboard')).toBeInTheDocument();
-  });
 
-  it('copies the value to the clipboard on click', async () => {
-    const user = userEvent.setup();
-    render(<CopyToClipboardButton value="hello@rs.school" />);
-
-    await user.click(screen.getByTestId('copy-to-clipboard'));
+    fireEvent.click(screen.getByTestId('copy-to-clipboard'));
 
     expect(copyToClipboard).toHaveBeenCalledWith('hello@rs.school');
-  });
 
-  it('applies the provided button type', () => {
-    const { container } = render(<CopyToClipboardButton value="x" type="primary" />);
+    rerender(<CopyToClipboardButton value="x" type="primary" />);
 
     expect(container.querySelector('.ant-btn-primary')).toBeInTheDocument();
   });
