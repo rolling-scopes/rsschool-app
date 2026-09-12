@@ -1,5 +1,5 @@
 /* eslint-disable testing-library/no-node-access -- the github link is resolved via .closest('a') */
-import { render, screen, within } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { UserStudentDto } from '@client/api';
 import { StudentInfo } from './index';
@@ -36,7 +36,7 @@ function makeStudent(overrides: Partial<UserStudentDto> = {}): UserStudentDto {
 }
 
 describe('<StudentInfo />', () => {
-  it('renders the student name as a profile link and the github handle', () => {
+  it('renders the student details, contacts and courses panels', () => {
     render(<StudentInfo student={makeStudent()} />);
 
     const nameLink = screen.getByRole('link', { name: 'Alice Smith' });
@@ -45,20 +45,26 @@ describe('<StudentInfo />', () => {
     // The github handle renders inside a link to github.com.
     const ghLink = screen.getByText('alice').closest('a')!;
     expect(ghLink).toHaveAttribute('href', 'https://github.com/alice');
-  });
-
-  it('renders the location as "city, country"', () => {
-    render(<StudentInfo student={makeStudent()} />);
-
     expect(screen.getByText('Warsaw, Poland')).toBeInTheDocument();
+    expect(screen.getByText('JS Course')).toBeInTheDocument();
+    expect(screen.getByText('RS Course')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /certificate/i })).toHaveAttribute('href', '/certificate/cert-123');
+    expect(screen.getByRole('link', { name: 'Mentor One' })).toHaveAttribute('href', '/profile?githubId=mentor1');
+    expect(screen.getByText('Score: 100')).toBeInTheDocument();
+    expect(screen.getByText('Score: 200')).toBeInTheDocument();
+    expect(screen.getByText('Position: 1')).toBeInTheDocument();
+    expect(screen.getByText('Contacts')).toBeInTheDocument();
+    expect(screen.getByText('Courses')).toBeInTheDocument();
+    expect(screen.getByText('Location')).toBeInTheDocument();
   });
 
   it('omits an empty/placeholder full name', () => {
-    render(<StudentInfo student={makeStudent({ fullName: '(Empty)' })} />);
+    render(<StudentInfo student={makeStudent({ fullName: '(Empty)', city: '' as never, country: '' as never })} />);
 
     expect(screen.queryByRole('link', { name: '(Empty)' })).not.toBeInTheDocument();
     // Github handle link still renders.
     expect(screen.getByText('alice')).toBeInTheDocument();
+    expect(screen.getByText('Location')).toBeInTheDocument();
   });
 
   it('renders only the filled contacts in the Contacts panel', async () => {
@@ -86,37 +92,6 @@ describe('<StudentInfo />', () => {
     expect(screen.queryByText('Discord')).not.toBeInTheDocument();
   });
 
-  it('renders courses (ongoing + previous) with certificate and mentor links', () => {
-    render(<StudentInfo student={makeStudent()} />);
-
-    expect(screen.getByText('JS Course')).toBeInTheDocument();
-    expect(screen.getByText('RS Course')).toBeInTheDocument();
-
-    // Certificate link for the certified course.
-    const certLink = screen.getByRole('link', { name: /certificate/i });
-    expect(certLink).toHaveAttribute('href', '/certificate/cert-123');
-
-    // Mentor link.
-    const mentorLink = screen.getByRole('link', { name: 'Mentor One' });
-    expect(mentorLink).toHaveAttribute('href', '/profile?githubId=mentor1');
-  });
-
-  it('renders score and position for courses', () => {
-    render(<StudentInfo student={makeStudent()} />);
-
-    expect(screen.getByText('Score: 100')).toBeInTheDocument();
-    expect(screen.getByText('Score: 200')).toBeInTheDocument();
-    expect(screen.getByText('Position: 1')).toBeInTheDocument();
-  });
-
-  it('renders the Contacts and Courses collapse panels', () => {
-    render(<StudentInfo student={makeStudent()} />);
-
-    expect(screen.getByText('Contacts')).toBeInTheDocument();
-    expect(screen.getByText('Courses')).toBeInTheDocument();
-    expect(screen.getByText('Location')).toBeInTheDocument();
-  });
-
   it('sorts certified courses ahead of non-certified ones in the Courses list', () => {
     // Mixed certificate flags across both lists exercise both sides of the sort
     // comparator (course.hasCertificate ? -1 : 1).
@@ -139,14 +114,5 @@ describe('<StudentInfo />', () => {
     expect(screen.getByText('Cur Certified')).toBeInTheDocument();
     expect(screen.getByText('Prev Plain')).toBeInTheDocument();
     expect(screen.getByText('Cur Plain')).toBeInTheDocument();
-  });
-
-  it('still renders the github link when there is no location', () => {
-    render(<StudentInfo student={makeStudent({ city: '' as never, country: '' as never })} />);
-
-    // Location row is present but empty — no "city, country" text.
-    const locationLabel = screen.getByText('Location');
-    expect(locationLabel).toBeInTheDocument();
-    expect(within(document.body).getByText('alice')).toBeInTheDocument();
   });
 });
