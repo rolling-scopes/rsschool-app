@@ -54,7 +54,8 @@ describe('<ScoreTableTabs />', () => {
     } as never);
   });
 
-  it('renders "All students" and "Active students" tabs, defaulting to Active', () => {
+  it('renders the default tab, opens settings and switches to all students', async () => {
+    const user = userEvent.setup();
     render(<ScoreTableTabs {...makeProps()} />);
 
     expect(screen.getByRole('tab', { name: /all students/i })).toBeInTheDocument();
@@ -63,10 +64,10 @@ describe('<ScoreTableTabs />', () => {
     // Default active tab = "active" → its ScoreTable has activeOnly=true.
     const activeTable = screen.getByTestId('score-table');
     expect(activeTable).toHaveAttribute('data-active-only', 'true');
-  });
+    expect(activeTable).toHaveAttribute('data-settings-open', 'false');
 
-  it('switches to the "All students" tab and renders the activeOnly=false table', async () => {
-    render(<ScoreTableTabs {...makeProps()} />);
+    await user.click(getSettingsButton());
+    await waitFor(() => expect(screen.getByTestId('score-table')).toHaveAttribute('data-settings-open', 'true'));
 
     fireEvent.click(screen.getByRole('tab', { name: /all students/i }));
 
@@ -78,19 +79,6 @@ describe('<ScoreTableTabs />', () => {
     });
     const visiblePanel = screen.getByRole('tabpanel');
     expect(within(visiblePanel).getByTestId('score-table')).toHaveAttribute('data-active-only', 'false');
-  });
-
-  it('opens the settings (passes isVisibleSetting=true to the table) when the settings button is clicked', async () => {
-    const user = userEvent.setup();
-    render(<ScoreTableTabs {...makeProps()} />);
-
-    expect(screen.getByTestId('score-table')).toHaveAttribute('data-settings-open', 'false');
-
-    await user.click(getSettingsButton());
-
-    await waitFor(() => {
-      expect(screen.getByTestId('score-table')).toHaveAttribute('data-settings-open', 'true');
-    });
   });
 
   it('navigates to the CSV export URL (built from course id + query filters) on export click', async () => {
