@@ -27,39 +27,25 @@ const settings: ScheduleSettings = {
 };
 
 describe('<SettingsDrawer />', () => {
-  it('renders the trigger button but keeps the drawer closed initially', () => {
+  it('renders, opens, and closes the settings drawer', async () => {
+    const user = userEvent.setup();
     render(<SettingsDrawer settings={settings} tags={[TagEnum.Coding]} />);
 
     expect(screen.getByTestId('Settings')).toBeInTheDocument();
     expect(screen.queryByText('Schedule settings')).not.toBeInTheDocument();
-  });
-
-  it('opens the drawer with all three settings sections when the trigger is clicked', async () => {
-    const user = userEvent.setup();
-    render(<SettingsDrawer settings={settings} tags={[TagEnum.Coding]} />);
 
     await user.click(screen.getByTestId('Settings'));
 
     expect(await screen.findByText('Schedule settings')).toBeInTheDocument();
-    // Collapsible section headers from the three child panels.
     expect(screen.getByText('Time zone')).toBeInTheDocument();
     expect(screen.getByText('Table columns')).toBeInTheDocument();
     expect(screen.getByText('Change Tag Colors')).toBeInTheDocument();
-  });
 
-  it('closes the drawer when the close button is clicked', async () => {
-    const user = userEvent.setup();
-    render(<SettingsDrawer settings={settings} tags={[TagEnum.Coding]} />);
-
-    await user.click(screen.getByTestId('Settings'));
-    expect(await screen.findByText('Schedule settings')).toBeInTheDocument();
-    // While open, the drawer content wrapper is not hidden.
     const hiddenWrapper = () => document.querySelector('.ant-drawer-content-wrapper-hidden');
     expect(hiddenWrapper()).toBeNull();
 
     await user.click(screen.getByRole('button', { name: /close/i }));
 
-    // antd keeps the Drawer mounted but applies the `-hidden` class on close.
     await waitFor(() => expect(hiddenWrapper()).not.toBeNull());
   });
 });
