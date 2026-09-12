@@ -1,4 +1,3 @@
-import assert from 'node:assert';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { GratitudeDto } from '@client/api';
 import { GratitudeList } from './index';
@@ -26,66 +25,30 @@ describe('GratitudeList', () => {
   afterAll(() => {
     vi.useRealTimers();
   });
-  test('should display nothing if gratitude list is empty', () => {
-    const { container } = render(<GratitudeList feedback={[]} showCount={5} />);
-    expect(container).toBeEmptyDOMElement();
-  });
+  test('renders empty, full, partial, expanded, and collapsed list states', () => {
+    const { container, rerender } = render(
+      <GratitudeList key="full" feedback={mockGratitudes} showCount={mockGratitudes.length} />,
+    );
 
-  test('should display gratitudes list if provided', () => {
-    render(<GratitudeList feedback={mockGratitudes} showCount={mockGratitudes.length} />);
+    expect(screen.getByText(mockGratitudes[0]!.comment)).toBeInTheDocument();
+    expect(screen.getByText('11 hours ago')).toBeInTheDocument();
+    expect(screen.getByText(mockGratitudes[1]!.comment)).toBeInTheDocument();
+    expect(screen.getByText('a day ago')).toBeInTheDocument();
+    expect(screen.getByText(mockGratitudes[2]!.comment)).toBeInTheDocument();
+    expect(screen.getByText('3 months ago')).toBeInTheDocument();
+    expect(screen.getAllByRole('listitem')).toHaveLength(mockGratitudes.length);
+    expect(screen.queryByRole('button', { name: 'Show all' })).not.toBeInTheDocument();
 
-    assert.ok(mockGratitudes.length === 3);
-
-    const gratitudeComment1 = screen.getByText(mockGratitudes[0]!.comment);
-    const timeAgo1 = screen.getByText('11 hours ago');
-    const gratitudeComment2 = screen.getByText(mockGratitudes[1]!.comment);
-    const timeAgo2 = screen.getByText('a day ago');
-    const gratitudeComment3 = screen.getByText(mockGratitudes[2]!.comment);
-    const timeAgo3 = screen.getByText('3 months ago');
-
-    expect(gratitudeComment1).toBeInTheDocument();
-    expect(timeAgo1).toBeInTheDocument();
-    expect(gratitudeComment2).toBeInTheDocument();
-    expect(timeAgo2).toBeInTheDocument();
-    expect(gratitudeComment3).toBeInTheDocument();
-    expect(timeAgo3).toBeInTheDocument();
-  });
-
-  test('should display number of feedbacks equal to showCount and Show All button if number of feedbacks is greater than showCount', () => {
-    const mockShowCount = 1;
-
-    render(<GratitudeList feedback={mockGratitudes} showCount={mockShowCount} />);
-
-    const feedbacksCount = screen.getAllByRole('listitem');
-    const showAllButton = screen.getByRole('button', { name: 'Show all' });
-
-    expect(feedbacksCount.length).toBe(mockShowCount);
-    expect(showAllButton).toBeInTheDocument();
-  });
-
-  test('should display number of feedbacks equal to showCount and not show Show All button if number of feedbacks is not greater than showCount', () => {
-    render(<GratitudeList feedback={mockGratitudes} showCount={mockGratitudes.length} />);
-
-    const feedbacksCount = screen.getAllByRole('listitem');
-    const showAllButton = screen.queryByRole('button', { name: 'Show all' });
-
-    expect(feedbacksCount).toHaveLength(mockGratitudes.length);
-    expect(showAllButton).not.toBeInTheDocument();
-  });
-
-  test('should collapse and expand the list of feedbacks correctly', () => {
-    const mockShowCount = 1;
-
-    render(<GratitudeList feedback={mockGratitudes} showCount={mockShowCount} />);
-
-    expect(screen.getAllByRole('listitem').length).toBe(mockShowCount);
+    rerender(<GratitudeList key="partial" feedback={mockGratitudes} showCount={1} />);
+    expect(screen.getAllByRole('listitem')).toHaveLength(1);
 
     fireEvent.click(screen.getByRole('button', { name: 'Show all' }));
-
-    expect(screen.getAllByRole('listitem').length).toBe(mockGratitudes.length);
+    expect(screen.getAllByRole('listitem')).toHaveLength(mockGratitudes.length);
 
     fireEvent.click(screen.getByRole('button', { name: 'Show partially' }));
+    expect(screen.getAllByRole('listitem')).toHaveLength(1);
 
-    expect(screen.getAllByRole('listitem').length).toBe(mockShowCount);
+    rerender(<GratitudeList key="empty" feedback={[]} showCount={5} />);
+    expect(container).toBeEmptyDOMElement();
   });
 });
