@@ -99,29 +99,16 @@ describe('MentorPreferencesModal', () => {
     createMentor.mockReset().mockResolvedValue({});
   });
 
-  it('should not render the modal until showMentorOptions is invoked', () => {
-    renderProvider();
-
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-  });
-
-  it('should open the modal and load mentor options when triggered', async () => {
+  it('should start closed, load mentor options when opened and close on cancel', async () => {
     const user = userEvent.setup();
     renderProvider();
 
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'open-options' }));
 
     expect(await screen.findByRole('dialog')).toBeInTheDocument();
     expect(screen.getByText('RS 2025')).toBeInTheDocument();
     await waitFor(() => expect(getMentorOptions).toHaveBeenCalledWith(17, 400));
-  });
-
-  it('should close the modal on cancel', async () => {
-    const user = userEvent.setup();
-    renderProvider();
-
-    await user.click(screen.getByRole('button', { name: 'open-options' }));
-    await screen.findByRole('dialog');
 
     await user.click(screen.getByRole('button', { name: /Cancel/ }));
 
