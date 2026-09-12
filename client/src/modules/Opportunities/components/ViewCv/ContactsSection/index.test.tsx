@@ -7,13 +7,11 @@ vi.mock('./ContactsList', () => ({
 }));
 
 describe('ContactsSection', () => {
-  test('should display nothing if contacts are not provided', () => {
-    const { container } = render(<ContactsSection contacts={null} />);
+  test('displays the section only when contacts are provided', () => {
+    const { container, rerender } = render(<ContactsSection contacts={null} />);
     expect(container).toBeEmptyDOMElement();
-  });
 
-  test('should display section if contacts are provided', () => {
-    render(<ContactsSection contacts={{} as Contacts} />);
+    rerender(<ContactsSection contacts={{} as Contacts} />);
     const contactsList = screen.getByText('Mock Contacts');
     expect(contactsList).toBeInTheDocument();
   });
