@@ -17,8 +17,8 @@ function makeStudent(overrides: Partial<StudentDto> = {}): StudentDto {
 const courseSummary = { totalScore: 1000, studentsCount: 50 };
 
 describe('<StudentInfo />', () => {
-  it('renders the student name, github link, rank/position, score and location', () => {
-    render(<StudentInfo student={makeStudent()} courseSummary={courseSummary} />);
+  it('renders student details and handles name and location variants', () => {
+    const { rerender } = render(<StudentInfo student={makeStudent()} courseSummary={courseSummary} />);
 
     expect(screen.getByRole('heading', { name: 'Ada Lovelace' })).toBeInTheDocument();
 
@@ -29,22 +29,15 @@ describe('<StudentInfo />', () => {
     expect(screen.getByText('3/50')).toBeInTheDocument();
     expect(screen.getByText('850/1000')).toBeInTheDocument();
     expect(screen.getByText('London, UK')).toBeInTheDocument();
-  });
 
-  it('omits the name heading when the name is empty or the placeholder "(Empty)"', () => {
-    const { rerender } = render(
-      <StudentInfo student={makeStudent({ name: '(Empty)' })} courseSummary={courseSummary} />,
-    );
+    rerender(<StudentInfo student={makeStudent({ name: '(Empty)' })} courseSummary={courseSummary} />);
     expect(screen.queryByRole('heading')).not.toBeInTheDocument();
-    // Github link is still present.
     expect(screen.getByRole('link', { name: /ada-lovelace/ })).toBeInTheDocument();
 
     rerender(<StudentInfo student={makeStudent({ name: '' })} courseSummary={courseSummary} />);
     expect(screen.queryByRole('heading')).not.toBeInTheDocument();
-  });
 
-  it('joins only the populated location parts (city missing → country only)', () => {
-    render(
+    rerender(
       <StudentInfo
         student={makeStudent({ cityName: undefined, countryName: 'Poland' })}
         courseSummary={courseSummary}
@@ -52,16 +45,13 @@ describe('<StudentInfo />', () => {
     );
     expect(screen.getByText('Poland')).toBeInTheDocument();
     expect(screen.queryByText(/,/)).not.toBeInTheDocument();
-  });
 
-  it('renders an empty location string when neither city nor country is set', () => {
-    render(
+    rerender(
       <StudentInfo
         student={makeStudent({ cityName: undefined, countryName: undefined })}
         courseSummary={courseSummary}
       />,
     );
-    // Position + Total Score labels still render.
     expect(screen.getByText('Position')).toBeInTheDocument();
     expect(screen.getByText('Total Score')).toBeInTheDocument();
     expect(screen.getByText('Location')).toBeInTheDocument();
