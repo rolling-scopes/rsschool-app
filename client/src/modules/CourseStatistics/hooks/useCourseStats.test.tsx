@@ -52,20 +52,18 @@ describe('useCoursesStats', () => {
     expect(result.current.coursesData).toEqual({ studentsStats: {} });
   });
 
-  it('is ready when ids are non-empty', () => {
-    renderHook(() => useCoursesStats({ ids: [42], year: 0 }));
+  it('sets readiness from ids and year', () => {
+    const { rerender } = renderHook(({ ids, year }) => useCoursesStats({ ids, year }), {
+      initialProps: { ids: [42], year: 0 },
+    });
 
     expect(lastCall().options.ready).toBe(true);
-  });
 
-  it('is ready when only a year is provided', () => {
-    renderHook(() => useCoursesStats({ ids: [], year: 2025 }));
+    rerender({ ids: [], year: 2025 });
 
     expect(lastCall().options.ready).toBe(true);
-  });
 
-  it('is NOT ready when neither ids nor year are set', () => {
-    renderHook(() => useCoursesStats({ ids: [], year: 0 }));
+    rerender({ ids: [], year: 0 });
 
     expect(lastCall().options.ready).toBe(false);
   });
