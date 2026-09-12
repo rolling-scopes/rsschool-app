@@ -70,105 +70,52 @@ vi.mock('@client/modules/Opportunities/hooks');
 const mockUuid = '13791ec3-83b9-44ce-95c5-f06837a71966';
 
 describe('ViewCV', () => {
-  test('should display loading screeen if loading is true', () => {
+  test('should render loading, public, private, populated, and empty data states', () => {
     vi.mocked(useViewData).mockReturnValue({ loading: true });
     vi.mocked(useExpiration).mockReturnValue({
       expirationState: ExpirationState.NotExpired,
       expirationDateFormatted: '2021-01-01',
     });
 
-    render(<ViewCV initialData={{} as ResumeDto} />);
+    const { rerender } = render(<ViewCV initialData={{} as ResumeDto} />);
 
     const loadingScreen = screen.getByText('Loading...');
 
     expect(loadingScreen).toBeInTheDocument();
-  });
 
-  test('should display public link in public mode', () => {
     vi.mocked(useViewData).mockReturnValue({ loading: false, uuid: mockUuid });
-    vi.mocked(useExpiration).mockReturnValue({
-      expirationState: ExpirationState.NotExpired,
-      expirationDateFormatted: '2021-01-01',
-    });
+    rerender(<ViewCV initialData={{} as ResumeDto} publicMode={true} />);
 
-    render(<ViewCV initialData={{} as ResumeDto} publicMode={true} />);
+    expect(screen.getByText(`PublicLink ${window.location.origin}/cv/${mockUuid}`)).toBeInTheDocument();
+    expect(screen.queryByText('ActionButtons')).not.toBeInTheDocument();
 
-    const publicLink = screen.getByText(`PublicLink ${window.location.origin}/cv/${mockUuid}`);
-    const actionButtons = screen.queryByText('ActionButtons');
+    rerender(<ViewCV initialData={{} as ResumeDto} publicMode={false} />);
 
-    expect(publicLink).toBeInTheDocument();
-    expect(actionButtons).not.toBeInTheDocument();
-  });
+    expect(screen.queryByText(`PublicLink ${window.location.origin}/cv/${mockUuid}`)).not.toBeInTheDocument();
+    expect(screen.getByText('ActionButtons')).toBeInTheDocument();
 
-  test('should display action buttons in non public mode', () => {
-    vi.mocked(useViewData).mockReturnValue({ loading: false, uuid: mockUuid });
-    vi.mocked(useExpiration).mockReturnValue({
-      expirationState: ExpirationState.NotExpired,
-      expirationDateFormatted: '2021-01-01',
-    });
-
-    render(<ViewCV initialData={{} as ResumeDto} publicMode={false} />);
-
-    const publicLink = screen.queryByText(`PublicLink ${window.location.origin}/cv/${mockUuid}`);
-    const actionButtons = screen.getByText('ActionButtons');
-
-    expect(publicLink).not.toBeInTheDocument();
-    expect(actionButtons).toBeInTheDocument();
-  });
-
-  test('should not display userData-related content if userData is provided', () => {
     vi.mocked(useViewData).mockReturnValue({ loading: false, uuid: mockUuid, userData: {} });
-    vi.mocked(useExpiration).mockReturnValue({
-      expirationState: ExpirationState.NotExpired,
-      expirationDateFormatted: '2021-01-01',
-    });
+    rerender(<ViewCV initialData={{} as ResumeDto} publicMode={false} />);
 
-    render(<ViewCV initialData={{} as ResumeDto} publicMode={false} />);
+    expect(screen.getByText('ExpirationTooltip')).toBeInTheDocument();
+    expect(screen.getByText('NameTitle')).toBeInTheDocument();
+    expect(screen.getByText('PersonalSection')).toBeInTheDocument();
+    expect(screen.getByText('ContactsSection')).toBeInTheDocument();
+    expect(screen.getByText('AboutSection')).toBeInTheDocument();
+    expect(screen.getByText('CoursesSection')).toBeInTheDocument();
+    expect(screen.getByText('FeedbackSection')).toBeInTheDocument();
+    expect(screen.getByText('GratitudeSection')).toBeInTheDocument();
 
-    const expiration = screen.queryByText('ExpirationTooltip');
-    const nameTitle = screen.queryByText('NameTitle');
-    const personalSection = screen.queryByText('PersonalSection');
-    const contactsSection = screen.queryByText('ContactsSection');
-    const aboutSection = screen.queryByText('AboutSection');
-    const coursesSection = screen.queryByText('CoursesSection');
-    const feedbackSection = screen.queryByText('FeedbackSection');
-    const gratitudeSection = screen.queryByText('GratitudeSection');
-
-    expect(expiration).toBeInTheDocument();
-    expect(nameTitle).toBeInTheDocument();
-    expect(personalSection).toBeInTheDocument();
-    expect(contactsSection).toBeInTheDocument();
-    expect(aboutSection).toBeInTheDocument();
-    expect(coursesSection).toBeInTheDocument();
-    expect(feedbackSection).toBeInTheDocument();
-    expect(gratitudeSection).toBeInTheDocument();
-  });
-
-  test('should not display userData-related content if userData is not provided', () => {
     vi.mocked(useViewData).mockReturnValue({ loading: false, uuid: mockUuid, userData: null });
-    vi.mocked(useExpiration).mockReturnValue({
-      expirationState: ExpirationState.NotExpired,
-      expirationDateFormatted: '2021-01-01',
-    });
+    rerender(<ViewCV initialData={{} as ResumeDto} publicMode={false} />);
 
-    render(<ViewCV initialData={{} as ResumeDto} publicMode={false} />);
-
-    const expiration = screen.queryByText('Expiration');
-    const nameTitle = screen.queryByText('NameTitle');
-    const personalSection = screen.queryByText('PersonalSection');
-    const contactsSection = screen.queryByText('ContactsSection');
-    const aboutSection = screen.queryByText('AboutSection');
-    const coursesSection = screen.queryByText('CoursesSection');
-    const feedbackSection = screen.queryByText('FeedbackSection');
-    const gratitudeSection = screen.queryByText('GratitudeSection');
-
-    expect(expiration).not.toBeInTheDocument();
-    expect(nameTitle).not.toBeInTheDocument();
-    expect(personalSection).not.toBeInTheDocument();
-    expect(contactsSection).not.toBeInTheDocument();
-    expect(aboutSection).not.toBeInTheDocument();
-    expect(coursesSection).not.toBeInTheDocument();
-    expect(feedbackSection).not.toBeInTheDocument();
-    expect(gratitudeSection).not.toBeInTheDocument();
+    expect(screen.queryByText('Expiration')).not.toBeInTheDocument();
+    expect(screen.queryByText('NameTitle')).not.toBeInTheDocument();
+    expect(screen.queryByText('PersonalSection')).not.toBeInTheDocument();
+    expect(screen.queryByText('ContactsSection')).not.toBeInTheDocument();
+    expect(screen.queryByText('AboutSection')).not.toBeInTheDocument();
+    expect(screen.queryByText('CoursesSection')).not.toBeInTheDocument();
+    expect(screen.queryByText('FeedbackSection')).not.toBeInTheDocument();
+    expect(screen.queryByText('GratitudeSection')).not.toBeInTheDocument();
   });
 });
