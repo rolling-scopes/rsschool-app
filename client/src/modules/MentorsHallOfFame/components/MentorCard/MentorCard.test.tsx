@@ -17,131 +17,51 @@ const mockMentor: TopMentorDto = {
 };
 
 describe('MentorCard', () => {
-  it('renders mentor name, githubId, and avatar', () => {
-    render(<MentorCard mentor={mockMentor} />);
+  it('renders mentor details and handles data variants', () => {
+    const { rerender } = render(<MentorCard mentor={mockMentor} />);
 
     expect(screen.getByText('Test Mentor')).toBeInTheDocument();
     expect(screen.getByText('@testmentor')).toBeInTheDocument();
-    // Avatar is rendered
     expect(screen.getAllByRole('img').length).toBeGreaterThan(0);
-  });
-
-  it('does not display rank badge', () => {
-    render(<MentorCard mentor={mockMentor} />);
-
     expect(screen.queryByTitle('1')).not.toBeInTheDocument();
-  });
-
-  it('displays total students count', () => {
-    render(<MentorCard mentor={mockMentor} />);
-
     expect(screen.getByText('25')).toBeInTheDocument();
     expect(screen.getByText(/certified students/i)).toBeInTheDocument();
-  });
-
-  it('displays total gratitudes count with heart emoji', () => {
-    render(<MentorCard mentor={mockMentor} />);
-
     expect(screen.getByText('12')).toBeInTheDocument();
     expect(screen.getByText('❤️')).toBeInTheDocument();
-  });
-
-  it('renders course stats list', () => {
-    render(<MentorCard mentor={mockMentor} />);
-
     expect(screen.getByText('JS Course')).toBeInTheDocument();
     expect(screen.getByText('15')).toBeInTheDocument();
     expect(screen.getByText('React Course')).toBeInTheDocument();
     expect(screen.getByText('10')).toBeInTheDocument();
-  });
-
-  it('renders "Say Thank you!" button that navigates to /gratitude', () => {
-    render(<MentorCard mentor={mockMentor} />);
-
-    const button = screen.getByRole('button', { name: /say thank you/i });
-    expect(button).toBeInTheDocument();
-  });
-
-  it('handles empty course stats gracefully', () => {
-    const mentorWithoutCourseStats: TopMentorDto = {
-      ...mockMentor,
-      courseStats: [],
-    };
-
-    render(<MentorCard mentor={mentorWithoutCourseStats} />);
-
-    expect(screen.getByText('Test Mentor')).toBeInTheDocument();
-    expect(screen.queryByText('JS Course')).not.toBeInTheDocument();
-  });
-
-  it('renders GitHub profile link', () => {
-    render(<MentorCard mentor={mockMentor} />);
-
+    expect(screen.getByRole('button', { name: /say thank you/i })).toBeInTheDocument();
     const githubLink = screen.getByText('@testmentor');
     expect(githubLink).toHaveAttribute('href', 'https://github.com/testmentor');
     expect(githubLink).toHaveAttribute('target', '_blank');
-  });
 
-  it('renders zero students and gratitudes', () => {
-    const mentorWithZeroValues: TopMentorDto = {
-      ...mockMentor,
-      totalStudents: 0,
-      totalGratitudes: 0,
-    };
+    rerender(<MentorCard mentor={{ ...mockMentor, courseStats: [] }} />);
+    expect(screen.queryByText('JS Course')).not.toBeInTheDocument();
 
-    render(<MentorCard mentor={mentorWithZeroValues} />);
-
+    rerender(<MentorCard mentor={{ ...mockMentor, totalStudents: 0, totalGratitudes: 0 }} />);
     expect(screen.getAllByText('0')).toHaveLength(2);
     expect(screen.getByText(/certified students/i)).toBeInTheDocument();
-  });
 
-  it('renders mentor when only firstName exists in name', () => {
-    const mentorWithFirstNameOnly: TopMentorDto = {
-      ...mockMentor,
-      name: 'John',
-    };
-
-    render(<MentorCard mentor={mentorWithFirstNameOnly} />);
-
+    rerender(<MentorCard mentor={{ ...mockMentor, name: 'John' }} />);
     expect(screen.getByText('John')).toBeInTheDocument();
     expect(screen.queryByText('Test Mentor')).not.toBeInTheDocument();
-  });
 
-  it('renders mentor when only lastName exists in name', () => {
-    const mentorWithLastNameOnly: TopMentorDto = {
-      ...mockMentor,
-      name: 'Doe',
-    };
-
-    render(<MentorCard mentor={mentorWithLastNameOnly} />);
-
+    rerender(<MentorCard mentor={{ ...mockMentor, name: 'Doe' }} />);
     expect(screen.getByText('Doe')).toBeInTheDocument();
     expect(screen.queryByText('Test Mentor')).not.toBeInTheDocument();
-  });
 
-  it('renders very long course names', () => {
     const longCourseName =
       'Very Long Course Name With Many Words For Overflow Testing Very Long Course Name With Many Words For Overflow Testing';
-    const mentorWithLongCourseName: TopMentorDto = {
-      ...mockMentor,
-      courseStats: [{ courseName: longCourseName, studentsCount: 7 }],
-    };
-
-    render(<MentorCard mentor={mentorWithLongCourseName} />);
-
+    rerender(
+      <MentorCard mentor={{ ...mockMentor, courseStats: [{ courseName: longCourseName, studentsCount: 7 }] }} />,
+    );
     expect(screen.getByText(longCourseName)).toBeInTheDocument();
-  });
 
-  it('renders very long mentor names', () => {
     const longMentorName =
       'Very Long Mentor Name With Many Words For Overflow Testing Very Long Mentor Name With Many Words For Overflow Testing';
-    const mentorWithLongName: TopMentorDto = {
-      ...mockMentor,
-      name: longMentorName,
-    };
-
-    render(<MentorCard mentor={mentorWithLongName} />);
-
+    rerender(<MentorCard mentor={{ ...mockMentor, name: longMentorName }} />);
     expect(screen.getByText(longMentorName)).toBeInTheDocument();
   });
 });
