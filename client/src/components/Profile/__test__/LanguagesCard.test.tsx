@@ -17,19 +17,10 @@ function renderCard(overrides: Partial<React.ComponentProps<typeof LanguagesCard
 }
 
 describe('LanguagesCard', () => {
-  it('renders no tags when data is empty', () => {
-    renderCard({ data: [] });
+  it('renders the empty state without an edit affordance when editing is disabled', () => {
+    renderCard({ data: [], isEditingModeEnabled: false });
     expect(screen.queryByText(String(getLanguageName(lang)))).not.toBeInTheDocument();
     expect(screen.getByText('Languages are not selected')).toBeInTheDocument();
-  });
-
-  it('renders a tag for each language when data is populated', () => {
-    renderCard({ data: [lang] });
-    expect(screen.getAllByText(String(getLanguageName(lang))).length).toBeGreaterThan(0);
-  });
-
-  it('does not show the edit affordance when editing is disabled', () => {
-    renderCard({ isEditingModeEnabled: false });
     expect(screen.queryByRole('img', { name: 'edit' })).not.toBeInTheDocument();
   });
 
@@ -37,6 +28,8 @@ describe('LanguagesCard', () => {
     const user = userEvent.setup();
     const updateProfile = vi.fn().mockResolvedValue(true);
     renderCard({ data: [lang], updateProfile });
+
+    expect(screen.getAllByText(String(getLanguageName(lang))).length).toBeGreaterThan(0);
 
     await user.click(screen.getByRole('img', { name: 'edit' }));
     expect(screen.getByRole('dialog')).toBeInTheDocument();
