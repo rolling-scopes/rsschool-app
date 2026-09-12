@@ -12,18 +12,16 @@ const distribution = {
 } as TeamDistributionDto;
 
 describe('CardTitle', () => {
-  it('should display distribution name', () => {
-    render(<CardTitle distribution={distribution} />);
+  it('renders distribution details across registration states', () => {
+    const { rerender } = render(<CardTitle distribution={distribution} />);
+
     expect(screen.getByText('test name')).toBeInTheDocument();
-  });
-
-  it('should display min score when it is not 0 and registrationStatus not completed or distributed', () => {
-    render(<CardTitle distribution={distribution} />);
     expect(screen.getByText(`Min score ${distribution.minTotalScore}`)).toBeInTheDocument();
-  });
+    expect(screen.getByText(`${distribution.strictTeamSize} members`)).toBeInTheDocument();
+    expect(screen.getByText(/2023-01-24/i)).toBeInTheDocument();
+    expect(screen.getByText(/2023-01-31/i)).toBeInTheDocument();
 
-  it('should not display min score when it is 0', () => {
-    render(
+    rerender(
       <CardTitle
         distribution={{
           ...distribution,
@@ -32,48 +30,27 @@ describe('CardTitle', () => {
       />,
     );
     expect(screen.queryByText('Min score 0')).not.toBeInTheDocument();
-  });
 
-  it.each`
-    registrationStatus
-    ${TeamDistributionDtoRegistrationStatusEnum.Completed}
-    ${TeamDistributionDtoRegistrationStatusEnum.Distributed}
-  `('should not display min score when registrationStatus is $registrationStatus', ({ registrationStatus }) => {
-    render(
+    rerender(
       <CardTitle
         distribution={{
           ...distribution,
-          registrationStatus,
+          registrationStatus: TeamDistributionDtoRegistrationStatusEnum.Completed,
         }}
       />,
     );
     expect(screen.queryByText(`Min score ${distribution.minTotalScore}`)).not.toBeInTheDocument();
-  });
+    expect(screen.getByText('without team')).toBeInTheDocument();
 
-  it.each`
-    registrationStatus                                       | text
-    ${TeamDistributionDtoRegistrationStatusEnum.Completed}   | ${'without team'}
-    ${TeamDistributionDtoRegistrationStatusEnum.Distributed} | ${'distributed'}
-  `('should render tag with $text when registrationStatus is $registrationStatus', ({ registrationStatus, text }) => {
-    render(
+    rerender(
       <CardTitle
         distribution={{
           ...distribution,
-          registrationStatus,
+          registrationStatus: TeamDistributionDtoRegistrationStatusEnum.Distributed,
         }}
       />,
     );
-    expect(screen.getByText(text)).toBeInTheDocument();
-  });
-
-  it('should display strict team size', () => {
-    render(<CardTitle distribution={distribution} />);
-    expect(screen.getByText(`${distribution.strictTeamSize} members`)).toBeInTheDocument();
-  });
-
-  it('should display distribution period', () => {
-    render(<CardTitle distribution={distribution} />);
-    expect(screen.getByText(/2023-01-24/i)).toBeInTheDocument();
-    expect(screen.getByText(/2023-01-31/i)).toBeInTheDocument();
+    expect(screen.queryByText(`Min score ${distribution.minTotalScore}`)).not.toBeInTheDocument();
+    expect(screen.getByText('distributed')).toBeInTheDocument();
   });
 });
