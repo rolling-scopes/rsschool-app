@@ -28,48 +28,21 @@ function makeItem(overrides: Partial<CourseScheduleItemDto> = {}): CourseSchedul
 }
 
 describe('<MobileItemCard />', () => {
-  it('renders the item name linking to its description URL', () => {
-    render(<MobileItemCard item={makeItem()} timezone="Europe/Moscow" />);
+  it('renders item details and their optional variants', () => {
+    const { rerender } = render(<MobileItemCard item={makeItem()} timezone="Europe/Moscow" />);
 
     const link = screen.getByRole('link', { name: 'Intro to JS' });
     expect(link).toHaveAttribute('href', 'https://example.com/task');
     expect(link).toHaveAttribute('target', '_blank');
-  });
+    expect(screen.getByText(TAG_NAME_MAP[TagEnum.Coding])).toBeInTheDocument();
+    expect(screen.getByText('Done')).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: 'swap-right' })).toBeInTheDocument();
 
-  it('falls back to an empty href when the item has no description URL', () => {
-    render(<MobileItemCard item={makeItem({ descriptionUrl: '' })} timezone="Europe/Moscow" />);
-
+    rerender(<MobileItemCard item={makeItem({ descriptionUrl: '', endDate: undefined })} timezone="UTC" />);
     const heading = screen.getByRole('heading', { name: 'Intro to JS' });
     // eslint-disable-next-line testing-library/no-node-access -- Empty-href anchors have no link role in DOM queries.
-    const link = heading.closest('a');
-    expect(link).toHaveAttribute('href', '');
-  });
-
-  it('renders the tag label and the capitalized status', () => {
-    render(<MobileItemCard item={makeItem()} timezone="Europe/Moscow" />);
-
-    expect(screen.getByText(TAG_NAME_MAP[TagEnum.Coding])).toBeInTheDocument();
-    // statusRenderer capitalizes the enum value.
-    expect(screen.getByText('Done')).toBeInTheDocument();
-  });
-
-  it('renders the timezone offset for the supplied timezone', () => {
-    render(<MobileItemCard item={makeItem()} timezone="UTC" />);
-
-    // UTC offset is +00:00.
+    expect(heading.closest('a')).toHaveAttribute('href', '');
     expect(screen.getByText('(UTC +00:00)')).toBeInTheDocument();
-  });
-
-  it('renders both start and end dates with a separator when an end date exists', () => {
-    render(<MobileItemCard item={makeItem()} timezone="Europe/Moscow" />);
-
-    // The SwapRightOutlined icon renders as an accessible image labelled "swap-right".
-    expect(screen.getByRole('img', { name: 'swap-right' })).toBeInTheDocument();
-  });
-
-  it('omits the end date and separator when the item has no end date', () => {
-    render(<MobileItemCard item={makeItem({ endDate: undefined })} timezone="Europe/Moscow" />);
-
     expect(screen.queryByRole('img', { name: 'swap-right' })).not.toBeInTheDocument();
   });
 });
