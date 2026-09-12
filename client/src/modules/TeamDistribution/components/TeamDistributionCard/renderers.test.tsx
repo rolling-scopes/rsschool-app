@@ -2,33 +2,33 @@ import { render, screen } from '@testing-library/react';
 import { TeamDistributionDtoRegistrationStatusEnum } from '@client/api';
 import { RenderMinTotalScore, RenderRegistrationStatus } from './renderers';
 
+vi.mock('@ant-design/icons/ClockCircleOutlined', () => ({ default: () => null }));
+vi.mock('antd', () => ({
+  Tag: ({ children }: React.PropsWithChildren) => <span>{children}</span>,
+  Typography: { Text: ({ children }: React.PropsWithChildren) => <span>{children}</span> },
+}));
+
 describe('RenderRegistrationStatus', () => {
-  it('renders a green "distributed" tag for the distributed status', () => {
-    render(<RenderRegistrationStatus status={TeamDistributionDtoRegistrationStatusEnum.Distributed} />);
-    expect(screen.getByText('distributed')).toBeInTheDocument();
-  });
-
-  it('renders a "without team" tag for the completed status', () => {
-    render(<RenderRegistrationStatus status={TeamDistributionDtoRegistrationStatusEnum.Completed} />);
-    expect(screen.getByText('without team')).toBeInTheDocument();
-  });
-
-  it('renders nothing for any other registration status (default branch)', () => {
-    const { container } = render(
-      <RenderRegistrationStatus status={TeamDistributionDtoRegistrationStatusEnum.Available} />,
+  it('renders each registration status', () => {
+    const { container, rerender } = render(
+      <RenderRegistrationStatus status={TeamDistributionDtoRegistrationStatusEnum.Distributed} />,
     );
+    expect(screen.getByText('distributed')).toBeInTheDocument();
+
+    rerender(<RenderRegistrationStatus status={TeamDistributionDtoRegistrationStatusEnum.Completed} />);
+    expect(screen.getByText('without team')).toBeInTheDocument();
+
+    rerender(<RenderRegistrationStatus status={TeamDistributionDtoRegistrationStatusEnum.Available} />);
     expect(container).toBeEmptyDOMElement();
   });
 });
 
 describe('RenderMinTotalScore', () => {
-  it('renders the min-score label when a score is provided', () => {
-    render(<RenderMinTotalScore score={120} />);
+  it('renders a provided score and nothing for zero', () => {
+    const { container, rerender } = render(<RenderMinTotalScore score={120} />);
     expect(screen.getByText('Min score 120')).toBeInTheDocument();
-  });
 
-  it('renders nothing when the score is zero', () => {
-    const { container } = render(<RenderMinTotalScore score={0} />);
+    rerender(<RenderMinTotalScore score={0} />);
     expect(container).toBeEmptyDOMElement();
   });
 });
