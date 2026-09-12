@@ -26,8 +26,8 @@ const mockCourses = [
 ] as ResumeCourseDto[];
 
 describe('VisibleCoursesForm', () => {
-  test('should display all courses with positions', () => {
-    render(<VisibleCoursesForm courses={mockCourses} visibleCourses={[]} />);
+  test('renders courses and both empty-list variants', () => {
+    const { rerender } = render(<VisibleCoursesForm courses={mockCourses} visibleCourses={[]} />);
 
     mockCourses.forEach(({ fullName, rank }) => {
       const courseName = screen.getByText(fullName);
@@ -36,17 +36,11 @@ describe('VisibleCoursesForm', () => {
       expect(courseName).toBeInTheDocument();
       expect(coursePosition).toBeInTheDocument();
     });
-  });
 
-  test('shows a fallback message when there are no courses', () => {
-    render(<VisibleCoursesForm courses={[]} visibleCourses={[]} />);
-
+    rerender(<VisibleCoursesForm courses={[]} visibleCourses={[]} />);
     expect(screen.getByText('No courses to show')).toBeInTheDocument();
-  });
 
-  test('shows the fallback message when courses is null', () => {
-    render(<VisibleCoursesForm courses={null} visibleCourses={[]} />);
-
+    rerender(<VisibleCoursesForm courses={null} visibleCourses={[]} />);
     expect(screen.getByText('No courses to show')).toBeInTheDocument();
   });
 });
