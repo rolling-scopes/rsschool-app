@@ -21,17 +21,12 @@ describe('MentorSearch', () => {
     });
   });
 
-  it('renders a combobox', () => {
-    render(<MentorSearch courseId={42} />);
-
-    expect(screen.getByRole('combobox')).toBeInTheDocument();
-  });
-
   it('searches mentors for the given course and renders the results', async () => {
     const user = userEvent.setup();
     render(<MentorSearch courseId={42} />);
 
     const combobox = screen.getByRole('combobox');
+    expect(combobox).toBeInTheDocument();
     combobox.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
     await user.type(combobox, 'men');
 
