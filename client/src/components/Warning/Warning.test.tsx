@@ -19,18 +19,19 @@ vi.mock('@client/shared/components/PageLayout', () => ({
 }));
 
 describe('Warning', () => {
-  it('renders the image (prefixed with /static) and a text message', () => {
-    render(<Warning imagePath="/svg/sloth.svg" imageName="Sad sloth" textMessage="Page not found" />);
+  it('renders text and JSX messages and forwards loading state', () => {
+    const { rerender } = render(
+      <Warning imagePath="/svg/sloth.svg" imageName="Sad sloth" textMessage="Page not found" />,
+    );
 
     const img = screen.getByRole('img', { name: 'Sad sloth' });
     expect(img).toHaveAttribute('src', '/static/svg/sloth.svg');
     expect(img).toHaveAttribute('width', '175');
     expect(img).toHaveAttribute('height', '175');
     expect(screen.getByRole('heading', { name: 'Page not found' })).toBeInTheDocument();
-  });
+    expect(screen.getByTestId('page-layout')).toHaveAttribute('data-loading', 'false');
 
-  it('renders a JSX text message', () => {
-    render(
+    rerender(
       <Warning
         imagePath="/svg/x.svg"
         imageName="img"
@@ -39,15 +40,8 @@ describe('Warning', () => {
     );
 
     expect(screen.getByTestId('custom-message')).toHaveTextContent('Custom error');
-  });
 
-  it('defaults loading to false', () => {
-    render(<Warning imagePath="/svg/x.svg" imageName="img" textMessage="msg" />);
-    expect(screen.getByTestId('page-layout')).toHaveAttribute('data-loading', 'false');
-  });
-
-  it('forwards the loading flag to PageLayout', () => {
-    render(<Warning imagePath="/svg/x.svg" imageName="img" textMessage="msg" loading />);
+    rerender(<Warning imagePath="/svg/x.svg" imageName="img" textMessage="msg" loading />);
     expect(screen.getByTestId('page-layout')).toHaveAttribute('data-loading', 'true');
   });
 });
