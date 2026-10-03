@@ -1,13 +1,14 @@
-import { Controller, Get, NotFoundException, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, NotFoundException, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { AutoTestService } from './auto-test.service';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CourseRole } from '@entities/session';
-import { RequiredRoles, Role } from 'src/auth';
+import { DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/auth';
 import { AutoTestTaskDto } from './dto/auto-test-task.dto';
 import { BasicAutoTestTaskDto } from './dto/basic-auto-test-task.dto';
 
 @Controller('auto-test')
 @ApiTags('auto-tests')
+@UseGuards(DefaultGuard, RoleGuard)
 export class AutoTestController {
   constructor(private readonly service: AutoTestService) {}
 

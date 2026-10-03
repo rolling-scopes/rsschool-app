@@ -1,6 +1,6 @@
 import { Controller, Get, Header, Param, ParseIntPipe, Query, Req, UseGuards } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { JwtService } from 'src/core/jwt/jwt.service';
+import { CALENDAR_TOKEN_AUDIENCE, JwtService } from 'src/core/jwt/jwt.service';
 import { CourseGuard, CurrentRequest, DefaultGuard } from '../../auth';
 import { CoursesService } from '../courses.service';
 import { CourseICalendarService } from './course-icalendar.service';
@@ -40,7 +40,10 @@ export class CourseICalendarController {
     @Param('token') token: string,
     @Query('timezone') timezone: string,
   ): Promise<string> {
-    const payload = this.jwtService.validateToken<{ githubId: string; courseId: number }>(token);
+    const payload = this.jwtService.validateToken<{ githubId: string; courseId: number }>(
+      token,
+      CALENDAR_TOKEN_AUDIENCE,
+    );
     await this.courseICalendarService.validateUserCourse(courseId, payload);
     const [data, course] = await Promise.all([
       this.courseScheduleService.getAll(courseId),

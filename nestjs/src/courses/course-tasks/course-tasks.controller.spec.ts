@@ -189,7 +189,7 @@ describe('CourseTasksController', () => {
 
       await controller.updateCourseTask(5, 7, dto as never);
 
-      expect(service.updateCourseTask).toHaveBeenCalledWith(7, { maxScore: 50, courseId: 5, id: 7 });
+      expect(service.updateCourseTask).toHaveBeenCalledWith(5, 7, { maxScore: 50, id: 7 });
     });
   });
 
@@ -199,7 +199,7 @@ describe('CourseTasksController', () => {
 
       await controller.deleteCourseTask(5, 7);
 
-      expect(service.disable).toHaveBeenCalledWith(7);
+      expect(service.disable).toHaveBeenCalledWith(5, 7);
     });
   });
 });
