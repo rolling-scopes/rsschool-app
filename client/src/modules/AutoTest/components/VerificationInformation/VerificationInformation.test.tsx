@@ -50,7 +50,6 @@ describe('VerificationInformation', () => {
     ${CourseTaskDetailedDtoTypeEnum.Cvmarkdown}
     ${CourseTaskDetailedDtoTypeEnum.Htmltask}
     ${CourseTaskDetailedDtoTypeEnum.Ipynb}
-    ${CourseTaskDetailedDtoTypeEnum.Jstask}
     ${CourseTaskDetailedDtoTypeEnum.Kotlintask}
     ${CourseTaskDetailedDtoTypeEnum.Objctask}
   `(
@@ -77,6 +76,7 @@ describe('VerificationInformation', () => {
     const refreshButton = screen.getByRole('button', { name: /refresh/i });
     expect(startTaskButton).toBeInTheDocument();
     expect(refreshButton).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /show answers/i })).not.toBeInTheDocument();
   });
 
   it('should not render start and refresh buttons if table is not visible', () => {
@@ -104,7 +104,7 @@ describe('VerificationInformation', () => {
     renderVerificationInformation({
       type: CourseTaskDetailedDtoTypeEnum.Selfeducation,
       studentEndDate: '2000-01-01 12:00',
-      verifications: [{ score: 50 }] as CourseTaskVerifications['verifications'],
+      verifications: [{ id: 1, score: 50 }] as CourseTaskVerifications['verifications'],
     });
 
     const answersButton = screen.getByRole('button', { name: /show answers/i });

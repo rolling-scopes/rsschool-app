@@ -1,8 +1,8 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { ReactNode, createContext } from 'react';
 import type { UploadProps } from 'antd';
+import { setupUser } from '@client/__tests__/setupUser';
 import { SubmitScorePage } from '@client/pages/course/submit-scores';
 
 // --- Boundary & brittle-widget mocks --------------------------------------
@@ -32,11 +32,15 @@ const { getCourseTasks } = vi.hoisted(() => ({
   }),
 }));
 
-vi.mock('@client/api', async () => ({
-  ...(await vi.importActual('@client/api')),
+vi.mock('@client/api', () => ({
   CoursesTasksApi: function CoursesTasksApi() {
     return { getCourseTasks };
   },
+}));
+
+const { showError } = vi.hoisted(() => ({ showError: vi.fn() }));
+vi.mock('@client/hooks', () => ({
+  useMessage: () => ({ message: { error: showError, success: vi.fn() } }),
 }));
 
 const { postMultipleScores } = vi.hoisted(() => ({ postMultipleScores: vi.fn() }));
@@ -135,7 +139,7 @@ describe('<SubmitScorePage /> CSV upload flow', () => {
   });
 
   it('registers chosen files in the Upload fileList', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<SubmitScorePage />);
 
     await waitFor(() => expect(getCourseTasks).toHaveBeenCalled());
@@ -147,7 +151,7 @@ describe('<SubmitScorePage /> CSV upload flow', () => {
   });
 
   it('parses a valid CSV, uploads the deduped best scores, and shows the summary table', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     postMultipleScores.mockResolvedValue([
       { status: 'updated', value: undefined },
       { status: 'updated', value: undefined },
@@ -187,7 +191,7 @@ describe('<SubmitScorePage /> CSV upload flow', () => {
   });
 
   it('renders skipped students under a "Skipped students" section', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     postMultipleScores.mockResolvedValue([
       { status: 'created', value: undefined },
       { status: 'skipped', value: 'ghost-student not found' },
@@ -208,7 +212,7 @@ describe('<SubmitScorePage /> CSV upload flow', () => {
   });
 
   it('shows a specific "Incorrect data" error when required headers are missing', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<SubmitScorePage />);
     await waitFor(() => expect(getCourseTasks).toHaveBeenCalled());
 
@@ -221,14 +225,16 @@ describe('<SubmitScorePage /> CSV upload flow', () => {
     await user.click(screen.getByRole('button', { name: 'mock-select' }));
     await user.click(screen.getByRole('button', { name: /^Submit$/i }));
 
-    await waitFor(() => {
-      // The component routes "Incorrect data" errors to message.error; the network call never happens.
-      expect(postMultipleScores).not.toHaveBeenCalled();
-    });
+    await waitFor(() =>
+      expect(showError).toHaveBeenCalledWith(
+        'Incorrect data: CSV file should contain the headers named "GitHub" and "Score"!',
+      ),
+    );
+    expect(postMultipleScores).not.toHaveBeenCalled();
   });
 
   it('handles a generic upload failure without rendering a results summary', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     // Reject with a non-"Incorrect data" error → falls into the generic message.error branch.
     postMultipleScores.mockRejectedValue(new Error('Boom'));
     render(<SubmitScorePage />);
@@ -243,12 +249,13 @@ describe('<SubmitScorePage /> CSV upload flow', () => {
     await user.click(screen.getByRole('button', { name: /^Submit$/i }));
 
     await waitFor(() => expect(postMultipleScores).toHaveBeenCalled());
+    await waitFor(() => expect(showError).toHaveBeenCalledWith('An error occurred. Please try later.'));
     // The catch branch swallows the error → no Summary table is rendered.
     expect(screen.queryByText('Summary')).not.toBeInTheDocument();
   });
 
   it('handles a FileReader read error during parsing without uploading', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<SubmitScorePage />);
     await waitFor(() => expect(getCourseTasks).toHaveBeenCalled());
 
@@ -262,14 +269,13 @@ describe('<SubmitScorePage /> CSV upload flow', () => {
     await user.click(screen.getByRole('button', { name: /^Submit$/i }));
 
     // parseFiles rejects → handleSubmit catch → the network call never happens.
-    await waitFor(() => {
-      expect(screen.queryByText('Summary')).not.toBeInTheDocument();
-    });
+    await waitFor(() => expect(showError).toHaveBeenCalledWith('An error occurred. Please try later.'));
+    expect(screen.queryByText('Summary')).not.toBeInTheDocument();
     expect(postMultipleScores).not.toHaveBeenCalled();
   });
 
   it('does not submit when no file has been selected (form validation blocks it)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<SubmitScorePage />);
     await waitFor(() => expect(getCourseTasks).toHaveBeenCalled());
 
@@ -286,7 +292,7 @@ describe('<SubmitScorePage /> CSV upload flow', () => {
   });
 
   it('clears previous results when switching tabs', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     postMultipleScores.mockResolvedValue([{ status: 'created', value: undefined }]);
     render(<SubmitScorePage />);
     await waitFor(() => expect(getCourseTasks).toHaveBeenCalled());

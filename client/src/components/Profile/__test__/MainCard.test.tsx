@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { ProfileMainCardData } from '@client/services/user';
+import { setupUser } from '@client/__tests__/setupUser';
 import MainCard from '../MainCard';
 
 // Stub the remote (Google Maps) LocationSelect with a simple value-emitting control so
@@ -71,7 +71,7 @@ describe('MainCard', () => {
   });
 
   it('edits the name, saves and reflects the new value on success', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn().mockResolvedValue(true);
     render(<MainCard {...makeProps({ updateProfile })} />);
 
@@ -79,7 +79,7 @@ describe('MainCard', () => {
 
     const nameInput = screen.getByPlaceholderText('First-name Last-name');
     await user.clear(nameInput);
-    await user.type(nameInput, 'Jane Roe');
+    await user.type(nameInput, 'Jane Roe', { skipClick: true });
     await user.click(screen.getByRole('button', { name: 'Save' }));
 
     await waitFor(() => expect(updateProfile).toHaveBeenCalledWith({ name: 'Jane Roe' }));
@@ -87,7 +87,7 @@ describe('MainCard', () => {
   });
 
   it('edits the location and includes city/country in the update payload', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn().mockResolvedValue(true);
     render(<MainCard {...makeProps({ updateProfile })} />);
 
@@ -100,7 +100,7 @@ describe('MainCard', () => {
   });
 
   it('sends null city/country when the location is cleared (hits the `?? null` branch)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn().mockResolvedValue(true);
     render(<MainCard {...makeProps({ updateProfile })} />);
 
@@ -112,14 +112,14 @@ describe('MainCard', () => {
   });
 
   it('keeps the previous displayed values when the update fails', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn().mockResolvedValue(false);
     render(<MainCard {...makeProps({ updateProfile })} />);
 
     await user.click(screen.getByRole('img', { name: 'edit' }));
     const nameInput = screen.getByPlaceholderText('First-name Last-name');
     await user.clear(nameInput);
-    await user.type(nameInput, 'Rejected Name');
+    await user.type(nameInput, 'Rejected Name', { skipClick: true });
     await user.click(screen.getByRole('button', { name: 'Save' }));
 
     await waitFor(() => expect(updateProfile).toHaveBeenCalled());
@@ -129,13 +129,13 @@ describe('MainCard', () => {
   });
 
   it('restores the original name when the edit is cancelled', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<MainCard {...makeProps()} />);
 
     await user.click(screen.getByRole('img', { name: 'edit' }));
     const nameInput = screen.getByPlaceholderText('First-name Last-name');
     await user.clear(nameInput);
-    await user.type(nameInput, 'Discarded');
+    await user.type(nameInput, 'Discarded', { skipClick: true });
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
 
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
@@ -146,23 +146,23 @@ describe('MainCard', () => {
   });
 
   it('keeps Save disabled when the name is only whitespace and enables it on a real change', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<MainCard {...makeProps()} />);
 
     await user.click(screen.getByRole('img', { name: 'edit' }));
     const nameInput = screen.getByPlaceholderText('First-name Last-name');
 
     await user.clear(nameInput);
-    await user.type(nameInput, '   ');
+    await user.type(nameInput, '   ', { skipClick: true });
     expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled();
 
     await user.clear(nameInput);
-    await user.type(nameInput, 'Real Name');
+    await user.type(nameInput, 'Real Name', { skipClick: true });
     expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled();
   });
 
   it('opens the obfuscate modal for admins', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<MainCard {...makeProps({ isAdmin: true, isEditingModeEnabled: false })} />);
 
     await user.click(screen.getByRole('button', { name: 'Obfuscate' }));

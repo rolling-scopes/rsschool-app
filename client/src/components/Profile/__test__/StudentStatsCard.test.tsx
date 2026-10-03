@@ -1,5 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import axios from 'axios';
 import StudentStatsCard from '../StudentStatsCard';
 import { StudentStats } from '@common/models/profile';
@@ -174,21 +174,12 @@ describe('StudentStatsCard', () => {
   const makeData = (overrides: Partial<typeof baseCourse> = {}): StudentStats[] =>
     [{ ...baseCourse, ...overrides }] as unknown as StudentStats[];
 
-  it('renders the Leave Course button for an owner on an active course and opens the leave modal', async () => {
-    const user = userEvent.setup();
-    render(<StudentStatsCard isProfileOwner data={makeData()} username={githubId} />);
-
-    const leaveBtn = screen.getByRole('button', { name: /Leave Course/ });
-    await user.click(leaveBtn);
-
-    expect(screen.getByText('Confirm Leaving Course')).toBeInTheDocument();
-  });
-
   it('cancels the leave confirmation modal (hideExpelConfirmationModal)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<StudentStatsCard isProfileOwner data={makeData()} username={githubId} />);
 
     await user.click(screen.getByRole('button', { name: /Leave Course/ }));
+    expect(screen.getByText('Confirm Leaving Course')).toBeInTheDocument();
     const dialog = screen.getByRole('dialog');
     await user.click(within(dialog).getByRole('button', { name: /Continue studying/ }));
 
@@ -197,7 +188,7 @@ describe('StudentStatsCard', () => {
   });
 
   it('submits the leave survey and posts to the leave endpoint then reloads (selfExpelStudent)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<StudentStatsCard isProfileOwner data={makeData()} username={githubId} />);
 
     await user.click(screen.getByRole('button', { name: /Leave Course/ }));
@@ -212,7 +203,7 @@ describe('StudentStatsCard', () => {
   });
 
   it('renders Back to Course for a self-expelled student and rejoins on click (rejoinAsStudent)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(
       <StudentStatsCard
         isProfileOwner
@@ -239,13 +230,6 @@ describe('StudentStatsCard', () => {
     expect(screen.getByText('You expelled by Course Manager or Mentor')).toBeInTheDocument();
   });
 
-  it('renders no leave/back controls for a non-owner', () => {
-    render(<StudentStatsCard isProfileOwner={false} data={makeData()} username={githubId} />);
-
-    expect(screen.queryByRole('button', { name: /Leave Course/ })).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /Back to Course/ })).not.toBeInTheDocument();
-  });
-
   it('renders the certificate link, mentor link and rank when present', () => {
     render(
       <StudentStatsCard
@@ -266,31 +250,19 @@ describe('StudentStatsCard', () => {
     expect(screen.getByText('Position: 5')).toBeInTheDocument();
   });
 
-  it('opens the per-course stats modal from the expand button (showStudentStatsModal)', async () => {
-    const user = userEvent.setup();
+  it('hides leave controls for a non-owner and opens and closes course statistics', async () => {
+    const user = setupUser();
     render(<StudentStatsCard isProfileOwner={false} data={makeData()} username={githubId} />);
 
-    await user.click(screen.getByRole('button', { name: 'Open details' }));
+    expect(screen.queryByRole('button', { name: /Leave Course/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Back to Course/ })).not.toBeInTheDocument();
+    expect(axios.post).not.toHaveBeenCalled();
 
+    await user.click(screen.getByRole('button', { name: 'Open details' }));
     expect(screen.getByText('RS Active statistics')).toBeInTheDocument();
-  });
-
-  it('closes the per-course stats modal (hideStudentStatsModal)', async () => {
-    const user = userEvent.setup();
-    render(<StudentStatsCard isProfileOwner={false} data={makeData()} username={githubId} />);
-
-    await user.click(screen.getByRole('button', { name: 'Open details' }));
     const dialog = screen.getByRole('dialog');
     await user.click(within(dialog).getByRole('button', { name: 'Close' }));
 
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
-  });
-
-  it('does not post when leaving with no courseId (selfExpelStudent guard)', async () => {
-    // unreachable in practice: the Leave button always passes a real courseId.
-    // Covered indirectly: the non-owner case renders no leave control, so the guard
-    // path (`if (!courseId) return`) cannot be triggered through the UI.
-    render(<StudentStatsCard isProfileOwner={false} data={makeData()} username={githubId} />);
-    expect(axios.post).not.toHaveBeenCalled();
   });
 });

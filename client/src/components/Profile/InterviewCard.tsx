@@ -1,7 +1,8 @@
 import CommonCard from '@client/components/Profile/CommonCard';
+import { List } from '@client/shared/components/List';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { CSSProperties, ReactNode, useState } from 'react';
-import { Empty, Flex, List, theme, Typography } from 'antd';
+import { Empty, Flex, theme, Typography } from 'antd';
 import { DecisionTag, getRating } from '@client/domain/interview';
 import { Decision } from '@client/data/interviews/technical-screening';
 import {
@@ -72,7 +73,6 @@ function renderCoreJsInterviews({ cardData, setModalData }: CardRenderProps<Core
 
   return (
     <List
-      itemLayout="horizontal"
       dataSource={cardData}
       split={false}
       renderItem={({ courseName, locationName, interviews }, idx) =>
@@ -108,7 +108,6 @@ function renderPrescreeningInterviewCard({ cardData, setModalData }: CardRenderP
 
   return (
     <List
-      itemLayout="horizontal"
       dataSource={cardData}
       split={false}
       renderItem={({ courseName, interviewer, score, maxScore, date, isGoodCandidate, version, decision }, idx) => (

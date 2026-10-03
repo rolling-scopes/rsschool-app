@@ -16,7 +16,7 @@ const mockUserData = {
 };
 
 describe('GeneralInfoForm', () => {
-  test('should render form items with proper values', async () => {
+  test('should render form items with proper values and labels', async () => {
     render(<GeneralInfoForm userData={mockUserData} />);
 
     const name = await screen.findByDisplayValue(mockUserData.name);
@@ -40,24 +40,21 @@ describe('GeneralInfoForm', () => {
     expect(avatarLink).toBeInTheDocument();
     expect(selfIntroLink).toBeInTheDocument();
     expect(notes).toBeInTheDocument();
-  });
 
-  test.each`
-    label
-    ${'Name'}
-    ${'Desired position'}
-    ${'Locations'}
-    ${'Select your English level'}
-    ${'Military service'}
-    ${'Ready to start work from'}
-    ${'Ready to work full time'}
-    ${'Photo'}
-    ${'Self introduction video'}
-    ${'About me'}
-  `('should render field with $label label', async ({ label }) => {
-    render(<GeneralInfoForm userData={mockUserData} />);
-    const fieldLabel = await screen.findByLabelText(label);
-    expect(fieldLabel).toBeInTheDocument();
+    for (const label of [
+      'Name',
+      'Desired position',
+      'Locations',
+      'Select your English level',
+      'Military service',
+      'Ready to start work from',
+      'Ready to work full time',
+      'Photo',
+      'Self introduction video',
+      'About me',
+    ]) {
+      expect(screen.getByLabelText(label)).toBeInTheDocument();
+    }
   });
 
   test('should render form items with proper placeholders', async () => {

@@ -9,58 +9,28 @@ const PROPS_MOCK = {
 };
 
 describe('TaskStatusTabs', () => {
-  it('should render status tabs', () => {
-    const statuses = generateStatuses();
-
-    render(<TaskStatusTabs {...PROPS_MOCK} statuses={statuses} />);
-
-    expect(screen.getAllByRole('tab')).toHaveLength(TASKS_STATUSES.length);
-  });
-
-  it('should render status tabs when statuses were not provided', () => {
-    render(<TaskStatusTabs {...PROPS_MOCK} statuses={[]} />);
+  it('renders status counts, handles missing statuses, and reports tab changes', () => {
+    const statuses = [
+      ...generateStatuses(2, SolutionItemStatus.Done),
+      ...generateStatuses(3, SolutionItemStatus.InReview),
+      ...generateStatuses(4, SolutionItemStatus.RandomTask),
+    ];
+    const { rerender } = render(<TaskStatusTabs {...PROPS_MOCK} statuses={statuses} />);
 
     expect(screen.getAllByRole('tab')).toHaveLength(TASKS_STATUSES.length);
-  });
+    expect(screen.getByText('2')).toBeInTheDocument();
+    expect(screen.getByText('3')).toBeInTheDocument();
+    expect(screen.getByText('4')).toBeInTheDocument();
+    fireEvent.click(screen.getByText(new RegExp(SolutionItemStatus.Done, 'i')));
+    expect(PROPS_MOCK.onTabChange).toHaveBeenCalledWith(SolutionItemStatus.Done);
 
-  it('should render zero-count badges when statuses is undefined', () => {
-    // statuses={undefined} drives the `statuses?.filter(...).length ?? 0` nullish
-    // fallback in tabsRenderer so every tab shows a 0 count.
-    render(<TaskStatusTabs {...PROPS_MOCK} statuses={undefined} />);
+    rerender(<TaskStatusTabs {...PROPS_MOCK} statuses={[]} />);
+    expect(screen.getAllByRole('tab')).toHaveLength(TASKS_STATUSES.length);
 
+    rerender(<TaskStatusTabs {...PROPS_MOCK} statuses={undefined} />);
     const tabs = screen.getAllByRole('tab');
     expect(tabs).toHaveLength(TASKS_STATUSES.length);
-    // every tab badge renders a "0" count (showZero)
     expect(screen.getAllByText('0').length).toBe(TASKS_STATUSES.length);
-  });
-
-  it.each`
-    status                           | count
-    ${SolutionItemStatus.Done}       | ${2}
-    ${SolutionItemStatus.InReview}   | ${3}
-    ${SolutionItemStatus.RandomTask} | ${4}
-  `(
-    'should render badge with count of $count for "$status" tab',
-    ({ status, count }: { status: SolutionItemStatus; count: number }) => {
-      const statuses = generateStatuses(count, status);
-
-      render(<TaskStatusTabs {...PROPS_MOCK} statuses={statuses} />);
-
-      expect(screen.getByText(count)).toBeInTheDocument();
-    },
-  );
-
-  describe('when active tab was changed', () => {
-    it('should call onTabChange with tab name "Done"', () => {
-      const tabName = SolutionItemStatus.Done;
-      const statuses = generateStatuses();
-      render(<TaskStatusTabs {...PROPS_MOCK} statuses={statuses} />);
-
-      const selectedTab = screen.getByText(new RegExp(tabName, 'i'));
-      fireEvent.click(selectedTab);
-
-      expect(PROPS_MOCK.onTabChange).toHaveBeenCalledWith(tabName);
-    });
   });
 });
 

@@ -24,7 +24,7 @@ export const PublicLink = ({ url }: Props) => {
           <Button
             onClick={() => {
               copyToClipboard(url ?? '');
-              notification.success({ message: 'Copied to clipboard' });
+              notification.success({ title: 'Copied to clipboard' });
             }}
             size="small"
             type="text"

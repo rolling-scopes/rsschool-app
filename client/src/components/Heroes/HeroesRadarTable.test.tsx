@@ -13,7 +13,7 @@ const baseHero: HeroRadarDto = {
   githubId: 'alice',
   name: 'Alice Smith',
   rank: 1,
-  total: 2,
+  total: 7,
   badges: [
     { id: 'b1', badgeId: 'Hero', comment: 'nice', date: '2023-01-01T00:00:00.000Z' },
     { id: 'b2', badgeId: 'Good_job', comment: 'great', date: '2023-02-01T00:00:00.000Z' },
@@ -23,21 +23,18 @@ const baseHero: HeroRadarDto = {
 describe('HeroesRadarTable', () => {
   const noop = vi.fn();
 
-  it('renders a row per hero with github link and profile link', () => {
-    render(<HeroesRadarTable heroes={buildHeroes([baseHero])} onChange={noop} setFormLayout={noop} />);
+  it('renders hero links, badge total and the desktop form layout', () => {
+    const setFormLayout = vi.fn();
+    render(<HeroesRadarTable heroes={buildHeroes([baseHero])} onChange={noop} setFormLayout={setFormLayout} />);
 
     const githubLink = screen.getByRole('link', { name: 'alice' });
     expect(githubLink).toHaveAttribute('href', 'https://github.com/alice');
 
     const profileLink = screen.getByRole('link', { name: 'Alice Smith' });
     expect(profileLink).toHaveAttribute('href', '/profile?githubId=alice');
-  });
-
-  it('renders the total badge count in bold', () => {
-    const hero: HeroRadarDto = { ...baseHero, total: 7 };
-    render(<HeroesRadarTable heroes={buildHeroes([hero])} onChange={noop} setFormLayout={noop} />);
     const totalCell = screen.getByText('7');
     expect(totalCell.tagName).toBe('B');
+    expect(setFormLayout).toHaveBeenCalledWith('inline');
   });
 
   it('renders "New" for a rank greater or equal to 999999', () => {
@@ -55,13 +52,6 @@ describe('HeroesRadarTable', () => {
   it('renders an empty table message when there are no heroes', () => {
     render(<HeroesRadarTable heroes={buildHeroes([], 0)} onChange={noop} setFormLayout={noop} />);
     expect(screen.getAllByText('No data').length).toBeGreaterThan(0);
-  });
-
-  it('sets the form layout based on the window width on mount', () => {
-    // jsdom default innerWidth is 1024 (>= XS breakpoint), so layout should be inline
-    const setFormLayout = vi.fn();
-    render(<HeroesRadarTable heroes={buildHeroes([baseHero])} onChange={noop} setFormLayout={setFormLayout} />);
-    expect(setFormLayout).toHaveBeenCalledWith('inline');
   });
 
   it('switches to vertical layout for narrow viewports', () => {

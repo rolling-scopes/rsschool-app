@@ -1,5 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { UserGroupDto } from '@client/api';
 import { UserGroupsTable } from './UserGroupsTable';
 
@@ -21,9 +21,19 @@ const data = [
   },
 ] as unknown as UserGroupDto[];
 
+function getGroupRow(name: string) {
+  // Avoid computing accessible names for every table row.
+  // eslint-disable-next-line testing-library/no-node-access
+  const row = screen.getByText(name).closest('tr') as HTMLTableRowElement;
+  expect(row).toHaveRole('row');
+  return row;
+}
+
 describe('<UserGroupsTable />', () => {
-  it('renders group names, users and role tags', () => {
-    render(<UserGroupsTable data={data} onEdit={vi.fn()} onDelete={vi.fn()} />);
+  it('calls onEdit with the row record when Edit is clicked', async () => {
+    const user = setupUser();
+    const onEdit = vi.fn();
+    render(<UserGroupsTable data={data} onEdit={onEdit} onDelete={vi.fn()} />);
 
     expect(screen.getByText('Admins')).toBeInTheDocument();
     expect(screen.getByText('Mentors')).toBeInTheDocument();
@@ -31,25 +41,19 @@ describe('<UserGroupsTable />', () => {
     expect(screen.getByText('manager')).toBeInTheDocument();
     expect(screen.getByText('supervisor')).toBeInTheDocument();
     expect(screen.getByText('dementor')).toBeInTheDocument();
-  });
 
-  it('calls onEdit with the row record when Edit is clicked', async () => {
-    const user = userEvent.setup();
-    const onEdit = vi.fn();
-    render(<UserGroupsTable data={data} onEdit={onEdit} onDelete={vi.fn()} />);
-
-    const row = screen.getByRole('row', { name: /Admins/ });
+    const row = getGroupRow('Admins');
     await user.click(within(row).getByText('Edit'));
 
     expect(onEdit).toHaveBeenCalledWith(data[0]);
   });
 
   it('calls onDelete with the id after confirming', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onDelete = vi.fn();
     render(<UserGroupsTable data={data} onEdit={vi.fn()} onDelete={onDelete} />);
 
-    const row = screen.getByRole('row', { name: /Mentors/ });
+    const row = getGroupRow('Mentors');
     await user.click(within(row).getByText('Delete'));
     await user.click(await screen.findByRole('button', { name: /^ok$/i }));
 

@@ -64,14 +64,11 @@ describe('<UploadCriteriaJSON /> parse branches', () => {
     capturedOnChange = undefined;
   });
 
-  it('renders the upload button', () => {
-    render(<UploadCriteriaJSON onLoad={vi.fn()} />);
-    expect(screen.getByText('Click to Upload Criteria (JSON)')).toBeInTheDocument();
-  });
-
-  it('parses a valid criteria file and calls onLoad with the transformed data', async () => {
+  it('handles valid, empty, missing, invalid, and unfinished uploads', async () => {
     const onLoad = vi.fn();
     render(<UploadCriteriaJSON onLoad={onLoad} />);
+
+    expect(screen.getByText('Click to Upload Criteria (JSON)')).toBeInTheDocument();
 
     await fireUpload(
       JSON.stringify({
@@ -88,32 +85,23 @@ describe('<UploadCriteriaJSON /> parse branches', () => {
       { type: 'subtask', max: 10, text: 'Do the thing' },
     ]);
     expect(success).toHaveBeenCalledWith('criteria.json file uploaded successfully');
-  });
 
-  it('warns and does not call onLoad when the criteria array is empty', async () => {
-    const onLoad = vi.fn();
-    render(<UploadCriteriaJSON onLoad={onLoad} />);
+    vi.clearAllMocks();
 
     await fireUpload(JSON.stringify({ criteria: [] }));
 
     expect(warning).toHaveBeenCalledWith('There is no criteria for downloading');
     expect(onLoad).not.toHaveBeenCalled();
-  });
 
-  it('warns when the JSON has no criteria field at all', async () => {
-    const onLoad = vi.fn();
-    render(<UploadCriteriaJSON onLoad={onLoad} />);
+    vi.clearAllMocks();
 
     await fireUpload(JSON.stringify({ somethingElse: true }));
 
     expect(warning).toHaveBeenCalledWith('There is no criteria for downloading');
     expect(onLoad).not.toHaveBeenCalled();
-  });
 
-  it('does not call onLoad or success on invalid JSON content (parse error branch)', async () => {
-    const onLoad = vi.fn();
+    vi.clearAllMocks();
     lastOnloadError = null;
-    render(<UploadCriteriaJSON onLoad={onLoad} />);
 
     await fireUpload('not-valid-json');
 
@@ -121,11 +109,8 @@ describe('<UploadCriteriaJSON /> parse branches', () => {
     expect(lastOnloadError).toBeInstanceOf(Error);
     expect(onLoad).not.toHaveBeenCalled();
     expect(success).not.toHaveBeenCalled();
-  });
 
-  it('ignores upload events whose status is not "done"', async () => {
-    const onLoad = vi.fn();
-    render(<UploadCriteriaJSON onLoad={onLoad} />);
+    vi.clearAllMocks();
 
     capturedOnChange?.({
       file: { status: 'uploading', name: 'criteria.json' },

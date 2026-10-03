@@ -10,22 +10,19 @@ describe('useActiveCourse', () => {
     { id: 3, name: 'Course 3' },
   ] as ProfileCourseDto[];
 
-  it('should return the first course as the active course by default', () => {
+  it('returns the first course by default and updates the active course', () => {
     const { result } = renderHook(() => useActiveCourse(courses));
     expect(result.current[0]).toEqual(courses[0]);
+
+    act(() => {
+      result.current[1](3);
+    });
+    expect(result.current[0]).toEqual(courses[2]);
   });
 
   it('should return the previously selected course when it is stored in local storage', () => {
     vi.spyOn(ReactUse, 'useLocalStorage').mockReturnValueOnce(['2', vi.fn(), vi.fn()]);
     const { result } = renderHook(() => useActiveCourse(courses));
     expect(result.current[0]).toEqual(courses[1]);
-  });
-
-  it('should return the correct course when setActiveCourse is called', () => {
-    const { result } = renderHook(() => useActiveCourse(courses));
-    act(() => {
-      result.current[1](3);
-    });
-    expect(result.current[0]).toEqual(courses[2]);
   });
 });

@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { NotificationDto, NotificationType } from '@client/api';
+import { setupUser } from '@client/__tests__/setupUser';
 import { AdminNotificationsPage } from './AdminNotificationsSettingsPage';
 
 // --- Mocks -----------------------------------------------------------------
@@ -55,32 +55,8 @@ describe('AdminNotificationsPage', () => {
     expect(screen.getByRole('button', { name: /add notification/i })).toBeInTheDocument();
   });
 
-  it('opens the create modal when Add Notification is clicked', async () => {
-    const user = userEvent.setup();
-    render(<AdminNotificationsPage />);
-    await screen.findByText('Existing One');
-
-    await user.click(screen.getByRole('button', { name: /add notification/i }));
-
-    expect(await screen.findByRole('dialog')).toBeInTheDocument();
-    expect(screen.getByText('Notification Settings')).toBeInTheDocument();
-  });
-
-  it('opens the edit modal pre-filled with the row record', async () => {
-    const user = userEvent.setup();
-    render(<AdminNotificationsPage />);
-    await screen.findByText('Existing One');
-
-    await user.click(screen.getByText('Edit'));
-
-    expect(await screen.findByRole('dialog')).toBeInTheDocument();
-    expect(screen.getByLabelText('Id')).toHaveValue('existing');
-    // Editing an existing notification disables the Id field.
-    expect(screen.getByLabelText('Id')).toBeDisabled();
-  });
-
   it('creates a new notification and appends it to the table on submit', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const created = makeNotification({ id: 'fresh', name: 'Fresh One' });
     createNotification.mockResolvedValue({ data: created });
 
@@ -105,7 +81,7 @@ describe('AdminNotificationsPage', () => {
   });
 
   it('saves (updates) an existing notification on submit', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updated = makeNotification({ id: 'existing', name: 'Renamed' });
     saveNotification.mockResolvedValue({ data: updated });
 
@@ -113,7 +89,9 @@ describe('AdminNotificationsPage', () => {
     await screen.findByText('Existing One');
 
     await user.click(screen.getByText('Edit'));
-    await screen.findByRole('dialog');
+    expect(await screen.findByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByLabelText('Id')).toHaveValue('existing');
+    expect(screen.getByLabelText('Id')).toBeDisabled();
 
     const nameInput = screen.getByLabelText('Name');
     await user.clear(nameInput);
@@ -128,7 +106,7 @@ describe('AdminNotificationsPage', () => {
   });
 
   it('shows an error message when saving fails', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     createNotification.mockRejectedValue(new Error('boom'));
 
     render(<AdminNotificationsPage />);
@@ -149,7 +127,7 @@ describe('AdminNotificationsPage', () => {
   });
 
   it('deletes a notification after confirmation and removes its row', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     deleteNotification.mockResolvedValue(undefined);
 
     render(<AdminNotificationsPage />);
@@ -165,7 +143,7 @@ describe('AdminNotificationsPage', () => {
   });
 
   it('shows an error message when deletion fails', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     deleteNotification.mockRejectedValue(new Error('nope'));
 
     render(<AdminNotificationsPage />);
@@ -179,13 +157,15 @@ describe('AdminNotificationsPage', () => {
     expect(screen.getByText('Existing One')).toBeInTheDocument();
   });
 
-  it('closes the create modal on cancel without saving', async () => {
-    const user = userEvent.setup();
+  it('opens the create modal and cancels without saving', async () => {
+    const user = setupUser();
     render(<AdminNotificationsPage />);
     await screen.findByText('Existing One');
 
     await user.click(screen.getByRole('button', { name: /add notification/i }));
     const dialog = await screen.findByRole('dialog');
+    expect(dialog).toBeInTheDocument();
+    expect(screen.getByText('Notification Settings')).toBeInTheDocument();
 
     await user.click(within(dialog).getByRole('button', { name: /cancel/i }));
 

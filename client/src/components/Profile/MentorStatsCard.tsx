@@ -1,5 +1,6 @@
+import { List } from '@client/shared/components/List';
 import { useMemo, useState } from 'react';
-import { Button, Card, Flex, List, Space, Typography } from 'antd';
+import { Button, Card, Flex, Space, Typography } from 'antd';
 import CommonCard from './CommonCard';
 import MentorStatsModal from './MentorStatsModal';
 import { MentorStats, Student } from '@common/models/profile';
@@ -90,7 +91,6 @@ export function MentorStatsCard(props: Props) {
                     students ? (
                       idx === 0 ? (
                         <List
-                          itemLayout="horizontal"
                           dataSource={students}
                           split={false}
                           renderItem={({ githubId, name, totalScore }) => (

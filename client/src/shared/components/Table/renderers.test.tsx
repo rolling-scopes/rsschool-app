@@ -86,15 +86,9 @@ describe('Table renderers (string outputs)', () => {
 });
 
 describe('Table renderers (cross-check status)', () => {
-  it('returns N/A for non cross-check checkers', () => {
+  it('renders non-cross-check, initial, and completed statuses', () => {
     expect(crossCheckStatusRenderer('done' as never, { checker: 'auto-test' as never })).toBe('N/A');
-  });
-
-  it('returns "Not distributed" for the initial status', () => {
     expect(crossCheckStatusRenderer('initial' as never, { checker: 'crossCheck' as never })).toBe('Not distributed');
-  });
-
-  it('renders a capitalized status span otherwise', () => {
     render(<>{crossCheckStatusRenderer('completed' as never, { checker: 'crossCheck' as never })}</>);
     expect(screen.getByText('completed')).toBeInTheDocument();
   });
@@ -174,33 +168,25 @@ describe('Table renderers (JSX outputs)', () => {
 });
 
 describe('urlRenderer', () => {
-  it('returns false for empty urls', () => {
+  it('renders empty, GitHub, YouTube, and generic URLs', () => {
     expect(urlRenderer('')).toBe(false);
-  });
 
-  it('renders a github icon for github links', () => {
-    const { container } = render(<>{urlRenderer('https://github.com/x')}</>);
+    const { container, rerender } = render(<>{urlRenderer('https://github.com/x')}</>);
     expect(container.querySelector('.anticon-github')).toBeInTheDocument();
-  });
 
-  it('renders a youtube icon for youtube links', () => {
-    const { container } = render(<>{urlRenderer('https://youtu.be/x')}</>);
+    rerender(<>{urlRenderer('https://youtu.be/x')}</>);
     expect(container.querySelector('.anticon-youtube')).toBeInTheDocument();
-  });
 
-  it('renders a chrome icon for other links', () => {
-    const { container } = render(<>{urlRenderer('https://example.com')}</>);
+    rerender(<>{urlRenderer('https://example.com')}</>);
     expect(container.querySelector('.anticon-chrome')).toBeInTheDocument();
   });
 });
 
 describe('tagsCoursesRendererWithRemainingNumber', () => {
-  it('returns undefined when there are no courses', () => {
+  it('renders empty, multiple-course, and single-course values', () => {
     expect(tagsCoursesRendererWithRemainingNumber(undefined, { courses: [] } as never)).toBeUndefined();
-  });
 
-  it('renders the first course and a "+N More" tag when there are extras', () => {
-    render(
+    const { rerender } = render(
       <>
         {tagsCoursesRendererWithRemainingNumber(undefined, {
           courses: [{ name: 'Course A', isActive: true }, { name: 'Course B' }, { name: 'Course C' }],
@@ -210,10 +196,8 @@ describe('tagsCoursesRendererWithRemainingNumber', () => {
 
     expect(screen.getByText('Course A')).toBeInTheDocument();
     expect(screen.getByText('+ 2 More')).toBeInTheDocument();
-  });
 
-  it('renders just the first course when there are no extras', () => {
-    render(<>{tagsCoursesRendererWithRemainingNumber(undefined, { courses: [{ name: 'Solo' }] } as never)}</>);
+    rerender(<>{tagsCoursesRendererWithRemainingNumber(undefined, { courses: [{ name: 'Solo' }] } as never)}</>);
 
     expect(screen.getByText('Solo')).toBeInTheDocument();
     expect(screen.queryByText(/More/)).not.toBeInTheDocument();
@@ -226,43 +210,40 @@ describe('coloredDateRenderer', () => {
     return render(<>{renderer('2023-05-04T00:00:00.000Z', item as never)}</>);
   };
 
-  it('renders the formatted date text', () => {
-    renderColored({ startDate: '2023-05-01', endDate: '2023-05-10', score: null, tag: 'task' });
-    expect(screen.getByText('2023-05-04')).toBeInTheDocument();
-  });
-
-  it('renders an info tooltip icon for self-study tasks', () => {
-    const { container } = renderColored({
+  it('renders formatted, info, warning, success, and past date states', () => {
+    const { container, rerender } = renderColored({
       startDate: '2023-05-01',
       endDate: '2023-05-10',
       score: null,
-      tag: 'self-study',
+      tag: 'task',
     });
-    expect(container.querySelector('.anticon-info-circle')).toBeInTheDocument();
-  });
+    expect(screen.getByText('2023-05-04')).toBeInTheDocument();
 
-  it('applies a warning color when the deadline is within 48 hours (end date)', () => {
+    const baseRenderer = coloredDateRenderer('UTC', 'YYYY-MM-DD', 'end', 'Self-study info');
+    rerender(
+      <>
+        {baseRenderer('2023-05-04T00:00:00.000Z', {
+          startDate: '2023-05-01',
+          endDate: '2023-05-10',
+          tag: 'self-study',
+          score: null,
+        } as never)}
+      </>,
+    );
+    expect(container.querySelector('.anticon-info-circle')).toBeInTheDocument();
+
     const soon = new Date(Date.now() + 10 * 60 * 60 * 1000).toISOString();
     const renderer = coloredDateRenderer('UTC', 'YYYY-MM-DD', 'end', 'info');
-    const { container } = render(
-      <>{renderer(soon, { startDate: '2000-01-01', endDate: soon, score: null, tag: 'task' } as never)}</>,
-    );
+    rerender(<>{renderer(soon, { startDate: '2000-01-01', endDate: soon, score: null, tag: 'task' } as never)}</>);
     expect(container.querySelector('.ant-typography-warning')).toBeInTheDocument();
-  });
 
-  it('applies a success color for a current task on the start column', () => {
     const start = new Date(Date.now() - 60 * 60 * 1000).toISOString();
     const end = new Date(Date.now() + 1000 * 60 * 60 * 24 * 5).toISOString();
-    const renderer = coloredDateRenderer('UTC', 'YYYY-MM-DD', 'start', 'info');
-    const { container } = render(
-      <>{renderer(start, { startDate: start, endDate: end, score: null, tag: 'task' } as never)}</>,
-    );
+    const startRenderer = coloredDateRenderer('UTC', 'YYYY-MM-DD', 'start', 'info');
+    rerender(<>{startRenderer(start, { startDate: start, endDate: end, score: null, tag: 'task' } as never)}</>);
     expect(container.querySelector('.ant-typography-success')).toBeInTheDocument();
-  });
 
-  it('applies a secondary color for a scored (past) task', () => {
-    const renderer = coloredDateRenderer('UTC', 'YYYY-MM-DD', 'end', 'info');
-    const { container } = render(
+    rerender(
       <>
         {renderer('2020-01-01', { startDate: '2019-01-01', endDate: '2020-01-01', score: 80, tag: 'task' } as never)}
       </>,

@@ -10,7 +10,7 @@ export function SystemAlerts({ alerts }: Props) {
     <>
       {alerts.map(({ text, type }) => {
         const alertType = type === 'warn' ? 'warning' : type;
-        return <Alert key={text} style={{ margin: '8px 0' }} type={alertType as any} showIcon message={text} />;
+        return <Alert key={text} style={{ margin: '8px 0' }} type={alertType as any} showIcon title={text} />;
       })}
     </>
   );

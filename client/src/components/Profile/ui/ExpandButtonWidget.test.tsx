@@ -1,19 +1,14 @@
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { ExpandButtonWidget } from './ExpandButtonWidget';
 
 describe('ExpandButtonWidget', () => {
-  it('renders an accessible expand button', () => {
-    render(<ExpandButtonWidget onClick={vi.fn()} />);
-    expect(screen.getByRole('button', { name: 'Open details' })).toBeInTheDocument();
-  });
-
-  it('calls onClick when pressed', async () => {
-    const user = userEvent.setup();
+  it('renders an accessible button and calls onClick when pressed', () => {
     const onClick = vi.fn();
     render(<ExpandButtonWidget onClick={onClick} />);
+    const button = screen.getByRole('button', { name: 'Open details' });
 
-    await user.click(screen.getByRole('button', { name: 'Open details' }));
+    expect(button).toBeInTheDocument();
+    fireEvent.click(button);
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 });

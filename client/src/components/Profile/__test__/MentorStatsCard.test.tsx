@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { MentorStatsCard } from '../MentorStatsCard';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 
 vi.mock('@client/modules/Profile/components/MentorEndorsement', () => ({
   MentorEndorsement: ({ open, onClose }: { open: boolean; onClose: () => void }) => (
@@ -37,31 +37,6 @@ describe('MentorStatsCard', () => {
     },
   ];
 
-  it('shows stats', () => {
-    render(<MentorStatsCard githubId="test" data={mentorStats} />);
-    expect(screen.getByText('Mentored Students:')).toBeInTheDocument();
-    expect(screen.getByText('Courses as Mentor:')).toBeInTheDocument();
-  });
-
-  it('shows all courses', () => {
-    const courseNames = mentorStats.map(course => course.courseName);
-    render(<MentorStatsCard githubId="test" data={mentorStats} />);
-    courseNames.forEach(course => expect(screen.getByText(course)).toBeInTheDocument());
-  });
-
-  it('shows details button for courses with students', () => {
-    render(<MentorStatsCard githubId="test" data={mentorStats} />);
-    const coursesWithStudents = mentorStats.reduce((acc, c) => (c?.students?.length ? acc + 1 : acc), 0);
-    const openButtons = screen.queryAllByTitle('Open details');
-    expect(openButtons.length).toBe(coursesWithStudents);
-  });
-
-  it('shows dedicated message if no there are no students in the course', () => {
-    render(<MentorStatsCard githubId="test" data={mentorStats} />);
-    expect(screen.getByText('rs-2020-q1')).toBeInTheDocument();
-    expect(screen.getByText('Does not have students at this course yet')).toBeInTheDocument();
-  });
-
   it('shows endorsement button for admins', () => {
     render(<MentorStatsCard githubId="test" data={mentorStats} isAdmin={true} />);
     expect(screen.getByRole('button', { name: /Get Endorsement/i })).toBeInTheDocument();
@@ -72,26 +47,24 @@ describe('MentorStatsCard', () => {
     expect(screen.queryByRole('button', { name: /Get Endorsement/i })).not.toBeInTheDocument();
   });
 
-  it('opens MentorStatsModal for a course with students when expand is clicked', async () => {
-    render(<MentorStatsCard githubId="test" data={mentorStats} />);
-    const user = userEvent.setup();
-
-    const expandBtn = screen.getByTestId('expand-button');
-    await user.click(expandBtn);
-
-    expect(screen.getByText('rs-2018-q1 statistics')).toBeInTheDocument();
-  });
-
   it('closes MentorStatsModal when Close is clicked', async () => {
-    const { unmount } = render(<MentorStatsCard githubId="test" data={mentorStats} />);
-    const user = userEvent.setup();
+    render(<MentorStatsCard githubId="test" data={mentorStats} />);
+    const user = setupUser();
+
+    expect(screen.getByText('Mentored Students:')).toBeInTheDocument();
+    expect(screen.getByText('Courses as Mentor:')).toBeInTheDocument();
+    for (const course of mentorStats) {
+      expect(screen.getByText(course.courseName)).toBeInTheDocument();
+    }
+    const coursesWithStudents = mentorStats.filter(course => course.students?.length).length;
+    expect(screen.queryAllByTitle('Open details')).toHaveLength(coursesWithStudents);
+    expect(screen.getByText('Does not have students at this course yet')).toBeInTheDocument();
 
     await user.click(screen.getByTestId('expand-button'));
     expect(screen.getByText('rs-2018-q1 statistics')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Close' }));
-    unmount();
-    await waitFor(() => expect(screen.queryByText('rs-2018-q1 statistics')).not.toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText('rs-2018-q1 statistics')).not.toBeVisible());
   });
 
   it('renders students list for the first course when it has students', () => {
@@ -104,7 +77,7 @@ describe('MentorStatsCard', () => {
 
   it('opens and closes MentorEndorsement modal via the admin button', async () => {
     render(<MentorStatsCard githubId="mentor" data={mentorStats} isAdmin={true} />);
-    const user = userEvent.setup();
+    const user = setupUser();
 
     await user.click(screen.getByRole('button', { name: /Get Endorsement/i }));
     expect(screen.getByTestId('endorsement-open')).toBeInTheDocument();

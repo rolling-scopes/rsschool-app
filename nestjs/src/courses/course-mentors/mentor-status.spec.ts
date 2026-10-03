@@ -84,13 +84,13 @@ describe('CourseMentorsService expel/restore', () => {
 
       await service.expelMentor(5, 'john-doe');
 
-      const mentorQb = mentorsRepository.createQueryBuilder.mock.results[0].value;
+      const mentorQb = mentorsRepository.createQueryBuilder.mock.results[0]!.value;
       expect(mentorQb.where).toHaveBeenCalledWith('user.githubId = :githubId', { githubId: 'john-doe' });
       expect(mentorQb.andWhere).toHaveBeenCalledWith('mentor.courseId = :courseId', { courseId: 5 });
       expect(studentRepository.update).toHaveBeenCalledWith({ mentorId: 7 }, { mentorId: null });
       expect(mentorsRepository.update).toHaveBeenCalledWith(7, { isExpelled: true });
       // pending (no feedback) interviews of the mentor are canceled
-      const interviewsQb = stageInterviewRepository.createQueryBuilder.mock.results[0].value;
+      const interviewsQb = stageInterviewRepository.createQueryBuilder.mock.results[0]!.value;
       expect(interviewsQb.where).toHaveBeenCalledWith('f.id IS NULL');
       expect(interviewsQb.andWhere).toHaveBeenCalledWith('s.mentorId = :mentorId', { mentorId: 7 });
       expect(stageInterviewRepository.update).toHaveBeenCalledWith([100, 101], { isCanceled: true });

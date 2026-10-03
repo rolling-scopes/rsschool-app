@@ -1,5 +1,5 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { act, render, screen } from '@testing-library/react';
+import { setupUser } from '@client/__tests__/setupUser';
 import { MentorEndorsement } from './MentorEndorsement';
 
 // --- Boundary mock ---------------------------------------------------------
@@ -34,26 +34,23 @@ describe('<MentorEndorsement />', () => {
     });
   });
 
-  it('does not fetch when the modal is closed', () => {
-    render(<MentorEndorsement {...makeProps({ open: false })} />);
+  it('does not fetch when the modal is closed', async () => {
+    // eslint-disable-next-line testing-library/no-unnecessary-act -- Await the closed modal's async hook
+    await act(async () => {
+      render(<MentorEndorsement {...makeProps({ open: false })} />);
+    });
     expect(getEndorsement).not.toHaveBeenCalled();
   });
 
-  it('fetches the endorsement for the github id when open', async () => {
-    render(<MentorEndorsement {...makeProps()} />);
-    await waitFor(() => expect(getEndorsement).toHaveBeenCalledWith('octocat'));
-  });
-
-  it('renders the generated summary text', async () => {
-    render(<MentorEndorsement {...makeProps()} />);
+  it('fetches and renders the cleaned endorsement, then closes on OK', async () => {
+    const user = setupUser();
+    const props = makeProps();
+    render(<MentorEndorsement {...props} />);
 
     expect(await screen.findByText('Generated Text')).toBeInTheDocument();
+    expect(getEndorsement).toHaveBeenCalledWith('octocat');
     expect(screen.getByText(/Line one/)).toBeInTheDocument();
     expect(screen.getByText(/Line two/)).toBeInTheDocument();
-  });
-
-  it('renders the cleaned data model with nulls stripped', async () => {
-    render(<MentorEndorsement {...makeProps()} />);
 
     await screen.findByText('Data Model');
     // The read-only JSON dump is the only textbox in the modal.
@@ -61,6 +58,9 @@ describe('<MentorEndorsement />', () => {
     const json = JSON.parse(textarea.value);
     expect(json).toEqual({ name: 'Joe', nested: { keep: 'yes' } });
     expect(json).not.toHaveProperty('empty');
+
+    await user.click(screen.getByRole('button', { name: /ok/i }));
+    expect(props.onClose).toHaveBeenCalled();
   });
 
   it('shows an error alert when the request fails', async () => {
@@ -68,16 +68,5 @@ describe('<MentorEndorsement />', () => {
     render(<MentorEndorsement {...makeProps()} />);
 
     expect(await screen.findByText('generation failed')).toBeInTheDocument();
-  });
-
-  it('calls onClose when the OK button is clicked', async () => {
-    const user = userEvent.setup();
-    const props = makeProps();
-    render(<MentorEndorsement {...props} />);
-    await screen.findByText('Generated Text');
-
-    await user.click(screen.getByRole('button', { name: /ok/i }));
-
-    expect(props.onClose).toHaveBeenCalled();
   });
 });

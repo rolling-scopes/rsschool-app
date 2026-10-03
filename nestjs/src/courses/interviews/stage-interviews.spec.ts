@@ -216,8 +216,8 @@ describe('StageInterviewsService', () => {
 
       const [result] = await service.findMany(5);
 
-      expect(result.completed).toBe(true);
-      expect(result.status).toBe(1); // InterviewStatus.Completed
+      expect(result!.completed).toBe(true);
+      expect(result!.status).toBe(1); // InterviewStatus.Completed
     });
 
     it('maps a canceled (not completed) interview to Canceled status', async () => {
@@ -227,7 +227,7 @@ describe('StageInterviewsService', () => {
 
       const [result] = await service.findMany(5);
 
-      expect(result.status).toBe(2); // InterviewStatus.Canceled
+      expect(result!.status).toBe(2); // InterviewStatus.Canceled
     });
 
     it('falls back to undefined city/country and "any" preference when fields are null', async () => {
@@ -244,11 +244,11 @@ describe('StageInterviewsService', () => {
 
       const [result] = await service.findMany(5);
 
-      expect(result.student.cityName).toBeUndefined();
-      expect(result.student.countryName).toBeUndefined();
-      expect(result.interviewer.cityName).toBeUndefined();
-      expect(result.interviewer.countryName).toBeUndefined();
-      expect(result.interviewer.preference).toBe('any');
+      expect(result!.student.cityName).toBeUndefined();
+      expect(result!.student.countryName).toBeUndefined();
+      expect(result!.interviewer.cityName).toBeUndefined();
+      expect(result!.interviewer.countryName).toBeUndefined();
+      expect(result!.interviewer.preference).toBe('any');
     });
 
     it('returns an empty array when there are no interviews', async () => {
@@ -268,8 +268,8 @@ describe('StageInterviewsService', () => {
 
       const [result] = await service.findMany(5);
 
-      expect(result.student.name).toBe('Doe'); // firstName null -> only lastName
-      expect(result.interviewer.name).toBe('Mentor'); // lastName null -> only firstName
+      expect(result!.student.name).toBe('Doe'); // firstName null -> only lastName
+      expect(result!.interviewer.name).toBe('Mentor'); // lastName null -> only firstName
     });
   });
 
@@ -315,9 +315,9 @@ describe('StageInterviewsService', () => {
 
       const [result] = await service.findByInterviewer(5, 'mentor-x');
 
-      expect(result.status).toBe(1); // Completed
-      expect(result.result).toBe('yes');
-      expect(result.decision).toBe('yes');
+      expect(result!.status).toBe(1); // Completed
+      expect(result!.result).toBe('yes');
+      expect(result!.decision).toBe('yes');
     });
 
     it('maps a canceled interview to Canceled status', async () => {
@@ -325,7 +325,7 @@ describe('StageInterviewsService', () => {
 
       const [result] = await service.findByInterviewer(5, 'mentor-x');
 
-      expect(result.status).toBe(2); // Canceled
+      expect(result!.status).toBe(2); // Canceled
     });
   });
 

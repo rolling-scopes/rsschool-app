@@ -34,6 +34,10 @@ describe('CourseCrossCheckService.getTaskDetails', () => {
       {} as never,
       {} as never,
       { createQueryBuilder: vi.fn(() => qb) } as never,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
     );
     return { service, calls };
   }

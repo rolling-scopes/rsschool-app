@@ -1,5 +1,5 @@
 import { render, screen, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import InterviewModal from '../InterviewModal';
 import { CoreJsInterviewFeedback, LegacyFeedback, StageInterviewDetailedFeedback } from '@common/models/profile';
 
@@ -174,7 +174,7 @@ describe('InterviewModal', () => {
 
   it('calls onHide when the modal is cancelled', async () => {
     const onHide = vi.fn();
-    const user = userEvent.setup();
+    const user = setupUser();
     const coreJsData: CoreJsInterviewFeedback = {
       courseName: 'JS Course',
       courseFullName: 'JS Course 2021',
