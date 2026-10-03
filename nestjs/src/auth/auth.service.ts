@@ -15,6 +15,7 @@ import { lastValueFrom } from 'rxjs';
 import { NotificationUserConnection } from '@entities/notificationUserConnection';
 import { CourseUser } from '@entities/courseUser';
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
+import { UserId } from '../core/types/identifiers';
 
 const nanoid = customAlphabet('1234567890abcdef', 10);
 
@@ -155,7 +156,7 @@ export class AuthService {
     });
   }
 
-  public getLoginStateByUserId(id: number) {
+  public getLoginStateByUserId(id: UserId) {
     return this.loginStateRepository.findOne({
       where: {
         userId: id,
@@ -191,7 +192,7 @@ export class AuthService {
     return '/';
   }
 
-  public async onConnectionComplete(loginData: LoginData, userId: number) {
+  public async onConnectionComplete(loginData: LoginData, userId: UserId) {
     const { channelId, externalId } = loginData;
     if (!channelId || !externalId) {
       return;
@@ -266,7 +267,7 @@ export class AuthService {
     };
   }
 
-  public async clearAuthUserSessionCache(userId: number) {
+  public async clearAuthUserSessionCache(userId: UserId) {
     const cacheKey = `auth-user-${userId}`;
     await this.cacheManager.del(cacheKey);
   }

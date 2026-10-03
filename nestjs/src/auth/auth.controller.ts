@@ -23,6 +23,7 @@ import { AuthService, CurrentRequest } from './auth.service';
 import { AuthConnectionDto } from './dto/auth-connection.dto';
 import { clearAuthCookie, redirect, setAuthCookie, setDevAuthCookie } from './http.helpers';
 import { GithubStrategy } from './strategies/github.strategy';
+import { toUserId } from '../core/types/identifiers';
 
 // Guard names are baked into the route decorators at module load; everything
 // else derives the environment from ConfigService at request time.
@@ -52,7 +53,11 @@ export class AuthController {
     if (this.config.isDev) {
       // Local dev shortcut: mint the configured dev user's jwt right away
       // instead of doing the GitHub OAuth round trip.
-      const profile = { provider: '', id: '', username: this.config.auth.dev.username } as Profile;
+      const profile = {
+        provider: '',
+        id: '',
+        username: this.config.auth.dev.username,
+      } as Profile;
       req.user = await this.authService.createAuthUser(profile, this.config.auth.dev.admin);
       const token = this.authService.validateGithub(req);
       if (!token) {
@@ -123,7 +128,8 @@ export class AuthController {
   @ApiOperation({ operationId: 'clearAuthUserSessionCache' })
   @UseGuards(DefaultGuard)
   public async clearAuthUserSessionCache(@Param('userId', ParseIntPipe) userId: number, @Req() req: CurrentRequest) {
-    if (req.user.id !== userId) throw new ForbiddenException();
-    await this.authService.clearAuthUserSessionCache(userId);
+    const validatedUserId = toUserId(userId);
+    if (req.user.id !== validatedUserId) throw new ForbiddenException();
+    await this.authService.clearAuthUserSessionCache(validatedUserId);
   }
 }

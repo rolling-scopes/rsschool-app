@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Student } from './student';
+import { StudentId } from '../core/types/identifiers';
 
 @Entity()
 export class Certificate {
@@ -23,7 +24,7 @@ export class Certificate {
   publicId: string;
 
   @Column()
-  studentId: number;
+  studentId: StudentId;
 
   @OneToOne(() => Student, student => student.certificate)
   @JoinColumn()
