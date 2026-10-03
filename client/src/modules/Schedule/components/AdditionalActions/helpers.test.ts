@@ -19,6 +19,12 @@ describe('AdditionalActions helpers', () => {
     it('builds the CSV export url with a slash-safe timezone', () => {
       expect(buildExportLink(3, 'Europe/Warsaw')).toBe('/api/v2/courses/3/schedule/csv/Europe_Warsaw');
     });
+
+    it('replaces every slash in nested IANA timezones', () => {
+      expect(buildExportLink(3, 'America/Argentina/Buenos_Aires')).toBe(
+        '/api/v2/courses/3/schedule/csv/America_Argentina_Buenos_Aires',
+      );
+    });
   });
 
   describe('setExportLink', () => {
