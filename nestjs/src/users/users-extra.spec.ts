@@ -300,7 +300,7 @@ describe('UsersController.searchUsers', () => {
 
     await controller.searchUsers(plainReq, 'john');
 
-    expect(mockSearchUsers).toHaveBeenCalledWith('john');
+    expect(mockSearchUsers).toHaveBeenCalledWith('john', { includeSystem: false });
   });
 
   it('passes elevated visibility (true) for admins, exposing contacts', async () => {

@@ -8,6 +8,7 @@ import { ConfigModule } from '../config';
 import { CoursesModule } from '../courses/courses.module';
 import { CertificatesController } from './certificates.controller';
 import { CertificationsService } from './certificates.service';
+import { CloudApiModule } from '../cloud-api/cloud-api.module';
 import { User } from '@entities/user';
 import { HttpModule } from '@nestjs/axios';
 
@@ -18,6 +19,7 @@ import { HttpModule } from '@nestjs/axios';
     UsersNotificationsModule,
     CoursesModule,
     HttpModule,
+    CloudApiModule,
   ],
   controllers: [CertificatesController],
   providers: [CertificationsService],

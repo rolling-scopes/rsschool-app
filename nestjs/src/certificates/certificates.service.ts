@@ -10,9 +10,34 @@ import { ConfigService } from 'src/config';
 import { Student } from '@entities/student';
 import { Course } from '@entities/course';
 import { User } from '@entities/user';
+import { BulkIssueResultDto } from './dto/bulk-issue-result.dto';
+import { EligibleStudentsCriteriaDto } from './dto/eligible-students-criteria.dto';
 import { CertificateMetadataDto } from './dto/certificate-metadata.dto';
+import { CertificateIssuanceRequestDto } from './dto/certificate-issuance-request.dto';
+import { EligibleStudentDto } from './dto/eligible-student.dto';
+import { EligibleStudentsPreviewDto } from './dto/eligible-students-preview.dto';
+import { CloudApiService } from '../cloud-api/cloud-api.service';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
+
+type TaskCriteria = { courseTaskId: number; minScore: number };
+
+/**
+ * Collapses both accepted criteria shapes into per-task thresholds: explicit
+ * `taskCriteria` wins, otherwise the legacy flat form is expanded by giving
+ * every listed task the shared `minScore`. Mirrors buildCourseCertificateRequests
+ * so the preview/bulk endpoints and the UI issue path agree on who is eligible.
+ */
+function normalizeTaskCriteria(criteria: EligibleStudentsCriteriaDto): TaskCriteria[] {
+  if (criteria.taskCriteria?.length) {
+    return criteria.taskCriteria.map(({ courseTaskId, minScore }) => ({
+      courseTaskId: Number(courseTaskId),
+      minScore: minScore ? Number(minScore) : 1,
+    }));
+  }
+  const minScore = criteria.minScore ?? 1;
+  return (criteria.courseTaskIds ?? []).map(courseTaskId => ({ courseTaskId: Number(courseTaskId), minScore }));
+}
 
 @Injectable()
 export class CertificationsService {
@@ -29,6 +54,7 @@ export class CertificationsService {
     private studentRepository: Repository<Student>,
     private readonly configService: ConfigService,
     private readonly httpService: HttpService,
+    private readonly cloudApi: CloudApiService,
   ) {
     this.s3 = new S3(this.configService.awsClient);
   }
@@ -99,6 +125,140 @@ export class CertificationsService {
       ),
       this.certificateRepository.remove(certificate),
     ]);
+  }
+
+  public async previewEligibleStudents(
+    courseId: number,
+    criteria: EligibleStudentsCriteriaDto,
+  ): Promise<EligibleStudentsPreviewDto> {
+    const students = await this.findEligibleStudents(courseId, criteria);
+    return new EligibleStudentsPreviewDto(students);
+  }
+
+  public async requestBulkCertificateIssuance(
+    courseId: number,
+    criteria: EligibleStudentsCriteriaDto,
+  ): Promise<BulkIssueResultDto> {
+    const eligible = await this.findEligibleStudents(courseId, criteria);
+    if (eligible.length === 0) {
+      return new BulkIssueResultDto([]);
+    }
+
+    const course = await this.courseRepository.findOne({
+      where: { id: courseId },
+      relations: ['discipline'],
+    });
+    if (!course) throw new NotFoundException(`Course ${courseId} not found`);
+
+    const payloads: CertificateIssuanceRequestDto[] = eligible.map(
+      s =>
+        new CertificateIssuanceRequestDto({
+          courseId,
+          courseName: course.name,
+          coursePrimarySkill: course.discipline?.name ?? course.primarySkillName ?? null,
+          certificateIssuer: course.certificateIssuer ?? null,
+          studentId: s.studentId,
+          studentName: s.name,
+          timestamp: Date.now(),
+        }),
+    );
+
+    await this.cloudApi.requestCertificate(payloads);
+    return new BulkIssueResultDto(eligible);
+  }
+
+  public async findEligibleStudents(
+    courseId: number,
+    criteria: EligibleStudentsCriteriaDto,
+  ): Promise<EligibleStudentDto[]> {
+    const ids = await this.findEligibleStudentIds(courseId, {
+      taskCriteria: normalizeTaskCriteria(criteria),
+      minTotalScore: criteria.minTotalScore,
+    });
+
+    if (ids.length === 0) return [];
+
+    const students = await this.studentRepository
+      .createQueryBuilder('student')
+      .innerJoinAndSelect('student.user', 'user')
+      .leftJoinAndSelect('student.certificate', 'certificate')
+      .where('student.id IN (:...ids)', { ids })
+      .andWhere('student.isExpelled = false')
+      .andWhere('student.isFailed = false')
+      .andWhere('certificate.id IS NULL')
+      .getMany();
+
+    return students.map(
+      s =>
+        new EligibleStudentDto({
+          studentId: s.id,
+          githubId: s.user.githubId,
+          name: [s.user.firstName, s.user.lastName].filter(Boolean).join(' ').trim(),
+          totalScore: s.totalScore ?? 0,
+        }),
+    );
+  }
+
+  private async findEligibleStudentIds(
+    courseId: number,
+    params: { taskCriteria: TaskCriteria[]; minTotalScore: number },
+  ): Promise<number[]> {
+    const { taskCriteria, minTotalScore } = params;
+    const tasksCount = taskCriteria.length;
+    const courseTaskIds = taskCriteria.map(c => c.courseTaskId);
+
+    if (tasksCount === 0) {
+      const rows = await this.studentRepository
+        .createQueryBuilder('student')
+        .select('student.id', 'id')
+        .leftJoin('student.certificate', 'certificate')
+        .where('student.courseId = :courseId', { courseId })
+        .andWhere('student.isExpelled = false')
+        .andWhere('student.isFailed = false')
+        .andWhere('certificate.id IS NULL')
+        .andWhere('student.totalScore >= :minTotalScore', { minTotalScore })
+        .getRawMany<{ id: number }>();
+      return rows.map(r => r.id);
+    }
+
+    // Each task carries its own threshold, so the FILTER is an OR over
+    // (task, minScore) pairs rather than one shared `score >= :minScore`.
+    const scoreParams = Object.fromEntries(
+      taskCriteria.flatMap(({ courseTaskId, minScore }, i) => [
+        [`ct${i}`, courseTaskId],
+        [`ms${i}`, minScore],
+      ]),
+    );
+    const passesCriteria = (alias: string) =>
+      taskCriteria.map((_, i) => `("${alias}"."courseTaskId" = :ct${i} AND "${alias}"."score" >= :ms${i})`).join(' OR ');
+
+    const raw = await this.studentRepository
+      .createQueryBuilder('student')
+      .select('student.id', 'student_id')
+      .addSelect(
+        `array_remove(ARRAY_AGG(DISTINCT "tr"."courseTaskId") FILTER (WHERE ${passesCriteria('tr')}), NULL)`,
+        'tasks',
+      )
+      .addSelect(
+        `array_remove(ARRAY_AGG(DISTINCT "ir"."courseTaskId") FILTER (WHERE ${passesCriteria('ir')}), NULL)`,
+        'interviews',
+      )
+      .leftJoin('student.taskResults', 'tr', 'tr.courseTaskId IN (:...courseTaskIds)', { courseTaskIds })
+      .leftJoin('student.taskInterviewResults', 'ir', 'ir.courseTaskId IN (:...courseTaskIds)', { courseTaskIds })
+      .where('student.courseId = :courseId', { courseId })
+      .andWhere('student.isExpelled = false')
+      .andWhere('student.isFailed = false')
+      .andWhere('student.totalScore >= :minTotalScore', { minTotalScore })
+      .setParameters(scoreParams)
+      .groupBy('student.id')
+      .getRawMany<{ student_id: number; tasks: number[] | null; interviews: number[] | null }>();
+
+    return raw
+      .filter(({ tasks, interviews }) => {
+        const all = new Set<number>([...(tasks ?? []), ...(interviews ?? [])]);
+        return all.size === tasksCount;
+      })
+      .map(({ student_id }) => student_id);
   }
 
   public resolveTemplateId(input: unknown): string {

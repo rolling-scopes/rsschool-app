@@ -126,7 +126,7 @@ export class CourseTasksController {
   @ApiForbiddenResponse()
   @ApiBadRequestResponse()
   @ApiOperation({ operationId: 'createCourseTask' })
-  @RequiredRoles([Role.Admin, CourseRole.Manager])
+  @RequiredRoles([Role.Admin, CourseRole.Manager], true)
   public async createCourseTask(@Param('courseId', ParseIntPipe) courseId: number, @Body() dto: CreateCourseTaskDto) {
     await this.courseTasksService.createCourseTask({
       ...(dto as CourseTask),

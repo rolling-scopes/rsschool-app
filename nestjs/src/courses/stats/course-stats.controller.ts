@@ -101,7 +101,7 @@ export class CourseStatsController {
   @ApiOperation({ operationId: 'getCourseStats' })
   @ApiOkResponse({ type: CourseStatsDto })
   public async getCourses(@Req() req: CurrentRequest, @Param('courseId', ParseIntPipe) courseId: number) {
-    if (!this.courseAccessService.canAccessCourse(req.user, courseId)) {
+    if (!(await this.courseAccessService.canAccessCourse(req.user, courseId))) {
       throw new ForbiddenException();
     }
     const data = await this.courseStatsService.getStudents(courseId);

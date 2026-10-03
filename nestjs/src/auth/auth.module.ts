@@ -6,9 +6,11 @@ import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '../config/config.module';
 import { CoursesModule } from '../courses/courses.module';
+import { PersonalAccessTokensModule } from '../personal-access-tokens/personal-access-tokens.module';
 import { UsersModule } from '../users/users.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { ApiTokenStrategy } from './strategies/api-token.strategy';
 import { BasicStrategy } from './strategies/basic.strategy';
 import { DevStrategy } from './strategies/dev.strategy';
 import { GithubStrategy } from './strategies/github.strategy';
@@ -25,10 +27,11 @@ import { CacheModule } from '@nestjs/cache-manager';
     CoursesModule,
     ConfigModule,
     HttpModule,
+    PersonalAccessTokensModule,
     TypeOrmModule.forFeature([LoginState, NotificationUserConnection]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, GithubStrategy, JwtStrategy, BasicStrategy, DevStrategy],
+  providers: [AuthService, GithubStrategy, JwtStrategy, BasicStrategy, DevStrategy, ApiTokenStrategy],
   exports: [GithubStrategy, AuthService],
 })
 export class AuthModule {}

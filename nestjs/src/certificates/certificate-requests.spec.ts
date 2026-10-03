@@ -12,6 +12,7 @@ import { CertificatesController } from './certificates.controller';
 import { CertificationsService } from './certificates.service';
 import { StudentsService } from '../courses/students';
 import { UserNotificationsService } from 'src/users-notifications/users.notifications.service';
+import { CloudApiService } from '../cloud-api/cloud-api.service';
 
 // Fixtures mirrored from server/src/routes/course/__test__/certificates.test.ts to prove business-logic equivalence
 const mockStudent = {
@@ -66,6 +67,7 @@ describe('certificate requests', () => {
           },
         },
         { provide: HttpService, useValue: { post: mockPost } },
+        { provide: CloudApiService, useValue: { requestCertificate: vi.fn() } },
         { provide: StudentsService, useValue: {} },
         { provide: UserNotificationsService, useValue: {} },
       ],

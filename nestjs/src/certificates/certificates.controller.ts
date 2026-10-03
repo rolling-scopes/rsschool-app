@@ -16,6 +16,9 @@ import { CourseRole, DefaultGuard, RequiredRoles, Role, RoleGuard } from 'src/au
 import { StudentsService } from '../courses/students';
 import { UserNotificationsService } from 'src/users-notifications/users.notifications.service';
 import { CertificationsService } from './certificates.service';
+import { BulkIssueResultDto } from './dto/bulk-issue-result.dto';
+import { EligibleStudentsCriteriaDto } from './dto/eligible-students-criteria.dto';
+import { EligibleStudentsPreviewDto } from './dto/eligible-students-preview.dto';
 import { SaveCertificateDto } from './dto/save-certificate-dto';
 import {
   CertificateRequestDto,
@@ -128,5 +131,29 @@ export class CertificatesController {
   @ApiOperation({ operationId: 'removeCertificate' })
   public async removeCertificate(@Param('studentId', ParseIntPipe) studentId: number) {
     await this.certificatesService.removeCertificate(studentId);
+  }
+
+  @Post('/course/:courseId/eligible')
+  @UseGuards(DefaultGuard, RoleGuard)
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  @ApiOperation({ operationId: 'previewEligibleStudents' })
+  @ApiOkResponse({ type: EligibleStudentsPreviewDto })
+  public async previewEligibleStudents(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Body() criteria: EligibleStudentsCriteriaDto,
+  ): Promise<EligibleStudentsPreviewDto> {
+    return this.certificatesService.previewEligibleStudents(courseId, criteria);
+  }
+
+  @Post('/course/:courseId/bulk')
+  @UseGuards(DefaultGuard, RoleGuard)
+  @RequiredRoles([CourseRole.Manager, Role.Admin], true)
+  @ApiOperation({ operationId: 'issueCertificatesBulk' })
+  @ApiOkResponse({ type: BulkIssueResultDto })
+  public async issueCertificatesBulk(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Body() criteria: EligibleStudentsCriteriaDto,
+  ): Promise<BulkIssueResultDto> {
+    return this.certificatesService.requestBulkCertificateIssuance(courseId, criteria);
   }
 }
