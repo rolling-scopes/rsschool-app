@@ -9,9 +9,9 @@ describe('StudentStatsModal', () => {
       courseName: 'rs-2018-q1',
       locationName: 'Minsk',
       courseFullName: 'Rolling Scopes School 2018 Q1',
-      isExpelled: false,
+      isExpelled: true,
       isSelfExpelled: false,
-      expellingReason: '',
+      expellingReason: 'No activity',
       isCourseCompleted: true,
       totalScore: 1201,
       certificateId: 'asd',
@@ -53,6 +53,14 @@ describe('StudentStatsModal', () => {
 
     const { container } = render(<StudentStatsModal stats={stats} isVisible={true} onHide={vi.fn()} />);
     expect(container).toMatchSnapshot();
+    expect(screen.getByRole('link', { name: 'Andrey Andreev' })).toHaveAttribute('href', '/profile?githubId=andrew123');
+    expect(screen.getByText('Position:')).toBeInTheDocument();
+    expect(screen.getByText('32')).toBeInTheDocument();
+    expect(screen.getByText(/\/ 340\.0/)).toBeInTheDocument();
+    expect(screen.getByText(/Expelling reason: No activity/)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Task 1' })).toHaveAttribute('href', 'https://description.com');
+    expect(screen.getAllByRole('link', { name: 'PR' })).toHaveLength(3);
+    expect(screen.getByText('120.00')).toBeInTheDocument();
   });
 
   const baseStats = (overrides: Partial<StudentStats> = {}): StudentStats => ({
@@ -83,23 +91,6 @@ describe('StudentStatsModal', () => {
       },
     ],
     ...overrides,
-  });
-
-  it('renders mentor link, rank, total score with max and expelling reason when all present', () => {
-    render(
-      <StudentStatsModal
-        stats={baseStats({ isExpelled: true, expellingReason: 'No activity' })}
-        isVisible
-        onHide={vi.fn()}
-      />,
-    );
-
-    expect(screen.getByRole('link', { name: 'Andrey Andreev' })).toHaveAttribute('href', '/profile?githubId=andrew123');
-    expect(screen.getByText('Position:')).toBeInTheDocument();
-    expect(screen.getByText('32')).toBeInTheDocument();
-    // maxScore present on every task -> max course score computed (130 * 1 = 130.0)
-    expect(screen.getByText(/\/ 130\.0/)).toBeInTheDocument();
-    expect(screen.getByText(/Expelling reason: No activity/)).toBeInTheDocument();
   });
 
   it('hides mentor link, rank, max score and expelling reason when absent/falsy', () => {
@@ -156,30 +147,6 @@ describe('StudentStatsModal', () => {
     expect(within(dialog).getByText('*2')).toBeInTheDocument();
     // no PR link because githubPrUri empty
     expect(within(dialog).queryByRole('link', { name: 'PR' })).not.toBeInTheDocument();
-  });
-
-  it('renders task columns truthy branches: descriptionUri link, score weighted, PR link', () => {
-    const stats = baseStats({
-      tasks: [
-        {
-          maxScore: 100,
-          scoreWeight: 2,
-          name: 'Linked Task',
-          descriptionUri: 'https://task.example',
-          githubPrUri: 'https://pr.example',
-          score: 50,
-          comment: 'c',
-        },
-      ],
-    });
-    render(<StudentStatsModal stats={stats} isVisible onHide={vi.fn()} />);
-
-    expect(screen.getByRole('link', { name: 'Linked Task' })).toHaveAttribute('href', 'https://task.example');
-    expect(screen.getByRole('link', { name: 'PR' })).toHaveAttribute('href', 'https://pr.example');
-    // score 50 * weight 2 = 100.00 displayed
-    expect(screen.getByText('100.00')).toBeInTheDocument();
-    // score / max cell shows the actual score and maxScore
-    expect(screen.getByText('50')).toBeInTheDocument();
   });
 
   it('calls onHide when modal cancel/close is triggered', () => {

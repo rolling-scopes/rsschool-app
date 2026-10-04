@@ -6,7 +6,7 @@ const publicRoutes = [
   {
     icon: <BookOutlined style={{ color: '#52c41a' }} />,
     name: 'Docs',
-    link: 'https://docs.rs.school',
+    link: 'https://rs.school/docs',
     newTab: true,
   },
   {

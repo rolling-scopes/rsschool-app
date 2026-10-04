@@ -7,13 +7,13 @@ export function Steps() {
 
   return (
     <Stepper
-      direction="vertical"
+      orientation="vertical"
       current={activeStepIndex}
       size={'small'}
       style={{ padding: 24 }}
       items={steps.map((step, index) => ({
         title: step.title,
-        description: step.stepperDescription,
+        content: step.stepperDescription,
         status: getStatus(index),
       }))}
     />

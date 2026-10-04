@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react';
-import { act } from 'react-dom/test-utils';
+import { act } from 'react';
 import type { NextRouter } from 'next/router';
 import type { CourseService } from '@client/services/course';
 import { useScorePaging } from './useScorePaging';

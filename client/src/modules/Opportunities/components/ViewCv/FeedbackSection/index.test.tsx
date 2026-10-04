@@ -33,13 +33,10 @@ const mockFeedback = {
 } as FeedbackDto;
 
 describe('FeedbackSection', () => {
-  test('should display nothing if feedback is not provided', () => {
-    const { container } = render(<FeedbackSection data={[]} />);
+  test('renders empty, known-skill, and unknown-skill feedback states', () => {
+    const { container, rerender } = render(<FeedbackSection data={[]} />);
     expect(container).toBeEmptyDOMElement();
-  });
-
-  test('should display feedback if provided', () => {
-    render(<FeedbackSection data={[mockFeedback]} />);
+    rerender(<FeedbackSection data={[mockFeedback]} />);
 
     const sectionHeading = screen.getByRole('heading', { name: /mentor's feedback/i });
     const mentorLink = screen.getByRole('link', {
@@ -64,16 +61,12 @@ describe('FeedbackSection', () => {
     expect(communicationSkill).toBeInTheDocument();
     expect(responsibilitySkill).toBeInTheDocument();
     expect(teamPlayerSkill).toBeInTheDocument();
-  });
 
-  test('labels an unrecognized soft skill id as "Unknown"', () => {
-    // Forward-compat: a soft-skill id the frontend does not know maps to the default label.
     const withUnknownSkill = {
       ...mockFeedback,
       softSkills: [{ id: 'future-skill', value: FeedbackSoftSkillValueEnum.Great }],
     } as unknown as FeedbackDto;
-
-    render(<FeedbackSection data={[withUnknownSkill]} />);
+    rerender(<FeedbackSection data={[withUnknownSkill]} />);
 
     expect(screen.getByText('Unknown: Great')).toBeInTheDocument();
   });

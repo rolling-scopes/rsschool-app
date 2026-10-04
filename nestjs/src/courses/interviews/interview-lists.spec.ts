@@ -41,8 +41,14 @@ describe('InterviewsService.getUserInterviewDetails', () => {
   });
 
   it('returns stage interviews first, then regular interviews, for both user types', async () => {
-    vi.spyOn(service as never, 'getRegularInterviewDetails' as never).mockResolvedValue(regular as never);
-    vi.spyOn(service as never, 'getStageInterviewDetails' as never).mockResolvedValue(stage as never);
+    vi.spyOn(
+      service as unknown as { getRegularInterviewDetails: InterviewsService['getRegularInterviewDetails'] },
+      'getRegularInterviewDetails',
+    ).mockResolvedValue(regular as never);
+    vi.spyOn(
+      service as unknown as { getStageInterviewDetails: InterviewsService['getStageInterviewDetails'] },
+      'getStageInterviewDetails',
+    ).mockResolvedValue(stage as never);
 
     const studentResult = await service.getUserInterviewDetails(5, 'john-doe', 'student');
     expect(studentResult).toEqual([...stage, ...regular]);

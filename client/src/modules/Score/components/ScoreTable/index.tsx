@@ -109,13 +109,14 @@ export function ScoreTable(props: Props) {
         pagination: { current: currentPage },
       } = students;
 
+      const lastPage = Math.max(1, totalPages);
       if (currentPage > totalPages) {
         const { content, pagination } = await courseService.getCourseScore(
-          { ...students.pagination, current: totalPages },
+          { ...students.pagination, current: lastPage },
           filters,
           students.order,
         );
-        setStudents({ ...students, content, pagination: { ...pagination, current: totalPages } });
+        setStudents({ ...students, content, pagination: { ...pagination, current: lastPage } });
       } else {
         setStudents({ ...students, content, pagination: courseScore.pagination });
       }

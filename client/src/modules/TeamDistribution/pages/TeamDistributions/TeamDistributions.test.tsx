@@ -1,5 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { TeamDistributionApi, TeamDistributionDto } from '@client/api';
 import TeamDistributions from './TeamDistributions';
 
@@ -118,6 +118,7 @@ describe('<TeamDistributions />', () => {
 
     await waitFor(() => expect(getCourseTeamDistributions).toHaveBeenCalledWith(42));
     expect(await screen.findByText('Spring Distribution')).toBeInTheDocument();
+    expect(screen.queryByTestId('submit-score-modal')).not.toBeInTheDocument();
     // Welcome card shows the non-manager headline for a plain session.
     expect(screen.getByText('Become a member of the team!')).toBeInTheDocument();
   });
@@ -139,25 +140,9 @@ describe('<TeamDistributions />', () => {
     expect(screen.queryByText('Spring Distribution')).not.toBeInTheDocument();
   });
 
-  it('shows the manager welcome headline and renders the manager submit-score modal', async () => {
-    sessionValue.isAdmin = true;
-    render(<TeamDistributions />);
-
-    expect(await screen.findByText('Create student teams to solve group tasks!')).toBeInTheDocument();
-    // Manager-only SubmitScoreModal is mounted (closed initially).
-    expect(screen.getByTestId('submit-score-modal')).toHaveAttribute('data-open', 'false');
-  });
-
-  it('does not mount the submit-score modal for a non-manager', async () => {
-    render(<TeamDistributions />);
-
-    await screen.findByText('Spring Distribution');
-    expect(screen.queryByTestId('submit-score-modal')).not.toBeInTheDocument();
-  });
-
   it('opens the create-distribution modal from the welcome card (manager)', async () => {
     sessionValue.isAdmin = true;
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TeamDistributions />);
 
     await user.click(await screen.findByRole('button', { name: /add a new distribution/i }));
@@ -165,18 +150,13 @@ describe('<TeamDistributions />', () => {
     expect(modalForm.toggle).toHaveBeenCalled();
   });
 
-  it('renders the create/edit modal when the modal-form flag is open', async () => {
+  it('cancels the create/edit modal through its onCancel handler', async () => {
     modalForm.open = true;
+    const user = setupUser();
     render(<TeamDistributions />);
 
     expect(await screen.findByTestId('distribution-modal')).toBeInTheDocument();
     expect(screen.getByText('edit:new')).toBeInTheDocument();
-  });
-
-  it('cancels the create/edit modal through its onCancel handler', async () => {
-    modalForm.open = true;
-    const user = userEvent.setup();
-    render(<TeamDistributions />);
 
     await user.click(await screen.findByRole('button', { name: 'cancel-modal' }));
 
@@ -185,7 +165,7 @@ describe('<TeamDistributions />', () => {
 
   it('closes the modal and reloads data after a successful create/edit submit', async () => {
     modalForm.open = true;
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TeamDistributions />);
 
     await user.click(await screen.findByRole('button', { name: 'submit-modal' }));
@@ -197,7 +177,7 @@ describe('<TeamDistributions />', () => {
 
   it('opens the edit modal with the distribution data when the card edit button is clicked', async () => {
     sessionValue.isAdmin = true;
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TeamDistributions />);
 
     await user.click(await screen.findByRole('button', { name: /edit/i }));
@@ -207,7 +187,7 @@ describe('<TeamDistributions />', () => {
 
   it('deletes a distribution and reloads when the card delete button is clicked (manager)', async () => {
     sessionValue.isAdmin = true;
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TeamDistributions />);
 
     await user.click(await screen.findByRole('button', { name: /delete/i }));
@@ -220,7 +200,7 @@ describe('<TeamDistributions />', () => {
   it('shows an error toast when deleting a distribution fails (manager)', async () => {
     sessionValue.isAdmin = true;
     deleteTeamDistribution.mockRejectedValue(new Error('fail'));
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TeamDistributions />);
 
     await user.click(await screen.findByRole('button', { name: /delete/i }));
@@ -230,26 +210,11 @@ describe('<TeamDistributions />', () => {
     );
   });
 
-  it('opens the submit-score modal for the chosen distribution via the card action (manager)', async () => {
-    sessionValue.isAdmin = true;
-    const user = userEvent.setup();
-    render(<TeamDistributions />);
-
-    await screen.findByText('Spring Distribution');
-    // The card exposes a "Submit score" action for managers.
-    await user.click(screen.getByRole('button', { name: /submit score/i }));
-
-    await waitFor(() =>
-      expect(within(screen.getByTestId('submit-score-modal')).getByText('Spring Distribution')).toBeInTheDocument(),
-    );
-    expect(screen.getByTestId('submit-score-modal')).toHaveAttribute('data-open', 'true');
-  });
-
   it('registers for a distribution and shows a success toast', async () => {
     getCourseTeamDistributions.mockResolvedValue({
       data: [makeDistribution({ registrationStatus: 'available' })],
     } as never);
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TeamDistributions />);
 
     const registerBtn = await screen.findByRole('button', { name: /^register$/i });
@@ -264,7 +229,7 @@ describe('<TeamDistributions />', () => {
       data: [makeDistribution({ registrationStatus: 'available' })],
     } as never);
     teamDistributionRegistry.mockRejectedValue(new Error('nope'));
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TeamDistributions />);
 
     const registerBtn = await screen.findByRole('button', { name: /^register$/i });
@@ -279,7 +244,7 @@ describe('<TeamDistributions />', () => {
     getCourseTeamDistributions.mockResolvedValue({
       data: [makeDistribution({ registrationStatus: 'completed' })],
     } as never);
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TeamDistributions />);
 
     // The "Cancel" registration link (antd Typography.Link) opens a confirm dialog.
@@ -298,7 +263,7 @@ describe('<TeamDistributions />', () => {
       data: [makeDistribution({ registrationStatus: 'completed' })],
     } as never);
     teamDistributionDeleteRegistry.mockRejectedValue(new Error('nope'));
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TeamDistributions />);
 
     await user.click(await screen.findByText('Cancel'));
@@ -310,15 +275,20 @@ describe('<TeamDistributions />', () => {
     );
   });
 
-  it('closes the submit-score modal through its onClose handler (manager)', async () => {
+  it('shows manager welcome, opens the chosen distribution and closes its score modal', async () => {
     sessionValue.isAdmin = true;
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TeamDistributions />);
+
+    expect(await screen.findByText('Create student teams to solve group tasks!')).toBeInTheDocument();
+    expect(screen.getByTestId('submit-score-modal')).toHaveAttribute('data-open', 'false');
 
     // Open the modal for the card's distribution, then close it.
     await screen.findByText('Spring Distribution');
     await user.click(screen.getByRole('button', { name: /submit score/i }));
     await waitFor(() => expect(screen.getByTestId('submit-score-modal')).toHaveAttribute('data-open', 'true'));
+
+    expect(within(screen.getByTestId('submit-score-modal')).getByText('Spring Distribution')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'close-score' }));
 

@@ -150,7 +150,9 @@ describe('CourseTasksController', () => {
 
   describe('getAllExtended', () => {
     it('maps detailed service results to CourseTaskDetailedDto instances', async () => {
-      service.getAllDetailed.mockResolvedValue([mockCourseTask]);
+      service.getAllDetailed.mockResolvedValue([
+        { ...mockCourseTask, resultsCount: 0, interviewResultsCount: 0, stageInterviewResultsCount: 0 },
+      ]);
       const req = {} as CurrentRequest;
 
       const result = await controller.getAllExtended(req, 5);

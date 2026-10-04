@@ -1,47 +1,52 @@
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { WaitListAlert } from './WaitListAlert';
 
 // next/link is globally aliased to a mock; it renders an anchor with href.
+vi.mock('antd', () => ({
+  Alert: ({
+    title,
+    description,
+    onClose,
+  }: {
+    title: React.ReactNode;
+    description: React.ReactNode;
+    onClose: () => void;
+  }) => (
+    <div role="alert">
+      <span>{title}</span>
+      {description}
+      <button aria-label="close" onClick={onClose} />
+    </div>
+  ),
+  theme: { useToken: () => ({ token: { blue7: '#00f' } }) },
+  Typography: {
+    Text: ({ children, onClick }: React.ComponentProps<'span'>) => <span onClick={onClick}>{children}</span>,
+  },
+}));
 
 describe('WaitListAlert', () => {
   beforeEach(() => window.sessionStorage.clear());
 
-  it('should render the waitlist invitation with a link to the wait list', () => {
-    render(<WaitListAlert courseAlias="rs-2025" interviewId={7} startDate="2025-01-01" />);
+  it('should render, preserve description clicks, dismiss, and honor stored dismissal', () => {
+    const { unmount } = render(<WaitListAlert courseAlias="rs-2025" interviewId={7} startDate="2025-01-01" />);
 
     expect(screen.getByText('Do you want to interview more students?')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /students' waitlist/ })).toHaveAttribute(
       'href',
       '/course/mentor/interview-wait-list?course=rs-2025&interviewId=7',
     );
-  });
 
-  it('should hide the alert after it is dismissed', async () => {
-    const user = userEvent.setup();
-    render(<WaitListAlert courseAlias="rs-2025" interviewId={7} startDate="2025-01-01" />);
+    fireEvent.click(screen.getByText(/Excellent candidates are waiting/));
+    expect(screen.getByText('Do you want to interview more students?')).toBeInTheDocument();
 
-    await user.click(screen.getByRole('img', { name: 'close' }));
+    fireEvent.click(screen.getByRole('button', { name: 'close' }));
 
     expect(screen.queryByText('Do you want to interview more students?')).not.toBeInTheDocument();
-  });
-
-  it('should not render when previously dismissed in session storage', () => {
+    unmount();
     window.sessionStorage.setItem('waitlist-alert-7', 'true');
 
     render(<WaitListAlert courseAlias="rs-2025" interviewId={7} startDate="2025-01-01" />);
 
     expect(screen.queryByText('Do you want to interview more students?')).not.toBeInTheDocument();
-  });
-
-  it('should keep the alert open when its description text is clicked (stopPropagation)', async () => {
-    const user = userEvent.setup();
-    render(<WaitListAlert courseAlias="rs-2025" interviewId={7} startDate="2025-01-01" />);
-
-    // clicking the description text fires the onClick stopPropagation handler and
-    // must not dismiss the alert
-    await user.click(screen.getByText(/Excellent candidates are waiting/));
-
-    expect(screen.getByText('Do you want to interview more students?')).toBeInTheDocument();
   });
 });

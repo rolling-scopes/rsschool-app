@@ -1,5 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { message } from 'antd';
 import { TeamApi, TeamDistributionApi, TeamDistributionDetailedDto, TeamDto } from '@client/api';
 import Teams from './Teams';
@@ -176,15 +176,6 @@ beforeEach(() => {
 });
 
 describe('<Teams />', () => {
-  it('renders the page title and the header when a distribution is loaded', () => {
-    render(<Teams />);
-
-    expect(screen.getByRole('heading', { name: 'RS Teams' })).toBeInTheDocument();
-    expect(screen.getByTestId('teams-header')).toBeInTheDocument();
-    // Default tab renders the teams section.
-    expect(screen.getByTestId('teams-section')).toBeInTheDocument();
-  });
-
   it('does not render the header or any section when there is no distribution', () => {
     distributionState.distribution = undefined;
     render(<Teams />);
@@ -194,8 +185,12 @@ describe('<Teams />', () => {
   });
 
   it('switches the active tab to the students-without-team section', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
+
+    expect(screen.getByRole('heading', { name: 'RS Teams' })).toBeInTheDocument();
+    expect(screen.getByTestId('teams-header')).toBeInTheDocument();
+    expect(screen.getByTestId('teams-section')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'tab-students' }));
 
@@ -203,17 +198,8 @@ describe('<Teams />', () => {
     expect(screen.queryByTestId('teams-section')).not.toBeInTheDocument();
   });
 
-  it('switches the active tab to the my-team section', async () => {
-    const user = userEvent.setup();
-    render(<Teams />);
-
-    await user.click(screen.getByRole('button', { name: 'tab-myteam' }));
-
-    expect(await screen.findByTestId('myteam-section')).toBeInTheDocument();
-  });
-
   it('opens the team modal from the header create-team action', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
 
     await user.click(screen.getByRole('button', { name: 'header-create-team' }));
@@ -222,7 +208,7 @@ describe('<Teams />', () => {
   });
 
   it('distributes students and reloads the distribution', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
 
     await user.click(screen.getByRole('button', { name: 'header-distribute' }));
@@ -234,7 +220,7 @@ describe('<Teams />', () => {
   it('shows an error when distributing students fails', async () => {
     const errorSpy = vi.spyOn(message, 'error').mockImplementation(() => ({}) as never);
     distributeStudentsToTeam.mockRejectedValue(new Error('boom'));
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
 
     await user.click(screen.getByRole('button', { name: 'header-distribute' }));
@@ -246,7 +232,7 @@ describe('<Teams />', () => {
   });
 
   it('opens and submits the join-team modal, joining the chosen team', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
 
     await user.click(screen.getByRole('button', { name: 'header-join' }));
@@ -259,7 +245,7 @@ describe('<Teams />', () => {
   it('shows an error when joining a team fails', async () => {
     const errorSpy = vi.spyOn(message, 'error').mockImplementation(() => ({}) as never);
     joinTeam.mockRejectedValue(new Error('nope'));
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
 
     await user.click(screen.getByRole('button', { name: 'header-join' }));
@@ -270,7 +256,7 @@ describe('<Teams />', () => {
   });
 
   it('closes the join-team modal on cancel', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
 
     await user.click(screen.getByRole('button', { name: 'header-join' }));
@@ -280,20 +266,9 @@ describe('<Teams />', () => {
     await waitFor(() => expect(screen.queryByTestId('join-modal')).not.toBeInTheDocument());
   });
 
-  it('creates a new team through the team modal when it is open', async () => {
-    modalForm.open = true;
-    const user = userEvent.setup();
-    render(<Teams />);
-
-    await user.click(await screen.findByRole('button', { name: 'modal-create-submit' }));
-
-    await waitFor(() => expect(createTeam).toHaveBeenCalledWith(42, 5, { name: 'New Team' }));
-    await waitFor(() => expect(distributionState.loadDistribution).toHaveBeenCalled());
-  });
-
   it('updates an existing team through the team modal when an id is supplied', async () => {
     modalForm.open = true;
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
 
     await user.click(await screen.findByRole('button', { name: 'modal-update-submit' }));
@@ -306,7 +281,7 @@ describe('<Teams />', () => {
     const errorSpy = vi.spyOn(message, 'error').mockImplementation(() => ({}) as never);
     updateTeam.mockRejectedValue(new Error('fail'));
     modalForm.open = true;
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
 
     await user.click(await screen.findByRole('button', { name: 'modal-update-submit' }));
@@ -317,11 +292,12 @@ describe('<Teams />', () => {
 
   it('copies a team invitation password from the create-team success dialog', async () => {
     modalForm.open = true;
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
 
     await user.click(await screen.findByRole('button', { name: 'modal-create-submit' }));
-    await waitFor(() => expect(createTeam).toHaveBeenCalled());
+    await waitFor(() => expect(createTeam).toHaveBeenCalledWith(42, 5, { name: 'New Team' }));
+    await waitFor(() => expect(distributionState.loadDistribution).toHaveBeenCalled());
 
     // The success confirm dialog offers "Copy invitation password" -> copyPassword(team.id).
     const dialog = await screen.findByRole('dialog');
@@ -337,10 +313,11 @@ describe('<Teams />', () => {
   });
 
   it('copies the team password from the my-team section', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
 
     await user.click(screen.getByRole('button', { name: 'tab-myteam' }));
+    expect(await screen.findByTestId('myteam-section')).toBeInTheDocument();
     await user.click(await screen.findByRole('button', { name: 'copy-password' }));
 
     await waitFor(() => expect(getTeamPassword).toHaveBeenCalledWith(42, 5, 8));
@@ -352,7 +329,7 @@ describe('<Teams />', () => {
   it('shows an error when copying the team password fails', async () => {
     const errorSpy = vi.spyOn(message, 'error').mockImplementation(() => ({}) as never);
     getTeamPassword.mockRejectedValue(new Error('boom'));
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
 
     await user.click(screen.getByRole('button', { name: 'tab-myteam' }));
@@ -363,7 +340,7 @@ describe('<Teams />', () => {
   });
 
   it('regenerates and copies a new team password from the my-team section', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
 
     await user.click(screen.getByRole('button', { name: 'tab-myteam' }));
@@ -381,7 +358,7 @@ describe('<Teams />', () => {
   it('shows an error when regenerating the team password fails', async () => {
     const errorSpy = vi.spyOn(message, 'error').mockImplementation(() => ({}) as never);
     changeTeamPassword.mockRejectedValue(new Error('boom'));
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Teams />);
 
     await user.click(screen.getByRole('button', { name: 'tab-myteam' }));

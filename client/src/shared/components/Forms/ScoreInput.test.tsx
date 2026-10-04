@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { Button, Form } from 'antd';
 import { ScoreInput } from './ScoreInput';
 
@@ -17,19 +17,6 @@ function renderScoreInput(props: Parameters<typeof ScoreInput>[0] = {}, onFinish
 }
 
 describe('ScoreInput', () => {
-  it('renders a spinbutton with a default "Score" label when no max is provided', () => {
-    renderScoreInput();
-
-    expect(screen.getByRole('spinbutton')).toBeInTheDocument();
-    expect(screen.getByLabelText('Score')).toBeInTheDocument();
-  });
-
-  it('derives the max-points label from the maxScore prop', () => {
-    renderScoreInput({ maxScore: 80 });
-
-    expect(screen.getByLabelText('Score (Max 80 points)')).toBeInTheDocument();
-  });
-
   it('falls back to the courseTask.maxScore when maxScore prop is absent', () => {
     renderScoreInput({ courseTask: { id: 1, maxScore: 45 } });
 
@@ -49,10 +36,10 @@ describe('ScoreInput', () => {
   });
 
   it('lets the user type a score and submits it', async () => {
-    const user = userEvent.setup();
-    const { onFinish } = renderScoreInput({ maxScore: 100 });
+    const user = setupUser();
+    const { onFinish } = renderScoreInput({ maxScore: 80 });
 
-    const input = screen.getByRole('spinbutton');
+    const input = screen.getByLabelText('Score (Max 80 points)');
     await user.type(input, '42');
     await user.click(screen.getByRole('button', { name: /submit/i }));
 
@@ -60,9 +47,11 @@ describe('ScoreInput', () => {
   });
 
   it('shows a required-error and blocks submit when left empty', async () => {
-    const user = userEvent.setup();
-    const { onFinish } = renderScoreInput({ maxScore: 100 });
+    const user = setupUser();
+    const { onFinish } = renderScoreInput();
 
+    expect(screen.getByRole('spinbutton')).toBeInTheDocument();
+    expect(screen.getByLabelText('Score')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: /submit/i }));
 
     expect(await screen.findByText('Please enter score')).toBeInTheDocument();
@@ -70,7 +59,7 @@ describe('ScoreInput', () => {
   });
 
   it('clamps a value typed above the configured max on blur', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderScoreInput({ maxScore: 50 });
 
     const input = screen.getByRole('spinbutton');
@@ -81,7 +70,7 @@ describe('ScoreInput', () => {
   });
 
   it('clamps a negative value to the configured minimum of 0 on blur', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     renderScoreInput({ maxScore: 50 });
 
     const input = screen.getByRole('spinbutton');

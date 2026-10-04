@@ -2,16 +2,12 @@ import { render, screen } from '@testing-library/react';
 import { Help } from './Help';
 
 describe('Footer Help', () => {
-  it('renders the Help section title', () => {
+  it('renders the section title and support links', () => {
     render(<Help />);
+
     expect(screen.getByText('Help')).toBeInTheDocument();
-  });
-
-  it('renders the documentation and bug report links', () => {
-    render(<Help />);
-
     const docs = screen.getByRole('link', { name: /Docs/ });
-    expect(docs).toHaveAttribute('href', 'https://docs.rs.school');
+    expect(docs).toHaveAttribute('href', 'https://rs.school/docs');
     expect(docs).toHaveAttribute('target', '_blank');
 
     expect(screen.getByRole('link', { name: /Report a bug/ })).toHaveAttribute(

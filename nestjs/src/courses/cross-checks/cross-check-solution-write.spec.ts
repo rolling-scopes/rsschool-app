@@ -25,6 +25,9 @@ describe('CourseCrossCheckService.saveSolution', () => {
       {} as never,
       {} as never,
       {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
     );
   }
 
@@ -85,6 +88,9 @@ describe('CourseCrossCheckService.deleteSolution', () => {
     const service = new CourseCrossCheckService(
       {} as never,
       { delete: mockDelete } as never,
+      {} as never,
+      {} as never,
+      {} as never,
       {} as never,
       {} as never,
       {} as never,

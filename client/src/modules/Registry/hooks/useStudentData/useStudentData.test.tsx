@@ -1,6 +1,6 @@
-import { ReactNode } from 'react';
+import { Form } from 'antd';
 import { render, screen, waitFor, act } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { useRouter } from 'next/router';
 import { useStudentData } from './useStudentData';
 
@@ -112,7 +112,7 @@ type Api = ReturnType<typeof useStudentData>;
 function Harness({ courseAlias, onReady }: { courseAlias?: string; onReady: (api: Api) => void }) {
   const api = useStudentData('octocat', 42, courseAlias);
   onReady(api);
-  return (<>{api.modalContext}</>) as ReactNode;
+  return <Form form={api.form}>{api.modalContext}</Form>;
 }
 
 function renderHookView(courseAlias?: string) {
@@ -138,22 +138,6 @@ beforeEach(() => {
 });
 
 describe('useStudentData', () => {
-  test('loads eligible courses and clears the loading flag', async () => {
-    const view = renderHookView();
-
-    await waitFor(() => expect(view.current.loading).toBe(false));
-    expect(view.current.courses).toHaveLength(1);
-    expect(view.current.courses[0]?.id).toBe(1);
-    expect(view.current.registered).toBe(false);
-  });
-
-  test('builds the General/Done steps', async () => {
-    const view = renderHookView();
-
-    await waitFor(() => expect(view.current.loading).toBe(false));
-    expect(view.current.steps.map(s => s.title)).toEqual(['General', 'Done']);
-  });
-
   test('filters out invite-only courses', async () => {
     getCourses.mockResolvedValue([openCourse, { ...openCourse, id: 3, alias: 'x', inviteOnly: true }]);
     const view = renderHookView();
@@ -185,6 +169,11 @@ describe('useStudentData', () => {
     const view = renderHookView();
     await waitFor(() => expect(view.current.loading).toBe(false));
 
+    expect(view.current.courses).toHaveLength(1);
+    expect(view.current.courses[0]?.id).toBe(1);
+    expect(view.current.registered).toBe(false);
+    expect(view.current.steps.map(s => s.title)).toEqual(['General', 'Done']);
+
     await act(async () => {
       await view.current.handleSubmit({
         courseId: 1,
@@ -207,26 +196,8 @@ describe('useStudentData', () => {
       languages: ['English'],
     });
     expect(registerStudent).toHaveBeenCalledWith({ type: 'student', courseId: 1 });
-    await waitFor(() => expect(view.current.currentStep).toBe(1));
-  });
-
-  test('resets the cached auth session so the new course is visible right away', async () => {
-    const view = renderHookView();
-    await waitFor(() => expect(view.current.loading).toBe(false));
-
-    await act(async () => {
-      await view.current.handleSubmit({
-        courseId: 1,
-        location: { countryName: 'Poland', cityName: 'Warsaw' },
-        primaryEmail: 'a@b.c',
-        contactsEpamEmail: 'a@epam.com',
-        firstName: 'Ada',
-        lastName: 'L',
-        languagesMentoring: ['English'],
-      } as never);
-    });
-
     expect(clearAuthUserSessionCache).toHaveBeenCalledWith(42);
+    await waitFor(() => expect(view.current.currentStep).toBe(1));
   });
 
   test('still completes registration when the session cache reset fails', async () => {
@@ -252,7 +223,7 @@ describe('useStudentData', () => {
   });
 
   test('warns about existing enrollments and registers only after confirming', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     getCourses.mockResolvedValue([openCourse, enrolledCourse]);
     getProfileInfo.mockResolvedValue({
       studentStats: [{ courseId: 2, isExpelled: false, isCourseCompleted: false, certificateId: null }],
@@ -312,9 +283,13 @@ describe('useStudentData', () => {
     getProfileInfo.mockResolvedValue({
       studentStats: [{ courseId: 2, isExpelled: false, isCourseCompleted: false, certificateId: null }],
     });
-    const view = renderHookView('react-2024');
+    let view: ReturnType<typeof renderHookView>;
+    // eslint-disable-next-line testing-library/no-unnecessary-act -- Settle registration before advancing fake timers
+    await act(async () => {
+      view = renderHookView('react-2024');
+    });
 
-    await vi.waitFor(() => expect(view.current.registered).toBe(true));
+    expect(view!.current.registered).toBe(true);
     expect(push).not.toHaveBeenCalled();
 
     await act(async () => {

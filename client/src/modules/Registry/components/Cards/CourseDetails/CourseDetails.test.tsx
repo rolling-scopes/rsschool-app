@@ -12,25 +12,12 @@ const renderCourseDetails = (courses: CourseDto[] = []) =>
   );
 
 describe('CourseDetail', () => {
-  test.each`
-    label
-    ${LABELS.course}
-    ${LABELS.languagesStudent}
-  `('should render field with $label label', async ({ label }) => {
+  test('should render field labels and placeholders', async () => {
     renderCourseDetails();
 
-    const fieldLabel = await screen.findByLabelText(label);
-    expect(fieldLabel).toBeInTheDocument();
-  });
-
-  test.each`
-    placeholder
-    ${PLACEHOLDERS.courses}
-    ${PLACEHOLDERS.languages}
-  `('should render field with $placeholder placeholder', async ({ placeholder }) => {
-    renderCourseDetails();
-
-    const fieldPlaceholder = await screen.findByText(placeholder);
-    expect(fieldPlaceholder).toBeInTheDocument();
+    expect(await screen.findByLabelText(LABELS.course)).toBeInTheDocument();
+    expect(screen.getByLabelText(LABELS.languagesStudent)).toBeInTheDocument();
+    expect(screen.getByText(PLACEHOLDERS.courses)).toBeInTheDocument();
+    expect(screen.getByText(PLACEHOLDERS.languages)).toBeInTheDocument();
   });
 });

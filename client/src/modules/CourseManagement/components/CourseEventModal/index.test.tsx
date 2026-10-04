@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { CourseEventModal } from './index';
 
 // --- Boundary mocks --------------------------------------------------------
@@ -136,16 +136,6 @@ describe('<CourseEventModal />', () => {
     submitEvent.mockResolvedValue(undefined);
   });
 
-  it('renders the modal with the event/type/discipline fields when adding a new event', async () => {
-    render(<CourseEventModal {...makeProps()} />);
-
-    expect(await screen.findByText('Course Event')).toBeInTheDocument();
-    expect(screen.getByLabelText('Event')).toBeInTheDocument();
-    expect(screen.getByLabelText('Type')).toBeInTheDocument();
-    expect(screen.getByLabelText('Discipline')).toBeInTheDocument();
-    expect(screen.getByLabelText('Description URL')).toBeInTheDocument();
-  });
-
   it('renders the event name as a title (no Event select) when editing an existing event', async () => {
     render(<CourseEventModal {...makeProps({ data: { event: { id: 5, name: 'Existing Event' } } as never })} />);
 
@@ -167,7 +157,7 @@ describe('<CourseEventModal />', () => {
   });
 
   it('shows a validation error and does not submit when required fields are empty', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<CourseEventModal {...props} />);
 
@@ -188,23 +178,8 @@ describe('<CourseEventModal />', () => {
     expect(await screen.findByText('Please enter valid URL')).toBeInTheDocument();
   });
 
-  it('prefills description/type when picking an event template via onEventChange', async () => {
-    render(<CourseEventModal {...makeProps()} />);
-
-    const eventSelect = await screen.findByLabelText('Event');
-    fireEvent.mouseDown(eventSelect);
-
-    const option = await within(document.body).findByText('Intro Lecture');
-    fireEvent.click(option);
-
-    // The selected template's description URL flows into the URL input.
-    await waitFor(() => {
-      expect(screen.getByPlaceholderText('Enter description URL')).toHaveValue('https://example.com/intro');
-    });
-  });
-
   it('filters event template options by typed input via filterOption', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<CourseEventModal {...makeProps()} />);
 
     const eventSelect = await screen.findByLabelText('Event');
@@ -219,7 +194,7 @@ describe('<CourseEventModal />', () => {
   });
 
   it('submits via submitEvent and then calls onSubmit when the form is valid', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<CourseEventModal {...props} />);
 
@@ -227,6 +202,10 @@ describe('<CourseEventModal />', () => {
     const eventSelect = await screen.findByLabelText('Event');
     fireEvent.mouseDown(eventSelect);
     fireEvent.click(await within(document.body).findByText('Intro Lecture'));
+
+    await waitFor(() =>
+      expect(screen.getByPlaceholderText('Enter description URL')).toHaveValue('https://example.com/intro'),
+    );
 
     // Pick a discipline (required, not auto-filled).
     const disciplineSelect = screen.getByLabelText('Discipline');
@@ -243,12 +222,15 @@ describe('<CourseEventModal />', () => {
     await waitFor(() => expect(props.onSubmit).toHaveBeenCalled());
   });
 
-  it('calls onCancel when the cancel button is clicked on a pristine form', async () => {
-    const user = userEvent.setup();
+  it('renders the new-event fields and cancels a pristine form', async () => {
+    const user = setupUser();
     const props = makeProps();
     render(<CourseEventModal {...props} />);
 
-    await screen.findByText('Course Event');
+    expect(await screen.findByText('Course Event')).toBeInTheDocument();
+    for (const label of ['Event', 'Type', 'Discipline', 'Description URL']) {
+      expect(screen.getByLabelText(label)).toBeInTheDocument();
+    }
     await user.click(screen.getByRole('button', { name: /cancel/i }));
 
     expect(props.onCancel).toHaveBeenCalled();

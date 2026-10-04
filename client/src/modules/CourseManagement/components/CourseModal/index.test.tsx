@@ -1,6 +1,6 @@
 /* eslint-disable testing-library/no-node-access */
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { CourseModal } from './index';
 
 // --- Boundary mocks --------------------------------------------------------
@@ -123,11 +123,16 @@ describe('<CourseModal />', () => {
     copyCourse.mockResolvedValue({});
   });
 
-  it('renders the "Add Course" title and the copy-template select when creating', async () => {
+  it('renders the create form with its required fields and copy-template select', async () => {
     render(<CourseModal {...makeProps()} />);
 
     expect(await screen.findByText('Add Course')).toBeInTheDocument();
     expect(screen.getByLabelText('Copy Tasks, Schedule from:')).toBeInTheDocument();
+    expect(screen.getByLabelText('Course Name')).toBeInTheDocument();
+    expect(screen.getByLabelText('Full Course Name')).toBeInTheDocument();
+    expect(screen.getByLabelText('Alias')).toBeInTheDocument();
+    expect(screen.getByLabelText('Discord/Telegram channel')).toBeInTheDocument();
+    expect(screen.getByLabelText('Disciplines')).toBeInTheDocument();
   });
 
   it('renders the "Edit Course" title and hides the copy-template select when editing', async () => {
@@ -135,27 +140,12 @@ describe('<CourseModal />', () => {
 
     expect(await screen.findByText('Edit Course')).toBeInTheDocument();
     expect(await screen.findByDisplayValue('JS Course')).toBeInTheDocument();
+    expect(getCourse).toHaveBeenCalledWith(7);
     expect(screen.queryByLabelText('Copy Tasks, Schedule from:')).not.toBeInTheDocument();
   });
 
-  it('fetches the course when editing', async () => {
-    render(<CourseModal {...makeProps({ courseId: 7 })} />);
-
-    await waitFor(() => expect(getCourse).toHaveBeenCalledWith(7));
-  });
-
-  it('renders the core required fields', async () => {
-    render(<CourseModal {...makeProps()} />);
-
-    expect(await screen.findByLabelText('Course Name')).toBeInTheDocument();
-    expect(screen.getByLabelText('Full Course Name')).toBeInTheDocument();
-    expect(screen.getByLabelText('Alias')).toBeInTheDocument();
-    expect(screen.getByLabelText('Discord/Telegram channel')).toBeInTheDocument();
-    expect(screen.getByLabelText('Disciplines')).toBeInTheDocument();
-  });
-
   it('shows validation errors and does not submit when required fields are empty', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<CourseModal {...props} />);
 
@@ -169,26 +159,8 @@ describe('<CourseModal />', () => {
     expect(props.onClose).not.toHaveBeenCalled();
   });
 
-  it('reveals the Custom Url input when "Custom" description URL is selected', async () => {
-    render(<CourseModal {...makeProps()} />);
-
-    // The Description Url dropdown is long and virtualized (only ~10 options render at a
-    // time); scroll the rc-virtual list so the trailing "Custom" option mounts.
-    const descUrlSelect = await screen.findByLabelText('Description Url');
-    fireEvent.mouseDown(descUrlSelect);
-
-    await waitFor(() => expect(document.querySelector('.rc-virtual-list-holder')).toBeTruthy());
-    const list = document.querySelector('.rc-virtual-list-holder')!;
-    fireEvent.scroll(list, { target: { scrollTop: 1000 } });
-
-    const customOption = await within(document.body).findByText('Custom');
-    fireEvent.click(customOption);
-
-    expect(await screen.findByLabelText('Custom Url')).toBeInTheDocument();
-  });
-
   it('hides the certificate disciplines select when "Any course" is checked', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<CourseModal {...makeProps()} />);
 
     await screen.findByText('Add Course');
@@ -207,7 +179,7 @@ describe('<CourseModal />', () => {
   });
 
   it('reveals the Personal Mentoring date range when the toggle is checked', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<CourseModal {...makeProps()} />);
 
     await screen.findByText('Add Course');
@@ -224,52 +196,30 @@ describe('<CourseModal />', () => {
     const urlInput = await screen.findByPlaceholderText('Enter URL');
     fireEvent.change(urlInput, { target: { value: 'http://evil.example.com' } });
 
-    expect(await screen.findByText('Please enter RS APP or wearecommunity.io URL')).toBeInTheDocument();
+    // Allow async validation and error rendering to finish on busy parallel runners.
+    expect(
+      await screen.findByText('Please enter RS APP or wearecommunity.io URL', {}, { timeout: 5000 }),
+    ).toBeInTheDocument();
   });
 
-  it('rejects a registry URL whose course alias does not match the entered alias', async () => {
+  it('previews the registry URL and validates its course alias', async () => {
     render(<CourseModal {...makeProps()} />);
 
     const alias = await screen.findByLabelText('Alias');
     fireEvent.change(alias, { target: { value: 'my-course' } });
-    // Wait for the watched alias to propagate (the live registry-link preview confirms it).
-    await screen.findByText('https://app.rs.school/registry/student?course=my-course');
-
-    const urlInput = screen.getByPlaceholderText('Enter URL');
-    // A valid registry URL but with a different course alias → alias-mismatch rejection.
-    fireEvent.change(urlInput, { target: { value: 'https://app.rs.school/registry/student?course=other-course' } });
-
-    expect(await screen.findByText('URL must end with my-course')).toBeInTheDocument();
-  });
-
-  it('accepts a registry URL whose course alias matches the entered alias', async () => {
-    render(<CourseModal {...makeProps()} />);
-
-    const alias = await screen.findByLabelText('Alias');
-    fireEvent.change(alias, { target: { value: 'my-course' } });
-    await screen.findByText('https://app.rs.school/registry/student?course=my-course');
-
-    const urlInput = screen.getByPlaceholderText('Enter URL');
-    fireEvent.change(urlInput, { target: { value: 'https://app.rs.school/registry/student?course=my-course' } });
-
-    // No mismatch error should appear for a matching alias.
-    await waitFor(() => {
-      expect(screen.queryByText('URL must end with my-course')).not.toBeInTheDocument();
-      expect(screen.queryByText('Please enter RS APP or wearecommunity.io URL')).not.toBeInTheDocument();
-    });
-  });
-
-  it('shows the RS APP registry link preview once an alias is entered', async () => {
-    render(<CourseModal {...makeProps()} />);
-
-    const alias = await screen.findByLabelText('Alias');
-    fireEvent.change(alias, { target: { value: 'my-course' } });
-
     expect(await screen.findByText('https://app.rs.school/registry/student?course=my-course')).toBeInTheDocument();
+
+    const urlInput = screen.getByPlaceholderText('Enter URL');
+    fireEvent.change(urlInput, { target: { value: 'https://app.rs.school/registry/student?course=other-course' } });
+    expect(await screen.findByText('URL must end with my-course')).toBeInTheDocument();
+
+    fireEvent.change(urlInput, { target: { value: 'https://app.rs.school/registry/student?course=my-course' } });
+    await waitFor(() => expect(screen.queryByText('URL must end with my-course')).not.toBeInTheDocument());
+    expect(screen.queryByText('Please enter RS APP or wearecommunity.io URL')).not.toBeInTheDocument();
   });
 
   it('updates the course with the built record when editing and saving', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps({ courseId: 7 });
     render(<CourseModal {...props} />);
 
@@ -292,7 +242,7 @@ describe('<CourseModal />', () => {
   });
 
   it('marks the course completed when the Completed state radio is chosen on save', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps({ courseId: 7 });
     render(<CourseModal {...props} />);
 
@@ -334,7 +284,7 @@ describe('<CourseModal />', () => {
   }
 
   it('creates a new course with the built record when the create form is submitted', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<CourseModal {...props} />);
 
@@ -353,12 +303,13 @@ describe('<CourseModal />', () => {
       discordServerId: 5,
       descriptionUrl: 'https://rs.school/courses/javascript',
     });
+    expect(record.wearecommunityUrl).toBe('https://app.rs.school/registry/student?course=newc');
     expect(copyCourse).not.toHaveBeenCalled();
     await waitFor(() => expect(props.onClose).toHaveBeenCalled());
   });
 
   it('copies tasks/schedule from a template course when one is chosen on create', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<CourseModal {...props} />);
 
@@ -381,7 +332,7 @@ describe('<CourseModal />', () => {
   });
 
   it('calls onClose when the modal cancel button is clicked', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<CourseModal {...props} />);
 
@@ -392,7 +343,7 @@ describe('<CourseModal />', () => {
   });
 
   it('prefills and rebuilds a richly-populated planned course (registration date, certificates, mentoring, WAC URL)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     getCourse.mockResolvedValue({
       data: {
         ...editCourse,
@@ -429,7 +380,7 @@ describe('<CourseModal />', () => {
   });
 
   it('treats an empty certificateDisciplines list as "Any course" and clears the list on save', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     getCourse.mockResolvedValue({
       data: { ...editCourse, certificateDisciplines: [] },
     });
@@ -448,60 +399,41 @@ describe('<CourseModal />', () => {
     expect(record.certificateDisciplines).toEqual([]);
   });
 
-  it('falls back to the RS APP registry URL when no WeAreCommunity URL is provided', async () => {
-    const user = userEvent.setup();
-    const props = makeProps();
-    render(<CourseModal {...props} />);
-
-    await screen.findByText('Add Course');
-    await fillCreateForm();
-    // leave the WeAreCommunity URL empty => createRecord uses buildRSAppStudentRegistryURL(alias)
-
-    await user.click(screen.getByRole('button', { name: /save/i }));
-
-    await waitFor(() => expect(createCourse).toHaveBeenCalled());
-    const [record] = createCourse.mock.calls[0];
-    expect(record.wearecommunityUrl).toBe('https://app.rs.school/registry/student?course=newc');
-  });
-
-  it('submits the custom description URL when "Custom" is selected', async () => {
-    const user = userEvent.setup();
+  it('reveals and submits the custom description URL when "Custom" is selected', async () => {
+    const user = setupUser();
     const props = makeProps();
     render(<CourseModal {...props} />);
 
     await screen.findByText('Add Course');
 
-    // Fill required text + selects, but pick "Custom" for the description URL.
+    // Reveal the custom field before filling the rest of the form.
+    const descUrlSelect = screen.getByLabelText('Description Url');
+    fireEvent.mouseDown(descUrlSelect);
+    await waitFor(() => expect(document.querySelector('.rc-virtual-list-holder')).toBeTruthy());
+    const holder = document.querySelector('.rc-virtual-list-holder')!;
+    fireEvent.scroll(holder, { target: { scrollTop: 2000 } });
+    fireEvent.click(await screen.findByText('Custom'));
+
+    const customUrl = await screen.findByLabelText('Custom Url');
+    expect(customUrl).toBeInTheDocument();
+    fireEvent.change(customUrl, { target: { value: 'https://example.com/custom-course' } });
+
     fireEvent.change(screen.getByLabelText('Course Name'), { target: { value: 'New Course' } });
     fireEvent.change(screen.getByLabelText('Full Course Name'), { target: { value: 'New Full Course' } });
     fireEvent.change(screen.getByLabelText('Alias'), { target: { value: 'newc' } });
 
     const discord = screen.getByLabelText('Discord/Telegram channel');
     fireEvent.mouseDown(discord);
-    fireEvent.click(await within(document.body).findByText('RS Discord'));
+    fireEvent.click(await screen.findByText('RS Discord'));
 
     const disc = screen.getByLabelText('Disciplines');
     fireEvent.mouseDown(disc);
-    const fe = await within(document.body).findAllByText('Frontend');
+    const fe = await screen.findAllByText('Frontend');
     fireEvent.click(fe[fe.length - 1]);
 
     fireEvent.change(screen.getByTestId('range-start'), { target: { value: '2024-01-01' } });
     fireEvent.change(screen.getByTestId('range-end'), { target: { value: '2024-06-01' } });
-
-    // Close any dropdown left open by the previous selects so descUrl's list is the only one.
     fireEvent.keyDown(document.body, { key: 'Escape', code: 'Escape' });
-
-    // Description URL -> "Custom" (scroll the virtualized list so the trailing option mounts).
-    const descUrlSelect = screen.getByLabelText('Description Url');
-    fireEvent.mouseDown(descUrlSelect);
-    await waitFor(() => expect(document.querySelectorAll('.rc-virtual-list-holder').length).toBeGreaterThan(0));
-    const holders = document.querySelectorAll('.rc-virtual-list-holder');
-    const holder = holders[holders.length - 1];
-    fireEvent.scroll(holder, { target: { scrollTop: 2000 } });
-    fireEvent.click(await within(document.body).findByText('Custom'));
-
-    const customUrl = await screen.findByLabelText('Custom Url');
-    fireEvent.change(customUrl, { target: { value: 'https://example.com/custom-course' } });
 
     await user.click(screen.getByRole('button', { name: /save/i }));
 

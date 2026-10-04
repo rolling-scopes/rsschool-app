@@ -279,7 +279,7 @@ describe('DistributeStudentsService', () => {
       expect(teamService.generatePassword).toHaveBeenCalledTimes(1);
       const savedTeams = queryRunner.manager.save.mock.calls.find(call => call[0] === Team)?.[1] as Team[];
       expect(savedTeams).toHaveLength(1);
-      expect(savedTeams[0].students.map(s => s.id).sort()).toEqual([1, 2]);
+      expect(savedTeams[0]!.students.map(s => s.id).sort()).toEqual([1, 2]);
       // Lead is the lowest-rank student (id 2 with rank 1).
       expect((savedTeams[0] as Team & { teamLeadId: number }).teamLeadId).toBe(2);
     });

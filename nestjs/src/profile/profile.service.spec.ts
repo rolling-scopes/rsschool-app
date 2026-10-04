@@ -275,7 +275,7 @@ describe('ProfileService', () => {
         contactsEmail: 'good@example.com',
       } as never);
 
-      const setArg = qb.set.mock.calls[0][0];
+      const setArg = qb.set.mock.calls[0]![0];
       expect(setArg).toMatchObject({ firstName: 'John', lastName: 'Doe', aboutMyself: 'hi' });
       // undefined fields removed by omitBy(isUndefined)
       expect(setArg).not.toHaveProperty('contactsPhone');
@@ -288,7 +288,7 @@ describe('ProfileService', () => {
 
       await service.updateProfileFlat(11, { aboutMyself: 'hi' } as never);
 
-      const setArg = qb.set.mock.calls[0][0];
+      const setArg = qb.set.mock.calls[0]![0];
       expect(setArg).not.toHaveProperty('firstName');
       expect(setArg).not.toHaveProperty('lastName');
     });
@@ -299,7 +299,7 @@ describe('ProfileService', () => {
 
       await service.updateProfileFlat(11, { name: 'Cher' } as never);
 
-      expect(qb.set.mock.calls[0][0]).toMatchObject({ firstName: 'Cher', lastName: '' });
+      expect(qb.set.mock.calls[0]![0]).toMatchObject({ firstName: 'Cher', lastName: '' });
     });
   });
 
@@ -448,7 +448,7 @@ describe('ProfileService', () => {
         }),
       );
       // anonymised githubId is generated with a gdpr- prefix
-      const updatePayload = userRepository.update.mock.calls[0][1];
+      const updatePayload = userRepository.update.mock.calls[0]![1];
       expect(updatePayload.githubId).toMatch(/^gdpr-[a-z0-9_-]+$/);
       expect(notificationConnectionsRepository.delete).toHaveBeenCalledWith({ userId: 11 });
       expect(resumeRepository.delete).toHaveBeenCalledWith({ userId: 11 });
