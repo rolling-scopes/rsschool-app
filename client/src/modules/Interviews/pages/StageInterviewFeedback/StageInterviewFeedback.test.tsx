@@ -89,8 +89,8 @@ function makeProps(feedback: Partial<InterviewFeedbackDto> = {}): StageFeedbackP
 describe('<StageInterviewFeedback /> (page)', () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it('renders the full feedback form (header, sub-header, first step, student sidebar)', () => {
-    render(<StageInterviewFeedback {...makeProps()} />);
+  it('renders the full feedback form, missing completion state and every step', async () => {
+    render(<StageInterviewFeedback {...makeProps({ isCompleted: undefined as unknown as boolean })} />);
 
     expect(screen.getByRole('banner')).toHaveTextContent('Technical screening');
     expect(screen.getByText('Feedback form')).toBeInTheDocument();
@@ -100,6 +100,11 @@ describe('<StageInterviewFeedback /> (page)', () => {
     expect(screen.getByRole('heading', { name: 'Ada Lovelace' })).toBeInTheDocument();
     // Sub-header reflects the not-completed state.
     expect(screen.getByText('Uncompleted')).toBeInTheDocument();
+    expect(screen.queryByText('Completed')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Interview confirmation')).toBeInTheDocument();
+      expect(screen.getByText('Student admission to the mentoring program')).toBeInTheDocument();
+    });
   });
 
   it('falls back to the legacy screening page when the feedback version is 0', async () => {
@@ -131,21 +136,5 @@ describe('<StageInterviewFeedback /> (page)', () => {
     const tag = screen.getByText('Completed');
     expect(tag).toBeInTheDocument();
     expect(tag).toHaveClass('ant-tag-green');
-  });
-
-  it('treats a missing isCompleted flag as "Uncompleted" in the sub-header', () => {
-    render(<StageInterviewFeedback {...makeProps({ isCompleted: undefined as unknown as boolean })} />);
-
-    expect(screen.getByText('Uncompleted')).toBeInTheDocument();
-    expect(screen.queryByText('Completed')).not.toBeInTheDocument();
-  });
-
-  it('shows the vertical stepper with every template step', async () => {
-    render(<StageInterviewFeedback {...makeProps()} />);
-
-    await waitFor(() => {
-      expect(screen.getByText('Interview confirmation')).toBeInTheDocument();
-      expect(screen.getByText('Student admission to the mentoring program')).toBeInTheDocument();
-    });
   });
 });

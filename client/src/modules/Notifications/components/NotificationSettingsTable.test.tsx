@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { NotificationDto, NotificationType } from '@client/api';
 import { NotificationSettingsTable } from './NotificationSettingsTable';
 
@@ -21,28 +21,6 @@ const notifications: NotificationDto[] = [
 ];
 
 describe('NotificationSettingsTable', () => {
-  it('renders the column headers', () => {
-    render(<NotificationSettingsTable notifications={notifications} onEdit={vi.fn()} onDelete={vi.fn()} />);
-
-    expect(screen.getByText('Notification')).toBeInTheDocument();
-    expect(screen.getByText('Active')).toBeInTheDocument();
-    expect(screen.getByText('Actions')).toBeInTheDocument();
-  });
-
-  it('renders a row per notification with its name', () => {
-    render(<NotificationSettingsTable notifications={notifications} onEdit={vi.fn()} onDelete={vi.fn()} />);
-
-    expect(screen.getByText('Enabled One')).toBeInTheDocument();
-    expect(screen.getByText('Disabled One')).toBeInTheDocument();
-  });
-
-  it('renders the active state with check / minus icons', () => {
-    render(<NotificationSettingsTable notifications={notifications} onEdit={vi.fn()} onDelete={vi.fn()} />);
-
-    expect(screen.getByLabelText('check-circle')).toBeInTheDocument();
-    expect(screen.getByLabelText('minus-circle')).toBeInTheDocument();
-  });
-
   it('renders an empty table when there are no notifications', () => {
     render(<NotificationSettingsTable notifications={[]} onEdit={vi.fn()} onDelete={vi.fn()} />);
 
@@ -54,7 +32,18 @@ describe('NotificationSettingsTable', () => {
     const onEdit = vi.fn();
     render(<NotificationSettingsTable notifications={notifications} onEdit={onEdit} onDelete={vi.fn()} />);
 
-    const editLinks = screen.getAllByText('Edit');
+    expect(screen.getByText('Notification')).toBeInTheDocument();
+    expect(screen.getByText('Active')).toBeInTheDocument();
+    expect(screen.getByText('Actions')).toBeInTheDocument();
+    expect(screen.getByText('Enabled One')).toBeInTheDocument();
+    expect(screen.getByText('Disabled One')).toBeInTheDocument();
+    expect(screen.getByLabelText('check-circle')).toBeInTheDocument();
+    expect(screen.getByLabelText('minus-circle')).toBeInTheDocument();
+
+    const table = screen.getByRole('table');
+    const editLinks = within(table).getAllByText('Edit');
+    expect(editLinks).toHaveLength(notifications.length);
+    expect(within(table).getAllByText('Delete')).toHaveLength(notifications.length);
     fireEvent.click(editLinks[0]!);
 
     expect(onEdit).toHaveBeenCalledTimes(1);
@@ -62,7 +51,7 @@ describe('NotificationSettingsTable', () => {
   });
 
   it('confirms before deleting and calls onDelete with the record', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onDelete = vi.fn();
     render(<NotificationSettingsTable notifications={notifications} onEdit={vi.fn()} onDelete={onDelete} />);
 
@@ -82,7 +71,7 @@ describe('NotificationSettingsTable', () => {
   });
 
   it('does not call onDelete when the confirmation is cancelled', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onDelete = vi.fn();
     render(<NotificationSettingsTable notifications={notifications} onEdit={vi.fn()} onDelete={onDelete} />);
 
@@ -92,13 +81,5 @@ describe('NotificationSettingsTable', () => {
     await user.click(no);
 
     expect(onDelete).not.toHaveBeenCalled();
-  });
-
-  it('renders one Edit / Delete action per row', () => {
-    render(<NotificationSettingsTable notifications={notifications} onEdit={vi.fn()} onDelete={vi.fn()} />);
-
-    const table = screen.getByRole('table');
-    expect(within(table).getAllByText('Edit')).toHaveLength(notifications.length);
-    expect(within(table).getAllByText('Delete')).toHaveLength(notifications.length);
   });
 });

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { CrossCheckCriteriaDataDto, CrossCheckCriteriaDataDtoTypeEnum, CrossCheckSolutionReviewDto } from '@client/api';
 import { CrossCheckCriteriaForm } from './CrossCheckCriteriaForm';
 
@@ -64,16 +64,6 @@ function Harness({
 }
 
 describe('<CrossCheckCriteriaForm />', () => {
-  it('renders criteria, penalty sections and the max-score label', () => {
-    render(<Harness initialCriteria={makeCriteria()} maxScore={100} />);
-
-    expect(screen.getByRole('heading', { name: 'Criteria' })).toBeInTheDocument();
-    expect(screen.getByText('Layout section')).toBeInTheDocument();
-    expect(screen.getByText('Implements the header')).toBeInTheDocument();
-    expect(screen.getByText(/Broken layout/)).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: '(Max 100 points)' })).toBeInTheDocument();
-  });
-
   it('recalculates the total score from the criteria points on mount', () => {
     const criteria = makeCriteria();
     criteria[1].point = 7;
@@ -97,12 +87,18 @@ describe('<CrossCheckCriteriaForm />', () => {
   });
 
   it('updates the running score as the reviewer scores a subtask', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Harness initialCriteria={makeCriteria()} />);
+
+    expect(screen.getByRole('heading', { name: 'Criteria' })).toBeInTheDocument();
+    expect(screen.getByText('Layout section')).toBeInTheDocument();
+    expect(screen.getByText('Implements the header')).toBeInTheDocument();
+    expect(screen.getByText(/Broken layout/)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: '(Max 100 points)' })).toBeInTheDocument();
 
     const subtaskInput = screen.getAllByRole('spinbutton')[0];
     await user.clear(subtaskInput);
-    await user.type(subtaskInput, '8');
+    await user.type(subtaskInput, '8', { skipClick: true });
 
     await waitFor(() => {
       expect(screen.getByTestId('score-value')).toHaveTextContent('8');
@@ -110,13 +106,13 @@ describe('<CrossCheckCriteriaForm />', () => {
   });
 
   it('lets the reviewer override the final score with the score input', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Harness initialCriteria={[]} maxScore={50} />);
 
     // No criteria -> only the final-score InputNumber is rendered.
     const scoreInput = screen.getByRole('spinbutton');
     await user.clear(scoreInput);
-    await user.type(scoreInput, '30');
+    await user.type(scoreInput, '30', { skipClick: true });
 
     await waitFor(() => {
       expect(screen.getByTestId('score-value')).toHaveTextContent('30');
@@ -124,7 +120,7 @@ describe('<CrossCheckCriteriaForm />', () => {
   });
 
   it('skips the form after confirming in the dialog and restores it on toggle', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Harness initialCriteria={makeCriteria()} />);
 
     await user.click(screen.getByRole('button', { name: /Skip cross check form/ }));

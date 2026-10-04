@@ -79,30 +79,14 @@ describe('<MyTeamSection />', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it('renders the team name, description and members table', () => {
-    renderSection();
-    expect(screen.getByText('My Awesome Team')).toBeInTheDocument();
-    expect(screen.getByText('A description of my team')).toBeInTheDocument();
-    expect(screen.getByText('Lead Person')).toBeInTheDocument();
-  });
-
-  it('shows lead-only controls (password / change password / chat link) for the team lead', () => {
-    renderSection({ studentId: 1 });
-    expect(screen.getByRole('button', { name: /invitation password/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /change password/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /chat link/i })).toBeInTheDocument();
-  });
-
-  it('hides lead-only controls for a non-lead member', () => {
-    renderSection({ studentId: 999 });
-    expect(screen.queryByRole('button', { name: /invitation password/i })).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /change password/i })).not.toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /leave team/i })).toBeInTheDocument();
-  });
-
   it('calls copyPassword with the team id when "Invitation password" is clicked', async () => {
     const user = userEvent.setup();
     const { copyPassword } = renderSection({ studentId: 1 });
+    expect(screen.getByText('My Awesome Team')).toBeInTheDocument();
+    expect(screen.getByText('A description of my team')).toBeInTheDocument();
+    expect(screen.getByText('Lead Person')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /change password/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /chat link/i })).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: /invitation password/i }));
     expect(copyPassword).toHaveBeenCalledWith(7);
   });
@@ -132,6 +116,8 @@ describe('<MyTeamSection />', () => {
   it('leaves the team: calls leaveTeam, switches tab and reloads', async () => {
     const user = userEvent.setup();
     const { setActiveTab, reloadDistribution } = renderSection({ studentId: 999 });
+    expect(screen.queryByRole('button', { name: /invitation password/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /change password/i })).not.toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: /leave team/i }));
 

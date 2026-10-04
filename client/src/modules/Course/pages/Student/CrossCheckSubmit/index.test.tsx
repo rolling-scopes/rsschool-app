@@ -154,32 +154,18 @@ describe('<CrossCheckSubmit />', () => {
     setQueryTaskId();
   });
 
-  it('renders the page title and the task selector', () => {
-    render(<CrossCheckSubmit />);
-    expect(screen.getByRole('heading', { name: /cross-check submit/i })).toBeInTheDocument();
-    expect(screen.getByLabelText('task')).toBeInTheDocument();
-  });
-
   it('shows the no-submission message when there are no tasks', () => {
     setTasks([]);
     render(<CrossCheckSubmit />);
     expect(screen.getByText('No submission available')).toBeInTheDocument();
   });
 
-  it('loads task details when a task is selected and reveals the submit form', async () => {
-    setQueryTaskId(7);
-    render(<CrossCheckSubmit />);
-
-    await waitFor(() => expect(getCrossCheckTaskDetails).toHaveBeenCalledWith(7));
-    expect(getMyCrossCheckFeedbacks).toHaveBeenCalledWith(42, 7);
-    // Submit button appears because the task exists and the deadline is in the future.
-    expect(await screen.findByRole('button', { name: /^submit$/i })).toBeInTheDocument();
-  });
-
   it('submits the solution url and shows a success message', async () => {
     setQueryTaskId(7);
     render(<CrossCheckSubmit />);
-    await screen.findByRole('button', { name: /^submit$/i });
+    expect(await screen.findByRole('button', { name: /^submit$/i })).toBeInTheDocument();
+    expect(getCrossCheckTaskDetails).toHaveBeenCalledWith(7);
+    expect(getMyCrossCheckFeedbacks).toHaveBeenCalledWith(42, 7);
 
     const input = screen.getByPlaceholderText(/link in the form of/i);
     fireEvent.change(input, { target: { value: 'https://github.com/octocat/pr/1' } });
@@ -263,6 +249,9 @@ describe('<CrossCheckSubmit />', () => {
       push: vi.fn(),
     } as any);
     render(<CrossCheckSubmit />);
+
+    expect(screen.getByRole('heading', { name: /cross-check submit/i })).toBeInTheDocument();
+    expect(screen.getByLabelText('task')).toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText('task'), { target: { value: '7' } });
     expect(replace).toHaveBeenCalledWith(expect.stringContaining('taskId=7'));

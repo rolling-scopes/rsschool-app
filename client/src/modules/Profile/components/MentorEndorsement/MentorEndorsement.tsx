@@ -1,5 +1,5 @@
 import { Alert, Input, Modal, Spin, Typography } from 'antd';
-import { useMemo } from 'react';
+import { Fragment, useMemo } from 'react';
 import { ProfileApi } from '@client/api';
 import { useAsync } from 'react-use';
 import isNull from 'lodash/isNull';
@@ -47,11 +47,11 @@ export function MentorEndorsement(props: Props) {
             <>
               <Typography.Title level={4}>Generated Text</Typography.Title>
               <Typography.Paragraph style={{ fontSize: 13 }} copyable={{ text: value?.summary }}>
-                {value?.summary.split('\n').map(i => (
-                  <>
-                    {i}
+                {value?.summary.split('\n').map((line, index) => (
+                  <Fragment key={index}>
+                    {line}
                     <br />
-                  </>
+                  </Fragment>
                 ))}
               </Typography.Paragraph>
             </>

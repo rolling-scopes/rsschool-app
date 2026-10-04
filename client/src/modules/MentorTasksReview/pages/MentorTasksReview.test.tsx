@@ -1,5 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { CourseTaskDtoCheckerEnum, MentorReviewDto } from '@client/api';
 import { MentorTasksReview } from './MentorTasksReview';
 
@@ -34,16 +34,19 @@ vi.mock('ahooks/lib/useRequest', () => ({
   default: () => ({ runAsync: vi.fn().mockResolvedValue(undefined), loading: false }),
 }));
 
-vi.mock('@client/modules/Course/contexts', () => ({
-  SessionContext: {
-    Provider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-    displayName: 'Session',
-  },
-  useActiveCourseContext: () => ({
+vi.mock('@client/modules/Course/contexts', () => {
+  const activeCourse = {
     course: { id: 1, name: 'RS 2025' },
     courses: [{ id: 1, name: 'RS 2025' }],
-  }),
-}));
+  };
+  return {
+    SessionContext: {
+      Provider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+      displayName: 'Session',
+    },
+    useActiveCourseContext: () => activeCourse,
+  };
+});
 
 vi.mock('@client/domain/user', () => ({
   isCourseManager: (...args: unknown[]) => isCourseManagerMock(...args),
@@ -102,17 +105,12 @@ describe('MentorTasksReview page', () => {
     isCourseManagerMock.mockReset().mockReturnValue(true);
   });
 
-  it('should render the title and the active course name', async () => {
+  it('should render the initial page, manager hint and loaded reviews and request mentor tasks', async () => {
     render(<MentorTasksReview />);
 
     expect(screen.getByRole('heading', { name: 'Mentor tasks review' })).toBeInTheDocument();
     expect(screen.getByText('Submitted tasks')).toBeInTheDocument();
     expect(await screen.findByText('RS 2025')).toBeInTheDocument();
-  });
-
-  it('should show the manager hint and fetch reviews for the active course on mount', async () => {
-    render(<MentorTasksReview />);
-
     expect(screen.getByText(/You can assign a checker/i)).toBeInTheDocument();
     await waitFor(() =>
       expect(getMentorReviews).toHaveBeenCalledWith(
@@ -126,23 +124,14 @@ describe('MentorTasksReview page', () => {
         undefined,
       ),
     );
-  });
-
-  it('should render the loaded review rows inside the table', async () => {
-    render(<MentorTasksReview />);
 
     const table = await screen.findByRole('table');
     expect(within(table).getByRole('link', { name: 'Review task' })).toBeInTheDocument();
     expect(within(table).getAllByText('student-github').length).toBeGreaterThan(0);
-  });
-
-  it('should request mentor course tasks for the checker dropdown', () => {
-    render(<MentorTasksReview />);
 
     const [requestFn] = useRequestMock.mock.calls[0] as [() => Promise<unknown>];
-    return requestFn().then(() => {
-      expect(getCourseTasks).toHaveBeenCalledWith(1, undefined, CourseTaskDtoCheckerEnum.Mentor);
-    });
+    await requestFn();
+    expect(getCourseTasks).toHaveBeenCalledWith(1, undefined, CourseTaskDtoCheckerEnum.Mentor);
   });
 
   it('should hide the manager hint and the action column for non-managers', async () => {
@@ -162,7 +151,7 @@ describe('MentorTasksReview page', () => {
   });
 
   it('should re-fetch reviews after a reviewer is assigned from the modal', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<MentorTasksReview />);
 
     await screen.findByRole('table');
@@ -177,7 +166,7 @@ describe('MentorTasksReview page', () => {
   });
 
   it('should re-fetch reviews with sort params when the table sorting changes', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<MentorTasksReview />);
 
     await screen.findByRole('table');

@@ -1,6 +1,6 @@
 /* eslint-disable testing-library/no-node-access */
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import ExpelledStudentsStats from './ExpelledStudentsStats';
 import type { ExpelledStatsDto } from '@client/api';
 
@@ -72,8 +72,10 @@ describe('<ExpelledStudentsStats />', () => {
     expect(screen.queryByText('Detailed Statistics on Student Departures')).not.toBeInTheDocument();
   });
 
-  it('renders the heading, export button and data rows', () => {
-    useExpelledStats.mockReturnValue(makeHookState({ data: rows }));
+  it('calls handleDelete with the row id when a Delete button is clicked', async () => {
+    const handleDelete = vi.fn();
+    useExpelledStats.mockReturnValue(makeHookState({ data: rows, handleDelete }));
+    const user = setupUser();
 
     render(<ExpelledStudentsStats courseId={1} />);
 
@@ -93,14 +95,6 @@ describe('<ExpelledStudentsStats />', () => {
     // fullName preferred, falls back to name when empty
     expect(screen.getByText('JavaScript Course')).toBeInTheDocument();
     expect(screen.getByText('React Course')).toBeInTheDocument();
-  });
-
-  it('calls handleDelete with the row id when a Delete button is clicked', async () => {
-    const handleDelete = vi.fn();
-    useExpelledStats.mockReturnValue(makeHookState({ data: rows, handleDelete }));
-    const user = userEvent.setup();
-
-    render(<ExpelledStudentsStats courseId={1} />);
 
     const firstRow = screen.getByText('js-2024').closest('tr')!;
     await user.click(within(firstRow).getByRole('button', { name: /delete/i }));
@@ -111,7 +105,7 @@ describe('<ExpelledStudentsStats />', () => {
   it('exports a CSV with headers and escaped values when Export CSV is clicked', async () => {
     // Include a sparse row so the CSV value extraction hits the null/undefined guards.
     useExpelledStats.mockReturnValue(makeHookState({ data: [...rows, sparseRow] }));
-    const user = userEvent.setup();
+    const user = setupUser();
 
     // Capture the blob contents and the programmatic download click.
     let capturedBlob: Blob | null = null;
@@ -154,7 +148,7 @@ describe('<ExpelledStudentsStats />', () => {
 
   it('does not export when there is no data', async () => {
     useExpelledStats.mockReturnValue(makeHookState({ data: [] }));
-    const user = userEvent.setup();
+    const user = setupUser();
     const createObjectURL = vi.fn(() => 'blob:none');
     vi.stubGlobal('URL', { ...URL, createObjectURL });
 

@@ -6,12 +6,10 @@ import { PersonalSection } from './index';
 vi.mock('@client/modules/Opportunities/data/getPersonalToRender');
 
 describe('PersonalSection', () => {
-  test('should display nothing if user data is not provided', () => {
-    const { container } = render(<PersonalSection user={null} />);
+  test('displays personal data only when it is provided', () => {
+    const { container, rerender } = render(<PersonalSection user={null} />);
     expect(container).toBeEmptyDOMElement();
-  });
 
-  test('should display personal data if provided', () => {
     const mockData = [
       {
         title: 'Title 1',
@@ -28,7 +26,7 @@ describe('PersonalSection', () => {
     ];
     vi.mocked(getPersonalToRender).mockReturnValue(mockData);
 
-    render(<PersonalSection user={{} as UserData} />);
+    rerender(<PersonalSection user={{} as UserData} />);
 
     mockData.forEach(({ title, value }) => {
       const titleElement = screen.getByText(title);

@@ -1,3 +1,4 @@
+import type { CurrentRequest } from '../../auth';
 import { ForbiddenException, StreamableFile } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CourseMentorsController } from './course-mentors.controller';
@@ -13,7 +14,7 @@ const courseMentorsService = {
   searchMentors: vi.fn(),
 };
 
-const createReq = (user: Record<string, unknown>) => ({ user }) as never;
+const createReq = (user: Pick<CurrentRequest['user'], 'githubId' | 'isAdmin'>) => ({ user }) as CurrentRequest;
 
 describe('CourseMentorsController', () => {
   let controller: CourseMentorsController;

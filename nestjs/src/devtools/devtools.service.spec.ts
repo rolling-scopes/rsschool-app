@@ -110,8 +110,8 @@ describe('DevtoolsService', () => {
 
       const result = await service.getUsers();
 
-      expect(result[0].mentor).toEqual([undefined]);
-      expect(result[0].student).toEqual([undefined]);
+      expect(result[0]!.mentor).toEqual([undefined]);
+      expect(result[0]!.student).toEqual([undefined]);
     });
   });
 

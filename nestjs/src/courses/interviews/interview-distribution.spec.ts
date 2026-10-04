@@ -91,7 +91,7 @@ describe('InterviewsService (distribution, lookups, registration)', () => {
 
       const result = await service.getAll(5, {});
 
-      const arg = repos.courseTask.find.mock.calls[0][0];
+      const arg = repos.courseTask.find.mock.calls[0]![0];
       expect(arg.where).toMatchObject({ courseId: 5, disabled: false });
       // In([TaskType.Interview]) wraps the type value
       expect(arg.where.type._value).toEqual([TaskType.Interview]);
@@ -104,7 +104,7 @@ describe('InterviewsService (distribution, lookups, registration)', () => {
 
       await service.getAll(5, { disabled: true, types: [TaskType.StageInterview] });
 
-      const arg = repos.courseTask.find.mock.calls[0][0];
+      const arg = repos.courseTask.find.mock.calls[0]![0];
       expect(arg.where.disabled).toBe(true);
       expect(arg.where.type._value).toEqual([TaskType.StageInterview]);
     });
@@ -190,8 +190,8 @@ describe('InterviewsService (distribution, lookups, registration)', () => {
 
       const [pair] = await service.getInterviewPairs(7);
 
-      expect(pair.status).toBe(InterviewStatus.NotCompleted);
-      expect(pair.result).toBeNull();
+      expect(pair!.status).toBe(InterviewStatus.NotCompleted);
+      expect(pair!.result).toBeNull();
     });
 
     it('builds names from a single name part when the other is missing', async () => {
@@ -200,8 +200,8 @@ describe('InterviewsService (distribution, lookups, registration)', () => {
 
       const [pair] = await service.getInterviewPairs(7);
 
-      expect(pair.interviewer.name).toBe('Mentor');
-      expect(pair.student.name).toBe('Doe');
+      expect(pair!.interviewer.name).toBe('Mentor');
+      expect(pair!.student.name).toBe('Doe');
     });
   });
 
@@ -246,7 +246,7 @@ describe('InterviewsService (distribution, lookups, registration)', () => {
       const result = await service.getStageInterviewAvailableStudents(5);
 
       expect(result).toHaveLength(1);
-      expect(result[0].isGoodCandidate).toBe(false);
+      expect(result[0]!.isGoodCandidate).toBe(false);
     });
 
     it('includes a student whose interviews are all canceled', async () => {
@@ -256,7 +256,7 @@ describe('InterviewsService (distribution, lookups, registration)', () => {
       const result = await service.getStageInterviewAvailableStudents(5);
 
       expect(result).toHaveLength(1);
-      expect(result[0].id).toBe(42);
+      expect(result[0]!.id).toBe(42);
     });
 
     it('excludes a student with an active (non-canceled, non-completed) interview', async () => {
@@ -295,10 +295,10 @@ describe('InterviewsService (distribution, lookups, registration)', () => {
 
       const [student] = await service.getStageInterviewAvailableStudents(5);
 
-      expect(student.isGoodCandidate).toBe(true);
-      expect(student.rating).toBe(88);
-      expect(student.maxScore).toBe(100);
-      expect(student.feedbackVersion).toBe(3);
+      expect(student!.isGoodCandidate).toBe(true);
+      expect(student!.rating).toBe(88);
+      expect(student!.maxScore).toBe(100);
+      expect(student!.feedbackVersion).toBe(3);
     });
   });
 

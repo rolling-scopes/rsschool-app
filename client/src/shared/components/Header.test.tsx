@@ -1,6 +1,5 @@
-/* eslint-disable testing-library/no-container, testing-library/no-node-access */
-import { render, screen, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { act, render, screen, within } from '@testing-library/react';
+import { setupUser } from '@client/__tests__/setupUser';
 import { useRouter } from 'next/router';
 import { Header } from './Header';
 import { SessionContext } from '@client/modules/Course/contexts';
@@ -32,36 +31,47 @@ vi.mock('./SolidarityUkraine', () => ({
   SolidarityUkraine: () => <div data-testid="solidarity" />,
 }));
 
+async function renderHeader(ui: React.ReactElement) {
+  let view: ReturnType<typeof render>;
+  // eslint-disable-next-line testing-library/no-unnecessary-act -- Await mount effects after the synchronous render
+  await act(async () => {
+    view = render(ui);
+  });
+  return view!;
+}
+
 describe('Header', () => {
   beforeEach(() => {
     useActiveCourseContextMock.mockReturnValue({ course: { id: 1, name: 'JS Course' } });
     vi.mocked(useRouter).mockReturnValue({ asPath: '/' } as ReturnType<typeof useRouter>);
   });
 
-  it('renders the logo, theme switch and navigation links', () => {
-    render(<Header />);
+  it('renders the logo, theme switch and horizontal navigation links', async () => {
+    await renderHeader(<Header />);
 
     expect(screen.getByAltText('Rolling Scopes School Logo')).toBeInTheDocument();
     expect(screen.getByTestId('theme-switch')).toBeInTheDocument();
     expect(screen.getByText('Schedule')).toBeInTheDocument();
+    // The menu is rendered by the same header instance and uses the same navigation item.
+    // eslint-disable-next-line testing-library/no-node-access
+    const menu = document.querySelector('.ant-menu-horizontal');
+    expect(menu).toBeInTheDocument();
+    expect(within(menu as HTMLElement).getByText('Schedule')).toBeInTheDocument();
   });
 
-  it('renders the title and the course name when showCourseName is set', () => {
-    render(<Header title="Dashboard" showCourseName />);
+  it('shows and hides the course name with the showCourseName prop', async () => {
+    const { rerender } = await renderHeader(<Header title="Dashboard" showCourseName />);
 
     expect(screen.getByText(/Dashboard/)).toBeInTheDocument();
     expect(screen.getByText(/JS Course/)).toBeInTheDocument();
-  });
 
-  it('does not show the course name when showCourseName is not set', () => {
-    render(<Header title="Dashboard" />);
-
+    rerender(<Header title="Dashboard" />);
     expect(screen.queryByText(/JS Course/)).not.toBeInTheDocument();
   });
 
   it('renders the avatar dropdown and opens the profile menu on click', async () => {
-    const user = userEvent.setup();
-    render(<Header />);
+    const user = setupUser();
+    await renderHeader(<Header />);
 
     const avatarButton = screen.getByRole('button');
     await user.click(avatarButton);
@@ -70,8 +80,8 @@ describe('Header', () => {
     expect(screen.getByRole('link', { name: /logout/i })).toBeInTheDocument();
   });
 
-  it('hides the avatar dropdown when there is no logged-in session', () => {
-    render(
+  it('hides the avatar dropdown when there is no logged-in session', async () => {
+    await renderHeader(
       <SessionContext.Provider value={{} as never}>
         <Header />
       </SessionContext.Provider>,
@@ -81,28 +91,20 @@ describe('Header', () => {
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 
-  it('shows the carousel by default and hides it when showCarousel is false', () => {
-    const { rerender } = render(<Header />);
+  it('shows the carousel by default and hides it when showCarousel is false', async () => {
+    const { rerender } = await renderHeader(<Header />);
     expect(screen.getByTestId('carousel')).toBeInTheDocument();
 
     rerender(<Header showCarousel={false} />);
     expect(screen.queryByTestId('carousel')).not.toBeInTheDocument();
   });
 
-  it('renders the horizontal course navigation menu', () => {
-    const { container } = render(<Header />);
-
-    const menu = container.querySelector('.ant-menu-horizontal');
-    expect(menu).toBeInTheDocument();
-    expect(within(menu as HTMLElement).getByText('Schedule')).toBeInTheDocument();
-  });
-
-  it('does not pass the course to navigation links when the course id is empty', () => {
+  it('does not pass the course to navigation links when the course id is empty', async () => {
     // course.id === 0 -> courseNotEmpty is null (the `course.id ? course : null` and
     // `courseNotEmpty ?? null` falsy branches).
     useActiveCourseContextMock.mockReturnValue({ course: { id: 0, name: '' } });
 
-    render(<Header title="Dashboard" showCourseName />);
+    await renderHeader(<Header title="Dashboard" showCourseName />);
 
     // No course name rendered, header still mounts.
     expect(screen.getByText(/Dashboard/)).toBeInTheDocument();
@@ -112,11 +114,12 @@ describe('Header', () => {
     // asPath === '/profile' makes `isActive` true for the Profile entry, hitting the
     // active-class branch in the dropdown menu items.
     vi.mocked(useRouter).mockReturnValue({ asPath: '/profile' } as ReturnType<typeof useRouter>);
-    const user = userEvent.setup();
-    render(<Header />);
+    const user = setupUser();
+    await renderHeader(<Header />);
 
     await user.click(screen.getByRole('button'));
 
-    expect(await screen.findByRole('link', { name: /profile/i })).toBeInTheDocument();
+    const profile = await screen.findByRole('link', { name: /profile/i });
+    expect(profile.className).toMatch(/menuItemActive/);
   });
 });

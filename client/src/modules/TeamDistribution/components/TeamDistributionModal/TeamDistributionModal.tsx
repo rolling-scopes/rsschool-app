@@ -33,7 +33,7 @@ const { Option } = Select;
 
 const teamDistributionApi = new TeamDistributionApi();
 
-function getInitialValues(data: TeamDistributionDto) {
+function getInitialValues(data: Partial<TeamDistributionDto> = {}) {
   const timeZone = 'UTC';
   return {
     ...data,
@@ -102,7 +102,7 @@ export default function TeamDistributionModal({ data, onCancel, courseId, onSubm
         form.resetFields();
       }}
     >
-      <Form {...formLayoutProps} form={form} initialValues={data ? getInitialValues(data) : undefined}>
+      <Form {...formLayoutProps} form={form} initialValues={getInitialValues(data)}>
         <Text strong>
           You are {data ? 'editing' : 'creating'} a group distribution event. Fill out the form to add it to the
           schedule.
@@ -110,7 +110,7 @@ export default function TeamDistributionModal({ data, onCancel, courseId, onSubm
         <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter event name' }]}>
           <Input />
         </Form.Item>
-        <Form.Item name="timeZone" label="TimeZone" initialValue="UTC">
+        <Form.Item name="timeZone" label="TimeZone">
           <Select placeholder="Please select a timezone">
             {TIMEZONES.map(tz => (
               <Option key={tz} value={tz}>
@@ -133,13 +133,11 @@ export default function TeamDistributionModal({ data, onCancel, courseId, onSubm
         <Form.Item
           name="strictTeamSize"
           label="Team size"
-          initialValue={3}
           rules={[{ required: true, message: 'Please enter team size' }]}
         >
           <InputNumber min={2} />
         </Form.Item>
         <Form.Item
-          initialValue={0}
           name="minTotalScore"
           label="Minimum passing score"
           tooltip="Shows the activity of the students and their maturity to complete group tasks"

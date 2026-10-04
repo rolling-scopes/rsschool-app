@@ -66,11 +66,11 @@ describe('UserGroupsService', () => {
       expect(usersService.getUsersByUserIds).toHaveBeenCalledWith([10, 20]);
       // sorted alphabetically: Alpha before Zebra
       expect(result.map(g => g.name)).toEqual(['Alpha', 'Zebra']);
-      expect(result[0].users).toEqual([
+      expect(result[0]!.users).toEqual([
         { id: 10, githubId: 'github-a', name: 'Anna Apple' },
         { id: 10, githubId: 'github-a', name: 'Anna Apple' },
       ]);
-      expect(result[1].users).toEqual([
+      expect(result[1]!.users).toEqual([
         { id: 10, githubId: 'github-a', name: 'Anna Apple' },
         { id: 20, githubId: 'github-b', name: 'Bob Berry' },
       ]);
@@ -83,7 +83,7 @@ describe('UserGroupsService', () => {
 
       const result = await service.getAll();
 
-      expect(result[0].users).toEqual([{ id: -1, githubId: 'UNKNOWN', name: '' }]);
+      expect(result[0]!.users).toEqual([{ id: -1, githubId: 'UNKNOWN', name: '' }]);
     });
 
     it('should handle groups with no users', async () => {
@@ -94,7 +94,7 @@ describe('UserGroupsService', () => {
       const result = await service.getAll();
 
       expect(usersService.getUsersByUserIds).toHaveBeenCalledWith([]);
-      expect(result[0].users).toEqual([]);
+      expect(result[0]!.users).toEqual([]);
     });
 
     it('should join only the non-empty parts of the user name', async () => {
@@ -105,7 +105,7 @@ describe('UserGroupsService', () => {
 
       const result = await service.getAll();
 
-      expect(result[0].users).toEqual([{ id: 30, githubId: 'github-c', name: 'Cleo' }]);
+      expect(result[0]!.users).toEqual([{ id: 30, githubId: 'github-c', name: 'Cleo' }]);
     });
   });
 

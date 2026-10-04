@@ -57,17 +57,6 @@ describe('ThemeProvider', () => {
     expect(() => ctx?.changeAutoTheme()).not.toThrow();
   });
 
-  it('defaults to auto mode following the system (light) when nothing is stored', () => {
-    setMatchMedia(false);
-    render(
-      <ThemeProvider>
-        <Consumer />
-      </ThemeProvider>,
-    );
-    expect(screen.getByTestId('auto')).toHaveTextContent('true');
-    expect(screen.getByTestId('theme')).toHaveTextContent('light');
-  });
-
   it('defaults to auto mode following the system (dark) when nothing is stored', () => {
     setMatchMedia(true);
     render(
@@ -79,7 +68,7 @@ describe('ThemeProvider', () => {
     expect(screen.getByTestId('theme')).toHaveTextContent('dark');
   });
 
-  it('themeChange to dark applies the dark theme, body class, and persists it', () => {
+  it('themeChange applies and persists dark and light themes', () => {
     render(
       <ThemeProvider>
         <Consumer />
@@ -87,39 +76,18 @@ describe('ThemeProvider', () => {
     );
 
     fireEvent.click(screen.getByText('set-dark'));
-
     expect(screen.getByTestId('theme')).toHaveTextContent('dark');
     expect(document.body).toHaveClass(AppTheme.Dark);
     expect(document.body).not.toHaveClass(AppTheme.Light);
     expect(localStorage.getItem('app-theme')).toBe('dark');
     expect(screen.getByTestId('auto')).toHaveTextContent('false');
-  });
 
-  it('themeChange to light replaces dark body class with light', () => {
-    render(
-      <ThemeProvider>
-        <Consumer />
-      </ThemeProvider>,
-    );
-
-    fireEvent.click(screen.getByText('set-dark'));
     fireEvent.click(screen.getByText('set-light'));
 
     expect(screen.getByTestId('theme')).toHaveTextContent('light');
     expect(document.body).toHaveClass(AppTheme.Light);
     expect(document.body).not.toHaveClass(AppTheme.Dark);
     expect(localStorage.getItem('app-theme')).toBe('light');
-  });
-
-  it('restores a valid stored theme on mount', () => {
-    localStorage.setItem('app-theme', AppTheme.Dark);
-    render(
-      <ThemeProvider>
-        <Consumer />
-      </ThemeProvider>,
-    );
-    expect(screen.getByTestId('theme')).toHaveTextContent('dark');
-    expect(screen.getByTestId('auto')).toHaveTextContent('false');
   });
 
   it('enables auto mode for a legacy stored "auto" value and follows system (dark)', () => {
@@ -138,8 +106,7 @@ describe('ThemeProvider', () => {
     expect(localStorage.getItem('app-theme')).toBeNull();
   });
 
-  it('toggling auto on clears the stored theme and applies the system (light) theme', () => {
-    // Start from an explicit manual theme so auto is off, then toggle it on.
+  it('restores a stored theme and toggles auto mode on and off', () => {
     localStorage.setItem('app-theme', AppTheme.Dark);
     setMatchMedia(false);
     render(
@@ -148,26 +115,13 @@ describe('ThemeProvider', () => {
       </ThemeProvider>,
     );
     expect(screen.getByTestId('auto')).toHaveTextContent('false');
+    expect(screen.getByTestId('theme')).toHaveTextContent('dark');
 
     fireEvent.click(screen.getByText('toggle-auto'));
 
     expect(screen.getByTestId('auto')).toHaveTextContent('true');
     expect(localStorage.getItem('app-theme')).toBeNull();
     expect(screen.getByTestId('theme')).toHaveTextContent('light');
-  });
-
-  it('toggling auto off then on flips the auto flag', () => {
-    // Start from an explicit manual theme so auto is off initially.
-    localStorage.setItem('app-theme', AppTheme.Light);
-    render(
-      <ThemeProvider>
-        <Consumer />
-      </ThemeProvider>,
-    );
-    expect(screen.getByTestId('auto')).toHaveTextContent('false');
-
-    fireEvent.click(screen.getByText('toggle-auto'));
-    expect(screen.getByTestId('auto')).toHaveTextContent('true');
 
     fireEvent.click(screen.getByText('toggle-auto'));
     expect(screen.getByTestId('auto')).toHaveTextContent('false');

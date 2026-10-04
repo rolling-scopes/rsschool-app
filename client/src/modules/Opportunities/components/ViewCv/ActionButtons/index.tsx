@@ -52,7 +52,7 @@ export const ActionButtons = ({ onRemoveConsent, switchView, url, isExpired }: P
       title: title,
       content: confirmationModalContent,
       centered: true,
-      maskClosable: true,
+      mask: { closable: true },
       okText: 'Delete CV',
       okButtonProps: { danger: true },
       onOk: () => onRemoveConsent && onRemoveConsent(),

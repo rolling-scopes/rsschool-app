@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import InviteMentorsModal from './InviteMentorsModal';
 
 // --- Boundary mocks --------------------------------------------------------
@@ -28,8 +28,7 @@ const { getDisciplines, inviteMentors } = vi.hoisted(() => ({
   inviteMentors: vi.fn(),
 }));
 
-vi.mock('@client/api', async () => ({
-  ...(await vi.importActual('@client/api')),
+vi.mock('@client/api', () => ({
   DisciplinesApi: function DisciplinesApi() {
     return { getDisciplines };
   },
@@ -54,35 +53,8 @@ describe('<InviteMentorsModal />', () => {
     inviteMentors.mockResolvedValue(undefined);
   });
 
-  it('renders the modal with the title and all form fields', async () => {
-    render(<InviteMentorsModal onCancel={vi.fn()} />);
-
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
-    expect(screen.getByText('Invite as a Mentor')).toBeInTheDocument();
-    expect(screen.getByLabelText('Disciplines')).toBeInTheDocument();
-    expect(screen.getByText('Mentor in the Past')).toBeInTheDocument();
-    expect(screen.getByLabelText('Invitation Text')).toBeInTheDocument();
-
-    // Disciplines load asynchronously and populate the multi-select options.
-    await waitFor(() => expect(getDisciplines).toHaveBeenCalled());
-  });
-
-  it('loads discipline options from the API and shows them in the select', async () => {
-    render(<InviteMentorsModal onCancel={vi.fn()} />);
-
-    await waitFor(() => expect(getDisciplines).toHaveBeenCalled());
-
-    const select = screen.getByLabelText('Disciplines');
-    fireEvent.mouseDown(select);
-
-    await waitFor(() => {
-      expect(within(document.body).getByText('JavaScript')).toBeInTheDocument();
-      expect(within(document.body).getByText('Java')).toBeInTheDocument();
-    });
-  });
-
   it('blocks submit and shows validation errors when required fields are empty', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<InviteMentorsModal onCancel={vi.fn()} />);
 
     await user.click(screen.getByRole('button', { name: /save/i }));
@@ -94,7 +66,7 @@ describe('<InviteMentorsModal />', () => {
 
   it('submits the filled form, calls inviteMentors with the payload and closes', async () => {
     const onCancel = vi.fn();
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<InviteMentorsModal onCancel={onCancel} />);
 
     await waitFor(() => expect(getDisciplines).toHaveBeenCalled());
@@ -102,7 +74,10 @@ describe('<InviteMentorsModal />', () => {
     // Pick a discipline from the multi-select.
     const select = screen.getByLabelText('Disciplines');
     fireEvent.mouseDown(select);
-    fireEvent.click(await within(document.body).findByText('JavaScript'));
+    const javascriptOption = await within(document.body).findByText('JavaScript');
+    expect(javascriptOption).toBeInTheDocument();
+    expect(within(document.body).getByText('Java')).toBeInTheDocument();
+    fireEvent.click(javascriptOption);
 
     // Toggle "Mentor in the Past".
     await user.click(screen.getByRole('checkbox'));
@@ -123,8 +98,15 @@ describe('<InviteMentorsModal />', () => {
 
   it('calls onCancel when the modal is dismissed without changes', async () => {
     const onCancel = vi.fn();
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<InviteMentorsModal onCancel={onCancel} />);
+
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByText('Invite as a Mentor')).toBeInTheDocument();
+    expect(screen.getByLabelText('Disciplines')).toBeInTheDocument();
+    expect(screen.getByText('Mentor in the Past')).toBeInTheDocument();
+    expect(screen.getByLabelText('Invitation Text')).toBeInTheDocument();
+    await waitFor(() => expect(getDisciplines).toHaveBeenCalled());
 
     await user.click(screen.getByRole('button', { name: /cancel/i }));
 

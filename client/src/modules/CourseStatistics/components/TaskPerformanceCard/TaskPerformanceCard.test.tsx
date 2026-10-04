@@ -54,8 +54,7 @@ const { getTaskPerformance } = vi.hoisted(() => ({
   getTaskPerformance: vi.fn(),
 }));
 
-vi.mock('@client/api', async () => ({
-  ...(await vi.importActual('@client/api')),
+vi.mock('@client/api', () => ({
   CourseStatsApi: function CourseStatsApi() {
     return { getTaskPerformance };
   },
@@ -89,26 +88,18 @@ const performance = {
 describe('<TaskPerformanceCard />', () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it('renders the title and the task select', () => {
+  it('shows the initial empty state and lists the provided tasks', async () => {
     render(<TaskPerformanceCard tasks={tasks} />);
 
     expect(screen.getByText('Task Performance')).toBeInTheDocument();
     expect(screen.getByRole('combobox')).toBeInTheDocument();
-  });
-
-  it('shows the empty-state prompt before a task is selected', () => {
-    render(<TaskPerformanceCard tasks={tasks} />);
 
     expect(screen.getByText(/no data available for this task/i)).toBeInTheDocument();
     expect(screen.queryByTestId('donut-chart')).not.toBeInTheDocument();
-  });
-
-  it('lists the provided tasks as select options', () => {
-    render(<TaskPerformanceCard tasks={tasks} />);
 
     fireEvent.mouseDown(screen.getByRole('combobox'));
 
-    const listbox = screen.getByRole('listbox');
+    const listbox = await screen.findByRole('listbox');
     expect(within(listbox).getByRole('option', { name: 'Task Alpha' })).toBeInTheDocument();
     expect(within(listbox).getByRole('option', { name: 'Task Beta' })).toBeInTheDocument();
   });
@@ -151,7 +142,7 @@ describe('<TaskPerformanceCard />', () => {
       return lastDonutConfig.current;
     }
 
-    it('maps each performance type to its human-readable description via the tooltip item', async () => {
+    it('maps performance descriptions, handles unknown types and renders tooltip HTML', async () => {
       const chartConfig = await captureChartConfig();
       const formatItem = chartConfig?.tooltip?.items?.[0];
 
@@ -164,17 +155,8 @@ describe('<TaskPerformanceCard />', () => {
       expect(formatItem?.({ type: 'High', value: 4 }).name).toMatch(/71% and 90%/);
       expect(formatItem?.({ type: 'Exceptional', value: 5 }).name).toMatch(/91% and 99%/);
       expect(formatItem?.({ type: 'Perfect', value: 6 }).name).toMatch(/perfect score of 100%/);
-    });
-
-    it('falls back to the Unknown description for an unrecognised type', async () => {
-      const chartConfig = await captureChartConfig();
-      const formatItem = chartConfig?.tooltip?.items?.[0];
 
       expect(formatItem?.({ type: 'Mystery', value: 9 }).name).toBe('Unknown performance category');
-    });
-
-    it('renders the tooltip HTML containing the mapped name and value', async () => {
-      const chartConfig = await captureChartConfig();
       // `render` here is the antd chart tooltip renderer, not Testing Library's render.
       // eslint-disable-next-line testing-library/render-result-naming-convention
       const tooltipHtml = chartConfig?.interaction?.tooltip?.render?.(null, {

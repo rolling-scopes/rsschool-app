@@ -67,7 +67,7 @@ export const ExpirationTooltip = ({ expirationDate, expirationState, publicMode 
           <ClockCircleOutlined /> Renew
         </span>
       ),
-      maskClosable: true,
+      mask: { closable: true },
       onOk: async () => {
         await service.prolong();
         notification.success({

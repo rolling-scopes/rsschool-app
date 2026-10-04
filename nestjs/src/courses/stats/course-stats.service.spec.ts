@@ -3,7 +3,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Student } from '@entities/student';
 import { CourseTask, Mentor, StageInterview, TaskInterviewResult, TaskResult } from '@entities/index';
-import { TaskType } from '@entities/task';
+import { Checker, CrossCheckStatus } from '@entities/courseTask';
+import { Task, TaskType } from '@entities/task';
 import { CourseStatsService } from './course-stats.service';
 import { CourseTasksService } from '../course-tasks';
 import { CourseTaskDto } from '../course-tasks/dto';
@@ -40,8 +41,8 @@ const mockCourseTaskEntity = {
   type: TaskType.JSTask,
   maxScore: 100,
   scoreWeight: 1,
-  checker: 'auto',
-  crossCheckStatus: 'initial',
+  checker: Checker.AutoTest,
+  crossCheckStatus: CrossCheckStatus.Initial,
   crossCheckEndDate: null,
   pairsCount: null,
   submitText: null,
@@ -51,8 +52,8 @@ const mockCourseTaskEntity = {
   studentStartDate: null,
   studentEndDate: null,
   studentRegistrationStartDate: null,
-  task: { name: 'Task name', descriptionUrl: 'http://example.com', type: TaskType.JSTask },
-} as Partial<CourseTask> as CourseTask;
+  task: { name: 'Task name', descriptionUrl: 'http://example.com', type: TaskType.JSTask } as Task,
+} as CourseTask;
 
 describe('CourseStatsService', () => {
   let service: CourseStatsService;
@@ -507,7 +508,7 @@ describe('CourseStatsService', () => {
       });
       expect(result.courseTasks).toHaveLength(1);
       expect(result.courseTasks[0]).toBeInstanceOf(CourseTaskDto);
-      expect(result.courseTasks[0].id).toBe(10);
+      expect(result.courseTasks[0]!.id).toBe(10);
     });
 
     it('merges stats and countries across multiple course ids by summing matching keys', async () => {

@@ -1,5 +1,4 @@
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { TaskVerificationAttemptDto } from '@client/api';
 import AttemptsAnswers from './AttemptsAnswers';
 
@@ -22,33 +21,16 @@ function generateAttempt(overrides: Partial<TaskVerificationAttemptDto> = {}): T
 }
 
 describe('AttemptsAnswers', () => {
-  it('should render the heading per attempt counting down from the total', () => {
-    render(<AttemptsAnswers attempts={[generateAttempt(), generateAttempt()]} hideAnswers={vi.fn()} />);
+  it('renders every attempt and returns to the table', () => {
+    const hideAnswers = vi.fn();
+    render(<AttemptsAnswers attempts={[generateAttempt({ score: 7 }), generateAttempt()]} hideAnswers={hideAnswers} />);
 
     expect(screen.getByRole('heading', { name: 'Attempt #2' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Attempt #1' })).toBeInTheDocument();
-  });
-
-  it('should render the score and the formatted date for an attempt', () => {
-    render(<AttemptsAnswers attempts={[generateAttempt({ score: 7, maxScore: 10 })]} hideAnswers={vi.fn()} />);
-
     expect(screen.getByText('Score: 7 / 10')).toBeInTheDocument();
-    expect(screen.getByText('2022-10-10 12:00')).toBeInTheDocument();
-  });
-
-  it('should render the questions of every attempt', () => {
-    render(<AttemptsAnswers attempts={[generateAttempt()]} hideAnswers={vi.fn()} />);
-
-    expect(screen.getByRole('heading', { name: 'What is 2 + 2?' })).toBeInTheDocument();
-  });
-
-  it('should call hideAnswers when the "Back to table" button is clicked', async () => {
-    const user = userEvent.setup();
-    const hideAnswers = vi.fn();
-    render(<AttemptsAnswers attempts={[generateAttempt()]} hideAnswers={hideAnswers} />);
-
-    await user.click(screen.getByRole('button', { name: /back to table/i }));
-
+    expect(screen.getAllByText('2022-10-10 12:00')).toHaveLength(2);
+    expect(screen.getAllByRole('heading', { name: 'What is 2 + 2?' })).toHaveLength(2);
+    fireEvent.click(screen.getByRole('button', { name: /back to table/i }));
     expect(hideAnswers).toHaveBeenCalledTimes(1);
   });
 });

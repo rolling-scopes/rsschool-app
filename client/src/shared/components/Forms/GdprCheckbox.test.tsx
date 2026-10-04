@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { Button, Form } from 'antd';
 import { GdprCheckbox } from './GdprCheckbox';
 
@@ -17,44 +17,23 @@ function renderGdprCheckbox(onFinish = vi.fn()) {
 }
 
 describe('GdprCheckbox', () => {
-  it('renders both the English and Russian consent statements', () => {
-    renderGdprCheckbox();
+  it('renders consent and submits checked and unchecked values', async () => {
+    const user = setupUser();
+    const { onFinish } = renderGdprCheckbox();
 
     expect(screen.getByText(/I hereby agree to the processing of my personal data/i)).toBeInTheDocument();
     expect(screen.getByText(/Я согласен на обработку моих персональных данных/i)).toBeInTheDocument();
-  });
-
-  it('renders an unchecked checkbox by default', () => {
-    renderGdprCheckbox();
 
     const checkbox = screen.getByRole('checkbox', { name: /I agree/i });
     expect(checkbox).not.toBeChecked();
-  });
-
-  it('checks the box when the user clicks it and submits checked: true', async () => {
-    const user = userEvent.setup();
-    const { onFinish } = renderGdprCheckbox();
-
-    const checkbox = screen.getByRole('checkbox', { name: /I agree/i });
     await user.click(checkbox);
     expect(checkbox).toBeChecked();
-
     await user.click(screen.getByRole('button', { name: /submit/i }));
-
     await waitFor(() => expect(onFinish).toHaveBeenCalledWith({ gdpr: true }));
-  });
 
-  it('toggles back to unchecked on a second click', async () => {
-    const user = userEvent.setup();
-    const { onFinish } = renderGdprCheckbox();
-
-    const checkbox = screen.getByRole('checkbox', { name: /I agree/i });
-    await user.click(checkbox);
     await user.click(checkbox);
     expect(checkbox).not.toBeChecked();
-
     await user.click(screen.getByRole('button', { name: /submit/i }));
-
     await waitFor(() => expect(onFinish).toHaveBeenCalledWith({ gdpr: false }));
   });
 });

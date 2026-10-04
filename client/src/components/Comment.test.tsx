@@ -2,8 +2,8 @@ import { render, screen } from '@testing-library/react';
 import { Comment } from './Comment';
 
 describe('Comment', () => {
-  it('renders author, datetime, content and children', () => {
-    render(
+  it('renders populated and omitted comment sections', () => {
+    const { container, rerender } = render(
       <Comment
         author="John Doe"
         avatar={<span data-testid="avatar">A</span>}
@@ -19,30 +19,22 @@ describe('Comment', () => {
     expect(screen.getByText('This is the comment body')).toBeInTheDocument();
     expect(screen.getByText('Nested reply')).toBeInTheDocument();
     expect(screen.getByTestId('avatar')).toBeInTheDocument();
-  });
 
-  it('does not render the avatar when not provided', () => {
-    render(<Comment content="No avatar here" />);
+    rerender(<Comment content="No avatar here" />);
 
     expect(screen.queryByTestId('avatar')).not.toBeInTheDocument();
     expect(screen.getByText('No avatar here')).toBeInTheDocument();
-  });
 
-  it('omits the header row when neither author nor datetime are provided', () => {
-    render(<Comment content="Only content" />);
+    rerender(<Comment content="Only content" />);
 
     expect(screen.getByText('Only content')).toBeInTheDocument();
     expect(screen.queryByText('2 hours ago')).not.toBeInTheDocument();
-  });
 
-  it('renders the header row when only datetime is provided', () => {
-    render(<Comment datetime="just now" />);
+    rerender(<Comment datetime="just now" />);
 
     expect(screen.getByText('just now')).toBeInTheDocument();
-  });
 
-  it('renders nothing in the body areas when content and children are absent', () => {
-    const { container } = render(<Comment author="Solo Author" />);
+    rerender(<Comment author="Solo Author" />);
 
     expect(screen.getByText('Solo Author')).toBeInTheDocument();
     // only the wrapper + author header should be present, no content/children divs

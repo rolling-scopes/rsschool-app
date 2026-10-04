@@ -43,8 +43,7 @@ const { getCourseTasks } = vi.hoisted(() => ({
   }),
 }));
 
-vi.mock('@client/api', async () => ({
-  ...(await vi.importActual('@client/api')),
+vi.mock('@client/api', () => ({
   CoursesTasksApi: function CoursesTasksApi() {
     return { getCourseTasks };
   },
@@ -80,24 +79,17 @@ vi.mock('@client/shared/components/PageLayout', () => ({
 describe('<SubmitScorePage />', () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it('renders the page with both "Upload CSV" and "Manual Entry" tabs', async () => {
+  it('loads course tasks, shows CSV by default and switches to Manual Entry', async () => {
     render(<SubmitScorePage />);
 
     expect(screen.getByRole('heading', { name: /submit scores/i })).toBeInTheDocument();
     expect(screen.getByRole('tab', { name: /upload csv/i })).toBeInTheDocument();
     expect(screen.getByRole('tab', { name: /manual entry/i })).toBeInTheDocument();
-  });
-
-  it('shows the CSV tab by default with the file uploader and uploading rules', async () => {
-    render(<SubmitScorePage />);
-
     // Default tab — CSV.
     expect(screen.getByText(/uploading rules/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /select files/i })).toBeInTheDocument();
-  });
 
-  it('switches to the Manual Entry tab and shows manual form controls', async () => {
-    render(<SubmitScorePage />);
+    await waitFor(() => expect(getCourseTasks).toHaveBeenCalledWith(42));
 
     fireEvent.click(screen.getByRole('tab', { name: /manual entry/i }));
 
@@ -106,13 +98,5 @@ describe('<SubmitScorePage />', () => {
     });
     // One initial row → one student input.
     expect(screen.getAllByTestId('student-input')).toHaveLength(1);
-  });
-
-  it('fetches course tasks on mount', async () => {
-    render(<SubmitScorePage />);
-
-    await waitFor(() => {
-      expect(getCourseTasks).toHaveBeenCalledWith(42);
-    });
   });
 });
