@@ -1,7 +1,17 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { ReactNode, useEffect, useState } from 'react';
 import { CourseStatsDto } from '@client/api';
 import { StudentsStatsCard } from './StudentsStatsCard';
+
+vi.mock('antd', () => ({
+  Card: ({ title, children }: { title: React.ReactNode; children: React.ReactNode }) => (
+    <section>
+      <h2>{title}</h2>
+      {children}
+    </section>
+  ),
+  Typography: { Text: ({ children }: { children: React.ReactNode }) => <span>{children}</span> },
+}));
 
 // next/dynamic: resolve the lazily-imported chart synchronously (render the loading
 // fallback first, then swap in the loaded component), mirroring real behaviour.
@@ -35,27 +45,19 @@ const studentsStats: CourseStatsDto = {
 };
 
 describe('<StudentsStatsCard />', () => {
-  it('renders the card title and the active/total ratio text', () => {
-    render(<StudentsStatsCard studentsStats={studentsStats} />);
+  it('renders its title and forwards populated and zero student stats', async () => {
+    const { rerender } = render(<StudentsStatsCard studentsStats={studentsStats} />);
 
     expect(screen.getByText('Active Students')).toBeInTheDocument();
     expect(screen.getByText('Active Students: 80 / 120')).toBeInTheDocument();
-  });
-
-  it('passes the active and total counts to the liquid chart', async () => {
-    render(<StudentsStatsCard studentsStats={studentsStats} />);
 
     const chart = await screen.findByTestId('liquid-chart');
     expect(chart).toHaveAttribute('data-count', '80');
     expect(chart).toHaveAttribute('data-total', '120');
-  });
 
-  it('renders zero counts when there are no students', async () => {
-    render(<StudentsStatsCard studentsStats={{ ...studentsStats, activeStudentsCount: 0, totalStudents: 0 }} />);
+    rerender(<StudentsStatsCard studentsStats={{ ...studentsStats, activeStudentsCount: 0, totalStudents: 0 }} />);
 
     expect(screen.getByText('Active Students: 0 / 0')).toBeInTheDocument();
-    await waitFor(() => {
-      expect(screen.getByTestId('liquid-chart')).toHaveAttribute('data-count', '0');
-    });
+    expect(screen.getByTestId('liquid-chart')).toHaveAttribute('data-count', '0');
   });
 });

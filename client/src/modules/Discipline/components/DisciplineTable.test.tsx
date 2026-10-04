@@ -1,5 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { Modal } from 'antd';
 import { DisciplineDto } from '@client/api';
 import { DisciplineTable } from './DisciplineTable';
@@ -26,6 +26,13 @@ async function awaitNoOpenDialog() {
   await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument(), { timeout: 3000 });
 }
 
+function getDisciplineRow(name: string) {
+  // eslint-disable-next-line testing-library/no-node-access -- Avoid querying buttons across every table row.
+  const row = screen.getByText(name).closest('tr');
+  expect(row).toHaveRole('row');
+  return row!;
+}
+
 describe('<DisciplineTable />', () => {
   beforeEach(() => vi.clearAllMocks());
   afterEach(async () => {
@@ -37,47 +44,32 @@ describe('<DisciplineTable />', () => {
     }
   });
 
-  it('renders the column headers', () => {
-    render(<DisciplineTable {...makeProps()} />);
-
-    expect(screen.getByText('Discipline')).toBeInTheDocument();
-    expect(screen.getByText('Actions')).toBeInTheDocument();
-  });
-
-  it('renders a row per discipline', () => {
-    render(<DisciplineTable {...makeProps()} />);
-
-    expect(screen.getByText('Frontend')).toBeInTheDocument();
-    expect(screen.getByText('Backend')).toBeInTheDocument();
-  });
-
-  it('renders edit and delete buttons for every row', () => {
-    render(<DisciplineTable {...makeProps()} />);
-
-    // Each row has two action buttons (edit + delete) → 2 rows = 4 buttons.
-    const table = screen.getByRole('table');
-    expect(within(table).getAllByRole('button')).toHaveLength(4);
-  });
-
-  it('calls handleUpdate with the clicked record when its edit button is pressed', async () => {
-    const user = userEvent.setup();
+  it('renders headers, rows and action buttons, then edits the selected record', async () => {
+    const user = setupUser();
     const props = makeProps();
     render(<DisciplineTable {...props} />);
 
+    expect(screen.getByText('Discipline')).toBeInTheDocument();
+    expect(screen.getByText('Actions')).toBeInTheDocument();
+    expect(screen.getByText('Frontend')).toBeInTheDocument();
+    expect(screen.getByText('Backend')).toBeInTheDocument();
+    const buttons = within(screen.getByRole('table')).getAllByRole('button');
+    expect(buttons).toHaveLength(4);
+
     // The first action button of the first row is "edit".
-    const [firstEditBtn] = within(screen.getByRole('table')).getAllByRole('button');
+    const [firstEditBtn] = buttons;
     await user.click(firstEditBtn!);
 
     expect(props.handleUpdate).toHaveBeenCalledWith(disciplines[0]);
   });
 
   it('opens a confirm dialog and calls handleDelete on confirm', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<DisciplineTable {...props} />);
 
     // Buttons render as [edit, delete] per row → index 1 is the first row's delete.
-    const buttons = within(screen.getByRole('table')).getAllByRole('button');
+    const buttons = within(getDisciplineRow('Frontend')).getAllByRole('button');
     await user.click(buttons[1]!);
 
     // antd Modal.confirm renders into the document body. It echoes the title text in
@@ -91,11 +83,11 @@ describe('<DisciplineTable />', () => {
   });
 
   it('does not call handleDelete when the confirm dialog is cancelled', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<DisciplineTable {...props} />);
 
-    const buttons = within(screen.getByRole('table')).getAllByRole('button');
+    const buttons = within(getDisciplineRow('Frontend')).getAllByRole('button');
     await user.click(buttons[1]!);
 
     const dialog = await screen.findByRole('dialog');

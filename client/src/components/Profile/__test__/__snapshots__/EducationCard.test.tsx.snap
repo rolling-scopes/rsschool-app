@@ -69,29 +69,25 @@ exports[`EducationCard > Should render correctly > if "data" has element with "n
       class="ant-card-body"
     >
       <div
-        class="ant-list ant-list-split css-dev-only-do-not-override-1enej14 css-var-root"
+        class="ant-flex css-dev-only-do-not-override-1enej14 css-var-root ant-flex-align-stretch ant-flex-vertical"
+        data-size="default"
       >
-        <div
-          aria-busy="false"
-          aria-live="polite"
-          class="ant-spin css-dev-only-do-not-override-1enej14 css-var-root"
+        <ul
+          style="list-style: none; padding: 0px; margin: 0px; display: flex; flex-direction: column; gap: 8px;"
         >
-          <div
-            class="ant-spin-container"
+          <li
+            data-testid="list-item-0"
+            style="padding-bottom: 0px;"
           >
-            <ul
-              class="ant-list-items ant-list-container css-var-root"
+            <div
+              class="ant-flex css-dev-only-do-not-override-1enej14 css-var-root ant-flex-wrap-wrap ant-flex-align-center"
             >
-              <li
-                class="ant-list-item"
-              >
-                <p>
-                  (Empty)
-                </p>
-              </li>
-            </ul>
-          </div>
-        </div>
+              <p>
+                (Empty)
+              </p>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -248,37 +244,33 @@ exports[`EducationCard > Should render correctly > if editing mode is disabled 1
       class="ant-card-body"
     >
       <div
-        class="ant-list ant-list-split css-dev-only-do-not-override-1enej14 css-var-root"
+        class="ant-flex css-dev-only-do-not-override-1enej14 css-var-root ant-flex-align-stretch ant-flex-vertical"
+        data-size="default"
       >
-        <div
-          aria-busy="false"
-          aria-live="polite"
-          class="ant-spin css-dev-only-do-not-override-1enej14 css-var-root"
+        <ul
+          style="list-style: none; padding: 0px; margin: 0px; display: flex; flex-direction: column; gap: 8px;"
         >
-          <div
-            class="ant-spin-container"
+          <li
+            data-testid="list-item-0"
+            style="padding-bottom: 0px;"
           >
-            <ul
-              class="ant-list-items ant-list-container css-var-root"
+            <div
+              class="ant-flex css-dev-only-do-not-override-1enej14 css-var-root ant-flex-wrap-wrap ant-flex-align-center"
             >
-              <li
-                class="ant-list-item"
-              >
-                <p>
-                  <span
-                    class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
-                  >
-                    <strong>
-                      2002
-                    </strong>
-                  </span>
-                   
-                   MIT / POIT
-                </p>
-              </li>
-            </ul>
-          </div>
-        </div>
+              <p>
+                <span
+                  class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
+                >
+                  <strong>
+                    2002
+                  </strong>
+                </span>
+                 
+                 MIT / POIT
+              </p>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -354,37 +346,33 @@ exports[`EducationCard > Should render correctly > if editing mode is enabled 1`
       class="ant-card-body"
     >
       <div
-        class="ant-list ant-list-split css-dev-only-do-not-override-1enej14 css-var-root"
+        class="ant-flex css-dev-only-do-not-override-1enej14 css-var-root ant-flex-align-stretch ant-flex-vertical"
+        data-size="default"
       >
-        <div
-          aria-busy="false"
-          aria-live="polite"
-          class="ant-spin css-dev-only-do-not-override-1enej14 css-var-root"
+        <ul
+          style="list-style: none; padding: 0px; margin: 0px; display: flex; flex-direction: column; gap: 8px;"
         >
-          <div
-            class="ant-spin-container"
+          <li
+            data-testid="list-item-0"
+            style="padding-bottom: 0px;"
           >
-            <ul
-              class="ant-list-items ant-list-container css-var-root"
+            <div
+              class="ant-flex css-dev-only-do-not-override-1enej14 css-var-root ant-flex-wrap-wrap ant-flex-align-center"
             >
-              <li
-                class="ant-list-item"
-              >
-                <p>
-                  <span
-                    class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
-                  >
-                    <strong>
-                      2002
-                    </strong>
-                  </span>
-                   
-                   MIT / POIT
-                </p>
-              </li>
-            </ul>
-          </div>
-        </div>
+              <p>
+                <span
+                  class="ant-typography css-dev-only-do-not-override-1enej14 css-var-root"
+                >
+                  <strong>
+                    2002
+                  </strong>
+                </span>
+                 
+                 MIT / POIT
+              </p>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
   </div>

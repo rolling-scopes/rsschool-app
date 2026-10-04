@@ -25,45 +25,25 @@ describe('RegistrationPageLayout', () => {
     mapsApiKey.value = 'test-key';
   });
 
-  it('renders the header and children content', () => {
-    render(
-      <RegistrationPageLayout loading={false}>
+  it('renders content, conditionally loads Maps, and reflects loading state', () => {
+    const { container, rerender } = render(
+      <RegistrationPageLayout loading={true}>
         <div>registration form</div>
       </RegistrationPageLayout>,
     );
 
     expect(screen.getByRole('banner')).toBeInTheDocument();
     expect(screen.getByText('registration form')).toBeInTheDocument();
-  });
-
-  it('loads the google maps script when an api key is configured', () => {
-    render(
-      <RegistrationPageLayout loading={false}>
-        <div>content</div>
-      </RegistrationPageLayout>,
-    );
-
     expect(screen.getByTestId('gmaps-script')).toBeInTheDocument();
-  });
+    expect(container.querySelector('.ant-spin-spinning')).toBeInTheDocument();
 
-  it('does not load the google maps script when no api key is configured', () => {
     mapsApiKey.value = '';
-    render(
+    rerender(
       <RegistrationPageLayout loading={false}>
         <div>content</div>
       </RegistrationPageLayout>,
     );
 
     expect(screen.queryByTestId('gmaps-script')).not.toBeInTheDocument();
-  });
-
-  it('shows a busy spinner while loading', () => {
-    const { container } = render(
-      <RegistrationPageLayout loading={true}>
-        <div>content</div>
-      </RegistrationPageLayout>,
-    );
-
-    expect(container.querySelector('.ant-spin-spinning')).toBeInTheDocument();
   });
 });

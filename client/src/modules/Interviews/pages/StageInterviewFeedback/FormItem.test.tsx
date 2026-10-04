@@ -1,11 +1,11 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { Form } from 'antd';
 import { ReactNode } from 'react';
 import { FormItem } from './FormItem';
 import { StepForm } from './StepForm';
 import { FeedbackStep, FeedbackStepId, StepFormItem } from '@client/data/interviews/technical-screening';
 import { InputType } from '@client/data/interviews';
+import { setupUser } from '@client/__tests__/setupUser';
 
 // FormItem only renders a non-brittle widget per branch (Radio / RadioButton / Checkbox /
 // Input / TextArea). The Rating branch delegates to QuestionList, whose Form.List +
@@ -36,9 +36,15 @@ function renderItem(
 // We pass `form={undefined}` for items that never touch `form` (every branch except Radio,
 // whose NestedRadio child needs a real form). For the Radio case we render with a real form.
 
+function getRadio(label: string) {
+  const radio = screen.getByLabelText(label);
+  expect(radio).toHaveRole('radio');
+  return radio;
+}
+
 describe('FormItem branches', () => {
   it('renders a TextArea and submits its typed value', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const item: StepFormItem = {
       id: 'comment',
       type: InputType.TextArea,
@@ -56,7 +62,7 @@ describe('FormItem branches', () => {
   });
 
   it('blocks submit and shows "Required" for an empty required TextArea', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const item: StepFormItem = {
       id: 'comment',
       type: InputType.TextArea,
@@ -74,7 +80,7 @@ describe('FormItem branches', () => {
   });
 
   it('renders a text Input and submits its value', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const item: StepFormItem = {
       id: 'name',
       type: InputType.Input,
@@ -92,7 +98,7 @@ describe('FormItem branches', () => {
   });
 
   it('renders a number Input (narrow style) and submits a numeric string', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const item: StepFormItem = {
       id: 'finalScore',
       type: InputType.Input,
@@ -111,7 +117,7 @@ describe('FormItem branches', () => {
   });
 
   it('renders RadioButton options (with description) and submits the chosen id', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const item: StepFormItem = {
       id: 'englishCertificate',
       type: InputType.RadioButton,
@@ -137,7 +143,7 @@ describe('FormItem branches', () => {
   });
 
   it('shows "Required" for a required RadioButton left unselected', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const item: StepFormItem = {
       id: 'englishCertificate',
       type: InputType.RadioButton,
@@ -155,7 +161,7 @@ describe('FormItem branches', () => {
   });
 
   it('renders a Checkbox.Group and submits the checked ids as an array', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const item: StepFormItem = {
       id: 'isGoodCandidate',
       type: InputType.Checkbox,
@@ -233,36 +239,25 @@ describe('FormItem Radio + nested conditional (real form)', () => {
   };
 
   it('shows nested sub-options only after the parent option with children is selected', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(
       <RadioHarness>
         {form => <FormItem item={radioItem} form={form} stepId={FeedbackStepId.Introduction} />}
       </RadioHarness>,
     );
 
+    expect(screen.getAllByRole('radio')).toHaveLength(2);
     // Initially nested reasons are hidden.
     expect(screen.queryByRole('radio', { name: 'Has a reason.' })).not.toBeInTheDocument();
 
     // Selecting "No, failed." (which has child options) reveals the nested radios.
-    await user.click(screen.getByRole('radio', { name: 'No, failed.' }));
+    await user.click(getRadio('No, failed.'));
     expect(await screen.findByRole('radio', { name: 'Has a reason.' })).toBeInTheDocument();
-    expect(screen.getByRole('radio', { name: 'Ignores mentor.' })).toBeInTheDocument();
+    expect(getRadio('Ignores mentor.')).toBeInTheDocument();
 
     // Selecting the option WITHOUT children hides the nested group again.
-    await user.click(screen.getByRole('radio', { name: "Yes, it's ok." }));
+    await user.click(getRadio("Yes, it's ok."));
     await waitFor(() => expect(screen.queryByRole('radio', { name: 'Has a reason.' })).not.toBeInTheDocument());
-  });
-
-  it('does not render a nested group for a childless option', () => {
-    const user = userEvent.setup();
-    render(
-      <RadioHarness>
-        {form => <FormItem item={radioItem} form={form} stepId={FeedbackStepId.Introduction} />}
-      </RadioHarness>,
-    );
-    // "Yes, it's ok." has no `options`, so NestedRadio returns null → no extra radios.
-    void user;
-    expect(screen.getAllByRole('radio')).toHaveLength(2); // only the two top-level options
   });
 });
 
@@ -317,7 +312,7 @@ describe('<StepForm /> initial values + navigation labels', () => {
   });
 
   it('shows Back and "Submit" on a final, non-first step and calls back on click', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const back = vi.fn();
     const step = makeStep([{ id: 'comment', type: InputType.TextArea, title: 'c', placeholder: 'c' }]);
     render(<StepForm step={step} next={vi.fn()} back={back} isFirst={false} isLast onValuesChange={vi.fn()} />);
@@ -328,7 +323,7 @@ describe('<StepForm /> initial values + navigation labels', () => {
   });
 
   it('does not call next and runs onFinishFailed when a required field is empty on submit', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const next = vi.fn();
     const step = makeStep([{ id: 'comment', type: InputType.TextArea, title: 'c', required: true, placeholder: 'c' }]);
     render(<StepForm step={step} next={next} back={vi.fn()} isFirst isLast onValuesChange={vi.fn()} />);
@@ -341,7 +336,7 @@ describe('<StepForm /> initial values + navigation labels', () => {
   });
 
   it('calls next with the collected values on a valid submit', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const next = vi.fn();
     const step = makeStep([{ id: 'comment', type: InputType.TextArea, title: 'c', placeholder: 'type' }]);
     render(<StepForm step={step} next={next} back={vi.fn()} isFirst isLast onValuesChange={vi.fn()} />);
@@ -353,7 +348,7 @@ describe('<StepForm /> initial values + navigation labels', () => {
   });
 
   it('reports value changes via onValuesChange as the user types', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onValuesChange = vi.fn();
     const step = makeStep([{ id: 'comment', type: InputType.TextArea, title: 'c', placeholder: 'type here' }]);
     render(
@@ -370,7 +365,7 @@ describe('<StepForm /> initial values + navigation labels', () => {
 // A focused check that nested options live in the same group as their parent.
 describe('FormItem Radio nested group structure', () => {
   it('nests sub-options under the selected parent', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     function Harness() {
       const [form] = Form.useForm();
       return (
@@ -397,7 +392,7 @@ describe('FormItem Radio nested group structure', () => {
     }
     render(<Harness />);
 
-    await user.click(screen.getByRole('radio', { name: 'No, failed.' }));
+    await user.click(getRadio('No, failed.'));
     const groups = screen.getAllByRole('radiogroup');
     // Outer group + the revealed nested group.
     expect(groups.length).toBeGreaterThanOrEqual(2);

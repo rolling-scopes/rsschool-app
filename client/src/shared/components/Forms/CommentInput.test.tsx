@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { Button, Form } from 'antd';
 import { CommentInput } from './CommentInput';
 
@@ -19,29 +19,12 @@ function renderCommentInput(props: Parameters<typeof CommentInput>[0] = {}, onFi
 const LONG_COMMENT = 'This is a detailed comment that is well over thirty characters long.';
 
 describe('CommentInput', () => {
-  it('renders a "Comment" labelled textarea', () => {
-    renderCommentInput();
+  it('shows a required error and blocks submit when empty', async () => {
+    const user = setupUser();
+    const { onFinish } = renderCommentInput();
 
     expect(screen.getByLabelText('Comment')).toBeInTheDocument();
     expect(screen.getByRole('textbox')).toBeInTheDocument();
-  });
-
-  it('lets the user type a comment and submits its value', async () => {
-    const user = userEvent.setup();
-    const { onFinish } = renderCommentInput();
-
-    const textarea = screen.getByRole('textbox');
-    await user.type(textarea, LONG_COMMENT);
-    expect(textarea).toHaveValue(LONG_COMMENT);
-
-    await user.click(screen.getByRole('button', { name: /submit/i }));
-
-    await waitFor(() => expect(onFinish).toHaveBeenCalledWith({ comment: LONG_COMMENT }));
-  });
-
-  it('shows a required error and blocks submit when empty', async () => {
-    const user = userEvent.setup();
-    const { onFinish } = renderCommentInput();
 
     await user.click(screen.getByRole('button', { name: /submit/i }));
 
@@ -49,8 +32,22 @@ describe('CommentInput', () => {
     expect(onFinish).not.toHaveBeenCalled();
   });
 
+  it('lets the user type a comment and submits its value', async () => {
+    const user = setupUser();
+    const { onFinish } = renderCommentInput();
+
+    const textarea = screen.getByRole('textbox');
+    await user.click(textarea);
+    await user.paste(LONG_COMMENT);
+    expect(textarea).toHaveValue(LONG_COMMENT);
+
+    await user.click(screen.getByRole('button', { name: /submit/i }));
+
+    await waitFor(() => expect(onFinish).toHaveBeenCalledWith({ comment: LONG_COMMENT }));
+  });
+
   it('shows the min-length error when the comment is shorter than 30 characters', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { onFinish } = renderCommentInput();
 
     await user.type(screen.getByRole('textbox'), 'too short');
@@ -61,7 +58,7 @@ describe('CommentInput', () => {
   });
 
   it('skips validation entirely when notRequired is set', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { onFinish } = renderCommentInput({ notRequired: true });
 
     await user.click(screen.getByRole('button', { name: /submit/i }));

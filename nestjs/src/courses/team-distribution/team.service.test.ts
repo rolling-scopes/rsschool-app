@@ -133,7 +133,7 @@ describe('TeamService', () => {
 
       await service.create(data);
 
-      const saved = repository.save.mock.calls[0][0] as Partial<Team>;
+      const saved = repository.save.mock.calls[0]![0] as Partial<Team>;
       expect(saved.teamLeadId).toBe(2);
       expect(saved.password).toHaveLength(6);
     });
@@ -144,7 +144,7 @@ describe('TeamService', () => {
 
       await service.create(data);
 
-      const saved = repository.save.mock.calls[0][0] as Partial<Team>;
+      const saved = repository.save.mock.calls[0]![0] as Partial<Team>;
       expect(saved.teamLeadId).toBeUndefined();
       expect(saved.password).toHaveLength(6);
     });
@@ -154,7 +154,7 @@ describe('TeamService', () => {
 
       await service.create({ name: 'NoStudents' });
 
-      const saved = repository.save.mock.calls[0][0] as Partial<Team>;
+      const saved = repository.save.mock.calls[0]![0] as Partial<Team>;
       expect(saved.teamLeadId).toBeUndefined();
     });
   });
@@ -194,7 +194,7 @@ describe('TeamService', () => {
       expect(teamDistributionStudentService.findByStudentIds).toHaveBeenCalledWith([2, 3], 7);
 
       const saved = teamDistributionStudentService.saveTeamDistributionStudents.mock
-        .calls[0][0] as TeamDistributionStudent[];
+        .calls[0]![0] as TeamDistributionStudent[];
       expect(saved).toEqual(
         expect.arrayContaining([
           expect.objectContaining({ studentId: 2, distributed: false }),
@@ -281,7 +281,7 @@ describe('TeamService', () => {
 
   describe('getStudentsCountInTeam', () => {
     it('should return the numeric count of students', async () => {
-      qb.getRawOne.mockResolvedValueOnce({ studentsCount: '4' });
+      qb.getRawOne!.mockResolvedValueOnce({ studentsCount: '4' });
 
       const result = await service.getStudentsCountInTeam(1);
 
@@ -293,7 +293,7 @@ describe('TeamService', () => {
   describe('findTeamWithStudentsById', () => {
     it('should build the query and return the loaded team', async () => {
       const team = buildTeam();
-      qb.getOneOrFail.mockResolvedValueOnce(team);
+      qb.getOneOrFail!.mockResolvedValueOnce(team);
 
       const result = await service.findTeamWithStudentsById(1);
 
@@ -315,7 +315,7 @@ describe('TeamService', () => {
       await service.save(1, dto, 7, 9);
 
       expect(editSpy).toHaveBeenCalledWith(team, [2], 7, 9);
-      const saved = repository.save.mock.calls[0][0] as Team;
+      const saved = repository.save.mock.calls[0]![0] as Team;
       expect(saved.teamLeadId).toBe(2);
       expect(saved.students.map(s => s.id)).toEqual([2]);
     });
@@ -367,7 +367,7 @@ describe('TeamService', () => {
   describe('findAllByDistributionId', () => {
     it('should return all teams for the distribution', async () => {
       const teams = [buildTeam()];
-      qb.getMany.mockResolvedValueOnce(teams);
+      qb.getMany!.mockResolvedValueOnce(teams);
 
       const result = await service.findAllByDistributionId(1);
 
@@ -389,7 +389,7 @@ describe('TeamService', () => {
 
   describe('findByDistributionId', () => {
     it('should paginate without a search filter', async () => {
-      qb.getManyAndCount.mockResolvedValueOnce([[buildTeam()], 1]);
+      qb.getManyAndCount!.mockResolvedValueOnce([[buildTeam()], 1]);
 
       const result = await service.findByDistributionId(1, { page: 1, limit: 10 });
 
@@ -401,12 +401,12 @@ describe('TeamService', () => {
 
     it('should pre-filter by matching team ids when a search term is provided', async () => {
       // First query (matching team ids) -> getMany; second (page) -> getManyAndCount.
-      qb.getMany.mockResolvedValueOnce([{ id: 11 }, { id: 12 }] as Team[]);
-      qb.getManyAndCount.mockResolvedValueOnce([[buildTeam({ id: 11 })], 1]);
+      qb.getMany!.mockResolvedValueOnce([{ id: 11 }, { id: 12 }] as Team[]);
+      qb.getManyAndCount!.mockResolvedValueOnce([[buildTeam({ id: 11 })], 1]);
 
       // Execute the Brackets factory so the inner search-condition builder runs.
       const innerQb = { where: vi.fn(() => innerQb), orWhere: vi.fn(() => innerQb) };
-      qb.andWhere.mockImplementation((arg: unknown) => {
+      qb.andWhere!.mockImplementation((arg: unknown) => {
         if (arg && typeof arg === 'object' && 'whereFactory' in arg) {
           (arg as { whereFactory: (b: typeof innerQb) => void }).whereFactory(innerQb);
         }
@@ -424,7 +424,7 @@ describe('TeamService', () => {
     });
 
     it('should fall back to default page and limit values', async () => {
-      qb.getManyAndCount.mockResolvedValueOnce([[], 0]);
+      qb.getManyAndCount!.mockResolvedValueOnce([[], 0]);
 
       const result = await service.findByDistributionId(1, {});
 
@@ -441,7 +441,7 @@ describe('TeamService', () => {
         teamLeadId: 1,
         students: [buildStudent({ id: 1, rank: 1 }), buildStudent({ id: 2, rank: 2 })],
       });
-      qb.getOneOrFail.mockResolvedValueOnce(team);
+      qb.getOneOrFail!.mockResolvedValueOnce(team);
       teamDistributionStudentService.getTeamDistributionStudent.mockResolvedValueOnce({
         id: 99,
       } as TeamDistributionStudent);
@@ -467,7 +467,7 @@ describe('TeamService', () => {
           buildStudent({ id: 3, rank: 2 }),
         ],
       });
-      qb.getOneOrFail.mockResolvedValueOnce(team);
+      qb.getOneOrFail!.mockResolvedValueOnce(team);
       teamDistributionStudentService.getTeamDistributionStudent.mockResolvedValueOnce({
         id: 99,
       } as TeamDistributionStudent);
@@ -480,7 +480,7 @@ describe('TeamService', () => {
 
     it('should set teamLeadId to 0 when the removed lead was the last student', async () => {
       const team = buildTeam({ id: 1, teamLeadId: 1, students: [buildStudent({ id: 1, rank: 1 })] });
-      qb.getOneOrFail.mockResolvedValueOnce(team);
+      qb.getOneOrFail!.mockResolvedValueOnce(team);
       teamDistributionStudentService.getTeamDistributionStudent.mockResolvedValueOnce({
         id: 99,
       } as TeamDistributionStudent);
@@ -493,7 +493,7 @@ describe('TeamService', () => {
 
     it('should roll back and throw InternalServerErrorException on transaction failure', async () => {
       const team = buildTeam({ id: 1, teamLeadId: 1, students: [buildStudent({ id: 1, rank: 1 })] });
-      qb.getOneOrFail.mockResolvedValueOnce(team);
+      qb.getOneOrFail!.mockResolvedValueOnce(team);
       queryRunner.manager.save.mockRejectedValueOnce(new Error('db down'));
 
       await expect(service.deleteStudentFromTeam(1, 1, 5)).rejects.toBeInstanceOf(InternalServerErrorException);
@@ -541,7 +541,7 @@ describe('TeamService', () => {
       });
       const oneStudentTeam = buildTeam({ id: 2, students: [buildStudent({ id: 3 })] });
       const emptyTeam = buildTeam({ id: 3, students: [] });
-      qb.getMany.mockResolvedValueOnce([fullTeam, oneStudentTeam, emptyTeam]);
+      qb.getMany!.mockResolvedValueOnce([fullTeam, oneStudentTeam, emptyTeam]);
 
       const result = await service.getTeamsAvailableForDistribute(1, 2);
 
@@ -551,7 +551,7 @@ describe('TeamService', () => {
 
     it('should return an empty list when every team is full', async () => {
       const fullTeam = buildTeam({ id: 1, students: [buildStudent({ id: 1 }), buildStudent({ id: 2 })] });
-      qb.getMany.mockResolvedValueOnce([fullTeam]);
+      qb.getMany!.mockResolvedValueOnce([fullTeam]);
 
       const result = await service.getTeamsAvailableForDistribute(1, 2);
 

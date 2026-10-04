@@ -64,7 +64,7 @@ const mockSwitchView = vi.fn();
 const mockOnUpdateResume = vi.fn();
 
 describe('EditCV', () => {
-  test('should display forms and control buttons', () => {
+  test('should display forms and controls and switch view on Cancel', () => {
     render(
       <EditCV
         githubId={mockGithubId}
@@ -88,45 +88,8 @@ describe('EditCV', () => {
     expect(visibleCoursesForm).toBeInTheDocument();
     expect(saveButton).toBeInTheDocument();
     expect(cancelButton).toBeInTheDocument();
-  });
-
-  test('should switch view on Cancel button click', () => {
-    render(
-      <EditCV
-        githubId={mockGithubId}
-        contacts={{} as Contacts}
-        userData={{} as UserData}
-        switchView={mockSwitchView}
-        onUpdateResume={mockOnUpdateResume}
-        visibleCourses={[]}
-        courses={[]}
-      />,
-    );
-
-    const cancelButton = screen.getByRole('button', { name: /cancel/i });
 
     fireEvent.click(cancelButton);
-
-    expect(mockSwitchView).toHaveBeenCalled();
-  });
-
-  test('should show notification view on Cancel button click', () => {
-    render(
-      <EditCV
-        githubId={mockGithubId}
-        contacts={{} as Contacts}
-        userData={{} as UserData}
-        switchView={mockSwitchView}
-        onUpdateResume={mockOnUpdateResume}
-        visibleCourses={[]}
-        courses={[]}
-      />,
-    );
-
-    const cancelButton = screen.getByRole('button', { name: /cancel/i });
-
-    fireEvent.click(cancelButton);
-
     expect(mockSwitchView).toHaveBeenCalled();
   });
 
@@ -155,6 +118,7 @@ describe('EditCV', () => {
 
     await waitFor(() => {
       expect(mockOnUpdateResume).toHaveBeenCalled();
+      expect(mockSuccessNotification).toHaveBeenCalledWith({ title: 'CV successfully updated', duration: 2 });
     });
   });
 

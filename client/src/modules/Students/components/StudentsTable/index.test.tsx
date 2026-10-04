@@ -1,6 +1,6 @@
 /* eslint-disable testing-library/no-node-access -- header cells are resolved via .closest('th') */
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { CourseDto, UserStudentDto } from '@client/api';
 import StudentsTable from './index';
 
@@ -57,33 +57,6 @@ describe('<StudentsTable />', () => {
     return screen.getAllByText(title)[0]!.closest('th')!;
   }
 
-  it('renders the column headers', () => {
-    render(<StudentsTable {...makeProps()} />);
-
-    ['Student', 'Ongoing Courses', 'Previous Courses', 'Country', 'City', 'Languages'].forEach(title => {
-      expect(screen.getAllByText(title).length).toBeGreaterThan(0);
-    });
-  });
-
-  it('renders a row per student with names, locations and language tags', () => {
-    render(<StudentsTable {...makeProps()} />);
-
-    expect(screen.getByText('Alice Smith')).toBeInTheDocument();
-    expect(screen.getByText('Bob Jones')).toBeInTheDocument();
-    expect(screen.getByText('Warsaw')).toBeInTheDocument();
-    expect(screen.getByText('Berlin')).toBeInTheDocument();
-    expect(screen.getByText('Poland')).toBeInTheDocument();
-    expect(screen.getByText('pl')).toBeInTheDocument();
-    expect(screen.getByText('de')).toBeInTheDocument();
-  });
-
-  it('renders the course aliases as tags', () => {
-    render(<StudentsTable {...makeProps()} />);
-
-    expect(screen.getByText('ongoing-a')).toBeInTheDocument();
-    expect(screen.getByText('previous-a')).toBeInTheDocument();
-  });
-
   it('collapses more than three courses into a "+N more" overflow tag', () => {
     const manyCourses = [
       { alias: 'c1', hasCertificate: false },
@@ -126,9 +99,23 @@ describe('<StudentsTable />', () => {
     expect(screen.getByText('+1 more')).toBeInTheDocument();
   });
 
-  it('calls setActiveStudent with the record when a row is clicked', async () => {
+  it('renders headers, student details and course tags, then selects the clicked record', async () => {
     const props = makeProps();
     render(<StudentsTable {...props} />);
+
+    ['Student', 'Ongoing Courses', 'Previous Courses', 'Country', 'City', 'Languages'].forEach(title => {
+      expect(screen.getAllByText(title).length).toBeGreaterThan(0);
+    });
+
+    expect(screen.getByText('Alice Smith')).toBeInTheDocument();
+    expect(screen.getByText('Bob Jones')).toBeInTheDocument();
+    expect(screen.getByText('Warsaw')).toBeInTheDocument();
+    expect(screen.getByText('Berlin')).toBeInTheDocument();
+    expect(screen.getByText('Poland')).toBeInTheDocument();
+    expect(screen.getByText('pl')).toBeInTheDocument();
+    expect(screen.getByText('de')).toBeInTheDocument();
+    expect(screen.getByText('ongoing-a')).toBeInTheDocument();
+    expect(screen.getByText('previous-a')).toBeInTheDocument();
 
     // Click the cell text of the first data row.
     fireEvent.click(screen.getByText('Alice Smith'));
@@ -143,24 +130,8 @@ describe('<StudentsTable />', () => {
     expect(screen.queryByText('Alice Smith')).not.toBeInTheDocument();
   });
 
-  it('shows only ongoing (not completed) courses in the Ongoing Courses filter list', async () => {
-    const user = userEvent.setup();
-    render(<StudentsTable {...makeProps()} />);
-
-    // The Ongoing Courses column has a server-side `filters` dropdown.
-    const ongoingHeader = headerCell('Ongoing Courses');
-    const filterBtn = within(ongoingHeader).getByRole('button', { name: /filter/i });
-    await user.click(filterBtn);
-
-    const dropdown = await screen.findByRole('menu');
-    expect(within(dropdown).getByText('ongoing-a')).toBeInTheDocument();
-    expect(within(dropdown).getByText('ongoing-b')).toBeInTheDocument();
-    // Completed courses must NOT appear in the ongoing filter.
-    expect(within(dropdown).queryByText('previous-a')).not.toBeInTheDocument();
-  });
-
   it('passes the selected ongoing course id to handleChange when its filter is applied', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<StudentsTable {...props} />);
 
@@ -168,6 +139,10 @@ describe('<StudentsTable />', () => {
     await user.click(within(ongoingHeader).getByRole('button', { name: /filter/i }));
 
     const dropdown = await screen.findByRole('menu');
+    expect(within(dropdown).getByText('ongoing-a')).toBeInTheDocument();
+    expect(within(dropdown).getByText('ongoing-b')).toBeInTheDocument();
+    expect(within(dropdown).queryByText('previous-a')).not.toBeInTheDocument();
+
     await user.click(within(dropdown).getByText('ongoing-a'));
     await user.click(screen.getByRole('button', { name: /ok/i }));
 
@@ -178,7 +153,7 @@ describe('<StudentsTable />', () => {
   });
 
   it('passes the typed Country search value to handleChange', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<StudentsTable {...props} />);
 
@@ -196,7 +171,7 @@ describe('<StudentsTable />', () => {
   });
 
   it('passes the typed City search value to handleChange', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<StudentsTable {...props} />);
 
@@ -213,7 +188,7 @@ describe('<StudentsTable />', () => {
   });
 
   it('passes the typed Student search value to handleChange', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<StudentsTable {...props} />);
 

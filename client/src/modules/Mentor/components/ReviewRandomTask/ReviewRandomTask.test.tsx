@@ -1,5 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import ReviewRandomTask from './ReviewRandomTask';
 
 const { getRandomTask, messageInfo } = vi.hoisted(() => ({
@@ -20,6 +19,17 @@ vi.mock('antd', async () => {
 
 const PROPS = { mentorId: 1, courseId: 400, onClick: vi.fn() };
 
+function createDeferredRequest() {
+  let resolve!: (value: { data: object }) => void;
+  let reject!: (reason: unknown) => void;
+  const promise = new Promise<{ data: object }>((resolvePromise, rejectPromise) => {
+    resolve = resolvePromise;
+    reject = rejectPromise;
+  });
+
+  return { promise, resolve, reject };
+}
+
 describe('ReviewRandomTask', () => {
   beforeEach(() => {
     getRandomTask.mockReset();
@@ -27,42 +37,43 @@ describe('ReviewRandomTask', () => {
     PROPS.onClick = vi.fn();
   });
 
-  it('should render the "Review random task" button', () => {
-    render(<ReviewRandomTask {...PROPS} />);
-
-    expect(screen.getByRole('button', { name: /review random task/i })).toBeInTheDocument();
-  });
-
   it('should request a random task for the mentor/course and notify the parent on success', async () => {
-    const user = userEvent.setup();
-    getRandomTask.mockResolvedValueOnce({ data: {} });
+    const request = createDeferredRequest();
+    getRandomTask.mockReturnValueOnce(request.promise);
     render(<ReviewRandomTask {...PROPS} />);
 
-    await user.click(screen.getByRole('button', { name: /review random task/i }));
+    const button = screen.getByRole('button', { name: /review random task/i });
+    fireEvent.click(button);
 
-    await waitFor(() => expect(getRandomTask).toHaveBeenCalledWith(1, 400));
+    expect(getRandomTask).toHaveBeenCalledWith(1, 400);
+    expect(button).toBeDisabled();
+
+    await act(async () => request.resolve({ data: {} }));
+
     expect(PROPS.onClick).toHaveBeenCalled();
   });
 
   it('should show an info message and not notify the parent when no task is found (404)', async () => {
-    const user = userEvent.setup();
-    getRandomTask.mockRejectedValueOnce({ response: { status: 404 } });
+    const request = createDeferredRequest();
+    getRandomTask.mockReturnValueOnce(request.promise);
     render(<ReviewRandomTask {...PROPS} />);
 
-    await user.click(screen.getByRole('button', { name: /review random task/i }));
+    fireEvent.click(screen.getByRole('button', { name: /review random task/i }));
+    await act(async () => request.reject({ response: { status: 404 } }));
 
-    await waitFor(() => expect(messageInfo).toHaveBeenCalledWith('Task for review was not found. Please try later.'));
+    expect(messageInfo).toHaveBeenCalledWith('Task for review was not found. Please try later.');
     expect(PROPS.onClick).not.toHaveBeenCalled();
   });
 
   it('should swallow non-404 errors without an info message', async () => {
-    const user = userEvent.setup();
-    getRandomTask.mockRejectedValueOnce({ response: { status: 500 } });
+    const request = createDeferredRequest();
+    getRandomTask.mockReturnValueOnce(request.promise);
     render(<ReviewRandomTask {...PROPS} />);
 
-    await user.click(screen.getByRole('button', { name: /review random task/i }));
+    fireEvent.click(screen.getByRole('button', { name: /review random task/i }));
+    await act(async () => request.reject({ response: { status: 500 } }));
 
-    await waitFor(() => expect(getRandomTask).toHaveBeenCalled());
+    expect(getRandomTask).toHaveBeenCalled();
     expect(messageInfo).not.toHaveBeenCalled();
     expect(PROPS.onClick).not.toHaveBeenCalled();
   });

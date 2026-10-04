@@ -34,8 +34,8 @@ const data = [
 ];
 
 describe('<DonutChart />', () => {
-  it('renders the pie chart with the donut field configuration', () => {
-    render(<DonutChart data={data} />);
+  it('renders populated, empty, and configured donut charts', () => {
+    const { rerender } = render(<DonutChart data={data} />);
 
     const chart = screen.getByTestId('pie-chart');
     expect(chart).toBeInTheDocument();
@@ -43,24 +43,15 @@ describe('<DonutChart />', () => {
     expect(chart).toHaveAttribute('data-anglefield', 'value');
     expect(chart).toHaveAttribute('data-colorfield', 'type');
     expect(chart).toHaveAttribute('data-inner-radius', '0.6');
-  });
+    expect(chart).toHaveAttribute('data-total', '10');
 
-  it('renders the summed total as the centre annotation', () => {
-    render(<DonutChart data={data} />);
+    rerender(<DonutChart data={[]} />);
 
-    expect(screen.getByTestId('pie-chart')).toHaveAttribute('data-total', '10');
-  });
+    const emptyChart = screen.getByTestId('pie-chart');
+    expect(emptyChart).toHaveAttribute('data-length', '0');
+    expect(emptyChart).toHaveAttribute('data-total', '0');
 
-  it('computes a zero total for empty data', () => {
-    render(<DonutChart data={[]} />);
-
-    const chart = screen.getByTestId('pie-chart');
-    expect(chart).toHaveAttribute('data-length', '0');
-    expect(chart).toHaveAttribute('data-total', '0');
-  });
-
-  it('merges a caller-supplied config (e.g. a tooltip)', () => {
-    render(<DonutChart data={data} config={{ tooltip: { items: [] } }} />);
+    rerender(<DonutChart data={data} config={{ tooltip: { items: [] } }} />);
 
     expect(screen.getByTestId('pie-chart')).toHaveAttribute('data-has-tooltip', 'true');
   });

@@ -7,22 +7,18 @@ const mockTitle = 'Some title';
 const mockIcon = <ExclamationCircleOutlined data-testid={mockTestId} />;
 
 describe('BaseSection', () => {
-  test('should display title and icon if provided', () => {
-    render(<BaseSection title={mockTitle} icon={mockIcon} />);
+  test('renders the title, icon, and children', () => {
+    const { rerender } = render(<BaseSection title={mockTitle} icon={mockIcon} />);
 
     const title = screen.getByText(mockTitle);
     const icon = screen.getByTestId(mockTestId);
 
     expect(title).toBeInTheDocument();
     expect(icon).toBeInTheDocument();
-  });
 
-  test('should render children if provided', () => {
-    const MockChild = () => <div>Some child</div>;
-
-    render(
+    rerender(
       <BaseSection>
-        <MockChild />
+        <div>Some child</div>
       </BaseSection>,
     );
 

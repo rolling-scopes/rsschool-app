@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import StudentLeaveCourse from '../StudentLeaveCourse';
 
 const reasonsOptions = [
@@ -19,16 +19,8 @@ function renderModal(overrides: Partial<React.ComponentProps<typeof StudentLeave
 }
 
 describe('StudentLeaveCourse', () => {
-  it('renders the confirmation messages and reason options', () => {
-    renderModal();
-    expect(screen.getByText('Are you sure you want to leave the course?')).toBeInTheDocument();
-    expect(screen.getByText('Your learning will be stopped.')).toBeInTheDocument();
-    expect(screen.getByRole('checkbox', { name: /Too difficult/ })).toBeInTheDocument();
-    expect(screen.getByRole('checkbox', { name: /No time/ })).toBeInTheDocument();
-  });
-
   it('does not call onOk when no reason is selected (validation fails)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onOk = vi.fn();
     renderModal({ onOk });
 
@@ -39,7 +31,7 @@ describe('StudentLeaveCourse', () => {
   });
 
   it('calls onOk with the selected reason when validation passes', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onOk = vi.fn();
     renderModal({ onOk });
 
@@ -51,9 +43,14 @@ describe('StudentLeaveCourse', () => {
   });
 
   it('calls onCancel when "Continue studying" is clicked', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onCancel = vi.fn();
     renderModal({ onCancel });
+
+    expect(screen.getByText('Are you sure you want to leave the course?')).toBeInTheDocument();
+    expect(screen.getByText('Your learning will be stopped.')).toBeInTheDocument();
+    expect(screen.getByRole('checkbox', { name: /Too difficult/ })).toBeInTheDocument();
+    expect(screen.getByRole('checkbox', { name: /No time/ })).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Continue studying' }));
     expect(onCancel).toHaveBeenCalledTimes(1);

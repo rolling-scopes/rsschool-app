@@ -12,7 +12,7 @@ const getParamDecoratorFactory = (decorator: () => ParameterDecorator): ParamFac
   }
 
   const args = Reflect.getMetadata(ROUTE_ARGS_METADATA, TestController, 'test');
-  const key = Object.keys(args)[0];
+  const key = Object.keys(args)[0]!;
   return args[key].factory as ParamFactory;
 };
 

@@ -1,5 +1,4 @@
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { TasksChart } from './TasksChart';
 
@@ -35,8 +34,9 @@ describe('<TasksChart />', () => {
     vi.clearAllMocks();
   });
 
-  it('passes the data, theme and angle/color fields to the Pie config', () => {
-    render(<TasksChart data={data} onItemSelected={vi.fn()} />);
+  it('configures the chart, formats labels, and handles chart events', () => {
+    const onItemSelected = vi.fn();
+    render(<TasksChart data={data} onItemSelected={onItemSelected} />);
 
     expect(screen.getByTestId('pie')).toBeInTheDocument();
     expect(lastConfig.current?.data).toEqual(data);
@@ -44,29 +44,13 @@ describe('<TasksChart />', () => {
     expect(lastConfig.current?.colorField).toBe('status');
     // theme comes from the (mocked) useTheme hook → 'light'
     expect(lastConfig.current?.theme).toBe('light');
-  });
 
-  it('invokes onItemSelected with the clicked datum on element:click', async () => {
-    const user = userEvent.setup();
-    const onItemSelected = vi.fn();
-    render(<TasksChart data={data} onItemSelected={onItemSelected} />);
-
-    await user.click(screen.getByText('fire-click'));
+    fireEvent.click(screen.getByText('fire-click'));
     expect(onItemSelected).toHaveBeenCalledWith({ status: 'done', value: 3 });
-  });
 
-  it('does not invoke onItemSelected for non-click events or when click data is missing', async () => {
-    const user = userEvent.setup();
-    const onItemSelected = vi.fn();
-    render(<TasksChart data={data} onItemSelected={onItemSelected} />);
-
-    await user.click(screen.getByText('fire-noop'));
-    await user.click(screen.getByText('fire-empty'));
-    expect(onItemSelected).not.toHaveBeenCalled();
-  });
-
-  it('builds the legend item label and tooltip from the status', () => {
-    render(<TasksChart data={data} onItemSelected={vi.fn()} />);
+    fireEvent.click(screen.getByText('fire-noop'));
+    fireEvent.click(screen.getByText('fire-empty'));
+    expect(onItemSelected).toHaveBeenCalledTimes(1);
 
     const legend = lastConfig.current?.legend as { color: { itemLabelText: (d: unknown) => string } };
     // string datum

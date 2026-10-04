@@ -15,8 +15,6 @@ type Props = {
   student: UserStudentDto;
 };
 
-const { Panel } = Collapse;
-
 const { Text } = Typography;
 
 export function StudentInfo(props: Props) {
@@ -68,26 +66,37 @@ export function StudentInfo(props: Props) {
           </Row>
         </Col>
       </Row>
-      <Collapse defaultActiveKey={['courses']}>
-        <Panel header="Contacts" key="contacts">
-          <List
-            dataSource={UserContacts(student)}
-            renderItem={item => (
-              <List.Item>
-                <List.Item.Meta avatar={<Avatar icon={item.icon} />} title={item.type} description={item.value} />
-              </List.Item>
-            )}
-          />
-        </Panel>
-        <Panel header="Courses" key="courses">
-          <List
-            dataSource={[...student.previousCourses, ...student.onGoingCourses].sort(course =>
-              course.hasCertificate ? -1 : 1,
-            )}
-            renderItem={course => <CourseItem course={course} />}
-          />
-        </Panel>
-      </Collapse>
+      <Collapse
+        defaultActiveKey={['courses']}
+        items={[
+          {
+            key: 'contacts',
+            label: 'Contacts',
+            children: (
+              <List
+                dataSource={UserContacts(student)}
+                renderItem={item => (
+                  <List.Item>
+                    <List.Item.Meta avatar={<Avatar icon={item.icon} />} title={item.type} description={item.value} />
+                  </List.Item>
+                )}
+              />
+            ),
+          },
+          {
+            key: 'courses',
+            label: 'Courses',
+            children: (
+              <List
+                dataSource={[...student.previousCourses, ...student.onGoingCourses].sort(course =>
+                  course.hasCertificate ? -1 : 1,
+                )}
+                renderItem={course => <CourseItem course={course} />}
+              />
+            ),
+          },
+        ]}
+      />
     </Space>
   );
 }

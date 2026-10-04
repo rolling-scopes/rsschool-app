@@ -193,8 +193,7 @@ describe('InterviewsService.getUserInterviewDetails (real private methods)', () 
 
     const [details] = await service.getUserInterviewDetails(5, 'john-doe', 'student');
 
-    expect(details.status).toBe(InterviewStatus.Canceled);
-    expect(details.result).toBeNull();
+    expect(details).toMatchObject({ status: InterviewStatus.Canceled, result: null });
   });
 
   it('builds interviewer/student names from a single present name part', async () => {
@@ -208,8 +207,7 @@ describe('InterviewsService.getUserInterviewDetails (real private methods)', () 
 
     const [details] = await service.getUserInterviewDetails(5, 'john-doe', 'student');
 
-    expect(details.interviewer.name).toBe('Mentor');
-    expect(details.student.name).toBe('Doe');
+    expect(details).toMatchObject({ interviewer: { name: 'Mentor' }, student: { name: 'Doe' } });
   });
 
   it('reports a not-completed stage interview status when neither completed nor canceled', async () => {
@@ -219,6 +217,6 @@ describe('InterviewsService.getUserInterviewDetails (real private methods)', () 
 
     const [details] = await service.getUserInterviewDetails(5, 'mentor-x', 'mentor');
 
-    expect(details.status).toBe(InterviewStatus.NotCompleted);
+    expect(details).toMatchObject({ status: InterviewStatus.NotCompleted });
   });
 });

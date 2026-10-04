@@ -16,10 +16,10 @@ describe.each(ADAPTERS)('github oauth in production mode [%s]', adapter => {
 
   // Fresh module graph (created in beforeAll after NODE_ENV is stubbed).
   let modules: {
-    AuthController: typeof import('src/auth/auth.controller').AuthController;
-    AuthService: typeof import('src/auth/auth.service').AuthService;
-    GithubStrategy: typeof import('src/auth/strategies/github.strategy').GithubStrategy;
-    ConfigService: typeof import('src/config').ConfigService;
+    AuthController: typeof import('../../src/auth/auth.controller.js').AuthController;
+    AuthService: typeof import('../../src/auth/auth.service.js').AuthService;
+    GithubStrategy: typeof import('../../src/auth/strategies/github.strategy.js').GithubStrategy;
+    ConfigService: typeof import('../../src/config/index.js').ConfigService;
     passport: typeof import('passport');
   };
 
@@ -35,10 +35,10 @@ describe.each(ADAPTERS)('github oauth in production mode [%s]', adapter => {
     vi.stubEnv('NODE_ENV', 'production');
     vi.resetModules();
     modules = {
-      AuthController: (await import('src/auth/auth.controller')).AuthController,
-      AuthService: (await import('src/auth/auth.service')).AuthService,
-      GithubStrategy: (await import('src/auth/strategies/github.strategy')).GithubStrategy,
-      ConfigService: (await import('src/config')).ConfigService,
+      AuthController: (await import('../../src/auth/auth.controller.js')).AuthController,
+      AuthService: (await import('../../src/auth/auth.service.js')).AuthService,
+      GithubStrategy: (await import('../../src/auth/strategies/github.strategy.js')).GithubStrategy,
+      ConfigService: (await import('../../src/config/index.js')).ConfigService,
       passport: await import('passport'),
     };
   });

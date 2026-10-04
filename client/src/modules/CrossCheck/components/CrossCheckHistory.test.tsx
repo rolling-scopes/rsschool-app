@@ -46,13 +46,7 @@ function makeProps(overrides: Partial<React.ComponentProps<typeof CrossCheckHist
 }
 
 describe('<CrossCheckHistory />', () => {
-  it('renders the History heading', () => {
-    render(<CrossCheckHistory {...makeProps()} />);
-
-    expect(screen.getByRole('heading', { name: 'History' })).toBeInTheDocument();
-  });
-
-  it('renders one SolutionReview per review in the timeline', () => {
+  it('renders the heading, reviews and active/outdated labels', () => {
     render(
       <CrossCheckHistory
         {...makeProps({ state: { loading: false, data: [review({ score: 70 }), review({ score: 40 })] } })}
@@ -62,11 +56,7 @@ describe('<CrossCheckHistory />', () => {
     expect(screen.getAllByTestId('solution-review')).toHaveLength(2);
     expect(screen.getByText('review-score-70')).toBeInTheDocument();
     expect(screen.getByText('review-score-40')).toBeInTheDocument();
-  });
-
-  it('marks the first review as the active review and the rest as outdated', () => {
-    render(<CrossCheckHistory {...makeProps({ state: { loading: false, data: [review(), review()] } })} />);
-
+    expect(screen.getByRole('heading', { name: 'History' })).toBeInTheDocument();
     expect(screen.getByText('active review')).toBeInTheDocument();
     expect(screen.getByText('outdated review')).toBeInTheDocument();
   });

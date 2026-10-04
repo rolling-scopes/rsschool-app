@@ -19,7 +19,7 @@ const loadGetPinoHttp = async (env: Record<string, string | undefined>) => {
   delete process.env.RSSHCOOL_AWS_REGION;
   Object.assign(process.env, env);
 
-  const mod = await import('./pino');
+  const mod = await import('./pino.js');
   const result = mod.getPinoHttp();
 
   process.env = original;

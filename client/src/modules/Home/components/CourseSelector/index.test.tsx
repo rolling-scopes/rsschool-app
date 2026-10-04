@@ -32,25 +32,15 @@ describe('<CourseSelector />', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it('renders a combobox defaulted to the active course', () => {
-    render(<CourseSelector course={active} courses={[active, archived]} onChangeCourse={vi.fn()} />);
-    expect(screen.getByRole('combobox')).toBeInTheDocument();
-    expect(screen.getByText('Active Course')).toBeInTheDocument();
-  });
-
-  it('marks completed courses as archived in the options', () => {
-    render(<CourseSelector course={active} courses={[active, archived]} onChangeCourse={vi.fn()} />);
-    fireEvent.mouseDown(screen.getByRole('combobox'));
-    expect(screen.getByText(/\(Archived\)/)).toBeInTheDocument();
-  });
-
-  it('calls onChangeCourse with the selected course id', async () => {
+  it('renders courses and reports the selected course id', async () => {
     const onChangeCourse = vi.fn();
     render(<CourseSelector course={active} courses={[active, archived]} onChangeCourse={onChangeCourse} />);
+
+    expect(screen.getByRole('combobox')).toBeInTheDocument();
+    expect(screen.getByText('Active Course')).toBeInTheDocument();
     fireEvent.mouseDown(screen.getByRole('combobox'));
-    // antd wires its select handler on the `.ant-select-item-option` wrapper (the
-    // role="option" nodes are empty aria mirrors), and option labels are JSX so they
-    // have no computed accessible name — locate the wrapper by its content text.
+    expect(screen.getByText(/\(Archived\)/)).toBeInTheDocument();
+
     const option = await waitFor(() => {
       const match = Array.from(document.querySelectorAll('.ant-select-item-option')).find(el =>
         el.textContent?.includes('Old Course'),
@@ -59,7 +49,6 @@ describe('<CourseSelector />', () => {
       return match as HTMLElement;
     });
     fireEvent.click(option);
-    // antd passes (value, option) to onChange.
     expect(onChangeCourse).toHaveBeenCalledWith(2, expect.anything());
   });
 });
