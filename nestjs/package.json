@@ -8,7 +8,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "compile": "tsc --noEmit",
+    "compile": "tsc --project tsconfig.build.json --noEmit",
     "start": "nest start --watch | pino-pretty -i time,remoteAddress,req,reqId",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/nestjs/src/main.js",
@@ -70,8 +70,8 @@
     "swagger-ui-express": "5.0.1"
   },
   "devDependencies": {
-    "@nestjs/cli": "^11.0.24",
-    "@nestjs/schematics": "^11.1.0",
+    "@nestjs/cli": "^12.0.0",
+    "@nestjs/schematics": "^12.0.0",
     "@nestjs/testing": "^11.1.29",
     "@openapitools/openapi-generator-cli": "2.20.0",
     "@types/cookie": "0.6.0",
@@ -85,7 +85,7 @@
     "@types/supertest": "2.0.16",
     "pino-pretty": "10.2.3",
     "supertest": "6.3.3",
-    "ts-loader": "9.5.2",
+    "ts-loader": "^9.6.2",
     "tsconfig-paths": "4.2.0"
   }
 }
