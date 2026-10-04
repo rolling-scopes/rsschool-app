@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { JwtService } from 'src/core/jwt/jwt.service';
+import { CALENDAR_TOKEN_AUDIENCE, JwtService } from 'src/core/jwt/jwt.service';
 import { CoursesService } from '../courses.service';
 import { CourseICalendarController } from './course-icalendar.controller';
 import { CourseICalendarService } from './course-icalendar.service';
@@ -55,7 +55,7 @@ describe('CourseICalendarController', () => {
 
       const result = await controller.getScheduleICalendar(11, 'the-token', 'Europe/London');
 
-      expect(jwtService.validateToken).toHaveBeenCalledWith('the-token');
+      expect(jwtService.validateToken).toHaveBeenCalledWith('the-token', CALENDAR_TOKEN_AUDIENCE);
       expect(courseICalendarService.validateUserCourse).toHaveBeenCalledWith(11, payload);
       expect(courseScheduleService.getAll).toHaveBeenCalledWith(11);
       expect(coursesService.getById).toHaveBeenCalledWith(11);

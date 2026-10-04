@@ -33,15 +33,16 @@ export class CourseEventsService {
   }
 
   public async updateCourseEvent(
+    courseId: number,
     id: number,
     courseEvent: Partial<Omit<CourseEvent, 'organizer'> & { organizer: { id: number } }>,
   ) {
-    await this.courseEventRepository.update(id, courseEvent);
-    return this.courseEventRepository.findOneByOrFail({ id });
+    await this.courseEventRepository.update({ id, courseId }, courseEvent);
+    return this.courseEventRepository.findOneByOrFail({ id, courseId });
   }
 
-  public async deleteCourseEvent(id: number) {
-    const entity = await this.courseEventRepository.findOneByOrFail({ id });
+  public async deleteCourseEvent(courseId: number, id: number) {
+    const entity = await this.courseEventRepository.findOneByOrFail({ id, courseId });
     return this.courseEventRepository.remove(entity);
   }
 }

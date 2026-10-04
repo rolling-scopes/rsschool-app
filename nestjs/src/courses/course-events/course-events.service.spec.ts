@@ -154,10 +154,10 @@ describe('CourseEventsService', () => {
       repo.update.mockResolvedValue({ affected: 1 });
       repo.findOneByOrFail.mockResolvedValue(mockCourseEvents[0]);
 
-      const result = await service.updateCourseEvent(101, patch);
+      const result = await service.updateCourseEvent(mockCourseId, 101, patch);
 
-      expect(repo.update).toHaveBeenCalledWith(101, patch);
-      expect(repo.findOneByOrFail).toHaveBeenCalledWith({ id: 101 });
+      expect(repo.update).toHaveBeenCalledWith({ id: 101, courseId: mockCourseId }, patch);
+      expect(repo.findOneByOrFail).toHaveBeenCalledWith({ id: 101, courseId: mockCourseId });
       expect(result).toBe(mockCourseEvents[0]);
     });
   });
@@ -167,9 +167,9 @@ describe('CourseEventsService', () => {
       repo.findOneByOrFail.mockResolvedValue(mockCourseEvents[0]);
       repo.remove.mockResolvedValue(mockCourseEvents[0]);
 
-      const result = await service.deleteCourseEvent(101);
+      const result = await service.deleteCourseEvent(mockCourseId, 101);
 
-      expect(repo.findOneByOrFail).toHaveBeenCalledWith({ id: 101 });
+      expect(repo.findOneByOrFail).toHaveBeenCalledWith({ id: 101, courseId: mockCourseId });
       expect(repo.remove).toHaveBeenCalledWith(mockCourseEvents[0]);
       expect(result).toBe(mockCourseEvents[0]);
     });
