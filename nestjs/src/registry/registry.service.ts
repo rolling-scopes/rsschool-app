@@ -13,6 +13,7 @@ import { Registry, RegistryStatus } from '@entities/registry';
 import { Mentor } from '@entities/mentor';
 import { Course } from '@entities/course';
 import { MentorRegistryTabsMode } from './registry.controller';
+import { CourseId, UserId } from '../core/types/identifiers';
 
 @Injectable()
 export class RegistryService {
@@ -158,10 +159,14 @@ export class RegistryService {
     const req = this.getPreparedMentorRegistriesQuery().andWhere('mentorRegistry.canceled = false');
 
     if (githubId) {
-      req.andWhere(`"user"."githubId" ILIKE :githubId`, { githubId: `%${githubId}%` });
+      req.andWhere(`"user"."githubId" ILIKE :githubId`, {
+        githubId: `%${githubId}%`,
+      });
     }
     if (cityName) {
-      req.andWhere(`"user"."cityName" ILIKE :cityName`, { cityName: `%${cityName}%` });
+      req.andWhere(`"user"."cityName" ILIKE :cityName`, {
+        cityName: `%${cityName}%`,
+      });
     }
     if (preselectedCourses?.length) {
       req.andWhere(
@@ -326,11 +331,19 @@ export class RegistryService {
       canceled: false,
     };
 
-    const mentorRegistry = await this.mentorsRegistryRepository.findOne({ where: { userId: user.id } });
+    const mentorRegistry = await this.mentorsRegistryRepository.findOne({
+      where: { userId: user.id },
+    });
     if (mentorRegistry == null) {
-      await this.mentorsRegistryRepository.insert({ userId: user.id, ...mentorData });
+      await this.mentorsRegistryRepository.insert({
+        userId: user.id,
+        ...mentorData,
+      });
     } else {
-      await this.mentorsRegistryRepository.update(mentorRegistry.id, { ...mentorData, preselectedCourses: [] });
+      await this.mentorsRegistryRepository.update(mentorRegistry.id, {
+        ...mentorData,
+        preselectedCourses: [],
+      });
     }
 
     return user;
@@ -338,7 +351,12 @@ export class RegistryService {
 
   public async createRegistration(
     authUser: { id: number; githubId: string },
-    payload: { courseId: number; type: 'student' | 'mentor'; maxStudentsLimit?: number; experienceInYears?: string },
+    payload: {
+      courseId: number;
+      type: 'student' | 'mentor';
+      maxStudentsLimit?: number;
+      experienceInYears?: string;
+    },
   ) {
     const { courseId, type, maxStudentsLimit, experienceInYears } = payload;
 
@@ -351,9 +369,14 @@ export class RegistryService {
     }
 
     const [user, course, existingRegistry] = await Promise.all([
-      this.userRepository.findOne({ where: { githubId: authUser.githubId }, relations: ['mentors', 'students'] }),
+      this.userRepository.findOne({
+        where: { githubId: authUser.githubId },
+        relations: ['mentors', 'students'],
+      }),
       this.courseRepository.findOneBy({ id: Number(courseId) }),
-      this.registryRepository.findOne({ where: { userId: authUser.id, courseId: Number(courseId) } }),
+      this.registryRepository.findOne({
+        where: { userId: authUser.id, courseId: Number(courseId) },
+      }),
     ]);
 
     if (existingRegistry && existingRegistry.userId === authUser.id) {
@@ -370,7 +393,11 @@ export class RegistryService {
     if (type === 'student') {
       registryPayload.status = 'approved';
       if ((user?.students || []).every(s => s.courseId !== courseId)) {
-        await this.studentRepository.save({ userId: user!.id, courseId: course!.id, startDate: new Date() });
+        await this.studentRepository.save({
+          userId: user!.id,
+          courseId: course!.id,
+          startDate: new Date(),
+        });
       }
     } else if (type === 'mentor') {
       registryPayload = {
@@ -382,20 +409,29 @@ export class RegistryService {
       };
       if ((user?.mentors || []).length > 0) {
         registryPayload.status = 'approved';
-        await this.mentorRepository.save({ userId: user!.id, courseId: course!.id, maxStudentsLimit });
+        await this.mentorRepository.save({
+          userId: user!.id,
+          courseId: course!.id,
+          maxStudentsLimit,
+        });
       }
     }
 
     return this.registryRepository.save(registryPayload);
   }
 
-  public async getRegistrations(type: string | undefined, courseId: number | undefined) {
+  public async getRegistrations(type: string | undefined, courseId: CourseId | undefined) {
     return this.registryRepository.find({
       skip: 0,
       take: 1000,
       order: { id: 'ASC' },
       relations: ['user', 'course'],
-      where: [{ type: (type || 'mentor') as Registry['type'], course: { id: courseId } }],
+      where: [
+        {
+          type: (type || 'mentor') as Registry['type'],
+          course: { id: courseId },
+        },
+      ],
     });
   }
 
@@ -415,7 +451,9 @@ export class RegistryService {
       await this.registryRepository.save(registryPayload);
 
       if (status === 'approved') {
-        const existingMentor = await this.mentorRepository.findOne({ where: { userId, courseId: course.id } });
+        const existingMentor = await this.mentorRepository.findOne({
+          where: { userId, courseId: course.id },
+        });
         if (existingMentor == null) {
           const newMentor = await this.mentorRepository.save({
             userId,
@@ -432,7 +470,7 @@ export class RegistryService {
     return { registries: result };
   }
 
-  public async getOwnMentorRegistry(userId: number) {
+  public async getOwnMentorRegistry(userId: UserId) {
     return this.mentorsRegistryRepository.findOne({ where: { userId } });
   }
 }
