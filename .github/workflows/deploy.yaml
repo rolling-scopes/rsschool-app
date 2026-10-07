@@ -182,12 +182,73 @@ jobs:
       - name: Publish "nestjs" container
         run: docker push ghcr.io/rolling-scopes/rsschool-app-nestjs:master
 
+  build_mcp:
+    name: Build (MCP)
+    concurrency:
+      group: deploy-build-mcp
+      cancel-in-progress: true
+    needs: [checks]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Restore npm cache
+        uses: actions/cache@v4
+        env:
+          cache-name: cache-npm
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-
+
+      - name: Generate isolated subworkspace for MCP
+        run: npx turbo@${{ env.TURBO_VERSION }} prune --scope=@rsschool/mcp-server --docker
+
+      - name: Add lockfile and package.json's and source of isolated subworkspace
+        run: |
+          mkdir -p app
+          cp -r out/json/. app
+          cp -r out/full/. app
+          cp -r out/package-lock.json app
+          cp -r common app/common
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./app
+
+      - name: Build (npm run build)
+        env:
+          NODE_ENV: production
+        run: npx turbo run build --filter=@rsschool/mcp-server
+        working-directory: ./app
+
+      - name: Build container
+        run: docker build -t ghcr.io/rolling-scopes/rsschool-app-mcp:master -f mcp/Dockerfile ./app
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish "mcp" container
+        run: docker push ghcr.io/rolling-scopes/rsschool-app-mcp:master
+
   deploy:
     name: deploy
     concurrency:
       group: deploy-aws
       cancel-in-progress: false
-    needs: [build_client, build_nestjs]
+    needs: [build_client, build_nestjs, build_mcp]
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:

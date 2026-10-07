@@ -53,6 +53,34 @@ services:
         awslogs-stream: nestjs
         awslogs-create-group: 'true'
 
+  mcp:
+    container_name: mcp
+    image: ghcr.io/rolling-scopes/rsschool-app-mcp:master
+    environment:
+      # NestJS is addressed directly over the docker network, so no /api/v2
+      # prefix here — that path only exists on the public nginx vhost.
+      RSAPP_BASE_URL: http://nestjs:8080
+      # Activates DNS-rebinding protection and the CORS allow-list. Without
+      # these the transport keeps both switched off (Access-Control-Allow-Origin: *).
+      RSAPP_ALLOWED_HOSTS: ${RSAPP_ALLOWED_HOSTS:-app.rs.school}
+      RSAPP_ALLOWED_ORIGINS: ${RSAPP_ALLOWED_ORIGINS:-https://app.rs.school}
+      # Kill switch for whole tool groups without rebuilding the image.
+      # Empty = every toolset the user's roles allow.
+      RSAPP_TOOLSETS: ${RSAPP_TOOLSETS:-}
+      RSAPP_REQUEST_TIMEOUT_MS: ${RSAPP_REQUEST_TIMEOUT_MS:-15000}
+    restart: on-failure
+    depends_on:
+      - nestjs
+    networks:
+      - shared-network
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: eu-central-1
+        awslogs-group: rsschool-app
+        awslogs-stream: mcp
+        awslogs-create-group: 'true'
+
   nginx:
     container_name: nginx
     image: nginx:1.21-alpine
@@ -77,6 +105,7 @@ services:
     depends_on:
       - client
       - nestjs
+      - mcp
 
   certbot:
     container_name: certbot

@@ -4,7 +4,8 @@
   "private": true,
   "workspaces": [
     "nestjs",
-    "client"
+    "client",
+    "mcp"
   ],
   "engines": {
     "node": "^22.13.0 || ^24.0.0 || >=26.0.0",

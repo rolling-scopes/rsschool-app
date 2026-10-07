@@ -16,7 +16,7 @@ jobs:
       group: pr-checks_${{ github.head_ref }}
       cancel-in-progress: true
     runs-on: ubuntu-latest
-    # Runs format + lint + the client and nestjs unit suites (both with v8
+    # Runs format + lint + the client, nestjs and mcp unit suites (all with v8
     # coverage). Those suites grew ~3x with the coverage initiative, so 20m is no
     # longer enough on a 2-core runner — raised to keep the gate from timing out.
     timeout-minutes: 40
@@ -57,6 +57,11 @@ jobs:
         run: npm run test:ci
         if: success() || failure()
         working-directory: nestjs
+
+      - name: Test (mcp)
+        run: npm run test:ci
+        if: success() || failure()
+        working-directory: mcp
 
   pr_build:
     name: Build

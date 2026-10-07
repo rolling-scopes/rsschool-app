@@ -35,6 +35,7 @@ export class AuthUser {
   public readonly appRoles: Role[];
   public readonly githubId: string;
   public readonly courses: Record<number, CourseInfo>;
+  public apiTokenId?: string;
 
   constructor(user: AuthDetails, courseTasks: CourseTask[] = [], admin: boolean = false, hirer: boolean = false) {
     const roles: { [key: string]: 'student' | 'mentor' } = {};
