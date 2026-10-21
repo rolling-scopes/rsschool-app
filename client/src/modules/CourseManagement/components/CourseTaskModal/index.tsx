@@ -159,7 +159,7 @@ export function CourseTaskModal(props: Props) {
         </Col>
         <Col span={6}>
           <Form.Item name="timeZone" label="TimeZone">
-            <Select defaultValue="UTC">
+            <Select>
               <Option value="UTC">UTC</Option>
             </Select>
           </Form.Item>

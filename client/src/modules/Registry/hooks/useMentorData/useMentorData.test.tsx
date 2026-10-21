@@ -116,7 +116,7 @@ async function renderLoaded(courseAlias?: string | string[]) {
 }
 
 describe('useMentorData', () => {
-  test('loads profile-derived initial values into resume', async () => {
+  test('loads profile values, steps, and initial step', async () => {
     const { result } = await renderLoaded();
 
     expect(result.current.resume).toMatchObject({
@@ -131,17 +131,7 @@ describe('useMentorData', () => {
       technicalMentoring: [],
       preferedCourses: [], // no alias => none preselected
     });
-  });
-
-  test('builds the General/Mentorship/Done steps', async () => {
-    const { result } = await renderLoaded();
-
     expect(result.current.steps.map(s => s.title)).toEqual(['General', 'Mentorship', 'Done']);
-  });
-
-  test('starts on the first step', async () => {
-    const { result } = await renderLoaded();
-
     expect(result.current.currentStep).toBe(0);
   });
 
@@ -157,25 +147,15 @@ describe('useMentorData', () => {
     expect(result.current.resume?.preferedCourses).toEqual([1, 3]);
   });
 
-  test('first submit only advances the step without calling the API', async () => {
+  test('advances first, then submits user and mentor payloads and reaches Done', async () => {
     const { result } = await renderLoaded();
 
     await act(async () => {
       await result.current.handleSubmit({ firstName: 'New' } as never);
     });
-
     expect(result.current.currentStep).toBe(1);
     expect(updateUser).not.toHaveBeenCalled();
     expect(registerMentor).not.toHaveBeenCalled();
-  });
-
-  test('second submit posts the user and mentor registry payloads and advances to Done', async () => {
-    const { result } = await renderLoaded();
-
-    // advance to mentorship step
-    await act(async () => {
-      await result.current.handleSubmit({} as never);
-    });
 
     await act(async () => {
       await result.current.handleSubmit({

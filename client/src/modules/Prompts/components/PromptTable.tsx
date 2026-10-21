@@ -12,7 +12,7 @@ type Props = {
 
 export const PromptTable = ({ data, handleDelete, handleUpdate }: Props) => {
   return (
-    <Table dataSource={data} rowKey={'name'}>
+    <Table dataSource={data} rowKey="id">
       <Column title="Type" dataIndex="type" key="type" />
       <Column
         title="Actions"

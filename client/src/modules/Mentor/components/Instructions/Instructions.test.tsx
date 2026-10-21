@@ -19,36 +19,20 @@ vi.mock('@client/api', async importOriginal => {
 describe('Instructions', () => {
   beforeEach(() => getInviteLinkByDiscordServerId.mockReset().mockResolvedValue({ data: 'https://t.me/rsschool' }));
 
-  it('should render the title and description', () => {
-    render(<Instructions courseId={400} discordServerId={1} />);
+  it('renders the instructions and applies the fetched telegram invite link', async () => {
+    render(<Instructions courseId={400} discordServerId={42} />);
 
     expect(screen.getByText(INSTRUCTIONS_TEXT.title)).toBeInTheDocument();
     expect(screen.getByText(INSTRUCTIONS_TEXT.description)).toBeInTheDocument();
-  });
-
-  it('should render each instruction step title', () => {
-    render(<Instructions courseId={400} discordServerId={1} />);
-
     for (const step of INSTRUCTIONS_TEXT.steps) {
       expect(screen.getByText(step.title)).toBeInTheDocument();
     }
-  });
-
-  it('should render the social links for the first step (github/discord/linkedin)', () => {
-    render(<Instructions courseId={400} discordServerId={1} />);
-
     expect(screen.getByRole('link', { name: /github/i })).toHaveAttribute(
       'href',
       'https://github.com/rolling-scopes/rsschool-app',
     );
-  });
-
-  it('should fetch and apply the telegram invite link when a discord server id is provided', async () => {
-    render(<Instructions courseId={400} discordServerId={42} />);
 
     await waitFor(() => expect(getInviteLinkByDiscordServerId).toHaveBeenCalledWith(400, 42));
-
-    // once the telegram url resolves, the telegram link becomes clickable with that href
     await waitFor(() => {
       const links = screen.getAllByRole('link');
       expect(links.some(link => link.getAttribute('href') === 'https://t.me/rsschool')).toBe(true);
@@ -62,8 +46,6 @@ describe('Instructions', () => {
   });
 
   it('renders a social link with no icon for an unknown platform title', () => {
-    // renderSocialLinks needs theme context, so render it through a host component.
-    // An unknown title falls through the icon switch `default` branch (no icon).
     function Host() {
       return <>{renderSocialLinks([{ title: 'myspace', url: 'https://myspace.com/rs' }])}</>;
     }

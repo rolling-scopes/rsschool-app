@@ -12,59 +12,20 @@ const renderPanel = () => {
 };
 
 describe('GitHub', () => {
-  test.each`
-    label
-    ${LABELS.repoUrl}
-    ${LABELS.expectedRepoName}
-  `('should render fields with $label label', async ({ label }) => {
+  test('renders its fields and validates the source repository URL', async () => {
     renderPanel();
 
-    const field = await screen.findByText(label);
-    expect(field).toBeInTheDocument();
-  });
-
-  test('should render "Pull Request required" checkbox', async () => {
-    renderPanel();
-
-    const checkbox = await screen.findByRole('checkbox', { name: /pull request required/i });
-    expect(checkbox).toBeInTheDocument();
-  });
-
-  test.each`
-    placeholder
-    ${PLACEHOLDERS.sourceGithubRepoUrl}
-    ${PLACEHOLDERS.githubRepoName}
-  `('should render field with $placeholder placeholder', async ({ placeholder }) => {
-    renderPanel();
-
-    const field = await screen.findByPlaceholderText(placeholder);
-    expect(field).toBeInTheDocument();
-  });
-
-  test('should render error message on invalid source GitHub repo URL input', async () => {
-    renderPanel();
-
+    expect(await screen.findByText(LABELS.repoUrl)).toBeInTheDocument();
+    expect(screen.getByText(LABELS.expectedRepoName)).toBeInTheDocument();
+    expect(screen.getByRole('checkbox', { name: /pull request required/i })).toBeInTheDocument();
     const field = await screen.findByPlaceholderText(PLACEHOLDERS.sourceGithubRepoUrl);
-    expect(field).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(PLACEHOLDERS.githubRepoName)).toBeInTheDocument();
 
     fireEvent.change(field, { target: { value: 'http://github.com/i-vasilich-i' } });
-
     const errorMessage = await screen.findByText(ERROR_MESSAGES.sourceGithubRepoUrl);
-    expect(errorMessage).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent(ERROR_MESSAGES.sourceGithubRepoUrl);
-  });
-
-  test('should not render error message on valid source GitHub repo URL input', async () => {
-    renderPanel();
-
-    const field = await screen.findByPlaceholderText(PLACEHOLDERS.sourceGithubRepoUrl);
-    expect(field).toBeInTheDocument();
 
     fireEvent.change(field, { target: { value: 'https://github.com/rolling-scopes-school/task1' } });
-
-    await waitFor(() => {
-      const errorMessage = screen.queryByText(ERROR_MESSAGES.sourceGithubRepoUrl);
-      expect(errorMessage).not.toBeInTheDocument();
-    });
+    await waitFor(() => expect(screen.queryByText(ERROR_MESSAGES.sourceGithubRepoUrl)).not.toBeInTheDocument());
   });
 });

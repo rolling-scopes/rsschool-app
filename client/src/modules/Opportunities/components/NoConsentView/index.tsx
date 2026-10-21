@@ -70,7 +70,7 @@ export const NoConsentView = (props: Props) => {
     modal.confirm({
       icon: null,
       content: confirmationModalContent,
-      maskClosable: true,
+      mask: { closable: true },
       onOk() {
         giveConsent();
       },

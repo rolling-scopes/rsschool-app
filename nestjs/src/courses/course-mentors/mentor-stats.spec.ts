@@ -125,7 +125,7 @@ describe('CourseMentorsService stats & search', () => {
 
       await service.getMentorsWithStats(5);
 
-      const ctQb = courseTaskRepository.createQueryBuilder.mock.results[0].value;
+      const ctQb = courseTaskRepository.createQueryBuilder.mock.results[0]!.value;
       expect(courseTaskRepository.createQueryBuilder).toHaveBeenCalledWith('c');
       expect(ctQb.where).toHaveBeenCalledWith({ checker: 'mentor', courseId: 5, disabled: false });
       expect(ctQb.andWhere).toHaveBeenCalledWith('c.studentEndDate < NOW()');
@@ -158,7 +158,7 @@ describe('CourseMentorsService stats & search', () => {
           checked: 4,
         },
       });
-      expect(mentor.taskResultsStats?.lastUpdatedDate).toEqual(new Date('2024-05-01T00:00:00.000Z'));
+      expect(mentor!.taskResultsStats?.lastUpdatedDate).toEqual(new Date('2024-05-01T00:00:00.000Z'));
     });
 
     it('defaults missing checked count to 0 and null last-checked date', async () => {
@@ -172,7 +172,7 @@ describe('CourseMentorsService stats & search', () => {
 
       const [mentor] = await service.getMentorsWithStats(5);
 
-      expect(mentor.taskResultsStats).toMatchObject({
+      expect(mentor!.taskResultsStats).toMatchObject({
         total: 0, // 1 active student * 0 tasks
         checked: 0,
         lastUpdatedDate: null,
@@ -237,7 +237,7 @@ describe('CourseMentorsService stats & search', () => {
 
       // buildTaskResultSubQuery is invoked twice (checked count + last checked dates),
       // each appending a 0 to preserve a non-empty IN (...) list.
-      const subQb = taskResultRepository.createQueryBuilder.mock.results[0].value;
+      const subQb = taskResultRepository.createQueryBuilder.mock.results[0]!.value;
       expect(subQb.where).toHaveBeenCalledWith('t.courseTaskId IN (:...ids)', { ids: [100, 101, 0] });
     });
   });

@@ -12,89 +12,67 @@ vi.mock('./Sider/AdminSider', () => ({
 }));
 
 describe('PageLayout', () => {
-  it('renders the header and children when there is no error', () => {
-    render(
+  it('renders content, error, loading, and custom layout states', () => {
+    const { container, rerender } = render(
       <PageLayout loading={false} title="Dashboard">
         <div>Body content</div>
       </PageLayout>,
     );
-
     expect(screen.getByTestId('header')).toHaveTextContent('Dashboard');
     expect(screen.getByText('Body content')).toBeInTheDocument();
-  });
 
-  it('renders a 500 result with a back-home link when an error is provided', () => {
     const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    render(
+    rerender(
       <PageLayout loading={false} error={new Error('boom')}>
         <div>Body content</div>
       </PageLayout>,
     );
-
     expect(screen.getByText('Sorry, something went wrong.')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /back home/i })).toHaveAttribute('href', '/');
     expect(screen.queryByText('Body content')).not.toBeInTheDocument();
     errorSpy.mockRestore();
-  });
 
-  it('shows a spinner while loading', () => {
-    const { container } = render(
+    rerender(
       <PageLayout loading={true}>
         <div>Body content</div>
       </PageLayout>,
     );
-
     expect(container.querySelector('.ant-spin-spinning')).toBeInTheDocument();
-  });
 
-  it('applies the provided background and removes the content margin when withMargin is false', () => {
-    // background prop -> `props.background ? props.background : token...` true branch;
-    // withMargin={false} -> `withMargin ? { margin: 16 } : undefined` false branch.
-    const { container } = render(
+    rerender(
       <PageLayout loading={false} background="rgb(255, 0, 0)" withMargin={false}>
         <div>Body content</div>
       </PageLayout>,
     );
-
-    const layout = container.querySelector('.ant-layout') as HTMLElement;
-    expect(layout).toHaveStyle({ background: 'rgb(255, 0, 0)' });
+    expect(container.querySelector('.ant-layout')).toHaveStyle({ background: 'rgb(255, 0, 0)' });
     expect(screen.getByText('Body content')).toBeInTheDocument();
   });
 });
 
 describe('PageLayoutSimple', () => {
-  it('renders children inside the responsive grid when there is data', () => {
-    render(
+  it('renders data, no-data, and custom-background states', () => {
+    const { container, rerender } = render(
       <PageLayoutSimple loading={false}>
         <div>Simple body</div>
       </PageLayoutSimple>,
     );
-
     expect(screen.getByText('Simple body')).toBeInTheDocument();
     expect(screen.queryByText('no data')).not.toBeInTheDocument();
-  });
 
-  it('renders a "no data" message when noData is set', () => {
-    render(
+    rerender(
       <PageLayoutSimple loading={false} noData>
         <div>Simple body</div>
       </PageLayoutSimple>,
     );
-
     expect(screen.getByText('no data')).toBeInTheDocument();
     expect(screen.queryByText('Simple body')).not.toBeInTheDocument();
-  });
 
-  it('applies the provided background', () => {
-    // background prop -> the true branch of `props.background ? ... : token...`.
-    const { container } = render(
+    rerender(
       <PageLayoutSimple loading={false} background="rgb(0, 0, 255)">
         <div>Simple body</div>
       </PageLayoutSimple>,
     );
-
-    const layout = container.querySelector('.ant-layout') as HTMLElement;
-    expect(layout).toHaveStyle({ background: 'rgb(0, 0, 255)' });
+    expect(container.querySelector('.ant-layout')).toHaveStyle({ background: 'rgb(0, 0, 255)' });
   });
 });
 
@@ -105,7 +83,6 @@ describe('AdminPageLayout', () => {
         <div>Admin body</div>
       </AdminPageLayout>,
     );
-
     expect(screen.getByTestId('header')).toHaveTextContent('Admin');
     expect(screen.getByTestId('admin-sider')).toBeInTheDocument();
     expect(screen.getByText('Admin body')).toBeInTheDocument();

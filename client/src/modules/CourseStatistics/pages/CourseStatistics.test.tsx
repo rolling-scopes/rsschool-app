@@ -58,6 +58,11 @@ vi.mock('../components/StatCards', () => ({
   ),
 }));
 
+vi.mock('antd', () => ({
+  Empty: ({ description }: { description: ReactNode }) => <div>{description}</div>,
+  theme: { useToken: () => ({ token: { colorBgLayout: '#fff' } }) },
+}));
+
 // next/navigation router + search params.
 const { push } = vi.hoisted(() => ({ push: vi.fn() }));
 const { searchParamsValue } = vi.hoisted(() => ({ searchParamsValue: { value: '' } }));
@@ -74,16 +79,11 @@ describe('<CourseStatistic />', () => {
     useCoursesStats.mockReturnValue({ loading: false, coursesData: undefined });
   });
 
-  it('defaults to Timeline scope (plural title) with no course query param', () => {
+  it('defaults to Timeline scope and shows its empty state', () => {
     render(<CourseStatistic />);
 
     expect(screen.getByRole('heading', { name: 'Courses Statistics' })).toBeInTheDocument();
     expect(screen.getByTestId('scope-selector')).toHaveAttribute('data-scope', 'Timeline');
-  });
-
-  it('shows the Empty state on Timeline scope when no year is selected', () => {
-    render(<CourseStatistic />);
-
     expect(screen.getByText('No data available.')).toBeInTheDocument();
     expect(screen.queryByTestId('stat-cards')).not.toBeInTheDocument();
   });

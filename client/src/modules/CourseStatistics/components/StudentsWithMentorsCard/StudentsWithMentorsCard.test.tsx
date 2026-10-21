@@ -1,19 +1,14 @@
 import { render, screen } from '@testing-library/react';
-import { ReactNode, useEffect, useState } from 'react';
 import { CourseStatsDto } from '@client/api';
 import { StudentsWithMentorsCard } from './StudentsWithMentorsCard';
 import { Colors } from '../../data';
 
 vi.mock('next/dynamic', () => ({
-  default: (loader: () => Promise<{ default: (p: Record<string, unknown>) => ReactNode }>) => {
-    const Lazy = (props: Record<string, unknown>) => {
-      const [Comp, setComp] = useState<((p: Record<string, unknown>) => ReactNode) | null>(null);
-      useEffect(() => {
-        loader().then(m => setComp(() => m.default));
-      }, []);
-      return Comp ? <Comp {...props} /> : null;
-    };
-    return Lazy;
+  default: (loader: () => Promise<unknown>) => {
+    void loader();
+    return ({ count, total, color }: { count: number; total: number; color: string }) => (
+      <div data-testid="liquid-chart" data-count={count} data-total={total} data-color={color} />
+    );
   },
 }));
 
@@ -33,17 +28,13 @@ const studentsStats: CourseStatsDto = {
 };
 
 describe('<StudentsWithMentorsCard />', () => {
-  it('renders the title and the with-mentor/active ratio', () => {
+  it('renders the title, ratio, and chart data', () => {
     render(<StudentsWithMentorsCard studentsStats={studentsStats} />);
 
     expect(screen.getByText('Students With Mentor')).toBeInTheDocument();
     expect(screen.getByText('Students With Mentor: 70 / 100')).toBeInTheDocument();
-  });
 
-  it('passes the with-mentor count, active total and Gold color to the chart', async () => {
-    render(<StudentsWithMentorsCard studentsStats={studentsStats} />);
-
-    const chart = await screen.findByTestId('liquid-chart');
+    const chart = screen.getByTestId('liquid-chart');
     expect(chart).toHaveAttribute('data-count', '70');
     expect(chart).toHaveAttribute('data-total', '100');
     expect(chart).toHaveAttribute('data-color', Colors.Gold);

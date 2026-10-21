@@ -13,7 +13,12 @@ import { CoursesService } from 'src/courses/courses.service';
 import { NotificationsService } from 'src/notifications/notifications.service';
 
 // Fixtures mirrored from server/src/routes/registry/__test__/createRegistration.test.ts to prove business-logic equivalence
-const mockUser = { id: 11, githubId: 'john-doe', mentors: [], students: [] };
+const mockUser = {
+  id: 11,
+  githubId: 'john-doe',
+  mentors: [] as Pick<Mentor, 'id'>[],
+  students: [] as Pick<Student, 'courseId'>[],
+};
 const mockCourse = { id: 5 };
 const authUser = { id: 11, githubId: 'john-doe' };
 

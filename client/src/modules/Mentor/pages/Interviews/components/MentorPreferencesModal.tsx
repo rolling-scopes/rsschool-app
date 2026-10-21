@@ -57,7 +57,7 @@ function MentorOptionsModal({ course, close, session }: Props & { close: () => v
         <Modal
           onCancel={close}
           okText="Confirm"
-          destroyOnClose
+          destroyOnHidden
           onOk={async () => {
             const values = await form.validateFields();
             if (values) {

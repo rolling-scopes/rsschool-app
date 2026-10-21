@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { ReactNode } from 'react';
+import { setupUser } from '@client/__tests__/setupUser';
 import { generateTasksData } from '@client/modules/Tasks/utils/test-utils';
 import { FormValues } from '@client/modules/Tasks/types';
 import { ModalProps } from '@client/modules/Tasks/components';
@@ -110,15 +110,11 @@ describe('TasksPage', () => {
     createTaskCriteria.mockResolvedValue({ data: {} });
   });
 
-  it('should render the page title and the Add Task button', () => {
+  it('should fetch and render the tasks in the table', async () => {
     render(<TasksPage />);
 
     expect(screen.getByRole('heading', { name: 'Manage Tasks' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /add task/i })).toBeInTheDocument();
-  });
-
-  it('should fetch and render the tasks in the table', async () => {
-    render(<TasksPage />);
 
     await waitFor(() => expect(getTasks).toHaveBeenCalled());
 
@@ -126,45 +122,21 @@ describe('TasksPage', () => {
     expect(await screen.findByText(firstTaskName)).toBeInTheDocument();
   });
 
-  it('should open the create modal when Add Task is clicked', async () => {
-    const user = userEvent.setup();
-    render(<TasksPage />);
-
-    await waitFor(() => expect(getTasks).toHaveBeenCalled());
-
-    await user.click(screen.getByRole('button', { name: /add task/i }));
-
-    const dialog = await screen.findByRole('dialog');
-    expect(dialog).toHaveTextContent('mode: create');
-  });
-
-  it('should fetch criteria and open the edit modal when Edit is clicked', async () => {
-    const user = userEvent.setup();
-    render(<TasksPage />);
-
-    await waitFor(() => expect(getTasks).toHaveBeenCalled());
-
-    const [editLink] = await screen.findAllByText('Edit');
-    await user.click(editLink as HTMLElement);
-
-    await waitFor(() => expect(getTaskCriteria).toHaveBeenCalledWith(TASKS[0]?.id));
-    const dialog = await screen.findByRole('dialog');
-    expect(dialog).toHaveTextContent('mode: edit');
-  });
-
   it('should close the modal when cancel is triggered', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TasksPage />);
 
     await waitFor(() => expect(getTasks).toHaveBeenCalled());
     await user.click(screen.getByRole('button', { name: /add task/i }));
+
+    expect(await screen.findByRole('dialog')).toHaveTextContent('mode: create');
 
     await user.click(await screen.findByRole('button', { name: 'cancel-modal' }));
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
   });
 
   it('should create a task and its criteria when submitting a valid new task', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TasksPage />);
 
     await waitFor(() => expect(getTasks).toHaveBeenCalled());
@@ -184,7 +156,7 @@ describe('TasksPage', () => {
   });
 
   it('should update the task and existing criteria when submitting a valid edit', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     getTaskCriteria
       .mockResolvedValueOnce({ data: { criteria: [] } }) // on edit open
       .mockResolvedValueOnce({ data: { criteria: [{ type: 'title', text: 'c1' }] } }); // during submit
@@ -201,7 +173,7 @@ describe('TasksPage', () => {
   });
 
   it('should create criteria during edit when the task has none yet', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     getTaskCriteria
       .mockResolvedValueOnce({ data: { criteria: [] } }) // on edit open
       .mockResolvedValueOnce({ data: { criteria: null } }); // during submit
@@ -216,7 +188,7 @@ describe('TasksPage', () => {
   });
 
   it('should not submit when a required field is missing', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     submitValues.current = { ...VALID_VALUES, name: undefined };
     render(<TasksPage />);
 
@@ -229,7 +201,7 @@ describe('TasksPage', () => {
   });
 
   it('should swallow API errors during submit without crashing', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     createTask.mockRejectedValue(new Error('boom'));
     render(<TasksPage />);
 
@@ -243,13 +215,15 @@ describe('TasksPage', () => {
   });
 
   it('should not call updateTask when the edited task has a falsy id', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<TasksPage />);
 
     await waitFor(() => expect(getTasks).toHaveBeenCalled());
     // First task has id 0 (falsy) → handleModalSubmit returns before updating.
     const editLinks = await screen.findAllByText('Edit');
     await user.click(editLinks[0] as HTMLElement);
+    await waitFor(() => expect(getTaskCriteria).toHaveBeenCalledWith(TASKS[0]?.id));
+    expect(await screen.findByRole('dialog')).toHaveTextContent('mode: edit');
     await user.click(await screen.findByRole('button', { name: 'submit-modal' }));
 
     await waitFor(() => expect(getTaskCriteria).toHaveBeenCalled());
@@ -257,7 +231,7 @@ describe('TasksPage', () => {
   });
 
   it('should block submit when a non-title criterion has zero score', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     getTaskCriteria.mockResolvedValue({ data: { criteria: [{ type: 'subtask', text: 'st', max: 0 }] } });
     render(<TasksPage />);
 
@@ -271,7 +245,7 @@ describe('TasksPage', () => {
   });
 
   it('defaults criteria to an empty list when the edited task returns no criteria field', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     // getTaskCriteria with no `criteria` key on edit-open → `data.criteria ?? []` fallback.
     getTaskCriteria.mockResolvedValueOnce({ data: {} });
     render(<TasksPage />);
@@ -286,7 +260,7 @@ describe('TasksPage', () => {
   });
 
   it('applies createRecord defaults for omitted optional fields', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     // Only the required fields are present → the `?? ''` / `?? []` defaults in createRecord engage.
     submitValues.current = {
       name: 'Minimal Task',

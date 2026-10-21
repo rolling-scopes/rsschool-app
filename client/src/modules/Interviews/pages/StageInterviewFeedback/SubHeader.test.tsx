@@ -12,26 +12,19 @@ const back = (useRouter() as unknown as { back: ReturnType<typeof vi.fn> }).back
 describe('<SubHeader />', () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it('shows the "Completed" green tag when isCompleted is true', () => {
-    render(<SubHeader isCompleted />);
+  it('renders both completion states and navigates back', async () => {
+    const user = userEvent.setup();
+    const { container, rerender } = render(<SubHeader isCompleted />);
 
     expect(screen.getByText('Feedback form')).toBeInTheDocument();
     const tag = screen.getByText('Completed');
     expect(tag).toBeInTheDocument();
     expect(tag).toHaveClass('ant-tag-green');
-  });
 
-  it('shows the "Uncompleted" tag (no green) when isCompleted is false', () => {
-    render(<SubHeader isCompleted={false} />);
-
-    const tag = screen.getByText('Uncompleted');
-    expect(tag).toBeInTheDocument();
-    expect(tag).not.toHaveClass('ant-tag-green');
-  });
-
-  it('navigates back when the back arrow is clicked', async () => {
-    const user = userEvent.setup();
-    const { container } = render(<SubHeader isCompleted={false} />);
+    rerender(<SubHeader isCompleted={false} />);
+    const uncompletedTag = screen.getByText('Uncompleted');
+    expect(uncompletedTag).toBeInTheDocument();
+    expect(uncompletedTag).not.toHaveClass('ant-tag-green');
 
     const arrow = container.querySelector('.anticon-arrow-left');
     expect(arrow).toBeTruthy();

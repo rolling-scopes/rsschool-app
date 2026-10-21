@@ -45,6 +45,9 @@ describe('CourseCrossCheckService.saveResult', () => {
       { update: mockUpdate, insert: mockInsert, createQueryBuilder: vi.fn(() => qb) } as never,
       {} as never,
       {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
     );
   }
 
@@ -110,6 +113,9 @@ describe('CourseCrossCheckService.saveSolutionComments', () => {
     return new CourseCrossCheckService(
       {} as never,
       { save: mockSave, createQueryBuilder: vi.fn(() => qb) } as never,
+      {} as never,
+      {} as never,
+      {} as never,
       {} as never,
       {} as never,
       {} as never,

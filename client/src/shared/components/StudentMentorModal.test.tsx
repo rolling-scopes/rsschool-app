@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { StudentMentorModal } from './StudentMentorModal';
 
 // The search fields are remote-search widgets with their own tests; stub them
@@ -39,18 +39,8 @@ describe('StudentMentorModal', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it('renders the Student and Mentor fields when open', () => {
-    render(<StudentMentorModal {...baseProps} />);
-
-    expect(screen.getByText('Student/Mentor')).toBeInTheDocument();
-    expect(screen.getByText('Student')).toBeInTheDocument();
-    expect(screen.getByText('Mentor')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /pick student/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /pick mentor/i })).toBeInTheDocument();
-  });
-
   it('shows validation errors when submitting without selections', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<StudentMentorModal {...baseProps} />);
 
     await user.click(screen.getByRole('button', { name: /save/i }));
@@ -61,11 +51,19 @@ describe('StudentMentorModal', () => {
   });
 
   it('calls onOk with the selected student and mentor github ids', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<StudentMentorModal {...baseProps} />);
 
-    await user.click(screen.getByRole('button', { name: /pick student/i }));
-    await user.click(screen.getByRole('button', { name: /pick mentor/i }));
+    expect(screen.getByText('Student/Mentor')).toBeInTheDocument();
+    expect(screen.getByText('Student')).toBeInTheDocument();
+    expect(screen.getByText('Mentor')).toBeInTheDocument();
+    const studentButton = screen.getByRole('button', { name: /pick student/i });
+    const mentorButton = screen.getByRole('button', { name: /pick mentor/i });
+    expect(studentButton).toBeInTheDocument();
+    expect(mentorButton).toBeInTheDocument();
+
+    await user.click(studentButton);
+    await user.click(mentorButton);
 
     await user.click(screen.getByRole('button', { name: /save/i }));
 

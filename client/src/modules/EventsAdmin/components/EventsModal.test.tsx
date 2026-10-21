@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { DisciplineDto, EventDto } from '@client/api';
+import { setupUser } from '@client/__tests__/setupUser';
 import { EventsModal } from './EventsModal';
 
 // Pure presentational wrapper around the shared ModalForm; no API of its own.
@@ -33,7 +33,7 @@ function makeProps(overrides: Partial<Parameters<typeof EventsModal>[0]> = {}) {
 }
 
 // Open an antd Select by label and pick an option by its visible text.
-async function selectOption(user: ReturnType<typeof userEvent.setup>, label: string, optionText: string) {
+async function selectOption(user: ReturnType<typeof setupUser>, label: string, optionText: string) {
   const combobox = screen.getByLabelText(label);
   await user.click(combobox);
   const option = await screen.findByText(optionText, { selector: '.ant-select-item-option-content' });
@@ -46,25 +46,8 @@ describe('<EventsModal />', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it('renders the title and an empty name input when creating', () => {
-    render(<EventsModal {...makeProps()} />);
-
-    expect(screen.getByText('Event')).toBeInTheDocument();
-    expect(screen.getByLabelText('Name')).toHaveValue('');
-  });
-
-  it('lists the supplied disciplines as options', async () => {
-    const user = userEvent.setup();
-    render(<EventsModal {...makeProps()} />);
-
-    await user.click(screen.getByLabelText('Discipline'));
-
-    expect(await screen.findByText('Frontend', { selector: '.ant-select-item-option-content' })).toBeInTheDocument();
-    expect(screen.getByText('Backend', { selector: '.ant-select-item-option-content' })).toBeInTheDocument();
-  });
-
   it('shows validation errors and does not submit when required fields are empty', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<EventsModal {...props} />);
 
@@ -77,13 +60,17 @@ describe('<EventsModal />', () => {
   });
 
   it('submits name, selected type, discipline and optional fields', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<EventsModal {...props} />);
 
     await user.type(screen.getByLabelText('Name'), 'Kickoff');
     await selectOption(user, 'Event Type', 'Online Lecture');
-    await selectOption(user, 'Discipline', 'Backend');
+    await user.click(screen.getByLabelText('Discipline'));
+    expect(await screen.findByText('Frontend', { selector: '.ant-select-item-option-content' })).toBeInTheDocument();
+    const backendOption = screen.getByText('Backend', { selector: '.ant-select-item-option-content' });
+    expect(backendOption).toBeInTheDocument();
+    await user.click(backendOption);
     await user.type(screen.getByLabelText('Description URL'), 'https://u');
     await user.type(screen.getByLabelText('Description'), 'desc body');
     await user.click(screen.getByRole('button', { name: /save/i }));
@@ -109,10 +96,13 @@ describe('<EventsModal />', () => {
     expect(screen.getByText('Frontend')).toBeInTheDocument();
   });
 
-  it('cancels when the form is untouched', async () => {
-    const user = userEvent.setup();
+  it('renders empty create fields and cancels when untouched', async () => {
+    const user = setupUser();
     const props = makeProps();
     render(<EventsModal {...props} />);
+
+    expect(screen.getByText('Event')).toBeInTheDocument();
+    expect(screen.getByLabelText('Name')).toHaveValue('');
 
     await user.click(screen.getByRole('button', { name: /cancel/i }));
 

@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { Form, Input } from 'antd';
 import { FORM_TITLES } from '@client/modules/Registry/constants';
 import { RegistrationForm } from './RegistrationForm';
@@ -41,18 +41,14 @@ const renderForm = (type?: 'mentor' | 'student') => {
 };
 
 describe('RegistrationForm', () => {
-  test('should render form', async () => {
+  test('should render the mentor form, steps and current content', async () => {
     renderForm();
 
     const form = await screen.findByRole('form');
     expect(form).toBeInTheDocument();
-  });
-
-  test('should render mentor form title', async () => {
-    renderForm();
-
-    const title = await screen.findByText(FORM_TITLES.mentorForm);
-    expect(title).toBeInTheDocument();
+    expect(screen.getByText(FORM_TITLES.mentorForm)).toBeInTheDocument();
+    steps.forEach(({ title }) => expect(screen.getByText(title)).toBeInTheDocument());
+    expect(screen.getByText(`${steps[0]?.title}-content`)).toBeInTheDocument();
   });
 
   test('should render student form title', async () => {
@@ -60,20 +56,6 @@ describe('RegistrationForm', () => {
 
     const title = await screen.findByText(FORM_TITLES.studentForm);
     expect(title).toBeInTheDocument();
-  });
-
-  test.each(steps)('should render step title', async ({ title }) => {
-    renderForm();
-
-    const stepTitle = await screen.findByText(title);
-    expect(stepTitle).toBeInTheDocument();
-  });
-
-  test('should render current step content', async () => {
-    renderForm();
-
-    const content = await screen.findByText(`${steps[0]?.title}-content`);
-    expect(content).toBeInTheDocument();
   });
 
   test('hides step titles on small screens', async () => {
@@ -92,7 +74,7 @@ describe('RegistrationForm', () => {
   });
 
   test('scrolls to the first invalid field when submit fails validation', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const scrollToField = vi.fn();
 
     const stepsWithRequired = [

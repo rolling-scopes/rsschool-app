@@ -1,12 +1,18 @@
 /* eslint-disable testing-library/no-container, testing-library/no-node-access */
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { message } from 'antd';
+import { setupUser } from '@client/__tests__/setupUser';
 import { MentorRegistryDto, DisciplineDto } from '@client/api';
 import { Course } from '@client/services/models';
 import { ModalDataMode } from '@client/pages/admin/mentor-registry';
 import { MentorRegistryTableContainer, CombinedFilter } from './MentorRegistryTableContainer';
 import { MentorRegistryTable } from './MentorRegistryTable';
 import { MentorRegistryTabsMode } from '../constants';
+
+vi.mock('@client/shared/components/Icons', async importOriginal => ({
+  ...(await importOriginal<typeof import('@client/shared/components/Icons')>()),
+  PublicSvgIcon: () => <span />,
+}));
 
 // Render the real table through the container's render-prop so both collaborate
 // like in production. Only props/services are supplied by the test.
@@ -107,12 +113,6 @@ async function openRowDropdown() {
 describe('<MentorRegistryTableContainer /> + <MentorRegistryTable />', () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it('renders a populated table row with the mentor github id', () => {
-    renderContainer();
-    expect(screen.getByText('octocat')).toBeInTheDocument();
-    expect(screen.getByText('Octo Cat')).toBeInTheDocument();
-  });
-
   it('renders an empty-state table when there are no mentors', () => {
     renderContainer({ mentors: [] });
     // Fixed-column tables duplicate the empty placeholder, so allow multiple matches.
@@ -120,9 +120,12 @@ describe('<MentorRegistryTableContainer /> + <MentorRegistryTable />', () => {
     expect(screen.queryByText('octocat')).not.toBeInTheDocument();
   });
 
-  it('opens the Invite modal when the row "Invite" action is clicked', async () => {
-    const user = userEvent.setup();
-    const { handleModalDataChange } = renderContainer();
+  it('renders the mentor row with its copy link and opens Invite', async () => {
+    const user = setupUser();
+    const { container, handleModalDataChange } = renderContainer();
+    expect(screen.getByText('octocat')).toBeInTheDocument();
+    expect(screen.getByText('Octo Cat')).toBeInTheDocument();
+    expect(container.querySelector('.anticon-copy')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Invite' }));
 
@@ -132,40 +135,19 @@ describe('<MentorRegistryTableContainer /> + <MentorRegistryTable />', () => {
     );
   });
 
-  it('triggers the Re-send action from the row dropdown (New tab)', async () => {
+  it('triggers Re-send, Delete and Add comment from the New tab row dropdown', async () => {
     const { handleModalDataChange } = renderContainer();
 
-    const menu = await openRowDropdown();
-    fireEvent.click(within(menu).getByText('Re-send'));
-
-    expect(handleModalDataChange).toHaveBeenCalledWith(
-      ModalDataMode.Resend,
-      expect.objectContaining({ githubId: 'octocat' }),
-    );
-  });
-
-  it('triggers the Delete action from the dropdown', async () => {
-    const { handleModalDataChange } = renderContainer();
-
-    const menu = await openRowDropdown();
-    fireEvent.click(within(menu).getByText('Delete'));
-
-    expect(handleModalDataChange).toHaveBeenCalledWith(
-      ModalDataMode.Delete,
-      expect.objectContaining({ githubId: 'octocat' }),
-    );
-  });
-
-  it('triggers the "Add comment" action from the dropdown', async () => {
-    const { handleModalDataChange } = renderContainer();
-
-    const menu = await openRowDropdown();
-    fireEvent.click(within(menu).getByText('Add comment'));
-
-    expect(handleModalDataChange).toHaveBeenCalledWith(
-      ModalDataMode.Comment,
-      expect.objectContaining({ githubId: 'octocat' }),
-    );
+    for (const [label, mode] of [
+      ['Re-send', ModalDataMode.Resend],
+      ['Delete', ModalDataMode.Delete],
+      ['Add comment', ModalDataMode.Comment],
+    ] as const) {
+      handleModalDataChange.mockClear();
+      const menu = await openRowDropdown();
+      fireEvent.click(within(menu).getByText(label));
+      expect(handleModalDataChange).toHaveBeenCalledWith(mode, expect.objectContaining({ githubId: 'octocat' }));
+    }
   });
 
   it('shows "Edit comment" label when the mentor already has a comment', async () => {
@@ -218,7 +200,7 @@ describe('<MentorRegistryTableContainer /> + <MentorRegistryTable />', () => {
   it('clears all tag filters when "Clear all" is clicked', async () => {
     const setCombinedFilter = vi.fn();
     const setTagFilters = vi.fn();
-    const user = userEvent.setup();
+    const user = setupUser();
     renderContainer({
       tagFilters: ['Technologies: React'],
       setCombinedFilter,
@@ -232,6 +214,7 @@ describe('<MentorRegistryTableContainer /> + <MentorRegistryTable />', () => {
   });
 
   it('shows an error and leaves filters untouched for an unrecognized tag prefix', () => {
+    const error = vi.spyOn(message, 'error').mockImplementation(() => (() => {}) as never);
     const setCombinedFilter = vi.fn();
     const setTagFilters = vi.fn();
     renderContainer({
@@ -244,9 +227,10 @@ describe('<MentorRegistryTableContainer /> + <MentorRegistryTable />', () => {
     const closeIcon = tag.closest('.ant-tag')?.querySelector('.ant-tag-close-icon') as HTMLElement;
     fireEvent.click(closeIcon);
 
-    // Default branch hits message.error and does not call setCombinedFilter.
+    expect(error).toHaveBeenCalledWith('An error occurred. Please try again later.');
     expect(setCombinedFilter).not.toHaveBeenCalled();
     expect(setTagFilters).toHaveBeenCalled();
+    error.mockRestore();
   });
 
   it('renders extra "Additional" info icons for a mentor with a certificate and comment', () => {
@@ -301,16 +285,6 @@ describe('<MentorRegistryTableContainer /> + <MentorRegistryTable />', () => {
 
     // Course name appears in both Preferred and Pre-Selected columns.
     expect(screen.getAllByText('Course One').length).toBeGreaterThan(0);
-  });
-
-  it('renders a copy-link button for a not-yet-confirmed Pre-Selected course', () => {
-    // record.courses does NOT include the preselected id -> renderTagWithCopyButton branch.
-    const { container } = renderContainer({
-      mentors: [makeMentor({ preselectedCourses: [1], courses: [] })],
-    });
-
-    // CopyToClipboardButton renders a copy icon link in the Pre-Selected cell.
-    expect(container.querySelector('.anticon-copy')).toBeInTheDocument();
   });
 
   it('falls back to the raw course id when a preferred course is not found', () => {

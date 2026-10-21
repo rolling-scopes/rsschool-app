@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { setupUser } from '@client/__tests__/setupUser';
 import { CriteriaDto, CriteriaDtoTypeEnum } from '@client/api';
 import { EditableTable } from './EditableTableForCrossCheck';
 
@@ -56,36 +56,23 @@ function getRow(text: string) {
 }
 
 describe('<EditableTable /> (CrossCheck editable criteria)', () => {
-  it('renders a row per criteria with Type/Max/Text and Edit/Delete actions', () => {
+  it('renders rows, enters edit mode, disables other edits and saves changed text', async () => {
+    const user = setupUser();
     render(<Host />);
 
     expect(screen.getByText('First criteria')).toBeInTheDocument();
     expect(screen.getByText('A title row')).toBeInTheDocument();
     expect(screen.getAllByText('Edit')).toHaveLength(2);
     expect(screen.getAllByText('Delete')).toHaveLength(2);
-  });
-
-  it('enters edit mode for a row and shows Save/Cancel plus editable inputs', async () => {
-    const user = userEvent.setup();
-    render(<Host />);
 
     const row = getRow('First criteria');
     await user.click(within(row).getByText('Edit'));
 
-    // Save/Cancel replace Edit/Delete for the editing row.
     expect(within(row).getByText('Save')).toBeInTheDocument();
     expect(within(row).getByText('Cancel')).toBeInTheDocument();
-    // Editable Text becomes a textarea and Max becomes a spinbutton.
     expect(within(row).getByRole('textbox')).toBeInTheDocument();
     expect(within(row).getByRole('spinbutton')).toBeInTheDocument();
-  });
-
-  it('saves an edited Text value back into the data', async () => {
-    const user = userEvent.setup();
-    render(<Host />);
-
-    const row = getRow('First criteria');
-    await user.click(within(row).getByText('Edit'));
+    expect(within(getRow('A title row')).getByText('Edit')).toHaveClass('ant-typography-disabled');
 
     const textarea = within(row).getByRole('textbox');
     await user.clear(textarea);
@@ -99,7 +86,7 @@ describe('<EditableTable /> (CrossCheck editable criteria)', () => {
   });
 
   it('cancels an edit and restores the original value', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Host />);
 
     const row = getRow('First criteria');
@@ -115,7 +102,7 @@ describe('<EditableTable /> (CrossCheck editable criteria)', () => {
   });
 
   it('deletes a row through the Delete confirmation popconfirm', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Host />);
 
     expect(screen.getByTestId('count').textContent).toBe('2');
@@ -132,7 +119,7 @@ describe('<EditableTable /> (CrossCheck editable criteria)', () => {
   });
 
   it('changes a row type via the type selector and clears Max when Title is chosen', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<Host />);
 
     const row = getRow('First criteria');
@@ -153,7 +140,7 @@ describe('<EditableTable /> (CrossCheck editable criteria)', () => {
   });
 
   it('keeps the existing max when a row type changes to a non-Title type', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     // A subtask row keeps its max when re-typed to Penalty.
     render(<Host initial={[{ key: 'k1', index: 0, type: CriteriaDtoTypeEnum.Subtask, max: 7, text: 'Keep max' }]} />);
 
@@ -171,24 +158,12 @@ describe('<EditableTable /> (CrossCheck editable criteria)', () => {
     });
   });
 
-  it('disables Edit/Delete on other rows while one row is being edited', async () => {
-    const user = userEvent.setup();
-    render(<Host />);
-
-    await user.click(within(getRow('First criteria')).getByText('Edit'));
-
-    // The other row's Edit link is disabled (antd marks it with a disabled class).
-    const otherRow = getRow('A title row');
-    const otherEdit = within(otherRow).getByText('Edit');
-    expect(otherEdit).toHaveClass('ant-typography-disabled');
-  });
-
   it('reorders rows when a drag-end event fires (dnd handler wiring)', async () => {
     render(<Host />);
 
     expect(dragEndHandlers[0]).toBeTypeOf('function');
     // Simulate dropping row k1 onto k2's position.
-    dragEndHandlers[0]({ active: { id: 'k1' }, over: { id: 'k2' } });
+    act(() => dragEndHandlers[0]({ active: { id: 'k1' }, over: { id: 'k2' } }));
 
     await waitFor(() => {
       const dump = JSON.parse(screen.getByTestId('dump').textContent || '[]');

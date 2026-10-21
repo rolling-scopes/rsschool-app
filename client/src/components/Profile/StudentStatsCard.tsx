@@ -1,6 +1,7 @@
 import * as React from 'react';
 import isEqual from 'lodash/isEqual';
-import { Typography, List, Button, Progress } from 'antd';
+import { List } from '@client/shared/components/List';
+import { Typography, Button, Progress } from 'antd';
 import axios from 'axios';
 import CommonCard from './CommonCard';
 import StudentStatsModal from './StudentStatsModal';
@@ -177,7 +178,6 @@ class StudentStatsCard extends React.Component<Props, State> {
           icon={<BookOutlined />}
           content={
             <List
-              itemLayout="horizontal"
               dataSource={stats}
               renderItem={(
                 {

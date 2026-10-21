@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/react';
 import { useRouter } from 'next/router';
-// eslint-disable-next-line boundaries/element-types -- the page itself consumes SessionContext from this module; the test must provide it.
 import { SessionContext } from '@client/modules/Course/contexts';
 import type { Session } from '@client/components/withSession';
 import { StudentRegistry } from './Student';
@@ -49,12 +48,16 @@ function setData(overrides: Partial<typeof baseData> = {}) {
   mockedUseStudentData.mockReturnValue({ ...baseData, ...overrides });
 }
 
-function renderPage(session: Partial<Session> = { githubId: 'octocat', id: 1 }) {
-  return render(
+function Page({ session = { githubId: 'octocat', id: 1 } }: { session?: Partial<Session> }) {
+  return (
     <SessionContext.Provider value={session as Session}>
       <StudentRegistry />
-    </SessionContext.Provider>,
+    </SessionContext.Provider>
   );
+}
+
+function renderPage(session?: Partial<Session>) {
+  return render(<Page session={session} />);
 }
 
 beforeEach(() => {
@@ -64,70 +67,50 @@ beforeEach(() => {
 });
 
 describe('StudentRegistry', () => {
-  test('passes session data and course query param to useStudentData', () => {
+  test('passes inputs and renders every loading and registration branch', () => {
     vi.mocked(useRouter).mockReturnValue({ query: { course: 'js-2024' }, push: vi.fn() } as never);
     setData({ courses: [{ id: 1 } as never] });
 
-    renderPage({ githubId: 'octocat', id: 1 });
+    const { rerender } = renderPage({ githubId: 'octocat', id: 1 });
 
     expect(mockedUseStudentData).toHaveBeenCalledWith('octocat', 1, 'js-2024');
-  });
+    expect(screen.getByTestId('registration-form')).toHaveTextContent('type:student');
+    expect(screen.getByTestId('modal-context')).toBeInTheDocument();
 
-  test('renders nothing but the modal context while loading', () => {
     setData({ loading: true });
-
-    renderPage();
+    rerender(<Page />);
 
     expect(screen.getByTestId('modal-context')).toBeInTheDocument();
     expect(screen.queryByTestId('registration-form')).not.toBeInTheDocument();
     expect(screen.queryByText('There are no available courses.')).not.toBeInTheDocument();
     expect(screen.getByTestId('page-layout')).toHaveAttribute('data-loading', 'true');
-  });
 
-  test('renders no content once registered (redirecting)', () => {
     setData({ registered: true });
-
-    renderPage();
+    rerender(<Page />);
 
     expect(screen.queryByTestId('registration-form')).not.toBeInTheDocument();
     expect(screen.queryByText('There are no available courses.')).not.toBeInTheDocument();
-  });
 
-  test('shows the certificate alert when disciplines are missing and courses exist', () => {
     setData({ missingDisciplines: 'JavaScript', courses: [{ id: 1 } as never] });
-
-    renderPage();
+    rerender(<Page />);
 
     expect(
       screen.getByText('To register for this course, you need to already have JavaScript RS School certificate.'),
     ).toBeInTheDocument();
     expect(screen.queryByTestId('registration-form')).not.toBeInTheDocument();
-  });
 
-  test('shows the empty state when there are no courses', () => {
     setData({ courses: [] });
-
-    renderPage();
+    rerender(<Page />);
 
     expect(screen.getByText('There are no available courses.')).toBeInTheDocument();
     expect(screen.queryByTestId('registration-form')).not.toBeInTheDocument();
-  });
 
-  test('renders the student registration form when courses are available', () => {
     setData({ courses: [{ id: 1 } as never] });
-
-    renderPage();
+    rerender(<Page />);
 
     const form = screen.getByTestId('registration-form');
     expect(form).toBeInTheDocument();
     expect(form).toHaveTextContent('type:student');
-  });
-
-  test('always renders the modal context regardless of branch', () => {
-    setData({ courses: [{ id: 1 } as never] });
-
-    renderPage();
-
     expect(screen.getByTestId('modal-context')).toBeInTheDocument();
   });
 });

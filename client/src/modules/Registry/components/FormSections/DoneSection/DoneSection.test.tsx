@@ -1,25 +1,17 @@
 import { render, screen } from '@testing-library/react';
 import { DoneSection } from './DoneSection';
 
-const renderDoneSection = (courseName?: string) => {
-  render(<DoneSection courseName={courseName} />);
-};
-
 const courseName = 'test-course';
 
 describe('DoneSection', () => {
-  test('should render Continue link on student form', async () => {
-    renderDoneSection(courseName);
+  test('should render Continue only on the student form', async () => {
+    const { rerender } = render(<DoneSection courseName={courseName} />);
 
     const link = await screen.findByRole('link', { name: /continue/i });
     expect(link).toBeInTheDocument();
     expect(link).toHaveAttribute('href', '/');
-  });
+    rerender(<DoneSection />);
 
-  test('should not render Continue link on mentor form', async () => {
-    renderDoneSection();
-
-    const link = screen.queryByRole('link', { name: /continue/i });
-    expect(link).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /continue/i })).not.toBeInTheDocument();
   });
 });

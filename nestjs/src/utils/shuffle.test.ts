@@ -1,4 +1,10 @@
+import { randomBytes } from 'crypto';
 import { isShuffledArrays, shuffleRec } from './shuffle';
+
+vi.mock('crypto', async importOriginal => {
+  const actual = await importOriginal<typeof import('crypto')>();
+  return { ...actual, randomBytes: vi.fn(actual.randomBytes) };
+});
 
 describe('shuffle utils', () => {
   describe('isShuffledArrays', () => {
@@ -37,11 +43,23 @@ describe('shuffle utils', () => {
       },
     );
 
+    test('should retry when the first shuffle leaves the array unchanged', () => {
+      vi.mocked(randomBytes)
+        .mockImplementationOnce(() => Buffer.from([0, 1]))
+        .mockImplementationOnce(() => Buffer.from([0, 0]));
+
+      expect(shuffleRec([1, 2], 1)).toEqual([2, 1]);
+      expect(randomBytes).toHaveBeenCalledTimes(2);
+    });
+
     test('should respect maxAttempts', () => {
+      vi.mocked(randomBytes).mockImplementationOnce(() => Buffer.from([0, 1]));
       const input = [1, 2];
       const result = shuffleRec(input, 0);
       expect(result).toHaveLength(input.length);
       expect([...result].sort()).toEqual([...input].sort());
+      expect(result).toEqual(input);
+      expect(randomBytes).toHaveBeenCalledTimes(1);
     });
   });
 });

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { StageInterviewFeedbackVerdict } from '@common/models';
 import { Decision } from '@client/data/interviews/technical-screening';
 import { initializeFeatures } from '@client/services/features';
@@ -15,6 +15,11 @@ import {
   DecisionTag,
   InterviewPeriod,
 } from './interview';
+
+vi.mock('antd', () => ({
+  Tag: ({ children }: { children: React.ReactNode }) => <span>{children}</span>,
+  Typography: { Text: ({ children }: { children: React.ReactNode }) => <span>{children}</span> },
+}));
 
 describe('friendlyStageInterviewVerdict', () => {
   it.each`
@@ -129,53 +134,46 @@ describe('isRegistrationNotStarted', () => {
 });
 
 describe('DecisionTag', () => {
-  it('renders Completed (green) when no decision but status is Completed', () => {
-    render(<DecisionTag status={InterviewStatus.Completed} />);
-    expect(screen.getByText('Completed')).toBeInTheDocument();
-  });
+  it('renders every current and legacy decision label', () => {
+    const cases = [
+      { element: <DecisionTag status={InterviewStatus.Completed} />, label: 'Completed' },
+      { element: <DecisionTag status={InterviewStatus.NotCompleted} />, label: 'Uncompleted' },
+      { element: <DecisionTag decision={Decision.Yes} />, label: 'Completed' },
+      { element: <DecisionTag decision={Decision.No} />, label: 'Completed' },
+      { element: <DecisionTag decision={Decision.Draft} />, label: 'Unfilled form' },
+      { element: <DecisionTag decision={Decision.SeparateStudy} />, label: 'Separate study' },
+      { element: <DecisionTag decision={Decision.MissedIgnoresMentor} />, label: 'Ignored mentor' },
+      { element: <DecisionTag decision={Decision.MissedWithReason} />, label: 'Missed with a reason' },
+      { element: <DecisionTag decision={'noButGoodCandidate' as Decision} />, label: 'Completed' },
+      { element: <DecisionTag decision={'didNotDecideYet' as Decision} />, label: 'Unfilled form' },
+      { element: <DecisionTag decision={'mystery' as Decision} />, label: 'Uncompleted' },
+    ];
 
-  it('renders Uncompleted when no decision and not completed', () => {
-    render(<DecisionTag status={InterviewStatus.NotCompleted} />);
-    expect(screen.getByText('Uncompleted')).toBeInTheDocument();
-  });
+    render(
+      <>
+        {cases.map(({ element }, index) => (
+          <div key={index} data-testid={`decision-${index}`}>
+            {element}
+          </div>
+        ))}
+      </>,
+    );
 
-  it.each`
-    decision                        | label
-    ${Decision.Yes}                 | ${'Completed'}
-    ${Decision.No}                  | ${'Completed'}
-    ${Decision.Draft}               | ${'Unfilled form'}
-    ${Decision.SeparateStudy}       | ${'Separate study'}
-    ${Decision.MissedIgnoresMentor} | ${'Ignored mentor'}
-    ${Decision.MissedWithReason}    | ${'Missed with a reason'}
-  `('renders "$label" for $decision', ({ decision, label }) => {
-    render(<DecisionTag decision={decision} />);
-    expect(screen.getByText(label)).toBeInTheDocument();
-  });
-
-  it('renders Completed for the legacy noButGoodCandidate value', () => {
-    render(<DecisionTag decision={'noButGoodCandidate' as Decision} />);
-    expect(screen.getByText('Completed')).toBeInTheDocument();
-  });
-
-  it('renders Unfilled form for the legacy didNotDecideYet value', () => {
-    render(<DecisionTag decision={'didNotDecideYet' as Decision} />);
-    expect(screen.getByText('Unfilled form')).toBeInTheDocument();
-  });
-
-  it('renders Uncompleted for an unknown legacy decision value', () => {
-    render(<DecisionTag decision={'mystery' as Decision} />);
-    expect(screen.getByText('Uncompleted')).toBeInTheDocument();
+    cases.forEach(({ label }, index) => {
+      expect(within(screen.getByTestId(`decision-${index}`)).getByText(label)).toBeInTheDocument();
+    });
   });
 });
 
 describe('InterviewPeriod', () => {
-  it('renders the full date range by default', () => {
-    render(<InterviewPeriod startDate="2023-03-09T00:00:00Z" endDate="2023-03-20T00:00:00Z" />);
+  it('renders full and short date ranges', () => {
+    render(
+      <>
+        <InterviewPeriod startDate="2023-03-09T00:00:00Z" endDate="2023-03-20T00:00:00Z" />
+        <InterviewPeriod startDate="2023-03-09T00:00:00Z" endDate="2023-03-20T00:00:00Z" shortDate />
+      </>,
+    );
     expect(screen.getByText('2023-03-09 - 2023-03-20')).toBeInTheDocument();
-  });
-
-  it('renders the short date range when shortDate is set', () => {
-    render(<InterviewPeriod startDate="2023-03-09T00:00:00Z" endDate="2023-03-20T00:00:00Z" shortDate />);
     expect(screen.getByText('Mar 09 - Mar 20')).toBeInTheDocument();
   });
 });

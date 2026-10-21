@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 import { fireEvent, render, screen, within, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { TaskDto } from '@client/api';
 import { TasksTable } from './TasksTable';
 import { ColumnName } from '@client/modules/Tasks/types';
@@ -14,42 +14,44 @@ const renderTasksTable = (data: TaskDto[] = generateTasksData(1), handleEditItem
 describe('TasksTable', () => {
   const [mockData] = generateTasksData(1);
 
-  test.each`
-    label
-    ${ColumnName.Id}
-    ${ColumnName.Name}
-    ${ColumnName.Discipline}
-    ${ColumnName.Tags}
-    ${ColumnName.Skills}
-    ${ColumnName.Type}
-    ${ColumnName.UsedInCourses}
-    ${ColumnName.DescriptionURL}
-    ${ColumnName.PRRequired}
-    ${ColumnName.RepoName}
-    ${ColumnName.Actions}
-  `('should render column "$label"', ({ label }: { label: ColumnName }) => {
+  test('should render all columns', () => {
     renderTasksTable();
 
-    expect(screen.getByText(label)).toBeInTheDocument();
+    for (const label of [
+      ColumnName.Id,
+      ColumnName.Name,
+      ColumnName.Discipline,
+      ColumnName.Tags,
+      ColumnName.Skills,
+      ColumnName.Type,
+      ColumnName.UsedInCourses,
+      ColumnName.DescriptionURL,
+      ColumnName.PRRequired,
+      ColumnName.RepoName,
+      ColumnName.Actions,
+    ]) {
+      expect(screen.getByText(label)).toBeInTheDocument();
+    }
   });
 
-  test.each`
-    value
-    ${mockData?.id}
-    ${mockData?.name}
-    ${mockData?.discipline.name}
-    ${mockData?.tags[0]}
-    ${mockData?.tags[1]}
-    ${mockData?.skills[0]}
-    ${mockData?.skills[1]}
-    ${mockData?.type}
-    ${mockData?.githubRepoName}
-    ${mockData?.courses[0]?.name}
-  `('should render data field "$value"', ({ value }) => {
+  test('should render all data fields', () => {
     renderTasksTable();
 
-    const [dataField] = screen.getAllByText(value ?? '');
-    expect(dataField).toBeInTheDocument();
+    for (const value of [
+      mockData?.id,
+      mockData?.name,
+      mockData?.discipline.name,
+      mockData?.tags[0],
+      mockData?.tags[1],
+      mockData?.skills[0],
+      mockData?.skills[1],
+      mockData?.type,
+      mockData?.githubRepoName,
+      mockData?.courses[0]?.name,
+    ]) {
+      const [dataField] = screen.getAllByText(value ?? '');
+      expect(dataField).toBeInTheDocument();
+    }
   });
 
   test('should render description link fields', () => {
@@ -65,15 +67,6 @@ describe('TasksTable', () => {
     });
   });
 
-  test('should render "Edit" link fields', () => {
-    const data = generateTasksData();
-
-    renderTasksTable(data);
-
-    const links = screen.getAllByText(/edit/i);
-    expect(links).toHaveLength(data.length);
-  });
-
   test('should call handleEditItem on "Edit" click with proper record', () => {
     const handleEditItem = vi.fn();
     const data = generateTasksData();
@@ -81,6 +74,7 @@ describe('TasksTable', () => {
     renderTasksTable(data, handleEditItem);
 
     const links = screen.getAllByText('Edit');
+    expect(links).toHaveLength(data.length);
 
     data.forEach((task, i) => {
       const link = links[i];
@@ -105,25 +99,7 @@ describe('TasksTable', () => {
   });
 
   describe('filter & search data', () => {
-    test('should check filter in dropdown when tag is selected', async () => {
-      const tag = TASK_TYPES[0]?.name ?? '';
-      const data = generateTasksData();
-      renderTasksTable(data);
-
-      const columnHeader = screen.getByLabelText(/type/i);
-
-      const tagFilterBtn = within(columnHeader).getByRole('button', { name: /filter/i });
-      fireEvent.click(tagFilterBtn);
-
-      const filtersDropdown = await screen.findByRole('menu');
-      const menuItem = within(filtersDropdown).getByRole('menuitem', { name: new RegExp(tag, 'i') });
-      fireEvent.click(menuItem);
-
-      const checkbox = within(menuItem).getByRole('checkbox');
-      expect(checkbox).toBeChecked();
-    });
-
-    test('should reset filter on Reset click', async () => {
+    test('should select a filter and clear it on Reset click', async () => {
       const tag = TASK_TYPES[0]?.name ?? '';
       const data = generateTasksData();
       renderTasksTable(data);
@@ -240,38 +216,13 @@ describe('TasksTable', () => {
       expect(rows).toHaveLength(notAssignedCount);
     });
 
-    test('should render only data filtered by Name column search', async () => {
-      const user = userEvent.setup();
+    test('should filter by Name and restore all data when search is cleared', async () => {
+      const user = setupUser();
       const data = generateTasksData();
       const searchQuery = data[0]?.name ?? '';
       renderTasksTable(data);
 
-      // Check that all items rendered
-      const table = screen.getByRole('table');
-      const rows = within(table).getAllByText(/edit/i);
-      expect(rows).toHaveLength(data.length);
-
-      // Find and click search button for column
-      const searchButton = screen.getByRole('button', { name: /search/i });
-      await user.click(searchButton);
-
-      // Type search query inside search input
-      const searchInput = await screen.findByRole('textbox');
-      await user.type(searchInput, searchQuery);
-      fireEvent.keyDown(searchInput, { key: 'Enter', keyCode: 13 });
-
-      // Find the line with search query and no others
-      const item = await screen.findByText(searchQuery);
-      expect(item).toBeInTheDocument();
-      const secondTaskName = data[1]?.name ?? 'non-existent';
-      await waitFor(() => expect(screen.queryByText(secondTaskName)).not.toBeInTheDocument());
-    });
-
-    test('should render all data when search query is cleared', async () => {
-      const user = userEvent.setup();
-      const data = generateTasksData();
-      const searchQuery = data[0]?.name ?? '';
-      renderTasksTable(data);
+      expect(within(screen.getByRole('table')).getAllByText(/edit/i)).toHaveLength(data.length);
 
       // Find and click search button for column
       const searchButton = screen.getByRole('button', { name: /search/i });

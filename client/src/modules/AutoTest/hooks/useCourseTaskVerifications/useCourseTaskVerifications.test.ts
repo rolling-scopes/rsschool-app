@@ -78,7 +78,7 @@ describe('useCourseTaskVerifications', () => {
     expect(result.current.tasks?.[0]?.verifications).toEqual([{ id: 11, courseTaskId: 1, score: 90 }]);
   });
 
-  it('toggles isExerciseVisible via startTask and finishTask', async () => {
+  it('toggles exercise visibility and reloads verifications', async () => {
     getCourseTasksDetailed.mockResolvedValueOnce({ data: [] });
     const { result } = renderHook(() => useCourseTaskVerifications(42));
 
@@ -90,38 +90,18 @@ describe('useCourseTaskVerifications', () => {
 
     act(() => result.current.finishTask());
     expect(result.current.isExerciseVisible).toBe(false);
-    // finishTask reloads the verifications request
     await waitFor(() => expect(getTaskVerifications).toHaveBeenCalledTimes(2));
-  });
-
-  it('reloads the verifications when reload is called', async () => {
-    getCourseTasksDetailed.mockResolvedValueOnce({ data: [] });
-    const { result } = renderHook(() => useCourseTaskVerifications(42));
-
-    await waitFor(() => expect(getTaskVerifications).toHaveBeenCalledTimes(1));
 
     act(() => result.current.reload());
-    await waitFor(() => expect(getTaskVerifications).toHaveBeenCalledTimes(2));
+    await waitFor(() => expect(getTaskVerifications).toHaveBeenCalledTimes(3));
   });
 
-  it('marks a task as done, moving it to the Done status and persisting the id per course', async () => {
+  it('marks a task done and does not duplicate its persisted id', async () => {
     getCourseTasksDetailed.mockResolvedValueOnce({ data: [detailedTask({ id: 1, name: 'Available' })] });
     const { result } = renderHook(() => useCourseTaskVerifications(42));
 
     await waitFor(() => expect(result.current.tasks).toHaveLength(1));
     expect(result.current.tasks?.[0]?.status).toBe('Available');
-
-    act(() => result.current.markTaskAsDone(1));
-
-    await waitFor(() => expect(result.current.tasks?.[0]?.status).toBe('Done'));
-    expect(JSON.parse(localStorage.getItem('autotest-done-tasks-42') ?? '[]')).toContain(1);
-  });
-
-  it('does not duplicate an id that was already marked as done', async () => {
-    getCourseTasksDetailed.mockResolvedValueOnce({ data: [detailedTask({ id: 1 })] });
-    const { result } = renderHook(() => useCourseTaskVerifications(42));
-
-    await waitFor(() => expect(result.current.tasks).toHaveLength(1));
 
     act(() => result.current.markTaskAsDone(1));
     act(() => result.current.markTaskAsDone(1));

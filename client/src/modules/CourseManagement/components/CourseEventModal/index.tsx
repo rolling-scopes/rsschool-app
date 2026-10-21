@@ -93,7 +93,13 @@ export function CourseEventModal({ data, onCancel, courseId, onSubmit }: Props) 
       {data.event?.id ? (
         <Title level={4}>{data.event.name}</Title>
       ) : (
-        <Form.Item name="event" label="Event" rules={[{ required: true, message: 'Please select an event' }]}>
+        <Form.Item
+          name="event"
+          label="Event"
+          rules={[{ required: true, message: 'Please select an event' }]}
+          getValueProps={value => ({ value: value == null ? [] : [value] })}
+          getValueFromEvent={(values: string[]) => values[values.length - 1]}
+        >
           <Select
             mode="tags"
             maxTagCount={1}

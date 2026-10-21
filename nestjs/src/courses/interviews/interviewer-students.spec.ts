@@ -38,8 +38,8 @@ const createQb = (method: 'getOne' | 'getMany', result: unknown) => {
     getOne: vi.fn(),
     getMany: vi.fn(),
   };
-  Object.keys(qb).forEach(k => qb[k].mockReturnValue(qb));
-  qb[method].mockResolvedValue(result);
+  Object.keys(qb).forEach(k => qb[k]!.mockReturnValue(qb));
+  qb[method]!.mockResolvedValue(result);
   return qb;
 };
 
@@ -114,7 +114,9 @@ describe('InterviewsService.getInterviewStudentsByMentor', () => {
     };
     studentRepository.createQueryBuilder.mockReturnValue(createQb('getMany', [expelled]));
 
-    const [student] = await service.getInterviewStudentsByMentor(5, 7, 'mentor-x');
+    const students = await service.getInterviewStudentsByMentor(5, 7, 'mentor-x');
+    expect(students).not.toBeNull();
+    const student = students![0]!;
 
     expect(student.cityName).toBe('');
     expect(student.countryName).toBe('');

@@ -10,8 +10,8 @@ vi.mock('react-use', () => ({
 }));
 
 describe('PublicLink', () => {
-  test('should not render anything if url is not provided', () => {
-    render(<PublicLink url={null} />);
+  test('renders empty and populated states and copies the public URL', async () => {
+    const { rerender } = render(<PublicLink url={null} />);
 
     const title = screen.queryByText('Public Link');
     const link = screen.queryByRole('link');
@@ -20,25 +20,17 @@ describe('PublicLink', () => {
     expect(title).not.toBeInTheDocument();
     expect(link).not.toBeInTheDocument();
     expect(copyBtn).not.toBeInTheDocument();
-  });
 
-  test('should display title and link', () => {
-    render(<PublicLink url={mockUrl} />);
+    rerender(<PublicLink url={mockUrl} />);
 
-    const title = screen.getByText('Public Link');
-    const link = screen.getByRole('link', { name: mockUrl });
+    const renderedTitle = screen.getByText('Public Link');
+    const renderedLink = screen.getByRole('link', { name: mockUrl });
 
-    expect(title).toBeInTheDocument();
-    expect(link).toBeInTheDocument();
-    expect(link).toHaveAttribute('href', mockUrl);
-  });
+    expect(renderedTitle).toBeInTheDocument();
+    expect(renderedLink).toBeInTheDocument();
+    expect(renderedLink).toHaveAttribute('href', mockUrl);
 
-  test('should copy link', async () => {
-    render(<PublicLink url={mockUrl} />);
-
-    const copyBtn = screen.getByRole('button');
-
-    fireEvent.click(copyBtn);
+    fireEvent.click(screen.getByRole('button'));
 
     const notification = await screen.findByText('Copied to clipboard');
     expect(notification).toBeInTheDocument();

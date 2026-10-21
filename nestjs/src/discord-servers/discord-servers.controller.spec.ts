@@ -51,7 +51,7 @@ describe('DiscordServersController', () => {
         gratitudeUrl: 'https://discord.gg/gratitude',
         mentorsChatUrl: 'https://discord.gg/mentors',
       };
-      service.create.mockResolvedValue(mockDiscordServer);
+      service.create.mockResolvedValue({ ...mockDiscordServer, ...dto });
 
       const result = await controller.create(dto);
 
@@ -77,7 +77,7 @@ describe('DiscordServersController', () => {
       expect(service.getAll).toHaveBeenCalledTimes(1);
       expect(result).toHaveLength(1);
       expect(result[0]).toBeInstanceOf(DiscordServerDto);
-      expect(result[0].id).toBe(1);
+      expect(result[0]!.id).toBe(1);
     });
 
     it('returns an empty list when there are no servers', async () => {
@@ -129,7 +129,7 @@ describe('DiscordServersController', () => {
         gratitudeUrl: 'https://discord.gg/gratitude',
         mentorsChatUrl: 'https://discord.gg/mentors',
       };
-      service.update.mockResolvedValue(mockDiscordServer);
+      service.update.mockResolvedValue({ ...mockDiscordServer, ...dto });
 
       const result = await controller.update(1, dto);
 

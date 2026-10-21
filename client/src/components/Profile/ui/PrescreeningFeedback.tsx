@@ -62,7 +62,7 @@ const FeedbackItem = ({
 }) => {
   if (typeof value === 'string' && value) {
     return (
-      <Space direction="vertical" style={{ width }}>
+      <Space orientation="vertical" style={{ width }}>
         <Text strong>{label}: </Text>
         <Text>{value}</Text>
       </Space>
@@ -89,7 +89,7 @@ export function PrescreeningFeedback({ feedback }: { feedback: StageInterviewDet
   );
 
   return (
-    <Space direction="vertical" size={20}>
+    <Space orientation="vertical" size={20}>
       {displayItems.map(item => (
         <FeedbackItem key={item.id} label={item.label} value={item.value} />
       ))}
@@ -115,7 +115,7 @@ function SkillSection({
   if (!skills) return null;
 
   return (
-    <Space direction="vertical">
+    <Space orientation="vertical">
       <Title level={4}>{title}</Title>
       <SkillTable skills={skills.questions as InterviewQuestion[]} tooltips={tooltips} />
       <FeedbackItem label="Comment" value={skills?.comment} width={STYLES.skillCommentWidth} />

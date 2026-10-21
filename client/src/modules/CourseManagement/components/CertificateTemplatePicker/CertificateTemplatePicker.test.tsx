@@ -1,5 +1,5 @@
 /* eslint-disable testing-library/no-container, testing-library/no-node-access */
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import axios from 'axios';
 import { CertificateTemplatePicker } from './CertificateTemplatePicker';
 
@@ -32,7 +32,7 @@ async function renderPicker(props: Parameters<typeof CertificateTemplatePicker>[
 }
 
 describe('<CertificateTemplatePicker />', () => {
-  it('shows a spinner while templates are loading', async () => {
+  it('fetches templates and replaces the loading spinner with their radios', async () => {
     let resolve!: (v: unknown) => void;
     mockedGet.mockReturnValue(new Promise(r => (resolve = r)));
 
@@ -42,18 +42,7 @@ describe('<CertificateTemplatePicker />', () => {
 
     resolve({ data: templates });
     expect(await screen.findByText('Default')).toBeInTheDocument();
-  });
-
-  it('fetches templates from the certificate templates endpoint', async () => {
-    await renderPicker();
-
-    await waitFor(() => expect(mockedGet).toHaveBeenCalledWith('/api/v2/certificate/templates'));
-  });
-
-  it('renders one radio per fetched template', async () => {
-    await renderPicker();
-
-    expect(await screen.findByText('Default')).toBeInTheDocument();
+    expect(mockedGet).toHaveBeenCalledWith('/api/v2/certificate/templates');
     expect(screen.getByText('Modern')).toBeInTheDocument();
     expect(screen.getAllByRole('radio')).toHaveLength(2);
   });
@@ -96,6 +85,8 @@ describe('<CertificateTemplatePicker />', () => {
     // open the preview (state) and NOT change the radio selection — openPreview calls
     // preventDefault/stopPropagation to swallow the surrounding Radio's toggle.
     const previewButtons = await screen.findAllByRole('button', { name: /view full preview/i });
+    fireEvent.mouseDown(previewButtons[1]);
+    expect(onChange).not.toHaveBeenCalledWith('modern');
     fireEvent.click(previewButtons[1]);
 
     // Selection onChange must NOT fire to 'modern' from the preview click.
@@ -108,9 +99,10 @@ describe('<CertificateTemplatePicker />', () => {
 
   it('renders an empty radio group when the fetch fails', async () => {
     mockedGet.mockRejectedValue(new Error('boom'));
-    await renderPicker();
+    const { container } = await renderPicker();
 
-    await waitFor(() => expect(screen.queryByRole('radio')).not.toBeInTheDocument());
+    await waitFor(() => expect(container.querySelector('.ant-spin')).not.toBeInTheDocument());
+    expect(screen.queryByRole('radio')).not.toBeInTheDocument();
   });
 
   it('serves templates from the module cache on a subsequent mount (no refetch)', async () => {
@@ -123,7 +115,10 @@ describe('<CertificateTemplatePicker />', () => {
     unmount();
 
     // Second mount reads cachedTemplates: no spinner, no second network call.
-    render(<Picker />);
+    // eslint-disable-next-line testing-library/no-unnecessary-act -- Settle image effects on the cached render
+    await act(async () => {
+      render(<Picker />);
+    });
     expect(screen.getByText('Default')).toBeInTheDocument();
     expect(mockedGet).toHaveBeenCalledTimes(1);
   });
@@ -165,16 +160,6 @@ describe('<CertificateTemplatePicker />', () => {
     await waitFor(() => {
       expect(document.querySelector('.ant-image-preview-wrap.ant-image-preview-moving')).toBeNull();
     });
-  });
-
-  it('swallows mousedown on the fullscreen control so the radio is not toggled', async () => {
-    const onChange = vi.fn();
-    await renderPicker({ value: 'default', onChange });
-
-    const previewButtons = await screen.findAllByRole('button', { name: /view full preview/i });
-    fireEvent.mouseDown(previewButtons[1]);
-
-    expect(onChange).not.toHaveBeenCalledWith('modern');
   });
 
   it('auto-selects safely when no onChange handler is provided', async () => {

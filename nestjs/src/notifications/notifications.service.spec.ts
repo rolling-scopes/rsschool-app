@@ -7,6 +7,7 @@ import { HttpService } from '@nestjs/axios';
 import { Notification } from '@entities/notification';
 import { NotificationChannelSettings } from '@entities/notificationChannelSettings';
 import { ConfigService } from '../config';
+import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { NotificationsService } from './notifications.service';
 
 const mockNotification = {
@@ -146,7 +147,7 @@ describe('NotificationsService', () => {
       notificationsRepository.findOne.mockResolvedValue(null);
       notificationsRepository.save.mockResolvedValue(mockNotification);
 
-      const dto = {
+      const dto: UpdateNotificationDto = {
         id: 'taskGrade',
         name: 'Task grade',
         enabled: true,
@@ -222,7 +223,7 @@ describe('NotificationsService', () => {
       expect(result?.template.body).toContain('Hello John');
       expect(result?.template.body).toContain('<!DOCTYPE html>');
       // Subject is copied verbatim from the EmailTemplate and is NOT run through Handlebars
-      expect((result?.template as { subject: string }).subject).toBe('Subject {{name}}');
+      expect(result?.template).toEqual(expect.objectContaining({ subject: 'Subject {{name}}' }));
     });
 
     it('escapes HTML by default and preserves it when noEscape is set', () => {
@@ -288,7 +289,7 @@ describe('NotificationsService', () => {
       });
       expect(publishSpy).toHaveBeenCalledWith(
         expect.objectContaining({
-          notificationId: 'taskGrade',
+          notificationId: 'taskGrade' as const,
           channelId: ['email'],
           userId: 1,
           data: expect.objectContaining({

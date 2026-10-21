@@ -232,7 +232,7 @@ describe('OpportunitiesController', () => {
       expect(service.getApplicantResumes).toHaveBeenCalled();
       expect(result).toHaveLength(1);
       expect(result[0]).toBeInstanceOf(ApplicantResumeDto);
-      expect(result[0].githubId).toBe('john');
+      expect(result[0]!.githubId).toBe('john');
     });
 
     it('returns an empty array when there are no applicants', async () => {

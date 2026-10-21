@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { message } from 'antd';
 import { AxiosError } from 'axios';
 import { OpportunitiesApi, ResumeDto } from '@client/api';
@@ -103,7 +103,7 @@ describe('<EditPage />', () => {
   });
 
   it('creates consent, shows the public-until modal and refetches data', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<EditPage />);
 
     await user.click(await screen.findByRole('button', { name: 'create-consent' }));
@@ -116,7 +116,7 @@ describe('<EditPage />', () => {
   });
 
   it('deletes consent and refetches data', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<EditPage />);
 
     await user.click(await screen.findByRole('button', { name: 'remove-consent' }));
@@ -126,7 +126,7 @@ describe('<EditPage />', () => {
   });
 
   it('refetches the resume when the editor requests an update', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<EditPage />);
 
     await screen.findByTestId('edit-view-cv');

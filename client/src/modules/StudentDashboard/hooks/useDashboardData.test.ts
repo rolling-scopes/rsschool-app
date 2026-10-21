@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
   CoursesScheduleApi,
@@ -61,7 +61,8 @@ describe('useDashboardData', () => {
 
     const { result } = renderHook(() => useDashboardData(COURSE_ID, GITHUB_ID));
 
-    await waitFor(() => expect(result.current.data).toBeDefined());
+    await act(async () => undefined);
+    expect(result.current.data).toBeDefined();
 
     const data = result.current.data!;
     // maxCourseScore = round(100*1 + 40*0.5) = 120.
@@ -104,7 +105,8 @@ describe('useDashboardData', () => {
 
     const { result } = renderHook(() => useDashboardData(COURSE_ID, GITHUB_ID));
 
-    await waitFor(() => expect(result.current.data).toBeDefined());
+    await act(async () => undefined);
+    expect(result.current.data).toBeDefined();
 
     const data = result.current.data!;
     expect(data.maxCourseScore).toBe(0); // null maxScore -> 0 contribution.
@@ -127,7 +129,8 @@ describe('useDashboardData', () => {
 
     const { result } = renderHook(() => useDashboardData(COURSE_ID, GITHUB_ID));
 
-    await waitFor(() => expect(result.current.data).toBeDefined());
+    await act(async () => undefined);
+    expect(result.current.data).toBeDefined();
 
     expect(result.current.data!.tasksDetailCurrentCourse).toEqual([]);
     expect(result.current.data!.maxCourseScore).toBe(0);

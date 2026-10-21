@@ -82,127 +82,76 @@ describe('LocationSelect', () => {
     expect(document.querySelector('.ant-alert-error')).toBeInTheDocument();
   });
 
-  it('renders a searchable combobox once initialized', () => {
+  it('renders initialized values and the suggestion loading state', () => {
     const triggerPoll = setupPolling();
     (window as unknown as { google: unknown }).google = {};
-    renderLocationSelect();
+    const { rerender } = renderLocationSelect();
 
     triggerPoll();
 
     const combobox = screen.getByRole('combobox');
     expect(combobox).toBeInTheDocument();
-    // showSearch + filterOption=false means the combobox is the live search input.
     expect(combobox).toHaveValue('');
-  });
 
-  it('reflects the place value coming from the hook as the combobox text', () => {
-    const triggerPoll = setupPolling();
-    (window as unknown as { google: unknown }).google = {};
     mockPlaces({ value: 'Prague, Czechia' });
-    renderLocationSelect();
-
-    triggerPoll();
-
+    rerender(<LocationSelect location={null} onChange={vi.fn()} />);
     expect(screen.getByText('Prague, Czechia')).toBeInTheDocument();
-  });
 
-  it('shows a spinner inside the dropdown while suggestions are loading', () => {
-    const triggerPoll = setupPolling();
-    (window as unknown as { google: unknown }).google = {};
-    // loading=true drives the `notFoundContent={loading ? <Spin/> : null}` branch.
     mockPlaces({ value: 'Mi', suggestions: { data: [], loading: true } });
-    renderLocationSelect();
-    triggerPoll();
-
+    rerender(<LocationSelect location={null} onChange={vi.fn()} />);
     fireEvent.mouseDown(screen.getByRole('combobox'));
 
     expect(document.querySelector('.ant-select-dropdown .ant-spin')).toBeInTheDocument();
   });
 
-  it('forwards typed search text to setValue', async () => {
-    const triggerPoll = setupPolling();
-    (window as unknown as { google: unknown }).google = {};
-    renderLocationSelect();
-    triggerPoll();
-
-    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'Min' } });
-
-    await waitFor(() => expect(mockSetValue).toHaveBeenCalledWith('Min'));
-  });
-
-  it('renders suggestion options from the places data', () => {
+  it('searches and selects place suggestions', async () => {
     const triggerPoll = setupPolling();
     (window as unknown as { google: unknown }).google = {};
     mockPlaces({
       value: 'M',
       suggestions: { data: [{ description: 'Minsk, Belarus' }, { description: 'Munich, Germany' }], loading: false },
     } as Partial<ReturnType<typeof usePlacesAutocomplete>>);
-    renderLocationSelect();
-    triggerPoll();
-
-    fireEvent.mouseDown(screen.getByRole('combobox'));
-
-    // Scope to the listbox options (antd also renders a hidden measure mirror of the label).
-    expect(screen.getByRole('option', { name: 'Minsk, Belarus' })).toBeInTheDocument();
-    expect(screen.getByRole('option', { name: 'Munich, Germany' })).toBeInTheDocument();
-  });
-
-  it('parses a selected option into a Location and calls onChange', () => {
-    const triggerPoll = setupPolling();
-    (window as unknown as { google: unknown }).google = {};
-    mockPlaces({
-      value: 'M',
-      suggestions: { data: [{ description: 'Minsk, Belarus' }], loading: false },
-    } as Partial<ReturnType<typeof usePlacesAutocomplete>>);
     const { onChange } = renderLocationSelect();
     triggerPoll();
 
-    fireEvent.mouseDown(screen.getByRole('combobox'));
-    // antd wires its select handler on the `.ant-select-item-option` wrapper element, so we
-    // must click that node (the only rendered option here) rather than the inner content node.
+    const combobox = screen.getByRole('combobox');
+    fireEvent.change(combobox, { target: { value: 'Min' } });
+    await waitFor(() => expect(mockSetValue).toHaveBeenCalledWith('Min'));
+    fireEvent.mouseDown(combobox);
+    expect(screen.getByRole('option', { name: 'Minsk, Belarus' })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'Munich, Germany' })).toBeInTheDocument();
+
     const option = document.querySelector('.ant-select-item-option');
     expect(option).toHaveTextContent('Minsk, Belarus');
     fireEvent.click(option as Element);
-
-    // handleSelect: setValue(value, false) then onChange(toLocation(value))
     expect(mockSetValue).toHaveBeenCalledWith('Minsk, Belarus', false);
     expect(onChange).toHaveBeenCalledWith({ cityName: 'Minsk', countryName: 'Belarus' } satisfies Location);
   });
 
-  it('restores the location text on blur when the field was cleared', () => {
+  it('restores or retains the location value on blur', () => {
     const triggerPoll = setupPolling();
     (window as unknown as { google: unknown }).google = {};
-    // value is empty → handleBlur should reset it from the provided location prop.
     mockPlaces({ value: '' });
-    renderLocationSelect({ location: { cityName: 'Berlin', countryName: 'Germany' } });
+    const onChange = vi.fn();
+    const { rerender } = renderLocationSelect({
+      location: { cityName: 'Berlin', countryName: 'Germany' },
+      onChange,
+    });
     triggerPoll();
 
     fireEvent.blur(screen.getByRole('combobox'));
 
     expect(mockSetValue).toHaveBeenCalledWith('Berlin, Germany', false);
-  });
 
-  it('resets to an empty string on blur when no location prop is given', () => {
-    const triggerPoll = setupPolling();
-    (window as unknown as { google: unknown }).google = {};
-    mockPlaces({ value: '' });
-    renderLocationSelect({ location: null });
-    triggerPoll();
-
+    mockSetValue.mockClear();
+    rerender(<LocationSelect location={null} onChange={onChange} />);
     fireEvent.blur(screen.getByRole('combobox'));
-
     expect(mockSetValue).toHaveBeenCalledWith('', false);
-  });
 
-  it('does not reset on blur when the field already has a value', () => {
-    const triggerPoll = setupPolling();
-    (window as unknown as { google: unknown }).google = {};
     mockPlaces({ value: 'Paris, France' });
-    renderLocationSelect();
-    triggerPoll();
-
+    rerender(<LocationSelect location={null} onChange={onChange} />);
+    mockSetValue.mockClear();
     fireEvent.blur(screen.getByRole('combobox'));
-
     expect(mockSetValue).not.toHaveBeenCalled();
   });
 });

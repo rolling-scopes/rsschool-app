@@ -1,4 +1,4 @@
-const colors = ['colorBgContainer', 'red1', 'yellow1', 'green1'] as const;
+const colors = ['colorBgContainer', 'red3', 'yellow3', 'green3'] as const;
 
 export function getCriteriaStatusColor(score: number, maxScore?: number) {
   const [transparent, red, yellow, green] = colors;

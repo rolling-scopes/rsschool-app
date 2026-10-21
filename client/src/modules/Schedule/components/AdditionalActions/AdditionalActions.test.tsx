@@ -22,7 +22,7 @@ const PROPS_MOCK: AdditionalActionsProps = {
 };
 
 describe('AdditionalActions', () => {
-  it('should render menu items', async () => {
+  it('renders menu items and dispatches copy, calendar-link and export actions', async () => {
     render(<AdditionalActions {...PROPS_MOCK} />);
 
     const moreBtn = screen.getByRole('button', { name: /more/i });
@@ -30,28 +30,14 @@ describe('AdditionalActions', () => {
 
     const menuItems = await screen.findAllByRole('menuitem');
     expect(menuItems).toHaveLength(4);
-  });
-
-  it('should call onCopyFromCourse when "Copy from" action was clicked', async () => {
-    render(<AdditionalActions {...PROPS_MOCK} />);
-    const moreBtn = screen.getByRole('button', { name: /more/i });
-    fireEvent.click(moreBtn);
-
-    const copyBtn = await screen.findByRole('menuitem', { name: new RegExp(SettingsButtons.Copy, 'i') });
-    fireEvent.click(copyBtn);
+    fireEvent.click(await screen.findByRole('menuitem', { name: new RegExp(SettingsButtons.Copy, 'i') }));
 
     await waitFor(() => {
       expect(PROPS_MOCK.onCopyFromCourse).toHaveBeenCalled();
     });
-  });
 
-  it('should call onCalendarCopyLink when "Copy iCal Link" action was clicked', async () => {
-    render(<AdditionalActions {...PROPS_MOCK} />);
-    const moreBtn = screen.getByRole('button', { name: /more/i });
     fireEvent.click(moreBtn);
-
-    const calendarBtn = await screen.findByRole('menuitem', { name: new RegExp(SettingsButtons.CopyLink, 'i') });
-    fireEvent.click(calendarBtn);
+    fireEvent.click(await screen.findByRole('menuitem', { name: new RegExp(SettingsButtons.CopyLink, 'i') }));
 
     await waitFor(() => {
       expect(buildICalendarLink).toHaveBeenCalledWith(
@@ -60,15 +46,9 @@ describe('AdditionalActions', () => {
         PROPS_MOCK.timezone,
       );
     });
-  });
 
-  it('should call onExport when "Export" action was clicked', async () => {
-    render(<AdditionalActions {...PROPS_MOCK} />);
-    const moreBtn = screen.getByRole('button', { name: /more/i });
     fireEvent.click(moreBtn);
-
-    const exportBtn = await screen.findByRole('menuitem', { name: new RegExp(SettingsButtons.Export, 'i') });
-    fireEvent.click(exportBtn);
+    fireEvent.click(await screen.findByRole('menuitem', { name: new RegExp(SettingsButtons.Export, 'i') }));
 
     expect(buildExportLink).toHaveBeenCalledWith(PROPS_MOCK.courseId, PROPS_MOCK.timezone);
     expect(setExportLink).toHaveBeenCalled();

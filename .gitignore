@@ -6,6 +6,7 @@
 .sentryclirc
 .swc/
 .turbo
+.vitest/
 .vscode
 app/
 coverage

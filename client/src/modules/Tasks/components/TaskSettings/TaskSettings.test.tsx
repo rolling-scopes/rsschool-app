@@ -13,15 +13,15 @@ const renderTaskSettings = (dataCriteria: CriteriaDto[] = [], setDataCriteria = 
 };
 
 describe('TaskSettings', () => {
-  test.each`
-    header
-    ${TASK_SETTINGS_HEADERS.crossCheckCriteria}
-    ${TASK_SETTINGS_HEADERS.github}
-    ${TASK_SETTINGS_HEADERS.jsonAttributes}
-  `('should render task setting panel $header', ({ header }) => {
+  it('renders every task setting panel', () => {
     renderTaskSettings();
 
-    const panel = screen.getByText(header);
-    expect(panel).toBeInTheDocument();
+    for (const header of [
+      TASK_SETTINGS_HEADERS.crossCheckCriteria,
+      TASK_SETTINGS_HEADERS.github,
+      TASK_SETTINGS_HEADERS.jsonAttributes,
+    ]) {
+      expect(screen.getByText(header)).toBeInTheDocument();
+    }
   });
 });

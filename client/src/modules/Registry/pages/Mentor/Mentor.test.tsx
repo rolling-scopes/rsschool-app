@@ -46,37 +46,28 @@ beforeEach(() => {
 });
 
 describe('MentorRegistry', () => {
-  test('forwards the course query param to useMentorData', () => {
+  test('renders the registry from router and mentor data state', () => {
     vi.mocked(useRouter).mockReturnValue({ query: { course: 'react-2024' }, push: vi.fn() } as never);
 
-    render(<MentorRegistry />);
+    const { rerender } = render(<MentorRegistry />);
 
     expect(mockedUseMentorData).toHaveBeenCalledWith('react-2024');
-  });
 
-  test('renders the registration form with resume as initial values', () => {
     setData({ resume: { firstName: 'Ada' } });
-
-    render(<MentorRegistry />);
+    rerender(<MentorRegistry />);
 
     const form = screen.getByTestId('registration-form');
     expect(form).toBeInTheDocument();
     expect(form).toHaveTextContent('has-initial-values');
-  });
 
-  test('renders no form until the resume (initial values) is loaded', () => {
     setData({ resume: undefined });
-
-    render(<MentorRegistry />);
+    rerender(<MentorRegistry />);
 
     expect(screen.queryByTestId('registration-form')).not.toBeInTheDocument();
     expect(screen.getByTestId('page-layout')).toBeInTheDocument();
-  });
 
-  test('passes the loading flag down to the page layout', () => {
     setData({ loading: true, resume: undefined });
-
-    render(<MentorRegistry />);
+    rerender(<MentorRegistry />);
 
     expect(screen.getByTestId('page-layout')).toHaveAttribute('data-loading', 'true');
   });

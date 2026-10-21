@@ -1,6 +1,15 @@
-/* eslint-disable testing-library/no-container, testing-library/no-node-access */
+/* eslint-disable testing-library/no-node-access */
 import { render, screen } from '@testing-library/react';
 import { tabRenderer, LabelItem } from './renderers';
+
+vi.mock('antd', () => ({
+  Badge: ({ count, style }: { count: number; style: React.CSSProperties }) => (
+    <sup className="ant-badge-count" style={style}>
+      {count}
+    </sup>
+  ),
+  Space: ({ children }: React.PropsWithChildren) => <span>{children}</span>,
+}));
 
 // Indirection so the testing-library lint heuristic does not treat the
 // `tabRenderer` result as a `render()` return value.
@@ -9,38 +18,26 @@ function buildTab(item: LabelItem, activeTab?: string) {
 }
 
 describe('tabRenderer', () => {
-  it('returns the key unchanged', () => {
+  it('returns the key and renders each count and active state', () => {
     expect(buildTab({ key: 'mytab', label: 'My Tab', count: 0 }).key).toBe('mytab');
-  });
 
-  it('renders just the label when count is zero', () => {
-    render(<div>{buildTab({ key: 'a', label: 'Plain', count: 0 }).label}</div>);
+    render(
+      <div>
+        {buildTab({ key: 'a', label: 'Plain', count: 0 }).label}
+        {buildTab({ key: 'b', label: 'With Count', count: 7 }).label}
+        {buildTab({ key: 'c', label: 'Active', count: 3 }, 'c').label}
+        {buildTab({ key: 'd', label: 'Inactive', count: 3 }, 'other').label}
+      </div>,
+    );
 
     expect(screen.getByText('Plain')).toBeInTheDocument();
-    // no badge sup rendered
-    expect(document.querySelector('.ant-badge-count')).toBeNull();
-  });
-
-  it('renders a count badge alongside the label when count > 0', () => {
-    const { container } = render(<div>{buildTab({ key: 'a', label: 'With Count', count: 7 }).label}</div>);
-
     expect(screen.getByText('With Count')).toBeInTheDocument();
-    const badge = container.querySelector('.ant-badge-count');
-    expect(badge).not.toBeNull();
-    expect(badge?.textContent).toContain('7');
-  });
-
-  it('uses processing status when the tab is active', () => {
-    const { container } = render(<div>{buildTab({ key: 'a', label: 'Active', count: 3 }, 'a').label}</div>);
-
-    const badge = container.querySelector('.ant-badge-count') as HTMLElement;
-    expect(badge).toHaveStyle({ backgroundColor: '#e6f7ff' });
-  });
-
-  it('uses default status when the tab is not active', () => {
-    const { container } = render(<div>{buildTab({ key: 'a', label: 'Inactive', count: 3 }, 'b').label}</div>);
-
-    const badge = container.querySelector('.ant-badge-count') as HTMLElement;
-    expect(badge).toHaveStyle({ backgroundColor: '#f0f2f5' });
+    expect(screen.getByText('7')).toBeInTheDocument();
+    expect(screen.getByText('Active').querySelector('.ant-badge-count')).toHaveStyle({
+      backgroundColor: '#e6f7ff',
+    });
+    expect(screen.getByText('Inactive').querySelector('.ant-badge-count')).toHaveStyle({
+      backgroundColor: '#f0f2f5',
+    });
   });
 });

@@ -15,21 +15,23 @@ function renderInput(props: React.ComponentProps<typeof EditableCriteriaInput>) 
 }
 
 describe('<EditableCriteriaInput />', () => {
-  it('renders an InputNumber for the Max column when type is not Title', () => {
-    renderInput({
+  it('renders the Max input only when type is not Title', () => {
+    const { container, rerender } = renderInput({
       dataIndex: EditableTableColumnsDataIndex.Max,
       onSelectChange: vi.fn(),
       type: CriteriaDtoTypeEnum.Subtask,
     });
     expect(screen.getByRole('spinbutton')).toBeInTheDocument();
-  });
 
-  it('renders nothing for the Max column when type is Title', () => {
-    const { container } = renderInput({
-      dataIndex: EditableTableColumnsDataIndex.Max,
-      onSelectChange: vi.fn(),
-      type: CriteriaDtoTypeEnum.Title,
-    });
+    rerender(
+      <Form>
+        <EditableCriteriaInput
+          dataIndex={EditableTableColumnsDataIndex.Max}
+          onSelectChange={vi.fn()}
+          type={CriteriaDtoTypeEnum.Title}
+        />
+      </Form>,
+    );
     expect(screen.queryByRole('spinbutton')).not.toBeInTheDocument();
     expect(container.querySelector('input')).toBeNull();
   });
@@ -49,21 +51,23 @@ describe('<EditableCriteriaInput />', () => {
     expect(onSelectChange).toHaveBeenCalledWith('penalty', expect.anything());
   });
 
-  it('renders a TextArea for the Text column', () => {
-    renderInput({
+  it('renders the Text input and nothing for an unknown column', () => {
+    const { container, rerender } = renderInput({
       dataIndex: EditableTableColumnsDataIndex.Text,
       onSelectChange: vi.fn(),
       type: CriteriaDtoTypeEnum.Subtask,
     });
     expect(screen.getByRole('textbox')).toBeInTheDocument();
-  });
 
-  it('renders nothing for an unknown column (default branch)', () => {
-    const { container } = renderInput({
-      dataIndex: EditableTableColumnsDataIndex.Actions,
-      onSelectChange: vi.fn(),
-      type: CriteriaDtoTypeEnum.Subtask,
-    });
+    rerender(
+      <Form>
+        <EditableCriteriaInput
+          dataIndex={EditableTableColumnsDataIndex.Actions}
+          onSelectChange={vi.fn()}
+          type={CriteriaDtoTypeEnum.Subtask}
+        />
+      </Form>,
+    );
     expect(container.querySelector('input, textarea, .ant-select')).toBeNull();
   });
 });

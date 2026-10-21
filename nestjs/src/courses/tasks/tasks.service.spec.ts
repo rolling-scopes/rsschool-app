@@ -101,7 +101,7 @@ describe('TasksService', () => {
         task: expect.objectContaining({ id: 10 }),
       });
       expect(pending?.[0]).not.toHaveProperty('studentHasSolution');
-      expect(pending?.[0].course).not.toHaveProperty('students');
+      expect(pending?.[0]!.course).not.toHaveProperty('students');
     });
 
     it('excludes a student who already has a solution for the task', async () => {
@@ -163,7 +163,7 @@ describe('TasksService', () => {
 
       const pending = result.get(100);
       expect(pending).toHaveLength(1);
-      expect(pending?.[0].task.id).toBe(11);
+      expect(pending?.[0]!.task.id).toBe(11);
     });
 
     it('aggregates pending tasks for the same userId across multiple courses', async () => {
@@ -236,7 +236,7 @@ describe('TasksService', () => {
         task: expect.objectContaining({ id: 10 }),
         crossCheckEndDate: '2024-02-01',
       });
-      expect(result.get(100)?.[0].course).not.toHaveProperty('students');
+      expect(result.get(100)?.[0]!.course).not.toHaveProperty('students');
       expect(result.get(200)).toHaveLength(1);
     });
 

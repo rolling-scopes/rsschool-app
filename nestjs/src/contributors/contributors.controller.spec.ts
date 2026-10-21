@@ -70,7 +70,7 @@ describe('ContributorsController', () => {
       expect(service.getAll).toHaveBeenCalledTimes(1);
       expect(result).toHaveLength(1);
       expect(result[0]).toBeInstanceOf(ContributorDto);
-      expect(result[0].id).toBe(1);
+      expect(result[0]!.id).toBe(1);
     });
 
     it('returns an empty list when there are no contributors', async () => {

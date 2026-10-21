@@ -53,11 +53,12 @@ describe('useGoogleMapsPlaces', () => {
     expect(result.current.loading).toBe(false);
     expect(result.current.initialized).toBe(false);
     expect(result.current.error).toBe(null);
+    expect(usePlacesAutocompleteModule.default).toHaveBeenCalledWith(expect.objectContaining({ defaultValue: '' }));
+    expect(useInterval).toHaveBeenCalledWith(expect.any(Function), 100);
   });
 
   describe('location formatting', () => {
     it.each([
-      { location: null, expected: '' },
       { location: { cityName: 'Minsk', countryName: 'Belarus' } as Location, expected: 'Minsk, Belarus' },
       { location: { cityName: 'São Paulo', countryName: 'Brazil' } as Location, expected: 'São Paulo, Brazil' },
     ])('uses "$expected" as the autocomplete default value', ({ location, expected }) => {
@@ -140,11 +141,5 @@ describe('useGoogleMapsPlaces', () => {
 
       expect(mockSetValue).toHaveBeenCalledWith('New York');
     });
-  });
-
-  it('uses 100ms polling interval', () => {
-    renderUseGoogleMapsPlaces();
-
-    expect(useInterval).toHaveBeenCalledWith(expect.any(Function), 100);
   });
 });

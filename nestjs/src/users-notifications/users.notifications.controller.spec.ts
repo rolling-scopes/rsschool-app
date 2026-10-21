@@ -70,7 +70,9 @@ describe('UsersNotificationsController', () => {
     it('adds a synthetic always-enabled discord connection from the profile', async () => {
       userNotificationsService.getUserConnections.mockResolvedValue([]);
       authService.getLoginStateByUserId.mockResolvedValue(null);
-      usersService.getUserByUserId.mockResolvedValue({ discord: { id: 999 } } as Partial<User> as User);
+      usersService.getUserByUserId.mockResolvedValue({
+        discord: { id: '999', username: 'john-doe', discriminator: '0' },
+      } as Partial<User> as User);
 
       const result = await controller.getUserConnections(req(7));
 
@@ -86,7 +88,7 @@ describe('UsersNotificationsController', () => {
 
       const result = await controller.getUserConnections(req(7));
 
-      expect(result.connections.email.lastLinkSentAt).toBeUndefined();
+      expect(result.connections.email!.lastLinkSentAt).toBeUndefined();
     });
   });
 

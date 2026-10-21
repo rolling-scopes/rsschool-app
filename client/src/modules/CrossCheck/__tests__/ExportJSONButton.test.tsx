@@ -2,6 +2,9 @@ import { render, screen } from '@testing-library/react';
 import { CriteriaDto, CriteriaDtoTypeEnum } from '@client/api';
 import { ExportJSONButton } from '../ExportJSONButton';
 
+vi.mock('@ant-design/icons/FileOutlined', () => ({ default: () => null }));
+vi.mock('antd', () => ({ Button: ({ children }: React.PropsWithChildren) => <button>{children}</button> }));
+
 const dataCriteria = [
   {
     key: '0',
@@ -26,13 +29,11 @@ const dataCriteria = [
 ] as CriteriaDto[];
 
 describe('ExportJSONButton', () => {
-  test('contains following text', () => {
-    render(<ExportJSONButton dataCriteria={dataCriteria} />);
+  test('renders populated and empty criteria exports', () => {
+    const { rerender } = render(<ExportJSONButton dataCriteria={dataCriteria} />);
     expect(screen.getByText('Export JSON')).toBeInTheDocument();
-  });
 
-  test('should render correctly with empty dataCriteria', () => {
-    render(<ExportJSONButton dataCriteria={[]} />);
+    rerender(<ExportJSONButton dataCriteria={[]} />);
     const link = screen.getByRole('link');
     expect(link).toHaveAttribute('download', 'crossCheckCriteria.json');
   });

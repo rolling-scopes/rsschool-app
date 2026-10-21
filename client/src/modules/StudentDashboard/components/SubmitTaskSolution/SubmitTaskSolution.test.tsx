@@ -1,6 +1,6 @@
 import { render, screen, waitFor, within, fireEvent } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { setupUser } from '@client/__tests__/setupUser';
 import { CheckerEnum, CourseTaskDto } from '@client/api';
 import SubmitTaskSolution from './SubmitTaskSolution';
 
@@ -64,28 +64,17 @@ describe('<SubmitTaskSolution />', () => {
     expect(screen.getByRole('button', { name: /submit task/i })).toBeInTheDocument();
   });
 
-  it('opens the modal and loads mentor-checked course tasks when the trigger is clicked', async () => {
-    const user = userEvent.setup();
-    getCourseTasksWithStudentSolution.mockResolvedValue({ data: tasks });
-    render(<SubmitTaskSolution courseId={10} />);
-
-    await user.click(screen.getByRole('button', { name: /submit task/i }));
-
-    const dialog = await screen.findByRole('dialog', { name: /submit task for mentor review/i });
-    expect(dialog).toBeInTheDocument();
-    expect(getCourseTasksWithStudentSolution).toHaveBeenCalledWith(10);
-    // The solution link input is present.
-    expect(within(dialog).getByLabelText(/add a solution link/i)).toBeInTheDocument();
-  });
-
   it('submits the selected task and solution url, then shows the success result', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     getCourseTasksWithStudentSolution.mockResolvedValue({ data: tasks });
     createTaskSolution.mockResolvedValue({});
     render(<SubmitTaskSolution courseId={10} />);
 
     await user.click(screen.getByRole('button', { name: /submit task/i }));
     const dialog = await screen.findByRole('dialog', { name: /submit task for mentor review/i });
+    expect(dialog).toBeInTheDocument();
+    expect(getCourseTasksWithStudentSolution).toHaveBeenCalledWith(10);
+    expect(within(dialog).getByLabelText(/add a solution link/i)).toBeInTheDocument();
 
     // Select a task via the antd Select. antd opens its dropdown on mouseDown (matching the
     // ManualSubmitTab reference test). CourseTaskSelect renders the task name inside a <span>
@@ -108,7 +97,7 @@ describe('<SubmitTaskSolution />', () => {
   });
 
   it('shows an error alert when loading the tasks fails', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     getCourseTasksWithStudentSolution.mockRejectedValue({ message: 'Network down' });
     render(<SubmitTaskSolution courseId={10} />);
 

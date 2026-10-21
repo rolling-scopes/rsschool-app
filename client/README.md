@@ -97,6 +97,27 @@ modules/<Feature>/
 - Convert styled-jsx to CSS modules during touch-based changes.
 - Do not initiate large-scale rewrites without approval.
 
+## Unit Tests
+
+- Run all client tests: `npm test --workspace client`
+- Run tests with combined coverage: `npm run test:ci --workspace client`
+- Run DOM-free tests: `npm test --workspace client -- --project node`
+- Run component and browser API tests: `npm test --workspace client -- --project dom`
+
+The `nodeTests` list in `vitest.config.mts` selects audited DOM-free tests. Add a file only if its tests and runtime
+imports work without browser globals. All other tests use jsdom and `setupTests.ts`. Both projects retain file isolation
+and contribute to the same coverage report and thresholds.
+
+Retries are disabled so flaky tests fail on their first attempt. Fix the async wait or state cleanup before adding a
+test-specific retry. When checking one rendered state, group related assertions in one test to avoid repeated UI renders.
+Keep separate tests for different inputs and interactions.
+
+For a timing comparison, use the same worker count and coverage options before and after the change:
+
+```sh
+npm run test:ci --workspace client -- --maxWorkers=4
+```
+
 ## Enforcement (Planned)
 
 - ESLint boundary rules to prevent cross-module imports.

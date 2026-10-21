@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react';
 import { ResumeDtoEnglishLevelEnum, ResumeDto, ResumeDtoMilitaryServiceEnum } from '@client/api';
 import { useViewData } from './useViewData';
 
@@ -69,24 +69,24 @@ describe('useViewData', () => {
       uuid: mockResume.uuid,
     };
 
-    await waitFor(() => expect(result.current).toStrictEqual(expected));
+    await act(async () => undefined);
+    expect(result.current).toStrictEqual(expected);
   });
 
   test('should return empty data if not provided', async () => {
     const { result } = renderHook(() => useViewData({}));
 
-    await waitFor(() => {
-      expect(result.current).toStrictEqual({
-        contacts: null,
-        courses: [],
-        expires: null,
-        feedbacks: [],
-        gratitudes: [],
-        loading: true,
-        setExpires: expect.any(Function),
-        userData: null,
-        uuid: null,
-      });
+    await act(async () => undefined);
+    expect(result.current).toStrictEqual({
+      contacts: null,
+      courses: [],
+      expires: null,
+      feedbacks: [],
+      gratitudes: [],
+      loading: true,
+      setExpires: expect.any(Function),
+      userData: null,
+      uuid: null,
     });
   });
 });

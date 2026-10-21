@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import AboutCard from '../AboutCard';
 
 describe('AboutCard', () => {
@@ -18,7 +18,7 @@ describe('AboutCard', () => {
   });
 
   it('edits, saves the about text and reflects the new value on success', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn().mockResolvedValue(true);
     render(<AboutCard data="old bio" isEditingModeEnabled updateProfile={updateProfile} />);
 
@@ -26,7 +26,7 @@ describe('AboutCard', () => {
 
     const textarea = screen.getByRole('textbox');
     await user.clear(textarea);
-    await user.type(textarea, 'new bio');
+    await user.type(textarea, 'new bio', { skipClick: true });
     await user.click(screen.getByRole('button', { name: 'Save' }));
 
     await waitFor(() => expect(updateProfile).toHaveBeenCalledWith({ aboutMyself: 'new bio' }));
@@ -34,14 +34,14 @@ describe('AboutCard', () => {
   });
 
   it('keeps the previous displayed value when the update fails', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn().mockResolvedValue(false);
     render(<AboutCard data="old bio" isEditingModeEnabled updateProfile={updateProfile} />);
 
     await user.click(screen.getByRole('img', { name: 'edit' }));
     const textarea = screen.getByRole('textbox');
     await user.clear(textarea);
-    await user.type(textarea, 'failed bio');
+    await user.type(textarea, 'failed bio', { skipClick: true });
     await user.click(screen.getByRole('button', { name: 'Save' }));
 
     await waitFor(() => expect(updateProfile).toHaveBeenCalledWith({ aboutMyself: 'failed bio' }));
@@ -50,14 +50,14 @@ describe('AboutCard', () => {
   });
 
   it('restores the original value when the edit is cancelled', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn().mockResolvedValue(true);
     render(<AboutCard data="original" isEditingModeEnabled updateProfile={updateProfile} />);
 
     await user.click(screen.getByRole('img', { name: 'edit' }));
     const textarea = screen.getByRole('textbox');
     await user.clear(textarea);
-    await user.type(textarea, 'discarded');
+    await user.type(textarea, 'discarded', { skipClick: true });
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
 
     expect(updateProfile).not.toHaveBeenCalled();
@@ -69,7 +69,7 @@ describe('AboutCard', () => {
   });
 
   it('disables Save until the text changes', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<AboutCard data="unchanged" isEditingModeEnabled updateProfile={vi.fn()} />);
 
     await user.click(screen.getByRole('img', { name: 'edit' }));

@@ -4,87 +4,32 @@ import { CourseScheduleItemDto, CourseScheduleItemDtoTagEnum as TagsEnum } from 
 import { TAG_NAME_MAP } from '@client/modules/Schedule/constants';
 
 describe('FilteredTags', () => {
-  const onTagCloseMock = vi.fn();
-  const onClearAllButtonClick = vi.fn();
-
-  it('should not render when tags were not provided', () => {
-    render(<FilteredTags tagFilters={[]} onTagClose={onTagCloseMock} onClearAllButtonClick={onClearAllButtonClick} />);
-
-    expect(screen.queryByText(/Type /)).not.toBeInTheDocument();
-  });
-
-  it.each`
-    tag
-    ${TagsEnum.Coding}
-    ${TagsEnum.CrossCheckReview}
-    ${TagsEnum.CrossCheckSubmit}
-    ${TagsEnum.Interview}
-    ${TagsEnum.Lecture}
-    ${TagsEnum.SelfStudy}
-    ${TagsEnum.Test}
-  `('should render tag "$tag"', ({ tag }: { tag: CourseScheduleItemDto['tag'] }) => {
-    render(
-      <FilteredTags tagFilters={[tag]} onTagClose={onTagCloseMock} onClearAllButtonClick={onClearAllButtonClick} />,
+  it('renders all tags and handles close, clear, and empty states', () => {
+    const onTagClose = vi.fn();
+    const onClearAllButtonClick = vi.fn();
+    const tags = [
+      TagsEnum.Coding,
+      TagsEnum.CrossCheckReview,
+      TagsEnum.CrossCheckSubmit,
+      TagsEnum.Interview,
+      TagsEnum.Lecture,
+      TagsEnum.SelfStudy,
+      TagsEnum.Test,
+    ];
+    const { rerender } = render(
+      <FilteredTags tagFilters={tags} onTagClose={onTagClose} onClearAllButtonClick={onClearAllButtonClick} />,
     );
 
-    expect(screen.getByText(getTagLabel(tag))).toBeInTheDocument();
-  });
-
-  it('should render several tags', () => {
-    render(
-      <FilteredTags
-        tagFilters={[TagsEnum.Coding, TagsEnum.CrossCheckReview, TagsEnum.Interview]}
-        onTagClose={onTagCloseMock}
-        onClearAllButtonClick={onClearAllButtonClick}
-      />,
-    );
-
-    expect(screen.getByText(getTagLabel(TagsEnum.Coding))).toBeInTheDocument();
-    expect(screen.getByText(getTagLabel(TagsEnum.CrossCheckReview))).toBeInTheDocument();
-    expect(screen.getByText(getTagLabel(TagsEnum.Interview))).toBeInTheDocument();
-  });
-
-  it('should render "Clear all" button', () => {
-    render(
-      <FilteredTags
-        tagFilters={[TagsEnum.Coding, TagsEnum.CrossCheckReview, TagsEnum.Interview]}
-        onTagClose={onTagCloseMock}
-        onClearAllButtonClick={onClearAllButtonClick}
-      />,
-    );
-
-    expect(screen.getByText(/Clear all/)).toBeInTheDocument();
-  });
-
-  it('should remove selected tag when onTagClose was called', () => {
-    render(
-      <FilteredTags
-        tagFilters={[TagsEnum.Coding, TagsEnum.CrossCheckReview, TagsEnum.Interview]}
-        onTagClose={onTagCloseMock}
-        onClearAllButtonClick={onClearAllButtonClick}
-      />,
-    );
+    for (const tag of tags) expect(screen.getByText(getTagLabel(tag))).toBeInTheDocument();
     const interviewTag = screen.getByText(getTagLabel(TagsEnum.Interview));
-    const interviewCrossIcon = within(interviewTag).getByRole('img', { name: 'Close' });
+    fireEvent.click(within(interviewTag).getByRole('img', { name: 'Close' }));
+    expect(onTagClose).toHaveBeenCalledWith(TagsEnum.Interview);
 
-    fireEvent.click(interviewCrossIcon);
-
-    expect(onTagCloseMock).toHaveBeenCalledWith(TagsEnum.Interview);
-  });
-
-  it('should clear all tags when onClearAllButtonClick was called', () => {
-    render(
-      <FilteredTags
-        tagFilters={[TagsEnum.Coding, TagsEnum.CrossCheckReview, TagsEnum.Interview]}
-        onTagClose={onTagCloseMock}
-        onClearAllButtonClick={onClearAllButtonClick}
-      />,
-    );
-
-    const clearAllBtn = screen.getByText(/Clear all/);
-    fireEvent.click(clearAllBtn);
-
+    fireEvent.click(screen.getByText(/Clear all/));
     expect(onClearAllButtonClick).toHaveBeenCalled();
+
+    rerender(<FilteredTags tagFilters={[]} onTagClose={onTagClose} onClearAllButtonClick={onClearAllButtonClick} />);
+    expect(screen.queryByText(/Type /)).not.toBeInTheDocument();
   });
 });
 

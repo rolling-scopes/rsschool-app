@@ -49,14 +49,10 @@ const countriesStats: CountriesStatsDto = {
 };
 
 describe('<MentorsCountriesCard />', () => {
-  it('renders the card title', () => {
+  it('renders the title and forwards chart data', async () => {
     render(<MentorsCountriesCard countriesStats={countriesStats} activeCount={14} />);
 
     expect(screen.getByText('Mentors Countries')).toBeInTheDocument();
-  });
-
-  it('forwards countries, active count, mentors axis title and Purple color', async () => {
-    render(<MentorsCountriesCard countriesStats={countriesStats} activeCount={14} />);
 
     const chart = await screen.findByTestId('countries-chart');
     expect(chart).toHaveAttribute('data-length', '3');

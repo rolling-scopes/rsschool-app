@@ -22,72 +22,29 @@ const renderContactInfo = (values: Values = mockValues) =>
   );
 
 describe('ContactInfo', () => {
-  test.each(Object.values(mockValues).map(value => ({ value })))(
-    'should render form item with $value value',
-    async ({ value }) => {
-      renderContactInfo();
-
-      const item = await screen.findByDisplayValue(value);
-      expect(item).toBeInTheDocument();
-    },
-  );
-
-  test('should render Continue button', async () => {
+  test('should render initial values, labels, placeholders and navigation', () => {
     renderContactInfo();
 
-    const button = await screen.findByRole('button', { name: /continue/i });
-    expect(button).toBeInTheDocument();
-  });
-
-  test('should render Telegram bot link', async () => {
-    renderContactInfo();
-
-    const link = await screen.findByRole('link');
+    for (const value of Object.values(mockValues)) {
+      expect(screen.getByDisplayValue(value)).toBeInTheDocument();
+    }
+    for (const label of [LABELS.telegram, LABELS.skype, LABELS.whatsApp, LABELS.email, LABELS.phone, LABELS.notes]) {
+      expect(screen.getByLabelText(label)).toBeInTheDocument();
+    }
+    for (const placeholder of [
+      PLACEHOLDERS.telegram,
+      PLACEHOLDERS.skype,
+      PLACEHOLDERS.whatsApp,
+      PLACEHOLDERS.email,
+      PLACEHOLDERS.phone,
+      PLACEHOLDERS.notes,
+    ]) {
+      expect(screen.getByPlaceholderText(placeholder)).toBeInTheDocument();
+    }
+    expect(screen.getByRole('button', { name: /continue/i })).toBeInTheDocument();
+    const link = screen.getByRole('link');
     expect(link).toBeInTheDocument();
     expect(link).toHaveAttribute('href', RSSCHOOL_BOT_LINK);
-  });
-
-  test.each`
-    label
-    ${LABELS.telegram}
-    ${LABELS.skype}
-    ${LABELS.whatsApp}
-    ${LABELS.email}
-    ${LABELS.phone}
-    ${LABELS.notes}
-  `('should render field with $label label', async ({ label }) => {
-    renderContactInfo();
-
-    const fieldLabel = await screen.findByLabelText(label);
-    expect(fieldLabel).toBeInTheDocument();
-  });
-
-  test.each`
-    placeholder
-    ${PLACEHOLDERS.telegram}
-    ${PLACEHOLDERS.skype}
-    ${PLACEHOLDERS.whatsApp}
-    ${PLACEHOLDERS.email}
-    ${PLACEHOLDERS.phone}
-    ${PLACEHOLDERS.notes}
-  `('should render field with $placeholder placeholder', async ({ placeholder }) => {
-    renderContactInfo();
-
-    const fieldPlaceholder = await screen.findByPlaceholderText(placeholder);
-    expect(fieldPlaceholder).toBeInTheDocument();
-  });
-
-  test.each`
-    placeholder           | message
-    ${PLACEHOLDERS.email} | ${ERROR_MESSAGES.email}
-    ${PLACEHOLDERS.phone} | ${ERROR_MESSAGES.phone}
-  `('should not render $message error message on valid input', async ({ placeholder, message }) => {
-    renderContactInfo();
-
-    const input = await screen.findByPlaceholderText(placeholder);
-    const errorMessage = screen.queryByText(message);
-    expect(input).toBeInTheDocument();
-    expect(errorMessage).not.toBeInTheDocument();
   });
 
   test.each`
@@ -98,6 +55,8 @@ describe('ContactInfo', () => {
     renderContactInfo();
 
     const input = await screen.findByPlaceholderText(placeholder);
+    expect(input).toBeInTheDocument();
+    expect(screen.queryByText(message)).not.toBeInTheDocument();
 
     fireEvent.change(input, {
       target: {

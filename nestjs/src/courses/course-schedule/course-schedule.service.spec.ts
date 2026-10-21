@@ -451,7 +451,7 @@ describe('CourseScheduleService (branch coverage)', () => {
       deps.teamDistributionStudentRepository.find.mockResolvedValue([]);
 
       const [item] = await deps.service.getAll(333, 777);
-      return item.score;
+      return item!.score;
     }
 
     it('prefers the task result score', async () => {
@@ -559,7 +559,7 @@ describe('CourseScheduleService (branch coverage)', () => {
         descriptionUrl: 'desc-url',
         type: CourseScheduleDataSource.CourseTask,
       });
-      expect(schedule[0].organizer).toMatchObject({ id: 9, githubId: 'jane', name: 'Jane Roe' });
+      expect(schedule[0]!.organizer).toMatchObject({ id: 9, githubId: 'jane', name: 'Jane Roe' });
     });
 
     it('sets organizer to null when the task has no taskOwner', async () => {
@@ -571,7 +571,7 @@ describe('CourseScheduleService (branch coverage)', () => {
 
       const [item] = await deps.service.getAll(333);
 
-      expect(item.organizer).toBeNull();
+      expect(item!.organizer).toBeNull();
     });
 
     it('expands a cross-check task into submit and review items', async () => {
@@ -621,7 +621,7 @@ describe('CourseScheduleService (branch coverage)', () => {
         type: CourseScheduleDataSource.CourseEvent,
         descriptionUrl: 'ev-url',
       });
-      expect(schedule[0].organizer).toMatchObject({ githubId: 'org', name: 'Org Anizer' });
+      expect(schedule[0]!.organizer).toMatchObject({ githubId: 'org', name: 'Org Anizer' });
     });
 
     it('maps team distributions to schedule items', async () => {
@@ -748,7 +748,7 @@ describe('CourseScheduleService (branch coverage)', () => {
       deps.teamDistributionStudentRepository.find.mockResolvedValue(students);
 
       const [item] = await deps.service.getAll(333, studentId);
-      return item.status;
+      return item!.status;
     }
 
     it('is Future when current time is before the start date', async () => {
@@ -860,7 +860,7 @@ describe('CourseScheduleService (branch coverage)', () => {
       deps.courseEventRepository.find.mockResolvedValue([]);
       deps.courseTeamDistributionRepository.find.mockResolvedValue([]);
       const [item] = await deps.service.getAll(333);
-      return item.tag;
+      return item!.tag;
     }
 
     it('tags selfeducation tasks as Test', async () => {
@@ -909,12 +909,12 @@ describe('CourseScheduleService (branch coverage)', () => {
 
     it('tags self-study events as SelfStudy', async () => {
       const item = await eventResult({ event: { name: 'E', descriptionUrl: 'u', type: EventType.SelfStudy } });
-      expect(item.tag).toBe(CourseScheduleItemTag.SelfStudy);
+      expect(item!.tag).toBe(CourseScheduleItemTag.SelfStudy);
     });
 
     it('tags any other event type as Lecture', async () => {
       const item = await eventResult({ event: { name: 'E', descriptionUrl: 'u', type: EventType.Workshop } });
-      expect(item.tag).toBe(CourseScheduleItemTag.Lecture);
+      expect(item!.tag).toBe(CourseScheduleItemTag.Lecture);
     });
 
     it('marks an event Archived when its end time has passed', async () => {
@@ -922,30 +922,30 @@ describe('CourseScheduleService (branch coverage)', () => {
         dateTime: PAST,
         endTime: PAST.getTime().toString(),
       });
-      expect(item.status).toBe(CourseScheduleItemStatus.Archived);
+      expect(item!.status).toBe(CourseScheduleItemStatus.Archived);
     });
 
     it('marks an event Available when it started but has not ended', async () => {
       const item = await eventResult({ dateTime: PAST, endTime: FUTURE.getTime().toString() });
-      expect(item.status).toBe(CourseScheduleItemStatus.Available);
+      expect(item!.status).toBe(CourseScheduleItemStatus.Available);
     });
 
     it('marks an event Future when it has not started yet', async () => {
       const item = await eventResult({ dateTime: FUTURE, endTime: null });
-      expect(item.status).toBe(CourseScheduleItemStatus.Future);
+      expect(item!.status).toBe(CourseScheduleItemStatus.Future);
     });
 
     it('derives the end time from duration when endTime is absent', async () => {
       // started in the past, default duration keeps it in the past -> Archived
       const item = await eventResult({ dateTime: PAST, endTime: null, duration: 1 });
-      expect(item.status).toBe(CourseScheduleItemStatus.Archived);
+      expect(item!.status).toBe(CourseScheduleItemStatus.Archived);
     });
 
     it('uses the default 60 minute duration when duration is null', async () => {
       // started a moment ago without a duration -> still within the default window
       const recent = new Date(NOW.getTime() - 30 * 60 * 1000);
       const item = await eventResult({ dateTime: recent, endTime: null, duration: null });
-      expect(item.status).toBe(CourseScheduleItemStatus.Available);
+      expect(item!.status).toBe(CourseScheduleItemStatus.Available);
     });
   });
 
@@ -984,7 +984,7 @@ describe('CourseScheduleService (branch coverage)', () => {
       deps.taskCheckerRepository.find.mockResolvedValue([]);
       deps.teamDistributionStudentRepository.find.mockResolvedValue([]);
       const [item] = await deps.service.getAll(333, opts.studentId);
-      return item.status;
+      return item!.status;
     }
 
     it('is Archived when start or end date is missing', async () => {
@@ -1104,7 +1104,7 @@ describe('CourseScheduleService (branch coverage)', () => {
       await deps.service.copyFromTo(1, 2);
 
       const dayMs = 7 * 24 * 60 * 60 * 1000;
-      const savedTask = deps.courseTaskRepository.save.mock.calls[0][0];
+      const savedTask = deps.courseTaskRepository.save.mock.calls[0]![0];
       expect(savedTask).not.toHaveProperty('id');
       expect(savedTask.courseId).toBe(2);
       expect(savedTask.crossCheckEndDate).toEqual(new Date(new Date('2022-01-05T00:00:00.000Z').getTime() + dayMs));
@@ -1113,14 +1113,14 @@ describe('CourseScheduleService (branch coverage)', () => {
       expect(savedTask.mentorStartDate).toBeNull();
       expect(savedTask.studentRegistrationStartDate).toBeNull();
 
-      const savedEvent = deps.courseEventRepository.save.mock.calls[0][0];
+      const savedEvent = deps.courseEventRepository.save.mock.calls[0]![0];
       expect(savedEvent.courseId).toBe(2);
       expect(savedEvent.date).toBeNull();
       expect(savedEvent.time).toBeNull();
       expect(savedEvent.dateTime).toEqual(new Date(new Date('2022-01-04T00:00:00.000Z').getTime() + dayMs));
       expect(savedEvent.endTime).toBeNull();
 
-      const savedTd = deps.teamDistribution.save.mock.calls[0][0];
+      const savedTd = deps.teamDistribution.save.mock.calls[0]![0];
       expect(savedTd.courseId).toBe(2);
       expect(savedTd.startDate).toEqual(new Date(new Date('2022-01-06T00:00:00.000Z').getTime() + dayMs));
       expect(savedTd.endDate).toEqual(new Date(new Date('2022-01-07T00:00:00.000Z').getTime() + dayMs));
@@ -1148,7 +1148,7 @@ describe('CourseScheduleService (branch coverage)', () => {
 
       await deps.service.copyFromTo(1, 2);
 
-      const savedTd = deps.teamDistribution.save.mock.calls[0][0];
+      const savedTd = deps.teamDistribution.save.mock.calls[0]![0];
       expect(savedTd.startDate).toBeNull();
       expect(savedTd.endDate).toBeNull();
     });
@@ -1180,7 +1180,7 @@ describe('CourseScheduleService (branch coverage)', () => {
       await deps.service.copyFromTo(1, 2);
 
       const dayMs = 24 * 60 * 60 * 1000;
-      const savedTask = deps.courseTaskRepository.save.mock.calls[0][0];
+      const savedTask = deps.courseTaskRepository.save.mock.calls[0]![0];
       expect(savedTask.studentStartDate).toEqual(new Date(new Date('2022-01-02T00:00:00.000Z').getTime() + dayMs));
     });
 

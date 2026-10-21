@@ -38,13 +38,11 @@ const mockCourses = [
 ] as [ResumeCourseDto, ResumeCourseDto, ResumeCourseDto, ResumeCourseDto];
 
 describe('CoursesSection', () => {
-  test('should display nothing if courses are not provided', () => {
-    const { container } = render(<CoursesSection courses={[]} visibleCourses={[]} />);
+  test('renders empty, detailed, all-course, and filtered states', () => {
+    const { container, rerender } = render(<CoursesSection courses={[]} visibleCourses={[]} />);
     expect(container).toBeEmptyDOMElement();
-  });
 
-  test('should display all course data correctly', () => {
-    render(<CoursesSection courses={[courseWithFullData]} visibleCourses={[courseWithFullData.id]} />);
+    rerender(<CoursesSection courses={[courseWithFullData]} visibleCourses={[courseWithFullData.id]} />);
 
     const sectionHead = screen.getByRole('heading', { name: /rs school courses/i });
     const fullName = screen.getByText(`${courseWithFullData.fullName} (${courseWithFullData.locationName})`);
@@ -63,10 +61,8 @@ describe('CoursesSection', () => {
     expect(mentorLink).toHaveAttribute('href', `https://github.com/${courseWithFullData.mentor?.githubId}`);
     expect(position).toBeInTheDocument();
     expect(score).toBeInTheDocument();
-  });
 
-  test('should display all courses if visible courses are empty', () => {
-    render(<CoursesSection courses={mockCourses} visibleCourses={[]} />);
+    rerender(<CoursesSection courses={mockCourses} visibleCourses={[]} />);
 
     mockCourses.forEach(({ fullName, rank }) => {
       const courseName = screen.getByText(fullName, { exact: false });
@@ -75,12 +71,9 @@ describe('CoursesSection', () => {
       expect(courseName).toBeInTheDocument();
       expect(coursePosition).toBeInTheDocument();
     });
-  });
 
-  test('should display only visible courses if provided', () => {
     const mockVisibleCourses = [mockCourses[0].id, mockCourses[2].id];
-
-    render(<CoursesSection courses={mockCourses} visibleCourses={mockVisibleCourses} />);
+    rerender(<CoursesSection courses={mockCourses} visibleCourses={mockVisibleCourses} />);
 
     mockVisibleCourses.forEach(courseId => {
       const course = mockCourses.find(({ id }) => id === courseId);

@@ -73,12 +73,11 @@ describe('PublicFeedbackModal', () => {
     vi.useRealTimers();
   });
 
-  it('Should render correctly', () => {
-    const { container } = render(<PublicFeedbackModal data={data} isVisible={true} onHide={vi.fn()} />);
+  it('renders and handles populated, empty, and hidden states', () => {
+    const onHide = vi.fn();
+    const { container, rerender } = render(<PublicFeedbackModal data={data} isVisible={true} onHide={onHide} />);
     expect(container).toMatchSnapshot();
-  });
 
-  it('renders known badge name, empty string for unknown badge, and nothing when badgeId is falsy', () => {
     const mixed = [
       {
         feedbackDate: '2021-01-01T00:00:00.000Z',
@@ -103,34 +102,22 @@ describe('PublicFeedbackModal', () => {
       },
     ];
 
-    render(<PublicFeedbackModal data={mixed} isVisible={true} onHide={vi.fn()} />);
+    rerender(<PublicFeedbackModal data={mixed} isVisible={true} onHide={onHide} />);
 
-    // known badge resolves to its display name
     expect(screen.getByText('Congratulations')).toBeInTheDocument();
-    // all comments rendered regardless of badge state
     expect(screen.getByText('Known badge comment')).toBeInTheDocument();
     expect(screen.getByText('Unknown badge comment')).toBeInTheDocument();
     expect(screen.getByText('No badge comment')).toBeInTheDocument();
-    // author links present
     expect(screen.getByRole('link', { name: 'Known User' })).toHaveAttribute('href', '/profile?githubId=known');
-  });
-
-  it('renders an empty list when there are no feedback items', () => {
-    render(<PublicFeedbackModal data={[]} isVisible={true} onHide={vi.fn()} />);
-    expect(screen.getByText('Public Feedback')).toBeInTheDocument();
-  });
-
-  it('calls onHide when the modal is cancelled', () => {
-    const onHide = vi.fn();
-    render(<PublicFeedbackModal data={data} isVisible={true} onHide={onHide} />);
 
     const dialog = screen.getByRole('dialog');
     fireEvent.click(within(dialog).getByRole('button', { name: /close/i }));
     expect(onHide).toHaveBeenCalled();
-  });
 
-  it('does not render the dialog content when not visible', () => {
-    render(<PublicFeedbackModal data={data} isVisible={false} onHide={vi.fn()} />);
+    rerender(<PublicFeedbackModal data={[]} isVisible={true} onHide={onHide} />);
+    expect(screen.getByText('Public Feedback')).toBeInTheDocument();
+
+    rerender(<PublicFeedbackModal data={data} isVisible={false} onHide={onHide} />);
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 });

@@ -8,15 +8,15 @@ describe('getCriteriaStatusColor', () => {
   });
 
   it('returns red when the score is zero', () => {
-    expect(getCriteriaStatusColor(0, 10)).toBe('red1');
+    expect(getCriteriaStatusColor(0, 10)).toBe('red3');
   });
 
   it('returns yellow when the score is below the maximum', () => {
-    expect(getCriteriaStatusColor(4, 10)).toBe('yellow1');
+    expect(getCriteriaStatusColor(4, 10)).toBe('yellow3');
   });
 
   it('returns green when the score equals the maximum', () => {
-    expect(getCriteriaStatusColor(10, 10)).toBe('green1');
+    expect(getCriteriaStatusColor(10, 10)).toBe('green3');
   });
 
   it('returns the transparent background when the score exceeds the maximum', () => {

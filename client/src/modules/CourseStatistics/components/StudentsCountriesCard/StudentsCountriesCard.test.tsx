@@ -3,6 +3,15 @@ import { ReactNode, useEffect, useState } from 'react';
 import { CountriesStatsDto } from '@client/api';
 import { StudentsCountriesCard } from './StudentsCountriesCard';
 
+vi.mock('antd', () => ({
+  Card: ({ title, children }: { title: React.ReactNode; children: React.ReactNode }) => (
+    <section>
+      <h2>{title}</h2>
+      {children}
+    </section>
+  ),
+}));
+
 vi.mock('next/dynamic', () => ({
   default: (loader: () => Promise<{ default: (p: Record<string, unknown>) => ReactNode }>) => {
     const Lazy = (props: Record<string, unknown>) => {
@@ -37,25 +46,20 @@ const studentsCountriesStats: CountriesStatsDto = {
 };
 
 describe('<StudentsCountriesCard />', () => {
-  it('renders the card title', () => {
-    render(<StudentsCountriesCard studentsCountriesStats={studentsCountriesStats} activeStudentsCount={50} />);
+  it('renders its title and forwards populated and empty country data', async () => {
+    const { rerender } = render(
+      <StudentsCountriesCard studentsCountriesStats={studentsCountriesStats} activeStudentsCount={50} />,
+    );
 
     expect(screen.getByText('Students Countries')).toBeInTheDocument();
-  });
-
-  it('forwards countries, active count and the students axis title to the chart', async () => {
-    render(<StudentsCountriesCard studentsCountriesStats={studentsCountriesStats} activeStudentsCount={50} />);
 
     const chart = await screen.findByTestId('countries-chart');
     expect(chart).toHaveAttribute('data-length', '2');
     expect(chart).toHaveAttribute('data-active', '50');
     expect(chart).toHaveAttribute('data-axis-title', 'Number of Students');
-  });
 
-  it('forwards an empty countries list', async () => {
-    render(<StudentsCountriesCard studentsCountriesStats={{ countries: [] }} activeStudentsCount={0} />);
+    rerender(<StudentsCountriesCard studentsCountriesStats={{ countries: [] }} activeStudentsCount={0} />);
 
-    const chart = await screen.findByTestId('countries-chart');
-    expect(chart).toHaveAttribute('data-length', '0');
+    expect(await screen.findByTestId('countries-chart')).toHaveAttribute('data-length', '0');
   });
 });

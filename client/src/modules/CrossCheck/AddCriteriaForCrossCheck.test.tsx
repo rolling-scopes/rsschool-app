@@ -1,18 +1,17 @@
-/* eslint-disable testing-library/no-node-access */
 // Complements `__tests__/AddCriteriaForCrossCheck.test.tsx` (basic render + save)
 // by covering the per-type payload branches and the canSave validation paths.
-import { render, screen, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen } from '@testing-library/react';
+import { setupUser } from '@client/__tests__/setupUser';
 import { AddCriteriaForCrossCheck } from './AddCriteriaForCrossCheck';
 
-async function selectType(user: ReturnType<typeof userEvent.setup>, optionName: string) {
+async function selectType(user: ReturnType<typeof setupUser>, optionName: string) {
   await user.click(screen.getByRole('combobox'));
   await user.click(await screen.findByText(optionName, { selector: '.ant-select-item-option-content' }));
 }
 
 describe('<AddCriteriaForCrossCheck /> payload branches', () => {
   it('keeps the save button disabled until a title text is entered, then clears on save', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onCreate = vi.fn();
     render(<AddCriteriaForCrossCheck onCreate={onCreate} />);
 
@@ -32,7 +31,7 @@ describe('<AddCriteriaForCrossCheck /> payload branches', () => {
   });
 
   it('requires a non-zero max score for a subtask and emits it in the payload', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onCreate = vi.fn();
     render(<AddCriteriaForCrossCheck onCreate={onCreate} />);
 
@@ -43,11 +42,9 @@ describe('<AddCriteriaForCrossCheck /> payload branches', () => {
     await user.type(screen.getByPlaceholderText('Add description'), 'Subtask text');
     expect(addButton).toBeDisabled();
 
-    const maxScoreInput = within(screen.getByText('Add Max Score').closest('.ant-form-item') as HTMLElement).getByRole(
-      'spinbutton',
-    );
+    const maxScoreInput = screen.getByRole('spinbutton');
     await user.clear(maxScoreInput);
-    await user.type(maxScoreInput, '5');
+    await user.type(maxScoreInput, '5', { skipClick: true });
 
     expect(addButton).toBeEnabled();
     await user.click(addButton);
@@ -56,7 +53,7 @@ describe('<AddCriteriaForCrossCheck /> payload branches', () => {
   });
 
   it('stores a penalty max score as a negative value', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onCreate = vi.fn();
     render(<AddCriteriaForCrossCheck onCreate={onCreate} />);
 
@@ -64,11 +61,9 @@ describe('<AddCriteriaForCrossCheck /> payload branches', () => {
     expect(screen.getByText('Add Max Penalty')).toBeInTheDocument();
 
     await user.type(screen.getByPlaceholderText('Add description'), 'Penalty text');
-    const penaltyInput = within(screen.getByText('Add Max Penalty').closest('.ant-form-item') as HTMLElement).getByRole(
-      'spinbutton',
-    );
+    const penaltyInput = screen.getByRole('spinbutton');
     await user.clear(penaltyInput);
-    await user.type(penaltyInput, '4');
+    await user.type(penaltyInput, '4', { skipClick: true });
 
     await user.click(screen.getByRole('button', { name: 'Add New Criteria' }));
 

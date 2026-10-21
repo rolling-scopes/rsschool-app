@@ -1,5 +1,6 @@
+import { List } from '@client/shared/components/List';
 import { ChangeEvent, useMemo, useState } from 'react';
-import { Typography, List, Input, Button } from 'antd';
+import { Typography, Input, Button } from 'antd';
 import { ReadOutlined, FileAddOutlined, DeleteOutlined } from '@ant-design/icons';
 import isEqual from 'lodash/isEqual';
 import CommonCardWithSettingsModal from './CommonCardWithSettingsModal';
@@ -145,13 +146,11 @@ const EducationCard = ({ isEditingModeEnabled, data, updateProfile }: Props) => 
       cancelChanges={handleCancel}
       isSaveDisabled={isSaveDisabled}
       content={
-        displayUniversities.length ? (
-          <List itemLayout="horizontal" dataSource={displayUniversities} renderItem={renderContentItem} />
-        ) : null
+        displayUniversities.length ? <List dataSource={displayUniversities} renderItem={renderContentItem} /> : null
       }
       profileSettingsContent={
         <>
-          <List itemLayout="horizontal" dataSource={universities} renderItem={renderSettingsItem} />
+          <List dataSource={universities} renderItem={renderSettingsItem} />
           <Button type="dashed" style={{ width: '100%' }} onClick={addUniversity} disabled={isAddDisabled}>
             <FileAddOutlined /> Add new university
           </Button>

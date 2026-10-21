@@ -31,23 +31,12 @@ function makeProps(overrides: Partial<React.ComponentProps<typeof CrossCheckPair
 }
 
 describe('<CrossCheckPairsTable />', () => {
-  it('renders nothing until loaded is true', () => {
-    const { container } = render(<CrossCheckPairsTable {...makeProps({ loaded: false })} />);
+  it('renders its loading, populated, and empty states', () => {
+    const { container, rerender } = render(<CrossCheckPairsTable {...makeProps({ loaded: false })} />);
 
     expect(container).toBeEmptyDOMElement();
-  });
 
-  it('renders the table header columns once loaded', () => {
-    render(<CrossCheckPairsTable {...makeProps()} />);
-
-    expect(screen.getByRole('columnheader', { name: /Task/ })).toBeInTheDocument();
-    expect(screen.getByRole('columnheader', { name: /Checker/ })).toBeInTheDocument();
-    expect(screen.getByRole('columnheader', { name: /Student/ })).toBeInTheDocument();
-    expect(screen.getByRole('columnheader', { name: /Score/ })).toBeInTheDocument();
-  });
-
-  it('renders a row for each cross-check pair', () => {
-    render(
+    rerender(
       <CrossCheckPairsTable
         {...makeProps({
           crossCheckPairs: [
@@ -57,14 +46,15 @@ describe('<CrossCheckPairsTable />', () => {
         })}
       />,
     );
-
+    expect(screen.getByRole('columnheader', { name: /Task/ })).toBeInTheDocument();
+    expect(screen.getByRole('columnheader', { name: /Checker/ })).toBeInTheDocument();
+    expect(screen.getByRole('columnheader', { name: /Student/ })).toBeInTheDocument();
+    expect(screen.getByRole('columnheader', { name: /Score/ })).toBeInTheDocument();
     expect(screen.getByText('Task A')).toBeInTheDocument();
     expect(screen.getByText('Task B')).toBeInTheDocument();
     expect(screen.getAllByRole('link', { name: 'student-gh' })).toHaveLength(2);
-  });
 
-  it('renders an empty table when there are no pairs', () => {
-    render(<CrossCheckPairsTable {...makeProps({ crossCheckPairs: [] })} />);
+    rerender(<CrossCheckPairsTable {...makeProps({ crossCheckPairs: [] })} />);
 
     expect(screen.getByRole('columnheader', { name: /Task/ })).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'student-gh' })).not.toBeInTheDocument();

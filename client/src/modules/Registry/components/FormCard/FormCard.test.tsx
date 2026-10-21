@@ -4,32 +4,30 @@ import { FormCard } from './FormCard';
 
 const { Title } = Typography;
 
+vi.mock('antd', () => ({
+  Card: ({ title, children }: { title: React.ReactNode; children?: React.ReactNode }) => (
+    <section>
+      <header>{title}</header>
+      {children}
+    </section>
+  ),
+  Typography: { Title: ({ children }: { children: React.ReactNode }) => <h5>{children}</h5> },
+}));
+
 describe('FormCard', () => {
-  test('renders a plain string title in the card head', () => {
-    render(<FormCard title="Personal information" />);
-
-    expect(screen.getByText('Personal information')).toBeInTheDocument();
-  });
-
-  test('renders a Typography Title node as an accessible heading (real usage)', () => {
-    render(<FormCard title={<Title level={5}>Contact information</Title>} />);
-
-    expect(screen.getByRole('heading', { name: 'Contact information' })).toBeInTheDocument();
-  });
-
-  test('renders its children inside the card body', () => {
-    render(
-      <FormCard title="Course details">
+  test('renders string and heading titles with optional body content', () => {
+    const { rerender } = render(
+      <FormCard title="Personal information">
         <p>child content</p>
       </FormCard>,
     );
 
+    expect(screen.getByText('Personal information')).toBeInTheDocument();
     expect(screen.getByText('child content')).toBeInTheDocument();
-  });
 
-  test('renders without children', () => {
-    render(<FormCard title="Empty card" />);
+    rerender(<FormCard title={<Title level={5}>Contact information</Title>} />);
 
-    expect(screen.getByText('Empty card')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Contact information' })).toBeInTheDocument();
+    expect(screen.queryByText('child content')).not.toBeInTheDocument();
   });
 });

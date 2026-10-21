@@ -17,35 +17,29 @@ const baseCourse = {
 } as unknown as CourseDto;
 
 describe('CourseLabel', () => {
-  test('student form: shows discipline, name and the friendly start month', () => {
-    render(<CourseLabel course={baseCourse} isStudentForm />);
+  test('renders student and mentor labels with optional data', () => {
+    const { rerender } = render(<CourseLabel course={baseCourse} isStudentForm />);
 
     // ` JS Course (JavaScript, Mar 2024) `
     expect(screen.getByText(/JS Course \(JavaScript, Mar 2024\)/)).toBeInTheDocument();
-  });
 
-  test('student form: omits the discipline prefix when discipline has no name', () => {
     const course = { ...baseCourse, discipline: undefined } as CourseDto;
-    render(<CourseLabel course={course} isStudentForm />);
+    rerender(<CourseLabel course={course} isStudentForm />);
 
     expect(screen.getByText(/JS Course \(Mar 2024\)/)).toBeInTheDocument();
     expect(screen.queryByText(/JavaScript,/)).not.toBeInTheDocument();
-  });
 
-  test('mentor form: shows the personal mentoring date range', () => {
-    render(<CourseLabel course={baseCourse} />);
+    rerender(<CourseLabel course={baseCourse} />);
 
     // ` JS Course (Mentoring: Apr 2024-Jun 2024) `
     expect(screen.getByText(/JS Course \(Mentoring: Apr 2024-Jun 2024\)/)).toBeInTheDocument();
-  });
 
-  test('mentor form: tolerates missing mentoring dates', () => {
-    const course = {
+    const courseWithoutDates = {
       ...baseCourse,
       personalMentoringStartDate: undefined,
       personalMentoringEndDate: undefined,
     } as CourseDto;
-    render(<CourseLabel course={course} />);
+    rerender(<CourseLabel course={courseWithoutDates} />);
 
     expect(screen.getByText(/JS Course \(Mentoring: -\)/)).toBeInTheDocument();
   });

@@ -36,28 +36,20 @@ describe('PrescreeningFeedback', () => {
       },
     };
 
-    it('renders the non-rejected feedback items', () => {
+    it('renders feedback items and both skill sections', () => {
       render(<PrescreeningFeedback {...makeFeedback(steps)} />);
       expect(screen.getByText('none observed')).toBeInTheDocument();
       expect(screen.getByText('strong candidate')).toBeInTheDocument();
       expect(screen.getByText('IELTS 7.0')).toBeInTheDocument();
       expect(screen.getByText('B2 level')).toBeInTheDocument();
       expect(screen.getByText('learned at university')).toBeInTheDocument();
-      // intro comment (isRejectedInterviewItem) must NOT show
       expect(screen.queryByText('should not show')).not.toBeInTheDocument();
-    });
-
-    it('renders both Theory and Practice skill sections with topic and no-topic rows', () => {
-      render(<PrescreeningFeedback {...makeFeedback(steps)} />);
       expect(screen.getByText('Theory')).toBeInTheDocument();
       expect(screen.getByText('Practice')).toBeInTheDocument();
-      // SkillTable: row with topic
       expect(screen.getByText('Closures')).toBeInTheDocument();
       expect(screen.getByText('Explain closures')).toBeInTheDocument();
-      // SkillTable: row without topic still renders the title
       expect(screen.getByText('No topic question')).toBeInTheDocument();
       expect(screen.getByText('Reverse an array')).toBeInTheDocument();
-      // SkillSection comments
       expect(screen.getByText('good theory')).toBeInTheDocument();
       expect(screen.getByText('good practice')).toBeInTheDocument();
     });

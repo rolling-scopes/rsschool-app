@@ -36,26 +36,19 @@ describe('Actions', () => {
     mockOnDeleteRegister.mockClear();
   });
 
-  it('should render a register button when the distribution is available', () => {
+  it('renders the available registration actions and calls register', () => {
     renderActions(distribution);
 
     const registerButton = screen.getByRole('button', {
       name: /register/i,
     });
     expect(registerButton).toBeInTheDocument();
-  });
-
-  it('should call register when the register button is clicked', () => {
-    renderActions(distribution);
-
-    const registerButton = screen.getByRole('button', {
-      name: /register/i,
-    });
+    expect(screen.getByText('Register before 2022-01-03 00:00')).toHaveClass('ant-typography-danger');
     fireEvent.click(registerButton);
     expect(mockOnRegister).toHaveBeenCalledWith(1);
   });
 
-  it('should render a disabled download button when the distribution is completed', () => {
+  it('renders the completed registration actions before the end date', () => {
     const completedDistribution = {
       ...distribution,
       registrationStatus: TeamDistributionDtoRegistrationStatusEnum.Completed,
@@ -67,17 +60,8 @@ describe('Actions', () => {
     });
     expect(registeredButton).toBeInTheDocument();
     expect(registeredButton).toBeDisabled();
-  });
-
-  it('should render a cancel registration link when the distribution is completed and end date has not passed', () => {
-    const completedDistribution = {
-      ...distribution,
-      registrationStatus: TeamDistributionDtoRegistrationStatusEnum.Completed,
-    };
-    renderActions(completedDistribution);
-
-    const cancel = screen.getByText(/cancel/i);
-    expect(cancel).toBeInTheDocument();
+    expect(screen.getByText(/cancel/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /connect with teams/i })).toBeInTheDocument();
   });
 
   it('should render the "Registration is closed" text when the distribution is completed and end date has passed', () => {
@@ -121,23 +105,8 @@ describe('Actions', () => {
     expect(screen.getByText('Registration is closed')).toBeInTheDocument();
   });
 
-  it('should render a warning text when the end date is within 48 hours of the current time', () => {
-    renderActions(distribution);
-
-    expect(screen.getByText('Register before 2022-01-03 00:00')).toHaveClass('ant-typography-danger');
-  });
-
   it('should render connect with teams button for managers', () => {
     renderActions(distribution, true);
-
-    const registerButton = screen.getByRole('button', {
-      name: /connect with teams/i,
-    });
-    expect(registerButton).toBeInTheDocument();
-  });
-
-  it('should render connect with teams when registration status is completed', () => {
-    renderActions({ ...distribution, registrationStatus: TeamDistributionDtoRegistrationStatusEnum.Completed });
 
     const registerButton = screen.getByRole('button', {
       name: /connect with teams/i,

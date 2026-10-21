@@ -1,5 +1,5 @@
 import { screen, render } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { TeamDistributionDetailedDto } from '@client/api';
 import TeamsHeader from './TeamsHeader';
 
@@ -33,42 +33,31 @@ function renderHeader(overrides: Partial<Parameters<typeof TeamsHeader>[0]> = {}
 }
 
 describe('<TeamsHeader />', () => {
-  it('renders the base tabs (available teams + students without team)', () => {
-    renderHeader();
-    expect(screen.getByRole('tab', { name: /available teams/i })).toBeInTheDocument();
-    expect(screen.getByRole('tab', { name: /students without team/i })).toBeInTheDocument();
-    expect(screen.queryByRole('tab', { name: /my team/i })).not.toBeInTheDocument();
-  });
-
   it('adds the "My team" tab when the student has a team', () => {
     renderHeader({ distribution: makeDistribution({ myTeam: { id: 1 } as never }) });
     expect(screen.getByRole('tab', { name: /my team/i })).toBeInTheDocument();
   });
 
-  it('calls setActiveTab when a tab is clicked', async () => {
-    const user = userEvent.setup();
+  it('renders base tabs and calls setActiveTab when a tab is clicked', async () => {
+    const user = setupUser();
     const { setActiveTab } = renderHeader();
+    expect(screen.getByRole('tab', { name: /available teams/i })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /students without team/i })).toBeInTheDocument();
+    expect(screen.queryByRole('tab', { name: /my team/i })).not.toBeInTheDocument();
+
     await user.click(screen.getByRole('tab', { name: /students without team/i }));
     expect(setActiveTab).toHaveBeenCalledWith('students');
   });
 
-  it('shows the "without team" status tag for a student without a team', () => {
-    renderHeader({ isStudent: true, distribution: makeDistribution({ myTeam: undefined }) });
-    expect(screen.getByText('without team')).toBeInTheDocument();
-  });
-
-  it('shows the "distributed" status tag for a student with a team', () => {
-    renderHeader({ isStudent: true, distribution: makeDistribution({ myTeam: { id: 1 } as never }) });
-    expect(screen.getByText('distributed')).toBeInTheDocument();
-  });
-
   it('renders student action cards (create / join) and wires their handlers', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { handleCreateTeam, handleJoinTeam } = renderHeader({
       isStudent: true,
       isManager: false,
       distribution: makeDistribution({ myTeam: undefined }),
     });
+
+    expect(screen.getByText('without team')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: /create team/i }));
     expect(await screen.findByText(/are you sure you want to create team\?/i)).toBeInTheDocument();
@@ -82,7 +71,7 @@ describe('<TeamsHeader />', () => {
   });
 
   it('renders manager action cards (create team / distribute students)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const { handleCreateTeam, handleDistributeStudents } = renderHeader({ isManager: true });
 
     expect(screen.getByText('Team management')).toBeInTheDocument();
@@ -95,8 +84,9 @@ describe('<TeamsHeader />', () => {
     expect(handleCreateTeam).not.toHaveBeenCalled();
   });
 
-  it('does not render any action cards when the student already has a team', () => {
+  it('shows distributed status and no action cards when the student has a team', () => {
     renderHeader({ isStudent: true, distribution: makeDistribution({ myTeam: { id: 1 } as never }) });
+    expect(screen.getByText('distributed')).toBeInTheDocument();
     expect(screen.queryByText('Team management')).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /create team/i })).not.toBeInTheDocument();
   });

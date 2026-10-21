@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { DashboardDetails } from './DashboardDetails';
 import type { StudentDetails } from '@client/services/course';
 
@@ -78,15 +78,13 @@ describe('DashboardDetails', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it('renders the drawer title with name and github id', () => {
-    render(<DashboardDetails {...makeProps()} />);
-    expect(screen.getByText('Student One , student-1')).toBeInTheDocument();
-  });
-
   it('shows the Expel button for an active student and opens the comment modal', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onExpelStudent = vi.fn();
     render(<DashboardDetails {...makeProps({ onExpelStudent })} />);
+    expect(screen.getByText('Student One , student-1')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Issue Certificate/ })).not.toBeInTheDocument();
+    expect(screen.queryByTestId('pick-mentor')).not.toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: /Expel/ }));
     expect(screen.getByTestId('comment-modal')).toBeInTheDocument();
@@ -96,7 +94,7 @@ describe('DashboardDetails', () => {
   });
 
   it('shows the Restore button for an inactive student', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onRestoreStudent = vi.fn();
     const inactive = { ...activeDetails, isActive: false } as StudentDetails;
     render(<DashboardDetails {...makeProps({ details: inactive, onRestoreStudent })} />);
@@ -106,14 +104,8 @@ describe('DashboardDetails', () => {
     expect(onRestoreStudent).toHaveBeenCalled();
   });
 
-  it('hides manager controls when not a manager/supervisor', () => {
-    render(<DashboardDetails {...makeProps({ courseManagerOrSupervisor: false })} />);
-    expect(screen.queryByRole('button', { name: /Issue Certificate/ })).not.toBeInTheDocument();
-    expect(screen.queryByTestId('pick-mentor')).not.toBeInTheDocument();
-  });
-
   it('shows manager controls and updates the mentor', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onUpdateMentor = vi.fn();
     render(<DashboardDetails {...makeProps({ courseManagerOrSupervisor: true, onUpdateMentor })} />);
 
@@ -131,7 +123,7 @@ describe('DashboardDetails', () => {
   });
 
   it('issues a certificate and closes the modal on success', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onIssueCertificate = vi.fn().mockResolvedValue(true);
     render(<DashboardDetails {...makeProps({ courseManagerOrSupervisor: true, onIssueCertificate })} />);
 
@@ -144,7 +136,7 @@ describe('DashboardDetails', () => {
   });
 
   it('keeps the issue modal open when issuing fails', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onIssueCertificate = vi.fn().mockResolvedValue(false);
     render(<DashboardDetails {...makeProps({ courseManagerOrSupervisor: true, onIssueCertificate })} />);
 
@@ -156,7 +148,7 @@ describe('DashboardDetails', () => {
   });
 
   it('closes the comment modal on cancel without expelling', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onExpelStudent = vi.fn();
     render(<DashboardDetails {...makeProps({ onExpelStudent })} />);
 
@@ -169,7 +161,7 @@ describe('DashboardDetails', () => {
   });
 
   it('closes the issue-certificate modal on cancel', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onIssueCertificate = vi.fn();
     render(<DashboardDetails {...makeProps({ courseManagerOrSupervisor: true, onIssueCertificate })} />);
 
@@ -182,7 +174,7 @@ describe('DashboardDetails', () => {
   });
 
   it('shows the Remove Certificate confirm for admins and fires onRemoveCertificate', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const onRemoveCertificate = vi.fn();
     render(
       <DashboardDetails {...makeProps({ isAdmin: true, courseManagerOrSupervisor: true, onRemoveCertificate })} />,

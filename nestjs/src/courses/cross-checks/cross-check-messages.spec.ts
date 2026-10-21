@@ -24,6 +24,9 @@ describe('CourseCrossCheckService.saveMessage / updateMessage', () => {
       { update: mockUpdate, createQueryBuilder: vi.fn(() => qb) } as never,
       {} as never,
       {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
     );
   }
 

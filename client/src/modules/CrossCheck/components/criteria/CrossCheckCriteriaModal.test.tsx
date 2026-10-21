@@ -1,5 +1,4 @@
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { CrossCheckCriteriaDataDto, CrossCheckCriteriaDataDtoTypeEnum } from '@client/api';
 import { CrossCheckCriteriaModal } from './CrossCheckCriteriaModal';
 
@@ -14,37 +13,23 @@ const modalInfo: CrossCheckCriteriaDataDto[] = [
 ];
 
 describe('<CrossCheckCriteriaModal />', () => {
-  it('does not render its content when closed', () => {
-    render(<CrossCheckCriteriaModal modalInfo={modalInfo} isModalVisible={false} showModal={vi.fn()} />);
+  it('renders closed and open states and invokes both close actions', () => {
+    const showModal = vi.fn();
+    const { rerender } = render(
+      <CrossCheckCriteriaModal modalInfo={modalInfo} isModalVisible={false} showModal={showModal} />,
+    );
 
     expect(screen.queryByText('Subtask in modal')).not.toBeInTheDocument();
-  });
-
-  it('renders the feedback title and criteria when open', () => {
-    render(<CrossCheckCriteriaModal modalInfo={modalInfo} isModalVisible={true} showModal={vi.fn()} />);
+    rerender(<CrossCheckCriteriaModal modalInfo={modalInfo} isModalVisible={true} showModal={showModal} />);
 
     expect(screen.getByText('Feedback')).toBeInTheDocument();
     expect(screen.getByText('Subtask in modal')).toBeInTheDocument();
     expect(screen.getByText('Points for criteria: 5/10')).toBeInTheDocument();
-  });
 
-  it('closes via the OK button', async () => {
-    const user = userEvent.setup();
-    const showModal = vi.fn();
-    render(<CrossCheckCriteriaModal modalInfo={modalInfo} isModalVisible={true} showModal={showModal} />);
-
-    await user.click(screen.getByRole('button', { name: 'OK' }));
-
+    fireEvent.click(screen.getByRole('button', { name: 'OK' }));
     expect(showModal).toHaveBeenCalledWith(false);
-  });
-
-  it('closes via the Cancel button', async () => {
-    const user = userEvent.setup();
-    const showModal = vi.fn();
-    render(<CrossCheckCriteriaModal modalInfo={modalInfo} isModalVisible={true} showModal={showModal} />);
-
-    await user.click(screen.getByRole('button', { name: 'Cancel' }));
-
+    fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(showModal).toHaveBeenCalledWith(false);
+    expect(showModal).toHaveBeenCalledTimes(2);
   });
 });

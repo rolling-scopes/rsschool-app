@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react';
 import { OpportunitiesApi, ResumeDto } from '@client/api';
 import { useResumeData } from './useResumeData';
 import { AxiosResponse } from 'axios';
@@ -21,9 +21,8 @@ describe('useResumeData', () => {
       } as AxiosResponse<ResumeDto>),
     );
     const { result } = renderHook(() => useResumeData({ githubId: mockGithubId, actualTime: mockActualTime }));
-    await waitFor(() => {
-      expect(result.current[0]).toBe(mockResumeData);
-    });
+    await act(async () => undefined);
+    expect(result.current[0]).toBe(mockResumeData);
   });
 
   it('should return null in case of 404 error', async () => {
@@ -38,9 +37,8 @@ describe('useResumeData', () => {
       }),
     );
     const { result } = renderHook(() => useResumeData({ githubId: mockGithubId, actualTime: mockActualTime }));
-    await waitFor(() => {
-      expect(result.current[0]).toBe(null);
-    });
+    await act(async () => undefined);
+    expect(result.current[0]).toBe(null);
   });
 
   it('should throw error in case of unexpected error', async () => {
@@ -54,8 +52,7 @@ describe('useResumeData', () => {
     };
     vi.spyOn(OpportunitiesApi.prototype, 'getResume').mockImplementation(() => Promise.reject(mockErrorResponse));
     const { result } = renderHook(() => useResumeData({ githubId: mockGithubId, actualTime: mockActualTime }));
-    await waitFor(() => {
-      expect(result.current[1]).toBe(mockErrorResponse);
-    });
+    await act(async () => undefined);
+    expect(result.current[1]).toBe(mockErrorResponse);
   });
 });

@@ -32,20 +32,39 @@ vi.mock('@client/modules/Score/components/ScoreTable/ScoreTableTabs', () => ({
   ScoreTableTabs: () => <div data-testid="score-table-tabs" />,
 }));
 
+vi.mock('antd', () => ({
+  Row: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  Col: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  Button: ({ children, href }: React.ComponentProps<'a'>) => <a href={href}>{children}</a>,
+  Result: ({
+    title,
+    subTitle,
+    extra,
+  }: {
+    title: React.ReactNode;
+    subTitle: React.ReactNode;
+    extra: React.ReactNode;
+  }) => (
+    <main>
+      <h1>{title}</h1>
+      <p>{subTitle}</p>
+      {extra}
+    </main>
+  ),
+}));
+
 describe('<ScorePage />', () => {
-  it('renders the score table layout when a course is available', () => {
+  it('renders course and no-access branches', () => {
     ctx.course = { id: 42, name: 'RS Course' };
-    render(<ScorePage />);
+    const { rerender } = render(<ScorePage />);
 
     const layout = screen.getByTestId('course-page-layout');
     expect(layout).toHaveAttribute('data-title', 'Score');
     expect(layout).toHaveAttribute('data-loading', 'false');
     expect(screen.getByTestId('score-table-tabs')).toBeInTheDocument();
-  });
 
-  it('renders the no-access view when there is no active course', () => {
     ctx.course = null;
-    render(<ScorePage />);
+    rerender(<ScorePage />);
 
     expect(screen.getByText(/You Have No Access to Course Page/i)).toBeInTheDocument();
     expect(screen.queryByTestId('score-table-tabs')).not.toBeInTheDocument();

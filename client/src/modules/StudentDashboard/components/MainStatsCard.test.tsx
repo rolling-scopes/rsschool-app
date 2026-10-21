@@ -14,32 +14,23 @@ function makeProps(overrides: Partial<Parameters<typeof MainStatsCard>[0]> = {})
 }
 
 describe('<MainStatsCard />', () => {
-  it('renders the "Your stats" card with Position and Total Score labels', () => {
-    render(<MainStatsCard {...makeProps()} />);
+  it('renders labels and formats regular, empty-total, and new-student stats', () => {
+    const { rerender } = render(<MainStatsCard {...makeProps()} />);
 
     expect(screen.getByText('Your stats')).toBeInTheDocument();
     expect(screen.getByText('Position')).toBeInTheDocument();
     expect(screen.getByText('Total Score')).toBeInTheDocument();
-  });
-
-  it('renders position as "rank / total" and score as "score / max"', () => {
-    render(
-      <MainStatsCard {...makeProps({ position: 5, totalStudentsCount: 200, totalScore: 120, maxCourseScore: 1000 })} />,
-    );
-
     expect(screen.getByText('5 / 200')).toBeInTheDocument();
     expect(screen.getByText('120 / 1000')).toBeInTheDocument();
-  });
 
-  it('renders position without total when there are no students, and score without max when maxCourseScore is 0', () => {
-    render(<MainStatsCard {...makeProps({ position: 7, totalStudentsCount: 0, totalScore: 50, maxCourseScore: 0 })} />);
+    rerender(
+      <MainStatsCard {...makeProps({ position: 7, totalStudentsCount: 0, totalScore: 50, maxCourseScore: 0 })} />,
+    );
 
     expect(screen.getByText('7')).toBeInTheDocument();
     expect(screen.getByText('50')).toBeInTheDocument();
-  });
 
-  it('renders "New" when the position is at or above the default sentinel position', () => {
-    render(<MainStatsCard {...makeProps({ position: 999999 })} />);
+    rerender(<MainStatsCard {...makeProps({ position: 999999 })} />);
 
     expect(screen.getByText('New')).toBeInTheDocument();
   });

@@ -44,6 +44,9 @@ describe('CourseCrossCheckService.queryStudentByGithubId', () => {
       {} as never,
       {} as never,
       { createQueryBuilder: vi.fn(() => qb) } as never,
+      {} as never,
+      {} as never,
+      {} as never,
     );
     return { service, calls };
   }
@@ -78,6 +81,9 @@ describe('CourseCrossCheckService.getCourseTask', () => {
       {} as never,
       {} as never,
       { createQueryBuilder: vi.fn(() => qb) } as never,
+      {} as never,
+      {} as never,
+      {} as never,
       {} as never,
     );
 

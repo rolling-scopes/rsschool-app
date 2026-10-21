@@ -1,13 +1,13 @@
 import type { Mocked } from 'vitest';
 import { Test, TestingModule } from '@nestjs/testing';
-import { Alert } from '@entities/alert';
+import { Alert, AlertType } from '@entities/alert';
 import { AlertsController } from './alerts.controller';
 import { AlertsService } from './alerts.service';
 import { AlertDto, CreateAlertDto, UpdateAlertDto } from './dto';
 
 const mockAlert = {
   id: 1,
-  type: 'warning',
+  type: AlertType.WARN,
   text: 'Maintenance window tonight',
   enabled: true,
   courseId: 5,
@@ -45,7 +45,12 @@ describe('AlertsController', () => {
 
   describe('create', () => {
     it('delegates to the service and wraps the result in an AlertDto', async () => {
-      const dto: CreateAlertDto = { type: 'warning', text: 'Maintenance window tonight', enabled: true, courseId: 5 };
+      const dto: CreateAlertDto = {
+        type: AlertType.WARN,
+        text: 'Maintenance window tonight',
+        enabled: true,
+        courseId: 5,
+      };
       service.create.mockResolvedValue(mockAlert);
 
       const result = await controller.create(dto);
@@ -54,7 +59,7 @@ describe('AlertsController', () => {
       expect(result).toBeInstanceOf(AlertDto);
       expect(result).toEqual({
         id: 1,
-        type: 'warning',
+        type: AlertType.WARN,
         text: 'Maintenance window tonight',
         enabled: true,
         courseId: 5,
@@ -73,7 +78,7 @@ describe('AlertsController', () => {
       expect(service.findAll).toHaveBeenCalledWith({ enabled: true });
       expect(result).toHaveLength(1);
       expect(result[0]).toBeInstanceOf(AlertDto);
-      expect(result[0].id).toBe(1);
+      expect(result[0]!.id).toBe(1);
     });
 
     it('forwards a false enabled flag and returns an empty list', async () => {

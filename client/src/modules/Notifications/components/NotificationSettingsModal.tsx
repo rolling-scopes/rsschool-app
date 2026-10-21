@@ -44,7 +44,7 @@ export function NotificationSettingsModal(props: Props) {
       key: 'sd',
       label: 'Settings',
       forceRender: true,
-      destroyInactiveTabPane: false,
+      destroyOnHidden: false,
       children: (
         <>
           <Form.Item name="id" label="Id" rules={[{ required: true, message: 'Please enter id' }]}>
@@ -69,7 +69,7 @@ export function NotificationSettingsModal(props: Props) {
             <Form.Item name="parentId" label="Parent">
               <Select placeholder="Please select parent">
                 {parentNotifications.map(({ id, name }) => (
-                  <Select.Option key={id} value={id}>
+                  <Select.Option key={id ?? 'empty'} value={id}>
                     {name}
                   </Select.Option>
                 ))}

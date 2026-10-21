@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react';
 import { useStudentSummary } from './useStudentSummary';
 import { Session } from '@client/components/withSession';
 import { Course } from '@client/services/models';
@@ -21,6 +21,7 @@ describe('useStudentSummary', () => {
 
   it('returns empty defaults when there is no active course', async () => {
     const { result } = renderHook(() => useStudentSummary(session, null));
+    await act(async () => undefined);
     expect(result.current.studentSummary).toBeNull();
     expect(result.current.courseTasks).toEqual([]);
     expect(loadHomeData).not.toHaveBeenCalled();
@@ -29,7 +30,8 @@ describe('useStudentSummary', () => {
   it('does not load data when the user is not a student in the course', async () => {
     vi.mocked(isStudent).mockReturnValue(false);
     const { result } = renderHook(() => useStudentSummary(session, course));
-    await waitFor(() => expect(isStudent).toHaveBeenCalledWith(session, 10));
+    await act(async () => undefined);
+    expect(isStudent).toHaveBeenCalledWith(session, 10);
     expect(loadHomeData).not.toHaveBeenCalled();
     expect(result.current.studentSummary).toBeNull();
   });
@@ -44,7 +46,8 @@ describe('useStudentSummary', () => {
 
     const { result } = renderHook(() => useStudentSummary(session, course));
 
-    await waitFor(() => expect(result.current.studentSummary).toEqual(summary));
+    await act(async () => undefined);
+    expect(result.current.studentSummary).toEqual(summary);
     expect(loadHomeData).toHaveBeenCalledWith(10, 'octocat');
     expect(result.current.courseTasks).toEqual([{ id: 1 }, { id: 2 }]);
   });

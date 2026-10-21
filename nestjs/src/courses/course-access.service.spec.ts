@@ -27,7 +27,7 @@ const mockStudent = {
   id: 101,
   userId: 5005,
   isExpelled: false,
-  expellingReason: null,
+  expellingReason: '',
 } as Partial<Student> as Student;
 
 const mockCourse = {
@@ -190,7 +190,7 @@ describe('CourseAccessService', () => {
           },
           select: ['id'],
         });
-        const [[arg]] = courseRepository.find.mock.calls;
+        const [arg] = courseRepository.find.mock.calls[0]!;
         expect(arg.where).not.toHaveProperty('id');
       });
 
@@ -200,7 +200,7 @@ describe('CourseAccessService', () => {
 
         await service.getUserAllowedCourseIds(user, [], 2030);
 
-        const [[arg]] = courseRepository.find.mock.calls;
+        const [arg] = courseRepository.find.mock.calls[0]!;
         // Between encodes the boundaries as _value: [start, end]
         const range = arg.where.startDate as { _value: [Date, Date] };
         expect(range._value[0]).toEqual(new Date('2030'));

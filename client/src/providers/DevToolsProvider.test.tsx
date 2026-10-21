@@ -14,10 +14,10 @@ describe('DevToolsProvider', () => {
     process.env.RSSCHOOL_DEV_TOOLS = originalEnv;
   });
 
-  it('renders only the children (no container) when dev tools are disabled', () => {
+  it('renders the container only when dev tools are enabled', () => {
     process.env.RSSCHOOL_DEV_TOOLS = 'false';
 
-    render(
+    const { rerender } = render(
       <DevToolsProvider>
         <div>app-content</div>
       </DevToolsProvider>,
@@ -25,12 +25,9 @@ describe('DevToolsProvider', () => {
 
     expect(screen.getByText('app-content')).toBeInTheDocument();
     expect(screen.queryByTestId('dev-tools-container')).not.toBeInTheDocument();
-  });
 
-  it('renders only the children when the env var is unset', () => {
     delete process.env.RSSCHOOL_DEV_TOOLS;
-
-    render(
+    rerender(
       <DevToolsProvider>
         <div>app-content</div>
       </DevToolsProvider>,
@@ -38,12 +35,9 @@ describe('DevToolsProvider', () => {
 
     expect(screen.getByText('app-content')).toBeInTheDocument();
     expect(screen.queryByTestId('dev-tools-container')).not.toBeInTheDocument();
-  });
 
-  it('wraps the children with the DevToolsContainer when dev tools are enabled', () => {
     process.env.RSSCHOOL_DEV_TOOLS = 'true';
-
-    render(
+    rerender(
       <DevToolsProvider>
         <div>app-content</div>
       </DevToolsProvider>,

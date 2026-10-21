@@ -30,7 +30,7 @@ export function ModalForm<T extends object>(props: Props<T>) {
       open={true}
       title={props.title}
       okText={props.okText ?? 'Save'}
-      maskClosable={false}
+      mask={{ closable: false }}
       onOk={async e => {
         e.preventDefault();
         const values = await form.validateFields().catch(() => null);

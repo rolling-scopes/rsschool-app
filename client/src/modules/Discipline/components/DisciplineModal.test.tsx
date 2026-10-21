@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { message } from 'antd';
+import { setupUser } from '@client/__tests__/setupUser';
 import { DisciplineDto } from '@client/api';
 import { DisciplineModal } from './DisciplineModal';
 
@@ -13,8 +13,7 @@ const { createDiscipline, updateDiscipline } = vi.hoisted(() => ({
   updateDiscipline: vi.fn(),
 }));
 
-vi.mock('@client/api', async () => ({
-  ...(await vi.importActual('@client/api')),
+vi.mock('@client/api', () => ({
   DisciplinesApi: function DisciplinesApi() {
     return { createDiscipline, updateDiscipline };
   },
@@ -39,22 +38,6 @@ describe('<DisciplineModal />', () => {
     updateDiscipline.mockResolvedValue({});
   });
 
-  it('renders the "Add discipline" title and an empty input when creating', () => {
-    render(<DisciplineModal {...makeProps()} />);
-
-    expect(screen.getByText('Add discipline')).toBeInTheDocument();
-    const input = screen.getByLabelText('Discipline');
-    expect(input).toBeInTheDocument();
-    expect(input).toHaveValue('');
-  });
-
-  it('renders the "Edit discipline" title and prefills the input when editing', () => {
-    render(<DisciplineModal {...makeProps({ discipline: editDiscipline })} />);
-
-    expect(screen.getByText('Edit discipline')).toBeInTheDocument();
-    expect(screen.getByLabelText('Discipline')).toHaveValue('Frontend');
-  });
-
   it('does not render the modal body when not visible', () => {
     render(<DisciplineModal {...makeProps({ isModalVisible: false })} />);
 
@@ -63,7 +46,7 @@ describe('<DisciplineModal />', () => {
   });
 
   it('shows a validation error and does not submit when the name is empty', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<DisciplineModal {...props} />);
 
@@ -76,7 +59,7 @@ describe('<DisciplineModal />', () => {
   });
 
   it('creates a discipline with the typed name, reloads and closes', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<DisciplineModal {...props} />);
 
@@ -90,13 +73,15 @@ describe('<DisciplineModal />', () => {
   });
 
   it('updates the existing discipline by id when editing', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps({ discipline: editDiscipline });
     render(<DisciplineModal {...props} />);
 
+    expect(screen.getByText('Edit discipline')).toBeInTheDocument();
     const input = screen.getByLabelText('Discipline');
+    expect(input).toHaveValue('Frontend');
     await user.clear(input);
-    await user.type(input, 'Fullstack');
+    await user.type(input, 'Fullstack', { skipClick: true });
     await user.click(screen.getByRole('button', { name: /ok/i }));
 
     await waitFor(() => expect(updateDiscipline).toHaveBeenCalledWith(7, { name: 'Fullstack' }));
@@ -106,7 +91,7 @@ describe('<DisciplineModal />', () => {
   });
 
   it('shows an error message and stays open when the API rejects', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const errorSpy = vi.spyOn(message, 'error').mockImplementation(() => ({}) as never);
     createDiscipline.mockRejectedValueOnce(new Error('boom'));
     const props = makeProps();
@@ -121,9 +106,14 @@ describe('<DisciplineModal />', () => {
   });
 
   it('calls onCancel when the Cancel button is clicked', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const props = makeProps();
     render(<DisciplineModal {...props} />);
+
+    expect(screen.getByText('Add discipline')).toBeInTheDocument();
+    const input = screen.getByLabelText('Discipline');
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveValue('');
 
     await user.click(screen.getByRole('button', { name: /cancel/i }));
 

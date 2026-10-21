@@ -59,6 +59,17 @@ export const BadReviewTable = ({ data, type }: IBadReviewTableProps) => {
   }
 
   return (
-    <>{data.length ? <Table columns={columnsType} dataSource={data} scroll={{ x: true }} /> : <Text>No data</Text>}</>
+    <>
+      {data.length ? (
+        <Table
+          rowKey={record => JSON.stringify([record.taskName, record.checkerGithubId, record.studentGithubId])}
+          columns={columnsType}
+          dataSource={data}
+          scroll={{ x: true }}
+        />
+      ) : (
+        <Text>No data</Text>
+      )}
+    </>
   );
 };

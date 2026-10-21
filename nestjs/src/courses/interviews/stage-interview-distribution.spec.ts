@@ -292,7 +292,7 @@ describe('stage-interview-distribution', () => {
       const result = distributeStudentsRandomly([mentor(1, 1, true)], [student(1, 90), student(2, 10), student(3, 50)]);
 
       expect(result).toHaveLength(1);
-      expect(result[0].student).toEqual({ id: 2 });
+      expect(result[0]!.student).toEqual({ id: 2 });
     });
 
     it('a lowGrade mentor with a single student picks that student (minScore stays 0 on first item)', () => {

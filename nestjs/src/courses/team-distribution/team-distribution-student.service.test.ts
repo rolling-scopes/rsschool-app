@@ -421,7 +421,7 @@ describe('TeamDistributionStudentService', () => {
       await service.getStudentsByTeamDistributionId(5, { search: 'john', page: 2, limit: 25 });
 
       // search branch adds a Brackets condition via andWhere; paginate receives the supplied page/limit
-      const bracketsArg = qb.andWhere.mock.calls.map(c => c[0]).find(a => a && typeof a === 'object');
+      const bracketsArg = qb.andWhere!.mock.calls.map(c => c[0]).find(a => a && typeof a === 'object');
       expect(bracketsArg).toBeDefined();
       expect(paginateModule.paginate).toHaveBeenCalledWith(qb, { page: 2, limit: 25 });
 

@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { AdminSider } from './AdminSider';
 import { SessionContext } from '@client/modules/Course/contexts';
 import { Course } from '@client/services/models';
@@ -89,33 +89,13 @@ describe('AdminSider', () => {
     );
   };
 
-  it('renders correctly with default props', () => {
+  it('renders sections and navigates through their items', () => {
     renderComponent();
 
     expect(screen.getByTestId('admin-sider')).toBeInTheDocument();
 
     expect(screen.getByText('Admin Area')).toBeInTheDocument();
     expect(screen.getByText('Course Management')).toBeInTheDocument();
-  });
-
-  it('handles sidebar collapse toggle', () => {
-    const setIsSiderCollapsed = vi.fn();
-
-    vi.mocked(useLocalStorage).mockImplementation(key => {
-      if (key === 'isSiderCollapsed') return [false, setIsSiderCollapsed];
-      return [undefined, vi.fn()];
-    });
-
-    renderComponent();
-
-    const collapseButton = screen.getByRole('img', { name: 'menu-fold' });
-    fireEvent.click(collapseButton);
-
-    expect(setIsSiderCollapsed).toHaveBeenCalledWith(true);
-  });
-
-  it('navigates to correct route when menu item is clicked', () => {
-    renderComponent();
 
     const adminArea = screen.getByText('Admin Area');
     fireEvent.click(adminArea);
@@ -124,10 +104,6 @@ describe('AdminSider', () => {
     fireEvent.click(adminItem);
 
     expect(router.push).toHaveBeenCalledWith('/admin1');
-  });
-
-  it('handles course management menu items correctly', () => {
-    renderComponent();
 
     const courseManagement = screen.getByText('Course Management');
     fireEvent.click(courseManagement);
@@ -136,6 +112,30 @@ describe('AdminSider', () => {
     fireEvent.click(courseItem);
 
     expect(router.push).toHaveBeenCalledWith('/course1');
+  });
+
+  it('handles collapse and renders the collapsed state', () => {
+    const setIsSiderCollapsed = vi.fn();
+
+    vi.mocked(useLocalStorage).mockImplementation(key => {
+      if (key === 'isSiderCollapsed') return [false, setIsSiderCollapsed];
+      return [undefined, vi.fn()];
+    });
+
+    const { rerender } = renderComponent();
+    fireEvent.click(screen.getByRole('img', { name: 'menu-fold' }));
+    expect(setIsSiderCollapsed).toHaveBeenCalledWith(true);
+
+    vi.mocked(useLocalStorage).mockImplementation(key => {
+      if (key === 'isSiderCollapsed') return [true, vi.fn()];
+      return [[], vi.fn()];
+    });
+    rerender(
+      <SessionContext.Provider value={mockSession}>
+        <AdminSider courses={mockCourses} />
+      </SessionContext.Provider>,
+    );
+    expect(screen.getByRole('img', { name: 'menu-unfold' })).toBeInTheDocument();
   });
 
   it('renders correctly when no courses are provided', () => {
@@ -154,18 +154,6 @@ describe('AdminSider', () => {
 
     expect(screen.queryByText('Admin Area')).not.toBeInTheDocument();
     expect(screen.queryByText('Course Management')).not.toBeInTheDocument();
-  });
-
-  it('shows the unfold icon when the sider is collapsed', () => {
-    // isSiderCollapsed=true selects the MenuUnfoldOutlined icon.
-    vi.mocked(useLocalStorage).mockImplementation(key => {
-      if (key === 'isSiderCollapsed') return [true, vi.fn()];
-      return [[], vi.fn()];
-    });
-
-    renderComponent();
-
-    expect(screen.getByRole('img', { name: 'menu-unfold' })).toBeInTheDocument();
   });
 
   it('prefers the activeCourse prop when provided', () => {

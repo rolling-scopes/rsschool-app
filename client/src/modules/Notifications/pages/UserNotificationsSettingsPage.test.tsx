@@ -1,5 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { ReactNode } from 'react';
 import { UserNotificationsPage } from './UserNotificationsSettingsPage';
 
@@ -53,21 +53,6 @@ describe('UserNotificationsPage', () => {
     saveUserNotifications.mockResolvedValue(undefined);
   });
 
-  it('loads and renders the user notification settings table', async () => {
-    render(<UserNotificationsPage />);
-
-    expect(await screen.findByText('First Notification')).toBeInTheDocument();
-    expect(screen.getByText('Second Notification')).toBeInTheDocument();
-    expect(getUserNotificationSettings).toHaveBeenCalledTimes(1);
-  });
-
-  it('enables the Save button when at least one channel is connected', async () => {
-    render(<UserNotificationsPage />);
-    await screen.findByText('First Notification');
-
-    expect(screen.getByRole('button', { name: /save/i })).toBeEnabled();
-  });
-
   it('disables the Save button when no channels are connected', async () => {
     getUserNotificationSettings.mockResolvedValue({
       connections: {
@@ -84,9 +69,12 @@ describe('UserNotificationsPage', () => {
   });
 
   it('toggles a channel checkbox and persists all settings on Save', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<UserNotificationsPage />);
-    await screen.findByText('First Notification');
+    expect(await screen.findByText('First Notification')).toBeInTheDocument();
+    expect(screen.getByText('Second Notification')).toBeInTheDocument();
+    expect(getUserNotificationSettings).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole('button', { name: /save/i })).toBeEnabled();
 
     // Turn on telegram for the first notification (was false).
     const firstRow = screen.getAllByRole('row')[1]!;
@@ -107,7 +95,7 @@ describe('UserNotificationsPage', () => {
   });
 
   it('turns a channel off and saves the disabled state', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<UserNotificationsPage />);
     await screen.findByText('First Notification');
 
@@ -125,7 +113,7 @@ describe('UserNotificationsPage', () => {
   });
 
   it('shows an error message when saving fails', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     saveUserNotifications.mockRejectedValue(new Error('boom'));
     render(<UserNotificationsPage />);
     await screen.findByText('First Notification');

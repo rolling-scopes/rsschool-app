@@ -1,12 +1,12 @@
 /* eslint-disable testing-library/no-node-access */
 import { fireEvent, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import TimeZone from './TimeZone';
 
 // TimeZone is wrapped in a SettingsItem (antd Collapse) that starts collapsed,
 // so its Select is not rendered until the panel header is expanded.
 async function expandPanel() {
-  const user = userEvent.setup();
+  const user = setupUser();
   const header = document.querySelector('.ant-collapse-header') as HTMLElement;
   await user.click(header);
 }
@@ -28,8 +28,9 @@ async function pickFromDropdown(query: string, optionLabel: string) {
 }
 
 describe('<TimeZone />', () => {
-  it('renders the heading and description inside the collapsible panel', async () => {
-    render(<TimeZone timezone="Europe/Moscow" setTimezone={vi.fn()} />);
+  it('renders the panel and calls setTimezone with the selected value', async () => {
+    const setTimezone = vi.fn();
+    render(<TimeZone timezone="Europe/Moscow" setTimezone={setTimezone} />);
 
     await expandPanel();
 
@@ -37,37 +38,18 @@ describe('<TimeZone />', () => {
     expect(screen.getByText('Manage region-specific options for the schedule.')).toBeInTheDocument();
     // antd Select renders the chosen value in the selection item.
     expect(screen.getByText('Europe/Moscow')).toBeInTheDocument();
+
+    const option = await pickFromDropdown('utc', 'UTC');
+    fireEvent.click(option);
+    expect(setTimezone.mock.calls[0]?.[0]).toBe('UTC');
   });
 
-  it('relabels the legacy "Europe/Kiev" zone to "Europe/Kyiv" in the dropdown', async () => {
+  it('filters case-insensitively and relabels the legacy Kiev zone', async () => {
     render(<TimeZone timezone="UTC" setTimezone={vi.fn()} />);
 
     await expandPanel();
     // The legacy zone's value is "Europe/Kiev" (so filter by that) but its label is "Europe/Kyiv".
-    const option = await pickFromDropdown('kiev', 'Europe/Kyiv');
-
-    expect(option).toBeInTheDocument();
-  });
-
-  it('calls setTimezone with the chosen value when an option is selected', async () => {
-    const setTimezone = vi.fn();
-    render(<TimeZone timezone="UTC" setTimezone={setTimezone} />);
-
-    await expandPanel();
-    const option = await pickFromDropdown('moscow', 'Europe/Moscow');
-    fireEvent.click(option);
-
-    // antd Select calls onChange with (value, option); assert the chosen value.
-    expect(setTimezone).toHaveBeenCalled();
-    expect(setTimezone.mock.calls[0]?.[0]).toBe('Europe/Moscow');
-  });
-
-  it('filters options case-insensitively when typing in the search box', async () => {
-    render(<TimeZone timezone="UTC" setTimezone={vi.fn()} />);
-
-    await expandPanel();
-    // Uppercase query still matches the lowercased value via the custom filterOption.
-    const option = await pickFromDropdown('MOSCOW', 'Europe/Moscow');
+    const option = await pickFromDropdown('KIEV', 'Europe/Kyiv');
 
     expect(option).toBeInTheDocument();
   });

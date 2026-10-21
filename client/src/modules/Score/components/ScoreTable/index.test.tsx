@@ -1,6 +1,6 @@
 /* eslint-disable testing-library/no-node-access */
 import { render, screen, fireEvent, within, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useRouter } from 'next/router';
 import { ScoreTable, getTableWidth } from './index';
@@ -131,43 +131,24 @@ beforeEach(() => {
 });
 
 describe('<ScoreTable />', () => {
-  it('toggles the loading flag on and off around the initial data load', async () => {
+  it('loads tasks and scores, toggles loading, and renders student and summary rows', async () => {
     const onLoading = vi.fn();
     render(<ScoreTable {...makeProps({ onLoading })} />);
 
     await waitFor(() => expect(onLoading).toHaveBeenCalledWith(false));
     expect(onLoading).toHaveBeenCalledWith(true);
-  });
-
-  it('fetches course tasks, course score and the student score on mount', async () => {
-    render(<ScoreTable {...makeProps()} />);
-
-    await waitFor(() => expect(getCourseTasks).toHaveBeenCalledWith(42));
+    expect(getCourseTasks).toHaveBeenCalledWith(42);
     expect(getStudentCourseScore).toHaveBeenCalledWith('me');
-    // Initial course-score request carries activeOnly from the prop.
     expect(getCourseScore).toHaveBeenCalled();
     expect(getCourseScore.mock.calls[0][1]).toMatchObject({ activeOnly: true });
-  });
-
-  it('renders a row per student with the basic columns once loaded', async () => {
-    render(<ScoreTable {...makeProps()} />);
 
     await screen.findAllByText('alice');
     const table = mainTable();
     expect(within(table).getByText('alice')).toBeInTheDocument();
     expect(within(table).getByText('bob')).toBeInTheDocument();
-    // Task columns are derived from the fetched tasks.
     expect(within(table).getByText('Task Alpha')).toBeInTheDocument();
     expect(within(table).getByText('Task Beta')).toBeInTheDocument();
-    // Pagination total footer.
     expect(screen.getByText(/total 2 students/i)).toBeInTheDocument();
-  });
-
-  it('renders the summary row (your score) when more than one student is present', async () => {
-    render(<ScoreTable {...makeProps()} />);
-
-    // studentScore.totalScore (55) is rendered in the summary row.
-    await screen.findAllByText('alice');
     expect(screen.getAllByText('55').length).toBeGreaterThan(0);
   });
 
@@ -189,8 +170,8 @@ describe('<ScoreTable />', () => {
     expect(screen.queryByText('alice')).not.toBeInTheDocument();
   });
 
-  it('requests the last page when the saved current page exceeds the available pages', async () => {
-    // First response says current(1) > totalPages(0) → component refetches the last page.
+  it('keeps the page positive when the API reports no available pages', async () => {
+    // An empty result must not cause a request for page zero.
     getCourseScore.mockResolvedValueOnce({
       content: twoStudents,
       pagination: { current: 1, pageSize: 100, total: 2, totalPages: 0 },
@@ -200,8 +181,8 @@ describe('<ScoreTable />', () => {
     render(<ScoreTable {...makeProps()} />);
 
     await waitFor(() => expect(getCourseScore).toHaveBeenCalledTimes(2));
-    // The refetch pins current to totalPages (0 here).
-    expect(getCourseScore.mock.calls[1][0]).toMatchObject({ current: 0 });
+    // Pagination stays one-based even when totalPages is zero.
+    expect(getCourseScore.mock.calls[1][0]).toMatchObject({ current: 1 });
   });
 
   it('calls the paging hook with the requested page on pagination change', async () => {
@@ -224,7 +205,7 @@ describe('<ScoreTable />', () => {
   });
 
   it('applies a column search filter through the paging hook with the typed value', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<ScoreTable {...makeProps()} />);
 
     await screen.findAllByText('alice');
@@ -262,7 +243,7 @@ describe('<ScoreTable />', () => {
   });
 
   it('saves hidden columns to localStorage and closes the drawer when settings are saved', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const setIsVisibleSettings = vi.fn();
     render(<ScoreTable {...makeProps({ isVisibleSetting: true, setIsVisibleSettings })} />);
 
@@ -281,7 +262,7 @@ describe('<ScoreTable />', () => {
   });
 
   it('closes the settings drawer without saving when cancelled', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const setIsVisibleSettings = vi.fn();
     render(<ScoreTable {...makeProps({ isVisibleSetting: true, setIsVisibleSettings })} />);
 

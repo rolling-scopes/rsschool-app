@@ -1,6 +1,6 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { ReactNode } from 'react';
+import { setupUser } from '@client/__tests__/setupUser';
 import { PromptsPage } from './PromptPage';
 
 // --- Boundary mocks --------------------------------------------------------
@@ -42,8 +42,7 @@ const { getPrompts, createPrompt, updatePrompt, deletePrompt } = vi.hoisted(() =
   deletePrompt: vi.fn(),
 }));
 
-vi.mock('@client/api', async () => ({
-  ...(await vi.importActual('@client/api')),
+vi.mock('@client/api', () => ({
   PromptsApi: function PromptsApi() {
     return { getPrompts, createPrompt, updatePrompt, deletePrompt };
   },
@@ -53,6 +52,13 @@ const prompts = [
   { id: 1, type: 'summary', temperature: 0.5, text: 'A body' },
   { id: 2, type: 'gratitude', temperature: 0.7, text: 'B body' },
 ];
+
+function getPromptRow(type: string) {
+  // eslint-disable-next-line testing-library/no-node-access -- Avoid computing accessible names for every table row.
+  const row = screen.getByText(type).closest('tr');
+  expect(row).toHaveRole('row');
+  return row!;
+}
 
 describe('<PromptsPage />', () => {
   beforeEach(() => {
@@ -72,23 +78,13 @@ describe('<PromptsPage />', () => {
     expect(screen.getByRole('heading', { name: /manage prompts/i })).toBeInTheDocument();
   });
 
-  it('opens the create modal when "Add Prompt" is clicked', async () => {
-    const user = userEvent.setup();
-    render(<PromptsPage />);
-    await screen.findByText('summary');
-
-    await user.click(screen.getByRole('button', { name: /add prompt/i }));
-
-    expect(await screen.findByText('Add prompt')).toBeInTheDocument();
-  });
-
   it('creates a prompt and reloads the list on submit', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<PromptsPage />);
     await screen.findByText('summary');
 
     await user.click(screen.getByRole('button', { name: /add prompt/i }));
-    await screen.findByText('Add prompt');
+    expect(await screen.findByText('Add prompt')).toBeInTheDocument();
     const dialog = screen.getByRole('dialog');
 
     await user.type(within(dialog).getByLabelText('Type'), 'newtype');
@@ -100,11 +96,11 @@ describe('<PromptsPage />', () => {
   });
 
   it('opens the edit modal prefilled and updates by id', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<PromptsPage />);
     await screen.findByText('summary');
 
-    const row = screen.getByRole('row', { name: /summary/ });
+    const row = getPromptRow('summary');
     const [editBtn] = within(row).getAllByRole('button');
     await user.click(editBtn);
 
@@ -121,11 +117,11 @@ describe('<PromptsPage />', () => {
   });
 
   it('deletes a prompt and reloads the list', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<PromptsPage />);
     await screen.findByText('gratitude');
 
-    const row = screen.getByRole('row', { name: /gratitude/ });
+    const row = getPromptRow('gratitude');
     const buttons = within(row).getAllByRole('button');
     await user.click(buttons[1]);
 

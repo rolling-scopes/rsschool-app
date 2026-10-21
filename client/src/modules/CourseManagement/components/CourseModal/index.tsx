@@ -302,7 +302,7 @@ export function CourseModal(props: CourseModalProps) {
                   },
                 ]}
               >
-                <InputNumber step={5} min={1} max={100} addonAfter="%" />
+                <InputNumber step={5} min={1} max={100} suffix="%" />
               </Form.Item>
             </Col>
             <Col md={8} sm={12} span={24}>

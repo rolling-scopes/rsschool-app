@@ -11,25 +11,12 @@ const renderPreferences = () =>
   );
 
 describe('Preferences', () => {
-  test.each`
-    value
-    ${2}
-    ${'any'}
-  `('should render form item with $value value', async ({ value }) => {
+  test('should render preference values and labels', async () => {
     renderPreferences();
 
-    const item = await screen.findByDisplayValue(value);
-    expect(item).toBeInTheDocument();
-  });
-
-  test.each`
-    label
-    ${LABELS.studentsCount}
-    ${LABELS.studentsLocation}
-  `('should render field with $label label', async ({ label }) => {
-    renderPreferences();
-
-    const fieldLabel = await screen.findByTitle(label);
-    expect(fieldLabel).toBeInTheDocument();
+    expect(await screen.findByDisplayValue(2)).toBeInTheDocument();
+    expect(screen.getByDisplayValue('any')).toBeInTheDocument();
+    expect(screen.getByTitle(LABELS.studentsCount)).toBeInTheDocument();
+    expect(screen.getByTitle(LABELS.studentsLocation)).toBeInTheDocument();
   });
 });

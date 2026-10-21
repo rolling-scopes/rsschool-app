@@ -72,7 +72,7 @@ describe('WriteScoreService', () => {
         const after = Date.now();
 
         expect(taskResultRepository.save).toHaveBeenCalledTimes(1);
-        const saved = taskResultRepository.save.mock.calls[0][0] as Partial<TaskResult>;
+        const saved = taskResultRepository.save.mock.calls[0]![0] as Partial<TaskResult>;
         expect(saved).toMatchObject({
           courseTaskId: 20,
           studentId: 10,
@@ -97,7 +97,7 @@ describe('WriteScoreService', () => {
       it('sets lastCheckerId to undefined when authorId is not provided (defaults to 0)', async () => {
         await service.saveScoreWithStatus(10, 20, { score: 90, comment: 'great' });
 
-        const saved = taskResultRepository.save.mock.calls[0][0] as Partial<TaskResult>;
+        const saved = taskResultRepository.save.mock.calls[0]![0] as Partial<TaskResult>;
         expect(saved.lastCheckerId).toBeUndefined();
         expect(saved.historicalScores![0]!.authorId).toBe(0);
       });
@@ -105,14 +105,14 @@ describe('WriteScoreService', () => {
       it('sets lastCheckerId to undefined when authorId is 0 (not > 0)', async () => {
         await service.saveScoreWithStatus(10, 20, { authorId: 0, score: 90, comment: 'great' });
 
-        const saved = taskResultRepository.save.mock.calls[0][0] as Partial<TaskResult>;
+        const saved = taskResultRepository.save.mock.calls[0]![0] as Partial<TaskResult>;
         expect(saved.lastCheckerId).toBeUndefined();
       });
 
       it('passes githubPrUrl through as undefined when not provided', async () => {
         await service.saveScoreWithStatus(10, 20, { score: 90, comment: 'great' });
 
-        const saved = taskResultRepository.save.mock.calls[0][0] as Partial<TaskResult>;
+        const saved = taskResultRepository.save.mock.calls[0]![0] as Partial<TaskResult>;
         expect(saved.githubPrUrl).toBeUndefined();
       });
 

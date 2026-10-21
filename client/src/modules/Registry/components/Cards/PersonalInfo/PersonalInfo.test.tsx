@@ -35,62 +35,26 @@ const renderPersonalInfo = (values: Values = mockValues, isStudentForm?: boolean
   );
 
 describe('PersonalInfo', () => {
-  test.each(
-    Object.values(mockValues)
-      .filter(Boolean)
-      .map(value => ({ value })),
-  )('should render form item with $value value', async ({ value }) => {
+  test('should render initial mentor values, labels and placeholders', () => {
     renderPersonalInfo();
 
-    const item = await screen.findByDisplayValue(value as string);
-    expect(item).toBeInTheDocument();
-  });
-
-  test.each`
-    label
-    ${LABELS.firstName}
-    ${LABELS.lastName}
-    ${LABELS.primaryEmail}
-    ${LABELS.epamEmail}
-  `('should render field with $label label', async ({ label }) => {
-    renderPersonalInfo();
-
-    const fieldLabel = await screen.findByLabelText(label);
-    expect(fieldLabel).toBeInTheDocument();
-  });
-
-  test('should render field with location label', async () => {
-    renderPersonalInfo();
-    const fieldLabel = await screen.findByText(LABELS.location);
-    expect(fieldLabel).toBeInTheDocument();
-  });
-
-  test.each`
-    placeholder
-    ${PLACEHOLDERS.firstName}
-    ${PLACEHOLDERS.lastName}
-    ${PLACEHOLDERS.email}
-    ${PLACEHOLDERS.epamEmail}
-  `('should render field with $placeholder placeholder', async ({ placeholder }) => {
-    renderPersonalInfo();
-
-    const fieldPlaceholder = await screen.findByPlaceholderText(placeholder);
-    expect(fieldPlaceholder).toBeInTheDocument();
-  });
-
-  test.each`
-    placeholder               | message
-    ${PLACEHOLDERS.email}     | ${ERROR_MESSAGES.email}
-    ${PLACEHOLDERS.epamEmail} | ${ERROR_MESSAGES.epamEmail}
-    ${PLACEHOLDERS.firstName} | ${ERROR_MESSAGES.inEnglish('First name')}
-    ${PLACEHOLDERS.lastName}  | ${ERROR_MESSAGES.inEnglish('Last name')}
-  `('should not render $message error message on valid input', async ({ placeholder, message }) => {
-    renderPersonalInfo();
-
-    const input = await screen.findByPlaceholderText(placeholder);
-    const errorMessage = screen.queryByText(message);
-    expect(input).toBeInTheDocument();
-    expect(errorMessage).not.toBeInTheDocument();
+    for (const value of Object.values(mockValues).filter(Boolean)) {
+      expect(screen.getByDisplayValue(value as string)).toBeInTheDocument();
+    }
+    for (const label of [LABELS.firstName, LABELS.lastName, LABELS.primaryEmail, LABELS.epamEmail]) {
+      expect(screen.getByLabelText(label)).toBeInTheDocument();
+    }
+    expect(screen.getByText(LABELS.location)).toBeInTheDocument();
+    for (const placeholder of [
+      PLACEHOLDERS.firstName,
+      PLACEHOLDERS.lastName,
+      PLACEHOLDERS.email,
+      PLACEHOLDERS.epamEmail,
+    ]) {
+      expect(screen.getByPlaceholderText(placeholder)).toBeInTheDocument();
+    }
+    expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /submit/i })).not.toBeInTheDocument();
   });
 
   test.each`
@@ -99,22 +63,27 @@ describe('PersonalInfo', () => {
     ${PLACEHOLDERS.epamEmail} | ${'test@epam.com'} | ${ERROR_MESSAGES.epamEmail}
     ${PLACEHOLDERS.firstName} | ${'Róża'}          | ${ERROR_MESSAGES.inEnglish('First name')}
     ${PLACEHOLDERS.lastName}  | ${'Wójcik'}        | ${ERROR_MESSAGES.inEnglish('Last name')}
-  `('should render $message error message on invalid input', async ({ placeholder, value, message }) => {
-    renderPersonalInfo();
+  `(
+    'should show $message only after changing valid input to invalid input',
+    async ({ placeholder, value, message }) => {
+      renderPersonalInfo();
 
-    const input = await screen.findByPlaceholderText(placeholder);
+      const input = await screen.findByPlaceholderText(placeholder);
+      expect(input).toBeInTheDocument();
+      expect(screen.queryByText(message)).not.toBeInTheDocument();
 
-    fireEvent.change(input, {
-      target: {
-        value,
-      },
-    });
+      fireEvent.change(input, {
+        target: {
+          value,
+        },
+      });
 
-    expect(input).toHaveValue(value);
+      expect(input).toHaveValue(value);
 
-    const errorMessage = await screen.findByText(message);
-    expect(errorMessage).toBeInTheDocument();
-  });
+      const errorMessage = await screen.findByText(message);
+      expect(errorMessage).toBeInTheDocument();
+    },
+  );
 
   test('should render error messages only on required fields', async () => {
     renderPersonalInfo({});
@@ -135,31 +104,10 @@ describe('PersonalInfo', () => {
     expect(errorEpamEmail).not.toBeInTheDocument();
   });
 
-  test('should render data processing checkbox on student form', async () => {
+  test('should render data processing checkbox and Submit button on student form', async () => {
     renderPersonalInfo(mockValues, true);
 
-    const checkbox = await screen.findByRole('checkbox');
-    expect(checkbox).toBeInTheDocument();
-  });
-
-  test('should render Submit button on student form', async () => {
-    renderPersonalInfo(mockValues, true);
-
-    const button = await screen.findByRole('button', { name: /submit/i });
-    expect(button).toBeInTheDocument();
-  });
-
-  test('should not render data processing checkbox on mentor form', () => {
-    renderPersonalInfo();
-
-    const checkbox = screen.queryByRole('checkbox');
-    expect(checkbox).not.toBeInTheDocument();
-  });
-
-  test('should not render Submit button on mentor form', () => {
-    renderPersonalInfo();
-
-    const button = screen.queryByRole('button', { name: /submit/i });
-    expect(button).not.toBeInTheDocument();
+    expect(await screen.findByRole('checkbox')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
   });
 });

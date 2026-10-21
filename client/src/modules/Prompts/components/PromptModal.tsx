@@ -13,7 +13,11 @@ const disciplineService = new PromptsApi();
 export function PromptModal({ open, onCancel, loadData, data }: Props) {
   const [form] = Form.useForm();
 
-  useEffect(() => form.resetFields, [open]);
+  useEffect(() => {
+    if (open) {
+      form.resetFields();
+    }
+  }, [open, form]);
 
   const initialValues = data ?? { temperature: 0.5 };
 

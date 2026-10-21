@@ -291,7 +291,10 @@ describe('CertificationsService', () => {
     };
 
     it('short-circuits when criteria are non-empty but match no students', async () => {
-      vi.spyOn(service as never, 'findStudentIdsByCriteria' as never).mockResolvedValue([] as never);
+      vi.spyOn(
+        service as unknown as { findStudentIdsByCriteria: CertificationsService['findStudentIdsByCriteria'] },
+        'findStudentIdsByCriteria',
+      ).mockResolvedValue([]);
 
       const result = await service.buildCourseCertificateRequests(5, { criteria: { minTotalScore: 100 } });
 
@@ -299,7 +302,10 @@ describe('CertificationsService', () => {
     });
 
     it('builds requests for the matched student ids', async () => {
-      vi.spyOn(service as never, 'findStudentIdsByCriteria' as never).mockResolvedValue([42] as never);
+      vi.spyOn(
+        service as unknown as { findStudentIdsByCriteria: CertificationsService['findStudentIdsByCriteria'] },
+        'findStudentIdsByCriteria',
+      ).mockResolvedValue([42]);
       const qb = makeQb([student]);
       studentRepository.createQueryBuilder.mockReturnValue(qb);
 
@@ -317,18 +323,24 @@ describe('CertificationsService', () => {
     });
 
     it('falls back to primarySkillName when the matched student course has no discipline', async () => {
-      vi.spyOn(service as never, 'findStudentIdsByCriteria' as never).mockResolvedValue([42] as never);
+      vi.spyOn(
+        service as unknown as { findStudentIdsByCriteria: CertificationsService['findStudentIdsByCriteria'] },
+        'findStudentIdsByCriteria',
+      ).mockResolvedValue([42]);
       const noDiscipline = { ...student, course: { ...student.course, discipline: undefined } };
       const qb = makeQb([noDiscipline]);
       studentRepository.createQueryBuilder.mockReturnValue(qb);
 
       const result = await service.buildCourseCertificateRequests(5, { criteria: {} });
 
-      expect(result.requests[0].coursePrimarySkill).toBe('JavaScript');
+      expect(result.requests[0]!.coursePrimarySkill).toBe('JavaScript');
     });
 
     it('targets students without certificates when criteria are empty', async () => {
-      vi.spyOn(service as never, 'findStudentIdsByCriteria' as never).mockResolvedValue([] as never);
+      vi.spyOn(
+        service as unknown as { findStudentIdsByCriteria: CertificationsService['findStudentIdsByCriteria'] },
+        'findStudentIdsByCriteria',
+      ).mockResolvedValue([]);
       const qb = makeQb([]);
       studentRepository.createQueryBuilder.mockReturnValue(qb);
 
@@ -343,7 +355,10 @@ describe('CertificationsService', () => {
     });
 
     it('handles a fully empty data object (no criteria, no templateId)', async () => {
-      vi.spyOn(service as never, 'findStudentIdsByCriteria' as never).mockResolvedValue([] as never);
+      vi.spyOn(
+        service as unknown as { findStudentIdsByCriteria: CertificationsService['findStudentIdsByCriteria'] },
+        'findStudentIdsByCriteria',
+      ).mockResolvedValue([]);
       const qb = makeQb([]);
       studentRepository.createQueryBuilder.mockReturnValue(qb);
 

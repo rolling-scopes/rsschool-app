@@ -1,7 +1,7 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { ReactNode } from 'react';
 import { message } from 'antd';
+import { setupUser } from '@client/__tests__/setupUser';
 import { UserGroupDto } from '@client/api';
 import { UserGroupsAdminPage } from './UserGroupsAdminPage';
 
@@ -68,6 +68,13 @@ const groups = [
   },
 ] as unknown as UserGroupDto[];
 
+function getGroupRow(name: string) {
+  // eslint-disable-next-line testing-library/no-node-access -- Avoid computing accessible names for every table row.
+  const row = screen.getByText(name).closest('tr');
+  expect(row).toHaveRole('row');
+  return row!;
+}
+
 describe('<UserGroupsAdminPage />', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -86,7 +93,7 @@ describe('<UserGroupsAdminPage />', () => {
   });
 
   it('creates a group with mapped user ids and a role', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<UserGroupsAdminPage />);
     await screen.findByText('Admins');
 
@@ -110,11 +117,11 @@ describe('<UserGroupsAdminPage />', () => {
   });
 
   it('opens the edit modal prefilled and updates by id', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<UserGroupsAdminPage />);
     await screen.findByText('Admins');
 
-    const row = screen.getByRole('row', { name: /Admins/ });
+    const row = getGroupRow('Admins');
     await user.click(within(row).getByText('Edit'));
     await screen.findByText('User Group');
     const dialog = screen.getByRole('dialog');
@@ -129,11 +136,11 @@ describe('<UserGroupsAdminPage />', () => {
   });
 
   it('deletes a group after confirming and reloads', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<UserGroupsAdminPage />);
     await screen.findByText('Admins');
 
-    const row = screen.getByRole('row', { name: /Admins/ });
+    const row = getGroupRow('Admins');
     await user.click(within(row).getByText('Delete'));
     await user.click(await screen.findByRole('button', { name: /^ok$/i }));
 
@@ -142,13 +149,13 @@ describe('<UserGroupsAdminPage />', () => {
   });
 
   it('shows an error message when delete fails', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const errorSpy = vi.spyOn(message, 'error').mockImplementation(() => ({}) as never);
     deleteUserGroup.mockRejectedValueOnce(new Error('boom'));
     render(<UserGroupsAdminPage />);
     await screen.findByText('Admins');
 
-    const row = screen.getByRole('row', { name: /Admins/ });
+    const row = getGroupRow('Admins');
     await user.click(within(row).getByText('Delete'));
     await user.click(await screen.findByRole('button', { name: /^ok$/i }));
 
@@ -157,13 +164,13 @@ describe('<UserGroupsAdminPage />', () => {
   });
 
   it('shows an error message when save fails', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const errorSpy = vi.spyOn(message, 'error').mockImplementation(() => ({}) as never);
     updateUserGroup.mockRejectedValueOnce(new Error('boom'));
     render(<UserGroupsAdminPage />);
     await screen.findByText('Admins');
 
-    const row = screen.getByRole('row', { name: /Admins/ });
+    const row = getGroupRow('Admins');
     await user.click(within(row).getByText('Edit'));
     await screen.findByText('User Group');
     await user.click(screen.getByRole('button', { name: /save/i }));

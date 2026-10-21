@@ -111,8 +111,8 @@ describe('EndorsementService', () => {
 
       await service.getEndorsmentData('john-doe');
 
-      const studentWhere = studentRepository.count.mock.calls[0][0].where;
-      const interviewWhere = taskInterviewResultRepository.count.mock.calls[0][0].where;
+      const studentWhere = studentRepository.count.mock.calls[0]![0].where;
+      const interviewWhere = taskInterviewResultRepository.count.mock.calls[0]![0].where;
       // In(...) is opaque, so assert the count was invoked with a mentorId filter object.
       expect(studentWhere).toHaveProperty('mentorId');
       expect(interviewWhere).toHaveProperty('mentorId');

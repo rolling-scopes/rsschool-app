@@ -10,6 +10,30 @@ vi.mock('@client/api', () => ({
   },
 }));
 
+vi.mock('antd', () => {
+  const Descriptions = Object.assign(
+    ({ title, children }: { title: React.ReactNode; children: React.ReactNode }) => (
+      <section>
+        <h2>{title}</h2>
+        {children}
+      </section>
+    ),
+    {
+      Item: ({ label, children }: { label: React.ReactNode; children: React.ReactNode }) => (
+        <div>
+          <span>{label}</span>
+          {children}
+        </div>
+      ),
+    },
+  );
+
+  return {
+    Descriptions,
+    Typography: { Text: ({ children }: { children: React.ReactNode }) => <span>{children}</span> },
+  };
+});
+
 // Drive the real fetcher (so the session-api callback runs) through a tiny
 // useRequest stand-in backed by React state. This exercises the data path in
 // the component rather than stubbing its result wholesale.

@@ -1,5 +1,5 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { setupUser } from '@client/__tests__/setupUser';
 import EducationCard from '../EducationCard';
 
 describe('EducationCard', () => {
@@ -40,12 +40,11 @@ describe('EducationCard', () => {
     });
   });
 
-  const openSettings = (user: ReturnType<typeof userEvent.setup>) =>
-    user.click(screen.getByRole('img', { name: 'edit' }));
+  const openSettings = (user: ReturnType<typeof setupUser>) => user.click(screen.getByRole('img', { name: 'edit' }));
 
   // Fill all three fields of the (single) university in an open dialog.
   const fillNewUniversity = async (
-    user: ReturnType<typeof userEvent.setup>,
+    user: ReturnType<typeof setupUser>,
     { university, faculty, graduationYear }: { university: string; faculty: string; graduationYear: string },
   ) => {
     const dialog = screen.getByRole('dialog');
@@ -56,7 +55,7 @@ describe('EducationCard', () => {
   };
 
   it('adds a new university, fills it, saves and reflects it on success', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn().mockResolvedValue(true);
     render(<EducationCard data={[]} isEditingModeEnabled updateProfile={updateProfile} />);
 
@@ -78,7 +77,7 @@ describe('EducationCard', () => {
   });
 
   it('does not update the displayed list when the save fails (handleSave early return)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     const updateProfile = vi.fn().mockResolvedValue(false);
     render(<EducationCard data={[]} isEditingModeEnabled updateProfile={updateProfile} />);
 
@@ -94,7 +93,7 @@ describe('EducationCard', () => {
   });
 
   it('typing into an existing university field updates the input (handleChange)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<EducationCard data={makeData()} isEditingModeEnabled updateProfile={vi.fn()} />);
 
     await openSettings(user);
@@ -106,7 +105,7 @@ describe('EducationCard', () => {
   });
 
   it('disables Add new university while an entry has empty fields (isAddDisabled)', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(<EducationCard data={makeData()} isEditingModeEnabled updateProfile={vi.fn()} />);
 
     await openSettings(user);
@@ -118,23 +117,12 @@ describe('EducationCard', () => {
     expect(screen.getByText('(Empty)')).toBeInTheDocument();
   });
 
-  it('deletes a university entry (handleDelete)', async () => {
-    const user = userEvent.setup();
+  it('deletes a university and restores it on cancel', async () => {
+    const user = setupUser();
     render(<EducationCard data={makeData()} isEditingModeEnabled updateProfile={vi.fn()} />);
 
     await openSettings(user);
     expect(screen.getByDisplayValue('MIT')).toBeInTheDocument();
-
-    await user.click(screen.getByRole('button', { name: /Delete/ }));
-
-    expect(screen.queryByDisplayValue('MIT')).not.toBeInTheDocument();
-  });
-
-  it('restores the universities on cancel (handleCancel)', async () => {
-    const user = userEvent.setup();
-    render(<EducationCard data={makeData()} isEditingModeEnabled updateProfile={vi.fn()} />);
-
-    await openSettings(user);
     // delete the only entry, then cancel to restore it
     await user.click(screen.getByRole('button', { name: /Delete/ }));
     expect(screen.queryByDisplayValue('MIT')).not.toBeInTheDocument();
@@ -148,7 +136,7 @@ describe('EducationCard', () => {
   });
 
   it('renders the settings entry as "(Empty)" when a university is incomplete', async () => {
-    const user = userEvent.setup();
+    const user = setupUser();
     render(
       <EducationCard
         data={[{ graduationYear: null, faculty: 'POIT', university: 'MIT' }]}

@@ -12,10 +12,10 @@ vi.mock('next/router', () => ({
 }));
 
 describe('MentorDashboard', () => {
-  it('should render instructions when mentor has no students for this course', async () => {
+  it('renders instructions without students and the table with students', async () => {
     vi.mocked(useMentorDashboard).mockReturnValue([[], false, vi.fn()]);
 
-    render(
+    const dashboard = () => (
       <SessionContext.Provider
         value={
           {
@@ -34,15 +34,13 @@ describe('MentorDashboard', () => {
         }
       >
         <MentorDashboard />
-      </SessionContext.Provider>,
+      </SessionContext.Provider>
     );
+    const { rerender } = render(dashboard());
 
     const instructionsTitle = await screen.findByText(INSTRUCTIONS_TEXT.title);
 
     expect(instructionsTitle).toBeInTheDocument();
-  });
-
-  it('should render table when mentor has students for this course', async () => {
     const mockData = [
       {
         courseTaskId: 1,
@@ -60,27 +58,7 @@ describe('MentorDashboard', () => {
 
     vi.mocked(useMentorDashboard).mockReturnValue([mockData, false, vi.fn()]);
 
-    render(
-      <SessionContext.Provider
-        value={
-          {
-            id: 1,
-            isActivist: false,
-            isAdmin: true,
-            isHirer: false,
-            githubId: 'github-id',
-            courses: {
-              '400': {
-                mentorId: 1,
-                roles: ['mentor'],
-              } as CourseInfo,
-            },
-          } as Session
-        }
-      >
-        <MentorDashboard />
-      </SessionContext.Provider>,
-    );
+    rerender(dashboard());
 
     const emptyTable = await screen.findByText(/John Doe/i);
 
