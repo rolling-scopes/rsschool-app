@@ -1,5 +1,6 @@
 import { sign } from 'jsonwebtoken';
 import { AuthUser, JwtToken } from 'src/auth/auth-user.model';
+import { AUTH_TOKEN_AUDIENCE } from 'src/core/jwt/jwt.service';
 import { ConfigService } from 'src/config';
 import { TEST_HOST } from './harness';
 
@@ -36,6 +37,16 @@ export function createTestUser(admin = false): AuthUser {
 }
 
 export function signTestJwt(payload: Partial<JwtToken> = {}, options: { expiresIn?: string } = {}): string {
-  const token: JwtToken = { id: 1, githubId: 'octocat', isAdmin: false, isHirer: false, ...payload };
-  return sign(token, TEST_JWT_SECRET, options.expiresIn ? { expiresIn: options.expiresIn } : {});
+  const token: JwtToken = {
+    id: 1,
+    githubId: 'octocat',
+    isAdmin: false,
+    isHirer: false,
+    purpose: 'authentication',
+    ...payload,
+  };
+  return sign(token, TEST_JWT_SECRET, {
+    audience: AUTH_TOKEN_AUDIENCE,
+    ...(options.expiresIn ? { expiresIn: options.expiresIn } : {}),
+  });
 }

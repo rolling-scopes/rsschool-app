@@ -76,6 +76,7 @@ describe('FeedbacksController', () => {
   describe('updateStudentFeedback', () => {
     it('updates the feedback by id and wraps it in a StudentFeedbackDto', async () => {
       mockStudentsService.canAccessStudent.mockResolvedValue(true);
+      mockFeedbacksService.getById.mockResolvedValue(mockFeedback);
       mockFeedbacksService.update.mockResolvedValue(mockFeedback);
       const body = { content: { suggestions: 'updated' } } as never;
 
@@ -83,6 +84,16 @@ describe('FeedbacksController', () => {
 
       expect(mockFeedbacksService.update).toHaveBeenCalledWith(feedbackId, body);
       expect(result).toMatchObject({ id: feedbackId });
+    });
+
+    it('throws ForbiddenException when the feedback belongs to a different student', async () => {
+      mockStudentsService.canAccessStudent.mockResolvedValue(true);
+      mockFeedbacksService.getById.mockResolvedValue({ ...mockFeedback, studentId: 999 });
+
+      await expect(
+        controller.updateStudentFeedback(studentId, feedbackId, {} as never, createReq({ id: 1 })),
+      ).rejects.toThrow(ForbiddenException);
+      expect(mockFeedbacksService.update).not.toHaveBeenCalled();
     });
 
     it('throws ForbiddenException and never updates when access is denied', async () => {

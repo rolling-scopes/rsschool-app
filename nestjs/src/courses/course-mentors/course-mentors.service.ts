@@ -1,6 +1,6 @@
 import { ConflictException, ForbiddenException, Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, QueryFailedError, Repository } from 'typeorm';
+import { DataSource, In, QueryFailedError, Repository } from 'typeorm';
 import { CourseTask, Mentor, TaskResult } from '@entities/index';
 import { Student } from '@entities/student';
 import { MentorRegistry } from '@entities/mentorRegistry';
@@ -210,6 +210,18 @@ export class CourseMentorsService {
         : {}),
     };
     const exist = await this.mentorsRepository.findOne({ where: { courseId, userId: user.id } });
+    const studentRepository = this.dataSource.getRepository(Student);
+    const students = input.students.length > 0 ? await studentRepository.findBy({ id: In(input.students) }) : [];
+    const uniqueStudentIds = new Set(input.students);
+    const hasIneligibleStudent =
+      students.length !== uniqueStudentIds.size ||
+      students.some(
+        student => student.courseId !== courseId || (student.mentorId != null && student.mentorId !== exist?.id),
+      );
+    if (hasIneligibleStudent) {
+      throw new ForbiddenException('Students must be unassigned and enrolled in this course');
+    }
+
     let mentorId = exist?.id;
     if (mentorId == null) {
       const mentorRegistrationInfo = await this.dataSource
@@ -247,7 +259,6 @@ export class CourseMentorsService {
       await this.mentorsRepository.update(mentorId, data);
     }
 
-    const studentRepository = this.dataSource.getRepository(Student);
     if (input.students.length > 0) {
       if (exist) {
         await studentRepository.update({ mentorId }, { mentorId: null });

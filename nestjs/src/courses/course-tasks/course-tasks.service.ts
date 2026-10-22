@@ -40,7 +40,10 @@ export class CourseTasksService {
   ) {}
 
   public async createTaskDistribution(courseId: number, courseTaskId: number, cleanDistribution?: boolean) {
-    const courseTask = await this.courseTaskRepository.findOne({ where: { id: courseTaskId }, select: ['id'] });
+    const courseTask = await this.courseTaskRepository.findOne({
+      where: { id: courseTaskId, courseId },
+      select: ['id'],
+    });
 
     if (courseTask == null) {
       return null;
@@ -239,15 +242,18 @@ export class CourseTasksService {
     return this.courseTaskRepository.insert(courseEvent);
   }
 
-  public updateCourseTask(id: number, courseEvent: Partial<CourseTask>) {
-    return this.courseTaskRepository.update(id, courseEvent);
+  public updateCourseTask(courseId: number, id: number, courseEvent: Partial<CourseTask>) {
+    return this.courseTaskRepository.update({ id, courseId }, courseEvent);
   }
 
-  public disable(id: number) {
-    return this.courseTaskRepository.update(id, {
-      id, // required to get right update in subscription
-      disabled: true,
-    });
+  public disable(courseId: number, id: number) {
+    return this.courseTaskRepository.update(
+      { id, courseId },
+      {
+        id, // required to get right update in subscription
+        disabled: true,
+      },
+    );
   }
 
   public changeCourseTaskProcessing(id: number, isProcessing: boolean) {

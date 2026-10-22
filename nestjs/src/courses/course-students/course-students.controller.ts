@@ -225,8 +225,11 @@ export class CourseStudentsController {
   @Post('expel')
   @ApiOperation({ operationId: 'expelStudents' })
   @UseGuards(RoleGuard)
-  @RequiredRoles([Role.Admin, CourseRole.Manager])
-  public async expelStudents(@Param('courseId') courseId: number, @Body() expelStatusDto: ExpelStatusDto) {
+  @RequiredRoles([Role.Admin, CourseRole.Manager], true)
+  public async expelStudents(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Body() expelStatusDto: ExpelStatusDto,
+  ) {
     return this.courseStudentService.expelStudents({
       courseId,
       expelStatusDto,
