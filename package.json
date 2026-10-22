@@ -43,7 +43,7 @@
     "@total-typescript/ts-reset": "0.6.1",
     "@types/jest": "30.0.0",
     "@types/lodash": "4.17.24",
-    "@types/node": "24.12.0",
+    "@types/node": "24.19.2",
     "@vitest/coverage-v8": "~5.0.0",
     "@vitest/eslint-plugin": "^1.6.27",
     "dotenv": "^16.5.0",
