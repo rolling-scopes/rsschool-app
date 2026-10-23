@@ -13,6 +13,7 @@ import { User } from '@entities/user';
 import { CertificateMetadataDto } from './dto/certificate-metadata.dto';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
+import { CourseId, StudentId } from '../core/types/identifiers';
 
 @Injectable()
 export class CertificationsService {
@@ -61,14 +62,16 @@ export class CertificationsService {
     return Body as Readable;
   }
 
-  public async saveCertificate(studentId: number, data: SaveCertificateDto) {
+  public async saveCertificate(studentId: StudentId, data: SaveCertificateDto) {
     let certificate = await this.getByPublicId(data.publicId);
     if (certificate) {
       await this.certificateRepository.update(certificate.id, data);
       return;
     }
 
-    certificate = await this.certificateRepository.findOne({ where: { studentId } });
+    certificate = await this.certificateRepository.findOne({
+      where: { studentId },
+    });
     if (certificate) {
       await this.certificateRepository.update(certificate.id, data);
       return;
@@ -78,7 +81,9 @@ export class CertificationsService {
   }
 
   public async buildNotificationData(student: Student, data: SaveCertificateDto) {
-    const course = await this.courseRepository.findOneByOrFail({ id: student.courseId });
+    const course = await this.courseRepository.findOneByOrFail({
+      id: student.courseId,
+    });
     return {
       userId: student.userId,
       notification: {
@@ -88,7 +93,7 @@ export class CertificationsService {
     };
   }
 
-  public async removeCertificate(studentId: number) {
+  public async removeCertificate(studentId: StudentId) {
     const certificate = await this.certificateRepository.findOneOrFail({
       where: { studentId },
     });
@@ -107,7 +112,7 @@ export class CertificationsService {
       : CertificationsService.DEFAULT_CERTIFICATE_TEMPLATE_ID;
   }
 
-  public async buildStudentCertificateRequest(courseId: number, githubId: string, templateId?: string) {
+  public async buildStudentCertificateRequest(courseId: CourseId, githubId: string, templateId?: string) {
     const student = await this.studentRepository.findOne({
       where: {
         courseId: Number(courseId),
@@ -132,7 +137,7 @@ export class CertificationsService {
   }
 
   public async buildCourseCertificateRequests(
-    courseId: number,
+    courseId: CourseId,
     data: {
       criteria?: {
         taskCriteria?: { courseTaskId: number; minScore: number }[];

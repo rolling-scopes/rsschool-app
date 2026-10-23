@@ -10,6 +10,7 @@ import {
   UseGuards,
   Query,
   ParseArrayPipe,
+  ParseIntPipe,
   Post,
 } from '@nestjs/common';
 import { ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
@@ -32,6 +33,7 @@ import { FilterMentorRegistryResponse } from './dto/mentor-registry.dto';
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from './constants';
 import { CourseInfo } from '@entities/session';
 import { InviteMentorsDto } from './dto/invite-mentors.dto';
+import { toCourseId, toUserId } from '../core/types/identifiers';
 
 export enum MentorRegistryTabsMode {
   New = 'new',
@@ -78,8 +80,14 @@ export class RegistryController {
   @ApiQuery({ name: 'courseId', required: false, type: Number })
   @ApiOkResponse({ type: [RegistrationDto] })
   @RequiredRoles([Role.Admin])
-  public async getRegistrations(@Query('type') type?: string, @Query('courseId') courseId?: number) {
-    const registrations = await this.registryService.getRegistrations(type, courseId ? Number(courseId) : undefined);
+  public async getRegistrations(
+    @Query('type') type?: string,
+    @Query('courseId', new ParseIntPipe({ optional: true })) courseId?: number,
+  ) {
+    const registrations = await this.registryService.getRegistrations(
+      type,
+      courseId ? toCourseId(courseId) : undefined,
+    );
     return registrations.map(registry => new RegistrationDto(registry));
   }
 
@@ -96,7 +104,7 @@ export class RegistryController {
   @ApiOperation({ operationId: 'getOwnMentorRegistry' })
   @ApiOkResponse({ type: OwnMentorRegistryDto })
   public async getOwnMentorRegistry(@Req() req: CurrentRequest) {
-    const mentorRegistry = await this.registryService.getOwnMentorRegistry(req.user.id);
+    const mentorRegistry = await this.registryService.getOwnMentorRegistry(toUserId(req.user.id));
     if (mentorRegistry == null) {
       throw new NotFoundException('Mentor registry record not found');
     }
@@ -148,19 +156,38 @@ export class RegistryController {
   @ApiQuery({ name: 'currentPage', required: false, type: 'number' })
   @ApiQuery({ name: 'githubId', required: false, type: 'string' })
   @ApiQuery({ name: 'cityName', required: false, type: 'string' })
-  @ApiQuery({ name: 'preferedCourses', required: false, type: 'number', isArray: true })
-  @ApiQuery({ name: 'preselectedCourses', required: false, type: 'number', isArray: true })
-  @ApiQuery({ name: 'technicalMentoring', required: false, type: 'string', isArray: true })
+  @ApiQuery({
+    name: 'preferedCourses',
+    required: false,
+    type: 'number',
+    isArray: true,
+  })
+  @ApiQuery({
+    name: 'preselectedCourses',
+    required: false,
+    type: 'number',
+    isArray: true,
+  })
+  @ApiQuery({
+    name: 'technicalMentoring',
+    required: false,
+    type: 'string',
+    isArray: true,
+  })
   public async getMentorRegistries(
     @Req() req: CurrentRequest,
-    @Query('status') status: MentorRegistryTabsMode = MentorRegistryTabsMode.All,
+    @Query('status')
+    status: MentorRegistryTabsMode = MentorRegistryTabsMode.All,
     @Query('pageSize') pageSize?: number,
     @Query('currentPage') currentPage?: number,
     @Query('githubId') githubId?: string,
     @Query('cityName') cityName?: string,
-    @Query('preferedCourses', new ParseArrayPipe({ items: Number, optional: true })) preferedCourses?: number[],
-    @Query('preselectedCourses', new ParseArrayPipe({ items: Number, optional: true })) preselectedCourses?: number[],
-    @Query('technicalMentoring', new ParseArrayPipe({ items: String, optional: true })) technicalMentoring?: string[],
+    @Query('preferedCourses', new ParseArrayPipe({ items: Number, optional: true }))
+    preferedCourses?: number[],
+    @Query('preselectedCourses', new ParseArrayPipe({ items: Number, optional: true }))
+    preselectedCourses?: number[],
+    @Query('technicalMentoring', new ParseArrayPipe({ items: String, optional: true }))
+    technicalMentoring?: string[],
   ) {
     if (req.user.isAdmin && !req.query) {
       const data = await this.registryService.findAllMentorRegistries();
