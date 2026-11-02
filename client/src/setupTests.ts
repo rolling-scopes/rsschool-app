@@ -1,4 +1,4 @@
-import { expect } from 'vitest';
+import { afterEach, expect } from 'vitest';
 import * as matchers from '@testing-library/jest-dom/matchers';
 import type { TestingLibraryMatchers } from '@testing-library/jest-dom/matchers';
 import matchMediaPolyfill from 'mq-polyfill';
@@ -96,3 +96,15 @@ if (typeof global.MessageChannel === 'undefined') {
   // @ts-expect-error polyfill for jsdom
   global.MessageChannel = MockMessageChannel;
 }
+
+// antd (via rc-util) batches Form/Select state updates on a macrotask scheduled
+// through MessageChannel, separately from React's own scheduler. That macrotask
+// can still be pending when a test finishes. Vitest then tears down the jsdom
+// environment for the file, deleting `window`. When the stale macrotask runs
+// afterwards, React reads `window` to pick an update priority and throws
+// "ReferenceError: window is not defined", failing the whole run even though
+// every test passed. Yield to the event loop after each test so any pending
+// macrotask fires while the environment is still alive.
+afterEach(async () => {
+  await new Promise(resolve => setTimeout(resolve, 0));
+});
