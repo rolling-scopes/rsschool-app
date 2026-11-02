@@ -105,6 +105,10 @@ if (typeof global.MessageChannel === 'undefined') {
 // "ReferenceError: window is not defined", failing the whole run even though
 // every test passed. Yield to the event loop after each test so any pending
 // macrotask fires while the environment is still alive.
+// Capture the real setTimeout before any test can replace it with vi.useFakeTimers(),
+// so this flush keeps working even in suites that fake timers without restoring them
+// until afterAll.
+const realSetTimeout = globalThis.setTimeout.bind(globalThis);
 afterEach(async () => {
-  await new Promise(resolve => setTimeout(resolve, 0));
+  await new Promise(resolve => realSetTimeout(resolve, 0));
 });
