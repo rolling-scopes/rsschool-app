@@ -1,4 +1,4 @@
-import { afterEach, expect } from 'vitest';
+import { expect } from 'vitest';
 import * as matchers from '@testing-library/jest-dom/matchers';
 import type { TestingLibraryMatchers } from '@testing-library/jest-dom/matchers';
 import matchMediaPolyfill from 'mq-polyfill';
@@ -67,6 +67,13 @@ const _CSSStyleDeclarationProto = Object.getPrototypeOf(_testDiv.style) as Recor
 
 // antd v6 uses MessageChannel via @rc-component/form for batching form updates.
 // jsdom does not include MessageChannel, so we provide a working mock implementation on global.
+// @rc-component/form schedules its watcher notifications as a real macrotask (setTimeout)
+// to let React batch state updates first. In a browser that's fine, but Vitest tears down
+// the jsdom environment (deleting `window`) right after a test's synchronous body finishes,
+// so a deferred macrotask can fire after `window` is gone and crash with
+// "ReferenceError: window is not defined" inside react-dom. We don't need real macrotask
+// deferral in tests, so dispatch synchronously instead — this keeps the watcher callback
+// inside the test's own execution instead of racing against environment teardown.
 if (typeof global.MessageChannel === 'undefined') {
   class MockMessagePort {
     onmessage: ((event: { data: unknown }) => void) | null = null;
@@ -77,7 +84,7 @@ if (typeof global.MessageChannel === 'undefined') {
     postMessage(data: unknown) {
       const partner = this._partner;
       if (partner?.onmessage) {
-        setTimeout(() => partner.onmessage?.({ data }), 0);
+        partner.onmessage({ data });
       }
     }
     start() {}
@@ -96,19 +103,3 @@ if (typeof global.MessageChannel === 'undefined') {
   // @ts-expect-error polyfill for jsdom
   global.MessageChannel = MockMessageChannel;
 }
-
-// antd (via rc-util) batches Form/Select state updates on a macrotask scheduled
-// through MessageChannel, separately from React's own scheduler. That macrotask
-// can still be pending when a test finishes. Vitest then tears down the jsdom
-// environment for the file, deleting `window`. When the stale macrotask runs
-// afterwards, React reads `window` to pick an update priority and throws
-// "ReferenceError: window is not defined", failing the whole run even though
-// every test passed. Yield to the event loop after each test so any pending
-// macrotask fires while the environment is still alive.
-// Capture the real setTimeout before any test can replace it with vi.useFakeTimers(),
-// so this flush keeps working even in suites that fake timers without restoring them
-// until afterAll.
-const realSetTimeout = globalThis.setTimeout.bind(globalThis);
-afterEach(async () => {
-  await new Promise(resolve => realSetTimeout(resolve, 0));
-});
