@@ -56,8 +56,7 @@ export class CourseEventsController {
     @Param('courseEventId', ParseIntPipe) courseEventId: number,
     @Body() dto: UpdateCourseEventDto,
   ) {
-    await this.courseEventsService.updateCourseEvent(courseEventId, {
-      courseId,
+    await this.courseEventsService.updateCourseEvent(courseId, courseEventId, {
       id: courseEventId,
       ...dto,
     });
@@ -70,7 +69,10 @@ export class CourseEventsController {
   @ApiParam({ name: 'courseId' })
   @ApiOperation({ operationId: 'deleteCourseEvent' })
   @RequiredRoles([Role.Admin, CourseRole.Manager], true)
-  public async deleteCourseEvent(@Param('courseEventId', ParseIntPipe) courseEventId: number) {
-    await this.courseEventsService.deleteCourseEvent(courseEventId);
+  public async deleteCourseEvent(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Param('courseEventId', ParseIntPipe) courseEventId: number,
+  ) {
+    await this.courseEventsService.deleteCourseEvent(courseId, courseEventId);
   }
 }

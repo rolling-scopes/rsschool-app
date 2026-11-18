@@ -296,9 +296,9 @@ describe('CourseTasksService', () => {
     it('updates the course task by id', async () => {
       courseTaskRepository.update.mockResolvedValue({ affected: 1 });
 
-      const result = await service.updateCourseTask(7, { maxScore: 100 });
+      const result = await service.updateCourseTask(5, 7, { maxScore: 100 });
 
-      expect(courseTaskRepository.update).toHaveBeenCalledWith(7, { maxScore: 100 });
+      expect(courseTaskRepository.update).toHaveBeenCalledWith({ id: 7, courseId: 5 }, { maxScore: 100 });
       expect(result).toEqual({ affected: 1 });
     });
   });
@@ -307,9 +307,9 @@ describe('CourseTasksService', () => {
     it('soft-disables the task while passing the id through for subscription handling', async () => {
       courseTaskRepository.update.mockResolvedValue({ affected: 1 });
 
-      await service.disable(7);
+      await service.disable(5, 7);
 
-      expect(courseTaskRepository.update).toHaveBeenCalledWith(7, { id: 7, disabled: true });
+      expect(courseTaskRepository.update).toHaveBeenCalledWith({ id: 7, courseId: 5 }, { id: 7, disabled: true });
     });
   });
 

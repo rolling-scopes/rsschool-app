@@ -71,8 +71,7 @@ describe('CourseEventsController write endpoints', () => {
 
       const result = await controller.updateCourseTask(mockCourseId, 200, dto);
 
-      expect(service.updateCourseEvent).toHaveBeenCalledWith(200, {
-        courseId: mockCourseId,
+      expect(service.updateCourseEvent).toHaveBeenCalledWith(mockCourseId, 200, {
         id: 200,
         place: 'Offline',
       });
@@ -84,9 +83,9 @@ describe('CourseEventsController write endpoints', () => {
     it('delegates deletion to the service by courseEventId', async () => {
       service.deleteCourseEvent.mockResolvedValue(undefined);
 
-      await controller.deleteCourseEvent(200);
+      await controller.deleteCourseEvent(mockCourseId, 200);
 
-      expect(service.deleteCourseEvent).toHaveBeenCalledWith(200);
+      expect(service.deleteCourseEvent).toHaveBeenCalledWith(mockCourseId, 200);
     });
   });
 });

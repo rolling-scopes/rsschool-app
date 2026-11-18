@@ -16,7 +16,7 @@ const adminSession = { id: 1, githubId: 'john-doe', isAdmin: true, courses: {} }
 const mentorsRepository = { findOne: vi.fn(), insert: vi.fn(), update: vi.fn() };
 const userRepository = { findOne: vi.fn() };
 const registryRepository = { findOne: vi.fn() };
-const studentRepository = { update: vi.fn() };
+const studentRepository = { findBy: vi.fn(), update: vi.fn() };
 
 describe('CourseMentorsService.createMentor', () => {
   let service: CourseMentorsService;
@@ -29,6 +29,9 @@ describe('CourseMentorsService.createMentor', () => {
     mentorsRepository.findOne.mockResolvedValue(null);
     mentorsRepository.insert.mockResolvedValue({ identifiers: [{ id: 9 }] });
     registryRepository.findOne.mockResolvedValue(null);
+    studentRepository.findBy.mockImplementation(({ id }: { id: { _value: number[] } }) =>
+      Promise.resolve(id._value.map(studentId => ({ id: studentId, courseId: 5, mentorId: null }))),
+    );
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         CourseMentorsService,
@@ -89,12 +92,34 @@ describe('CourseMentorsService.createMentor', () => {
 
   it('updates an existing mentor and relinks students', async () => {
     mentorsRepository.findOne.mockResolvedValue({ id: 7 });
+    studentRepository.findBy.mockResolvedValue([{ id: 201, courseId: 5, mentorId: 7 }]);
 
     await service.createMentor(plainSession, 5, 'john-doe', { students: [201], maxStudentsLimit: 4 });
 
     expect(mentorsRepository.update).toHaveBeenCalledWith(7, { maxStudentsLimit: 4 });
     expect(studentRepository.update).toHaveBeenNthCalledWith(1, { mentorId: 7 }, { mentorId: null });
     expect(studentRepository.update).toHaveBeenNthCalledWith(2, [201], { mentorId: 7 });
+  });
+
+  it('forbids assigning students from another course', async () => {
+    registryRepository.findOne.mockResolvedValue({ preselectedCourses: ['5'] });
+    studentRepository.findBy.mockResolvedValue([{ id: 201, courseId: 6, mentorId: null }]);
+
+    await expect(service.createMentor(plainSession, 5, 'john-doe', { students: [201] })).rejects.toThrow(
+      ForbiddenException,
+    );
+    expect(mentorsRepository.insert).not.toHaveBeenCalled();
+    expect(studentRepository.update).not.toHaveBeenCalled();
+  });
+
+  it('forbids taking a student assigned to another mentor', async () => {
+    mentorsRepository.findOne.mockResolvedValue({ id: 7 });
+    studentRepository.findBy.mockResolvedValue([{ id: 201, courseId: 5, mentorId: 8 }]);
+
+    await expect(service.createMentor(plainSession, 5, 'john-doe', { students: [201] })).rejects.toThrow(
+      ForbiddenException,
+    );
+    expect(studentRepository.update).not.toHaveBeenCalled();
   });
 
   it('responds 409 on concurrent registration (unique violation)', async () => {
