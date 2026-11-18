@@ -1,6 +1,6 @@
 /* eslint-disable testing-library/no-container, testing-library/no-node-access */
 import { Form } from 'antd';
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { CriteriaDtoTypeEnum } from '@client/api';
 import { EditableCriteriaInput } from './EditableCriteriaInput';
 import { EditableTableColumnsDataIndex } from './constants';
@@ -36,7 +36,7 @@ describe('<EditableCriteriaInput />', () => {
     expect(container.querySelector('input')).toBeNull();
   });
 
-  it('renders the type Select for the Type column and wires onSelectChange', () => {
+  it('renders the type Select for the Type column and wires onSelectChange', async () => {
     const onSelectChange = vi.fn();
     renderInput({
       dataIndex: EditableTableColumnsDataIndex.Type,
@@ -49,6 +49,7 @@ describe('<EditableCriteriaInput />', () => {
     fireEvent.click(within(document.body).getByTestId('Penalty'));
 
     expect(onSelectChange).toHaveBeenCalledWith('penalty', expect.anything());
+    await waitFor(() => expect(combobox).toHaveAttribute('aria-expanded', 'false'));
   });
 
   it('renders the Text input and nothing for an unknown column', () => {

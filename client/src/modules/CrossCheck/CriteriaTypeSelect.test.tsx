@@ -1,8 +1,8 @@
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { CriteriaTypeSelect } from './CriteriaTypeSelect';
 
 describe('<CriteriaTypeSelect />', () => {
-  it('renders options and reports the selected value', () => {
+  it('renders options and reports the selected value', async () => {
     const onChange = vi.fn();
     render(<CriteriaTypeSelect onChange={onChange} />);
 
@@ -17,5 +17,6 @@ describe('<CriteriaTypeSelect />', () => {
     fireEvent.click(body.getByTestId('Subtask'));
 
     expect(onChange).toHaveBeenCalledWith('subtask', expect.anything());
+    await waitFor(() => expect(screen.getByRole('combobox')).toHaveAttribute('aria-expanded', 'false'));
   });
 });
