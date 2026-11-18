@@ -222,14 +222,14 @@ jobs:
           scp -o StrictHostKeyChecking=no -i private_key ./setup/nginx/nginx.conf ${USERNAME}@${HOSTNAME}:~/nginx/nginx.conf
           ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} '
             sleep 10
-            docker-compose pull
+            docker compose pull
           '
 
       - name: Restart
         run: |
           ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} '
-            docker-compose up -d
-            docker-compose restart nginx
+            docker compose up -d
+            docker compose restart nginx
           '
 
       - name: Clean up
