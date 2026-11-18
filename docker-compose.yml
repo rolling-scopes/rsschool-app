@@ -55,7 +55,7 @@ services:
 
   nginx:
     container_name: nginx
-    image: nginx:1.30.7-alpine
+    image: nginx:1.30.7-alpine-slim
     restart: unless-stopped
     logging:
       driver: awslogs
