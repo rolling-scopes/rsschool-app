@@ -67,6 +67,13 @@ const _CSSStyleDeclarationProto = Object.getPrototypeOf(_testDiv.style) as Recor
 
 // antd v6 uses MessageChannel via @rc-component/form for batching form updates.
 // jsdom does not include MessageChannel, so we provide a working mock implementation on global.
+// @rc-component/form schedules its watcher notifications as a real macrotask (setTimeout)
+// to let React batch state updates first. In a browser that's fine, but Vitest tears down
+// the jsdom environment (deleting `window`) right after a test's synchronous body finishes,
+// so a deferred macrotask can fire after `window` is gone and crash with
+// "ReferenceError: window is not defined" inside react-dom. We don't need real macrotask
+// deferral in tests, so dispatch synchronously instead — this keeps the watcher callback
+// inside the test's own execution instead of racing against environment teardown.
 if (typeof global.MessageChannel === 'undefined') {
   class MockMessagePort {
     onmessage: ((event: { data: unknown }) => void) | null = null;
@@ -77,7 +84,7 @@ if (typeof global.MessageChannel === 'undefined') {
     postMessage(data: unknown) {
       const partner = this._partner;
       if (partner?.onmessage) {
-        setTimeout(() => partner.onmessage?.({ data }), 0);
+        partner.onmessage({ data });
       }
     }
     start() {}
