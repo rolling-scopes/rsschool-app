@@ -23,6 +23,7 @@ import {
   CreateStudentCertificateDto,
 } from './dto/create-certificate.dto';
 import { CERTIFICATE_TEMPLATES } from './templates/catalog';
+import { toCourseId, toStudentId } from '../core/types/identifiers';
 
 @Controller('certificate')
 @ApiTags('certificate')
@@ -43,7 +44,11 @@ export class CertificatesController {
     @Param('githubId') githubId: string,
     @Body() dto: CreateStudentCertificateDto,
   ) {
-    const request = await this.certificatesService.buildStudentCertificateRequest(courseId, githubId, dto.templateId);
+    const request = await this.certificatesService.buildStudentCertificateRequest(
+      toCourseId(courseId),
+      githubId,
+      dto.templateId,
+    );
     if (request == null) {
       throw new BadRequestException('No student');
     }
@@ -60,7 +65,10 @@ export class CertificatesController {
     @Param('courseId', ParseIntPipe) courseId: number,
     @Body() dto: CreateCourseCertificatesDto,
   ) {
-    const { requests, shortCircuit } = await this.certificatesService.buildCourseCertificateRequests(courseId, dto);
+    const { requests, shortCircuit } = await this.certificatesService.buildCourseCertificateRequests(
+      toCourseId(courseId),
+      dto,
+    );
     if (!shortCircuit) {
       await this.certificatesService.requestCertificates(requests);
     }
@@ -110,7 +118,7 @@ export class CertificatesController {
 
     const [notificationData] = await Promise.all([
       this.certificatesService.buildNotificationData(student, dto),
-      this.certificatesService.saveCertificate(student.id, dto),
+      this.certificatesService.saveCertificate(toStudentId(student.id), dto),
     ]);
 
     const { userId, notification } = notificationData;
@@ -127,6 +135,6 @@ export class CertificatesController {
   @RequiredRoles([Role.Admin])
   @ApiOperation({ operationId: 'removeCertificate' })
   public async removeCertificate(@Param('studentId', ParseIntPipe) studentId: number) {
-    await this.certificatesService.removeCertificate(studentId);
+    await this.certificatesService.removeCertificate(toStudentId(studentId));
   }
 }
